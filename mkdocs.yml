@@ -1,0 +1,55 @@
+INHERIT: ./base.yml
+site_name: Bitwarden Contributing Documentation
+theme:
+  favicon: assets/favicon.png
+extra_css:
+  - stylesheets/extra.css
+nav:
+  - "index.md"
+  - Server:
+      - "server/guide.md"
+      - "server/troubleshooting.md"
+      - "MSSQL Database":
+        - "server/mssql/index.md"
+        - "server/mssql/edd.md"
+        - "server/mssql/migrations.md"
+      - "Entity Framework":
+        - "server/ef/index.md"
+        - "server/ef/deploying.md"
+      - "server/admin.md"
+      - "server/user-secrets.md"
+  - Clients:
+    - "clients/index.md"
+    - "Web Vault":
+      - "clients/web-vault/index.md"
+      - "clients/web-vault/webauthn.md"
+    - Browser:
+      - "clients/browser/index.md"
+      - "clients/browser/biometric.md"
+      - "clients/browser/ff-private.md"
+    - Desktop:
+      - "clients/desktop/index.md"
+      - "clients/desktop/update.md"
+      - "clients/desktop/native-messaging-test-runner.md"
+    - CLI:
+      - "clients/cli/index.md"
+    - "clients/troubleshooting.md"
+  - Mobile:
+    - "mobile/index.md"
+    - "mobile/android.md"
+  - Enterprise Tools:
+      - "Directory Connector":
+        - "enterprise/directory-connector/index.md"
+        - "enterprise/directory-connector/open-ldap.md"
+        - "enterprise/directory-connector/jumpcloud.md"
+      - "enterprise/key-connector.md"
+  - Code Style:
+    - "code-style/index.md"
+    - "code-style/angular.md"
+    - "code-style/tailwind.md"
+    - "code-style/csharp.md"
+    - "code-style/sql.md"
+  - "contributing.md"
+  - Tools:
+    - "tools/index.md"
+    - "tools/commit-signing.md"

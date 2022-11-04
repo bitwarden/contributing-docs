@@ -1,0 +1,81 @@
+# Biometric Unlock
+
+Currently, Biometric unlock is supported on Mobile, Desktop, and Browser Extensions[*](#which-devices-support-biometric-unlock). Bitwarden's biometric unlock is integrated with native messaging APIs to leverage this functionality.
+
+## Which Devices Support Biometric Unlock?\*
+
+See the [help article](https://bitwarden.com/help/article/biometrics/) for the latest, but as of this writing, here's the rundown:
+
+_Supported:_
+
+- Chromium Based Browsers
+- Firefox Versions 87 and later
+- Safari 14 and later
+- Side-loaded Windows Desktop App from the [help site](https://bitwarden.com/download)
+- Mac Apple Store downloaded Mac App
+- Windows Desktop Apps via Windows Hello
+
+_Not Supported:_
+
+- Firefox Versions 86 and earlier
+- Side-loaded MacOS Desktop Apps
+- Linux OS
+
+## General Setup Steps
+
+!!! warning
+
+    If you've installed a locally built browser extension for Safari in the past, reset your extension reference paths as described [here](./index.md).
+
+Native messaging works by having the browser start a lightweight proxy baked into our desktop application.
+
+Out of the box, the desktop application can only communicate with the production browser extension. When you enable browser integration in the desktop application, the application generates manifests which contain the production IDs of the browser extensions. To enable communication between the desktop application and development versions of browser extensions, we need to add your browser extension development ID to this manifest instead.
+
+### Build and Run the Browser Extension
+
+- In the local Browser project, run `npm install`.
+- To use the local browser extension on Safari, use this command: `npm run dist:safari:dmg`. Once this has built, you should see the Bitwarden Extension in Safari's Preferences under the Extension menu. If not, open and build the related Xcode project (usually found in `$HOME/browser/dist/Safari/dmg/desktop.xcodeproj`). It should then show up in the Preferences menu, and you can enable it.
+- For other browsers, use `npm run build:watch` and then load the locally built extension using the method described [here](./index.md#testing-and-debugging).
+
+### Add the Extension ID for Native Messaging
+
+Once you have the Extension running, confirm that the Extension ID has been added to the `NativeMessagingHost` JSON file for your chosen browsers.
+
+- Find the Extension ID at `chrome://extensions` or `about:debugging`.
+
+  ![Extension ID](extension-id.png)
+
+- Add the ID to the `NativeMessageHost` JSON using your IDE. This file is nested in the Application Support Directory. For example, for the Chrome browser the file is located at:
+
+    === "Windows"
+    
+        ```
+        %APPDATA%\Bitwarden\browsers\chrome.json
+        ```
+
+    === "MacOS"
+    
+        ```
+        ~/Library/Application Support/Google/Chrome/NativeMessagingHosts/com.8bit.bitwarden.jso
+        ```
+
+    === "Linux"
+    
+        ```
+        ~/.config/google-chrome/NativeMessagingHosts/com.8bit.bitwarden.json
+        ```
+
+### Build and Run the Desktop App
+
+Follow the [Desktop](../desktop/index.md) setup document.
+
+!!! warning
+
+    On macOS you will either need to build a Mac App Store Development Build, or turn off gatekeeper.
+
+I've got the projects running, now what?
+
+- In the Desktop app's Preferences menu, turn on `Enable browser integration`.
+- In the Browser Extension, access the Settings menu, and enable the `Unlock with biometrics` option.
+
+  - The Browser will ask you to allow the action, but then lock the Extension. When you unlock the vault and enable Biometric unlock again, you'll be asked to confirm this choice in the Desktop app and also use the native biometric unlock feature.
