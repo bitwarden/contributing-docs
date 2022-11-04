@@ -1,0 +1,89 @@
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+import CodeBlock from "@theme/CodeBlock";
+
+# WebAuthn
+
+:::info
+
+This page contains additional setup instructions if you need to test WebAuthn authentication
+locally.
+
+:::
+
+The [WebAuthn](https://webauthn.guide/) spec requires that a valid domain name is used. Since
+`localhost` does not satisfy this requirement, you need to configure your local instance to use a
+domain name.
+
+There are multiple ways of doing this. However, the simplest method is to modify the operating
+system's host file with a loopback to `127.0.0.1`.
+
+## Configuration
+
+Webpack protects against DNS rebind attacks by blocking hostnames by default. However, we can
+specify specific hostnames to be allowed in the web environment configuration JSON files.
+
+1. Create a `local.json` file in the `web/config/` folder
+2. Add "bitwarden.test" as an `allowedHosts` entry:
+
+   ```json
+   {
+     "dev": {
+       "allowedHosts": ["bitwarden.test"]
+     }
+   }
+   ```
+
+:::note
+
+If you are running the app, you must restart it for the config change to take effect.
+
+:::
+
+### Hosts file
+
+:::note
+
+You will need administrator access to edit this file.
+
+:::
+
+The location of the host file differs slightly between operating systems.
+
+<Tabs groupId="os">
+  <TabItem value="win" label="Windows" default>
+    <CodeBlock language="bash">{`C:\\Windows\\System32\\drivers\\etc\\hosts`}</CodeBlock>
+  </TabItem>
+  <TabItem value="mac" label="macOS">
+    <CodeBlock language="bash">{`/etc/hosts`}</CodeBlock>
+  </TabItem>
+</Tabs>
+
+Open the file with the text editor of your choice. And append the following line.
+
+```plain
+127.0.0.1 bitwarden.test
+```
+
+### User Secrets
+
+In addition to modifying the host file, the [user secret](../../server/user-secrets.md)
+`globalSettings:baseServiceUri:vault` for API and Identity projects in the server need needs to be
+created or updated to reflect the domain name. For example:
+
+```json
+{
+  ...
+   "globalSettings":{
+      "baseServiceUri":{
+         "vault":"https://bitwarden.test:8080"
+      }
+   },
+   ...
+}
+```
+
+### Testing
+
+You should now be ready to test WebAuthn on your local instance by going to
+[https://bitwarden.test:8080](https://bitwarden.test:8080).
