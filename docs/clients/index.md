@@ -1,17 +1,30 @@
+---
+sidebar_position: 1
+---
+
 # Clients
 
-This section contains development information for each of the Bitwarden Typescript client applications:
+:::info
 
-* [Web Vault](./web-vault/index.md)
-* [Browser](./browser/index.md)
-* [Desktop](./desktop/index.md)
-* [CLI](./cli/index.md)
+For the Mobile application please visit [Mobile](mobile). This page covers the other clients.
 
-In this context, "clients" generally refers to the Typescript clients, which are located in the `clients` mono-repository. The [Mobile application](../mobile/index.md) is in a separate section (and repository) because it does not share common code.
+:::
+
+This section contains development information for each of the Bitwarden Typescript client
+applications:
+
+- [Web Vault](./web-vault)
+- [Browser](./browser)
+- [Desktop](./desktop)
+- [CLI](./cli)
+
+In this context, "clients" generally refers to the Typescript clients, which are located in the
+`clients` mono-repository.
 
 ## Requirements
 
-Before you start, you should have Node and npm installed. See the [Tools and Libraries](../tools/index.md) page for more information.
+Before you start, you should have Node and npm installed. See the [Tools and Libraries](../tools)
+page for more information.
 
 ## Setup instructions
 
@@ -29,16 +42,24 @@ Before doing work on any of the clients, you need to clone and setup the `client
     npm ci
     ```
 
-    !!! info
+    :::info
 
-        You should only ever install dependencies from the root of the repository. Don't try to install dependencies for individual client applications.
+    You should only ever install dependencies from the root of the repository. Don't try to install
+    dependencies for individual client applications.
 
-3. Configure git blame to ignore certain commits (generally administrative changes, such as formatting):
+    :::
+
+3.  Configure git blame to ignore certain commits (generally administrative changes, such as
+    formatting):
 
     ```bash
     git config blame.ignoreRevsFile .git-blame-ignore-revs
     ```
 
-4. Open the `clients.code-workspace` file in Visual Studio Code. This has been configured to use [multi-root workspaces](https://code.visualstudio.com/docs/editor/multi-root-workspaces) to improve your development experience. Each client will appear as its own workspace in the Explorer panel on the left-hand side.
+4.  Open the `clients.code-workspace` file in Visual Studio Code. This has been configured to use
+    [multi-root workspaces](https://code.visualstudio.com/docs/editor/multi-root-workspaces) to
+    improve your development experience. Each client will appear as its own workspace in the
+    Explorer panel on the left-hand side.
 
-You're now ready to continue with any additional instructions for the particular client you want to work on.
+You're now ready to continue with any additional instructions for the particular client you want to
+work on.

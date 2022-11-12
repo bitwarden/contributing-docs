@@ -1,44 +1,45 @@
-# Bitwarden Contributing Docs
+# Website
 
-The current version of the docs are accessable at:
+This website is built using [Docusaurus 2](https://docusaurus.io/), a modern static website
+generator.
 
-- https://contributing.bitwarden.com/
-
-## Install
-
-```
-python3 -m venv env
-
-# Mac
-source ./env/bin/activate
-
-# Windows
-.\env\Scripts\Activate.ps1
-
-pip install -r ./requirements.txt
-```
-
-## Preview
+### Installation
 
 ```
-mkdocs serve
+$ yarn
 ```
 
-## Writing
+### Local Development
 
-The contributing documentation is written using [MkDocs](https://www.mkdocs.org/), with the [Material for MkDocs](https://squidfunk.github.io/mkdocs-material/) theme. The Material theme provides many features, please take a moment to read through the [reference](https://squidfunk.github.io/mkdocs-material/reference/) section of their documentation.
+```
+$ yarn start
+```
 
-The MkDocs config lives in the `mkdocs.yml` configuration file which also contains the navigation.
+This command starts a local development server and opens up a browser window. Most changes are
+reflected live without having to restart the server.
 
-### Style Guide
+### Build
 
-Please follow the following (very brief) style guide:
+```
+$ yarn build
+```
 
-- Use numbered paragraphs for all instructions or procedures. Start each paragraph with a verb (“click”, “type”, “restart”, etc)
-- Use code blocks for all commands. Don’t write them in-line
-- Avoid long paragraphs - this documentation should be to-the-point and instructional
-- Please always remember that this documentation is public, be sure to scrub any personal data or sensitive information. Always indicate areas that must be filled in by the user and how to do so.
+This command generates static content into the `build` directory and can be served using any static
+contents hosting service.
 
-## Deploy
+### Deployment
 
-Deployments are handled by a Cloudflare action. Simply push the changes to the `main` branch and they will go live in a couple of minutes.
+Using SSH:
+
+```
+$ USE_SSH=true yarn deploy
+```
+
+Not using SSH:
+
+```
+$ GIT_USER=<Your GitHub username> yarn deploy
+```
+
+If you are using GitHub pages for hosting, this command is a convenient way to build the website and
+push to the `gh-pages` branch.

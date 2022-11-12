@@ -2,7 +2,10 @@
 
 ## Manually editing user secrets
 
-We recommend using the automated helper script described in the [Server Setup Guide](./guide.md). However, you can manually edit or troubleshoot your user secrets using the instructions below. If you are manually editing using secrets, make sure to remember to copy your changes across to all projects if required.
+We recommend using the automated helper script described in the [Server Setup Guide](./guide.md).
+However, you can manually edit or troubleshoot your user secrets using the instructions below. If
+you are manually editing using secrets, make sure to remember to copy your changes across to all
+projects if required.
 
 ### Editing user secrets - Visual Studio on Windows
 
@@ -24,10 +27,12 @@ View currently set secrets by running:
 dotnet user-secrets list
 ```
 
-By default, user secret files are located in: 
-```
+By default, user secret files are located in:
+
+```bash
 ~/.microsoft/usersecrets/<project name>/secrets.json
 ```
+
 You can edit this file directly, which is much easier than using the command line tool.
 
 ### Editing user secrets - Rider
