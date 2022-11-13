@@ -93,6 +93,12 @@ const config = {
             sidebarId: "tools",
           },
           {
+            type: "docSidebar",
+            position: "left",
+            label: "Architecture",
+            sidebarId: "architecture",
+          },
+          {
             href: "https://github.com/bitwarden",
             label: "GitHub",
             position: "right",
