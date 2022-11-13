@@ -98,7 +98,7 @@ const config = {
             position: "right",
           },
           {
-            type: 'custom-dev',
+            type: "custom-dev",
             position: "right",
           },
         ],

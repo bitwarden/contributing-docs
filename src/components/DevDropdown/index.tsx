@@ -30,7 +30,7 @@ export default function DevDropdown({
     };
   });
 
-  const dropdownLabel = dropdownOptions.find(i => i.id == devMode).label;
+  const dropdownLabel = dropdownOptions.find((i) => i.id == devMode).label;
 
   return <DropdownNavbarItem {...props} mobile={mobile} label={dropdownLabel} items={items} />;
 }
