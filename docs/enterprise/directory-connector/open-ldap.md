@@ -5,9 +5,9 @@ local directory service that you can use for development.
 
 ## Requirements
 
-- [Web vault](../../clients/web-vault)
+- [Web vault](../../clients/web-vault/index.mdx)
 
-- [Server](../../server/guide.md)
+- [Server](../../server/guide.mdx)
 
 - [Directory Connector](./index.mdx)
 

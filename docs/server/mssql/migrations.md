@@ -2,7 +2,7 @@
 
 :::note
 
-We recommend reading [Evolutionary Database Design](./edd.md) first, since it has a major impact in
+We recommend reading [Evolutionary Database Design](./edd.mdx) first, since it has a major impact in
 how we write migrations.
 
 :::
@@ -15,7 +15,7 @@ data from _Views_.
 
 ## Changing the database
 
-As we follow [Evolutionary Database Design](./edd.md) each change needs to be split into two parts.
+As we follow [Evolutionary Database Design](./edd.mdx) each change needs to be split into two parts.
 A backwards compatible transition phase, and a non-backwards compatible.
 
 ### Best Practices

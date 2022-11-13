@@ -13,7 +13,7 @@ It’s likely the first thing you’ll need to do is set up a local development 
 we recommend progressing through the documentation in the following order.
 
 1. Install all the recommended [Tools and Libraries](./tools/index.md) for development.
-2. Follow the [Server Setup Guide](./server/guide.md) to setup your local server and related
+2. Follow the [Server Setup Guide](./server/guide.mdx) to setup your local server and related
    services
 3. Build and run each [Clients](./clients/index.md) from source and connect them to your local
    server
