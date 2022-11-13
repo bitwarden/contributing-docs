@@ -57,40 +57,16 @@ const config = {
         style: "primary",
         items: [
           {
-            type: "docSidebar",
-            position: "left",
-            label: "Clients",
-            sidebarId: "clients",
-          },
-          {
-            type: "docSidebar",
-            position: "left",
-            label: "Server",
-            sidebarId: "server",
-          },
-          {
-            type: "docSidebar",
-            position: "left",
-            label: "Enterprise Tools",
-            sidebarId: "enterprise",
-          },
-          {
-            type: "docSidebar",
-            position: "left",
-            label: "Code Style",
-            sidebarId: "codestyle",
+            type: 'doc',
+            docId: 'index',
+            position: 'left',
+            label: 'Docs',
           },
           {
             type: "doc",
             docId: "contributing",
             position: "left",
             label: "Contributing Guidelines",
-          },
-          {
-            type: "docSidebar",
-            position: "left",
-            label: "Tools",
-            sidebarId: "tools",
           },
           {
             type: "docSidebar",
