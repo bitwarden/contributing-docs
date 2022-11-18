@@ -1,0 +1,99 @@
+---
+sidebar_position: 2
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+import CodeBlock from "@theme/CodeBlock";
+
+# Web Vault
+
+## Requirements
+
+- Before you start, you must complete the [Clients repository setup instructions](../index.md).
+
+- If you want to develop against a local server instance, see the
+  [Server Setup Guide](../../server/guide.mdx).
+
+## Build Instructions
+
+<!-- prettier-ignore-start -->
+
+1.  Build and run the Web Vault.
+
+  <Community>
+
+  ```bash
+  cd apps/web
+  npm run build:oss:watch
+  ```
+
+  </Community>
+
+  <Bitwarden>
+
+  ```bash
+  cd apps/web
+  npm run build:bit:watch
+  ```
+
+  </Bitwarden>
+
+    Which will target the local bitwarden instance. See [Official Server](#official-server) for
+    information on how to target official servers.
+
+2.  Open your browser and navigate to `https://localhost:8080`.
+
+:::info
+
+You can also run the Web Vault in self-hosted mode by using the `build:bit:selfhost:watch` and
+`build:oss:selfhost:watch` commands.
+
+:::
+
+
+<!-- prettier-ignore-end -->
+
+## Configuring API endpoints
+
+By default, the Web Vault will use your local development server (running at `localhost` on the
+default ports). You can use the official Bitwarden server instead or configure custom endpoints.
+
+### Official Server
+
+To use the official Bitwarden server, follow the build instructions above, but run the Web Vault
+using the following command:
+
+<Tabs groupId="dev">
+  <TabItem value="community" label="Community Developer" default>
+    <CodeBlock language="bash">{`ENV=cloud npm run build:oss:watch`}</CodeBlock>
+  </TabItem>
+  <TabItem value="bitwarden" label="Bitwarden Developer">
+    <CodeBlock language="bash">{`ENV=cloud npm run build:bit:watch`}</CodeBlock>
+  </TabItem>
+</Tabs>
+
+### Custom Endpoints
+
+You can manually set your API endpoint settings by creating a `config/local.json` file with the
+following structure:
+
+```json
+{
+  "dev": {
+    "proxyApi": "<http://your-api-url>",
+    "proxyIdentity": "<http://your-identity-url>",
+    "proxyEvents": "<http://your-events-url>",
+    "proxyNotifications": "<http://your-notifications-url>",
+    "allowedHosts": ["hostnames-to-allow-in-webpack"]
+  },
+  "urls": {}
+}
+```
+
+- `dev`: Proxies traffic from ex. `/api -> <http://your-api-url>`.
+- `urls`: Directly calls the remote service[^1]. **Note:** This can cause issues with CORS headers.
+
+[^1]:
+    `urls` adhere to the
+    [type definition in `EnvironmentService`](https://github.com/bitwarden/clients/blob/master/libs/common/src/abstractions/environment.service.ts).

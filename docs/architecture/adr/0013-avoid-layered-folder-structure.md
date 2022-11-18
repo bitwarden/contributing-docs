@@ -6,8 +6,6 @@ date: 2022-09-16
 tags: [clients, angular]
 ---
 
-import AdrTable from '@site/src/MDXComponents/AdrTable';
-
 # 0013 - Avoid layered folder structure for request/response models
 
 <AdrTable frontMatter={frontMatter}></AdrTable>

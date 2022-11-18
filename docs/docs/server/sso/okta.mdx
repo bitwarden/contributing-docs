@@ -1,0 +1,61 @@
+import configImage from './config.png';
+
+# Okta
+
+This guide will set up basic SSO auth using Okta. This is for testing ONLY and should not be linked
+to any production environment.
+
+Prerequisites:
+
+1.  Bitwarden server setup and configured.
+2.  Access to Development collection in your Bitwarden Vault
+
+## Steps
+
+Start the following server projects:
+
+- Identity
+- API
+- SSO (located at `server/bitwarden_license/src/Sso`)
+
+In your browser do the following steps to access Okta.
+
+1.  Launch the "[oktapreview.com](http://oktapreview.com)" login item in the Development collection.
+    Log in using those credentials
+2.  Click the "Admin" button in the top-right
+3.  Click "Users" -> "People"
+4.  Click "Add Person" and create a profile for yourself. Use the same email as your local Bitwarden
+    user and set a password. Save.
+5.  Click "Applications" in the top menu bar
+6.  You should now see a list of our test apps. For the purpose of local testing, click the
+    "Bitwarden Test 2" application. The Client Credentials and other information for this
+    application will be listed, which you can use in the subsequent steps.
+
+Open a separate browser tab to configure SSO in your local Bitwarden web vault.
+
+1.  Log into your web vault and navigate to the organization you want to enable SSO for
+2.  Click `Settings` for the organization and enter an Identifier. This should be unique - it can
+    just be the organization name. Click Save.
+3.  Go to `Manage > Single Sign-On` and input the following information:
+
+| Type                               | OpenId Connect                       |
+| ---------------------------------- | ------------------------------------ |
+| Authority                          | Copy from Okta, prefix with https:// |
+| Client ID                          | Copy from Okta                       |
+| Client Secret                      | Copy from Okta                       |
+| OIDCS Redirect Behaviour           | Redirect Get                         |
+| Get Claims From User Info Endpoint | :white_check_mark:                   |
+
+You can now log in using SSO.
+
+:::note
+
+You must have your vault URL set in your client endpoints
+
+:::
+
+## Example configuration
+
+Any fields not shown should be blank.
+
+<img src={configImage} width="500" />

@@ -5,8 +5,6 @@ date: 2022-07-12
 tags: [browser, angular]
 ---
 
-import AdrTable from '@site/src/MDXComponents/AdrTable';
-
 # 0007 - Manifest V3 sync Observables
 
 <AdrTable frontMatter={frontMatter}></AdrTable>

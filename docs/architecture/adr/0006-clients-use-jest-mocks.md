@@ -5,8 +5,6 @@ date: 2022-07-18
 tags: [clients, tests]
 ---
 
-import AdrTable from '@site/src/MDXComponents/AdrTable';
-
 # 0006 - Clients: Use Jest Mocks
 
 <AdrTable frontMatter={frontMatter}></AdrTable>

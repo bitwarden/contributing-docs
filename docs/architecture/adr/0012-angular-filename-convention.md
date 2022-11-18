@@ -6,8 +6,6 @@ date: 2022-08-23
 tags: [clients, angular]
 ---
 
-import AdrTable from '@site/src/MDXComponents/AdrTable';
-
 # 0012 - Angular Filename convention
 
 <AdrTable frontMatter={frontMatter}></AdrTable>

@@ -5,8 +5,6 @@ date: 2022-07-15
 tags: [server]
 ---
 
-import AdrTable from '@site/src/MDXComponents/AdrTable';
-
 # 0008 - Server: Adopt CQRS
 
 <AdrTable frontMatter={frontMatter}></AdrTable>
