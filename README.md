@@ -34,3 +34,36 @@ This website is built using [Docusaurus 2](https://docusaurus.io/), a modern sta
 generator.
 
 Documentation is located under `docs`.
+
+### Conditional Content
+
+The Contributing Docs site is used both for internal and external contributors. To this end we've
+facilitated a mean to conditionally show content for either group. This is primarily to keep the
+external docs simple.
+
+```md
+<community>
+
+This content is shown only to community contributors.
+
+</community>
+
+<bitwarden>
+
+This content is shown only to bitwarden contributors.
+
+</bitwarden>
+```
+
+The technical implementation uses a custom context called `devMode` which is persisted to local
+storage, and is exposed as a dropdown in the navigation bar.
+
+It's also possible to conditionally hide pages from the navigation using `frontMatter`. This is
+easiest done using the `access` property, which can be either `community` or `bitwarden`.
+
+```yml
+---
+sidebar_custom_props:
+  access: bitwarden
+---
+```
