@@ -6,18 +6,12 @@ const darkCodeTheme = require("prism-react-renderer/themes/dracula");
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: "My Site",
-  tagline: "Dinosaurs are cool",
-  url: "https://your-docusaurus-test-site.com",
+  title: "Bitwarden Contributing Documentation",
+  url: "https://contributing.bitwarden.com",
   baseUrl: "/",
   onBrokenLinks: "throw",
   onBrokenMarkdownLinks: "warn",
-  favicon: "img/favicon.ico",
-
-  // GitHub pages deployment config.
-  // If you aren't using GitHub pages, you don't need these.
-  organizationName: "bitwarden", // Usually your GitHub org/user name.
-  projectName: "Developer Documentation", // Usually your repo name.
+  favicon: "img/favicon.png",
 
   // Even if you don't use internalization, you can use this field to set useful
   // metadata like html lang. For example, if your site is Chinese, you may want
@@ -51,7 +45,7 @@ const config = {
       navbar: {
         title: "Bitwarden Developer Docs",
         logo: {
-          alt: "My Site Logo",
+          alt: "Bitwarden Logo",
           src: "img/logo.svg",
         },
         style: "primary",
@@ -89,37 +83,49 @@ const config = {
         style: "dark",
         links: [
           {
-            title: "Docs",
+            title: "Help Using Bitwarden",
             items: [
               {
-                label: "Tutorial",
-                to: "/docs/intro",
+                label: "Help Center",
+                href: "https://bitwarden.com/help/",
               },
+              {
+                label: "Learning Center",
+                href: "https://bitwarden.com/learning/",
+              },
+              {
+                label: "Community Help",
+                href: "https://community.bitwarden.com/c/support",
+              }
             ],
           },
           {
             title: "Community",
             items: [
               {
-                label: "Stack Overflow",
-                href: "https://stackoverflow.com/questions/tagged/docusaurus",
+                label: "Community Forums",
+                href: "https://community.bitwarden.com/",
               },
               {
-                label: "Discord",
-                href: "https://discordapp.com/invite/docusaurus",
+                label: "Gitter",
+                href: "https://gitter.im/bitwarden/Lobby"
               },
               {
-                label: "Twitter",
-                href: "https://twitter.com/docusaurus",
-              },
+                label: "Reddit",
+                href: "https://reddit.com/r/bitwarden"
+              }
             ],
           },
           {
             title: "More",
             items: [
               {
-                label: "Blog",
-                to: "/blog",
+                label: "Business",
+                href: "https://bitwarden.com/",
+              },
+              {
+                label: "Careers",
+                href: "https://bitwarden.com/careers/",
               },
               {
                 label: "GitHub",
