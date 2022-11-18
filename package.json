@@ -13,7 +13,8 @@
     "write-translations": "docusaurus write-translations",
     "write-heading-ids": "docusaurus write-heading-ids",
     "typecheck": "tsc",
-    "prettier": "prettier --write ."
+    "prettier": "prettier --write .",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@docusaurus/core": "2.2.0",
@@ -27,6 +28,8 @@
   "devDependencies": {
     "@docusaurus/module-type-aliases": "2.2.0",
     "@tsconfig/docusaurus": "^1.0.5",
+    "husky": "^8.0.2",
+    "lint-staged": "^13.0.3",
     "prettier": "^2.7.1",
     "typescript": "^4.7.4"
   },
@@ -44,5 +47,8 @@
   },
   "engines": {
     "node": ">=16.14"
+  },
+  "lint-staged": {
+    "*.{js,jsx,css,md,mdx,tsx,ts}": "prettier --write"
   }
 }
