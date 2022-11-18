@@ -44,12 +44,11 @@ const config = {
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
       navbar: {
-        title: "Bitwarden Contributing Docs",
+        title: "Contributing Docs",
         logo: {
           alt: "Bitwarden Logo",
-          src: "img/logo.svg",
+          src: "img/logo-horizontal.svg",
         },
-        style: "primary",
         items: [
           {
             type: "doc",
