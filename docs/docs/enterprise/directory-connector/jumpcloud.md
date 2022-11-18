@@ -80,7 +80,7 @@ Admin Console → User Authentication → LDAP → [your LDAP server].
 :::caution
 
 When you do a real sync, invitation emails will be sent out to all synced users. Make sure that
-you're using [Mailcatcher](../../../server/guide/#mailcatcher) so you don't send live emails.
+you're using [Mailcatcher](../../server/guide.mdx#mailcatcher) so you don't send live emails.
 
 :::
 
