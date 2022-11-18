@@ -6,7 +6,7 @@ sidebar_position: 1
 
 ## Operating System
 
-All Bitwarden developers are issued with a Macbook. The tooling recommendations and instructions in
+All Bitwarden developers are issued with a MacBook. The tooling recommendations and instructions in
 this documentation assume that you’re using MacOS. This may require some adaptation if you’re using
 a different operating system.
 
