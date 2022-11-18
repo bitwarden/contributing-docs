@@ -1,5 +1,5 @@
 ---
-sidebar_position: 4
+sidebar_position: 1
 ---
 
 # Tools
@@ -31,11 +31,9 @@ environment. IDEs
   [node version manager](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm))
 - [NPM](https://www.npmjs.com/) v8 (included with Node)
 - [Rust](https://www.rust-lang.org/tools/install)
-
-## Commit signing
-
-[Commit signing](./commit-signing) is required for all Bitwarden developers and is strongly
-encouraged for community contributors.
+- [Git](https://git-scm.com)
+  - [Commit signing](../../contributing/commit-signing.mdx) is required for all _Bitwarden
+    contributors_ and is strongly encouraged for _community contributors_.
 
 ## Other tools
 
