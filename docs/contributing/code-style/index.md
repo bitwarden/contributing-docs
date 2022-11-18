@@ -1,7 +1,3 @@
----
-sidebar_position: 1
----
-
 # Code Style
 
 This section contains general Code Style guidelines for the Bitwarden codebase. It is recommended to
