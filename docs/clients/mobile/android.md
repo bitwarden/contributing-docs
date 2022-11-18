@@ -2,7 +2,7 @@
 
 ## Requirements
 
-Before you start, you should have the recommended [Tools and Libraries](../../tools/index.md)
+Before you start, you should have the recommended [Tools and Libraries](../../tools.md)
 installed. You will also need to install:
 
 1.  Visual Studio 2019 (required for a dependency not included yet in VS 2022; development can be

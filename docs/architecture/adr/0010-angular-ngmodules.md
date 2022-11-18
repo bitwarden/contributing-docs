@@ -5,7 +5,11 @@ date: 2022-07-25
 tags: [clients, angular]
 ---
 
+import AdrTable from '@site/src/MDXComponents/AdrTable';
+
 # 0010 - Angular Modules
+
+<AdrTable frontMatter={frontMatter}></AdrTable>
 
 ## Context and Problem Statement
 

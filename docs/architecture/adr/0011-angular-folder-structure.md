@@ -6,7 +6,11 @@ date: 2022-07-25
 tags: [clients, angular]
 ---
 
+import AdrTable from '@site/src/MDXComponents/AdrTable';
+
 # 0011 - Scalable Angular Clients folder structure
+
+<AdrTable frontMatter={frontMatter}></AdrTable>
 
 ## Context and Problem Statement
 

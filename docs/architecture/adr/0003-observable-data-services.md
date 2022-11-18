@@ -5,7 +5,11 @@ date: 2022-06-30
 tags: [clients, angular]
 ---
 
+import AdrTable from '@site/src/MDXComponents/AdrTable';
+
 # 0003 - Adopt Observable Data Services for Angular
+
+<AdrTable frontMatter={frontMatter}></AdrTable>
 
 ## Context and Problem Statement
 

@@ -5,7 +5,11 @@ date: 2022-07-08
 tags: [clients, angular]
 ---
 
+import AdrTable from '@site/src/MDXComponents/AdrTable';
+
 # 0005 - Refactor Api Service
+
+<AdrTable frontMatter={frontMatter}></AdrTable>
 
 ## Context and Problem Statement
 

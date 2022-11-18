@@ -5,7 +5,11 @@ date: 2022-06-02
 tags: [clients]
 ---
 
+import AdrTable from '@site/src/MDXComponents/AdrTable';
+
 # 0002 - Public API for modules
+
+<AdrTable frontMatter={frontMatter}></AdrTable>
 
 ## Context and Problem Statement
 

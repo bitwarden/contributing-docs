@@ -13,7 +13,7 @@ If you’re not familiar with the CLI client, the Bitwarden Help Center has lots
 
 ## Requirements
 
-Before you start, you must complete the [Clients repository setup instructions](../index.md).
+Before you start, you must complete the [Clients repository setup instructions](../../clients.md).
 
 ## Build Instructions
 

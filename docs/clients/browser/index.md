@@ -6,7 +6,7 @@ sidebar_position: 3
 
 ## Requirements
 
-Before you start, you must complete the [Clients repository setup instructions](../index.md).
+Before you start, you must complete the [Clients repository setup instructions](../../clients.md).
 
 ## Build Instructions
 

@@ -1,4 +1,8 @@
-# Contributing Guidelines
+---
+sidebar_position: 0
+---
+
+# Contributing
 
 ## How to Contribute
 

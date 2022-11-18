@@ -1,6 +1,8 @@
 // Based on https://github.com/facebook/docusaurus/blob/main/packages/docusaurus-theme-common/src/contexts/colorMode.tsx
 import React, { useState, useEffect, useContext, useMemo, type ReactNode } from "react";
 import { createStorageSlot, ReactContextError } from "@docusaurus/theme-common";
+import ExecutionEnvironment from "@docusaurus/ExecutionEnvironment";
+import { useLocation } from "@docusaurus/router";
 
 type ContextValue = {
   readonly devMode: DevMode;
@@ -26,13 +28,28 @@ const storeDevMode = (newDevMode: DevMode) => {
   DevModeStorage.set(coerceToDevMode(newDevMode));
 };
 
+const getInitialDevMode = (): DevMode =>
+  ExecutionEnvironment.canUseDOM
+    ? coerceToDevMode(DevModeStorage.get())
+    : coerceToDevMode("community");
+
 function useContextValue(): ContextValue {
-  const [devMode, setDevModeState] = useState(coerceToDevMode(DevModeStorage.get()));
+  const [devMode, setDevModeState] = useState(getInitialDevMode());
 
   const setDevMode = (newDevMode: DevMode) => {
     setDevModeState(newDevMode);
     storeDevMode(newDevMode);
   };
+
+  const { search } = useLocation();
+  const searchParams = new URLSearchParams(search);
+  const param = searchParams.get("bitwarden");
+
+  useEffect(() => {
+    if (param != null) {
+      setDevMode("bitwarden");
+    }
+  }, [param])
 
   useEffect(() => {
     const onChange = (e: StorageEvent) => {

@@ -5,7 +5,11 @@ date: 2022-06-30
 tags: [clients, angular]
 ---
 
+import AdrTable from '@site/src/MDXComponents/AdrTable';
+
 # 0004 - Refactor State Service
+
+<AdrTable frontMatter={frontMatter}></AdrTable>
 
 ## Context and Problem Statement
 

@@ -5,7 +5,11 @@ date: 2022-05-28
 tags: [clients, angular, forms]
 ---
 
+import AdrTable from '@site/src/MDXComponents/AdrTable';
+
 # 0001 - Angular Reactive Forms
+
+<AdrTable frontMatter={frontMatter}></AdrTable>
 
 ## Context and Problem Statement
 

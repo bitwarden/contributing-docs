@@ -5,7 +5,11 @@ date: 2022-09-02
 tags: [clients, typescript]
 ---
 
+import AdrTable from '@site/src/MDXComponents/AdrTable';
+
 # 0014 - Adopt Typescript Strict flag
+
+<AdrTable frontMatter={frontMatter}></AdrTable>
 
 ## Context and Problem Statement
 

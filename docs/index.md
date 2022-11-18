@@ -1,8 +1,3 @@
----
-hide:
-  - navigation
----
-
 # Home
 
 Welcome! The Bitwarden Contributing Documentation contains all the information you need to get
@@ -13,12 +8,12 @@ started as a community developer.
 It’s likely the first thing you’ll need to do is set up a local development environment; to do so,
 we recommend progressing through the documentation in the following order.
 
-1. Install all the recommended [Tools and Libraries](./tools/index.md) for development.
+1. Install all the recommended [Tools and Libraries](./tools.md) for development.
 2. Follow the [Server Setup Guide](./server/guide.mdx) to setup your local server and related
    services
-3. Build and run each [Clients](./clients/index.md) from source and connect them to your local
+3. Build and run each [Clients](./clients.md) from source and connect them to your local
    server
-4. Read our [Contributing Guidelines](./contributing.md) and [Coding Style](./code-style/index.md)
+4. Read our [Contributing Guidelines](./contributing/index.md) and [Coding Style](./code-style.md)
 
 ## Help!
 
