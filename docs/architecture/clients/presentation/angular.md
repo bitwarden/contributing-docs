@@ -1,13 +1,15 @@
-# Angular / Presentation
+# Angular
 
 At Bitwarden we use Angular as our client side framework. It's recommended to have a basic
 understanding of Angular before continuing reading, and when uncertain please refer to the official
 [Angular Docs][docs] or the [Getting started with Angular][start]. We also make an effort at
 following the [Angular Style Guide][styleguide].
 
-This document covers
+This document aims to cover the best practices we follow. Many of them are originally based on
+different ADRs, however while ADRs are good at describing the why, they provide a suboptimal reading
+experience.
 
-## Naming {% if not external %} ([ADR-0012][adr-0012]) {% endif %}
+## Naming ([ADR-0012](../../adr/0012-angular-filename-convention.md))
 
 We follow the [Naming](https://angular.io/guide/styleguide#naming) section from the Angular Style
 Guide. More specifically use dashes to septate words in the descriptive name, and dots to separate
@@ -40,7 +42,7 @@ Since abstracts are referenced far more frequently than implementations, they us
 type while implementations must specify they are implementations e.g `.service` for the abstract vs
 `.service.implementation` for the implantation.
 
-## Observables {% if not external %} ([ADR-0003][adr-0003]) {% endif %}
+## Observables ([ADR-0003](../../adr/0003-observable-data-services.md))
 
 We are currently in the middle of a migration towards reactive data layer using [RxJS][rxjs]. What
 this essentially means is that a component subscribes to a state service, e.g. `FolderService` and
@@ -49,8 +51,6 @@ stay up to date.
 
 Previously we manually implemented an event system for sending basic messages which told other
 components to reload their state. This was error prone, and hard to maintain.
-
-{% raw %}
 
 ```ts
 // Example component which displays a list of folders
@@ -75,9 +75,7 @@ export class FoldersListComponent {
 }
 ```
 
-{% endraw %}
-
-## Reactive Forms {% if not external %} ([ADR-0001][adr-0001]) {% endif %}
+## Reactive Forms ([ADR-0001](../../adr/0001-reactive-forms.md))
 
 We almost exclusively use [Angular Reactive forms](https://angular.io/guide/reactive-forms) instead
 of Template Driven forms. And the Bitwarden Component library is designed to integrate with Reactive
@@ -88,8 +86,7 @@ forms.
 > part of your application, or you're already using reactive patterns for building your application,
 > use reactive forms.
 >
-> --
-> <cite>[https://angular.io/guide/forms-overview#choosing-an-approach](https://angular.io/guide/forms-overview#choosing-an-approach)</cite>
+> <cite>https://angular.io/guide/forms-overview#choosing-an-approach</cite>
 
 ## Thin Components
 
@@ -98,7 +95,7 @@ belongs to services. This way components that behave almost identical but looks 
 visually can avoid code duplication by sharing the same service. Services tends to be much easier to
 test than components as well.
 
-### Composition over Inheritance {% if not external %} ([ADR-0009][adr-0009]) {% endif %}
+### Composition over Inheritance ([ADR-0009](../../adr/0009-angular-composition-over-inheritance.md))
 
 Due to the multi client nature of Bitwarden, we have a lot of shared components with slightly
 different behavior client to client. Traditionally this was implemented using inheritance, however
@@ -108,7 +105,7 @@ work with, as well as a multi level inheritance tree.
 To avoid this, components should be broken up into logical standalone pieces. The different clients
 should use the the shared components by customizing the page level components.
 
-```plantuml
+```kroki type=plantuml
 @startuml
 skinparam BackgroundColor transparent
 skinparam componentStyle rectangle
@@ -138,11 +135,16 @@ component "Angular" {
 @enduml
 ```
 
+Understandably this is difficulty to properly implement when the different clients use different css
+frameworks, which until everything is properly migrated to Bootstrap means there will be a _Login
+Component_ for each client that extends the generic _Login Component_. However it should only expose
+a client specific template.
+
 The diagram below showcases how the reports share logic by extracting the list into a shared
 component. Instead of the organization component directly extending the base report page component.
 For more details, read [the PR for the refactor](https://github.com/bitwarden/clients/pull/3204).
 
-```plantuml
+```kroki type=plantuml
 @startuml
 skinparam BackgroundColor transparent
 skinparam componentStyle rectangle
@@ -174,7 +176,3 @@ component "Organization Reports Module" {
 [styleguide]: https://angular.io/guide/styleguide
 [style-02-01]: https://angular.io/guide/styleguide#general-naming-guidelines
 [rxjs]: https://angular.io/guide/rx-library
-[adr-0001]: https://adr.bitwarden.com/decisions/0001-reactive-forms
-[adr-0003]: https://adr.bitwarden.com/decisions/0003-observable-data-services
-[adr-0009]: https://adr.bitwarden.com/decisions/0009-angular-composition-over-inheritance
-[adr-0012]: https://adr.bitwarden.com/decisions/0012-angular-filename-convention

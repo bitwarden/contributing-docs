@@ -1,11 +1,14 @@
+---
+sidebar_position: 2
+---
+
 # Data Model
 
-This document describes the internal data model used by the different client applications.
-
-We use several dedicated models to represent our data layer. With a slightly complicated data
+This document describes the internal data model used by the different client applications. We use
+several dedicated models to represent our data layer. With a slightly complicated data
 transformation pipeline.
 
-```plantuml
+```kroki type=plantuml
 @startuml
 skinparam componentStyle rectangle
 component [""<Domain>""] as Domain
@@ -23,30 +26,6 @@ component [""<Domain>""Data] as Data
 [Export] -r-> [View]
 @enduml
 ```
-
-<!--
-TODO: Should this be completely removed from the docs, and moved to an ADR?
-
-We're currently investigating a migrating towards a relationship closer to:
-
-```plantuml
-@startuml
-skinparam componentStyle rectangle
-component [""<Domain>""] as Domain
-component [""<Domain><Modifier>""Request] As Request
-component [""<Domain>""Response] as Response
-component [""<Domain>""View] as View
-component [""<Domain>""Export] as Export
-component [""<Domain>""Data] as Data
-
-[Domain] <-l- [Response]
-[Domain] -r-> [Request]
-[Domain] <-d-> [View]
-[Domain] <-d-> [Export]
-[Domain] <-d-> [Data]
-@enduml
-```
--->
 
 ## Domain
 

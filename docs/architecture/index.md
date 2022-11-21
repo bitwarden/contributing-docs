@@ -1,10 +1,8 @@
-# Architectural Overview
+---
+sidebar_position: 1
+---
 
-<style>
-  .md-sidebar--secondary {
-    display: none  !important;
-  }
-</style>
+# Architectural Overview
 
 In this section we will cover the high level architecture of Bitwarden, how it is structured,
 focusing initially on how the server and clients interact with each other, before diving into the
