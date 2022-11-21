@@ -22,8 +22,6 @@ Here is how you can get involved:
   any relevant feature requests. This helps get feedback from the community and Bitwarden team
   members before you start writing code
 - **Report a bug or submit a bugfix:** Use Github issues and pull requests
-- **Write documentation:** Submit a pull request to the
-  [Bitwarden help repository](https://github.com/bitwarden/help)
 - **Help other users:** Go to the
   [Ask the Bitwarden Community category](https://community.bitwarden.com/c/support/) on the
   Community Forums
