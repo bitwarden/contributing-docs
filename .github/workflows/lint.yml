@@ -20,21 +20,6 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@a12a3943b4bdde767164f792f33f40b04645d846  # v3.0.0
 
-      - name: Lint filenames (no capital characters)
-        run: |
-          find . -type f,d -name "*[[:upper:]]*" \
-            ! -path "./node_modules/*" \
-            ! -path "./coverage/*" \
-            ! -path "*/dist/*" \
-            ! -path "*/build/*" \
-            ! -path "*/target/*" \
-            ! -path "./.git/*" \
-            ! -path "*/.DS_Store" \
-            ! -path "*/*locales/*" \
-            ! -path "./.github/*" \
-            > tmp.txt
-          diff <(sort .github/whitelist-capital-letters.txt) <(sort tmp.txt)
-
       - name: Set up Node
         uses: actions/setup-node@9ced9a43a244f3ac94f13bfd896db8c8f30da67a  # v3.0.0
         with:
