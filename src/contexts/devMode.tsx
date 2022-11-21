@@ -49,7 +49,7 @@ function useContextValue(): ContextValue {
     if (param != null) {
       setDevMode("bitwarden");
     }
-  }, [param])
+  }, [param]);
 
   useEffect(() => {
     const onChange = (e: StorageEvent) => {
