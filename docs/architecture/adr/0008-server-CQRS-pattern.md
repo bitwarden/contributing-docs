@@ -1,13 +1,13 @@
 ---
-parent: Decisions
-nav_order: 8
 adr: "0008"
 status: In progress
 date: 2022-07-15
 tags: [server]
 ---
 
-# Server: Adopt CQRS
+# 0008 - Server: Adopt CQRS
+
+<AdrTable frontMatter={frontMatter}></AdrTable>
 
 ## Context and Problem Statement
 
