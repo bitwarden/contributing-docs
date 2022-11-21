@@ -48,7 +48,7 @@ scope. In addition, we have an iterative path to a full-blown CQRS pipeline, wit
 Queries are already basically done through repositories and/or services, but would require some
 restructuring to be obvious.
 
-## Implementation
+## Guidance for Developers
 
 CQRS can be implemented differently depending on the codebase and the objectives behind adopting the
 pattern. This section provides guidance for developers on how to use CQRS in our codebase.
