@@ -34,7 +34,7 @@ async function createConfig() {
             sidebarPath: require.resolve("./sidebars.js"),
             // Please change this to your repo.
             // Remove this to remove the "edit this page" links.
-            editUrl: "https://github.com/bitwarden/developer-docs/tree/master/",
+            editUrl: "https://github.com/bitwarden/contributing-docs/tree/master/",
             remarkPlugins: [[remarkKroki, { server: "https://kroki.io/" }]],
           },
           theme: {
