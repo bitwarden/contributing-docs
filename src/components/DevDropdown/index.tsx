@@ -24,7 +24,7 @@ export default function DevDropdown({
   const items = dropdownOptions.map((item) => {
     return {
       label: item.label,
-      to: '#',
+      to: "#",
       onClick: (e) => {
         setDevMode(item.id);
         e.preventDefault();

@@ -95,8 +95,8 @@ require a code change to do so. Check out `ServiceCollectionExtension.AddGlobalS
 the server repository to see how we’re doing it today
 ([fragile link to the code](https://github.com/bitwarden/server/blob/master/src/SharedWeb/Utilities/ServiceCollectionExtensions.cs#L448-L463)).
 
-The [internal user secrets](../secrets/index.md) contains a minimum override example. You will need to
-update the following values in the `Dev:SelfHostOverride:GlobalSettings` section:
+The [internal user secrets](../secrets/index.md) contains a minimum override example. You will need
+to update the following values in the `Dev:SelfHostOverride:GlobalSettings` section:
 
 - Installation Id and Key, using the values you just generated
 - A SQL Server password for a new SQL database we will be creating below. It can be copied from the

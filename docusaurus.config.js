@@ -96,7 +96,7 @@ const config = {
               {
                 label: "Community Help",
                 href: "https://community.bitwarden.com/c/support",
-              }
+              },
             ],
           },
           {
@@ -108,12 +108,12 @@ const config = {
               },
               {
                 label: "Gitter",
-                href: "https://gitter.im/bitwarden/Lobby"
+                href: "https://gitter.im/bitwarden/Lobby",
               },
               {
                 label: "Reddit",
-                href: "https://reddit.com/r/bitwarden"
-              }
+                href: "https://reddit.com/r/bitwarden",
+              },
             ],
           },
           {

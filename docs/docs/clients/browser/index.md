@@ -120,7 +120,9 @@ This should be enough for most debugging and testing, unless you're working in n
 
 :::info
 
-[Deploying](https://bitwarden.atlassian.net/wiki/spaces/EN/pages/166396366/Deploying) has more information about building, packing and signing the MacOS Desktop client, including the Browser extension. It may be useful for debugging if you’re having difficulty.
+[Deploying](https://bitwarden.atlassian.net/wiki/spaces/EN/pages/166396366/Deploying) has more
+information about building, packing and signing the MacOS Desktop client, including the Browser
+extension. It may be useful for debugging if you’re having difficulty.
 
 :::
 
