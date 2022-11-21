@@ -28,7 +28,7 @@ method parameters, which goes against our typical DI pattern.
 ## Considered Options
 
 - **`<<Entity>>Services`** - Discussed above
-- **Queries and Commands** - Fundamentally our problem is that the <<Entity>>Service name
+- **Queries and Commands** - Fundamentally our problem is that the `<<Entity>>Service` name
   encapsulates absolutely anything you can do with that entity and excludes any code reuse across
   different entities. The CQRS pattern creates classes based on the action being taken on the
   entity. This naturally limits the classes scope and allows for reuse should two entities need to
