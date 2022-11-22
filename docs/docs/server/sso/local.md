@@ -18,16 +18,16 @@ This uses
 
 3.  Come up with and enter an SSO Identifier
 
-3.  Select "SAML 2.0" as the SSO type. Don't save or exit this page yet, you'll need to come back to
+4.  Select "SAML 2.0" as the SSO type. Don't save or exit this page yet, you'll need to come back to
     it later
 
-4.  Open a new terminal and navigate to the `dev` folder in your server repository, e.g.
+5.  Open a new terminal and navigate to the `dev` folder in your server repository, e.g.
 
     ```bash
     cd ~/Projects/server/dev
     ```
 
-5.  Open your `.env` file and set the following environment variables, based on the "SP Entity ID"
+6.  Open your `.env` file and set the following environment variables, based on the "SP Entity ID"
     and "Assertion Consumer Service (ACS) URL" values on the web vault SSO configuration page:
 
     ```bash
@@ -38,7 +38,7 @@ This uses
     !!! note You should have created this `.env` file during your initial server setup. You can
     refer back to the `.env.example` file if required.
 
-6.  Make a copy of the provided `authsources.php.example` file, which contains the configuration for
+7.  Make a copy of the provided `authsources.php.example` file, which contains the configuration for
     your IdP users.
 
     ```bash
@@ -50,13 +50,13 @@ This uses
     [here](https://github.com/kenchan0130/docker-simplesamlphp#advanced-usage) for more information
     about customising this file.
 
-7.  Start the docker container:
+8.  Start the docker container:
 
     ```bash
     docker-compose --profile idp up -d
     ```
 
-8.  You can test your user configuration by navigating to <http://localhost:8090/simplesaml>, then
+9.  You can test your user configuration by navigating to <http://localhost:8090/simplesaml>, then
     Authentication → test configured authentication sources → example-userpass. You should be able
     to login with the users you’ve configured.
 
@@ -65,11 +65,11 @@ This uses
 1.  Go back to your window with the SSO configuration page open
 2.  Complete the following values in the SAML Identity Provider Configuration section:
 
-    1.  Entity ID: 
+    1.  Entity ID:
         ```
         http://localhost:8090/simplesaml/saml2/idp/metadata.php
         ```
-    2.  Single Sign On Service URL: 
+    2.  Single Sign On Service URL:
         ```
         http://localhost:8090/simplesaml/saml2/idp/SSOService.php
         ```
