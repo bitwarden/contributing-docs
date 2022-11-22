@@ -5,7 +5,7 @@ sidebar_custom_props:
 
 # Self-Hosted Guide
 
-::: note
+:::note
 
 This page is only relevant to you if you need to test self-hosted features. It is **not** required
 for most development work. If you just need a local server, go to the
