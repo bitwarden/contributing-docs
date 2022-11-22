@@ -2,8 +2,8 @@
 
 ## Requirements
 
-- complete the [Server Setup Guide](./guide.mdx) first
-- an enterprise organization
+- Completed the [Server Setup Guide](./guide.mdx),
+- an [enterprise organization](https://bitwarden.com/help/about-organizations/#types-of-organizations).
 
 ## Azurite (Cloud)
 
