@@ -79,7 +79,7 @@ facilitate easily customization.
 4.  You can change the other variables or use their default values. Save and quit this file.
 5.  Start the Docker containers.
 
-    Using PowerShell navigate to the cloned server repo location, into the dev folder and run the
+    Using PowerShell, navigate to the cloned server repo location, into the `dev` folder and run the
     docker command below.
 
     <Tabs groupId="dev">
@@ -162,9 +162,9 @@ This section applies to Bitwarden developers only.
 Queues and Table storage. We use it to minimize the online dependencies required for developing in a
 cloud environment.
 
-To bootstrap the local Azurite instance:
+To bootstrap the local Azurite instance, navigate to the `dev` directory in your server repo and run the following commands:
 
-1.  Install the Az module. This may take a few minutes to complete without providing any user
+1.  Install the `Az` module. This may take a few minutes to complete without providing any user
     feedback (it may appear frozen).
 
     ```bash
@@ -179,11 +179,13 @@ To bootstrap the local Azurite instance:
 
 ## Create database
 
-You now have the MSSQL server running. The next step is to create the database that will be used by
+You now have the MSSQL server running in Docker. The next step is to create the database that will be used by
 the Bitwarden server.
 
 We provide a helper script which will create the development database `vault_dev` and also run all
 migrations.
+
+Navigate to the `dev` folder in your server repo and perform the following steps:
 
 1.  Create the database and run all migrations:
 
@@ -216,6 +218,8 @@ The next step is to create two self-signed certificates for local development. W
 script that will generate these certificates and add them to your system’s keychain or certificate
 store.
 
+Navigate to the `dev` folder in your server repo and perform the following commands.
+
 ### MacOS
 
 1.  Generate the certificates and save them to your keychain:
@@ -223,8 +227,8 @@ store.
     ```bash
     sh create_certificates_mac.sh
     ```
-
-2.  You will receive output similar to the following. You will need this information for the next
+2. You will be prompted to enter a password 3 times. Create a complex password and type it into the `Export Password` field on each prompt. You will not be able to copy/paste.
+3.  You will receive output similar to the following. You will need this information for the next
     section.
 
     ```
@@ -233,10 +237,10 @@ store.
     Data Protection Dev: C3A6CECAD3DB580F91A52FC9C767FE780300D8AB
     ```
 
-3.  Open Keychain Access and go to your login keychain.
-4.  Double-click the `Bitwarden Data Protection Dev` and `Bitwarden Identity Server Dev`
+4.  Open Keychain Access and go to your login keychain.
+5.  Double-click the `Bitwarden Data Protection Dev` and `Bitwarden Identity Server Dev`
     certificates.
-5.  In each certificate, change the Trust settings to “Always Trust”.
+6.  In each certificate, change the Trust settings to “Always Trust”.
 
 ### Windows
 
@@ -257,21 +261,30 @@ store.
     0BE8A0072214AB37C6928968752F698EEC3A68B5  CN=Bitwarden Identity Server Dev
     C3A6CECAD3DB580F91A52FC9C767FE780300D8AB  CN=Bitwarden Data Protection Dev
     ```
+ 
+<bitwarden> 
+
+## Install Licensing Certificate
+
+To run your local server environment as a licensed instance, you will need to download the `Licensing Certificate - Dev` from the shared Engineering collection and install it. This can be done by double-clicking on the downloaded certificate.
+
+</bitwarden>
 
 ## Configure User Secrets
 
 [User secrets](https://docs.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-6.0)
 are a method for managing application settings on a per-developer basis. They override the settings
-in `appsettings.json` of each project. Your user secrets file should match the structure of the
-`appsettings.json` file for the settings you intend to override.
+in `appSettings.json` of each project. Your user secrets file should match the structure of the
+`appSettings.json` file for the settings you intend to override.
 
 We provide a helper script which simplifies setting user secrets for all projects in the server
 repository.
 
-1.  Copy the example `secret.json` file.
+1.  Get a template `secrets.json`. We need to get an initial version of `secrets.json`, which you will modify for your own secrets values.
 
     <community>
 
+    Navigate to the `dev` folder in your server repo and copy the example `secrets.json` file.
     ```bash
     cp secrets.json.example secrets.json
     ```
@@ -283,12 +296,12 @@ repository.
     - Copy the user secrets file from the shared Development collection into the `dev` folder.
     - If you don't have access to the Development collection, contact our IT Manager to arrange
       access. Make sure you have first set up a Bitwarden account using your company email address.
-    - `secrets.json` is configured to use the dockerized Azurite and MailCatcher instances and is
+    - This `secrets.json` is configured to use the dockerized Azurite and MailCatcher instances and is
       recommended for this guide.
 
     </bitwarden>
 
-2.  Edit `secrets.json` and update the following strings:
+2.  Update `secrets.json` with your own values:
 
     - `sqlServer` > `connectionString`: insert your password where indicated
     - `identityServer` > `certificateThumbprint`: insert your Identity certificate thumbprint from
@@ -296,11 +309,7 @@ repository.
     - `dataProtection` > `certificateThumbprint`: insert your Data Protection certificate thumbprint
       from the previous step
 
-3.  &nbsp;
-
     <community>
-
-    You also need the following additional user secrets:
 
     - `installation` > `id` and `key`:
       [request a hosting installation Id and Key](https://bitwarden.com/host/) and insert them here
@@ -309,14 +318,7 @@ repository.
 
     </community>
 
-    <bitwarden>
-
-    You will also need to download the `Licensing Certificate - Dev` from the shared Engineering
-    collection and install it.
-
-    </bitwarden>
-
-4.  Add the secrets to each Bitwarden server project:
+3.  Once you have your `secrets.json` complete, run this command to add the secrets to each Bitwarden server project:
 
     ```bash
     pwsh setup_secrets.ps1
