@@ -12,7 +12,7 @@ This uses
 
 ## Configure IdP
 
-1.  Open your local web vault and navigate to your organization → Manage → Single Sign-On
+1.  Open your local web vault and navigate to your organization → Settings → Single Sign-On
 
 2.  Tick the "Allow SSO authentication" box
 
