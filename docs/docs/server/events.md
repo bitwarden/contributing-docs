@@ -2,10 +2,11 @@
 
 ## Requirements
 
-- Completed the [Server Setup Guide](./guide.mdx),
-- an [enterprise organization](https://bitwarden.com/help/about-organizations/#types-of-organizations).
+- Completed the [Server Setup Guide](./guide.mdx)
+- An
+  [enterprise organization](https://bitwarden.com/help/about-organizations/#types-of-organizations)
 
-## Azurite (Cloud)
+## Azure Queue (Cloud)
 
 The cloud instance of Bitwarden uses Azure Queue and Table Storage to handle events. Here's how this
 works:
@@ -47,5 +48,5 @@ To use database storage for events:
 
 1. Run your local development server in a [self-hosted configuration](./self-hosted/index.md) (Api,
    Identity and web vault)
-1. Start the Events project using `dotnet run` or your IDE (note: EventsProcessor is not required
+2. Start the Events project using `dotnet run` or your IDE (note: EventsProcessor is not required
    for self-hosted)
