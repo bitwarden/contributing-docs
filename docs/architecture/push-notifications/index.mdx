@@ -1,0 +1,33 @@
+---
+sidebar_position: 3
+---
+
+# Push Notifications
+
+Bitwarden uses push notifications to communicate in real-time from the Bitwarden server to its
+clients.
+
+## Uses at Bitwarden
+
+Currently, this functionality is used for:
+
+- Syncing the vault between clients
+- Bitwarden Send
+- Passwordless login requests
+
+## Technology in Use
+
+The technology used to send and receive push notifications depends on the client involved.
+
+The first key to understanding the push notification architecture at Bitwarden is that _all_ push
+notifications are initiated from the Bitwarden server. It is the responsibility of the Bitwarden
+server-side code to trigger push notifications when data is updated in such a way that a push
+notification is required.
+
+The way that the server communicates to the client depends upon the client involved.
+
+For our mobile applications, we use Azure Notification Hub, which abstracts the Push Notification
+Services (PNSs) for the Apple and Android ecosystems.
+
+For the other clients, we use SignalR, which uses WebSockets (or other protocols) to establish
+real-time client communications with our non-mobile clients.
