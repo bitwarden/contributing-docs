@@ -3,28 +3,38 @@ sidebar_custom_props:
   access: bitwarden
 ---
 
-# Self Hosted Guide
+# Self-Hosted Guide
+
+:::note
+
+This page is only relevant to you if you need to test self-hosted features. It is **not** required
+for most development work. If you just need a local server, go to the
+[Server Setup Guide](../guide.mdx) instead.
+
+:::
+
+This page explains how to configure and run a self-hosted development server alongside a cloud
+development server. This is useful if:
+
+- you need to test how a self-hosted instance communicates with the cloud
+- you need to develop self-hosted features without upsetting your normal development environment
+
+In the most common configuration, both the cloud and self-hosted development servers will be running
+with the same infrastructure configuration:
+
+- Services running on `http://localhost:{port}` (using different port numbers for cloud vs.
+  self-hosted)
+- Local SQL database (using a different database name for cloud vs. self-hosted)
+
+## Requirements
 
 This guide assumes you have completed and are familiar with the techniques in
 [Server Setup Guide](../guide.mdx). Please make sure you have a working development environment for
 a cloud-configured server before worrying about getting a self-hosted instance connected to it.
 
-In the most common local development configuration, both the "cloud" and "self-hosted" development
-servers will be running with the same infrastructure configuration:
-
-- Services running on http://localhost:{port} (different port numbers for cloud vs. self-hosted)
-- Local SQL database (different database name for cloud vs. self-hosted)
-
-The difference between them is whether they are configured to run as "self-hosted" or as "cloud".
-Running a local self-hosted instance allows us to test the logic for self-hosted customers and test
-how these services interact with a cloud instance.
-
 ## Setup
 
-There are scenarios in which you will want both the cloud-configured and the self-hosted server code
-running for development, so that the self-hosted instance can communicate back to the Bitwarden
-cloud. To do this, it is easiest to set up a folder for self-hosted work to develop on
-simultaneously. Clone the server repo into a new folder, called `server-selfhost`:
+Clone the server repo into a new folder, called `server-selfhost`:
 
 ```bash
 git clone git@github.com:bitwarden/server.git server-selfhost
@@ -211,14 +221,14 @@ self-hosted launch configurations (e.g. "Api-SelfHost") will set the Environment
 ### VS Code
 
 We have a number of launch configurations as well as combined configurations to make launching the
-services easy. By default, the individual self host launches are hidden. Navigate to `launch.json`
+services easy. By default, the individual self-host launches are hidden. Navigate to `launch.json`
 to un-hide them.
 
 ![](./vs-code.png)
 
 ### Visual Studio
 
-Run configurations have been made to start a given service in a self hosted mode.
+Run configurations have been made to start a given service in a self-hosted mode.
 
 ![](./visual-studio.png)
 

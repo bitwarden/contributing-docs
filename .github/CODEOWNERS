@@ -1,6 +1,2 @@
-# Default code owners
-* @MGibson1 @Hinton
-
-# Leave empty
-docs/docs
-docs/contributing
+# ADR code owners
+docs/architecture/adr @MGibson1 @Hinton
