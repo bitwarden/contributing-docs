@@ -10,7 +10,7 @@ To have efficient code reviews there are a few things to keep in mind (from
   - This can be tricky in our code base since many things are tightly coupled.
   - Consider splitting up a PR into multiple smaller PRs to encourage easier and better quality
     reviews.
-  - Target Master if the code is functionally complete, otherwise target a feature branch.
+  - Target `master` if the code is functionally complete, otherwise target a feature branch.
 - Take your time when reviewing - expect a rate of less than 500 lines of code per hour.
 - Take breaks - don’t review for longer than 60 minutes.
 
@@ -36,6 +36,13 @@ Please use the [SME Yellowpages][sme-yellowpages] to check if there is someone w
 knowledge of the area that can assist with reviewing complex changes.
 
 </bitwarden>
+
+<community>
+
+Once a community PRs is created, they will be automatically linked to an internal Jira ticket. The
+Jira ticket is used internally to prioritize and track the PR.
+
+</community>
 
 ### Force Pushing
 
