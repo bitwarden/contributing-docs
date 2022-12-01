@@ -12,20 +12,22 @@ This uses
 
 ## Configure IdP
 
-1.  Open your local web vault and navigate to your organization → Manage → Single Sign-On
+1.  Open your local web vault and navigate to your organization → Settings → Single Sign-On
 
 2.  Tick the "Allow SSO authentication" box
 
-3.  Select "SAML 2.0" as the SSO type. Don't save or exit this page yet, you'll need to come back to
+3.  Come up with and enter an SSO Identifier
+
+4.  Select "SAML 2.0" as the SSO type. Don't save or exit this page yet, you'll need to come back to
     it later
 
-4.  Open a new terminal and navigate to the `dev` folder in your server repository, e.g.
+5.  Open a new terminal and navigate to the `dev` folder in your server repository, e.g.
 
     ```bash
     cd ~/Projects/server/dev
     ```
 
-5.  Open your `.env` file and set the following environment variables, based on the "SP Entity ID"
+6.  Open your `.env` file and set the following environment variables, based on the "SP Entity ID"
     and "Assertion Consumer Service (ACS) URL" values on the web vault SSO configuration page:
 
     ```bash
@@ -36,7 +38,7 @@ This uses
     !!! note You should have created this `.env` file during your initial server setup. You can
     refer back to the `.env.example` file if required.
 
-6.  Make a copy of the provided `authsources.php.example` file, which contains the configuration for
+7.  Make a copy of the provided `authsources.php.example` file, which contains the configuration for
     your IdP users.
 
     ```bash
@@ -48,13 +50,13 @@ This uses
     [here](https://github.com/kenchan0130/docker-simplesamlphp#advanced-usage) for more information
     about customising this file.
 
-7.  Start the docker container:
+8.  Start the docker container:
 
     ```bash
     docker-compose --profile idp up -d
     ```
 
-8.  You can test your user configuration by navigating to <http://localhost:8090/simplesaml>, then
+9.  You can test your user configuration by navigating to <http://localhost:8090/simplesaml>, then
     Authentication → test configured authentication sources → example-userpass. You should be able
     to login with the users you’ve configured.
 
@@ -63,15 +65,19 @@ This uses
 1.  Go back to your window with the SSO configuration page open
 2.  Complete the following values in the SAML Identity Provider Configuration section:
 
-    1.  Entity ID: `http://localhost:8090/simplesaml/saml2/idp/metadata.php`
-    2.  Single Sign On Service URL: `http://localhost:8090/simplesaml/saml2/idp/SSOService.php`
+    1.  Entity ID:
+        ```
+        http://localhost:8090/simplesaml/saml2/idp/metadata.php
+        ```
+    2.  Single Sign On Service URL:
+        ```
+        http://localhost:8090/simplesaml/saml2/idp/SSOService.php
+        ```
     3.  X509 Public Certificate: get this by opening a new tab and navigating to the Entity ID URL
         above. It will open (or download) an XML file. Copy and paste the value _between_ the
         `<ds:X509Certificate>` tags (it should look like a B64 encoded string)
 
 3.  Save your SSO configuration
-4.  Also make sure you’ve set an identifier for your organization in Settings → My organisation →
-    Identifier
 
 Your SSO is now ready to go!
 
