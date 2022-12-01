@@ -76,9 +76,9 @@ in Visual Studio Code and then placing breakpoints in `build/main.js`.
 Instructions for configuring native messaging (communication between the desktop application and
 browser extension) are located [in the Browser section](../browser/biometric.mdx).
 
-# Troubleshooting
+## Troubleshooting
 
-## Trouble building
+### Trouble building
 
 If you see an error like this:
 
@@ -87,3 +87,17 @@ If you see an error like this:
 ```
 
 You likely haven't built the native module, refer to [Build Native Module](#build-native-module).
+
+### Desktop electron app window doesn't open
+
+If running `npm run electron` throws an error similar to this:
+
+```bash
+[Main] npm ERR! Error: Missing script: "build-native"
+```
+
+or the electron window doesn't render, you may need to update node and/or npm. Upgrading from older
+versions to these solved this issue:
+
+- Node: `16.18.1`
+- npm: `8.19.2`
