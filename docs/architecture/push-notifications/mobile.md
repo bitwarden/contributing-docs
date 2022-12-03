@@ -89,12 +89,16 @@ Cloud API. This is exposed to the self-hosted instance as httos://push.bitwarden
 `PushController` on the Bitwarden Cloud API then registers the push token as if it were a cloud
 registration - sending it to Azure Notification Hub.
 
-:::tip It is important to understand the change in context when moving through the relay push
-notification service. The relay communicates between two different servers running the Bitwarden
-API - the self-hosted instance and the Bitwarden Cloud instance. Each of these servers has different
+:::tip
+
+It is important to understand the change in context when moving through the relay push notification
+service. The relay communicates between two different servers running the Bitwarden API - the
+self-hosted instance and the Bitwarden Cloud instance. Each of these servers has different
 implementations of IPushNotificationService. Once the message is received by the Bitwarden Cloud API
 `/push/register` endpoint, it is handled just like any other push notification triggered from the
-service itself. :::
+service itself.
+
+:::
 
 ### Using the push token to send notifications to the device
 
@@ -237,9 +241,10 @@ the `GroupingsPage`. The same comparison is done for this user, and in this case
 updated the `PushCurrentToken` for the initial user thus far). It is at this point that the
 Bitwarden API is notified that the subsequent users are registered for the new token.
 
-:::warning **Implication for Push Notification Delays** The Android push notification implementation
-described above may cause delays in push notifications if there are multiple accounts on the device.
-This can happen in the following cases:
+:::warning **Implication for Push Notification Delays**
+
+The Android push notification implementation described above may cause delays in push notifications
+if there are multiple accounts on the device. This can happen in the following cases:
 
 - Normally, push notifications will be received for all accounts on the device, regardless if they
   are the active account or not. However, if a new token is received from FCM, non-active accounts
@@ -247,7 +252,9 @@ This can happen in the following cases:
   push token.
 - There is a delay of up to one day built in to the logic that runs when the vault page opens for a
   user. This means that if FCM provides a new token, it could be up to a day before the application
-  actually checks for this new token and registers it for the active user. :::
+  actually checks for this new token and registers it for the active user.
+
+  :::
 
 #### iOS
 
@@ -268,7 +275,11 @@ calls the `OnRegisteredAsync()` method of the `PushNotificationListenerService`,
 newly-acquired token. This method is responsible for sending the push token to the back-end API to
 register the device + user combination for push notifications.
 
-:::note We are registering for a push token once a day for each account on the device. However, it
-is quite likely that the token received from iOS will be the same each day. A different token should
-only be generated for a device when the device is uninstalled and re-installed, but we check on a
-daily basis to ensure our database is up to date. :::
+:::note
+
+We are registering for a push token once a day for each account on the device. However, it is quite
+likely that the token received from iOS will be the same each day. A different token should only be
+generated for a device when the device is uninstalled and re-installed, but we check on a daily
+basis to ensure our database is up to date.
+
+:::
