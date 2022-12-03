@@ -195,8 +195,8 @@ mobile OS.
 
 #### Android
 
-Android push tokens are received by the `FirebaseMessagingService`, found
-[here](https://github.com/bitwarden/mobile/blob/master/src/Android/Push/FirebaseMessagingService.cs).
+Android push tokens are received by the
+[`FirebaseMessagingService`](https://github.com/bitwarden/mobile/blob/master/src/Android/Push/FirebaseMessagingService.cs).
 Firebase Cloud Messaging (FCM) is the Platform Notification Service used for push notifications to
 Android devices. When the Android OS initially obtains a token for the application, or the token is
 updated, the `OnNewToken()` method in this service is triggered.
