@@ -220,8 +220,6 @@ Here, we use `PushRegisteredToken` in state to represent the recent token receiv
 scoped to exist once for a given device, because FCM assigns push tokens to a given device,
 regardless of Bitwarden accounts on the device.
 
-##### Registering the user's push token with `RegisterSync()`
-
 At this point, the `PushRegisteredToken` represents the token assigned to the device by FCM.
 However, Bitwarden stores push tokens for each individual user on the device, in order to target the
 notifications appropriately. In order to capture this level of granularity, we store the
@@ -251,6 +249,8 @@ Bitwarden API is notified that the subsequent users are registered for the new t
 
 #### iOS
 
+On iOS devices, push token registration occurs through the Apple Push Notification service (APNs).
+
 When a user logs in to the iOS application or switches accounts, the application loads the
 `GroupingsPage`. In the `GroupingsPage` initialization, we first check to make sure the device has
 accepted push notifications. If not, the Bitwarden push notification prompt is shown. This prompt
@@ -260,13 +260,14 @@ If the user accepts this prompt, or if they already have accepted it, the applic
 if the _current user_ has registered for push notifications within the last day. If they have never
 registered before, or if more than one day has elapsed, the Bitwarden app registers with iOS for
 push notifications, requesting a push token. This is done in the `RegisterAsync()` method in
-`iOSPushNotificationService`.
+`iOSPushNotificationService`. `RegisterAsync()` executes the iOS platform-specific method required
+to begin the token request process from APNs.
 
-The registration for a push token with iOS happens asynchonously. When a token is obtained for the
-device, the `OnRegisteredSuccess()` method in `iOSPushNotificationHandler` is triggered. This then
-calls the `OnRegisteredAsync()` method of the `PushNotificationListenerService`, passing along the
-newly-acquired token. This method is responsible for sending the push token to the back-end API to
-register the device + user combination for push notifications.
+The response from APNs with the push token is received asynchronously. When a token is obtained for
+the device, the `OnRegisteredSuccess()` method in `iOSPushNotificationHandler` is triggered. This
+then calls the `OnRegisteredAsync()` method of the `PushNotificationListenerService`, passing along
+the newly-acquired token. This method is responsible for sending the push token to the back-end API
+to register the device + user combination for push notifications.
 
 :::note
 
