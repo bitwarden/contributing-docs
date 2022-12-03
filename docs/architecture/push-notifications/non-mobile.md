@@ -1,8 +1,24 @@
-# Client Push Notifications
+# Other Client Push Notifications
 
-## Diagrams
+## Client Registration
 
-### Cloud instance
+For non-mobile clients, push notifications are handled with
+[SignalR](https://learn.microsoft.com/en-us/aspnet/core/signalr/introduction), Microsoft's library
+for real-time client communication over WebSockets.
+
+When a non-mobile client starts and the user is authenticated, it initiates a WebSocket connection
+to the Notification service (`/notifications/hub`) for their configured server instance. This
+request includes their JWT `bearer` token, which is used to retreive the user ID, which in turn
+determines which notifications the user receives.
+
+## Server
+
+When real-time changes must be communicated to the registered non-mobile clients, it is the
+responsibiity of the Bitwarden API for their configured server instance to distribute the
+information. The server abstracts this with the `IPushNotificationService` interface, which has
+different implementations based on whether the instance is cloud-hosted or self-hosted.
+
+### Cloud implementation
 
 ```kroki type=plantuml
 @startuml
@@ -28,7 +44,15 @@ end
 @enduml
 ```
 
-### Self-hosted instance
+For the Bitwarden Cloud implementation, the API uses the `AzureQueuePushNotificationService`
+implementation of `IPushNotificationService`. This service submits the push notification to an Azure
+Queue in the Bitwarden Azure tenant.
+
+The Bitwarden Cloud Notifications API includes a job - the `AzureQueueHostedService` - that monitors
+the Azure Queue for pending push notifications. The job pulls messages from the queue and sends them
+to all clients registered for the initiating user or organization.
+
+### Self-hosted implementation
 
 ```kroki type=plantuml
 @startuml
@@ -52,39 +76,11 @@ end
 @enduml
 ```
 
-## Cloud implementation
-
-### Registering for notifications
-
-For non-mobile clients, push notifications are handled with
-[SignalR](https://learn.microsoft.com/en-us/aspnet/core/signalr/introduction), Microsoft's library
-for real-time client communication over WebSockets.
-
-When a non-mobile client starts up, it is registered with the Bitwarden Notifications API through
-SignalR. This allows the client to receive real-time push notifications.
-
-### Triggering distribution of notifications
-
-When relevant data is changed through another client (this could be triggering a Passwordless login
-request or updating vault data, for example), the Bitwarden Cloud API is responsible for initiating
-the process of distributing that update to the user's other registered clients.
-
-To do so, the Bitwarden Cloud API uses the `AzureQueuePushNotificationService`. This service submits
-the push notification to an Azure Queue.
-
-### Sending notifications to registered clients
-
-The Bitwarden Cloud Notifications API includes a job - the `AzureQueueHostedService` - that monitors
-the Azure Queue for pending push notifications. The job will pull messages from the queue and send
-them to all clients registered via SignalR for the given user.
-
-## Self-hosted implementation
-
 For a self-hosted implementation, push notification architecture differs because there is no Azure
 Queue available.
 
-The overall flow is the same, with the exception that instead of submitting the notifications to the
-Azure Queue, the self-hosted Bitwarden API submits the notifications directly to the self-hosted
-Notifications API. In the cloud instance, this is buffered through the Azure Queue, but for
-self-hosted instances the API calls the `/send` endpoint on the `SendController` on the
-Notifications API to send the message directly.
+The overall flow is the same as the cloud-hosted implementation, with the exception that instead of
+submitting the notifications to the Azure Queue, the self-hosted Bitwarden API submits the
+notifications directly to the self-hosted Notifications API. In the cloud instance, this is buffered
+through the Azure Queue, but for self-hosted instances the API calls the `/send` endpoint on the
+`SendController` on the Notifications API to send the message directly.
