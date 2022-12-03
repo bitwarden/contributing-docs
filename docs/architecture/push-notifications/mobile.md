@@ -31,10 +31,14 @@ the server, the opaque push token is associated with a specific user via the use
 `access_token` on the request and a physical device from the URL path. This is stored in SQL in the
 `Device` table.
 
-:::note It is important to recognize here that at this point we have associated a token with the
-combination of **both** a user **and** a physical device, as both of these are used as tags on the
-registration in Azure Notification Hub. This is how we ensure that subsequent notifications are only
-sent to the device when the appropriate user triggers them on another device. :::
+:::note
+
+It is important to recognize here that at this point we have associated a token with the combination
+of **both** a user **and** a physical device, as both of these are used as tags on the registration
+in Azure Notification Hub. This is how we ensure that subsequent notifications are only sent to the
+device when the appropriate user triggers them on another device.
+
+:::
 
 #### Cloud implementation
 
