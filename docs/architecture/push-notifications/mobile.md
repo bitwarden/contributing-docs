@@ -187,12 +187,16 @@ No decrypted data is ever send in push notification payloads, and the data is ne
 Bitwarden Cloud database when being proxied by the push relay. This allows our self-hosted instances
 to keep their data segregated from the Bitwarden Cloud and still use push notifications.
 
-:::tip It is important to understand the change in context when moving through the relay push
-notification service. The relay communicates between two different servers running the Bitwarden
-API - the self-hosted instance and the Bitwarden Cloud instance. Each of these servers has different
+:::tip
+
+It is important to understand the change in context when moving through the relay push notification
+service. The relay communicates between two different servers running the Bitwarden API - the
+self-hosted instance and the Bitwarden Cloud instance. Each of these servers has different
 implementations of IPushNotificationService. Once the message is received by the Bitwarden Cloud API
 `/push/send` endpoint, it is handled just like any other push notification triggered from the
-service itself. :::
+service itself.
+
+:::
 
 ## Client Implementations
 
@@ -247,18 +251,7 @@ Bitwarden API is notified that the subsequent users are registered for the new t
 
 :::warning **Implication for Push Notification Delays**
 
-The Android push notification implementation described above may cause delays in push notifications
-if there are multiple accounts on the device. This can happen in the following cases:
-
-- Normally, push notifications will be received for all accounts on the device, regardless if they
-  are the active account or not. However, if a new token is received from FCM, non-active accounts
-  will stop receiving push notifications until they become the active account and can update their
-  push token.
-- There is a delay of up to one day built in to the logic that runs when the vault page opens for a
-  user. This means that if FCM provides a new token, it could be up to a day before the application
-  actually checks for this new token and registers it for the active user.
-
-  :::
+:::
 
 #### iOS
 
