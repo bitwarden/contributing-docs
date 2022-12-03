@@ -198,7 +198,7 @@ service itself.
 
 :::
 
-## Client Implementations
+## Client Registration
 
 ### Obtaining push tokens on the mobile clients
 

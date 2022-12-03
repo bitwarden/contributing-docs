@@ -1,17 +1,6 @@
 # Other Client Push Notifications
 
-## Client Registration
-
-For non-mobile clients, push notifications are handled with
-[SignalR](https://learn.microsoft.com/en-us/aspnet/core/signalr/introduction), Microsoft's library
-for real-time client communication over WebSockets.
-
-When a non-mobile client starts and the user is authenticated, it initiates a WebSocket connection
-to the Notification service (`/notifications/hub`) for their configured server instance. This
-request includes their JWT `bearer` token, which is used to retreive the user ID, which in turn
-determines which notifications the user receives.
-
-## Server
+## Server Implementations
 
 When real-time changes must be communicated to the registered non-mobile clients, it is the
 responsibiity of the Bitwarden API for their configured server instance to distribute the
@@ -84,3 +73,14 @@ submitting the notifications to the Azure Queue, the self-hosted Bitwarden API s
 notifications directly to the self-hosted Notifications API. In the cloud instance, this is buffered
 through the Azure Queue, but for self-hosted instances the API calls the `/send` endpoint on the
 `SendController` on the Notifications API to send the message directly.
+
+## Client Registration
+
+For non-mobile clients, push notifications are handled with
+[SignalR](https://learn.microsoft.com/en-us/aspnet/core/signalr/introduction), Microsoft's library
+for real-time client communication over WebSockets.
+
+When a non-mobile client starts and the user is authenticated, it initiates a WebSocket connection
+to the Notification service (`/notifications/hub`) for their configured server instance. This
+request includes their JWT `bearer` token, which is used to retreive the user ID, which in turn
+determines which notifications the user receives.
