@@ -1,21 +1,24 @@
 # Mobile Push Notifications
 
-## Device Push Tokens
+## Overview
 
-In order to understand how push notifications to Bitwarden's mobile application function, it is
-important to understand push tokens.
+Push notifications are a somewhat complex area, and their implementation differs both on the server
+and on the client, based on different dimensions.
 
-A push token is an opaque value that is received on the mobile application from the Platform
-Notification Service (PNS). The PNS varies based on the operating system of the mobile device:
+From a server perspective, the implementation differs between the Bitwarden cloud-hosted instance
+and self-hosted instances. The primary difference is that self-hosted clients need to relay their
+messages through the Bitwarden cloud-hosted instance. This is needed since only Bitwarden is allowed
+to send notifications to the store-distributed Android and iOS mobile applications.
 
-- Apple: Apple Push Notifications (APN)
-- Android: Firebase Cloud Messaging (FCM)
+From a client perspective, the implementations differ between mobile operating systems, Android and
+iOS. This is because each operating system handles acquiring and refreshing push tokens differently.
 
-From the OS perspective, this value is tied to the physical device that requested it. It is up to
-our application to associate it with any metadata required to ensure that notifications arrive to
-the proper devices.
+We will first look at the server-side implementations, then look at acquiring push tokens on the
+clients.
 
-## Sending the push token to Azure Notification Hub
+## Server Implementations
+
+### Sending the push token to Azure Notification Hub
 
 The mobile client - whether iOS or Android - receives an opaque token that represents that physical
 device to the platform-specific notification service. The client transmits this token to the server
@@ -33,7 +36,7 @@ combination of **both** a user **and** a physical device, as both of these are u
 registration in Azure Notification Hub. This is how we ensure that subsequent notifications are only
 sent to the device when the appropriate user triggers them on another device. :::
 
-### Cloud implementation
+#### Cloud implementation
 
 ```kroki type=plantuml
 @startuml
@@ -55,7 +58,7 @@ If we are running a Bitwarden cloud instance, the Bitwarden API is responsible f
 communicating with the Azure Notification Hub to register the push token. This is done in the
 `CreateOrUpdateRegistrationAsync()` method in the `NotificationHubPushRegistrationService`.
 
-### Self-hosted implementation
+#### Self-hosted implementation
 
 ```kroki type=plantuml
 @startuml
@@ -93,12 +96,12 @@ implementations of IPushNotificationService. Once the message is received by the
 `/push/register` endpoint, it is handled just like any other push notification triggered from the
 service itself. :::
 
-## Using the push token to send notifications to the device
+### Using the push token to send notifications to the device
 
 When a client changes data, or a Passwordless Authentication Request is sent, the server is
 responsible for sending push notifications to all mobile clients to make them aware of the change.
 
-### Cloud implementation
+#### Cloud implementation
 
 ```kroki type=plantuml
 @startuml
@@ -133,7 +136,7 @@ device identifier and user ID. Azure Notification Hub then uses those tags to lo
 and send the notification to the proper device. This ensures that we only send notifications to a
 device when the user _and_ device match.
 
-### Self-hosted implementation
+#### Self-hosted implementation
 
 ```kroki type=plantuml
 @startuml
@@ -183,12 +186,14 @@ implementations of IPushNotificationService. Once the message is received by the
 `/push/send` endpoint, it is handled just like any other push notification triggered from the
 service itself. :::
 
-## Obtaining push tokens on the mobile clients
+## Client Implementations
+
+### Obtaining push tokens on the mobile clients
 
 The process for obtaining the opaque device push tokens on the mobile client varies based on the
 mobile OS.
 
-### Android
+#### Android
 
 Android push tokens are received by the `FirebaseMessagingService`, found
 [here](https://github.com/bitwarden/mobile/blob/master/src/Android/Push/FirebaseMessagingService.cs).
@@ -203,7 +208,7 @@ Here, we use `PushRegisteredToken` in state to represent the recent token receiv
 scoped to exist once for a given device, because FCM assigns push tokens to a given device,
 regardless of Bitwarden accounts on the device.
 
-#### Registering the user's push token with `RegisterSync()`
+##### Registering the user's push token with `RegisterSync()`
 
 At this point, the `PushRegisteredToken` represents the token assigned to the device by FCM.
 However, Bitwarden stores push tokens for each individual user on the device, in order to target the
@@ -244,7 +249,7 @@ This can happen in the following cases:
   user. This means that if FCM provides a new token, it could be up to a day before the application
   actually checks for this new token and registers it for the active user. :::
 
-### iOS
+#### iOS
 
 When a user logs in to the iOS application or switches accounts, the application loads the
 `GroupingsPage`. In the `GroupingsPage` initialization, we first check to make sure the device has
