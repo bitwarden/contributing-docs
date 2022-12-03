@@ -249,10 +249,6 @@ the `GroupingsPage`. The same comparison is done for this user, and in this case
 updated the `PushCurrentToken` for the initial user thus far). It is at this point that the
 Bitwarden API is notified that the subsequent users are registered for the new token.
 
-:::warning **Implication for Push Notification Delays**
-
-:::
-
 #### iOS
 
 When a user logs in to the iOS application or switches accounts, the application loads the
