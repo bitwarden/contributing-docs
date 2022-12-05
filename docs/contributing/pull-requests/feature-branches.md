@@ -1,4 +1,4 @@
-# Reviewing Feature Branches
+# Long-lived Feature Branches
 
 A long lived feature branch typically differs from regular Pull Requests in two significant ways.
 
