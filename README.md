@@ -1,8 +1,9 @@
 # Bitwarden Contributing Docs
 
-The current version of the docs are accessible at:
-
-- https://contributing.bitwarden.com/
+This repository contains the code for the
+[Bitwarden contributing docs](https://contributing.bitwarden.com/) site. The site is built using
+[Docusaurus](https://docusaurus.io/) which is a static website generator. The latest version of the
+documentation is available at https://contributing.bitwarden.com/.
 
 ## Install
 
@@ -30,16 +31,35 @@ contents hosting service.
 
 ## Writing
 
-This website is built using [Docusaurus 2](https://docusaurus.io/), a modern static website
-generator.
+The documentation is written in Markdown and can be found in the `docs` directory. The `docs`
+directory consists of three sections:
 
-Documentation is located under `docs`.
+- Getting started - instructions on how to build and run the different projects.
+- Contribute - information on how to contribute to the project.
+- Architecture - high-level architecture documentation.
+
+### Style guide
+
+Please follow the following (very brief) style guide:
+
+- Use numbered paragraphs for all instructions or procedures. Start each paragraph with a verb
+  (“click”, “type”, “restart”, etc).
+- Use code blocks for all commands. Don't write them in-line.
+- Avoid long paragraphs - this documentation should be to-the-point and instructional.
 
 ### Conditional Content
 
 The Contributing Docs site is used both for internal and external contributors. To this end we've
 facilitated a mean to conditionally show content for either group. This is primarily to keep the
 external docs simple.
+
+As an end user you can switch the mode using the dropdown in the navigation bar. This will persist
+across sessions.
+
+![Context switcher](.github/dropdown.png)
+
+In order to write content that targets different context please use the `<community>` and
+`<bitwarden>` tags as demonstrated below.
 
 ```md
 <community>
