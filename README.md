@@ -38,6 +38,15 @@ directory consists of three sections:
 - Contribute - information on how to contribute to the project.
 - Architecture - high-level architecture documentation.
 
+### Style guide
+
+Please follow the following (very brief) style guide:
+
+- Use numbered paragraphs for all instructions or procedures. Start each paragraph with a verb
+  (“click”, “type”, “restart”, etc).
+- Use code blocks for all commands. Don't write them in-line.
+- Avoid long paragraphs - this documentation should be to-the-point and instructional.
+
 ### Conditional Content
 
 The Contributing Docs site is used both for internal and external contributors. To this end we've
