@@ -63,34 +63,27 @@ There are some vs code extensions that are life-savers in our line of work. A li
 recommended ones include the following:
 
 - General
-
   - [Back & Forth](https://marketplace.visualstudio.com/items?itemName=nick-rudenko.back-n-forth) -
     Adds forward and back buttons to top right of your editor. Simple, but I love it.
   - [Code Spell Checker](https://marketplace.visualstudio.com/items?itemName=streetsidesoftware.code-spell-checker) -
     can be annoying, but has saved me lots of `tmes form writting oragnizations.`
   - [LiveShare](https://marketplace.visualstudio.com/items?itemName=MS-vsliveshare.vsliveshare) -
     For pair programming
-
 - C#
-
   - [C#](https://marketplace.visualstudio.com/items?itemName=ms-dotnettools.csharp) - Omnisharp
     integrations
   - [.NET Core Test Explorer](https://marketplace.visualstudio.com/items?itemName=formulahendry.dotnet-test-explorer) -
     Test explorer for .NET tests
   - [.NET Core User Secrets](https://marketplace.visualstudio.com/items?itemName=adrianwilczynski.user-secrets) -
     Edit secrets files by right clicking on a .proj and selecting edit user -secrets
-
 - Git
-
   - [Git Graph](https://marketplace.visualstudio.com/items?itemName=mhutchie.git-graph) - fantastic
     git visualization tool
   - [Git History](https://marketplace.visualstudio.com/items?itemName=donjayamanne.githistory) -
     More Git history
   - [Git Lens](https://marketplace.visualstudio.com/items?itemName=eamodio.gitlens) - Even more Git
     options
-
 - Typescript / Angular
-
   - [Angular Language Service](https://marketplace.visualstudio.com/items?itemName=Angular.ng-template) -
     Understands Angular templates
   - [Jest](https://marketplace.visualstudio.com/items?itemName=Orta.vscode-jest) - Jest test runner
@@ -98,16 +91,13 @@ recommended ones include the following:
     integrate with prettier code formatting
   - [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) -
     Integrations for ESLint
-
 - Rust
-
   - [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=matklad.rust-analyzer) -
     Great rust language server
   - [Even Better TOML](https://marketplace.visualstudio.com/items?itemName=tamasfe.even-better-toml) -
     for handling TOML (cargo config)
   - [CodeLLDB](https://marketplace.visualstudio.com/items?itemName=vadimcn.vscode-lldb) - for rust
     debugging
-
 - Databases
   - [MySQL Syntax](https://marketplace.visualstudio.com/items?itemName=jakebathman.mysql-syntax) -
     syntax highlighting for MySQL
@@ -119,21 +109,12 @@ recommended ones include the following:
 The following tools may be useful depending on your preferences or what you’re developing.
 
 - [JetBrains Rider](https://www.jetbrains.com/rider/) ($) - an alternative to Visual Studio and/or
-  Visual Studio Code for MacOS
+  visual Studio Code for MacOS
 - [Microsoft Azure Storage Explorer](https://azure.microsoft.com/en-us/features/storage-explorer/) -
   for connecting to or working with local Azure table storage and queues
 - [Parallels](https://www.parallels.com/) - For running Windows VMs
-- [Sourcetree](https://www.sourcetreeapp.com/) - Git GUI.
-
-  Note: For the git hooks to behave correctly on macOS when using nvm, please create the following
-  file.
-
-  ```bash
-  # ~/.huskyrc
-  # This loads nvm.sh and sets the correct PATH before running hook
-  export NVM_DIR="$HOME/.nvm"
-
-  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-  ```
+- [Sourcetree](https://www.sourcetreeapp.com/) - Git GUI. Note: For the git hooks to behave
+  correctly on macOS when using nvm, please follow
+  [these instructions](https://typicode.github.io/husky/#/?id=command-not-found).
 
 [nvm]: https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
