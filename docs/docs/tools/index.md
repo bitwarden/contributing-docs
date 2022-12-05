@@ -109,7 +109,7 @@ recommended ones include the following:
 The following tools may be useful depending on your preferences or what you’re developing.
 
 - [JetBrains Rider](https://www.jetbrains.com/rider/) ($) - an alternative to Visual Studio and/or
-  visual Studio Code for MacOS
+  Visual Studio Code
 - [Microsoft Azure Storage Explorer](https://azure.microsoft.com/en-us/features/storage-explorer/) -
   for connecting to or working with local Azure table storage and queues
 - [Parallels](https://www.parallels.com/) - For running Windows VMs
