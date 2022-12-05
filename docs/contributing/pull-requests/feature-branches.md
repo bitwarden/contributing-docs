@@ -3,7 +3,7 @@
 A long lived feature branch typically differs from regular Pull Requests in three significant ways.
 
 1. Has multiple authors.
-2. Consists of multiple Pull Requests.
+2. Consists of multiple already reviewed Pull Requests.
 3. Only consists of pull request and merge commits.
 
 Since each pull request has already been reviewed before being merged into the feature branch, the
@@ -15,6 +15,15 @@ feature branch review is more of a sanity check. The reviewer should ensure the 
     testing.
 - Review any non-reviewed commits made directly on the branch, these can be either feature work or
   merge commits.
+
+:::warning
+
+Since feature branches do not have the same protections as master, it's technically possible to
+commit directly to the branch or merge a pull request without a up-to-date review. However this
+should be discouraged, and should be avoided whenever possible. The only exception being merge
+commits.
+
+:::
 
 ## Syncing Feature Branch
 
@@ -31,7 +40,7 @@ typically slightly larger some seniority with the codebase can be beneficial.
 We can perform the review using GitHubs UI. By opening the Pull Request and clicking on the
 `Commits` tab. Afterwards check each individually commit.
 
-- Verify the commit has an existing review by following the Pull Request link, and verifying the
+- Verify the commit has an existing review by following the Pull Request link. And verifying the
   commit SHA hash matches. `Author merged commit 8c948fd into branch`.
 - If not perform a regular code review of the commit.
 
