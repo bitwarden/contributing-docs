@@ -31,8 +31,8 @@ typically slightly larger some seniority with the codebase can be beneficial.
 We can perform the review using GitHubs UI. By opening the Pull Request and clicking on the
 `Commits` tab. Afterwards check each individually commit.
 
-- Verify the commit either has an existing review by following the Pull Request link, and verifying
-  the commit SHA hash matches. `Author merged commit 8c948fd into branch`.
+- Verify the commit has an existing review by following the Pull Request link, and verifying the
+  commit SHA hash matches. `Author merged commit 8c948fd into branch`.
 - If not perform a regular code review of the commit.
 
 Merge commits should be reviewed as well, the GitHub UI will automatically simplify the merge commit
