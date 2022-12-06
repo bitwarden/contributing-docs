@@ -1,5 +1,9 @@
 # Other Client Push Notifications
 
+For non-mobile clients, push notifications are handled with
+[SignalR](https://learn.microsoft.com/en-us/aspnet/core/signalr/introduction), Microsoft's library
+for real-time client communication over WebSockets.
+
 ## Server Implementations
 
 When real-time changes must be communicated to the registered non-mobile clients, it is the
@@ -34,12 +38,12 @@ end
 ```
 
 For the Bitwarden Cloud implementation, the API uses the `AzureQueuePushNotificationService`
-implementation of `IPushNotificationService`. This service submits the push notification to an Azure
-Queue in the Bitwarden Azure tenant.
+implementation. This service submits the push notification to an Azure Queue in the Bitwarden Azure
+tenant.
 
-The Bitwarden Cloud Notifications API includes a job - the `AzureQueueHostedService` - that monitors
-the Azure Queue for pending push notifications. The job pulls messages from the queue and sends them
-to all clients registered for the initiating user or organization.
+The Bitwarden Cloud Notifications API includes a queue processor - the `AzureQueueHostedService` -
+that monitors the Azure Queue for pending push notifications. The job pulls messages from the queue
+and sends them to all clients registered for the initiating user or organization.
 
 ### Self-hosted implementation
 
@@ -68,17 +72,12 @@ end
 For a self-hosted implementation, push notification architecture differs because there is no Azure
 Queue available.
 
-The overall flow is the same as the cloud-hosted implementation, with the exception that instead of
-submitting the notifications to the Azure Queue, the self-hosted Bitwarden API submits the
-notifications directly to the self-hosted Notifications API. In the cloud instance, this is buffered
-through the Azure Queue, but for self-hosted instances the API calls the `/send` endpoint on the
-`SendController` on the Notifications API to send the message directly.
+Self-hosted instances have a slightly simplified flow since they don't have access to Azure
+resources like Azure Queues. The overall flow is still the same as the cloud-hosted implementation,
+with the exception that instead of buffering the notifications using a Azure Queue, the self-hosted
+Bitwarden API submits the notifications directly to the self-hosted Notifications API.
 
 ## Client Registration
-
-For non-mobile clients, push notifications are handled with
-[SignalR](https://learn.microsoft.com/en-us/aspnet/core/signalr/introduction), Microsoft's library
-for real-time client communication over WebSockets.
 
 When a non-mobile client starts and the user is authenticated, it initiates a WebSocket connection
 to the Notification service (`/notifications/hub`) for their configured server instance. This

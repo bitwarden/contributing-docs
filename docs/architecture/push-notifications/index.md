@@ -25,6 +25,5 @@ There are currently two different methods being used for push notifications:
 - The mobile applications use Azure Notification Hub, which is an abstraction of the Push
   Notification Services (PNSs) for the Apple and Android ecosystems. Self-hosted instances relay
   their mobile messages through the Bitwarden cloud-hosted service.
-
 - The other clients use SignalR, which is a two-way RPC usually over WebSockets (but has fallbacks
   to other protocols) to establish real-time client communications with our non-mobile clients.

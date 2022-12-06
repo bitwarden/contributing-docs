@@ -89,7 +89,7 @@ self-hosted Bitwarden API must register with the Azure Notification Hub through 
 
 This implementation of `IPushRegistrationService` allows the self-hosted Bitwarden API to register
 the push token by calling the `/push/register` endpoint on the `PushController` in the Bitwarden
-Cloud API. This is exposed to the self-hosted instance as httos://push.bitwarden.com. The
+Cloud API. This is exposed to the self-hosted instance as https://push.bitwarden.com. The
 `PushController` on the Bitwarden Cloud API then registers the push token as if it were a cloud
 registration - sending it to Azure Notification Hub.
 
@@ -134,10 +134,10 @@ end
 ```
 
 For notifications to mobile devices, this is handled in the
-`NotificationHubPushNotificationService`. This service the `Microsoft.Azure.NotificationHubs` SDK to
-send notifications to the Azure Notification Hub.
+`NotificationHubPushNotificationService`. This service uses the `Microsoft.Azure.NotificationHubs`
+SDK to send notifications to the Azure Notification Hub.
 
-When registering with Azure Notification Hub, each push token was associated with both a user and a
+When registering with Azure Notification Hub, each push token is associated with both a user and a
 device, as we saw above. It is at this point that these tags are used to target specific
 notifications. For each type of notification that the server wishes to send, it is tagged with the
 device identifier and user ID. Azure Notification Hub then uses those tags to look up the push token
@@ -183,7 +183,7 @@ It is important to note that from the Cloud API's perspective, it handles a mess
 the `/send` endpoint the same way it does a message generated from an action on the Bitwarden Cloud
 server; there is no difference and the same code is executed either way.
 
-No decrypted data is ever send in push notification payloads, and the data is never stored on the
+No decrypted data is ever sent in push notification payloads, and the data is never stored on the
 Bitwarden Cloud database when being proxied by the push relay. This allows our self-hosted instances
 to keep their data segregated from the Bitwarden Cloud and still use push notifications.
 
