@@ -69,16 +69,15 @@ git checkout -b <pod>/<feature>/<issue-number> -t origin/master
 ### Naming convention
 
 To keep branches organized we adhere a naming convention for branches. The convention splits branch
-names into 3 components, each separated by a `/`.
+names into 2 components, each separated by a `/`.
 
 1. The developers pod abbreviation (e.g. `sm`)
-2. Type of work (e.g. `feature`, `bug`, `chore`)
-3. Descriptive name, or issue number (e.g. `1234`)
+2. Jira issue tag (e.g. `SM-1234`)
 
 ```bash
 # Some examples
-sm/feature/access-policy
-sm/feature/SM-2345
+sm/SM-1234
+ps/PS-4321-optional-description
 ```
 
 This naming convention allows us to easily identify the type of work being done on a branch. And
