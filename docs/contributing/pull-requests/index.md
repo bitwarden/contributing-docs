@@ -13,14 +13,22 @@ how to do this see this
 [help article from GitHub](https://docs.github.com/en/get-started/quickstart/fork-a-repo). After
 forking the repository you will need to clone it locally.
 
-It's also useful to add a `upstream` remote pointing to the official Bitwarden repository. This will
-allow you to pull in upstream changes easily by running.
-
 ```bash
 # Example for the clients repository
 git clone git@github.com:username/clients.git
-cd clients
+```
+
+It's also useful to add a `upstream` remote pointing to the official Bitwarden repository.
+
+```bash
+# Example for the clients repository, from the repository directory
 git remote add upstream https://github.com/bitwarden/clients.git
+```
+
+This will allow you to pull in upstream changes easily by running.
+
+```bash
+# Example for the clients repository, from the repository directory
 git fetch upstream
 ```
 
