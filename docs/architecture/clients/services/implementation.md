@@ -10,7 +10,7 @@ defined. These goals were the driving force behind the current implementation.
 ## Different Types of Services
 
 The Bitwarden clients have a service architecture that is comprised of primarily three different
-types of services, for a given domain in our [Data Model](data-model.md):
+types of services, for a given domain in our [Data Model](../data-model.md):
 
 - `[Domain]Service`
 - `Internal[Domain]Service`
