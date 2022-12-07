@@ -104,7 +104,11 @@ the docker-compose.yml file.
 
 ## Testing EF Changes
 
-Since we are supporting multiple databases it is important that any changes to EF repositories/models are tested against all supported databases. You may want to use a database that is different from your local development database because the tests may add or remove data. To apply migrations to a database different from your global settings run the following commands from the root of your repository:
+Since we allow for multiple databases it is important that any changes to EF repositories/models are
+tested against all possible databases. You may want to use a database that is different from your
+local development database because the tests may add or remove data. To apply migrations to a
+database different from your global settings run the following commands from the root of your
+repository:
 
 ```bash
 # EntityFramework CLI Reference: https://learn.microsoft.com/en-us/ef/core/cli/dotnet
@@ -126,9 +130,8 @@ dotnet user-secrets set "Ef:MySql" "[MYSQL_CONNECTION_STRING]"
 dotnet user-secrets set "Dapper:SqlServer" "[MSSQL_CONNECTION_STRING]"
 ```
 
-
-
-You can then run just those tests from the `test/Infrastructure.IntegrationTest` folder using `dotnet test`.
+You can then run just those tests from the `test/Infrastructure.IntegrationTest` folder using
+`dotnet test`.
 
 ## Generating EF Migrations
 
