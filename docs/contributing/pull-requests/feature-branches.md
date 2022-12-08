@@ -1,6 +1,11 @@
+---
+sidebar_custom_props:
+  access: bitwarden
+---
+
 # Long-lived Feature Branches
 
-A long lived feature branch differ from regular Pull Requests in three significant ways.
+A long lived feature branch differs from regular Pull Requests in three significant ways.
 
 1. Has multiple authors.
 2. Consists of multiple already reviewed Pull Requests.

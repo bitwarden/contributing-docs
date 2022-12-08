@@ -15,7 +15,7 @@ To have efficient code reviews there are a few things to keep in mind (from
 - Take breaks - don’t review for longer than 60 minutes.
 
 Don’t feel bad for taking your time when doing code reviews! They often take longer than you think,
-and we should ensure to be spend as much time as needed.
+and we should be spending as much time as needed.
 
 :::tip
 
@@ -62,7 +62,7 @@ scenarios where discarding the reviews are generally seen as accepted.
 - The reviewer is out of office for a longer duration and their original feedback has been resolved.
   It’s the responsibility of the new reviewer to ensure the original feedback has been addressed.
 - The PR is a hotfix that needs to be deployed quickly, and the reviewer is in a different timezone.
-  The feedback can be addressed in a follow up PR, should it not already have been resolved.
+  The feedback can be addressed in a follow up PR, if it hasn't already have been resolved.
 
 :::
 
@@ -72,7 +72,7 @@ Approving a PR means that you have confidence in that the code works, and does w
 Either by testing it or from previous domain knowledge.
 
 - You have read and understood the all code changes in the PR.
-- Verified the linked Jira issue description matches the changes made in the PR.
+- You have verified that the linked Jira issue description matches the changes made in the PR.
 - The code is well structured, follows our code patterns, doesn’t have a better or more appropriate
   solution, and is free of unintended side-effects.
 
