@@ -64,31 +64,57 @@ the Bitwarden heading in the Temporary Extensions page. To debug the popup:
 
 ### Safari
 
-#### Resetting the extension reference paths
+Safari WebExtensions must be distributed through the Mac App Store, bundled with a regular Mac App
+Store application. Due to this the build and debug process is slightly different to the other
+browsers.
 
-On MacOS, the Browser extension is packaged with the Desktop client. If you’ve built, installed or
-ran the Desktop client before (including the official release), there’s a risk that Safari will
-continue to load the official Browser extension and not the version you’ve built from source.
+#### Uninstall previous versions
 
-To avoid this, follow the instructions below to “reset” Safari’s extension reference paths:
+If you’ve built, installed or ran the Desktop client before (including the official release),
+there’s a risk that Safari will continue to load the official Browser extension and not the version
+you’ve built from source.
+
+To avoid this, follow the instructions below to uninstall the Safari extension:
 
 1.  Open Safari
 2.  Click “Preferences” and then click the “Extensions” tab
-3.  Uninstall the Bitwarden extension
-4.  Quit and completely close Safari
-5.  If you have the official Desktop client installed, uninstall it
-6.  If you have previously built the Desktop client from source, delete the `PlugIns` directory (if
-    it exists) and the `.dmg` (if you ran the Mac Apple Store build)
-7.  Reopen Safari and check Preferences to confirm that there is no Bitwarden Browser extension
-    installed
-8.  Quit and completely close Safari
+3.  Click uninstall next to the Bitwarden extension
+4.  Delete the Application with the extension.
+5.  Reopen Safari and check Preferences to confirm that there is no Bitwarden Browser extension
+    installed. In case there still is a Bitwarden Extension please repeat step 3-4.
+6.  Quit and completely close Safari
 
 You may need to do this periodically if you are loading the Browser extension from different sources
 (for example, switching between a local build and the official release).
 
-#### Testing
+#### Developing in Xcode
 
-To build and load the Browser extension:
+The easiest way to develop the extension is to build and debug it using Xcode.
+
+1. Build the extension:
+
+   ```bash
+   npm run build:watch
+   ```
+
+2. Edit `build/manifest.json`. Move the `nativeMessaging` permission from the `optional_permissions`
+   section into the `permissions` section
+3. Edit `build/index.html`, replace `<html class="__BROWSER__">` to `<html class="browser_safari">`.
+4. Open `src/safari/desktop.xcodeproj` in Xcode
+5. Run the "desktop" target.
+
+:::note
+
+Please remember to re-run through Xcode whenever any changes are made to the source files. It will
+not automatically reload.
+
+:::
+
+#### Production build
+
+The other alternative is to use the "proper" build process through gulp. This method doesn't require
+any manual processing of the output since gulp does it for us. However we have to completely rebuild
+the extension which is slower.
 
 1.  Build the extension for Safari
 
@@ -127,18 +153,3 @@ extension. It may be useful for debugging if you’re having difficulty.
 :::
 
 </bitwarden>
-
-#### Developing in Xcode
-
-You can also build and debug using Xcode, which allows for a more iterative approach without having
-to wait a long time for the build to compile.
-
-1.  Build the extension:
-
-    ```bash
-    npm run build
-    ```
-
-2.  Edit `build/manifest.json`. Move the `nativeMessaging` permission from the
-    `optional_permissions` section into the `permissions` section
-3.  Open `src/safari/desktop.xcodeproj` in Xcode
