@@ -58,7 +58,7 @@ async function createConfig() {
               type: "doc",
               docId: "index",
               position: "left",
-              label: "Docs",
+              label: "Getting Started",
             },
             {
               type: "docSidebar",

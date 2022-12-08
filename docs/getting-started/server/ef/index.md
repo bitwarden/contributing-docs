@@ -102,6 +102,37 @@ the docker-compose.yml file.
       requires a configured MSSQL database. You may also need to also set up a Postgres database for
       the tests to pass
 
+## Testing EF Changes
+
+Since we allow for multiple databases it is important that any changes to EF repositories/models are
+tested against all possible databases. You may want to use a database that is different from your
+local development database because the tests may add or remove data. To apply migrations to a
+database different from your global settings run the following commands from the root of your
+repository:
+
+```bash
+# EntityFramework CLI Reference: https://learn.microsoft.com/en-us/ef/core/cli/dotnet
+
+# Migrate Postgres database ex connection string: Host=localhost;Username=postgres;Password=SET_A_PASSWORD_HERE_123;Database=vault_dev_test
+dotnet ef database update --startup-project util/PostgresMigrations --connection "[POSTGRES_CONNECTION_STRING]"
+
+# Migrate MySql database ex connection string: server=localhost;uid=root;pwd=SET_A_PASSWORD_HERE_123;database=vault_dev_test
+dotnet ef database update --startup-project util/MySqlMigrations --connection "[MYSQL_CONNECTION_STRING]"
+
+cd test/Infrastructure.IntegrationTest
+
+
+# https://learn.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-6.0&tabs=windows#secret-manager
+dotnet user-secrets set "Ef:Postgres" "[POSTGRES_CONNECTION_STRING]"
+dotnet user-secrets set "Ef:MySql" "[MYSQL_CONNECTION_STRING]"
+
+# You can also set the connection string for your normal development MS SQL database like below
+dotnet user-secrets set "Dapper:SqlServer" "[MSSQL_CONNECTION_STRING]"
+```
+
+You can then run just those tests from the `test/Infrastructure.IntegrationTest` folder using
+`dotnet test`.
+
 ## Generating EF Migrations
 
 If you alter the database schema, you must create an EF migration script to ensure that EF databases
