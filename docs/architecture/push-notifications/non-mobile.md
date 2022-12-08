@@ -42,8 +42,8 @@ implementation. This service submits the push notification to an Azure Queue in 
 tenant.
 
 The Bitwarden Cloud Notifications API includes a queue processor - the `AzureQueueHostedService` -
-that monitors the Azure Queue for pending push notifications. The processor pulls messages from the queue
-and sends them to all clients registered for the initiating user or organization.
+that monitors the Azure Queue for pending push notifications. The processor pulls messages from the
+queue and sends them to all clients registered for the initiating user or organization.
 
 ### Self-hosted implementation
 
@@ -69,8 +69,8 @@ end
 @enduml
 ```
 
-For a self-hosted implementation, push notification architecture differs because there is no Azure
-Queue available.
+For a self-hosted implementation, the push notification architecture differs because there is no
+Azure Queue available.
 
 Self-hosted instances have a slightly simplified flow since they don't have access to Azure
 resources like Azure Queues. The overall flow is still the same as the cloud-hosted implementation,
