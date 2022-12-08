@@ -149,4 +149,4 @@ the changes can potentially save a lot of time.
 </bitwarden>
 
 We've written up some [guidelines](./code-review.md) for reviewing code, which we recommend reading
-before performing your first code-review.
+before performing your first code review.

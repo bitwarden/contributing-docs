@@ -39,7 +39,7 @@ typically larger, some seniority with the codebase can be beneficial.
 ## Reviewing
 
 We can perform the review using GitHub's UI. By opening the Pull Request and clicking on the
-`Commits` tab. Afterwards check each individually commit.
+`Commits` tab. Afterwards check each commit individually.
 
 - Verify the commit has an existing review by following the Pull Request link and verifying the
   commit SHA hash matches. `Author merged commit 8c948fd into branch`.
