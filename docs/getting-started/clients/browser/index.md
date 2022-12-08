@@ -65,14 +65,14 @@ the Bitwarden heading in the Temporary Extensions page. To debug the popup:
 ### Safari
 
 Safari WebExtensions must be distributed through the Mac App Store, bundled with a regular Mac App
-Store application. Due to this the build and debug process is slightly different to the other
-browsers.
+Store application. Due to this the build and debug process is slightly different compared to the
+other browsers.
 
 #### Uninstall previous versions
 
-If you’ve built, installed or ran the Desktop client before (including the official release),
-there’s a risk that Safari will continue to load the official Browser extension and not the version
-you’ve built from source.
+If you’ve built, installed or ran the Desktop client before (including the official release), Safari
+will most likely continue to load the official Browser extension and not the version you’ve built
+from source.
 
 To avoid this, follow the instructions below to uninstall the Safari extension:
 
