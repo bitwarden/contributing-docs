@@ -68,7 +68,7 @@ scenarios where discarding the reviews are generally seen as accepted.
 
 #### Approve
 
-Approving a PR means that you have confidence in that the code works, and that does what the PR
+Approving a PR means that you have confidence in that the code works, and that it does what the PR
 claims. This can be based on testing the change or on previous domain knowledge.
 
 - You have read and understood the all code changes in the PR.
