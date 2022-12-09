@@ -5,11 +5,12 @@ sidebar_custom_props:
 
 # Long-lived Feature Branches
 
-A long lived feature branch differs from regular Pull Requests in three significant ways.
+A long-lived feature branch differs from a regular Pull Requests in three significant ways. It
+should:
 
-1. Has multiple authors.
-2. Consists of multiple already reviewed Pull Requests.
-3. Only consists of merge commits.
+- Have multiple authors
+- Consists of multiple already reviewed Pull Requests
+- Only consists of merge commits
 
 Since each pull request has already been reviewed before being merged into the feature branch, the
 feature branch review is more of a sanity check. The reviewer should ensure the following:

@@ -68,8 +68,8 @@ scenarios where discarding the reviews are generally seen as accepted.
 
 #### Approve
 
-Approving a PR means that you have confidence in that the code works, and does what the PR claims.
-Either by testing it or from previous domain knowledge.
+Approving a PR means that you have confidence in that the code works, and that does what the PR
+claims. This can be based on testing the change or on previous domain knowledge.
 
 - You have read and understood the all code changes in the PR.
 - You have verified that the linked Jira issue description matches the changes made in the PR.

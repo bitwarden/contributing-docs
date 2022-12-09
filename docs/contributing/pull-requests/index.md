@@ -55,8 +55,8 @@ git checkout -b feature/example
 
 <bitwarden>
 
-As a bitwarden contributor you should branch of `origin/master`, this ensures that the branch is
-always based of the latest upstream master even if the local master is out of date.
+As a Bitwarden contributor you should branch of `origin/master`, this ensures that the branch is
+always based of the latest upstream `master` even if the local `master` is out of date.
 
 ```bash
 git checkout -b <pod>/<feature>/<issue-number> -t origin/master
