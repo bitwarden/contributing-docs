@@ -24,6 +24,8 @@ async function createConfig() {
       locales: ["en"],
     },
 
+    plugins: [require.resolve("docusaurus-lunr-search")],
+
     presets: [
       [
         "classic",
