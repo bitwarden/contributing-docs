@@ -117,7 +117,9 @@ Before you can start testing and debugging passwordless logins make sure your lo
 running correctly ([server setup](../../../server/guide.mdx)). You should also be able to deploy
 your Android app to your device or emulator.
 
-:::note Debug and testing passwordless is limited by [push notifications](#push-notifications). :::
+:::note 
+Debug and testing passwordless is limited by [push notifications](#push-notifications). 
+:::
 
 Testing passwordless notifications:
 
