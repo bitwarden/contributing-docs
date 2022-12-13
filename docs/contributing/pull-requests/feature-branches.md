@@ -9,8 +9,8 @@ A long-lived feature branch differs from a regular Pull Requests in three signif
 should:
 
 - Have multiple authors
-- Consists of multiple already reviewed Pull Requests
-- Only consists of merge commits
+- Consist of multiple Pull Requests, which have already been reviewed
+- Only consist of merge commits
 
 Since each pull request has already been reviewed before being merged into the feature branch, the
 feature branch review is more of a sanity check. The reviewer should ensure the following:
