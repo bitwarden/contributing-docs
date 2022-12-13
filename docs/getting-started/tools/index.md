@@ -46,7 +46,7 @@ environment.
 
 - [Android Studio](https://developer.android.com/studio/) - Nice for setting up and running Android
   Simulators
-- [abd](https://developer.android.com/studio/command-line/adb) - for interacting with Android sims
+- [adb](https://developer.android.com/studio/command-line/adb) - for interacting with Android sims
 
 ### Databases
 
