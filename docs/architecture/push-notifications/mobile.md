@@ -89,8 +89,10 @@ self-hosted Bitwarden API must register with the Azure Notification Hub through 
 `CreateOrUpdateRegistrationAsync()` method on
 [`RelayPushRegistrationService`](https://github.com/bitwarden/server/blob/master/src/Core/Services/Implementations/RelayPushRegistrationService.cs).
 
-This implementation of `IPushRegistrationService` allows the self-hosted Bitwarden API to register
-the push token by calling the `/push/register` endpoint on the
+This implementation of
+[`IPushRegistrationService`](https://github.com/bitwarden/server/blob/master/src/Core/Services/IPushRegistrationService.cs)
+allows the self-hosted Bitwarden API to register the push token by calling the `/push/register`
+endpoint on the
 [`PushController`](https://github.com/bitwarden/server/blob/master/src/Api/Controllers/PushController.cs)
 in the Bitwarden Cloud API. This is exposed to the self-hosted instance as
 https://push.bitwarden.com. The
