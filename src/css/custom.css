@@ -40,3 +40,8 @@
 .navbar__logo {
   height: 2.8rem;
 }
+
+.navbar__link--active,
+.menu__link--active {
+  font-weight: bold;
+}
