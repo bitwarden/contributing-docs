@@ -27,7 +27,7 @@ Bitwarden as they occur.
 
 ## Steps
 
-### Enable SCIM for Your Organization
+### Enable SCIM for your Organization
 
 1. Log in to the web vault and navigate to your organization -> Manage -> SCIM Provisioning
 2. Tick "Enable SCIM" and click save. Your SCIM URL and API Key should appear. Leave this window
@@ -44,7 +44,7 @@ Bitwarden as they occur.
 
 4. Verify that the SCIM project started successfully by navigating to `http://localhost:44559/alive`
 
-### Expose your local port
+### Expose your Local Port
 
 SCIM requires a direct connection between your SCIM project and the IdP. Therefore, you need to
 expose your local port to the internet. Please follow any of the guides on

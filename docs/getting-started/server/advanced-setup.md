@@ -37,7 +37,7 @@ other services such as Mailtrap, or Amazon to debug the amazon integration.
 - [bytemark/docker-smtp](https://github.com/BytemarkHosting/docker-smtp) - a local SMTP server
   running on Docker.
 
-## File Uploads (File Sends and attachments)
+## File Uploads (File Sends and Attachments)
 
 File uploads are stored using one of two methods.
 
