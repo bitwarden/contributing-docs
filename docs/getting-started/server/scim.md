@@ -42,28 +42,8 @@ Bitwarden as they occur.
 ### Expose your local port
 
 SCIM requires a direct connection between your SCIM project and the IdP. Therefore, you need to
-expose your local port to the internet. The process below uses [ngrok](https://ngrok.com/), but you
-can use any similar tool.
-
-1. Navigate to <https://ngrok.com/> and sign up for an account
-
-2. Follow the [official instructions](https://dashboard.ngrok.com/get-started/setup) to download
-   ngrok and connect it to your account.
-
-3. Expose your local port using ngrok:
-
-   ```bash
-   ngrok http 44559
-   ```
-
-4. ngrok's interface should display a "Forwarding" url, for example:
-
-   ```
-   https://abcd-123-456-789.au.ngrok.io -> http://localhost:44559
-   ```
-
-5. Verify that the forwarding url works by navigating to the forwarding url with `/alive` on the
-   end. For example, `https://abcd-123-456-789.au.ngrok.io/alive`.
+expose your local port to the internet. Please follow any of the guides on
+[Ingress Tunnels](./tunnel.md) to do this. The default port to expose is `44559`.
 
 ### Configure IdP
 
