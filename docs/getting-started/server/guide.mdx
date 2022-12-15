@@ -35,13 +35,23 @@ Before you start: make sure you’ve installed the recommended
 
 2.  Open a terminal and navigate to the root of the cloned repository.
 
-## Configure Git blame
+## Configure Git
 
-Configure Git to ignore the Prettier revision:
+1. Configure Git to ignore the Prettier revision:
 
-```bash
-git config blame.ignoreRevsFile .git-blame-ignore-revs
-```
+   ```bash
+   git config blame.ignoreRevsFile .git-blame-ignore-revs
+   ```
+
+2. _(Optional)_ Set up the pre-commit `dotnet format` hook:
+
+   ```bash
+   git config --local core.hooksPath .git-hooks
+   ```
+
+   Formatting requires a full build, which may be too slow to do every commit. As an alternative,
+   you can run `dotnet format` from the command line when convenient (e.g. before requesting a PR
+   review).
 
 ## Configure Docker
 

@@ -35,7 +35,7 @@ environment.
 - [Docker](https://docs.docker.com/get-docker/) - required for server development only
 - [PowerShell](https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell-core-on-macos)
   (available via Homebrew: `brew install powershell`)
-- [NodeJS](https://nodejs.org/) v16 (preferably using a [node version manager][nvm]
+- [NodeJS](https://nodejs.org/) v16 (preferably using a [node version manager][nvm])
 - [NPM](https://www.npmjs.com/) v8 (included with Node)
 - [Rust](https://www.rust-lang.org/tools/install) - Used for native desktop components
 - [Git](https://git-scm.com)
@@ -46,7 +46,7 @@ environment.
 
 - [Android Studio](https://developer.android.com/studio/) - Nice for setting up and running Android
   Simulators
-- [abd](https://developer.android.com/studio/command-line/adb) - for interacting with Android sims
+- [adb](https://developer.android.com/studio/command-line/adb) - for interacting with Android sims
 
 ### Databases
 
@@ -117,4 +117,4 @@ The following tools may be useful depending on your preferences or what you’re
   correctly on macOS when using nvm, please follow
   [these instructions](https://typicode.github.io/husky/#/?id=command-not-found).
 
-[nvm]: https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
+[nvm]: https://docs.npmjs.com/downloading-and-installing-node-js-and-npm

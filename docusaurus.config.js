@@ -24,6 +24,8 @@ async function createConfig() {
       locales: ["en"],
     },
 
+    plugins: [require.resolve("docusaurus-lunr-search")],
+
     presets: [
       [
         "classic",
@@ -48,10 +50,11 @@ async function createConfig() {
       /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
       ({
         navbar: {
-          title: "Contributing Docs",
+          title: "",
           logo: {
             alt: "Bitwarden Logo",
-            src: "img/logo-horizontal.svg",
+            src: "img/logo.svg",
+            srcDark: "img/logo-white.svg",
           },
           items: [
             {
@@ -71,11 +74,6 @@ async function createConfig() {
               position: "left",
               label: "Architecture",
               sidebarId: "architecture",
-            },
-            {
-              href: "https://github.com/bitwarden",
-              label: "GitHub",
-              position: "right",
             },
             {
               type: "custom-dev",
