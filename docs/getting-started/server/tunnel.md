@@ -1,3 +1,8 @@
+---
+sidebar_custom_props:
+  access: bitwarden
+---
+
 # Ingress Tunnels
 
 Sometimes it can be beneficial to allow other team members access to your locally running Bitwarden

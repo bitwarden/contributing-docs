@@ -1,3 +1,8 @@
+---
+sidebar_custom_props:
+  access: bitwarden
+---
+
 # SCIM
 
 SCIM stands for _System for Cross-domain Identity Management_, and uses a direct link between the
