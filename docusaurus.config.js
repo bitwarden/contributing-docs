@@ -54,6 +54,7 @@ async function createConfig() {
           logo: {
             alt: "Bitwarden Logo",
             src: "img/logo.svg",
+            srcDark: "img/logo-white.svg",
           },
           items: [
             {
