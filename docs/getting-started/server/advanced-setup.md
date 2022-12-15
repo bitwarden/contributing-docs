@@ -8,7 +8,7 @@ sidebar_custom_props:
 Once you have your server up and running, there may be some additional configuration required to
 activate all of Bitwarden's features.
 
-## Premium features
+## Premium Features
 
 The user secrets file includes a test Stripe key, which will allow you to "buy" premium features
 without actually being charged.
@@ -37,7 +37,7 @@ other services such as Mailtrap, or Amazon to debug the amazon integration.
 - [bytemark/docker-smtp](https://github.com/BytemarkHosting/docker-smtp) - a local SMTP server
   running on Docker.
 
-## File uploads (File Sends + attachments)
+## File Uploads (File Sends and attachments)
 
 File uploads are stored using one of two methods.
 

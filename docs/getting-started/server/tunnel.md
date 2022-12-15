@@ -39,7 +39,7 @@ local tunnel between Cloudflare and your local machine, which provides access to
 service. The tunnel can additionally be placed behind a cloudflare proxy which provides a valid SSL
 certificate, making it perfect for testing with the mobile applications.
 
-### Set up
+### Setup
 
 1. Install `cloudflared`, instructions are available at
    <https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/install-and-setup/installation>.
@@ -51,7 +51,7 @@ DNS to start resolving before trying to access it.
 
 **Note**, anyone with this URL can access the forwarded URL on your machine.
 
-## Ngrok (requires free account)
+## Ngrok (Requires a Free Account)
 
 1. Navigate to <https://ngrok.com/> and sign up for an account
 
