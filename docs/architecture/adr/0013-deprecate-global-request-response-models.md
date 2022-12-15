@@ -1,5 +1,4 @@
 ---
-title: 0013 - Deprecate global request/response models
 adr: "0013"
 status: In progress
 date: 2022-09-16
