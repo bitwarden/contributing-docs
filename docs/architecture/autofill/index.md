@@ -26,7 +26,7 @@ The extension uses the following scripts for Autofill:
 | `content/autofiller.ts`      | Responsible for automatically filling the form for users who have the "Enable Autofill on Page Load" setting enabled                                                                     |
 | `content/notificationBar.js` | Responsible for detecting DOM changes that indicate that a user has changed their credentials on a site or submitted a new form with new credentials, triggering the Notification Bar UI |
 
-::: note
+:::note
 
 There are other content scripts that Bitwarden uses, but these are the scripts related to the
 Autofill functionality and relevant here.
