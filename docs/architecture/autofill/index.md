@@ -80,7 +80,7 @@ are running on each browser tab.
     [Background Pages]
  }
 
- [Content Scripts] --> [Background Processes] : sendMessage
+ [Content Scripts] --> [Background Pages] : sendMessage
  [Background Pages] --> [Content Scripts] : tabSendMessage
  [Content Scripts] --> [Background Pages] : sendMessage
 

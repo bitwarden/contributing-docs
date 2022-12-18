@@ -16,7 +16,7 @@ by a content script. The Bitwarden browser extension performs this in the `colle
 
 Page detail collection can be requested from other content scripts or from the extension itself.
 
-### Requesting page detail collection in the background from another content script
+### Requesting page details in the background
 
 Page detail collection is requested from content script in two cases:
 
@@ -25,7 +25,7 @@ Page detail collection is requested from content script in two cases:
 
 In both of these cases, page detail collection is requested from another content script in the
 background, we use the `bgCollectPageDetails` command to communicate the request to the
-`main.background.ts` background page, which then requests that `runtime.backgroun.ts` transmit the
+`main.background.ts` background page, which then requests that `runtime.background.ts` transmit the
 `collectPageDetails` messaage to the `autofill.js` content script.
 
 The `autofill.js` content script generates the page details and broadcasts a
