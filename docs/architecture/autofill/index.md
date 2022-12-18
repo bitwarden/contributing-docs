@@ -75,18 +75,10 @@ are running on each browser tab.
     [Content Scripts]
  }
 
- component "Context Menu"
- component "Keyboard Shortcut"
- component "Notification Bar"
-
  node "Bitwarden Browser Extension" as E {
     [Browser Extension UI]
     [Background Processes]
  }
-
- [Context Menu] --> [Content Scripts] : Handle user context menu click
- [Keyboard Shortcut] --> [Content Scripts] : Handle user keyboard shortcut click
- [Notification Bar] --> [Content Scripts] : Handle user Notification Bar interaction
 
  [Content Scripts] --> [Background Processes] : sendMessage
  [Background Processes] --> [Content Scripts] : tabSendMessage
