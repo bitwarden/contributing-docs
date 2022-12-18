@@ -77,12 +77,12 @@ are running on each browser tab.
 
  node "Bitwarden Browser Extension" as E {
     [Browser Extension UI]
-    [Background Processes]
+    [Background Pages]
  }
 
  [Content Scripts] --> [Background Processes] : sendMessage
- [Background Processes] --> [Content Scripts] : tabSendMessage
- [Content Scripts] --> [Background Processes] : sendMessage
+ [Background Pages] --> [Content Scripts] : tabSendMessage
+ [Content Scripts] --> [Background Pages] : sendMessage
 
 @enduml
 ```
