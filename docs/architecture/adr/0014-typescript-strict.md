@@ -46,14 +46,12 @@ to support strict mode without requiring a significant initial engineering effor
 
 Chosen option: **Progressively enable strict flag**.
 
-<!-- optional: brief reason for decision **or** the positive/negative consequences sections below -->
-
-### Positive Consequences <!-- optional -->
+### Positive Consequences
 
 - We can immediately start using the strict flag.
 - Lower initial developer effort.
 
-### Negative Consequences <!-- optional -->
+### Negative Consequences
 
 - Migration will be slower.
 - We will continue to have parts of the code with null issues.
