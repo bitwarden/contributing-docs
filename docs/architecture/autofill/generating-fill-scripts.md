@@ -25,14 +25,14 @@ All of these methods will execute the same `generateFillScript()` private method
 generate the fill script, but the separate methods provide different entry points for syntactic
 sugar.
 
-## Determining the cipher to fill
-
 ## Generating the fill script
 
-Now that we have both the page details and the cipher that the user wishes to use, we can proceed
-with generating the fill script. This is done in the `generateFillScript()` method.
+The generation of the fill script takes place in the `generateFillScript()` method. We will examine
+in more detail how the script is generated below.
 
 ### Input
+
+The following information is provided to the `generateFillScript()` method:
 
 1. The page details, which represent the information collected from the page in `autofill.js`. It
    includes:
