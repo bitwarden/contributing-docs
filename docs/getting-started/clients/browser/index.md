@@ -8,6 +8,79 @@ sidebar_position: 3
 
 Before you start, you must complete the [Clients repository setup instructions](../index.md).
 
+## Environment Setup
+
+By default, the browser extension will run pointing to the production server endpoints. To override
+this for local development and testing, there are several options.
+
+### Using `managedEnvironment`
+
+The browser extension has the concept of a "managed environment", which is JSON configuration stored
+in
+[development.json](https://github.com/bitwarden/clients/blob/master/apps/browser/config/development.json).
+The `managedEnvironment` setting allows the contributor to override any or all of the URLs for the
+server. The `managedEnvironment` is read in the
+[`BrowserEnvironmentService`](https://github.com/bitwarden/clients/blob/master/apps/browser/src/services/browser-environment.service.ts)
+and overrides the default (production) settings for any supplied URLs.
+
+There are two ways to use `managedEnvironment`, depending upon whether you will also be running the
+web vault at the same time.
+
+#### `managedEnvironment` with web vault running
+
+If you are also running the web vault, you only need to set the `base` URL in the
+`managedEnvironment`:
+
+```json
+    "managedEnvironment": {
+      "base": "http://localhost:8080",
+    }
+```
+
+This is because the web vault includes the `webpack-dev-server` package in its
+[`webpack.config.js`](https://github.com/bitwarden/clients/blob/master/apps/web/webpack.config.js).
+When it is running, it proxies each of the endpoints based on the settings configured in its _own_
+[`development.json`](https://github.com/bitwarden/clients/blob/master/apps/web/config/development.json)
+configuration file:
+
+```json
+  "dev": {
+    "proxyApi": "http://localhost:4000",
+    "proxyIdentity": "http://localhost:33656",
+    "proxyEvents": "http://localhost:46273",
+    "proxyNotifications": "http://localhost:61840"
+  },
+```
+
+This means that when the web vault is running, the browser `managedEnvironment` does **not** need to
+override each of the URLs individually. The browser will format each URL as `{base}/{endpoint}`,
+such as http://localhost:8080/api, but the webpack DevServer will proxy that URL to the correct
+port, like http://localhost:4000.
+
+#### `managedEnvironment` without web vault running
+
+If you are testing the browser extension _without_ the web vault running, you will not be able to
+take advantage of the webpack DevServer to proxy the URLs. This means that your `managedEnvironment`
+setting must explicitly override all of the URLs with which you are going to be communicating
+locally.
+
+```json
+    "managedEnvironment": {
+      "webVault": "http://localhost:8080",
+      "api": "http://localhost:4000",
+      "identity": "http://localhost:33656",
+      "notifications": "http://localhost:61840",
+      "icons": "http://localhost:50024"
+    }
+```
+
+### Manually setting the Custom Environment URLs
+
+You may want to adjust the server URLs to point to your local server once you have loaded the
+extension instead of overriding them in `managedEnvironment`. You can change this through the
+browser settings. You can see instructions on how to configure the URLs
+[here](https://bitwarden.com/help/change-client-environment/).
+
 ## Build Instructions
 
 1.  Build and run the extension:
