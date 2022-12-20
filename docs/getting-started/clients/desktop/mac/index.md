@@ -74,9 +74,12 @@ security add-generic-password -a "<apple_id>" -w "<app_specific_password>" -s "A
 
 3. Run `npm run dist:mac:masdev`.
 
-!!! info
+:::info
 
-    If this is your first time running desktop locally, be sure to run `npm ci` before `npm run dist:mac:masdev`.
+If this is your first time running desktop locally, be sure to run `npm ci` before
+`npm run dist:mac:masdev`.
+
+:::
 
 ### Troubleshoot
 
