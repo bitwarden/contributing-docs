@@ -87,3 +87,9 @@ sidebar_custom_props:
   access: bitwarden
 ---
 ```
+
+# License
+
+Documentation (`docs` folder) is [Creative Commons licensed](./LICENSE-docs).
+
+Code is [GPL licensed](./LICENSE).
