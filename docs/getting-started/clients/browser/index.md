@@ -8,6 +8,17 @@ sidebar_position: 3
 
 Before you start, you must complete the [Clients repository setup instructions](../index.md).
 
+## Build Instructions
+
+1.  Build and run the extension:
+
+    ```bash
+    cd apps/browser
+    npm run build:watch
+    ```
+
+2.  Load the unpacked browser extension in your browser using the instructions in the next section.
+
 ## Environment Setup
 
 By default, the browser extension will run pointing to the production server endpoints. To override
@@ -17,7 +28,9 @@ this for local development and testing, there are several options.
 
 The browser extension has the concept of a "managed environment", which is JSON configuration stored
 in
-[development.json](https://github.com/bitwarden/clients/blob/master/apps/browser/config/development.json).
+[`development.json`](https://github.com/bitwarden/clients/blob/master/apps/browser/config/development.json),
+within the `devFlags` object.
+
 The `managedEnvironment` setting allows the contributor to override any or all of the URLs for the
 server. The `managedEnvironment` is read in the
 [`BrowserEnvironmentService`](https://github.com/bitwarden/clients/blob/master/apps/browser/src/services/browser-environment.service.ts)
@@ -32,9 +45,15 @@ If you are also running the web vault, you only need to set the `base` URL in th
 `managedEnvironment`:
 
 ```json
-    "managedEnvironment": {
-      "base": "http://localhost:8080",
-    }
+{
+   "devFlags":{
+      "managedEnvironment":{
+         "base":"https://localhost:8080"
+      }
+      ...
+   }
+   ...
+}
 ```
 
 This is because the web vault includes the `webpack-dev-server` package in its
@@ -65,13 +84,19 @@ setting must explicitly override all of the URLs with which you are going to be 
 locally.
 
 ```json
-    "managedEnvironment": {
-      "webVault": "http://localhost:8080",
-      "api": "http://localhost:4000",
-      "identity": "http://localhost:33656",
-      "notifications": "http://localhost:61840",
-      "icons": "http://localhost:50024"
+{
+    "devFlags": {
+        "managedEnvironment": {
+            "webVault": "http://localhost:8080",
+            "api": "http://localhost:4000",
+            "identity": "http://localhost:33656",
+            "notifications": "http://localhost:61840",
+            "icons": "http://localhost:50024"
+        }
+        ...
     }
+    ...
+}
 ```
 
 ### Manually setting the Custom Environment URLs
@@ -81,16 +106,9 @@ extension instead of overriding them in `managedEnvironment`. You can change thi
 browser settings. You can see instructions on how to configure the URLs
 [here](https://bitwarden.com/help/change-client-environment/).
 
-## Build Instructions
+Once configured, your local Custom Environment should look like this:
 
-1.  Build and run the extension:
-
-    ```bash
-    cd apps/browser
-    npm run build:watch
-    ```
-
-2.  Load the unpacked browser extension in your browser using the instructions in the next section.
+![Screenshot of Custom Environments](custom-local-environment.png)
 
 ## Testing and Debugging
 
