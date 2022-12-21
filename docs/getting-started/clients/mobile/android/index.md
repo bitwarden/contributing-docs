@@ -71,9 +71,9 @@ studio on your mac natively, you'll need to configure the endpoint addresses usi
 
 ### Using Server Tunneling
 
-Instead of having to deal with configuration on your device or emulator, you can create a proxy
-tunnel to you local server using `ngrok` and have your app connect to it directly.
-([More info in this server section](../../../server/tunnel.md#ngrok-requires-a-free-account))
+Instead of configuring your device or emulator, you can instead use a
+[proxy tunnel to you local server](../../../server/tunnel.md) and have your app connect to it
+directly.
 
 ### Push Notifications
 
@@ -91,10 +91,10 @@ Before you can start testing and debugging passwordless logins make sure your lo
 running correctly ([server setup](../../../server/guide.mdx)). You should also be able to deploy
 your Android app to your device or emulator.
 
-:::note 
+:::note
 
 Debug and testing passwordless is limited by [push notifications](#push-notifications).
- 
+
 :::
 
 Testing passwordless notifications:
