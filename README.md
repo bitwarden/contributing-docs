@@ -90,6 +90,6 @@ sidebar_custom_props:
 
 # License
 
-Documentation (`docs` folder) is [Creative Commons licensed](./LICENSE-docs).
+Documentation (`docs` folder) is [Creative Commons BY-NC-ND licensed](./LICENSE-docs).
 
 Code is [GPL licensed](./LICENSE).
