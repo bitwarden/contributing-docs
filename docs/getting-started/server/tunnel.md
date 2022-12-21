@@ -55,14 +55,9 @@ DNS to start resolving before trying to access it.
 
 1. Navigate to <https://ngrok.com/> and sign up for an account
 
-:::note
-
-Install ngrok via [brew](https://formulae.brew.sh/cask/ngrok) to avoid the limitation of one instance per account.
-
-:::
-
-2. Follow the [official instructions](https://dashboard.ngrok.com/get-started/setup) to download.
-   Can also be installed via . 
+2. Follow the [official instructions](https://dashboard.ngrok.com/get-started/setup) to download. Or
+   install using [brew](https://formulae.brew.sh/cask/ngrok) which supports multiple instances per
+   account.
 
 3. Expose your local port using ngrok:
 
