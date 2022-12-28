@@ -114,7 +114,7 @@ not automatically reload.
 
 The other alternative is to use the "proper" build process through gulp. This method doesn't require
 any manual processing of the output since gulp does it for us. However we have to completely rebuild
-the extension for every change which is slower.
+the extension for every change, which is slower.
 
 1.  Build the extension for Safari
 
