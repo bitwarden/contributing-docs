@@ -42,11 +42,11 @@ Chosen option: **Decorator Pattern**. This will be more reusable and the cleaner
 forward. It needs more thought to determine how to avoid circular events, but once solved, it is
 solved.
 
-### Positive Consequences <!-- optional -->
+### Positive Consequences
 
 - reusable, clean solution
 - adheres to observable best practices
 
-### Negative Consequences <!-- optional -->
+### Negative Consequences
 
 - some unknown implementation details may cause bumps along development
