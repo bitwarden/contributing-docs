@@ -120,7 +120,7 @@ change into the Long-Lived Feature Branch.
 When all Issue Branches are merged, the `needs-qa` label should be applied to the Long-Lived Feature
 Branch.
 
-##### Syncing the Long-Lived Feature Branch
+#### Syncing the Long-Lived Feature Branch
 
 We typically denote one person as being responsible for keeping the Long-Lived Feature Branch up to
 date.<bitwarden> In most cases this will be the TPC of the pod but can be anyone.</bitwarden> This
