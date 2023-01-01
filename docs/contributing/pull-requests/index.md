@@ -36,11 +36,11 @@ git fetch upstream
 
 ## Branch
 
-Each new feature or bug fix should be developed on a separate branch. Branches allows you to work on
+Each new feature or bug fix should be developed on a separate branch. Branches allow you to work on
 multiple features concurrently. In most cases you should branch from `master`. However, if you are
-working with other contributors we typically branch of a long-lived feature branch. Long-lived
-feature branches allows us to break up a single feature into multiple PRs, which can be reviewed
-individually.
+working with other contributors we typically branch off a long-lived feature branch. Long-lived
+feature branches allow us to break up a single feature into multiple PRs, which can be reviewed
+individually but tested and released together.
 
 <community>
 
@@ -66,22 +66,7 @@ git checkout -b <pod>/<feature>/<issue-number> -t origin/master
 
 <bitwarden>
 
-### Naming convention
-
-To keep branches organized we adhere a naming convention for branches. The convention splits branch
-names into 2 components, each separated by a `/`.
-
-1. The developers pod abbreviation (e.g. `sm`)
-2. Jira issue tag (e.g. `SM-1234`)
-
-```bash
-# Some examples
-sm/SM-1234
-ps/PS-4321-optional-description
-```
-
-This naming convention allows us to easily identify the type of work being done on a branch. And
-will assist in identifying and tracking down stale branches.
+Our branching strategy is described in detail [here](branching.md).
 
 </bitwarden>
 
