@@ -55,12 +55,12 @@ Since abstracts are referenced far more frequently than implementations, they us
 type while implementations must specify they are implementations e.g `.service` for the abstract vs
 `.service.implementation` for the implantation.
 
-### Positive Consequences <!-- optional -->
+### Positive Consequences
 
 - Since most of our code is written in Angular, we should use the Angular coding style guide.
 - Not using camelCase will avoid issues with case-sensitive file systems.
 
-### Negative Consequences <!-- optional -->
+### Negative Consequences
 
 - We need to update a lot of files to be consistent.
 

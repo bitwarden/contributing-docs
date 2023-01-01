@@ -28,12 +28,12 @@ provides safety that changes will be internal to the package and ideally covered
 
 Chosen option: **Define a public module using index.ts**.
 
-### Positive Consequences <!-- optional -->
+### Positive Consequences
 
 - The public module is defined.
 - Imports can be kept cleaner since not every file needs to be manually imported.
 - Safety in knowing that a change is isolated to the package.
 
-### Negative Consequences <!-- optional -->
+### Negative Consequences
 
 - We will have to update `index.ts` files whenever we add a new exported API.

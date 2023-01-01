@@ -19,6 +19,97 @@ Before you start, you must complete the [Clients repository setup instructions](
 
 2.  Load the unpacked browser extension in your browser using the instructions in the next section.
 
+## Environment Setup
+
+By default, the browser extension will run pointing to the production server endpoints. To override
+this for local development and testing, there are several options.
+
+### Using `managedEnvironment`
+
+The browser extension has the concept of a "managed environment", which is JSON configuration stored
+in
+[`development.json`](https://github.com/bitwarden/clients/blob/master/apps/browser/config/development.json),
+within the `devFlags` object.
+
+The `managedEnvironment` setting allows the contributor to override any or all of the URLs for the
+server. The `managedEnvironment` is read in the
+[`BrowserEnvironmentService`](https://github.com/bitwarden/clients/blob/master/apps/browser/src/services/browser-environment.service.ts)
+and overrides the default (production) settings for any supplied URLs.
+
+There are two ways to use `managedEnvironment`, depending upon whether you will also be running the
+web vault at the same time.
+
+#### `managedEnvironment` with web vault running
+
+If you are also running the web vault, you only need to set the `base` URL in the
+`managedEnvironment`:
+
+```json
+{
+   "devFlags":{
+      "managedEnvironment":{
+         "base":"https://localhost:8080"
+      }
+      ...
+   }
+   ...
+}
+```
+
+This is because the web vault includes the `webpack-dev-server` package in its
+[`webpack.config.js`](https://github.com/bitwarden/clients/blob/master/apps/web/webpack.config.js).
+When it is running, it proxies each of the endpoints based on the settings configured in its _own_
+[`development.json`](https://github.com/bitwarden/clients/blob/master/apps/web/config/development.json)
+configuration file:
+
+```json
+  "dev": {
+    "proxyApi": "http://localhost:4000",
+    "proxyIdentity": "http://localhost:33656",
+    "proxyEvents": "http://localhost:46273",
+    "proxyNotifications": "http://localhost:61840"
+  },
+```
+
+This means that when the web vault is running, the browser `managedEnvironment` does **not** need to
+override each of the URLs individually. The browser will format each URL as `{base}/{endpoint}`,
+such as http://localhost:8080/api, but the webpack DevServer will proxy that URL to the correct
+port, like http://localhost:4000.
+
+#### `managedEnvironment` without web vault running
+
+If you are testing the browser extension _without_ the web vault running, you will not be able to
+take advantage of the webpack DevServer to proxy the URLs. This means that your `managedEnvironment`
+setting must explicitly override all of the URLs with which you are going to be communicating
+locally.
+
+```json
+{
+    "devFlags": {
+        "managedEnvironment": {
+            "webVault": "http://localhost:8080",
+            "api": "http://localhost:4000",
+            "identity": "http://localhost:33656",
+            "notifications": "http://localhost:61840",
+            "icons": "http://localhost:50024"
+        }
+        ...
+    }
+    ...
+}
+```
+
+### Manually setting the Custom Environment URLs
+
+You may want to adjust the server URLs to point to your local server once you have loaded the
+extension instead of overriding them in `managedEnvironment`. You can change this through the
+browser settings. You can see instructions on how to configure the URLs
+[here](https://bitwarden.com/help/change-client-environment/).
+
+Once configured, your local Custom Environment should look like this:
+
+![Screenshot of Custom Environments](custom-local-environment.png)
+
 ## Testing and Debugging
 
 ### Chrome and Chromium-based browsers
@@ -64,31 +155,57 @@ the Bitwarden heading in the Temporary Extensions page. To debug the popup:
 
 ### Safari
 
-#### Resetting the extension reference paths
+Safari WebExtensions must be distributed through the Mac App Store, bundled with a regular Mac App
+Store application. Due to this the build and debug process is slightly different compared to the
+other browsers.
 
-On MacOS, the Browser extension is packaged with the Desktop client. If you’ve built, installed or
-ran the Desktop client before (including the official release), there’s a risk that Safari will
-continue to load the official Browser extension and not the version you’ve built from source.
+#### Uninstall previous versions
 
-To avoid this, follow the instructions below to “reset” Safari’s extension reference paths:
+If you’ve built, installed or ran the Desktop client before (including the official release), Safari
+will most likely continue to load the official Browser extension and not the version you’ve built
+from source.
+
+To avoid this, follow the instructions below to uninstall the Safari extension:
 
 1.  Open Safari
 2.  Click “Preferences” and then click the “Extensions” tab
-3.  Uninstall the Bitwarden extension
-4.  Quit and completely close Safari
-5.  If you have the official Desktop client installed, uninstall it
-6.  If you have previously built the Desktop client from source, delete the `PlugIns` directory (if
-    it exists) and the `.dmg` (if you ran the Mac Apple Store build)
-7.  Reopen Safari and check Preferences to confirm that there is no Bitwarden Browser extension
-    installed
-8.  Quit and completely close Safari
+3.  Click uninstall next to the Bitwarden extension
+4.  Delete the Application with the extension.
+5.  Reopen Safari and check Preferences to confirm that there is no Bitwarden Browser extension
+    installed. In case there still is a Bitwarden Extension please repeat step 3-4.
+6.  Quit and completely close Safari
 
 You may need to do this periodically if you are loading the Browser extension from different sources
 (for example, switching between a local build and the official release).
 
-#### Testing
+#### Developing in Xcode
 
-To build and load the Browser extension:
+The easiest way to develop the extension is to build and debug it using Xcode.
+
+1. Build the extension:
+
+   ```bash
+   npm run build:watch
+   ```
+
+2. Edit `build/manifest.json`. Move the `nativeMessaging` permission from the `optional_permissions`
+   section into the `permissions` section
+3. Edit `build/index.html`, replace `<html class="__BROWSER__">` to `<html class="browser_safari">`.
+4. Open `src/safari/desktop.xcodeproj` in Xcode
+5. Run the "desktop" target.
+
+:::note
+
+Please remember to re-run through Xcode whenever any changes are made to the source files. It will
+not automatically reload.
+
+:::
+
+#### Production build
+
+The other alternative is to use the "proper" build process through gulp. This method doesn't require
+any manual processing of the output since gulp does it for us. However we have to completely rebuild
+the extension for every change, which is slower.
 
 1.  Build the extension for Safari
 
@@ -127,18 +244,3 @@ extension. It may be useful for debugging if you’re having difficulty.
 :::
 
 </bitwarden>
-
-#### Developing in Xcode
-
-You can also build and debug using Xcode, which allows for a more iterative approach without having
-to wait a long time for the build to compile.
-
-1.  Build the extension:
-
-    ```bash
-    npm run build
-    ```
-
-2.  Edit `build/manifest.json`. Move the `nativeMessaging` permission from the
-    `optional_permissions` section into the `permissions` section
-3.  Open `src/safari/desktop.xcodeproj` in Xcode
