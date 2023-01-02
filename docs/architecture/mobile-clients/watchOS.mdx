@@ -67,7 +67,16 @@ Configuration and the Platform taking the output of the XCode watchOS app build.
 and if it finds a Watch app, it will just bundle it to the Xamarin iOS application. Finally, if the
 Watch app is bundled deep signing is enabled and on building the build path is printed if exists.
 
-## Synchronization with the iOS app
+:::caution
+
+As one can see in the csproj to bundle the watchOS app into the iOS app one needs to target the
+correct platform. So if one is going to use a device, target the device on XCode to build the
+watchOS app and after the build is done one can go to VS4M to build the iOS app (which will bundle
+the watchOS one) and run it on the device.
+
+:::
+
+## Synchronization iPhone <-> Watch
 
 In order to sync data between the iPhone and the Watch apps the
 [Watch Connectivity Framework](https://developer.apple.com/documentation/watchconnectivity) is used.
@@ -79,13 +88,84 @@ For the sync communication, mainly
 [updateApplicationContext](https://developer.apple.com/documentation/watchconnectivity/wcsession/1615621-updateapplicationcontext)
 is used given that it always have the latest data sent available, it's sent in the background and
 the counterpart device doesn't necessarily needs to be in range (so it's cached until it can be
-delivered). However,
+delivered). Additionally,
 [sendMessage](https://developer.apple.com/documentation/watchconnectivity/wcsession/1615687-sendmessage)
-is also used to signal the counterpart of some action to take fast.
+is also used to signal the counterpart of some action to take fastly (like triggering a sync from
+the Watch).
 
-<!---
-add diagram of services and watch connectivity interaction.
--->
+The `WatchDTO` is the object that is sent in the synchronization that has all the information for
+the Watch.
+
+```kroki type=plantuml
+title= iOS part
+@startuml
+
+title iOS
+
+participant C as "Caller"
+participant BWDS as "BaseWatchDeviceService"
+participant WDS as "WatchDeviceService"
+participant WCSM as "WCSessionManager"
+boundary WCF as "Watch Connectivity Framework"
+
+group Sync
+C->>BWDS: SyncDataToWatchAsync(...)
+BWDS->BWDS: GetStateAsync(...)
+BWDS->>WDS: SendDataToWatchAsync(...)
+WDS->>WCSM: SendBackgroundHighPriorityMessage(...)
+WCSM->>WCF: UpdateApplicationContext(...)
+end
+@enduml
+```
+
+```kroki type=plantuml
+title= iOS part
+@startuml
+
+title watchOS
+
+boundary WCF as "Watch Connectivity Framework"
+participant WCM as "WatchConnectivityManager"
+participant SS as "StateService"
+participant ES as "EnvironmentService"
+participant CS as "CipherService"
+participant WCS as "watchConnectivitySubject"
+
+group Sync
+WCF->>WCM: didReceiveApplicationContext(...)
+WCM->>SS: update state
+WCM->>ES: update environment
+WCM->>CS: saveCiphers(...)
+WCM->>WCS: fire notification change to subscribers
+end
+@enduml
+```
+
+## States
+
+The next ones are the states in which the Watch application can be at a given time:
+
+- **Valid:** Everything it's ok and the user can see the vault ciphers with TOTP
+- **Need Login:** The user needs to log in using the iPhone
+- **Need Setup:** The user needs to set up an account with "Connect to Watch" enabled on their
+  iPhone
+- **Need Premium:** The current account is not a premium account
+- **Need 2FA item:** The current account doesn't have any cipher with TOTP set up
+- **Syncing:** Displayed when changing accounts and syncing the new vault TOTPs
+- **Need Device Owner Auth:** The user needs to set up an Apple Watch Passcode in order to use the
+  app
+
+## Persistence and Encryption
+
+On the Watch [CoreData](https://developer.apple.com/documentation/coredata) is used as persistence
+for the ciphers. So in order to encrypt the data in them a Value Transformer in each encrypted
+attribute is used: `StringEncryptionTransformer`.
+
+Inside the transformer a call to the `CryptoService` is used that ends up using
+[AES.GCM](https://developer.apple.com/documentation/cryptokit/aes/gcm) to encrypt the data with a
+256 bits [SymmetricKey](https://developer.apple.com/documentation/cryptokit/symmetrickey). The key
+is generated/loaded the first time something needs to be encrypted and stored in the device
+Keychain.
 
 ## Crash reporting
 
