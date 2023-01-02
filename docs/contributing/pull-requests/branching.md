@@ -7,8 +7,8 @@ sidebar_custom_props:
 
 ## Naming Convention
 
-To keep branches organized we adhere a naming convention for branches. The convention splits branch
-names into 2 components, each separated by a `/`.
+To keep branches organized we adhere to a naming convention for branches. The convention splits
+branch names into 2 components, each separated by a `/`.
 
 1. The developers' pod abbreviation (e.g. `sm`)
 2. The Jira issue tag (e.g. `SM-1234`)
