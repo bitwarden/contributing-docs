@@ -76,6 +76,12 @@ We recommend grouping related changes together into a single commit. This can ma
 reviewers to understand and assess the changes that are being proposed, while also giving the
 contributor checkpoints to revert to if something should go wrong.
 
+We do not have a standard for how to structure commit messages (e.g. semantic commit messages). We
+encourage that commit messages should be within the 50-character limit so that `git log` can be used
+easily. If a commit message would take more than 50 characters it is best to break it up into
+smaller atomic changes for readability and malleability of the git history (reversion,
+cherry-picking, etc.).
+
 More advanced contributors might find it useful to
 [Rewrite History](https://git-scm.com/book/en/v2/Git-Tools-Rewriting-History). This allows a
 contributor to revise their local history before pushing to the remote repository. A common use case
@@ -99,8 +105,13 @@ Please follow the following checklist when creating a PR.
     (e.g. EC-123) or a link to the ticket anywhere in the PR title or body.
 - Add appropriate reviewer(s).
   - In most cases, this should be your pod. Each pod should have a GitHub team to simplify
-    requesting reviews, for example the _Platform pod_ has `pod-ps-dev`. There is a wider group
-    which includes QA and designers, `pod-ps`.
+    requesting reviews. The pod teams are named as follows:
+    - `@pod-{podAbbreviation}`: This will notify the entire pod, including product, design, QA and
+      development
+    - `@pod-{podAbbreviation}-dev`: This will notify or assign for code review the software
+      engineers within the pod
+    - `@pod-{podAbbreviation}-qa`: This will notify or assign for code review the QA
+      engineers/SDET(s) within the pod
   - Please use the
     [SME Yellowpages](https://bitwarden.atlassian.net/wiki/spaces/DEV/pages/195919928) to check if
     there is someone with specific knowledge of the area that can assist with reviewing complex
