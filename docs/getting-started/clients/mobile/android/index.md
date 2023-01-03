@@ -72,17 +72,20 @@ studio on your mac natively, you'll need to configure the endpoint addresses usi
 ### Using Server Tunneling
 
 Instead of configuring your device or emulator, you can instead use a
-[proxy tunnel to you local server](../../../server/tunnel.md) and have your app connect to it
+[proxy tunnel to your local server](../../../server/tunnel.md) and have your app connect to it
 directly.
 
 ### Push Notifications
 
-The default configuration for the android app is to register itself to the same environment as
+The default configuration for the Android app is to register itself to the same environment as
 Bitwarden's QA Cloud. This means that if you try to debug the app using the production endpoints you
-won't be able to receive live sync updates nor passwordless login requests.
+won't be able to receive Live Sync updates or Passwordless login requests.
 
 <bitwarden> 
- So, in order to receive notifications while debugging your app will have to use QA Cloud endpoints for the api and identity or a local server setup where the api is connected to QA Azure Notification Hub.
+So, in order to receive notifications while debugging, you have two options:
+- QA Cloud endpoints for the Api and Identity, or 
+- Use a local server setup where the Api is connected to QA Azure Notification Hub
+
 </bitwarden>
 
 ### Testing Passwordless Locally
@@ -93,19 +96,18 @@ your Android app to your device or emulator.
 
 :::note
 
-Debug and testing passwordless is limited by [push notifications](#push-notifications).
+Debugging and testing Passwordless authentication is limited by [push notifications](#push-notifications).
 
 :::
 
 Testing passwordless notifications:
 
-1. Start your local server (`api`, `identity`, `notification`)
+1. Start your local server (`Api`, `Identity`, `Notifications`)
 2. Make sure your mobile device can [connect to your local server](#using-server-tunneling)
-3. [Start web client](../../web-vault/index.mdx), you will need it to make login requests
+3. [Start the web client](../../web-vault/index.mdx), as you will need it to make login requests
 4. Deploy the Android app to your device or emulator
 5. After deployment, open the app, login to your QA account and activate passwordless login requests
    in settings
 6. Open the web vault using your prefered browser (ex: http://localhost:8080)
-7. Enter an email of a know device account and click login with device (you have to login first to
-   make the device known)
+7. Enter the email address of an account that has previously authenticated on that device (i.e. is a "known device") and click Continue.  When presented with the login options, click click Login with Device.
 8. Check mobile device for the notification
