@@ -2,7 +2,7 @@
 sidebar_position: 1
 ---
 
-# Watch app
+# watchOS
 
 ## Overall Architecture
 
@@ -65,11 +65,11 @@ Configuration and the Platform taking the output of the XCode watchOS app build.
 `ItemGroup` to include the watch app depending on if it exists and the Configuration. The task
 `_ResolvedWatchAppReferences` is the one responsible to peek into the `Bitwarden.app` built by XCode
 and if it finds a Watch app, it will just bundle it to the Xamarin iOS application. Finally, if the
-Watch app is bundled deep signing is enabled and on building the build path is printed if exists.
+Watch app is bundled, deep signing is enabled and the build path is printed.
 
 :::caution
 
-As one can see in the csproj to bundle the watchOS app into the iOS app one needs to target the
+As one can see in the csproj, to bundle the watchOS app into the iOS app one needs to target the
 correct platform. So if one is going to use a device, target the device on XCode to build the
 watchOS app and after the build is done one can go to VS4M to build the iOS app (which will bundle
 the watchOS one) and run it on the device.

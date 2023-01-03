@@ -1,6 +1,6 @@
 ---
 adr: "0017"
-status: In progress
+status: Done
 date: 2022-12-30
 tags: [clients, watchOS]
 ---
