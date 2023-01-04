@@ -82,10 +82,12 @@ Bitwarden's QA Cloud. This means that if you try to debug the app using the prod
 won't be able to receive Live Sync updates or Passwordless login requests.
 
 <bitwarden> 
+
 So, in order to receive notifications while debugging, you have two options:
 
 - Use QA Cloud endpoints for the Api and Identity, or 
 - Use a local server setup where the Api is connected to QA Azure Notification Hub
+
 </bitwarden>
 
 ### Testing Passwordless Locally
