@@ -63,7 +63,7 @@ To set up a new virtual Android device for debugging:
 ### Using the Android Emulator
 
 In order to access `localhost:<port>` resources in the Android Emulator when debugging using Xamarin
-studio on your mac natively, you'll need to configure the endpoint addresses using
+studio on your Mac natively, you'll need to configure the endpoint addresses using
 `<http://10.0.2.2:<port>`\> in order to access `localhost`, which maps the Android proxy by design.
 
 [xamarin-vs]: https://learn.microsoft.com/en-us/xamarin/android/get-started/installation/android-sdk
@@ -83,20 +83,20 @@ won't be able to receive Live Sync updates or Passwordless login requests.
 
 <bitwarden> 
 So, in order to receive notifications while debugging, you have two options:
-- QA Cloud endpoints for the Api and Identity, or 
+- Use QA Cloud endpoints for the Api and Identity, or 
 - Use a local server setup where the Api is connected to QA Azure Notification Hub
 
 </bitwarden>
 
 ### Testing Passwordless Locally
 
-Before you can start testing and debugging passwordless logins make sure your local server setup is
+Before you can start testing and debugging passwordless logins, make sure your local server setup is
 running correctly ([server setup](../../../server/guide.mdx)). You should also be able to deploy
 your Android app to your device or emulator.
 
 :::note
 
-Debugging and testing Passwordless authentication is limited by [push notifications](#push-notifications).
+Debugging and testing passwordless authentication is limited by [push notifications](#push-notifications).
 
 :::
 
