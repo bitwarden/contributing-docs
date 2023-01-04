@@ -159,4 +159,25 @@ keep pace with these changes. Developers must do this and include the migrations
     ```
 
 6.  Run the SQL script against your database
-7.  Save the script output in the `Scripts` folder
+
+7.  Save the script output in the `Scripts` folder, with the following naming convention. The date
+    in the file name should be the current date, not the anticipated date that the script will run
+    in any environment.
+
+    **MySQL:**
+
+    ```
+    YYYY-MM-DD_XX_[NAME_OF_MIGRATION].sql
+    ```
+
+    **Postgres:**
+
+    ```
+    YYYY-MM-DD_XX_[NAME_OF_MIGRATION].psql
+    ```
+
+    Where the `XX` is an incrementing number starting at `00` for a given date, to allow for
+    multiple scripts created on the same day.
+
+    For example, `2023-01-01_00_My_Migration.sql` for MySQL and `2023-01-01_00_My_Migration.psql`
+    for Postgres.
