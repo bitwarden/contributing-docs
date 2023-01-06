@@ -2,7 +2,7 @@
 adr: "0017"
 status: Done
 date: 2022-12-30
-tags: [clients, watchOS]
+tags: [mobile, watchOS]
 ---
 
 # 0017 - Use Swift to build watchOS app
@@ -11,28 +11,15 @@ tags: [clients, watchOS]
 
 ## Context and Problem Statement
 
-In order to build a watchOS application bundled to our iOS application we need to consider which
-technology to use. The requirements would be to remain in the same tech stack if possible and to
-have a watchOS app that we can build and can be bundled into our iOS app so that they are delivered
-together (the purpose is not to build an independant watchOS app).
+We would like to ship a watchOS application bundled together with the regular iOS application. The
+watchOS application will act as a companion application and initially offer a way to view TOTP codes
+from the watch which were previously synchronized from the iPhone.
 
 ## Considered Options
 
-- **.Net using Xamarin** - Has the advantage of keeping the same tech stack, we can share a lot more
-  of code, takes less time to learn and it's easier to have reviewers, plus it'd be all in the same
-  solution. The main problem here is that the watchOS development is not a priority on the .Net team
-  so there are several issues that affect a lot the development experience. Furthermore, there are
-  no plans to include watchOS support on MAUI and neither on .Net 7 nor on .Net 8 (at least at the
-  moment of writing this).
-- **Swift using UIKit** - Has the advantages of working with up to date native technology, a lot
-  more documentation and examples/projects done. However moving away from the tech stack means a
-  steep learning curve given that we need to also learn a new language and how things are done
-  there + additional libraries we may not be using in Xamarin.
-- **Swift using SwiftUI** - Idem to the previous one but with the additional advantage of having the
-  `SwiftUI` framework which accelerate the development a lot, specially using Previews. However,
-  it's an additional framework to learn and there are many things that are not polished enough so
-  it's something to consider like some special navigations and rendering issues are not easy to
-  debug.
+- [.Net using Xamarin](https://learn.microsoft.com/en-us/xamarin/ios/watchos/)
+- [Swift using WatchKit](https://developer.apple.com/documentation/watchkit/)
+- [Swift using SwiftUI](https://developer.apple.com/xcode/swiftui/)
 
 ## Decision Outcome
 
@@ -42,7 +29,7 @@ Chosen option: **Swift using SwiftUI**.
 
 - Supports watchOS fully
 - We can build and debug the app properly
-- Fast development with declarative UI and Previews
+- Fast development with declarative UI and Previews to enhance the dev experience
 - Code organized using components on the UI
 - Updates to the framework and the SDKs are available as soon as Apple ships them
 - A lot more documentation, examples and public repositories to check
@@ -55,3 +42,36 @@ Chosen option: **Swift using SwiftUI**.
   one is overriden by the stub one)
 - Set up is harder given that we need to bundle the XCode built watchOS app into the Xamarin iOS app
   and update CI accordingly
+
+## Pros and Cons of the Options
+
+### Net using Xamarin
+
+- :white_check_mark: Keeps same tech stack
+- :white_check_mark: Shares a lot of code
+- :white_check_mark: Easier learning curve and reviews
+- :white_check_mark: Easy integration into the regular iOS app
+- :no_entry: Several important issues affecting the watchOS dev experience, particularly can't debug
+  correctly
+- :no_entry: watchOS platform not being a priority for the .Net team
+- :no_entry: No plans to include watchOS support on MAUI and neither on .Net 7 nor on .Net 8
+
+### Swift using WatchKit
+
+- :white_check_mark: It's the native approach meaning it's always up to date
+- :white_check_mark: Lots of documentation and examples/projects to look
+- :white_check_mark: Debugging works as expected
+- :no_entry: Steep learning curve (language + watch related stuff)
+- :no_entry: Hard to integrate to the regular iOS app
+
+### Swift using SwiftUI
+
+- :white_check_mark: It's the native approach meaning it's always up to date
+- :white_check_mark: Lots of documentation and examples/projects to look
+- :white_check_mark: Debugging works as expected
+- :white_check_mark: Fast development with SwiftUI Framework
+- :white_check_mark: Previews enhance the development experience to the sky taking a lot less effort
+- :no_entry: Steep learning curve (language + watch related stuff + SwiftUI framework)
+- :no_entry: Hard to integrate to the regular iOS app
+- :no_entry: SwiftUI is not polished enough yet so some things to keep in mind are special
+  navigation and rendering issues
