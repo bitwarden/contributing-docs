@@ -21,7 +21,9 @@ of modern progressive web apps (PWAs) and single-page applications (SPAs). In cl
 
 On the other hand, in modern applications a `<form>` element can be used to collect user data, but a
 completely separate API request sends the form data to the server. For a good overview of the
-complexities, see this excellent documentation.
+complexities, see
+[this](https://developer.mozilla.org/en-US/docs/Learn/Forms/Sending_forms_through_JavaScript)
+excellent documentation.
 
 ## What is involved in Form submission detection?
 
