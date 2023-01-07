@@ -16,16 +16,17 @@ Our EF implementations currently support Postgres and mySQL.
 
 ## Setting up EF databases
 
-The workflow here is broadly the same as with the normal MSSQL implementation: set up the Docker
-container, configure user secrets, and run the scripts in the `scripts` folders against their
-relating databases in chronological order.
+The workflow here is broadly the same as with the normal MSSQL implementation - you begin by setting
+up the Docker container and configure user secrets. However, unlike with MSSQL, we then use the
+`migrate.ps1` script to run `dotnet ef` commands to set up the database and perform the migrations
+to get it up to date.
 
 ### Requirements
 
 - A working local development server
 - Docker
 - A way to manage user secrets in the server project - see
-  [User Secrets Reference](../user-secrets.md)
+  [User Secrets Reference](../../user-secrets.md)
 - Database management software (e.g. pgAdmin4 for Postgres or DBeaver for mySQL)
 - The `dotnet` cli
 - The `dotnet` cli [Entity Framework Core tool](https://docs.microsoft.com/en-us/ef/core/cli/dotnet)

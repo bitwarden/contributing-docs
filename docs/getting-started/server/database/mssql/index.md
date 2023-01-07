@@ -10,7 +10,7 @@ for .NET.
 
 ## Creating the database
 
-See [Server Setup Guide](../guide.mdx).
+See [Server Setup Guide](../../guide.mdx).
 
 ## Updating the database
 
