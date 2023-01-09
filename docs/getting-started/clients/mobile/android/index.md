@@ -81,11 +81,11 @@ The default configuration for the Android app is to register itself to the same 
 Bitwarden's QA Cloud. This means that if you try to debug the app using the production endpoints you
 won't be able to receive Live Sync updates or Passwordless login requests.
 
-<bitwarden> 
+<bitwarden>
 
 So, in order to receive notifications while debugging, you have two options:
 
-- Use QA Cloud endpoints for the Api and Identity, or 
+- Use QA Cloud endpoints for the Api and Identity, or
 - Use a local server setup where the Api is connected to QA Azure Notification Hub
 
 </bitwarden>
@@ -98,7 +98,8 @@ your Android app to your device or emulator.
 
 :::note
 
-Debugging and testing passwordless authentication is limited by [push notifications](#push-notifications).
+Debugging and testing passwordless authentication is limited by
+[push notifications](#push-notifications).
 
 :::
 
@@ -111,5 +112,7 @@ Testing passwordless notifications:
 5. After deployment, open the app, login to your QA account and activate passwordless login requests
    in settings
 6. Open the web vault using your prefered browser (ex: http://localhost:8080)
-7. Enter the email address of an account that has previously authenticated on that device (i.e. is a "known device") and click Continue.  When presented with the login options, click click Login with Device.
+7. Enter the email address of an account that has previously authenticated on that device (i.e. is a
+   "known device") and click Continue. When presented with the login options, click click Login with
+   Device.
 8. Check mobile device for the notification
