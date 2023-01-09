@@ -105,7 +105,7 @@ Refer to
   doing a rebase like the following targeting the hash of the previous commit to the one you did (it
   will sign all commits from there):
 
-  ```
+  ```bash
   git rebase --exec 'git commit --amend --no-edit -n -S' -i <previous-commmit-hash>
   ```
 
