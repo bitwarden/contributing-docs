@@ -105,13 +105,13 @@ Refer to
   doing a rebase like the following targeting the hash of the previous commit to the one you did (it
   will sign all commits from there):
 
-```
-git rebase --exec 'git commit --amend --no-edit -n -S' -i <previous-commmit-hash>
-```
+  ```
+  git rebase --exec 'git commit --amend --no-edit -n -S' -i <previous-commmit-hash>
+  ```
 
-Beware that if you had already pushed your changes to origin, you are going to have to do a force
-push in git after applying the fix which shouldn't be harmful on side branches but one needs to pay
-attention just in case.
+  Beware that if you had already pushed your changes to origin, you are going to have to do a force
+  push in git after applying the fix which shouldn't be harmful on side branches but one needs to
+  pay attention just in case.
 
-[github-verification]:
-  https://docs.github.com/en/authentication/managing-commit-signature-verification/about-commit-signature-verification
+  [github-verification]:
+    https://docs.github.com/en/authentication/managing-commit-signature-verification/about-commit-signature-verification
