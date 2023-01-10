@@ -20,7 +20,7 @@ Entity Framework (EF) is an ORM framework that acts as a wrapper around a databa
 support multiple (non-MSSQL) databases without having to maintain migration and query scripts for
 each.
 
-Our EF implementations currently support Postgres, mySQL, and SQLite3.
+Our EF implementations currently support Postgres, MySQL, and SQLite3.
 
 ## Setting up EF databases
 
