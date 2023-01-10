@@ -51,7 +51,7 @@ and the long-lived extensions living in the background.
 - Takes us in a direction needed for Manifest V3 anyway
 - Bypasses potential memory leaks due to dangling subscriptions
 
-### Negative Consequences <!-- optional -->
+### Negative Consequences
 
 - Increases memory footprint of the browser extension since service's observables need to be created
   per visualization and background context.
