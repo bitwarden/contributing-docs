@@ -45,7 +45,7 @@ These short lived subject will be accomplished by creating visualization-level s
 same lifetime as the components they serve. Data will be synced between these short-lived services
 and the long-lived extensions living in the background.
 
-### Positive Consequences <!-- optional -->
+### Positive Consequences
 
 - No impact to writing component-level code
 - Takes us in a direction needed for Manifest V3 anyway
