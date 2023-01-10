@@ -58,11 +58,61 @@ To set up a new virtual Android device for debugging:
 
 ![Android SDK configuration](android-sdk.png)
 
-## Testing and Debugging using the Android Emulator
+## Testing and Debugging
+
+### Using the Android Emulator
 
 In order to access `localhost:<port>` resources in the Android Emulator when debugging using Xamarin
-studio on your mac natively, you'll need to configure the endpoint addresses using
+studio on your Mac natively, you'll need to configure the endpoint addresses using
 `<http://10.0.2.2:<port>`\> in order to access `localhost`, which maps the Android proxy by design.
 
 [xamarin-vs]: https://learn.microsoft.com/en-us/xamarin/android/get-started/installation/android-sdk
 [android-studio]: https://developer.android.com/studio/releases/platforms
+
+### Using Server Tunneling
+
+Instead of configuring your device or emulator, you can instead use a
+[proxy tunnel to your local server](../../../server/tunnel.md) and have your app connect to it
+directly.
+
+### Push Notifications
+
+The default configuration for the Android app is to register itself to the same environment as
+Bitwarden's QA Cloud. This means that if you try to debug the app using the production endpoints you
+won't be able to receive Live Sync updates or Passwordless login requests.
+
+<bitwarden>
+
+So, in order to receive notifications while debugging, you have two options:
+
+- Use QA Cloud endpoints for the Api and Identity, or
+- Use a local server setup where the Api is connected to QA Azure Notification Hub
+
+</bitwarden>
+
+### Testing Passwordless Locally
+
+Before you can start testing and debugging passwordless logins, make sure your local server setup is
+running correctly ([server setup](../../../server/guide.mdx)). You should also be able to deploy
+your Android app to your device or emulator.
+
+:::note
+
+Debugging and testing passwordless authentication is limited by
+[push notifications](#push-notifications).
+
+:::
+
+Testing passwordless notifications:
+
+1. Start your local server (`Api`, `Identity`, `Notifications`)
+2. Make sure your mobile device can [connect to your local server](#using-server-tunneling)
+3. [Start the web client](../../web-vault/index.mdx), as you will need it to make login requests
+4. Deploy the Android app to your device or emulator
+5. After deployment, open the app, login to your QA account and activate passwordless login requests
+   in settings
+6. Open the web vault using your prefered browser (ex: http://localhost:8080)
+7. Enter the email address of an account that has previously authenticated on that device (i.e. is a
+   "known device") and click Continue. When presented with the login options, click click Login with
+   Device.
+8. Check mobile device for the notification
