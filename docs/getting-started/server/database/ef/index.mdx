@@ -36,10 +36,10 @@ chronological order.
 - A working local development server
 - Docker
 - A way to manage user secrets in the server project - see
-  [User Secrets Reference](../user-secrets.md)
-- Database management software (see [tools recommendations](../../tools/index.md#databases))
-- The `dotnet` cli
-- The `dotnet` cli [Entity Framework Core tool](https://docs.microsoft.com/en-us/ef/core/cli/dotnet)
+  [User Secrets Reference](../../user-secrets.md)
+- Database management software (see [tools recommendations](../../../tools/index.md#databases))
+- The `dotnet` CLI
+- The `dotnet` CLI [Entity Framework Core tool](https://docs.microsoft.com/en-us/ef/core/cli/dotnet)
 
 You can have multiple databases configured and switch between them by changing the value of the
 `globalSettings:databaseProvider` user secret. You don’t have to delete your connection strings.
@@ -202,7 +202,6 @@ dotnet ef database update --startup-project util/PostgresMigrations --connection
 dotnet ef database update --startup-project util/MySqlMigrations --connection "[MYSQL_CONNECTION_STRING]"
 
 cd test/Infrastructure.IntegrationTest
-
 
 # https://learn.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-6.0&tabs=windows#secret-manager
 dotnet user-secrets set "Ef:Postgres" "[POSTGRES_CONNECTION_STRING]"
