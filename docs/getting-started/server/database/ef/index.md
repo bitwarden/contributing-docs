@@ -33,7 +33,7 @@ container, configure user secrets, and then run `migrate.ps1` to run the migrati
 - Docker
 - A way to manage user secrets in the server project - see
   [User Secrets Reference](../../user-secrets.md)
-- Database management software (e.g. pgAdmin4 for Postgres or DBeaver for mySQL)
+- Database management software (see [tool recommendations](../../../tools/index.md#databases))
 - The `dotnet` cli
 - The `dotnet` cli [Entity Framework Core tool](https://docs.microsoft.com/en-us/ef/core/cli/dotnet)
 
