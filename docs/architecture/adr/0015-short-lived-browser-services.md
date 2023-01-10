@@ -41,7 +41,7 @@ Chosen option: **Short Lived Subjects**.
 This option is the most flexible and allows us to keep the benefits of Observables while avoiding
 the flakiness associated with the page visibility events.
 
-These short lived subject will be accomplished by creating visualization-level Services with the
+These short lived subject will be accomplished by creating visualization-level services with the
 same lifetime as the components they serve. Data will be synced between these short-lived services
 and the long-lived extensions living in the background.
 
