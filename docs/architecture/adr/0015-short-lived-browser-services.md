@@ -11,7 +11,7 @@ tags: [browser, clients, typescript]
 
 ## Context and Problem Statement
 
-[ADR 003](./0003-observable-data-services.md) introduced the usage of Observables into our
+[ADR-003](./0003-observable-data-services.md) introduced the usage of Observables into our
 TypeScript codebase. That same ADR describes using `ngDestroy` to trigger unsubscribing from all
 subscribed `Observables`. However, `ngDestroy` is only called when the Angular router is used to
 navigate away from the page. In SPAs, this isn't a problem. If the router isn't used, it means you
