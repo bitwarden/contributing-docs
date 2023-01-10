@@ -59,12 +59,8 @@ As a Bitwarden contributor you should branch of `origin/master`, this ensures th
 always based of the latest upstream `master` even if the local `master` is out of date.
 
 ```bash
-git checkout -b <pod>/<feature>/<issue-number> -t origin/master
+git checkout -b <pod>/<issue-number> -t origin/master
 ```
-
-</bitwarden>
-
-<bitwarden>
 
 Our branching strategy is described in detail [here](branching.md).
 

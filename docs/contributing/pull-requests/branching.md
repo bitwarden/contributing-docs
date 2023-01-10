@@ -16,7 +16,7 @@ branch names into 2 components, each separated by a `/`.
 ```bash
 # Some examples
 sm/SM-1234
-ps/PS-4321-optional-description
+ps/PS-4321
 ```
 
 This naming convention allows us to easily identify the type of work being done on a branch and will
@@ -123,9 +123,9 @@ Branch.
 #### Syncing the Long-Lived Feature Branch
 
 We typically denote one person as being responsible for keeping the Long-Lived Feature Branch up to
-date.<bitwarden> In most cases this will be the TPC of the pod but can be anyone.</bitwarden> This
-person is responsible for keeping the feature branch reasonably up to date with master, preparing it
-for merge and more.
+date. In most cases this will be the Tech Lead of the pod but can be anyone. This person is
+responsible for keeping the feature branch reasonably up to date with master, preparing it for merge
+and more.
 
 Due to how GitHub handles reviews, this person cannot also approve the final PR for the Long-Lived
 Feature Branch. The reviewer can be anyone in the pod. However, since the work this branch is
