@@ -16,16 +16,15 @@ Our EF implementations currently support Postgres and mySQL.
 
 ## Setting up EF databases
 
-The workflow here is broadly the same as with the normal MSSQL implementation: set up the docker
-container, configure user secrets, and run the scripts in the `scripts` folders against their
-relating databases in chronological order.
+The workflow here is broadly the same as with the MSSQL implementation. You will set up the Docker
+container, configure user secrets, and then run `migrate.ps1` to run the migrations.
 
 ### Requirements
 
 - A working local development server
 - Docker
 - A way to manage user secrets in the server project - see
-  [User Secrets Reference](../user-secrets.md)
+  [User Secrets Reference](../../user-secrets.md)
 - Database management software (e.g. pgAdmin4 for Postgres or DBeaver for mySQL)
 - The `dotnet` cli
 - The `dotnet` cli [Entity Framework Core tool](https://docs.microsoft.com/en-us/ef/core/cli/dotnet)
@@ -55,6 +54,8 @@ You can have multiple databases configured and switch between them by changing t
     ```bash
     pwsh migrate.ps1 -postgres
     ```
+
+    The `-postgres` flag on `migrate.ps1` will run `dotnet ef` commands to perform the migrations.
 
 4.  Optional: to verify that everything worked correctly:
 
@@ -88,6 +89,8 @@ the docker-compose.yml file.
     ```bash
     pwsh migrate.ps1 -mysql
     ```
+
+    The `-mysql` flag on `migrate.ps1` will run `dotnet ef` commands to perform the migrations.
 
     :::note
 
@@ -132,52 +135,3 @@ dotnet user-secrets set "Dapper:SqlServer" "[MSSQL_CONNECTION_STRING]"
 
 You can then run just those tests from the `test/Infrastructure.IntegrationTest` folder using
 `dotnet test`.
-
-## Generating EF Migrations
-
-If you alter the database schema, you must create an EF migration script to ensure that EF databases
-keep pace with these changes. Developers must do this and include the migrations with their PR.
-
-### Instructions
-
-1.  Update your data model in `Core/Entities` as desired
-2.  Ensure your user secrets in `API` have the correct provider configured in the `databaseProvider`
-    field. The value should match the provider you are generating migrations for.
-3.  Open a terminal in the root of the project you want to generate a migration for (either
-    `util/PostgresMigrations` or `util/MySqlMigrations`)
-4.  Generate the migration. This should have the same name as the corresponding MSSQL migration
-    (except for the date, which the the tool will prepend automatically):
-
-    ```bash
-    dotnet ef migrations add [NAME_OF_MIGRATION]
-    ```
-
-5.  Generate the migration SQL script:
-
-    ```bash
-    dotnet ef migrations script [LATEST_PREVIOUS_MIGRATION]
-    ```
-
-6.  Run the SQL script against your database
-
-7.  Save the script output in the `Scripts` folder, with the following naming convention. The date
-    in the file name should be the current date, not the anticipated date that the script will run
-    in any environment.
-
-    **MySQL:**
-
-    ```
-    YYYY-MM-DD_XX_[NAME_OF_MIGRATION].sql
-    ```
-
-    **Postgres:**
-
-    ```
-    YYYY-MM-DD_XX_[NAME_OF_MIGRATION].psql
-    ```
-
-    Where the `XX` is an incrementing number starting at `00` for a given date, to allow for
-    multiple scripts created on the same day.
-
-    For example, `2023-01-01_00_My_Migration.sql` for MySQL and `2023-01-01_00_My_Migration.psql`
-    for Postgres.
