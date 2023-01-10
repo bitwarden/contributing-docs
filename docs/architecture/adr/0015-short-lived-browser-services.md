@@ -45,8 +45,6 @@ These short lived subject will be accomplished by creating visualization-level S
 same lifetime as the components they serve. Data will be synced between these short-lived services
 and the long-lived extensions living in the background.
 
-<!-- optional: brief reason for decision **or** the positive/negative consequences sections below -->
-
 ### Positive Consequences <!-- optional -->
 
 - No impact to writing component-level code.
