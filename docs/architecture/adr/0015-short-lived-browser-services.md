@@ -112,9 +112,9 @@ The Browser Service must simple extend the libs service and wrap itself and the 
 decorators.
 
 ```typescript
-@browserSession()
+@browserSession
 export class BrowserFolderService extends FolderService {
-  @sessionSync({ .initializer: Folder.fromJSON, initializeAs: 'array' })
+  @sessionSync({ initializer: Folder.fromJSON, initializeAs: 'array' })
   protected _folders: BehaviorSubject<Folder[]>;
   @sessionSync({ initializer: FolderView.fromJSON, initializeAs: 'array' })
   protected _folderViews: BehaviorSubject<FolderView[]>;
