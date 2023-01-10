@@ -1,4 +1,8 @@
-# MSSQL Database
+---
+sidebar_position: 1
+---
+
+# MSSQL
 
 Bitwarden primarily stores data in MSSQL (Microsoft SQL Server). The data access layer in the Server
 is written using [Dapper](https://github.com/DapperLib/Dapper) which is a lightweight object mapper
@@ -6,7 +10,7 @@ for .NET.
 
 ## Creating the database
 
-See [Server Setup Guide](../guide.mdx).
+See [Server Setup Guide](../../guide.mdx).
 
 ## Updating the database
 
