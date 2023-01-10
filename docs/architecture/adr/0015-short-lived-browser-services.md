@@ -19,7 +19,7 @@ closed the page and the SPA is dead. In Browser Extensions, we have a persistent
 survives such closing events. This means that subscriptions exist in the Observers queue which no
 longer exist.
 
-In FireFox, in particular, this is a catastrophic failure. FireFox will swap out all object
+In Firefox, in particular, this is a catastrophic failure. Firefox will swap out all object
 belonging to a DOM object that no longer exists with a `DeadObject`. When `next()` is called on the
 `Subject`, the `DeadObject` is treated like and Observer and throws an error, preventing any further
 notification to subsequent Observers and catastrophic breaks in the extension.
