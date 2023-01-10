@@ -20,7 +20,7 @@ Entity Framework (EF) is an ORM framework that acts as a wrapper around a databa
 support multiple (non-MSSQL) databases without having to maintain migration and query scripts for
 each.
 
-Our EF implementations currently support Postgres and mySQL.
+Our EF implementations currently support Postgres, mySQL, and SQLite3.
 
 ## Setting up EF databases
 
@@ -48,9 +48,9 @@ You can have multiple databases configured and switch between them by changing t
     docker compose --profile postgres up
     ```
 
-2.  Add the following values to your API and Identity user secrets, changing information like root
-    password as needed. If you already have these secrets, make sure you update the existing values
-    instead of creating new ones:
+2.  Add the following values to your API, Identity, and Admin user secrets, changing information
+    like root password as needed. If you already have these secrets, make sure you update the
+    existing values instead of creating new ones:
 
     ```json
     "globalSettings:databaseProvider": "postgres",
@@ -69,8 +69,8 @@ You can have multiple databases configured and switch between them by changing t
 
     - Check the database tables to make sure everything has been created
     - Run the integration tests from the root of your server project using `dotnet test`. Note: this
-      requires a configured MSSQL database. You may also need to also set up a MySql database for
-      the tests to pass
+      requires a configured MSSQL database. You may also need to set up other EF providers for tests
+      to pass.
 
 ### MySql
 
@@ -83,9 +83,9 @@ the docker-compose.yml file.
     docker compose --profile mysql up
     ```
 
-2.  Add the following values to your API and Identity user secrets, changing information like root
-    password as needed. If you already have these secrets, make sure you update the existing values
-    instead of creating new ones:
+2.  Add the following values to your API, Identity, and Admin user secrets, changing information
+    like root password as needed. If you already have these secrets, make sure you update the
+    existing values instead of creating new ones:
 
     ```json
     "globalSettings:databaseProvider": "mysql",
@@ -110,8 +110,38 @@ the docker-compose.yml file.
 
     - Check the database tables to make sure everything has been created
     - Run the integration tests from the root of your server project using `dotnet test`. Note: this
-      requires a configured MSSQL database. You may also need to also set up a Postgres database for
-      the tests to pass
+      requires a configured MSSQL database. You may also need to set up other EF providers for tests
+      to pass.
+
+### SQLite3
+
+1.  Add the following values to your API, Identity, and Admin user secrets. Note, you must set the
+    Data Source path. This file can be located anywhere, but the `dev` folder of the server repo has
+    a git ignore rule for `.db` files.
+
+    ```json
+    "globalSettings:databaseProvider": "sqlite",
+    "globalSettings:postgreSql:connectionString": "Data Source=/path/to/your/server/repo/dev/db/bitwarden.db",
+    ```
+
+2.  In the `dev` folder run the following to update the database to the latest migration:
+
+    ```bash
+    pwsh migrate.ps1 -sqlite
+    ```
+
+    :::note
+
+    `pwsh migrate.ps1 -all` will run migrations for all database providers
+
+    :::
+
+3.  Optional: to verify that everything worked correctly:
+
+    - Check the database tables to make sure everything has been created
+    - Run the integration tests from the root of your server project using `dotnet test`. Note: this
+      requires a configured MSSQL database. You may also need to set up other EF providers for tests
+      to pass.
 
 ## Testing EF Changes
 
