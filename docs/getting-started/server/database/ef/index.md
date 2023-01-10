@@ -16,10 +16,8 @@ Our EF implementations currently support Postgres and mySQL.
 
 ## Setting up EF databases
 
-The workflow here is broadly the same as with the normal MSSQL implementation - you begin by setting
-up the Docker container and configure user secrets. However, unlike with MSSQL, we then use the
-`migrate.ps1` script to run `dotnet ef` commands to set up the database and perform the migrations
-to get it up to date.
+The workflow here is broadly the same as with the MSSQL implementation. You will set up the Docker
+container, configure user secrets, and then run `migrate.ps1` to run the migrations.
 
 ### Requirements
 
@@ -57,6 +55,8 @@ You can have multiple databases configured and switch between them by changing t
     pwsh migrate.ps1 -postgres
     ```
 
+    The `-postgres` flag on `migrate.ps1` will run `dotnet ef` commands to perform the migrations.
+
 4.  Optional: to verify that everything worked correctly:
 
     - Check the database tables to make sure everything has been created
@@ -89,6 +89,8 @@ the docker-compose.yml file.
     ```bash
     pwsh migrate.ps1 -mysql
     ```
+
+    The `-mysql` flag on `migrate.ps1` will run `dotnet ef` commands to perform the migrations.
 
     :::note
 
