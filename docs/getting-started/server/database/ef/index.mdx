@@ -13,7 +13,7 @@ Entity Framework support is still in beta and is not suitable for production dat
 
 This page refers to setting up a Bitwarden instance to develop on, for instructions on testing out
 our EF deployments for personal use, such as Bitwarden Unified, please see
-[the help documentation](https://bitwarden.com/help/install-and-deploy-unified-beta/)
+[the help documentation](https://bitwarden.com/help/install-and-deploy-unified-beta/).
 
 :::
 
@@ -25,7 +25,7 @@ each.
 
 Our EF implementations currently support Postgres, MySQL, and SQLite3.
 
-## Setting up EF databases
+## Setting Up EF Databases
 
 The workflow here is broadly the same as with the normal MSSQL implementation: set up the docker
 container, configure user secrets, and run migrations against their relating databases in
@@ -55,7 +55,7 @@ You can have multiple databases configured and switch between them by changing t
     ]}>
 <TabItem value="postgres">
 
-In the `dev` folder of your server repository, run:
+In the `dev` folder of your server repository, run
 
 ```bash
 docker compose --profile postgres up
@@ -64,7 +64,7 @@ docker compose --profile postgres up
 </TabItem>
 <TabItem value="mysql">
 
-In the `dev` folder of your server repository, run:
+In the `dev` folder of your server repository, run
 
 ```bash
 docker compose --profile mysql up
@@ -74,7 +74,7 @@ docker compose --profile mysql up
 <TabItem value="sqlite">
 
 Select a location for your database file. You can use the `dev` folder of your server repository,
-git is configured to ignore `.db` files in this repository for this purpose
+git is configured to ignore `.db` files in this repository for this purpose.
 
 </TabItem>
 </Tabs>
@@ -93,7 +93,7 @@ Add the following values to your API, Identity, and Admin user secrets.
 <TabItem value="postgres">
 
 Be sure to change information like root password as needed. If you already have these secrets, make
-sure you update the existing values instead of creating new ones:
+sure you update the existing values instead of creating new ones
 
 ```json
 "globalSettings:databaseProvider": "postgres",
@@ -104,7 +104,7 @@ sure you update the existing values instead of creating new ones:
 <TabItem value="mysql">
 
 Be sure to change information like root password as needed. If you already have these secrets, make
-sure you update the existing values instead of creating new ones:
+sure you update the existing values instead of creating new ones
 
 ```json
 "globalSettings:databaseProvider": "mysql",
@@ -136,7 +136,7 @@ Source path. Use the file location selected in [Database Setup](#database-setup)
     ]}>
 <TabItem value="postgres">
 
-In the `dev` folder run the following to update the database to the latest migration:
+In the `dev` folder run the following to update the database to the latest migration
 
 ```bash
 pwsh migrate.ps1 -postgres
@@ -147,7 +147,7 @@ The `-postgres` flag on `migrate.ps1` will run `dotnet ef` commands to perform t
 </TabItem>
 <TabItem value="mysql">
 
-In the `dev` folder run the following to update the database to the latest migration:
+In the `dev` folder run the following to update the database to the latest migration
 
 ```bash
 pwsh migrate.ps1 -mysql
@@ -158,7 +158,7 @@ The `-mysql` flag on `migrate.ps1` will run `dotnet ef` commands to perform the 
 </TabItem>
 <TabItem value="sqlite">
 
-In the `dev` folder run the following to update the database to the latest migration:
+In the `dev` folder run the following to update the database to the latest migration
 
 ```bash
 pwsh migrate.ps1 -sqlite
@@ -190,7 +190,7 @@ Since we allow for multiple databases it is important that any changes to EF rep
 tested against all possible databases. You may want to use a database that is different from your
 local development database because the tests may add or remove data. To apply migrations to a
 database different from your global settings run the following commands from the root of your
-repository:
+repository
 
 ```bash
 # EntityFramework CLI Reference: https://learn.microsoft.com/en-us/ef/core/cli/dotnet
