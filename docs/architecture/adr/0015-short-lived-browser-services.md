@@ -47,7 +47,7 @@ and the long-lived extensions living in the background.
 
 ### Positive Consequences <!-- optional -->
 
-- No impact to writing component-level code.
+- No impact to writing component-level code
 - Takes us in a direction needed for Manifest V3 anyway
 - Bypasses potential memory leaks due to dangling subscriptions
 
