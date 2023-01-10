@@ -101,6 +101,19 @@ Refer to
   your terminal. Refer to
   [this troubleshooting document](https://gist.github.com/paolocarrasco/18ca8fe6e63490ae1be23e84a7039374)
   for more help with this error
+- If you have already committed your changes and forgot to configure gpg signing you can fix it by
+  doing a rebase like the following targeting the hash of the previous commit to the one you did (it
+  will sign all commits from there):
+
+  ```bash
+  git rebase --exec 'git commit --amend --no-edit -n -S' -i <previous-commmit-hash>
+  ```
+
+  Beware that if you had already pushed your changes to origin, you are going to have to do a force
+  push in git after applying the fix which shouldn't be harmful on side branches but one needs to
+  pay attention just in case. It's advisable to create a temporary branch before doing this to have
+  a backup in case something goes wrong. If something does go wrong, the simplest solution is to
+  close the PR and create a new one squashing the old PR's commits with signing enabled.
 
 [github-verification]:
   https://docs.github.com/en/authentication/managing-commit-signature-verification/about-commit-signature-verification
