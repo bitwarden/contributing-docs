@@ -6,6 +6,14 @@ Entity Framework support is still in beta and is not suitable for production dat
 
 :::
 
+:::info
+
+This page refers to setting up a Bitwarden instance to develop on, for instructions on testing out
+our EF deployments for personal use, such as Bitwarden Unified, please see
+[the help documentation](https://bitwarden.com/help/install-and-deploy-unified-beta/)
+
+:::
+
 ## Background
 
 Entity Framework (EF) is an ORM framework that acts as a wrapper around a database. It allows us to
