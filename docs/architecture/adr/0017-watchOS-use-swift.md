@@ -45,7 +45,7 @@ Chosen option: **Swift using SwiftUI**.
 
 ## Pros and Cons of the Options
 
-### Net using Xamarin
+### .Net using Xamarin
 
 - :white_check_mark: Keeps same tech stack
 - :white_check_mark: Shares a lot of code
