@@ -1,6 +1,21 @@
 import Tabs from "@theme/Tabs";
 import TabItem from "@theme/TabItem";
 
+export const providers = [
+  {
+    label: "PostgreSQL",
+    value: "postgres",
+  },
+  {
+    label: "MySQL",
+    value: "mysql",
+  },
+  {
+    label: "SQLite",
+    value: "sqlite",
+  },
+];
+
 # Entity Framework
 
 :::warning
@@ -48,11 +63,7 @@ You can have multiple databases configured and switch between them by changing t
 
 <Tabs
     groupId="provider"
-    values={[
-        {label: 'PostgreSQL', value: 'postgres'},
-        {label: 'MySQL', value: 'mysql'},
-        {label: 'SQLite', value: 'sqlite'},
-    ]}>
+    values={providers}>
 <TabItem value="postgres">
 
 In the `dev` folder of your server repository, run
@@ -85,11 +96,7 @@ Add the following values to your API, Identity, and Admin user secrets.
 
 <Tabs
     groupId="provider"
-    values={[
-        {label: 'PostgreSQL', value: 'postgres'},
-        {label: 'MySQL', value: 'mysql'},
-        {label: 'SQLite', value: 'sqlite'},
-    ]}>
+    values={providers}>
 <TabItem value="postgres">
 
 Be sure to change information like root password as needed. If you already have these secrets, make
@@ -129,11 +136,7 @@ Source path. Use the file location selected in [Database Setup](#database-setup)
 
 <Tabs
     groupId="provider"
-    values={[
-        {label: 'PostgreSQL', value: 'postgres'},
-        {label: 'MySQL', value: 'mysql'},
-        {label: 'SQLite', value: 'sqlite'},
-    ]}>
+    values={providers}>
 <TabItem value="postgres">
 
 In the `dev` folder run the following to update the database to the latest migration
