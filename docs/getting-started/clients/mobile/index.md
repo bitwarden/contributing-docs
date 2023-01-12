@@ -30,3 +30,19 @@ Unfortunately, iOS development requires provisioning profiles and other capabili
 to internal team members. We do not have any documentation for community developers at this time.
 
 </community>
+
+## watchOS Development
+
+<bitwarden>
+
+See the [watchOS app](./watchos) page to set up an watchOS development environment.
+
+</bitwarden>
+
+<community>
+
+Unfortunately, watchOS development requires provisioning profiles and other capabilities only
+available to internal team members. We do not have any documentation for community developers at
+this time.
+
+</community>

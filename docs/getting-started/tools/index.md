@@ -47,6 +47,8 @@ environment.
 - [Android Studio](https://developer.android.com/studio/) - Nice for setting up and running Android
   Simulators
 - [adb](https://developer.android.com/studio/command-line/adb) - for interacting with Android sims
+- [Apple Icons Generator Gist](https://gist.github.com/brutella/0bcd671a9e4f63edc12e) - Script to
+  generate Apple icons from an image
 
 ### Databases
 

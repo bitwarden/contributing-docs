@@ -1,4 +1,4 @@
-# Android Mobile app
+# Android
 
 ## Requirements
 
