@@ -54,6 +54,7 @@ environment.
   for working with your local SQL Server
 - [PgAdmin4](https://www.pgadmin.org/) - Useful for fiddling with PostgreSQL db
 - [MySQLWorkbench](https://www.mysql.com/products/workbench/) - Useful for fiddling with MySQL db
+- [SQLiteStudio](https://www.sqlitestudio.pl/) - Useful for fiddling with SQLite db
 
 ### Visual Studio Code Extensions
 
