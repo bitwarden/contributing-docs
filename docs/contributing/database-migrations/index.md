@@ -1,4 +1,10 @@
-# Migrations
+---
+sidebar_position: 2
+---
+
+# Database Migrations
+
+## MSSQL Migrations
 
 :::note
 
@@ -7,18 +13,18 @@ how we write migrations.
 
 :::
 
-## Repositories
+### Repositories
 
 We use the [Repository pattern][repository] with the MSSQL repositories being written using
 [Dapper][dapper]. Each repository method in turn calls a _Stored Procedure_, which primarily fetches
 data from _Views_.
 
-## Changing the database
+### Changing the database
 
 As we follow [Evolutionary Database Design](./edd.mdx) each change needs to be split into two parts.
 A backwards compatible transition phase, and a non-backwards compatible.
 
-### Best Practices
+#### Best Practices
 
 When writing a migration script there are a couple of best practices we follow. Please check the
 [T-SQL Code Style][code-style-sql] for more details.
@@ -29,7 +35,7 @@ When writing a migration script there are a couple of best practices we follow. 
 2. Write a migration script, and place it in `util/Migrator/DbScripts`. Each script must be prefixed
    with the current date.
 
-### Non-backwards Compatible
+#### Non-backwards Compatible
 
 1. Copy the relevant `.sql` files from `src/Sql/dbo` to `src/Sql/dbo_future`.
 2. Remove the backwards compatibility which is no longer needed.
@@ -43,4 +49,23 @@ When writing a migration script there are a couple of best practices we follow. 
 [repository]:
   https://docs.microsoft.com/en-us/dotnet/architecture/microservices/microservice-ddd-cqrs-patterns/infrastructure-persistence-layer-design
 [dapper]: https://github.com/DapperLib/Dapper
-[code-style-sql]: ../../../../contributing/code-style/sql.md
+[code-style-sql]: ../code-style/sql.md
+
+## EF Migrations
+
+If you alter the database schema, you must create an EF migration script to ensure that EF databases
+keep pace with these changes. Developers must do this and include the migrations with their PR.
+
+### Instructions
+
+1.  Update your data model in `Core/Entities` as desired
+2.  Ensure your user secrets in `API` have the correct provider configured in the `databaseProvider`
+    field. The value should match the provider you are generating migrations for.
+3.  Open a terminal in the root of the project you want to generate a migration for (either
+    `util/PostgresMigrations` or `util/MySqlMigrations`)
+4.  Generate the migration. This should have the same name as the corresponding MSSQL migration
+    (except for the date, which the the tool will prepend automatically):
+
+    ```bash
+    dotnet ef migrations add [NAME_OF_MIGRATION]
+    ```
