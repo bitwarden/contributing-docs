@@ -1,12 +1,11 @@
 ---
-title: 0013 - Avoid layered folder structure
 adr: "0013"
 status: In progress
 date: 2022-09-16
 tags: [clients, angular]
 ---
 
-# 0013 - Avoid layered folder structure for request/response models
+# 0013 - Deprecate global request/response models
 
 <AdrTable frontMatter={frontMatter}></AdrTable>
 

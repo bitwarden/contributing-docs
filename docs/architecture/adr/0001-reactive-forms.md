@@ -37,10 +37,10 @@ Source: https://angular.io/guide/forms-overview#choosing-an-approach
 Chosen option: **Reactive forms**, because our needs exceed what template-driven forms are
 recommended for.
 
-### Positive Consequences <!-- optional -->
+### Positive Consequences
 
 - You never need to think which form method to use.
 
-### Negative Consequences <!-- optional -->
+### Negative Consequences
 
 - Using only reactive form means we might have some additional boilerplate.
