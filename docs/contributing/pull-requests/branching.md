@@ -65,31 +65,18 @@ if smaller features can be tested and released independently.
 
 ### Long-Lived Feature Branch
 
-A Long-Lived Feature Branch differs from a Short-Lived Feature Branch in three significant ways. It
-should:
+A Long-Lived Feature Branch describes a branch that serves as a respository for the changes required
+to make up a feature. It is necessary when the body of work to produce the smallest independent
+testable, releasable change is too large to be encapsulated in a single PR, or it requires the
+contribution of multiple developers.
 
-- Have multiple authors
-- Consist of multiple Pull Requests, each of which have already been reviewed
-- Only consist of merge commits
+The Long-Lived Feature Branch should **only** consist of:
 
-Since each Pull Request has already been reviewed before being merged into the Long-Lived Feature
-Branch, the feature branch review is more of a sanity check. The reviewer should ensure the
-following:
+- PRs for approved changes from individual contributions to the feature, and
+- Merge commits from `master`
 
-- The feature branch is ready to be merged into `master`.
-  - Ensure the work has been QA tested, including writing QA Notes in Jira should they be needed, or
-  - Verify the feature is behind a feature flag, and the crossover boundaries go through testing.
-- Review any non-reviewed commits made directly on the branch. These can be either feature work or
-  merge commits. For more details see [Reviewing](#reviewing).
-
-:::warning
-
-Since feature branches do not have the same protections as master, it's technically possible to
-commit directly to the branch or merge a pull request without a up-to-date review. However this
-should be discouraged, and should be avoided whenever possible, the only exception being merge
-commits.
-
-:::
+Any other commits directly to the Long-Lived Feature Branch will complicate the eventual review of
+the final PR into `master` and should be avoided.
 
 #### Development
 
@@ -140,17 +127,36 @@ cannot be tested individually.
 If QA finds a defect, it should be fixed in another Issue Branch off of the Long-Lived Feature
 Branch, with another reviewed PR into the Long-Lived Feature Branch to address the problem.
 
-#### Reviewing
+#### Final Review
+
+Since each Pull Request has already been reviewed before being merged into the Long-Lived Feature
+Branch, the feature branch review is more of a sanity check. The reviewer should ensure the
+following:
+
+- The feature branch is ready to be merged into `master`.
+  - Ensure the work has been QA tested, including writing QA Notes in Jira should they be needed, or
+  - Verify the feature is behind a feature flag, and the crossover boundaries go through testing.
+- Review any non-reviewed commits made directly on the branch. These can be either feature work or
+  merge commits.
+
+:::warning
+
+Since feature branches do not have the same protections as master, it's technically possible to
+commit directly to the branch or merge a pull request without a up-to-date review. However this
+should be discouraged, and should be avoided whenever possible, the only exception being merge
+commits.
+
+:::
 
 When all development and functional testing is complete on the Feature Branch, the original PR into
 `master` should be moved out of Draft status and tagged with the appropriate development group for
 review.
 
-We can perform the review using GitHub's UI. By opening the Pull Request and clicking on the
-`Commits` tab. Afterwards check each commit individually.
+The final review can be performed using GitHub's UI, by opening the Pull Request and clicking on the
+`Commits` tab. Each commit can then be checked individually.
 
 - Verify the commit has an existing review by following the Pull Request link and verifying the
-  commit SHA hash matches. `Author merged commit 8c948fd into branch`.
+  commit SHA hash matches. Look for `Author merged commit {hash} into branch`.
 - If not perform a regular code review of the commit.
 
 Merge commits should be reviewed as well, the GitHub UI will automatically simplify the merge commit
@@ -190,10 +196,10 @@ When development is complete, the developer should prepare the PR for review:
 
 - Remove the Draft status from the PR
 - Add the `needs-qa` label to the PR
-- Tag the appropriate development group for review
+- Tag the appropriate development group for review and `@dept-design` if design approval is required
 
-**Unlike with a Long-Lived Feature Branch, when a team member approves the PR, it should remain open
-to be tested.**
+When a team member approves the PR, it should **remain open** to be tested. This is critical, as
+completing the PR at this point would introduce un-tested changes into `master`.
 
 #### QA
 

@@ -108,6 +108,7 @@ Please follow the following checklist when creating a PR.
       engineers within the pod
     - `@pod-{podAbbreviation}-qa`: This will notify or assign for code review the QA
       engineers/SDET(s) within the pod
+  - For design changes, tag `@dept-design`
   - Please use the
     [SME Yellowpages](https://bitwarden.atlassian.net/wiki/spaces/DEV/pages/195919928) to check if
     there is someone with specific knowledge of the area that can assist with reviewing complex
