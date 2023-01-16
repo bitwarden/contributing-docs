@@ -1,0 +1,218 @@
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
+# Entity Framework
+
+export const providers = [
+  {
+    label: "PostgreSQL",
+    value: "postgres",
+  },
+  {
+    label: "MySQL",
+    value: "mysql",
+  },
+  {
+    label: "SQLite",
+    value: "sqlite",
+  },
+];
+
+:::warning
+
+Entity Framework support is still in beta and is not suitable for production databases.
+
+:::
+
+:::info
+
+This page refers to setting up a Bitwarden instance to develop on, for instructions on testing out
+our EF deployments for personal use, such as Bitwarden Unified, please see
+[the help documentation](https://bitwarden.com/help/install-and-deploy-unified-beta/).
+
+:::
+
+## Background
+
+Entity Framework (EF) is an ORM framework that acts as a wrapper around a database. It allows us to
+support multiple (non-MSSQL) databases without having to maintain migration and query scripts for
+each.
+
+Our EF implementations currently support Postgres, MySQL, and SQLite3.
+
+## Setting Up EF Databases
+
+The workflow here is broadly the same as with the normal MSSQL implementation: set up the docker
+container, configure user secrets, and run migrations against their relating databases in
+chronological order.
+
+### Requirements
+
+- A working local development server
+- Docker
+- A way to manage user secrets in the server project - see
+  [User Secrets Reference](../../user-secrets.md)
+- Database management software (see [tools recommendations](../../../tools/index.md#databases))
+- The `dotnet` CLI
+- The `dotnet` CLI [Entity Framework Core tool](https://docs.microsoft.com/en-us/ef/core/cli/dotnet)
+
+You can have multiple databases configured and switch between them by changing the value of the
+`globalSettings:databaseProvider` user secret. You don’t have to delete your connection strings.
+
+### Database Setup
+
+<Tabs
+    groupId="provider"
+    values={providers}>
+<TabItem value="postgres">
+
+In the `dev` folder of your server repository, run
+
+```bash
+docker compose --profile postgres up
+```
+
+</TabItem>
+<TabItem value="mysql">
+
+In the `dev` folder of your server repository, run
+
+```bash
+docker compose --profile mysql up
+```
+
+</TabItem>
+<TabItem value="sqlite">
+
+Select a location for your database file. You can use the `dev` folder of your server repository,
+git is configured to ignore `.db` files in this repository for this purpose.
+
+</TabItem>
+</Tabs>
+
+### User secrets
+
+Add the following values to your API, Identity, and Admin user secrets.
+
+<Tabs
+    groupId="provider"
+    values={providers}>
+<TabItem value="postgres">
+
+Be sure to change information like root password as needed. If you already have these secrets, make
+sure you update the existing values instead of creating new ones
+
+```json
+"globalSettings:databaseProvider": "postgres",
+"globalSettings:postgreSql:connectionString": "Host=localhost;Username=postgres;Password=example;Database=vault_dev;Include Error Detail=true",
+```
+
+</TabItem>
+<TabItem value="mysql">
+
+Be sure to change information like root password as needed. If you already have these secrets, make
+sure you update the existing values instead of creating new ones
+
+```json
+"globalSettings:databaseProvider": "mysql",
+"globalSettings:mySql:connectionString": "server=localhost;uid=root;pwd=example;database=vault_dev",
+```
+
+</TabItem>
+<TabItem value="sqlite">
+
+Add the following values to your API, Identity, and Admin user secrets. Note, you must set the Data
+Source path. Use the file location selected in [Database Setup](#database-setup)
+
+```json
+"globalSettings:databaseProvider": "sqlite",
+"globalSettings:sqlite:connectionString": "Data Source=/path/to/your/server/repo/dev/db/bitwarden.db",
+```
+
+</TabItem>
+</Tabs>
+
+### Migrations
+
+<Tabs
+    groupId="provider"
+    values={providers}>
+<TabItem value="postgres">
+
+In the `dev` folder run the following to update the database to the latest migration
+
+```bash
+pwsh migrate.ps1 -postgres
+```
+
+The `-postgres` flag on `migrate.ps1` will run `dotnet ef` commands to perform the migrations.
+
+</TabItem>
+<TabItem value="mysql">
+
+In the `dev` folder run the following to update the database to the latest migration
+
+```bash
+pwsh migrate.ps1 -mysql
+```
+
+The `-mysql` flag on `migrate.ps1` will run `dotnet ef` commands to perform the migrations.
+
+</TabItem>
+<TabItem value="sqlite">
+
+In the `dev` folder run the following to update the database to the latest migration
+
+```bash
+pwsh migrate.ps1 -sqlite
+```
+
+The `-sqlite` flag on `migrate.ps1` will run `dotnet ef` commands to perform the migrations.
+
+</TabItem>
+</Tabs>
+
+You can also run migrations for all database providers at once using
+
+```bash
+pwsh migrate.ps1 -all
+```
+
+### Optional: Verify
+
+If you would like to verify that everything worked correctly:
+
+- Check the database tables to make sure everything has been created
+- Run the integration tests from the root of your server project using `dotnet test`.
+  - Note: this requires a configured MSSQL database. You may also need to set up other EF providers
+    for tests to pass.
+
+## Testing EF Changes
+
+Since we allow for multiple databases it is important that any changes to EF repositories/models are
+tested against all possible databases. You may want to use a database that is different from your
+local development database because the tests may add or remove data. To apply migrations to a
+database different from your global settings run the following commands from the root of your
+repository
+
+```bash
+# EntityFramework CLI Reference: https://learn.microsoft.com/en-us/ef/core/cli/dotnet
+
+# Migrate Postgres database ex connection string: Host=localhost;Username=postgres;Password=SET_A_PASSWORD_HERE_123;Database=vault_dev_test
+dotnet ef database update --startup-project util/PostgresMigrations --connection "[POSTGRES_CONNECTION_STRING]"
+
+# Migrate MySql database ex connection string: server=localhost;uid=root;pwd=SET_A_PASSWORD_HERE_123;database=vault_dev_test
+dotnet ef database update --startup-project util/MySqlMigrations --connection "[MYSQL_CONNECTION_STRING]"
+
+cd test/Infrastructure.IntegrationTest
+
+# https://learn.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-6.0&tabs=windows#secret-manager
+dotnet user-secrets set "Ef:Postgres" "[POSTGRES_CONNECTION_STRING]"
+dotnet user-secrets set "Ef:MySql" "[MYSQL_CONNECTION_STRING]"
+
+# You can also set the connection string for your normal development MS SQL database like below
+dotnet user-secrets set "Dapper:SqlServer" "[MSSQL_CONNECTION_STRING]"
+```
+
+You can then run just those tests from the `test/Infrastructure.IntegrationTest` folder using
+`dotnet test`.
