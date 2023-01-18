@@ -4,7 +4,7 @@ sidebar_position: 30
 
 # Server Architecture
 
-## CQRS ([ADR-0008](../../adr/0008-server-CQRS-pattern))
+## CQRS ([ADR-0008](../adr/0008-server-CQRS-pattern))
 
 We are currently transitioning the server to a CQRS pattern.
 
