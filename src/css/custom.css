@@ -32,3 +32,16 @@
 .navbar__brand b {
   margin-left: 5px;
 }
+
+.navbar--fixed-top {
+  height: 4rem;
+}
+
+.navbar__logo {
+  height: 2.8rem;
+}
+
+.navbar__link--active,
+.menu__link--active {
+  font-weight: bold;
+}

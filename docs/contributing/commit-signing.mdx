@@ -7,6 +7,15 @@ import TabItem from "@theme/TabItem";
 
 # Commit Signing
 
+It's possible to configure git with any name and email, enabling bad actors to spoof commits and
+impersonate whomever they want. GitHub supports several ways to digitally sign git commits,
+verifying that they came from someone with access to a previously configured private key.
+
+For example, on 3 August 2022, Stephen Lacy
+[shared on Twitter](https://twitter.com/stephenlacy/status/1554697080718823424) how he uncovered a
+massive malware attack on GitHub by noticing unverified commits (i.e. commits that were not
+digitally signed).
+
 To protect against commit spoofing, all Bitwarden contributors must digitally sign their commits.
 This is optional but encouraged for community contributors.
 
