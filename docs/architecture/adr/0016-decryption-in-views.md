@@ -9,13 +9,14 @@ tags: [clients, typescript]
 
 ## Context and Problem Statement
 
-Bitwarden has a couple of different models for representing data.
+Bitwarden has a couple of different models for representing data described in detail in
+[Data Model](../clients/data-model.md). In this ADR we will focus on the following two models:
 
 - `<Domain>` - The domain model which represents the encrypted data state.
-- `<Domain>View` - The View Model which typically represents the decrypted state of domain models.
+- `<Domain>View` - The view model which represents the decrypted state of domain models.
 
-Since we have two different models for representing the encrypted and decrypted state of the same
-_Domain_, this also means we need a way to convert between the two models i.e. encrypting and
+Since we have at least two different models representing the encrypted and decrypted state of the
+same _Domain_, this also means we need a way to convert between the two models i.e. encrypting and
 decrypting the data.
 
 ### How it's currently being done
@@ -34,25 +35,48 @@ actual operations.
 
 There are a couple of problems with this approach:
 
-- Encrypting and decryption is split into two different places. Decryption happens directly on the
-  domain model, while encryption happens in the service.
-- We rely on a global container service to retrieve the `CryptoService` and `EncryptService`. Which
-  makes it harder to properly unit test.
-- Our current models act essentially as a transformation pipeline.
-  `Request -> Data -> Domain -> View`. And there is a slightly different transformation pipeline for
-  exports where the end state is a `Export` model, not a `View` model.
+- A _Domain_ model is tightly coupled to a _View_ model.
+- Encryption and decryption are split into two different places. Decryption happens directly on the
+  domain model, while encryption happens in the service. Logically these are tightly coupled and
+  should be located next to each other.
+- We rely on a global container service to retrieve the `CryptoService` and `EncryptService`.
+- Our current models acts as a transformation pipeline. `Request -> Data -> Domain -> View`.
 - It would be nice to have a way to support multiple `View` models per domain in the future.
+
+### Why now?
+
+Secret Manager is currently experiencing some friction with how encryption and decryption is
+currently managed. It doesn't follow the typical pattern of having a synced local state and instead
+relies on direct requests to the server to fetch data. The data then needs to be decrypted.
+
+Currently this encryption and decryption logic is handled by the `<Domain>Service` however this
+violates the single responsibility principle. It also makes our services difficult to follow since
+it now needs to be aware of requests, responses, encryption and decryption.
 
 ## Considered Options
 
-- **Move logic to `<Domain>Service`** - We already have services for the different domains, so it
-  would make sense to move the logic there.
-- **Move logic to `<Domain>View`** - We could move the logic to the `View` models themselves,
-  combined with a generic service to encrypt and decrypt views.
+- **Move decrypt to `<Domain>Service`** - We already have services for the different domains which
+  also currently handle encryption, so it would make sense to move the logic there.
+- **Move logic to `<Domain>View`** - Move the logic to the `View` models themselves, combined with a
+  generic service to encrypt and decrypt views.
 
 ## Decision Outcome
 
 Chosen option: **Move logic to `<Domain>View`**.
+
+### Positive Consequences
+
+- Domain services no longer need to implement customized encryption and decryption logic. Which
+  follows the single responsibility principle.
+- Domain models are no longer tightly coupled to views.
+- We can now have multiple views per domain.
+
+### Negative Consequences
+
+- Ciphers still needs a method on the `<Domain>Service` since it currently calculates the password
+  history on save. This could be argued is actual a domain concern, and decoupling the history from
+  encryption is a good thing. It could still be confusing since it's possible to bypass the
+  `CipherService` which would cause the history to not be updated.
 
 ### Implementation
 
@@ -103,9 +127,16 @@ class FolderView implements Encryptable<Folder> {
 Which would be used like this:
 
 ```ts
-const folder = new Folder();
+// Fetch from server
+const response: FolderResponse = await this.folderApiService.getFolder(id);
+const folderData: FolderData = new FolderData(response);
+const folder: Folder = new Folder(folderData);
 
+// Decrypt / Encrypt
 const folderView: FolderView = this.encryptionService.decryptView(FolderView, folder, key);
-
+folderView.name = "New folder name";
 const encryptedFolder: Folder = this.encryptionService.encryptView(folderView, key);
+
+// Update
+const request: FolderRequest = new FolderUpdateRequest(encryptedFolder);
 ```
