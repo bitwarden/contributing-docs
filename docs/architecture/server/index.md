@@ -38,7 +38,7 @@ always need their own class.
 
 The class, interface and public method should be named after the action. For example:
 
-```c#
+```csharp
 namespace Bit.Core.OrganizationFeatures.OrganizationApiKeys;
 
 public class RotateOrganizationApiKeyCommand : IRotateOrganizationApiKeyCommand
@@ -87,7 +87,7 @@ For example, if we need to update an API key for an organization, it might be te
 `UpdateApiKeyCommand` which fetches the current API key and then updates it. However, we can break
 this down into two separate queries/commands, which are called separately:
 
-```c#
+```csharp
 var currentApiKey = await _getOrganizationApiKeyQuery.GetOrganizationApiKeyAsync(orgId);
 await _rotateOrganizationApiKeyCommand.RotateApiKeyAsync(currentApiKey);
 ```
