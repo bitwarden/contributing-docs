@@ -73,10 +73,9 @@ Chosen option: **Move logic to `<Domain>View`**.
 
 ### Negative Consequences
 
-- Ciphers still needs a method on the `<Domain>Service` since it currently calculates the password
-  history on save. This could be argued is actual a domain concern, and decoupling the history from
-  encryption is a good thing. It could still be confusing since it's possible to bypass the
-  `CipherService` which would cause the history to not be updated.
+- Since encryption and decryption is now done on the generic `EncryptService` this makes it possible
+  to bypass expected flows. One example of this is `Cipher`, `CipherService` has a
+  `updateHistoryAndEncrypt` method which calculates the password history before encrypting it.
 
 ### Implementation
 
