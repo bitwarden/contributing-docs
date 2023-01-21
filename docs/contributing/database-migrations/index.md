@@ -59,21 +59,17 @@ required.
 If you alter the database schema, you must create an EF migration script to ensure that EF databases
 keep pace with these changes. Developers must do this and include the migrations with their PR.
 
-To do this, you will need to do the following:
+To create these scripts, you must first update your data model in `Core/Entities` as desired. This
+will be used to generate the migrations for each of our EF targets.
 
-1.  Update your data model in `Core/Entities` as desired
-2.  Ensure your user secrets in `API` have the correct provider configured in the `databaseProvider`
-    field. The value should match the provider you are generating migrations for.
-3.  Open a terminal in the root of the project you want to generate a migration for (one of the
-    following supported EF targets):
-    - `util/PostgresMigrations`
-    - `util/MySqlMigrations`
-    - `util/SqliteMigrations`
-4.  Generate the migration. This should have the same name as the corresponding MSSQL migration
-    (except for the date, which the the tool will prepend automatically):
+Once the model is updated, navigate to the `dev` directory in the `server` repo and execute the
+`ef_migrate.ps1` PowerShell command. You should provide a name for the migration as the only
+parameter:
 
-    ```bash
-    dotnet ef migrations add [NAME_OF_MIGRATION]
-    ```
+```bash
+pwsh ef_migrate.ps1 [NAME_OF_MIGRATION]
+```
+
+This will generate the migrations, which should then be included in your PR.
 
 [code-style-sql]: ../code-style/sql.md
