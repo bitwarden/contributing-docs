@@ -7,20 +7,25 @@ sidebar_custom_props:
 
 ## Naming Convention
 
-To keep branches organized we adhere to a naming convention for branches. The convention splits
-branch names into 2 components, each separated by a `/`.
-
-1. The developers' pod abbreviation (e.g. `sm`)
-2. The Jira issue tag (e.g. `SM-1234`)
-
-```bash
-# Some examples
-sm/SM-1234
-ps/PS-4321
-```
+To keep branches organized we adhere to a naming convention for branches.
 
 This naming convention allows us to easily identify the type of work being done on a branch and will
 assist in identifying and tracking down stale branches.
+
+### Branches for a specific Jira issue
+
+In order to tie the work on a branch to our Jira instance, the branch name should consist of the
+Jira issue tag (e.g. `PM-1234`). Jira will automatially generate the `git` command with the proper
+branch name on the issue's Detail pane:
+
+![Jira Branch](jira_branch.jpg)
+
+### Branches for multiple Jira issues
+
+If the branch will contain work from multiple Jira issues (most likely due to it being a
+[Long-Lived Feature Branch](#long-lived-feature-branch)), the name should be a descriptive name of
+the feature, separated by dashes (e.g. `my-long-lived-feature`). Consider brevity when possible, as
+our QA team will need to use this branch name when performing QA testing on the feature.
 
 ## Branching for Development
 
@@ -65,8 +70,7 @@ if smaller features can be tested and released independently.
 
 ### Long-Lived Feature Branch
 
-A Long-Lived Feature Branch describes a branch that serves as a respository for the changes required
-to make up a feature. It is necessary when the body of work to produce the smallest independent
+A Long-Lived Feature Branch is necessary when the body of work to produce the smallest independent
 testable, releasable change is too large to be encapsulated in a single PR, or it requires the
 contribution of multiple developers.
 
@@ -85,7 +89,7 @@ the Long-Lived Feature Branch for the piece of functionality and create a **draf
 branch into `master`. This name should include the Jira Epic name if applicable.
 
 Each developer should then branch off of that feature branch, creating an "Issue Branch" named with
-the initiating Jira issue (e.g. `sg/SG-123`). We call this an Issue Branch because Jira refers to
+the initiating Jira issue (e.g. `PM-1234`). We call this an Issue Branch because Jira refers to
 stories and tasks as issues and to differentiate from the Long-Lived Feature Branch above.
 
 :::note
@@ -177,7 +181,7 @@ This will often be the case for small pieces of new functionality and for most b
 
 #### Development
 
-The developer should create a branch named with the initiating Jira issue (e.g. `sg/SG-123`) and
+The developer should create a branch named with the initiating Jira issue (e.g. `PM-1234`) and
 create a **draft** PR from that branch into `master`.
 
 :::note
