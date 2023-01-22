@@ -55,8 +55,9 @@ DNS to start resolving before trying to access it.
 
 1. Navigate to <https://ngrok.com/> and sign up for an account
 
-2. Follow the [official instructions](https://dashboard.ngrok.com/get-started/setup) to download
-   ngrok and connect it to your account.
+2. Follow the [official instructions](https://dashboard.ngrok.com/get-started/setup) to download. Or
+   install using [brew](https://formulae.brew.sh/cask/ngrok) which supports multiple instances per
+   account.
 
 3. Expose your local port using ngrok:
 
@@ -73,4 +74,8 @@ DNS to start resolving before trying to access it.
 5. Verify that the forwarding url works by navigating to the forwarding url with `/alive` on the
    end. For example, `https://abcd-123-456-789.au.ngrok.io/alive`.
 
-**Note**, anyone with this URL can access the forwarded URL on your machine.
+:::note
+
+Anyone with this URL can access the forwarded URL on your machine.
+
+:::

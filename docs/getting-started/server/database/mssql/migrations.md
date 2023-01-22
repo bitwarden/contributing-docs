@@ -43,4 +43,4 @@ When writing a migration script there are a couple of best practices we follow. 
 [repository]:
   https://docs.microsoft.com/en-us/dotnet/architecture/microservices/microservice-ddd-cqrs-patterns/infrastructure-persistence-layer-design
 [dapper]: https://github.com/DapperLib/Dapper
-[code-style-sql]: ../../../contributing/code-style/sql.md
+[code-style-sql]: ../../../../contributing/code-style/sql.md

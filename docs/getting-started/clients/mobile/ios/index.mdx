@@ -300,3 +300,14 @@ Mac’s Sharing config.
 For example: if you want to debug the **iOS.Autofill** extension, you would complete steps 1 - 3,
 then go to your iOS device, open a browser, go to a login, tap the key icon and open Bitwarden from
 the bottom popup.
+
+### Using Server Tunneling
+
+Instead of configuring your device or emulator to ignore SSL certificates, you can instead use a
+[proxy tunnel to your local server](../../../server/tunnel.md) and have your app connect to it
+directly.
+
+### Push Notifications (Live Sync & Passwordless)
+
+Push notifications are not currently available for debug deployments. They are only supported on
+TestFlight and production builds.
