@@ -10,19 +10,19 @@ sidebar_position: 4
 
 A
 [content script](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Content_scripts)
-is a script that the browser inserts into the Page Source for each page that the browser loads.
+is a script that the browser inserts into the page source for each page that the browser loads.
 Content scripts can read and modify the contents of the page in which they are loaded, but they do
 not have access to the full set of browser APIs.
 
 The Bitwarden extension uses content scripts in order to perform the Autofill functionality, as
-Autofill must both parse the Page Source to find the relevant fields and also alter the Page Source
+Autofill must both parse the page source to find the relevant fields and also alter the page source
 to fill in the fields with the relevant Cipher data.
 
 The extension uses the following scripts for Autofill:
 
 | Content Script               | Responsibility                                                                                                                                                                           |
 | ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `content/autofill.js`        | Responsible for collecting the page details and performing the autofill action on the fields that are matched with vault items                                                           |
+| `content/autofill.js` b      | Responsible for collecting the page details and performing the autofill action on the fields that are matched with vault items                                                           |
 | `content/autofiller.ts`      | Responsible for automatically filling the form for users who have the "Enable Autofill on Page Load" setting enabled                                                                     |
 | `content/notificationBar.js` | Responsible for detecting DOM changes that indicate that a user has changed their credentials on a site or submitted a new form with new credentials, triggering the Notification Bar UI |
 
