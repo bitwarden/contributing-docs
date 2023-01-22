@@ -11,7 +11,7 @@ sidebar_position: 4
 A
 [content script](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Content_scripts)
 is a script that the browser inserts into the Page Source for each page that the browser loads.
-content scripts can read and modify the contents of the page onto which they are loaded, but they do
+Content scripts can read and modify the contents of the page in which they are loaded, but they do
 not have access to the full set of browser APIs.
 
 The Bitwarden extension uses content scripts in order to perform the Autofill functionality, as
