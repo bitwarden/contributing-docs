@@ -30,7 +30,7 @@ The extension uses the following scripts for Autofill:
 :::note
 
 There are other content scripts that Bitwarden uses, but these are the scripts related to the
-Autofill functionality and relevant here.
+Autofill functionality.
 
 :::
 
