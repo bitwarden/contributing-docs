@@ -1,0 +1,78 @@
+---
+sidebar_position: 2
+---
+
+# Mobile Clients Architecture
+
+The mobile clients are Android, iOS with its extensions and watchOS. They all are located in this
+[Git repository](https://github.com/bitwarden/mobile).
+
+Principal structure is a follows:
+
+- `Core`: Shared code that focus on the logical part of the app. Several classes are a port from the
+  Web Clients to C#.
+- `App`: Shared code that focus on the presentation layer of the app and some business logic as
+  well.
+- `Android`: All the code specific to the Android platform
+- `iOS`: All the code speicific to the iOS platform
+- `iOS.Core`: Shared code used by the iOS app and its extensions
+- `iOS.Autofill`: iOS extension that handles Autofill
+- `iOS.Extensions`: iOS extension that handles Autofill from the bottom sheet extension
+- `iOS.ShareExtension`: iOS extension that handles sharing files through Send
+- `watchOS`: All the code specific to the watchOS platform
+  - `bitwarden`: Stub iOS app so that the watchOS app has a companion app on XCode
+  - `bitwarden WatchKit App`: Main Watch app where we set assets.
+  - `bitwarden WatchKit Extension`: All the logic and presentation logic for the Watch app is here
+
+## Dependencies diagram
+
+Below is a simplified dependencies diagram of the mobile repository.
+
+```kroki type=plantuml
+@startuml
+skinparam BackgroundColor transparent
+skinparam componentStyle rectangle
+skinparam linetype ortho
+
+title Simplified Dependencies Diagram
+
+component "Core"
+component "App"
+component "Android"
+component "iOS.Core"
+component "iOS"
+component "iOS.Autofill"
+component "iOS.Extension"
+component "iOS.ShareExtension"
+component "watchOS" {
+   component "bitwarden"
+   component "bitwarden WatchKit App"
+   component "bitwarden WatchKit Extension"
+}
+
+[App] --> [Core]
+
+[Android] --> [App]
+
+[iOS.Core] --> [App]
+
+[iOS] --> [iOS.Core]
+[iOS] --> [iOS.Autofill]
+[iOS] --> [iOS.Extension]
+[iOS] --> [iOS.ShareExtension]
+[iOS] --> [bitwarden WatchKit App]
+
+[iOS.Autofill] --> [App]
+[iOS.Autofill] --> [iOS.Core]
+
+[iOS.Extension] --> [App]
+[iOS.Extension] --> [iOS.Core]
+
+[iOS.ShareExtension] --> [App]
+[iOS.ShareExtension] --> [iOS.Core]
+
+[bitwarden] --> [bitwarden WatchKit App]
+[bitwarden WatchKit App] --> [bitwarden WatchKit Extension]
+
+@enduml
+```
