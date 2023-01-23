@@ -20,11 +20,12 @@ to fill in the fields with the relevant Cipher data.
 
 The extension uses the following scripts for Autofill:
 
-| Content Script               | Responsibility                                                                                                                                                                           |
-| ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `content/autofill.js` b      | Responsible for collecting the page details and performing the autofill action on the fields that are matched with vault items                                                           |
-| `content/autofiller.ts`      | Responsible for automatically filling the form for users who have the "Enable Autofill on Page Load" setting enabled                                                                     |
-| `content/notificationBar.js` | Responsible for detecting DOM changes that indicate that a user has changed their credentials on a site or submitted a new form with new credentials, triggering the Notification Bar UI |
+<!-- prettier-ignore -->
+| Content Script | Responsibility |
+| ---------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| `content/autofill.js`        | Collects form elements from the page and performs the autofill action on relevant fields. |
+| `content/autofiller.ts`      | Triggers autofill for users who have the "Enable Autofill on Page Load" setting enabled.  |
+| `content/notificationBar.js` | Detects when the user submits new or updated credentials on a website and triggers the Notification Bar UI. |
 
 :::note
 
@@ -42,12 +43,13 @@ this by using `BrowserApi.messageListener()` to attach to `chrome.runtime.onMess
 
 The background scripts used in the Bitwarden extension are:
 
+<!-- prettier-ignore -->
 | Background Page              | Responsibility                                                                                                                                                     |
-| ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `runtime.background.ts`      | Handles incoming requests related to core extension functionality                                   |
-| `notification.background.ts` | Handles incoming requests related to the notification bar                                   |
-| `commands.background.ts`     | Handles incoming requests related to keyboard commands (including autofill)                                    |
-| `contextMenu.background.ts`  | Handles context menu actions (including autofill)                                    |
+| ---------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| `runtime.background.ts`      | Handles incoming requests related to core extension functionality.                                   |
+| `notification.background.ts` | Handles incoming requests related to the notification bar.                                  |
+| `commands.background.ts`     | Handles incoming requests related to keyboard commands (including autofill).                                    |
+| `contextMenu.background.ts`  | Handles context menu actions (including autofill).                                    |
 | `main.background.js`         | Bootstraps the extension. It is relevant here only because it (arbitrarily) contains the `collectPageDetailsForContentScript()` method. |
 
 In order to support browsers that will require the
@@ -63,7 +65,7 @@ keyboard command messages.
 We have established that the Bitwarden extension uses content scripts and background pages or
 listeners in order to perform Autofill. The last piece of the puzzle is the communication between
 them. The Autofill architecture leverages the
-[extension messaging API](9https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/runtime/sendMessage)
+[extension messaging API](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/runtime/sendMessage)
 in order to communicate between the extension UI, the background pages, and the content scripts that
 are running on each browser tab.
 
@@ -88,19 +90,20 @@ are running on each browser tab.
 
 #### Sending a request from the content script to the extension
 
-The content scripts use one of the following to send messages to the extension:
+To send a request from a content script to the extension, we have two services provided:
 
-- `BrowserApi.sendMessage`
-- `chrome.runtime.sendMessage`
+- When Dependency Injection is available, the `BrowserMessagingService` should be used, with its
+  provided `send()` method.
+- When no Dependency Injection is available, the static `BrowserApi` should be used, with its
+  `sendMessage()` method.
 
 On the extension, we attach with `chrome.runtime.onMessage.addListener` to receive the messages
 destined for the extension.
 
 :::note
 
-We have encapsulated the `chrome.runtime` messaging API in the `BrowserApi` static class, so you
-will see references to both; ideally all would use the `BrowswerApi` class but they have not all
-been refactored.
+The `BrowserMessagingService` and `BrowserApi` abstract the `chrome.runtime.sendMessage` API. If any
+direct references to this API are found, they should be refactored to use one of our abstractions.
 
 :::
 
@@ -111,3 +114,10 @@ on the browser tab.
 
 On the content script on the tab, we attach with `chrome.runtime.onMessage.addListener` to receive
 the messages destined for that tab.
+
+:::note
+
+The `BrowserApi` abstracts the `chrome.tabs.sendMessage` API. If any direct references to this API
+are found, they should be refactored to use our abstraction.
+
+:::
