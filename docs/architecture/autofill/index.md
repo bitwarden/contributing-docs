@@ -44,11 +44,11 @@ The background scripts used in the Bitwarden extension are:
 
 | Background Page              | Responsibility                                                                                                                                                     |
 | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `runtime.background.ts`      | Responsible for attaching to the `chrome.runtime.onMessage` event and handling incoming requests related to the extension itself                                   |
-| `notification.background.ts` | Responsible for attaching to the `chrome.runtime.onMessage` event and handling incoming requests related to the notification bar                                   |
-| `commands.background.ts`     | Responsible for attaching to the `chrome.commands.onCommand` event and handling incoming requests related to keyboard commands                                     |
-| `contextMenu.background.ts`  | Responsible for attaching to the `chrome.contextMenus.onClicked` event and requesting autofill (or other actions) when clicked                                     |
-| `main.background.js`         | Responsible for bootstrapping the extension. It exists in this process solely because it (arbitrarily) contains the `collectPageDetailsForContentScript()` method. |
+| `runtime.background.ts`      | Handles incoming requests related to core extension functionality                                   |
+| `notification.background.ts` | Handles incoming requests related to the notification bar                                   |
+| `commands.background.ts`     | Handles incoming requests related to keyboard commands (including autofill)                                    |
+| `contextMenu.background.ts`  | Handles context menu actions (including autofill)                                    |
+| `main.background.js`         | Bootstraps the extension. It is relevant here only because it (arbitrarily) contains the `collectPageDetailsForContentScript()` method. |
 
 In order to support browsers that will require the
 [Chrome Extension Manifest v3](https://developer.chrome.com/docs/extensions/mv3/intro/)
