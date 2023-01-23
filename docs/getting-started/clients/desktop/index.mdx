@@ -50,6 +50,22 @@ npm run build
 
 **Note**: This module needs to be re-built if the native code has changed.
 
+### Cross compile
+
+In certain environments such as WSL, it might be necessary to cross-compile the native module. To do
+this install the relevant rust target with `rustup` see
+[this article](https://rust-lang.github.io/rustup/cross-compilation.html) for more information.
+
+```bash
+# Ensure cargo env file is sourced.
+source "$HOME/.cargo/env"
+
+cd apps/desktop/desktop_native
+export PKG_CONFIG_ALL_STATIC=1
+export PKG_CONFIG_ALLOW_CROSS=1
+npm run build -- --target x86_64-unknown-linux-musl # Replace with relevant target
+```
+
 ## Build Instructions
 
 Build and run:
