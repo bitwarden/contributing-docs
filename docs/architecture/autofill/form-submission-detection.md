@@ -33,7 +33,7 @@ We must accurately collect the page details to capture the fact that there are f
 
 ### DOM Manipulation
 
-We must handle cases where the application is modifying the DOM based on user interaction
+We must handle cases where the application is modifying the DOM based on user interaction.
 
 ### Submission Detection
 
