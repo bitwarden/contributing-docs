@@ -83,8 +83,6 @@ The core of a `Login` type is a username and password. The easiest field to find
 password, so the routine looks for a password field and then tries to find the most likely candidate
 for a username field that is nearby in the DOM.
 
-##### Find Password Fields
-
 For each field in the Page Details collected from the DOM, we check to see if the following
 properties contain the word "password":
 
@@ -93,8 +91,6 @@ properties contain the word "password":
 - `placeholder`
 
 These will be our "password fields" to fill in on the forms.
-
-##### Look on Forms to Find Corresponding Username Field for each Password Field
 
 Now, we loop through each form on the page. For each of these forms, we examine each password field,
 find the password field on the form, and then try to find the corresponding username field. This is
@@ -106,10 +102,8 @@ either:
   list, or
 - The text, email, or telephone field closest to the password field in the DOM
 
-##### Orphaned Password Fields not on a Form
-
-If we can't find any forms that have our password fields on them, we the first password field on the
-page and the input field just before it as the username.
+If we can't find any forms that have our password fields on them, we take the first password field
+on the page and use the input field just before it as the username.
 
 ##### Handle Pages with no Password Fields
 
@@ -221,11 +215,3 @@ If we are able to find matching fields, we add instructions to the fill script f
 When the script has been generated, the `AutoFillService` issues a `fillForm` command. The
 `autofill.js` content script is listening for that command and performs the action of filling in the
 content on the page based on the instructions in the script.
-
-The page details are filled for the three script instructions as follows:
-
-| Instruction Type | Action Performed                                                                   |
-| ---------------- | ---------------------------------------------------------------------------------- |
-| `click_on_opid`  | The click() function is executed on the element.                                   |
-| `focus_by_opid`  | The click() function and then the focus() function are executed on the element.    |
-| `fill_by_opid`   | Set the value of the DOM element to the value specified in the script instruction. |
