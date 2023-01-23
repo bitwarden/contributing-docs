@@ -38,7 +38,7 @@ We must handle cases where the application is modifying the DOM based on user in
 ### Submission Detection
 
 We must be able to detect when a Form is submitted so that we can properly notify the user to save
-their credentials
+their credentials.
 
 ## How is this handled today?
 
