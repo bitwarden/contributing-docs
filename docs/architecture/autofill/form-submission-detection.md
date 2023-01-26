@@ -29,7 +29,7 @@ excellent documentation.
 
 ### Initial Collection
 
-We must accurately collect the page details to capture the fact that there are forms on the page
+We must accurately collect the page details to capture the fact that there are forms on the page.
 
 ### DOM Manipulation
 
