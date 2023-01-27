@@ -14,11 +14,13 @@ assist in identifying and tracking down stale branches.
 
 ### Branches for a specific Jira issue
 
-In order to tie the work on a branch to our Jira instance, the branch name should consist of the
-Jira issue tag (e.g. `PM-1234`). Jira will automatially generate the `git` command with the proper
-branch name on the issue's Detail pane:
+In order to tie the work on a branch to our Jira instance, the branch name should be made up of two
+parts, separated by a slash:
 
-![Jira Branch](jira_branch.jpg)
+- The team name or abbreviation (e.g. `Vault`), and
+- The Jira issue tag (e.g. `PM-1234`)
+
+In this example, the full branch name would be `Vault/PM-1234`.
 
 ### Branches for multiple Jira issues
 
