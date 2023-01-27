@@ -14,7 +14,7 @@ assist in identifying and tracking down stale branches.
 
 ### Branches for a specific Jira issue
 
-In order to tie the work on a branch to our Jira instance, the branch name should be made up of two
+In order to tie the work on a branch to our Jira issues, the branch name should be made up of two
 parts, separated by a slash:
 
 - The team name or abbreviation (e.g. `Vault`), and
