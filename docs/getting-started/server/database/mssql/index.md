@@ -20,7 +20,8 @@ typically `migrations_vault_dev`.
 
 ## Modifying the database
 
-The process for modifying the database is described in [Migrations](./migrations.md).
+The process for modifying the database is described in
+[Migrations](./../../../../contributing/database-migrations/).
 
 ## Troubleshooting
 
