@@ -55,18 +55,29 @@ states will be communicated down to calling clients where appropriate via API re
 features will be set up inside the service provider's platform, and changes to them will be streamed
 to the running applications. Access to the provider will be controlled internally.
 
-Contexts -- which for most use cases represent individual users -- will be established that
-communicate to the API using supported clients. Said contexts will be available within the service
-provider for specific targeting as desired. Integrations with organization and enterprise management
-will be considered at a later date.
+To facilitate when feature states need to be used by clients amongst other configuration, a new API
+will be developed to provide, amongst potentially other things, the server version and other build
+characteristics such as commit hash as well as a collection of configurations values. Some of these
+values are already maintained persistently and will be intermixed with feature keys. Clients will
+refresh configuration upon startup, when their local configuration is updated, and when sync events
+come in.
+
+Contexts -- generally representing individual users -- will be established that communicate to the
+API using supported clients. Said contexts will be available within the service provider for
+specific targeting as desired. Contexts will be established for the user, organization, and
+provider, with unique IDs for the entity as a key and other details as needed. Context attributes
+when needed can be marked as private to avoid spillover to the service provider, and the provider
+will be added to the [subprocessor list][subprocessors] with respective communication.
 
 Compile-time configuration will be converted wherever possible to use the feature management service
-provider.
+provider. SDK access to the service provider will be segmented by environment; some features may
+never progress to all environments.
 
 New features will be expected to be "off" as a default state. Variations for non-Boolean values will
-allow for customization. Offline access to feature states via the service provider will be available
-given the default state configuration. Local files can exist to load opt-ins to features for
-self-hosted installations.
+allow for customization. Offline access (also implying there is no connectivity needed outside the
+installation) to feature states via the service provider will be available given the default state
+configuration. Local files can exist to load opt-ins to features for self-hosted installations, and
+said installations will default to an offline mode.
 
 The software development lifecycle will be enhanced to make clear that essentially all feature
 development should be protected with flags.
@@ -75,4 +86,5 @@ Support for using an [OpenFeature][openfeature]-compatible interface in the code
 considered at a later date.
 
 [server]: https://github.com/bitwarden/server
+[subprocessors]: https://bitwarden.com/help/subprocessors/
 [openfeature]: https://docs.openfeature.dev/docs/reference/intro/
