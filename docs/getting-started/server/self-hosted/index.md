@@ -29,8 +29,8 @@ with the same infrastructure configuration:
 ## Requirements
 
 This guide assumes you have completed and are familiar with the techniques in
-[Server Setup Guide](../guide.md). Please make sure you have a working development environment for
-a cloud-configured server before worrying about getting a self-hosted instance connected to it.
+[Server Setup Guide](../guide.md). Please make sure you have a working development environment for a
+cloud-configured server before worrying about getting a self-hosted instance connected to it.
 
 ## Setup
 
