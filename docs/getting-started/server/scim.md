@@ -19,7 +19,7 @@ Bitwarden as they occur.
 
 ## Requirements
 
-- A [local development server](./guide.mdx)
+- A [local development server](./guide.md)
 - [Web vault](../clients/web-vault/index.mdx)
 - An enterprise organization
 - Mailcatcher or a similar local mailservice so that you don't spam real email addresses with test

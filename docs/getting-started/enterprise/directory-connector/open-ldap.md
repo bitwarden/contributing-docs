@@ -7,7 +7,7 @@ local directory service that you can use for development.
 
 - [Web vault](../../clients/web-vault/index.mdx)
 
-- [Server](../../server/guide.mdx)
+- [Server](../../server/guide.md)
 
 - [Directory Connector](./index.mdx)
 
@@ -129,7 +129,7 @@ to do this unless you have special requirements.
 :::caution
 
 When you do a real sync, invitation emails will be sent out to all synced users. Make sure that
-you're using [Mailcatcher](../../server/guide.mdx#mailcatcher) so you don't send live emails.
+you're using [Mailcatcher](../../server/guide.md#mailcatcher) so you don't send live emails.
 
 :::
 
