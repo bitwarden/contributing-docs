@@ -1,11 +1,11 @@
 ---
-adr: "0017"
+adr: "0018"
 status: In progress
-date: 2023-01-18
+date: 2023-02-01
 tags: [server]
 ---
 
-# 0017 - Feature management
+# 0018 - Feature management
 
 <AdrTable frontMatter={frontMatter}></AdrTable>
 
