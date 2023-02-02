@@ -2,7 +2,7 @@
 
 ## Requirements
 
-- Completed the [Server Setup Guide](./guide.mdx)
+- Completed the [Server Setup Guide](./guide.md)
 - An
   [enterprise organization](https://bitwarden.com/help/about-organizations/#types-of-organizations)
 
@@ -24,7 +24,7 @@ works:
 To emulate this locally:
 
 1.  Make sure you've installed and setup Azurite, as described in the
-    [Server Setup Guide](./guide.mdx#azurite)
+    [Server Setup Guide](./guide.md#azurite)
 
 2.  Make sure that the `globalSettings:events:connectionString` user secret is not set, or has the
     default value of `UseDevelopmentStorage=true`

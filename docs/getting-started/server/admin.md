@@ -5,7 +5,7 @@
 Admin Portal authentication is done entirely through a passwordless flow, using a link sent through
 email. The email address must be listed in the `adminSettings:admins` user secret to be authorized.
 
-If you’ve followed the [Server Setup Guide](./guide.mdx) this should already be configured and will
+If you’ve followed the [Server Setup Guide](./guide.md) this should already be configured and will
 default to `admin@localhost`. If not, please go back and configure it now.
 
 :::info
