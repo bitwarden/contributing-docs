@@ -50,24 +50,24 @@ Chosen option: **Adopt a feature management system with local fallback**.
 ### Plan
 
 The [server][server] codebase will adopt a .NET SDK for a service provider that offers feature
-management. Only the serverside SDK will be used to manage access and cost and feature
-states will be communicated down to calling clients where appropriate via API response elements. New
-features will be set up inside the service provider's platform, and changes to them will be streamed
-to the running applications. Access to the provider will be controlled internally.
+management. Only the serverside SDK will be used to manage access and cost and feature states will
+be communicated down to calling clients where appropriate via API response elements. New features
+will be set up inside the service provider's platform, and changes to them will be streamed to the
+running applications. Access to the provider will be controlled internally.
 
 To facilitate when feature states need to be used by clients amongst other configuration, a new API
 will be developed to provide, amongst potentially other things, the server version and other build
 characteristics such as commit hash as well as a collection of configurations values. Some of these
 values are already maintained persistently and will be intermixed with feature keys. Clients will
-refresh configuration upon startup, when their local configuration is updated, and when sync events
-come in.
+refresh configuration upon startup, login, when their local configuration is updated, and when sync
+events come in.
 
-Contexts -- generally representing individual users -- will be established that communicate to the
-API using supported clients. Said contexts will be available within the service provider for
-specific targeting as desired. Contexts will be established for the user, organization, and
-provider, with unique IDs for the entity as a key and other details as needed. Context attributes
-when needed can be marked as private to avoid spillover to the service provider, and the provider
-will be added to the [subprocessor list][subprocessors] with respective communication.
+Contexts will be established that communicate to the API using supported clients. Said contexts will
+be available within the service provider for specific targeting as desired. Contexts will be
+established for the user, organization, and provider, with unique IDs for the entity as a key and
+other details as needed. Context attributes when needed can be marked as private to avoid spillover
+to the service provider, and the provider will be added to the [subprocessor list][subprocessors]
+with respective communication.
 
 Compile-time configuration will be converted wherever possible to use the feature management service
 provider. SDK access to the service provider will be segmented by environment; some features may
@@ -83,7 +83,7 @@ The software development lifecycle will be enhanced to make clear that essential
 development should be protected with flags.
 
 Support for using an [OpenFeature][openfeature]-compatible interface in the codebase will be
-considered at a later date.
+considered.
 
 [server]: https://github.com/bitwarden/server
 [subprocessors]: https://bitwarden.com/help/subprocessors/
