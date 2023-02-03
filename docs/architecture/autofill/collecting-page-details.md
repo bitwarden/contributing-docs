@@ -28,13 +28,13 @@ Page detail collection can be requested from other content scripts or from the e
 
 Page detail collection is requested from content script in two cases:
 
-- The `notificationBar.js` content script detects that the page DOM has changed, or
+- The `notificationBar.js` content script detects that the page DOM or URL has changed, or
 - The user has Autofill on Page Load turned on, so `autofiller.js` requests autofill on page load
 
 In both of these cases, page detail collection is requested from another content script in the
 background, and we use the `bgCollectPageDetails` command to communicate the request to the
-`main.background.ts` background page, which then requests that `runtime.background.ts` transmit the
-`collectPageDetails` messaage to the `autofill.js` content script.
+`runtime.background.ts` background page, which then requests that `main.background.ts` transmit the
+`collectPageDetails` message to the `autofill.js` content script.
 
 The `autofill.js` content script generates the page details and broadcasts a
 `collectPageDetailsResponse` message with a sender of either `autofiller` or `notificationBar`. The
