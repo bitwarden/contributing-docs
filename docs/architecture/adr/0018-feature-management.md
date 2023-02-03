@@ -55,12 +55,10 @@ be communicated down to calling clients where appropriate via API response eleme
 will be set up inside the service provider's platform, and changes to them will be streamed to the
 running applications. Access to the provider will be controlled internally.
 
-To facilitate when feature states need to be used by clients amongst other configuration, a new API
-will be developed to provide, amongst potentially other things, the server version and other build
-characteristics such as commit hash as well as a collection of configurations values. Some of these
-values are already maintained persistently and will be intermixed with feature keys. Clients will
-refresh configuration upon startup, login, when their local configuration is updated, and when sync
-events come in.
+To facilitate when feature states need to be used by clients amongst other configuration, API(s)
+will be expanded to provide a collection of configuration values. Some of these values are already
+maintained persistently and will be intermixed with feature keys. Clients will refresh configuration
+upon startup, login, when their local configuration is updated, and when sync events come in.
 
 Contexts will be established that communicate to the API using supported clients. Said contexts will
 be available within the service provider for specific targeting as desired. Contexts will be
