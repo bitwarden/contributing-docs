@@ -112,7 +112,7 @@ direct references to this API are found, they should be refactored to use one of
 We use `BrowserApi.tabSendMessage` to send messages from the extension to the content script running
 on the browser tab.
 
-On the content script on the tab, we attach with `chrome.runtime.onMessage.addListener` to receive
+In the content script on the tab, we attach with `chrome.runtime.onMessage.addListener` to receive
 the messages destined for that tab.
 
 :::note
