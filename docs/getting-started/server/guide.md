@@ -2,9 +2,6 @@
 sidebar_position: 1
 ---
 
-import Tabs from "@theme/Tabs";
-import TabItem from "@theme/TabItem";
-
 # Setup Guide
 
 This page will show you how to set up a local Bitwarden server for development purposes.
@@ -92,31 +89,27 @@ facilitate easily customization.
     Using PowerShell, navigate to the cloned server repo location, into the `dev` folder and run the
     docker command below.
 
-    <Tabs groupId="dev">
-
-    <TabItem value="community" label="Community Developer" default>
-
-    If you’re a **community developer**, we recommend the following command. It starts the MSSQL and
-    local mail server containers, which should be suitable for most community contributions.
+    <community>
 
     ```bash
     docker compose --profile mssql --profile mail up -d
     ```
 
-    </TabItem>
+    Which starts the MSSQL and local mail server containers, which should be suitable for most
+    community contributions.
 
-    <TabItem value="bitwarden" label="Bitwarden Developer">
+    </community>
 
-    If you’re a **Bitwarden developer**, we recommend the following command. It starts both MSSQL
-    and the Azurite container which is used to emulate Azure services used by the cloud instance.
+    <bitwarden>
 
     ```bash
     docker compose --profile cloud --profile mail up -d
     ```
 
-    </TabItem>
+    Which starts MSSQL, mail, and Azurite container. The additional Azurite container is required to
+    emulate Azure used by the Bitwarden cloud environment.
 
-    </Tabs>
+    </bitwarden>
 
 After you’ve run the `docker compose` command, you can use the
 [Docker Dashboard](https://docs.docker.com/desktop/dashboard/) to manage your containers. You should

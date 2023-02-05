@@ -93,8 +93,8 @@ So, in order to receive notifications while debugging, you have two options:
 ### Testing Passwordless Locally
 
 Before you can start testing and debugging passwordless logins, make sure your local server setup is
-running correctly ([server setup](../../../server/guide.mdx)). You should also be able to deploy
-your Android app to your device or emulator.
+running correctly ([server setup](../../../server/guide.md)). You should also be able to deploy your
+Android app to your device or emulator.
 
 :::note
 
