@@ -13,10 +13,11 @@ tags: [server, clients, browser, notifications]
 
 Millions of users now utilize push notifications for background vault syncs and passwordless login
 requests. As the platform has grown, so has the need to maintain the current
-[SignalR][signalr]-based solution that utilizes WebSockets, a system that places enormous pressure
-on cloud components in the event of deployments or other application updates. Combined with the need
-to also support mobile devices with proprietary push notification protocols, a next-generation and
-hybridized service offering is needed to simplify and scale up notification delivery.
+[SignalR][signalr]-based solution that utilizes WebSockets, a system that places significant
+pressure on cloud components in the event of deployments or other application updates. Combined with
+the need to also support mobile devices with proprietary push notification protocols, a
+next-generation and hybridized service offering is needed to simplify and scale up notification
+delivery.
 
 ### Modern Infrastructure Management
 
@@ -70,7 +71,7 @@ Chosen option: **Adopt a new combined push service provider and utilize Web Push
 
 ### Positive Consequences
 
-- Web Push is [well-supported][caniuse] almost everywhere we need it and is a valuable technology
+- Web Push is [well-supported][caniuse] in most places we need it and is a valuable technology
   upgrade with ease of maintenance in the future.
 - Several service providers offer Web Push backends for our cloud offering, and the protocol can be
   implemented within the notifications service for self-host.
@@ -86,17 +87,18 @@ Chosen option: **Adopt a new combined push service provider and utilize Web Push
 ### Plan
 
 The notifications service will continue to exist and support APIs for the SignalR connections as
-well as new ones for Web Push. Internal support for the protocol will be used only for self-host,
-and cloud clients will connect to a unified service provider that has Web Push. Web Push's necessary
-key exchange and security (VAPID) can use existing in-house technology for self-host and the service
-provider for the cloud. SignalR will continue to be supported for some time as clients migrate to
-Web Push connections and this should go to zero once all clients connect to the service provider; at
-that time SignalR support will be removed and the notifications service restructured for easier
-maintenance and hosting.
+well as new ones for Web Push. Cloud-based clients will connect to a unified service provider that
+has Web Push whenever feasible and otherwise utilize the existing SignalR implementation when Web
+Push cannot be leveraged. Self-host clients will utilize a similar blend of Web Push and SignalR
+provided by the notification service. Web Push's necessary key exchange and security (VAPID) can use
+existing in-house technology for self-host and the service provider for the cloud. Clients will
+largely migrate to Web Push connections over time and the load on SignalR will significantly reduce,
+although the latter is planned to be supported for certain clients for the foreseeable future.
 
 Mobile devices will all migrate to the same unified service provider that supports native iOS (APNS)
-and Android (FCM) push notification protocols. Future support for [Unified Push][unifiedpush] can be
-considered alongside Web Push for incompatible mobile clients.
+and Android (FCM) push notification protocols alongside Web Push. Future support for [Unified
+Push][unifiedpush] will be considered alongside Web Push for incompatible clients, although the
+SignalR implementation continues to be available.
 
 [signalr]: https://dotnet.microsoft.com/en-us/apps/aspnet/signalr
 [notifications]: https://github.com/bitwarden/server/tree/master/src/Notifications
