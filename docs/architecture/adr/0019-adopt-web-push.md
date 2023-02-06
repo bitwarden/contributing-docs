@@ -1,11 +1,11 @@
 ---
-adr: "0016"
+adr: "0019"
 status: In progress
-date: 2023-01-12
+date: 2023-02-06
 tags: [server, clients, browser, notifications]
 ---
 
-# 0016 - Adoption of Web Push
+# 0019 - Adoption of Web Push
 
 <AdrTable frontMatter={frontMatter}></AdrTable>
 
