@@ -51,23 +51,32 @@ flexibility for self-host.
 
 ## Considered Options
 
-- **Keep the SignalR solution and continue to scale up** - Maintain the cluster of notifications
-  service virtual machines and keep pushing for a larger set to handle scale. Move all mobile
-  notifications to the custom solution and abandon Azure Notification Hubs.
+With respect to mobile notifications:
+
 - **Work around Azure Notification Hubs limits** - Since all mobile devices, even for self-hosted
   installations, must utilize the Bitwarden cloud for push due to certificate security, devise a
   solution that shards devices across many Notification Hubs within new subscriptions.
-- **Adopt a new offering for mobile push notifications only** - Use something other than Azure
+- **Adopt a new offering for mobile push notifications** - Use something other than Azure
   Notification Hubs that doesn't have limits, perhaps with some technology sacrifices.
-- **Adopt a new offering for non-mobile push notifications only** - Use something other than SignalR
-  like a homegrown [Web Push][webpush] backend inside the notifications service.
-- **Adopt a new combined push service provider and utilize Web Push** - Not only migrate away from
-  Azure Notification Hubs but also utilize Web Push with a single, reliable service provider. Host a
-  compatible Web Push backend for self-host with the clients that need it.
+- **Adopt a new combined push service provider** - Not only migrate away from Azure Notification
+  Hubs but also select a service provider that supports native mobile notifications as well as other
+  desired protocols like Web Push.
+
+With respect to protocol modernization:
+
+- **Keep the SignalR solution and continue to scale up** - Maintain the cluster of notifications
+  service virtual machines and keep pushing for a larger set to handle scale. Also move all mobile
+  notifications to the custom solution and abandon Azure Notification Hubs.
+- **Adopt a new offering for non-mobile push notifications** - Use something other than SignalR like
+  a homegrown [Web Push][webpush] backend inside the notifications service. Host a compatible Web
+  Push backend for self-host with the clients that need it.
+- **Adopt a new combined push service provider** - Not only migrate away from SignalR where possible
+  but also select a service provider that supports native mobile notification protocols.
+  Additionally implement a Web Push backend for self-host as described above.
 
 ## Decision Outcome
 
-Chosen option: **Adopt a new combined push service provider and utilize Web Push**.
+Chosen option: **Adopt a new combined push service provider**.
 
 ### Positive Consequences
 
@@ -82,7 +91,7 @@ Chosen option: **Adopt a new combined push service provider and utilize Web Push
 ### Negative Consequences
 
 - Need to watch Safari support for Web Push which was just recently released at time of writing.
-- Costs for selecting a service provider.
+- Potential cost increases for selecting a different service provider.
 
 ### Plan
 
