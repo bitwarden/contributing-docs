@@ -109,6 +109,10 @@ and Android (FCM) push notification protocols alongside Web Push. Future support
 Push][unifiedpush] will be considered alongside Web Push for incompatible clients, although the
 SignalR implementation continues to be available.
 
+Utilizing end-to-end encryption -- with user encryptions keys -- of push notification payloads will
+be considered while migrating compatible clients to the new provider to provide stronger security of
+potentially-sensitive payload contents.
+
 [signalr]: https://dotnet.microsoft.com/en-us/apps/aspnet/signalr
 [notifications]: https://github.com/bitwarden/server/tree/master/src/Notifications
 [podlife]: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/
