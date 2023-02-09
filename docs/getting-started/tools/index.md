@@ -39,8 +39,7 @@ environment.
 - [NPM](https://www.npmjs.com/) v8 (included with Node)
 - [Rust](https://www.rust-lang.org/tools/install) - Used for native desktop components
 - [Git](https://git-scm.com)
-  - [Commit signing](../../contributing/commit-signing.mdx) is required for all _Bitwarden
-    contributors_ and is strongly encouraged for _community contributors_.
+  - [Commit signing](../../contributing/commit-signing.mdx) is strongly recommended
 
 ### Mobile
 
