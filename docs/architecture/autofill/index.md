@@ -22,7 +22,7 @@ The extension uses the following scripts for Autofill:
 
 <!-- prettier-ignore -->
 | Content Script | Responsibility |
-| ---------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| ---------------------------- | -------------------------------------------------------------------------------- |
 | `content/autofill.js`        | Collects form elements from the page and performs the autofill action on relevant fields. |
 | `content/autofiller.ts`      | Triggers autofill for users who have the "Enable Autofill on Page Load" setting enabled.  |
 | `content/notificationBar.js` | Detects when the user submits new or updated credentials on a website and triggers the Notification Bar UI. |
@@ -41,24 +41,16 @@ The Bitwarden browser extension uses
 listen and respond to actions triggered by the content scripts running on the browser tab. They do
 this by using `BrowserApi.messageListener()` to attach to `chrome.runtime.onMessage.addListener()`.
 
-The background scripts used in the Bitwarden extension are:
+The background scripts and listeners used in the Bitwarden extension are:
 
 <!-- prettier-ignore -->
-| Background Page              | Responsibility                                                                                                                                                     |
-| ---------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
-| `runtime.background.ts`      | Handles incoming requests related to core extension functionality.                                   |
-| `notification.background.ts` | Handles incoming requests related to the notification bar.                                  |
-| `commands.background.ts`     | Handles incoming requests related to keyboard commands (including autofill).                                    |
+| Background Page / Listener   | Responsibility                          |                                    ------------------------------------------------------------------------ |
+| `runtime.background.ts`      | Handles incoming requests related to core extension functionality. |
+| `notification.background.ts` | Handles incoming requests related to the notification bar.    |
+| `commands.background.ts`     | Handles incoming requests related to keyboard commands (including autofill) for Mv2 extensions.   |
+| `onCommandListener.ts`       | Handles incoming requests related to keyboard commands (including autofill) for Mv3 extensions. |
 | `contextMenu.background.ts`  | Handles context menu actions (including autofill).                                    |
 | `main.background.js`         | Bootstraps the extension. It is relevant here only because it (arbitrarily) contains the `collectPageDetailsForContentScript()` method. |
-
-In order to support browsers that will require the
-[Chrome Extension Manifest v3](https://developer.chrome.com/docs/extensions/mv3/intro/)
-specifications, the Bitwarden extension also handles the keyboard shortcut command through an
-`onCommandListener`. This listener is registered with `chrome.commands.onCommand.addListener`. The
-`onCommandListener` is responsible for initiating the `AutoFillActiveTabCommand` to trigger the
-Autofill functionality, similar to how the `commands.background.ts` background page handles incoming
-keyboard command messages.
 
 ### Messaging
 
@@ -97,13 +89,14 @@ To send a request from a content script to the extension, we have two services p
 - When no Dependency Injection is available, the static `BrowserApi` should be used, with its
   `sendMessage()` method.
 
-On the extension, we attach with `chrome.runtime.onMessage.addListener` to receive the messages
-destined for the extension.
+On the extension background pages, we attach with `BrowserApi.messageListener` to receive the
+messages destined for the extension.
 
 :::note
 
-The `BrowserMessagingService` and `BrowserApi` abstract the `chrome.runtime.sendMessage` API. If any
-direct references to this API are found, they should be refactored to use one of our abstractions.
+The `BrowserMessagingService` and `BrowserApi` abstract the `chrome.runtime.sendMessage` and
+`chrome.runtime.onMessage.addListener` exposed by the browser. If any direct references to this API
+are found, they should be refactored to use one of our abstractions.
 
 :::
 

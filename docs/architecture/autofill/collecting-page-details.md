@@ -31,21 +31,50 @@ Page detail collection is requested from content script in two cases:
 - The `notificationBar.js` content script detects that the page DOM or URL has changed, or
 - The user has Autofill on Page Load turned on, so `autofiller.js` requests autofill on page load
 
-In both of these cases, page detail collection is requested from another content script in the
-background, and we use the `bgCollectPageDetails` command to communicate the request to the
-`runtime.background.ts` background page, which then requests that `main.background.ts` transmit the
-`collectPageDetails` message to the `autofill.js` content script.
+In both of these cases, page detail collection is handled as follows:
 
-The `autofill.js` content script generates the page details and broadcasts a
-`collectPageDetailsResponse` message with a sender of either `autofiller` or `notificationBar`. The
-`runtime.background.js` and `notification.background.js` are listening for these two messages,
-respectively.
+1. The requesting content script sends the `bgCollectPageDetails` command to communicate the request
+   to the `runtime.background.ts` background page.
+2. The `runtime.background.ts` page calls the `collectPageDetailsForContentScript` method on
+   `main.background.ts`.
+3. The `collectPageDetailsForContentScript` method sends a message with command `collectPageDetails`
+   to the `autofill.js` content script.
+4. The `autofill.js` content script generates the page details and broadcasts a
+   `collectPageDetailsResponse` message with a sender of either `autofiller` or `notificationBar`.
+5. The `runtime.background.js` and `notification.background.js` are listening for these two
+   messages, respectively, and will act upon them.
+
+These flows are diagrammed below:
+
+#### Autofill on Page Load
 
 ```kroki type=plantuml
 @startuml
 box "Content Scripts" #B8B8B8
 participant autofill.js as autofill
 participant autofiller.ts as autofiller
+end box
+
+box "Background Pages" #E5E8E8
+participant notification.background.ts as notification
+participant runtime.background.ts as runtime
+participant main.background.ts as main
+end box
+
+autofiller -> runtime : bgCollectPageDetails [sender: autofiller]
+runtime --> main : collectPageDetailsForContentScript()
+main -> autofill : collectPageDetails [sender: autofiller]
+autofill -> runtime : collectPageDetailsResponse [sender: autofiller]
+
+@enduml
+```
+
+#### Notification Bar
+
+```kroki type=plantuml
+@startuml
+box "Content Scripts" #B8B8B8
+participant autofill.js as autofill
 participant notificationBar.ts as notificationBar
 end box
 
@@ -55,21 +84,10 @@ participant runtime.background.ts as runtime
 participant main.background.ts as main
 end box
 
-group Autofill on Page Load
-  autofiller -> runtime : bgCollectPageDetails [sender: autofiller]
-  runtime --> main : collectPageDetailsForContentScript()
-  main -> autofill : collectPageDetails [sender: autofiller]
-  autofill -> runtime : collectPageDetailsResponse [sender: autofiller]
-end group
-
-break
-
-group Notification Bar
-  notificationBar -> runtime : bgCollectPageDetails [sender: notificationBar]
-  runtime --> main : collectPageDetailsForContentScript()
-  main -> autofill : collectPageDetails [sender: notificationBar]
-  autofill -> notificationBar: collectPageDetailsResponse [sender: notificationBar]
-end group
+notificationBar -> runtime : bgCollectPageDetails [sender: notificationBar]
+runtime --> main : collectPageDetailsForContentScript()
+main -> autofill : collectPageDetails [sender: notificationBar]
+autofill -> notificationBar: collectPageDetailsResponse [sender: notificationBar]
 
 @enduml
 ```
@@ -202,7 +220,7 @@ box "Content Scripts" #B8B8B8
 participant autofill.js as autofill
 end box
 
-box "Extension UI" #1252A3
+box "Extension UI" #7A7A7A
 participant view.component.ts as viewComponent
 participant "current-tab.component.ts" as currentTab
 end box
@@ -240,4 +258,4 @@ and
 [`AutofillForm`](https://github.com/bitwarden/clients/blob/master/apps/browser/src/models/autofillForm.ts)
 objects, each of which represents a potentially fillable field on the page source. The properties on
 the objects are used in the next step of the Autofill process,
-['Generating the Fill Script'](./generating-fill-scripts.md).
+['Generating the Fill Scripts'](./generating-fill-scripts.md).
