@@ -16,9 +16,8 @@ Here is how you can get involved:
 - **Request a new feature:** Go to the
   [Feature Requests category](https://community.bitwarden.com/c/feature-requests/) of the Community
   Forums. Please search existing feature requests before making a new one
-- **Write code for a new feature:** Make a new post in the
-  [Github Contributions category](https://community.bitwarden.com/c/github-contributions/) of the
-  Community Forums. Include a description of your proposed contribution, screeshots, and links to
+- **Write code for a new feature:** Create a new Github Discussions post in the
+  Community PR Proposals category for [server](https://github.com/bitwarden/server/discussions), [clients](https://github.com/bitwarden/clients/discussions) or [mobile](https://github.com/bitwarden/mobile). Include a description of your proposed contribution, screeshots, and links to
   any relevant feature requests. This helps get feedback from the community and Bitwarden team
   members before you start writing code
 - **Report a bug or submit a bugfix:** Use Github issues and pull requests
