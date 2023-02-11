@@ -55,22 +55,11 @@ SyncService *-- "Internal[Domain]Service" : uses
 
 The classes and their responsibilities are detailed below:
 
-| Type                      | Responsibility                                                                                                                                                                                                                                | Example                 |
-| ------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
-| `[Domain]Service`         | Provides read access to the domain through an Observable, which is updated when the local state changes via an RxJS `BehaviorSubject`. This service also provides helper methods related to that domain.                                      | `PolicyService`         |
+| Type                      | Responsibility                                                                                                                                                                                                                             | Example                 |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------- |
+| `[Domain]Service`         | Provides read access to the domain through an Observable, which is updated when the local state changes via an RxJS `BehaviorSubject`. This service also provides helper methods related to that domain.                                   | `PolicyService`         |
 | `Internal[Domain]Service` | Provides public update methods on the service's Observable properties _without_ updating the `[Domain]` on the server. It is implemented as an abstract class which extends `[Domain]Service`, but generally not shared with most classes. | `InternalPolicyService` |
-| `[Domain]ApiService`      | Provides synced-with-server write capabilities. In general, if you’re editing a `[Domain]`, you want `[Domain]ApiService`. See [Domain Updates](#domain-updates) for more details.                                                                                                                    | `PolicyApiService`      |
-
-:::tip Why a separate `ApiService` for the domain?
-
-The vast majority of components are simply interested in reading data, not in writing it. We could
-implement different interfaces to solve this, but there is quite a bit of baggage that comes along
-with API calls, so we elected to separate these concerns out into a separate class: the
-`[Domain]ApiService`. This class is injected into any component that needs to write information to
-domain models, and the `[Domain]ApiService` ensures that information is first synced with the
-server, and then it is broadcast locally to the application through the `Domain[Internal]Service`.
-
-:::
+| `[Domain]ApiService`      | Provides synced-with-server write capabilities. In general, if you’re editing a `[Domain]`, you want `[Domain]ApiService`. See [Domain Updates](#domain-updates) for more details.                                                         | `PolicyApiService`      |
 
 ## Domain Updates
 
@@ -128,14 +117,6 @@ responsible for transmitting that change to two places:
 You can see those responsibilities above, where `ApiService` updates the server and
 `Internal[Domain]Service` updates the `BehaviorSubject`.
 
-:::note
-
-In our current implementation, `Internal[Domain]Service` is implemented by `[Domain]Service`.
-However, that implementation is abstracted from the `[Domain]ApiService` so that there is not a
-direct dependency. This will allow for independent implementations in the future.
-
-:::
-
 ### Cache-Only Update: Updated in a different client
 
 ```kroki type=plantuml
@@ -169,7 +150,7 @@ For domain updates from another client, the current client receives those messag
 responsible for updating only the internal cache. The `SyncService` updates the domain through this
 service to propagate the changes in the current client.
 
-The `Internal[Domain]Service` uses `BehaviorSubject`s in the `[Domain]Service` for that caching
+The `Internal[Domain]Service` may use `BehaviorSubject`s in the `[Domain]Service` for that caching
 mechanism, but that implementation is abstracted from the `SyncService` and any other consumers of
 `Internal[Domain]Service`.
 
