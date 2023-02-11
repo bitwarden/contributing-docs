@@ -31,27 +31,27 @@ and
 for our JavaScript clients and the
 [`EventService`](https://github.com/bitwarden/mobile/blob/master/src/Core/Services/EventService.cs)
 for our mobile clients. These services enqueue the events into a collection stored client-side which
-is periodically uploaded to the server, currently at 60 seconds intervals. Logs are also uploaded on logout, so
-there are no events orphaned in the collection.
+is periodically uploaded to the server, currently at 60 seconds intervals. Logs are also uploaded on
+logout, so there are no events orphaned in the collection.
 
-When uploaded, event logs are sent to the server through `POST` requests to the `/collect` endpoint
-on the `Events` service.
+Uploaded event logs are sent to the server through `POST` requests to the `/collect` endpoint on the
+Events service, which is handled by the `CollectController`. The controller performs some basic
+mapping before passing the events to the `EventService`.
 
-At this point, the handling of the logs differs based on the hosting configuration of the Bitwarden
-instance. This configuration is done through Dependency Injection in the
-[`Startup`](https://github.com/bitwarden/server/blob/master/src/Events/Startup.cs) class on the
-`Events` project. Namely, the implementation of
-[`IEventWriteService`](https://github.com/bitwarden/server/blob/master/src/Core/Services/IEventWriteService.cs)
-differs based on whether the instance is self-hosted or cloud-hosted.
+Server-side events are sent directly to the `EventService`, bypassing the Events service completely.
+
+The `EventService` implementation differs for the cloud and self-hosted instances. This is handled
+by the `IEventWriteService`.
 
 ### Cloud-Hosted
 
 For cloud-hosted instances, we use the
-[`AzureQueueEventWriteService`](https://github.com/bitwarden/server/blob/master/src/Core/Services/Implementations/AzureQueueEventWriteService.cs) implementaiton, which writes the events to an Azure Queue that is specified in the
+[`AzureQueueEventWriteService`](https://github.com/bitwarden/server/blob/master/src/Core/Services/Implementations/AzureQueueEventWriteService.cs)
+implementation, which writes the events to an Azure Queue that is specified in the
 `globalSettings.Events.ConnectionString` configuration setting.
 
-The events in the Azure Queue are then processed by the `EventsProcessor` service that runs in the Bitwarden
-cloud-hosted instance. The `EventsProcessor` is running the
+The events in the Azure Queue are then processed by the `EventsProcessor` service that runs in the
+Bitwarden cloud-hosted instance. The `EventsProcessor` is running the
 [`AzureQueueHostedService`](https://github.com/bitwarden/server/blob/master/src/EventsProcessor/AzureQueueHostedService.cs),
 which dequeues the event logs from the Azure Queue and writes them to Azure Table storage using the
 [`EventRepository`](https://github.com/bitwarden/server/blob/master/src/Core/Repositories/TableStorage/EventRepository.cs).
@@ -59,7 +59,8 @@ which dequeues the event logs from the Azure Queue and writes them to Azure Tabl
 ### Self-Hosted
 
 On self-hosted instances, the
-[`RepositoryEventWriteService`](https://github.com/bitwarden/server/blob/master/src/Core/Services/Implementations/RepositoryEventWriteService.cs) writes the event logs to the `Events` database table directly using the `EventRepository`.
+[`RepositoryEventWriteService`](https://github.com/bitwarden/server/blob/master/src/Core/Services/Implementations/RepositoryEventWriteService.cs)
+writes the event logs to the `Events` database table directly using the `EventRepository`.
 
 ## Querying Events
 
