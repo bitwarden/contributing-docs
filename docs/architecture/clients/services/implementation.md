@@ -58,7 +58,7 @@ The classes and their responsibilities are detailed below:
 | ------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
 | `[Domain]Service`         | Provides read access to the domain through an Observable, which is updated when the local state changes via an RxJS `BehaviorSubject`. This service also provides helper methods related to that domain.                                      | `PolicyService`         |
 | `Internal[Domain]Service` | Provides public update methods on the service's Observable properties _without_ updating the `[Domain]` on the server. It is implemented as an abstract class which extends `[Domain]Service`, but generally not shared with most classes. | `InternalPolicyService` |
-| `[Domain]ApiService`      | Provides synced-with-server write capabilities. In general, if you’re editing a `[Domain]`, you want `[Domain]ApiService`.                                                                                                                    | `PolicyApiService`      |
+| `[Domain]ApiService`      | Provides synced-with-server write capabilities. In general, if you’re editing a `[Domain]`, you want `[Domain]ApiService`. See [Domain Updates](#domain-updates) for more details.                                                                                                                    | `PolicyApiService`      |
 
 :::tip Why a separate ApiService for the domain?
 
