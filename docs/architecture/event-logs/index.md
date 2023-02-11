@@ -39,7 +39,7 @@ is injected into the DI container.
 This service writes the events to an Azure Queue that is specified in the
 `globalSettings.Events.ConnectionString` configuration setting.
 
-The events in the Azure Queue are then processed by the `EventsProcessor` that runs in the Bitwarden
+The events in the Azure Queue are then processed by the `EventsProcessor` service that runs in the Bitwarden
 cloud-hosted instance. The `EventsProcessor` is running the
 [`AzureQueueHostedService`](https://github.com/bitwarden/server/blob/master/src/EventsProcessor/AzureQueueHostedService.cs),
 which dequeues the event logs from the Azure Queue and writes them to Azure Table storage using the
