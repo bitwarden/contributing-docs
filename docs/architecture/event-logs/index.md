@@ -5,10 +5,8 @@ sidebar_position: 5
 # Event Logs
 
 Bitwarden event logs are used for Teams and Enterprise organizations to capture timestamped records
-of events that occur within the organization.
-
-For documentation on how to view events, see our Help documentation
-[here](https://bitwarden.com/help/event-logs/).
+of events that occur within the organization. For documentation on how to view events, see the
+[Help Center](https://bitwarden.com/help/event-logs/).
 
 ## Types of Events
 
@@ -33,7 +31,7 @@ and
 for our JavaScript clients and the
 [`EventService`](https://github.com/bitwarden/mobile/blob/master/src/Core/Services/EventService.cs)
 for our mobile clients. These services enqueue the events into a collection stored client-side which
-is uploaded to the server on an interval, currently 60 seconds. Logs are also uploaded on logout, so
+is periodically uploaded to the server, currently at 60 seconds intervals. Logs are also uploaded on logout, so
 there are no events orphaned in the collection.
 
 When uploaded, event logs are sent to the server through `POST` requests to the `/collect` endpoint
@@ -48,27 +46,20 @@ differs based on whether the instance is self-hosted or cloud-hosted.
 
 ### Cloud-Hosted
 
-For cloud-hosted instances, the
-[`AzureQueueEventWriteService`](https://github.com/bitwarden/server/blob/master/src/Core/Services/Implementations/AzureQueueEventWriteService.cs)
-is injected into the DI container.
-
-This service writes the events to an Azure Queue that is specified in the
+For cloud-hosted instances, we use the
+[`AzureQueueEventWriteService`](https://github.com/bitwarden/server/blob/master/src/Core/Services/Implementations/AzureQueueEventWriteService.cs) implementaiton, which writes the events to an Azure Queue that is specified in the
 `globalSettings.Events.ConnectionString` configuration setting.
 
-The events in the Azure Queue are then processed by the `EventsProcessor` that runs in the Bitwarden
+The events in the Azure Queue are then processed by the `EventsProcessor` service that runs in the Bitwarden
 cloud-hosted instance. The `EventsProcessor` is running the
 [`AzureQueueHostedService`](https://github.com/bitwarden/server/blob/master/src/EventsProcessor/AzureQueueHostedService.cs),
-which dequeues the event logs from the Azure Queue and writes them to Azure Table storage
+which dequeues the event logs from the Azure Queue and writes them to Azure Table storage using the
 [`EventRepository`](https://github.com/bitwarden/server/blob/master/src/Core/Repositories/TableStorage/EventRepository.cs).
 
 ### Self-Hosted
 
-On self-hosted instances, we cannot use the Azure Queue or Azure Table infrastructure available in
-the cloud. Instead, the
-[`RepositoryEventWriteService`](https://github.com/bitwarden/server/blob/master/src/Core/Services/Implementations/RepositoryEventWriteService.cs)
-is injected into the DI container.
-
-This service writes the event logs to the `Events` table in the Bitwarden database.
+On self-hosted instances, the
+[`RepositoryEventWriteService`](https://github.com/bitwarden/server/blob/master/src/Core/Services/Implementations/RepositoryEventWriteService.cs) writes the event logs to the `Events` database table directly using the `EventRepository`.
 
 ## Querying Events
 
@@ -94,11 +85,5 @@ class, which implements `IEventRepository`.
 
 ### Self-Hosted
 
-On self-hosted Bitwarden instances, the `EventsController` will query the `Events` table in the
-Bitwarden SQL database to look for the event logs. The `IEventRepository` implementation depends
-upon whether the instance is using Entity Framework or Dapper to query the SQL database.
-
-- Instances using EF:
-  [`Bit.Infrastructure.EntityFramework.Repositories.EventRepository`](https://github.com/bitwarden/server/blob/master/src/Infrastructure.EntityFramework/Repositories/EventRepository.cs)
-- Instances using Dapper:
-  [`Bit.Infrastructure.Dapper.Repositories.EventRepository`](https://github.com/bitwarden/server/blob/master/src/Infrastructure.Dapper/Repositories/EventRepository.cs)
+On self-hosted Bitwarden instances, the `EventsController` will use the `IEventRepository` to query
+the `Events` database table for the event logs.
