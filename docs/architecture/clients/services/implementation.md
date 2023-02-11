@@ -66,7 +66,7 @@ The vast majority of components are simply interested in reading data, not in wr
 implement different interfaces to solve this, but there is quite a bit of baggage that comes along
 with API calls, so we elected to separate these concerns out into a separate class: the
 `[Domain]ApiService`. This class is injected into any component that needs to write information to
-domain models, and the `[Domain]ApiService` ensures that first that information is synced with the
+domain models, and the `[Domain]ApiService` ensures that information is first synced with the
 server, and then it is broadcast locally to the application through the `Domain[Internal]Service`.
 
 :::
