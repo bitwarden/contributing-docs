@@ -47,12 +47,8 @@ which dequeues the event logs from the Azure Queue and writes them to Azure Tabl
 
 ### Self-Hosted
 
-On self-hosted instances, we cannot use the Azure Queue or Azure Table infrastructure available in
-the cloud. Instead, the
-[`RepositoryEventWriteService`](https://github.com/bitwarden/server/blob/master/src/Core/Services/Implementations/RepositoryEventWriteService.cs)
-is injected into the DI container.
-
-This service writes the event logs to the `Events` table in the Bitwarden database.
+On self-hosted instances, the
+[`RepositoryEventWriteService`](https://github.com/bitwarden/server/blob/master/src/Core/Services/Implementations/RepositoryEventWriteService.cs) writes the event logs to the `Events` database table directly using the `EventRepository`.
 
 ## Querying Events
 
