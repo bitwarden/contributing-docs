@@ -80,11 +80,5 @@ class, which implements `IEventRepository`.
 
 ### Self-Hosted
 
-On self-hosted Bitwarden instances, the `EventsController` will query the `Events` table in the
-Bitwarden SQL database to look for the event logs. The `IEventRepository` implementation depends
-upon whether the instance is using Entity Framework or Dapper to query the SQL database.
-
-- Instances using EF:
-  [`Bit.Infrastructure.EntityFramework.Repositories.EventRepository`](https://github.com/bitwarden/server/blob/master/src/Infrastructure.EntityFramework/Repositories/EventRepository.cs)
-- Instances using Dapper:
-  [`Bit.Infrastructure.Dapper.Repositories.EventRepository`](https://github.com/bitwarden/server/blob/master/src/Infrastructure.Dapper/Repositories/EventRepository.cs)
+On self-hosted Bitwarden instances, the `EventsController` will use the `IEventRepository` to query
+the `Events` database table for the event logs.
