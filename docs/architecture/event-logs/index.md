@@ -42,7 +42,7 @@ This service writes the events to an Azure Queue that is specified in the
 The events in the Azure Queue are then processed by the `EventsProcessor` that runs in the Bitwarden
 cloud-hosted instance. The `EventsProcessor` is running the
 [`AzureQueueHostedService`](https://github.com/bitwarden/server/blob/master/src/EventsProcessor/AzureQueueHostedService.cs),
-which dequeues the event logs from the Azure Queue and writes them to Azure Table storage
+which dequeues the event logs from the Azure Queue and writes them to Azure Table storage using the
 [`EventRepository`](https://github.com/bitwarden/server/blob/master/src/Core/Repositories/TableStorage/EventRepository.cs).
 
 ### Self-Hosted
