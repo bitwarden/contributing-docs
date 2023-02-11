@@ -17,7 +17,7 @@ and
 for our JavaScript clients and the
 [`EventService`](https://github.com/bitwarden/mobile/blob/master/src/Core/Services/EventService.cs)
 for our mobile clients. These services enqueue the events into a collection stored client-side which
-is uploaded to the server on an interval, currently 60 seconds. Logs are also uploaded on logout, so
+is periodically uploaded to the server, currently at 60 seconds intervals. Logs are also uploaded on logout, so
 there are no events orphaned in the collection.
 
 When uploaded, event logs are sent to the server through `POST` requests to the `/collect` endpoint
