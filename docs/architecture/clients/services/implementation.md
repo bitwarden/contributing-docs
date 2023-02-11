@@ -4,8 +4,9 @@ sidebar_position: 2
 
 # Implementation
 
-Bitwarden's client service architecture is aligned with the [vision](vision.md) that we have
-defined. These goals were the driving force behind the current implementation.
+We have defined our [vision](vision.md) for the Bitwarden client-side services. The implementation
+below is our attempt to satisfy these goals within the context of our codebase. We are currently in
+the process of migrating our services to reflect this ideal.
 
 ## Different Types of Services
 
@@ -60,7 +61,7 @@ The classes and their responsibilities are detailed below:
 | `Internal[Domain]Service` | Provides public update methods on the service's Observable properties _without_ updating the `[Domain]` on the server. It is implemented as an abstract class which is extends `[Domain]Service`, but generally not shared with most classes. | `InternalPolicyService` |
 | `[Domain]ApiService`      | Provides synced-with-server write capabilities. In general, if you’re editing a `[Domain]`, you want `[Domain]ApiService`.                                                                                                                    | `PolicyApiService`      |
 
-:::tip Why a separate ApiService for the domain?
+:::tip Why a separate `ApiService` for the domain?
 
 The vast majority of components are simply interested in reading data, not in writing it. We could
 implement different interfaces to solve this, but there is quite a bit of baggage that comes along
