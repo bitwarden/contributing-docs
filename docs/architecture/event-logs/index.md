@@ -32,11 +32,8 @@ differs based on whether the instance is self-hosted or cloud-hosted.
 
 ### Cloud-Hosted
 
-For cloud-hosted instances, the
-[`AzureQueueEventWriteService`](https://github.com/bitwarden/server/blob/master/src/Core/Services/Implementations/AzureQueueEventWriteService.cs)
-is injected into the DI container.
-
-This service writes the events to an Azure Queue that is specified in the
+For cloud-hosted instances, we use the
+[`AzureQueueEventWriteService`](https://github.com/bitwarden/server/blob/master/src/Core/Services/Implementations/AzureQueueEventWriteService.cs) implementaiton, which writes the events to an Azure Queue that is specified in the
 `globalSettings.Events.ConnectionString` configuration setting.
 
 The events in the Azure Queue are then processed by the `EventsProcessor` service that runs in the Bitwarden
