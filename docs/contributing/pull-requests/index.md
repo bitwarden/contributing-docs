@@ -36,11 +36,11 @@ git fetch upstream
 
 ## Branch
 
-Each new feature or bug fix should be developed on a separate branch. Branches allows you to work on
+Each new feature or bug fix should be developed on a separate branch. Branches allow you to work on
 multiple features concurrently. In most cases you should branch from `master`. However, if you are
-working with other contributors we typically branch of a long-lived feature branch. Long-lived
-feature branches allows us to break up a single feature into multiple PRs, which can be reviewed
-individually.
+working with other contributors we typically branch off a long-lived feature branch. Long-lived
+feature branches allow us to break up a single feature into multiple PRs, which can be reviewed
+individually but tested and released together.
 
 <community>
 
@@ -59,29 +59,10 @@ As a Bitwarden contributor you should branch of `origin/master`, this ensures th
 always based of the latest upstream `master` even if the local `master` is out of date.
 
 ```bash
-git checkout -b <pod>/<feature>/<issue-number> -t origin/master
+git checkout -b <pod>/<issue-number> -t origin/master
 ```
 
-</bitwarden>
-
-<bitwarden>
-
-### Naming convention
-
-To keep branches organized we adhere a naming convention for branches. The convention splits branch
-names into 2 components, each separated by a `/`.
-
-1. The developers pod abbreviation (e.g. `sm`)
-2. Jira issue tag (e.g. `SM-1234`)
-
-```bash
-# Some examples
-sm/SM-1234
-ps/PS-4321-optional-description
-```
-
-This naming convention allows us to easily identify the type of work being done on a branch. And
-will assist in identifying and tracking down stale branches.
+Our branching strategy is described in detail [here](branching.md).
 
 </bitwarden>
 
@@ -90,6 +71,12 @@ will assist in identifying and tracking down stale branches.
 We recommend grouping related changes together into a single commit. This can make it easier for
 reviewers to understand and assess the changes that are being proposed, while also giving the
 contributor checkpoints to revert to if something should go wrong.
+
+We do not have a standard for how to structure commit messages (e.g. semantic commit messages). We
+encourage that commit messages should be within the 50-character limit so that `git log` can be used
+easily. If a commit message would take more than 50 characters it is best to break it up into
+smaller atomic changes for readability and malleability of the git history (reversion,
+cherry-picking, etc.).
 
 More advanced contributors might find it useful to
 [Rewrite History](https://git-scm.com/book/en/v2/Git-Tools-Rewriting-History). This allows a
@@ -114,8 +101,14 @@ Please follow the following checklist when creating a PR.
     (e.g. EC-123) or a link to the ticket anywhere in the PR title or body.
 - Add appropriate reviewer(s).
   - In most cases, this should be your pod. Each pod should have a GitHub team to simplify
-    requesting reviews, for example the _Platform pod_ has `pod-ps-dev`. There is a wider group
-    which includes QA and designers, `pod-ps`.
+    requesting reviews. The pod teams are named as follows:
+    - `@pod-{podAbbreviation}`: This will notify the entire pod, including product, design, QA and
+      development
+    - `@pod-{podAbbreviation}-dev`: This will notify or assign for code review the software
+      engineers within the pod
+    - `@pod-{podAbbreviation}-qa`: This will notify or assign for code review the QA
+      engineers/SDET(s) within the pod
+  - For design changes, tag `@dept-design`
   - Please use the
     [SME Yellowpages](https://bitwarden.atlassian.net/wiki/spaces/DEV/pages/195919928) to check if
     there is someone with specific knowledge of the area that can assist with reviewing complex
