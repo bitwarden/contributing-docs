@@ -4,6 +4,12 @@ toc_max_heading_level: 4
 
 # T-SQL
 
+## Repositories
+
+We use the [Repository pattern][repository] with the MSSQL repositories being written using
+[Dapper][dapper]. Each repository method in turn calls a _Stored Procedure_, which primarily fetches
+data from _Views_.
+
 ## Deployment Scripts
 
 There are specific ways deployment scripts should be structured. The goal for these standards is to
@@ -179,3 +185,7 @@ CREATE NONCLUSTERED INDEX [IX_OrganizationUser_UserIdOrganizationIdStatus]
    INCLUDE ([AccessAll])
    WITH (ONLINE = ON); -- ** THIS ENSURES ONLINE **
 ```
+
+[repository]:
+  https://docs.microsoft.com/en-us/dotnet/architecture/microservices/microservice-ddd-cqrs-patterns/infrastructure-persistence-layer-design
+[dapper]: https://github.com/DapperLib/Dapper

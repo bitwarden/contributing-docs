@@ -9,7 +9,7 @@ sidebar_custom_props:
 
 This page is only relevant to you if you need to test self-hosted features. It is **not** required
 for most development work. If you just need a local server, go to the
-[Server Setup Guide](../guide.mdx) instead.
+[Server Setup Guide](../guide.md) instead.
 
 :::
 
@@ -29,8 +29,8 @@ with the same infrastructure configuration:
 ## Requirements
 
 This guide assumes you have completed and are familiar with the techniques in
-[Server Setup Guide](../guide.mdx). Please make sure you have a working development environment for
-a cloud-configured server before worrying about getting a self-hosted instance connected to it.
+[Server Setup Guide](../guide.md). Please make sure you have a working development environment for a
+cloud-configured server before worrying about getting a self-hosted instance connected to it.
 
 ## Setup
 
@@ -135,7 +135,7 @@ Navigate to the self-hosted server repository. We will create a second database 
 configuration, so that the cloud-configured instance can have an independent data set for
 development.
 
-If you followed [Server Setup Guide](../guide.mdx#create-database) when creating your
+If you followed [Server Setup Guide](../guide.md#create-database) when creating your
 cloud-configured database, you just need to run the same PowerShell migration script with an
 argument of `-s`:
 
