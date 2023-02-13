@@ -19,7 +19,7 @@ Here is how you can get involved:
 - **Write code for a new feature:** Create a new Github Discussions post in the Community PR
   Proposals category for [server](https://github.com/bitwarden/server/discussions),
   [clients](https://github.com/bitwarden/clients/discussions) or
-  [mobile](https://github.com/bitwarden/mobile). Include a description of your proposed
+  [mobile](https://github.com/bitwarden/mobile/discussions). Include a description of your proposed
   contribution, screeshots, and links to any relevant feature requests. This helps get feedback from
   the community and Bitwarden team members before you start writing code
 - **Report a bug or submit a bugfix:** Use Github issues and pull requests
