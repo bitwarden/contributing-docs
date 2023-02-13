@@ -17,7 +17,7 @@ Bitwarden app. If you don’t have access to this collection, please contact you
 This secure note has 2 attachments:
 
 1.  `secrets.json` - the default recommended user secrets for development. This will use the local
-    Docker services as outlined in the [Server Setup Guide](../guide.mdx) (e.g. MailCatcher and
+    Docker services as outlined in the [Server Setup Guide](../guide.md) (e.g. MailCatcher and
     Azurite).
 2.  `additional-keys-for-cloud-services.json` - these are optional keys you can add to your
     `secrets.json` if you want to enable test cloud services instead of the local Docker services.
