@@ -6,15 +6,14 @@ sidebar_position: 30
 
 ## CQRS ([ADR-0008](../adr/0008-server-CQRS-pattern.md))
 
-We are currently transitioning the server to use a Command and Query Responsibility Segregation
-(CQRS) pattern.
+Our server architecture uses the the Command and Query Responsibility Segregation (CQRS) pattern.
 
 The main goal of this pattern is to break up large services focused on a single entity (e.g.
 `CipherService`) and move towards smaller, reusable classes based on actions or tasks (e.g.
 `CreateCipher`). In the future, this may enable other benefits such as enqueuing commands for
 execution, but for now the focus is on having smaller, reusable chunks of code.
 
-### Commands vs. Queries
+### Commands vs. queries
 
 **Commands** are write operations, e.g. `RotateOrganizationApiKeyCommand`. They should never read
 from the database.
@@ -26,7 +25,7 @@ The database is the most common data source we deal with, but others are possibl
 query could also get data from a remote server.
 
 Each query or command should have a single responsibility. For example: delete a user, get a license
-file, rotate an api key. They are designed around verbs or actions (e.g.
+file, rotate an API key. They are designed around verbs or actions (e.g.
 `RotateOrganizationApiKeyCommand`), not domains or entities (e.g. `ApiKeyService`).
 
 ### Writing commands or queries
@@ -71,7 +70,7 @@ By separating read and write operations, CQRS encourages us to maintain loose co
 classes. There are two golden rules to follow when using CQRS in our codebase:
 
 - **Commands should never read and queries should never write**
-- **Commands and queries should never call eachother**
+- **Commands and queries should never call each other**
 
 Both of these lead to tight coupling between classes, reduce opportunities for code re-use, and
 conflate the command/query distinction.
@@ -95,25 +94,12 @@ await _rotateOrganizationApiKeyCommand.RotateApiKeyAsync(currentApiKey);
 This has unit testing benefits as well - instead of having lengthy "arrange" phases where you mock
 query results, you can simply supply different argument values using the `Autodata` attribute.
 
-### Avoid Primitive Obsession
+### Avoid [primitive obsession](https://refactoring.guru/smells/primitive-obsession)
 
 Where practical, your commands and queries should take and return whole objects (e.g. `User`) rather
 than individual properties (e.g. `userId`).
-[Read more about Primitive Obsession](https://refactoring.guru/smells/primitive-obsession).
 
 ### Avoid excessive optional parameters
 
 Lots of optional parameters can quickly become difficult to work with. Instead, consider using
 method overloading to provide different entry points into your command or query.
-
-### Transition plan
-
-We are gradually transitioning to a CQRS pattern over time. If you're making changes that use or
-affect a service method, consider whether it can be extracted to a query/command, and include it in
-your work as tech debt.
-
-However, you may need to draw a line somewhere. Our current domain services are large and
-inter-dependent and we cannot break them up all at once. It's okay to refactor "one level deep" and
-then leave other methods where they are. This may result in your new query/command still being
-somewhat coupled with other service methods. This is acceptable for now while we transition, but we
-should be removing those interdependencies over time.
