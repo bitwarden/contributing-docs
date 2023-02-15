@@ -17,7 +17,7 @@ Here is how you can get involved:
   [Feature Requests category](https://community.bitwarden.com/c/feature-requests/) of the Community
   Forums. Please search existing feature requests before making a new one
 - **Write code for a new feature:** Create a new
-  [Github Discussions](https://github.com/bitwarden/clients/discussions) post outlining your
+  [Github Discussions](https://github.com/orgs/bitwarden/discussions) post outlining your
   proposal. Include a description of your proposed contribution, screeshots, and links to any
   relevant [feature requests](https://community.bitwarden.com/c/feature-requests/5/none). This helps
   get feedback from the community and Bitwarden team members before you start writing code
