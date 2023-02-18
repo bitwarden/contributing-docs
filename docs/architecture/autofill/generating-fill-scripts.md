@@ -98,7 +98,7 @@ done by looking at all fields in the Page Details **prior** to the password in t
 either:
 
 - An exact match from the
-  [UsernameFieldNames](https://github.com/bitwarden/clients/blob/master/apps/browser/src/autofill/services/autofill-constants.ts)
+  [`UsernameFieldNames`](https://github.com/bitwarden/clients/blob/master/apps/browser/src/services/autofillConstants.ts)
   list, or
 - The text, email, or telephone field closest to the password field in the DOM
 
