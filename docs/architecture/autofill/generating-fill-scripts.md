@@ -148,7 +148,7 @@ For that field, we then loop through all of the field's attributes from the `Car
 - `data-recurly`
 
 In the
-[`CreditCardAutoFillConstants`](https://github.com/bitwarden/clients/blob/master/apps/browser/src/autofill/services/autofill-constants.ts),
+[`CreditCardAutoFillConstants`](https://github.com/bitwarden/clients/blob/master/apps/browser/src/services/autofillConstants.ts),
 we define a static list of possible matching values for each of the fields on the Card Cipher type.
 For example, we define a `CardHolderFieldNames` array, which has all of the attribute values that we
 look for to find the likely "Cardholder Name" field in the DOM - and thus the field we want to fill
@@ -196,7 +196,7 @@ array. For that field, we then loop through all of the field's attributes from t
 - `data-recurly`
 
 In the
-[`IdentityAutoFillConstants`](https://github.com/bitwarden/clients/blob/master/apps/browser/src/autofill/services/autofill-cnstants.ts),
+[`IdentityAutoFillConstants`](https://github.com/bitwarden/clients/blob/master/apps/browser/src/services/autofillConstants.ts),
 we define a static list of possible matching values for each of the fields on the Identity Cipher
 type. For example, we define a `FirstnameFieldNames` array, which has all of the attribute values
 that we look for to find the likely "First Name" field in the DOM - and thus the field we want to
