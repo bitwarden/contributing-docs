@@ -51,7 +51,7 @@ interface StateService {
 //  DO NOT EXPORT IT.
 const StorageKey = "organizations";
 
-class Organization {
+class OrganizationService {
   async save(organizations: { [adr: string]: OrganizationData }) {
     await this._stateService.saveAccountData(this._activeAccount, StorageKey, organizations);
     await this._organizations$.next(await this.decryptOrgs(this._activeAccount, organizations));
