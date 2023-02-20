@@ -42,13 +42,8 @@ If the node is a shadow root, we try to recursively descend into it using the br
   [chrome.dom.openOrClosedShadowRoot](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/dom/openOrClosedShadowRoot) -
   ignores the `mode` property and works for open and closed shadow roots
 - **Firefox:**
-  [Element.openOrClosedShadowRoot](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/dom/openOrClosedShadowRoot) -
-  ignores the `mode` property and works for open and closed shadow roots. Note that this method
-  appears to have been moved to the `browser.dom` namespace but it is unclear from what Firefox
-  version that change will take effect. Our current usage is based on superseded documentation which
-  can be viewed
-  [here](https://github.com/mdn/content/pull/23989/files#diff-7f37c425019133d3fb533ca931fd4bfeeadd74e8e81418da513b5a1ba8f49ccc)
-  and appears to still be correct as at Firefox 110.0.
+  [Element.openOrClosedShadowRoot](https://developer.mozilla.org/en-US/docs/Web/API/Element/openOrClosedShadowRoot) -
+  ignores the `mode` property and works for open and closed shadow roots
 - **Safari and others:**
   [Element.shadowRoot](https://developer.mozilla.org/en-US/docs/Web/API/Element/shadowRoot) -
   respects the `mode` property and will only work for `"open"` shadow roots. We fall back to this
