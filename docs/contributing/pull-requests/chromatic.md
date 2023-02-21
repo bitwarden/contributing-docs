@@ -7,8 +7,8 @@ sidebar_custom_props:
 
 We use a tool called [Chromatic][chromatic] to run automated snapshot tests for all Storybook
 stories. This allows us to quickly catch design regressions in an automated fashion. As part of this
-we use Chromatic to also review and approve the visual changes. Members of the bitwarden
-organization can login to Chromatic using GitHub.
+we use Chromatic to also review and approve the visual changes. Members of the Bitwarden GitHub
+organization can login to Chromatic using their GitHub account.
 
 Chromatic splits the review process into two parts, _UI Tests_ and _UI Review_.
 
@@ -38,9 +38,12 @@ can easily be accessed by clicking on the **UI Tests** check in the pull request
 
 ![Chromatic UI Tests](ui-tests.png)
 
-_UI Review_ depends on the changes. Changes to the Component Library should be reviewed by the
-design department, which is done by requesting a review of `bitwarden/dept-design` in GitHub. For
-all other changes the reviewing developer is responsible for approving the UI Review in Chromatic.
+The action required for _UI Review_ depends on the failing stories:
+
+- Component Library should be reviewed by the design department, which is done by requesting a
+  review of `bitwarden/dept-design` in GitHub.
+- Other changes should be reviewed by the reviewing developer(s).
+
 The review can be accessed by clicking on the **UI Review** check.
 
 ![Chromatic UI Review & Publish](publish-review.png)
