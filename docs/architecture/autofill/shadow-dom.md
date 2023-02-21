@@ -3,6 +3,7 @@
 ## Introduction
 
 The Shadow DOM API allows a separate, encapsulated DOM tree to be embedded in a page.
+
 [From MDN](https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_shadow_DOM):
 
 > An important aspect of web components is encapsulation — being able to keep the markup structure,
@@ -38,13 +39,13 @@ each node. In practice, we check each visited node for two criteria:
 
 If the node is a shadow root, we try to recursively descend into it using the browser API available:
 
-- **Chrome:**
+- **Chrome: **
   [chrome.dom.openOrClosedShadowRoot](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/dom/openOrClosedShadowRoot) -
   ignores the `mode` property and works for open and closed shadow roots
-- **Firefox:**
+- **Firefox: **
   [Element.openOrClosedShadowRoot](https://developer.mozilla.org/en-US/docs/Web/API/Element/openOrClosedShadowRoot) -
   ignores the `mode` property and works for open and closed shadow roots
-- **Safari and others:**
+- **Safari and others: **
   [Element.shadowRoot](https://developer.mozilla.org/en-US/docs/Web/API/Element/shadowRoot) -
   respects the `mode` property and will only work for `"open"` shadow roots. We fall back to this
-  method if the other APIs are not available.
+  method if the other APIs are not available
