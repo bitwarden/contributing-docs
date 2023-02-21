@@ -33,8 +33,11 @@ Chromatic splits the review process into two parts, _UI Tests_ and _UI Review_.
 
 ## Reviewing
 
-Each pull request author is responsible for reviewing the _UI Tests_ results in Chromatic. The tests
-can easily be accessed by clicking on the **UI Tests** check in the pull request.
+Chromatic will mark a pull request as pending if there are visual changes. Each pull request author
+is responsible for reviewing the _UI Tests_ results in Chromatic and approve that the changes are
+intentional.
+
+The tests can easily be accessed by clicking on the **UI Tests** check in the pull request.
 
 ![Chromatic UI Tests](ui-tests.png)
 
