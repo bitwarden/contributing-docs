@@ -1,3 +1,7 @@
+---
+sidebar_position: 4
+---
+
 # Pull Requests
 
 Pull Requests are the primary mechanism we use to write software. GitHub has some great

@@ -1,4 +1,8 @@
-# Developer Introduction to Accessibility
+---
+sidebar_position: 5
+---
+
+# Accessibility
 
 Bitwarden strives to comply with WCAG AA requirements. The following serves as an introduction to
 common aspects of accessibility that should be considered while implementing features and content.
