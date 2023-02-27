@@ -7,8 +7,16 @@
 Error:
 `Interop.AppleCrypto.AppleCFErrorCryptographicException: The operation couldn't be completed.`
 
-Mac can sometimes set trust settings for your certificates as admin instead of as user. If you don't
-see your certificates by running:
+There could be a couple fixes to this problem, the most likely is you need to restart your device.
+
+If that doesn't work, you could try force unlocking your login keychain with:
+
+```bash
+security -v unlock-keychain /Users/$USER/Library/Keychains/login.keychain
+```
+
+If that doesn't work either, Mac can sometimes set trust settings for your certificates as admin
+instead of as user. If you don't see your certificates by running:
 
 ```bash
 security dump-trust-settings
