@@ -10,9 +10,13 @@ stories. This allows us to quickly catch design regressions in an automated fash
 we use Chromatic to also review and approve the visual changes. Members of the Bitwarden GitHub
 organization can login to Chromatic using their GitHub account.
 
-Chromatic splits the review process into two parts, _UI Tests_ and _UI Review_.
+## Checks
 
-## UI Tests
+Chromatic splits the review process into two parts, _UI Tests_ and _UI Review_. These appear as two
+different checks on the PR and need to be handled differently. The expectations for handling each
+one are broken down in detail below.
+
+### UI Tests
 
 > UI tests capture a visual snapshot of every story in a cloud browser environment. Whenever you
 > push code, Chromatic generates a new set of snapshots and compares them against baselines. If
@@ -20,7 +24,7 @@ Chromatic splits the review process into two parts, _UI Tests_ and _UI Review_.
 >
 > <cite>https://www.chromatic.com/docs/test</cite>
 
-## UI Review
+### UI Review
 
 > UI tests protect you from accidental regressions. But, before you ship, you’ll want to invite
 > developers, designers, and PMs to review the UI to make sure it’s correct.
