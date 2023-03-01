@@ -53,22 +53,3 @@ encapsulate the most commonly used core components.
 
 We use [Storybook](https://storybook.js.org/) to develop components in isolation. To launch
 storybook run the `npm run storybook` command in the root of `clients` repository.
-
-#### Chromatic
-
-:::note
-
-This section applies to Bitwarden developers only.
-
-:::
-
-The changes to the Component Library has an additional review process where a designer needs to
-approve the visual changes. We use a tool called
-[Chromatic](https://www.chromatic.com/builds?appId=622b79f994de1f003a54ce6f) to track these changes
-and members of the GitHub Bitwarden organization can login to Chromatic using GitHub to review
-visual changes.
-
-If you PR has **UI Review** check as pending or denied please reach out to Design to get your
-changes approved.
-
-![Chromatic PR review](chromatic.png)
