@@ -20,14 +20,16 @@ Start the following server projects:
 
 In your browser do the following steps to access Okta.
 
-1.  Launch the "[oktapreview.com](http://oktapreview.com)" login item in the Development collection.
-    Log in using those credentials
-2.  Click the "Admin" button in the top-right
-3.  Click "Users" -> "People"
-4.  Click "Add Person" and create a profile for yourself. Use the same email as your local Bitwarden
-    user and set a password. Save.
-5.  Click "Applications" in the top menu bar
-6.  You should now see a list of our test apps. For the purpose of local testing, click the
+1.  Launch the "[oktapreview.com](http://oktapreview.com)" login item in the Development collection
+2.  Log in using those credentials
+3.  Expand the "Directory" section on the left menu panel
+4.  Click "People"
+5.  Click "Add Person" and create a profile for yourself
+    - Use the same email as your local Bitwarden user
+    - For the Password field, choose "Set by admin" and set a secure password
+    - Uncheck "User must change password on first login"
+6.  Click "Applications" in the top menu bar
+7.  You should now see a list of our test apps. For the purpose of local testing, click the
     "Bitwarden Test 2" application. The Client Credentials and other information for this
     application will be listed, which you can use in the subsequent steps.
 
@@ -38,13 +40,13 @@ Open a separate browser tab to configure SSO in your local Bitwarden web vault.
     just be the organization name. Click Save.
 3.  Go to `Manage > Single Sign-On` and input the following information:
 
-| Type                               | OpenId Connect                       |
-| ---------------------------------- | ------------------------------------ |
-| Authority                          | Copy from Okta, prefix with https:// |
-| Client ID                          | Copy from Okta                       |
-| Client Secret                      | Copy from Okta                       |
-| OIDCS Redirect Behaviour           | Redirect Get                         |
-| Get Claims From User Info Endpoint | :white_check_mark:                   |
+| Type                               | OpenId Connect                     |
+| ---------------------------------- | ---------------------------------- |
+| Authority                          | https://dev-836655.oktapreview.com |
+| Client ID                          | Copy from Okta                     |
+| Client Secret                      | Copy from Okta                     |
+| OIDCS Redirect Behaviour           | Redirect GET                       |
+| Get Claims From User Info Endpoint | :white_check_mark:                 |
 
 You can now log in using SSO.
 
