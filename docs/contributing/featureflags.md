@@ -64,7 +64,7 @@ debugging code.
 
 ### Clients / Mobile
 
-:::warning
+:::caution
 
 Clients should now refresh configuration upon startup, login, when their local configuration is
 updated, and when sync events come in.
@@ -80,7 +80,7 @@ Given the variety of clients and unique implementations, a few general rules:
 
 ## Creating a new flag
 
-:::warning
+:::caution
 
 Compile-time configuration should be converted to use feature flags where appropriate. That said,
 feature flags are not to be used for permanent configuration – logic and storage should be developed
