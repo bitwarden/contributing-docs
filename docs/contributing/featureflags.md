@@ -76,7 +76,7 @@ Given the variety of clients and unique implementations, a few general rules:
 - Utilize the collection of feature states returned from the configuration API.
 - When in need of a feature state depend on what’s cached locally and available – this should
   refresh frequently enough.
-- Maintain constants for feature flag keys.
+- Maintain typed constants for feature flag keys.
 
 ## Creating a new flag
 
