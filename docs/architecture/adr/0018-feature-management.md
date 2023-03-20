@@ -1,6 +1,6 @@
 ---
 adr: "0018"
-status: In progress
+status: Done
 date: 2023-02-01
 tags: [server]
 ---
