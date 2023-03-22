@@ -8,12 +8,12 @@ sidebar_custom_props:
 ## Background
 
 Support for feature flags was added based on
-[ADR 0019](https://contributing.bitwarden.com/architecture/adr/feature-management/). Some
+[ADR 0018](https://contributing.bitwarden.com/architecture/adr/feature-management/). Some
 highlights:
 
 - [Context](https://github.com/bitwarden/server/blob/master/src/Core/Context/ICurrentContext.cs) is
-  provided when requesting the state of a flag. We currently allow targeting on user and
-  organization. Only the IDs are sent to LaunchDarkly to avoid PII sharing.
+  provided when requesting the state of a flag. We currently allow targeting on user, organization,
+  and service account. Only the IDs are sent to LaunchDarkly to avoid PII sharing.
 - All available feature flag states are provided to clients calling the
   [configuration API](https://github.com/bitwarden/server/blob/master/src/Api/Models/Response/ConfigResponseModel.cs).
 - Environments (production, QA, and development for now) exist to segment flag states further. This
