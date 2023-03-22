@@ -11,9 +11,23 @@ import CodeBlock from "@theme/CodeBlock";
 ## Requirements
 
 - Before you start, you must complete the [Clients repository setup instructions](../index.md).
-
 - If you want to develop against a local server instance, see the
   [Server Setup Guide](../../server/guide.md).
+
+### SSL Certificate
+
+It's recommended to generate a valid SSL certificate for local development rather than using the
+shared development cert. This will prevent browser warnings about invalid certificates and properly
+support WebAuthn which is blocked on websites with certificate errors. Please follow the
+[mkcert installation instructions](https://github.com/FiloSottile/mkcert#installation).
+
+```bash
+# Install CA
+mkcert --install
+
+# Generate cert valid for localhost, 127.0.0.1 and bitwarden.test
+mkcert -cert-file dev-server.local.pem -key-file dev-server.local.pem localhost 127.0.0.1 bitwarden.test
+```
 
 ## Build Instructions
 
