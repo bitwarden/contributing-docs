@@ -66,7 +66,7 @@ recommended ones include the following:
 
 - General
   - [Back & Forth](https://marketplace.visualstudio.com/items?itemName=nick-rudenko.back-n-forth) -
-    Adds forward and back buttons to top right of your editor. Simple, but I love it.
+    Adds forward and back buttons to top right of your editor. Simple, but incredibly useful.
   - [Code Spell Checker](https://marketplace.visualstudio.com/items?itemName=streetsidesoftware.code-spell-checker) -
     can be annoying, but has saved me lots of `tmes form writting oragnizations.`
   - [LiveShare](https://marketplace.visualstudio.com/items?itemName=MS-vsliveshare.vsliveshare) -
