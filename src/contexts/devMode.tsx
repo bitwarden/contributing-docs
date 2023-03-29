@@ -19,7 +19,7 @@ export const DevModes = {
   bitwarden: "bitwarden",
 } as const;
 
-export type DevMode = typeof DevModes[keyof typeof DevModes];
+export type DevMode = (typeof DevModes)[keyof typeof DevModes];
 
 const coerceToDevMode = (devMode?: string | null): DevMode =>
   devMode === DevModes.bitwarden ? DevModes.bitwarden : DevModes.community;
