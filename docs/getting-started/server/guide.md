@@ -146,6 +146,8 @@ You can connect to it using Azure Data Studio using the following credentials:
 - Username: sa
 - Password: (the password you set in `dev/.env`)
 
+![title](./gifs/giphy.gif)
+
 ### Mailcatcher
 
 The server uses emails for many user interactions. We provide a pre-configured instance of
