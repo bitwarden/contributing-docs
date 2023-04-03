@@ -146,7 +146,7 @@ You can connect to it using Azure Data Studio using the following credentials:
 - Username: sa
 - Password: (the password you set in `dev/.env`)
 
-![GIF showing how to make connection with Azure Data Studio](./gifs/giphy.gif)
+![GIF showing how to make connection with Azure Data Studio](sql-azure-connection.gif)
 
 ### Mailcatcher
 
