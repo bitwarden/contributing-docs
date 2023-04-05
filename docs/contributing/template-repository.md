@@ -77,9 +77,9 @@ dependencies. It:
 - Combines minor and patch changes into one rollup pull request, per package manager.
 - Uses a dependency dashboard so we can see what pull requests are not yet created but still manage
   the workload.
-- Manages updates weekly with rebases, semantic versioning, and lock file updates.
+- Manages updates with rebases, semantic versioning, and lock file updates.
 - Has a small pull request limit as a starting point.
-- Includes major updates as individual pull requests.
+- Includes major updates (the latest) as individual pull requests.
 - Schedules runs to happen on the weekend when more Actions workers are likely available for the
   organization.
 
