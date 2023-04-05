@@ -87,6 +87,9 @@ All package managers are recommended to be left enabled should a repository expa
 include new ones. Update schedules and how many pull requests are up to the individual repository.
 Exceptions, other package manager, and dependency-specific configuration may be needed.
 
+Consider [best practices](https://docs.renovatebot.com/dependency-pinning/#so-whats-best) with
+pinning dependencies (especially at the root), like those used for local linting above.
+
 ## Issue templates
 
 Configuration for issues with centralized and relevant links as well as a template for pull request
