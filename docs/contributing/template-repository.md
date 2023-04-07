@@ -88,7 +88,10 @@ include new ones. Update schedules and how many pull requests are up to the indi
 Exceptions, other package manager, and dependency-specific configuration may be needed.
 
 Consider [best practices](https://docs.renovatebot.com/dependency-pinning/#so-whats-best) with
-pinning dependencies (especially at the root), like those used for local linting above.
+pinning dependencies (especially at the root), like those used for local linting above. Development
+dependencies such as formatters and linters deserve communication and coordinated rollout across all
+teams so that code style is consistent per our standards and the editor configurations seen in the
+template repository itself.
 
 ## Issue templates
 
