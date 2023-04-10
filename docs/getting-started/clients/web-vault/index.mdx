@@ -2,10 +2,6 @@
 sidebar_position: 2
 ---
 
-import Tabs from "@theme/Tabs";
-import TabItem from "@theme/TabItem";
-import CodeBlock from "@theme/CodeBlock";
-
 # Web Vault
 
 ## Requirements
@@ -78,14 +74,21 @@ default ports). You can use the official Bitwarden server instead or configure c
 To use the official Bitwarden server, follow the build instructions above, but run the Web Vault
 using the following command:
 
-<Tabs groupId="dev">
-  <TabItem value="community" label="Community Developer" default>
-    <CodeBlock language="bash">{`ENV=cloud npm run build:oss:watch`}</CodeBlock>
-  </TabItem>
-  <TabItem value="bitwarden" label="Bitwarden Developer">
-    <CodeBlock language="bash">{`ENV=cloud npm run build:bit:watch`}</CodeBlock>
-  </TabItem>
-</Tabs>
+<community>
+
+```bash
+ENV=cloud npm run build:oss:watch
+```
+
+</community>
+
+<bitwarden>
+
+```bash
+ENV=cloud npm run build:bit:watch
+```
+
+</bitwarden>
 
 ### Custom Endpoints
 
