@@ -1,7 +1,3 @@
----
-sidebar_position: 5
----
-
 # Event Logs
 
 Bitwarden event logs are used for Teams and Enterprise organizations to capture timestamped records
