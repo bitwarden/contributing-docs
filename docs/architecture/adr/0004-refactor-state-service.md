@@ -18,7 +18,7 @@ handled by a single service. This has resulted in everything being tightly coupl
 `StateService` essentially making it a God object.
 
 Additionally any service or component can directly access any state using the state service. Which
-makes it difficult to follow the state lifecycle of each data type, and introduces uncertanty in how
+makes it difficult to follow the state lifecycle of each data type, and introduces uncertainty in how
 the data is accessed.
 
 ## Decision Outcome
@@ -27,8 +27,8 @@ We should refactor the state service to be a generic storage container.
 
 - Good: Eliminates the "good" functionality of the state service
 - Good: State is maintained by the service which owns it.
-- Good: No arbitary access of data.
-- Bad: Brings back arbitary keys that must be unique.
+- Good: No arbitrary access of data.
+- Bad: Brings back arbitrary keys that must be unique.
 
 ### Example
 

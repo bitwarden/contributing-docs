@@ -37,7 +37,7 @@ Chosen option: **Adopt a feature management system with local fallback**.
 
 ### Positive Consequences
 
-- Robust featureset for flags and their variations.
+- Robust feature set for flags and their variations.
 - Protection from changes and targeted impact, along with a speed in overall delivery (with managed
   functionality assumed to be turned "off").
 - Context-sensitive application of features.
@@ -50,7 +50,7 @@ Chosen option: **Adopt a feature management system with local fallback**.
 ### Plan
 
 The [server][server] codebase will adopt a .NET SDK for a service provider that offers feature
-management. Only the serverside SDK will be used to manage access and cost and feature states will
+management. Only the server-side SDK will be used to manage access and cost and feature states will
 be communicated down to calling clients where appropriate via API response elements. New features
 will be set up inside the service provider's platform, and changes to them will be streamed to the
 running applications. Access to the provider will be controlled internally.

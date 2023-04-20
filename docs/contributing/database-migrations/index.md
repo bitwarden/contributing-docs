@@ -27,7 +27,7 @@ Style][code-style-sql] first, since they have a major impact in how we write mig
 
 :::
 
-In accordinance with the tenets of [Evolutionary Database Design](./edd.mdx), each change needs to
+In accordance with the tenets of [Evolutionary Database Design](./edd.mdx), each change needs to
 be considered to be split into two parts:
 
 1. A backwards-compatible transition migration
