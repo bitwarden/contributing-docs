@@ -12,4 +12,5 @@ languageSettings:
       # Ref: https://github.com/streetsidesoftware/vscode-spell-checker/issues/202#issuecomment-377477473
       - "/^\\s*```[\\s\\S]*?^\\s*```/gm"
       # Ignore in-line code using single tildes (`)
+      # TODO: fix this so it pairs them
       - "`.*`"

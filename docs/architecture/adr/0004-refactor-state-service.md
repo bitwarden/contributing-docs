@@ -18,8 +18,8 @@ handled by a single service. This has resulted in everything being tightly coupl
 `StateService` essentially making it a God object.
 
 Additionally any service or component can directly access any state using the state service. Which
-makes it difficult to follow the state lifecycle of each data type, and introduces uncertainty in how
-the data is accessed.
+makes it difficult to follow the state lifecycle of each data type, and introduces uncertainty in
+how the data is accessed.
 
 ## Decision Outcome
 
