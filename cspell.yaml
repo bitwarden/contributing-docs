@@ -1,0 +1,15 @@
+---
+dictionaries:
+  - custom-words
+dictionaryDefinitions:
+  - name: custom-words
+    path: ./custom-words.txt
+    addWords: true
+languageSettings:
+  - languageId: markdown
+    ignoreRegExpList:
+      # Ignore code blocks using triple-tilde (```)
+      # Ref: https://github.com/streetsidesoftware/vscode-spell-checker/issues/202#issuecomment-377477473
+      - "/^\\s*```[\\s\\S]*?^\\s*```/gm"
+      # Ignore in-line code using single tildes (`)
+      - "`.*`"
