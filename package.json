@@ -15,7 +15,8 @@
     "typecheck": "tsc",
     "prettier": "prettier --write .",
     "lint": "prettier --check .",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "spellcheck": "cspell lint **/*.md"
   },
   "dependencies": {
     "@docusaurus/core": "2.4.0",
@@ -53,6 +54,7 @@
     "node": ">=16.14"
   },
   "lint-staged": {
-    "*.{js,jsx,css,md,mdx,tsx,ts}": "prettier --write"
+    "*.{js,jsx,css,md,mdx,tsx,ts}": "prettier --write",
+    "*.md": "cspell lint"
   }
 }
