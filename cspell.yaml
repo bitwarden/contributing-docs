@@ -6,9 +6,9 @@ dictionaryDefinitions:
     path: ./custom-words.txt
     addWords: true
 patterns:
-    # Ignore multi-line code blocks
-    # Ref: https://cspell.org/configuration/patterns/
-    # Modified to avoid matching line breaks before/after which had unexpected results
+  # Ignore multi-line code blocks
+  # Ref: https://cspell.org/configuration/patterns/
+  # Modified to avoid matching line breaks before/after which had unexpected results
   - name: markdown_code_block
     pattern: |
       /
@@ -29,8 +29,8 @@ patterns:
       /gx
 languageSettings:
   - languageId:
-    - markdown
-    - mdx
+      - markdown
+      - mdx
     ignoreRegExpList:
       - markdown_code_block
       - markdown_code_inline

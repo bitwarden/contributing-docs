@@ -54,7 +54,7 @@
     "node": ">=16.14"
   },
   "lint-staged": {
-    "*.{js,jsx,css,md,mdx,tsx,ts}": "prettier --write",
-    "*.md": "cspell lint"
+    "*.{js,jsx,css,md,mdx,tsx,ts,yaml}": "prettier --write",
+    "*.md{x,}": "cspell lint"
   }
 }
