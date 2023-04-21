@@ -8,6 +8,7 @@ dictionaryDefinitions:
 patterns:
     # Ignore multi-line code blocks
     # Ref: https://cspell.org/configuration/patterns/
+    # Modified to avoid matching line breaks before/after which had unexpected results
   - name: markdown_code_block
     pattern: |
       /
@@ -15,15 +16,21 @@ patterns:
           (`{3}).*    # match the ``` and any optional language specification afterwards
           [\s\S]*?    # the block of code
           ^[ \t]*     # match optional whitespace before the ```
-          \1        # end of the block
+          \1          # end of the block
       /gmx
+
+    # Ignore inline code blocks
+  - name: markdown_code_inline
+    pattern: |
+      /
+          `           # match the opening `
+          .*?         # match any characters, lazily (so that we stop at the next tilde)
+          `           # match the closing `
+      /gx
 languageSettings:
   - languageId:
     - markdown
     - mdx
     ignoreRegExpList:
       - markdown_code_block
-      # Ignore in-line code using single tildes (`)
-      # Uses negative lookahead to make sure it pairs tildes correctly and doesn't capture text
-      # between closing & opening tildes
-      - "`.*?`"
+      - markdown_code_inline
