@@ -5,13 +5,25 @@ dictionaryDefinitions:
   - name: custom-words
     path: ./custom-words.txt
     addWords: true
+patterns:
+    # Ignore multi-line code blocks
+    # Ref: https://cspell.org/configuration/patterns/
+  - name: markdown_code_block
+    pattern: |
+      /
+          ^[ \t]*     # match optional whitespace before the ```
+          (`{3}).*    # match the ``` and any optional language specification afterwards
+          [\s\S]*?    # the block of code
+          ^[ \t]*     # match optional whitespace before the ```
+          \1        # end of the block
+      /gmx
 languageSettings:
-  - languageId: markdown
+  - languageId:
+    - markdown
+    - mdx
     ignoreRegExpList:
-      # Ignore code blocks using triple-tilde (```)
-      # Ref: https://github.com/streetsidesoftware/vscode-spell-checker/issues/202#issuecomment-377477473
-      - "/^\\s*```[\\s\\S]*?^\\s*```/gm"
+      - markdown_code_block
       # Ignore in-line code using single tildes (`)
       # Uses negative lookahead to make sure it pairs tildes correctly and doesn't capture text
       # between closing & opening tildes
-      - "(`)((?:.(?!`))*.?)\\1"
+      - "`.*?`"

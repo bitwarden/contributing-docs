@@ -39,3 +39,13 @@ Yellowpages
 CODEOWNERS
 SDLC
 subprocessor
+Gitter
+IntelliJ
+WCAG
+pinentry
+refactorings
+toolset
+keypair
+onboarded
+OIDCS
+oktapreview
