@@ -34,6 +34,15 @@ END
 GO
 ```
 
+#### Deleting a table
+
+When deleting a table, use `IF EXISTS` to avoid an error if the table doesn't exist.
+
+```sql
+DROP IF EXISTS [dbo].[{table_name}]
+GO
+```
+
 #### Adding a column to a table
 
 You must first check to see if the column exists before adding it to the table.
@@ -128,7 +137,9 @@ view metadata.
 EXECUTE sp_refreshview N'[dbo].[{view_name}]
 ```
 
-### Create or Modify a View
+### Views
+
+#### Creating or Modifying a View
 
 We recommend using the `CREATE OR ALTER` syntax for adding or modifying a view.
 
@@ -139,6 +150,15 @@ SELECT
     *
 FROM
     [dbo].[{table_name}]
+GO
+```
+
+#### Deleting a View
+
+When deleting a view, use `IF EXISTS` to avoid an error if the table doesn't exist.
+
+```sql
+DROP IF EXISTS [dbo].[{view_name}]
 GO
 ```
 
@@ -156,7 +176,9 @@ END
 GO
 ```
 
-### Create or Modify a Function or Stored Procedure
+### Functions and Stored Procedures
+
+#### Creating or Modifying a Function or Stored Procedure
 
 We recommend using the `CREATE OR ALTER` syntax for adding or modifying a function or stored
 procedure.
@@ -164,6 +186,15 @@ procedure.
 ```sql
 CREATE OR ALTER {PROCEDURE|FUNCTION} [dbo].[{sproc_or_func_name}]
 '...
+GO
+```
+
+#### Deleting a Function or Stored Procedure
+
+When deleting a function or stored procedure, use `IF EXISTS` to avoid an error if it doesn't exist.
+
+```sql
+DROP IF EXISTS [dbo].[{sproc_or_func_name}]
 GO
 ```
 
