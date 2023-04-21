@@ -1,8 +1,4 @@
----
-sidebar_position: 4
----
-
-# Autofill
+# Browser Autofill
 
 ## Core Concepts
 
