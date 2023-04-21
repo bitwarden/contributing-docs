@@ -19,7 +19,7 @@ patterns:
           \1          # end of the block
       /gmx
 
-    # Ignore inline code blocks
+  # Ignore inline code blocks
   - name: markdown_code_inline
     pattern: |
       /
