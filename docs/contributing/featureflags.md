@@ -21,19 +21,19 @@ highlights:
 
 ## Using feature flags in code
 
-### Client implementations
-
 :::tip
 
-Default to an "off" state whenever possible – code defensively so that existing functionality is
-maintained should a flag be unavailable altogether. When an interface supports it, also provide
-default values implying "off" to feature flag accessors.
+When coding against a feature flag, default to an "off" state whenever possible – code defensively
+so that existing functionality is maintained should a flag be unavailable altogether. When an
+interface supports it, also provide default values implying "off" to feature flag accessors.
 
 Offline mode makes default values even more important, and local development as well as self-hosted
 installations imply being offline. Set a safe default value not just in the flag definition online
 at LaunchDarkly but in code.
 
 :::
+
+### Client implementations
 
 #### Web clients
 
@@ -78,7 +78,7 @@ the retrieval methods:
 
 Each of these methods accept a default value. This value should always default to "off".
 
-### Server
+### Server implementation
 
 1. Inject `IFeatureService` where you need a feature flag. Note that you’ll also need
    `ICurrentContext` when accessing the feature state.
