@@ -21,6 +21,10 @@ highlights:
 
 ## Using feature flags in code
 
+### Client implementations
+
+:::tip
+
 Default to an "off" state whenever possible – code defensively so that existing functionality is
 maintained should a flag be unavailable altogether. When an interface supports it, also provide
 default values implying "off" to feature flag accessors.
@@ -28,6 +32,51 @@ default values implying "off" to feature flag accessors.
 Offline mode makes default values even more important, and local development as well as self-hosted
 installations imply being offline. Set a safe default value not just in the flag definition online
 at LaunchDarkly but in code.
+
+:::
+
+#### Web clients
+
+The feature flag values are retrieved through the `fetchServerConfig()` method on the
+`ConfigService`. They are refreshed from the server at the following points in the application
+lifecycle:
+
+- On application startup
+- Every hour after application startup
+- On flag retrieval, if the values have not been refreshed in 18 hours
+- On sync (both automatic and manual)
+
+To use a feature flag, you should first define the new feature flag as an enum value in the
+`FeatureFlags` enum.
+
+Once that is defined, the value can be retrieved by injecting the `ConfigService` and using one of
+the retrieval methods:
+
+- `getFeatureFlagBool()`
+- `getFeatureFlagString()`
+- `getFeatureFlagNumber()`
+
+Each of these methods accept a default value. This value should always default to "off".
+
+#### Mobile
+
+The feature flag values are retrieved through the `GetAsync()` method on the `ConfigService`. They
+are refreshed from the server at the following points in the application lifecycle:
+
+- The first time a configuration value is accessed
+- Every hour after first access
+
+To use a feature flag, you should first define the new feature flag as an enum value in the
+`Constants` enum.
+
+Once that is defined, the value can be retrieved by injecting the `IConfigService` and using one of
+the retrieval methods:
+
+- `GetFeatureFlagBoolAsync()`
+- `GetFeatureFlagStringAsync()`
+- `GetFeatureFlagNumberAsync()`
+
+Each of these methods accept a default value. This value should always default to "off".
 
 ### Server
 
@@ -62,31 +111,11 @@ on running and the system will pick it up; ensure the file is there before start
 supports live reloading so you can change the file contents and see immediate results in running /
 debugging code.
 
-### Clients / Mobile
-
-:::note
-
-Clients should now refresh configuration upon startup, login, when their local configuration is
-updated, and when sync events come in.
-
-:::
-
-Given the variety of clients and unique implementations, a few general rules:
-
-- Utilize the collection of feature states returned from the configuration API.
-- When in need of a feature state depend on what’s cached locally and available – this should
-  refresh frequently enough.
-- Maintain typed constants for feature flag keys.
-
 ## Creating a new flag
-
-:::note
 
 Compile-time configuration should be converted to use feature flags where appropriate. That said,
 feature flags are not to be used for permanent configuration – logic and storage should be developed
 to maintain this long-term.
-
-:::
 
 Talk with your team, manager / lead, and product about how and when to create new feature flags.
 Depending on how a project / solution is being delivered it may be best to use the online
@@ -113,7 +142,7 @@ Configure default states to be "off". While rather advanced,
 them. Boolean values are by their nature not really able to use this but other data types like
 strings certainly can.
 
-## Maintaining flags
+## Feature flag lifecycle
 
 Let your management know when you need to change something about a feature online inside
 LaunchDarkly. Only a small number of users have accounts with LaunchDarkly to save on licensing
@@ -127,3 +156,15 @@ When defining the subtasks of a story be sure to include a technical debt cleanu
 of the feature flag from code – it’s essential that these not be left around for too long and assume
 a permanent existence. Address the technical debt at a later phase once the feature launches
 successfully.
+
+### Self-hosted considerations
+
+Self-hosted instances will not have access to LaunchDarkly, so the server configuration retrieved
+from the API **will always treat all feature flags as in their "off" state**. What this means in
+practice is that the feature flag must be fully removed from the code before the feature is
+available for self-hosted instances. This implies a staged feature release cycle, as follows:
+
+1. Release cloud and self-hosted with feature flag off
+2. Turn on feature flag, which will enable the feature for cloud instances **only**
+3. Release cloud and self-hosted with feature flag removed, which enables the feature for
+   self-hosted instances
