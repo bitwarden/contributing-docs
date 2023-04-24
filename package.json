@@ -1,6 +1,17 @@
 {
-  "name": "contributing-docs",
+  "name": "@bitwarden/contributing-docs",
   "version": "0.0.0",
+  "description": "Bitwarden Contributing Docs",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bitwarden/contributing-docs.git"
+  },
+  "author": "Bitwarden Inc. <hello@bitwarden.com> (https://bitwarden.com)",
+  "license": "SEE LICENSE IN LICENSE.txt",
+  "bugs": {
+    "url": "https://github.com/bitwarden/contributing-docs/issues"
+  },
+  "homepage": "https://bitwarden.com",
   "private": true,
   "scripts": {
     "docusaurus": "docusaurus",
@@ -30,11 +41,11 @@
   },
   "devDependencies": {
     "@docusaurus/module-type-aliases": "2.4.0",
-    "@tsconfig/docusaurus": "^1.0.5",
-    "husky": "^8.0.2",
-    "lint-staged": "^13.0.3",
-    "prettier": "^2.8.7",
-    "typescript": "^5.0.0"
+    "@tsconfig/docusaurus": "1.0.7",
+    "husky": "8.0.3",
+    "lint-staged": "13.2.1",
+    "prettier": "2.8.7",
+    "typescript": "5.0.4"
   },
   "browserslist": {
     "production": [
@@ -52,6 +63,6 @@
     "node": ">=16.14"
   },
   "lint-staged": {
-    "*.{js,jsx,css,md,mdx,tsx,ts}": "prettier --write"
+    "*": "prettier --cache --write --ignore-unknown"
   }
 }
