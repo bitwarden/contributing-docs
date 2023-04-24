@@ -40,7 +40,8 @@ this by using `BrowserApi.messageListener()` to attach to `chrome.runtime.onMess
 The background scripts and listeners used in the Bitwarden extension are:
 
 <!-- prettier-ignore -->
-| Background Page / Listener   | Responsibility                          |                                    ------------------------------------------------------------------------ |
+| Background Page / Listener   | Responsibility                          |
+| ---------------------------- | --------------------------------------- |
 | `runtime.background.ts`      | Handles incoming requests related to core extension functionality. |
 | `notification.background.ts` | Handles incoming requests related to the notification bar.    |
 | `commands.background.ts`     | Handles incoming requests related to keyboard commands (including autofill) for Mv2 extensions.   |
