@@ -43,7 +43,6 @@ lifecycle:
 
 - On application startup
 - Every hour after application startup
-- On flag retrieval, if the values have not been refreshed in 18 hours
 - On sync (both automatic and manual)
 
 To use a feature flag, you should first define the new feature flag as an enum value in the
@@ -66,8 +65,8 @@ are refreshed from the server at the following points in the application lifecyc
 - The first time a configuration value is accessed
 - Every hour after first access
 
-To use a feature flag, you should first define the new feature flag as an enum value in the
-`Constants` enum.
+To use a feature flag, you should first define the new feature flag as a string constant value in
+the `Constants` file.
 
 Once that is defined, the value can be retrieved by injecting the `IConfigService` and using one of
 the retrieval methods:
