@@ -138,7 +138,7 @@ class as the foreground service. Currently, the background services are initiali
 `main.background.ts`.
 
 ```diff
--import { FolderSerivce } from '@bitwarden/common/src/services/folder.service';
+-import { FolderService } from '@bitwarden/common/src/services/folder.service';
 +import { BrowserFolderService } from '../services/browser-folder.service';
 
 -this.folderService = new FolderService(

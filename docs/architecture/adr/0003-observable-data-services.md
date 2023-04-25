@@ -68,7 +68,7 @@ class Component implements OnDestroy {
 ```
 
 In this example we use the `takeUntil` pattern which can be combined with an eslint rule to ensure
-each component clens up after themselves.
+each component cleans up after themselves.
 
 ## Pros and Cons of the Options
 
