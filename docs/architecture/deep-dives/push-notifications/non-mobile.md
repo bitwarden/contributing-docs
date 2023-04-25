@@ -7,7 +7,7 @@ for real-time client communication over WebSockets.
 ## Server Implementations
 
 When real-time changes must be communicated to the registered non-mobile clients, it is the
-responsibiity of the Bitwarden API for their configured server instance to distribute the
+responsibility of the Bitwarden API for their configured server instance to distribute the
 information. The server abstracts this with the
 [`IPushNotificationService`](https://github.com/bitwarden/server/blob/master/src/Core/Services/IPushNotificationService.cs)
 interface, which has different implementations based on whether the instance is cloud-hosted or

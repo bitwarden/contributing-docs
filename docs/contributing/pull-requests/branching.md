@@ -236,7 +236,7 @@ the hotfix should be applied. The branch naming depends upon the repository. For
 _except_ `clients`, the branch name is `hotfix-rc`. However, as we can release individual clients
 separately, each client in the `clients` repo has their own named hotfix branch:
 
-- Web: `hofix-rc-web`
+- Web: `hotfix-rc-web`
 - Desktop: `hotfix-rc-desktop`
 - Browser: `hotfix-rc-browser`
 - CLI: `hotfix-rc-cli`

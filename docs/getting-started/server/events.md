@@ -35,7 +35,7 @@ To emulate this locally:
 You should now observe that your enterprise organization is logging events (e.g. when creating an
 item or inviting a user). These should appear in the Event Logs section of the organization vault.
 
-[Azure Storage Exporer](https://learn.microsoft.com/en-us/azure/vs-azure-tools-storage-manage-with-storage-explorer)
+[Azure Storage Explorer](https://learn.microsoft.com/en-us/azure/vs-azure-tools-storage-manage-with-storage-explorer)
 lets you inspect the contents of your local Queue and Table Storage and is extremely useful for
 debugging.
 

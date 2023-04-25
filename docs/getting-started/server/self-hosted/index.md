@@ -276,7 +276,7 @@ ports they are running on.
 :::
 
 To start the other services, follow the same format, including `--launch-profile` with the
-approprirate self-hosted launch configuration.
+appropriate self-hosted launch configuration.
 
 ## Web Client
 

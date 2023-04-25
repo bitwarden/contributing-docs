@@ -103,6 +103,6 @@ docker-compose --profile idp up -d
 
 ## Troubleshooting
 
-### Bitwarden server thows “unknown userId” error
+### Bitwarden server throws “unknown userId” error
 
 You’re missing the `uid` claim for the user in `authsources.php`.

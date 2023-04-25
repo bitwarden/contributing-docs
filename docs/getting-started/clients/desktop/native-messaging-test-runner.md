@@ -86,7 +86,7 @@ socket.
 ### NativeMessageService
 
 This service uses the IPCService to connect to the locally running Bitwarden desktop app's IPC proxy
-service. It uses Bitwarden's crypto service and functions to handle encrytption and decryption of
+service. It uses Bitwarden's crypto service and functions to handle encryption and decryption of
 the messages. It utilizes a test public/private key pair located in the
 `/native-messaging-test-runner/src/variables.ts` file.
 
@@ -94,7 +94,7 @@ the messages. It utilizes a test public/private key pair located in the
 
 #### I thought Node used JavaScript? How are we using TypeScript classes, including the ones from libs?
 
-Great question! With a little magic✨ we are compiling these TypeSript files into the JavaScript
+Great question! With a little magic✨ we are compiling these TypeScript files into the JavaScript
 that Node knows and loves. This is done is with a couple of mechanisms:
 
 - **`tsconfig.json`:** In the `paths` node of this file, the files in the paths provided are

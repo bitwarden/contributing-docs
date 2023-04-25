@@ -12,7 +12,7 @@ The watchOS application is organized as follows:
 So almost all the things related to the watch app will be in the **WatchKit Extension**, the
 WatchKit App one will be only for assets and some configs.
 
-Then in the Extension we have a layered architecure:
+Then in the Extension we have a layered architecture:
 
 - State (it's a really simplified version of the iOS state)
 - Persistence (here we use `CoreData` to interact with the Database)
