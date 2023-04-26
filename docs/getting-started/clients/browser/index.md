@@ -168,10 +168,10 @@ from source.
 To avoid this, follow the instructions below to uninstall the Safari extension:
 
 1.  Open Safari
-2.  Click “Preferences” and then click the “Extensions” tab
+2.  Click “Settings” and then click the “Extensions” tab
 3.  Click uninstall next to the Bitwarden extension
 4.  Delete the Application with the extension.
-5.  Reopen Safari and check Preferences to confirm that there is no Bitwarden Browser extension
+5.  Reopen Safari and check Settings to confirm that there is no Bitwarden Browser extension
     installed. In case there still is a Bitwarden Extension please repeat step 3-4.
 6.  Quit and completely close Safari
 
@@ -213,7 +213,7 @@ the extension for every change, which is slower.
     npm run dist:safari:dmg
     ```
 
-2.  Open Safari and check Preferences to confirm that the extension is installed and enabled
+2.  Open Safari and check Settings to confirm that the extension is installed and enabled
 
 :::caution
 
@@ -224,7 +224,7 @@ You may need to
 
 To enable debugging:
 
-1.  Click “Preferences” and then click the “Advanced” tab
+1.  Click “Settings” and then click the “Advanced” tab
 2.  Enable “Show Develop menu in menu bar”
 
 You can debug the background page of the browser extension by clicking
