@@ -45,7 +45,8 @@ At Bitwarden we also use a couple of more types:
 - `.request` - Api Request
 - `.response` - Api Response
 - `.type` - Enum
-- `.service.implementation` - Implementation of an abstract service
+- `.service.abstraction` - Abstract class for a service, used for DI, not all services needs an
+  abstract class
 
 The class names are expected to use the suffix as part of their class name as well. I.e. a service
 implementation will be named `FolderServiceImplementation`, a request model will be named
