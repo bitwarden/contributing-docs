@@ -31,7 +31,7 @@ At Bitwarden we also use a couple of more types:
 - `.export` - Export Model
 - `.request` - Api Request
 - `.response` - Api Response
-- `.type` - Enum
+- `.enum` - Enum
 - `.service.implementation` - Implementation of an abstract service
 
 The class names are expected to use the suffix as part of their class name as well. I.e. a service
@@ -41,6 +41,43 @@ implementation will be named `FolderServiceImplementation`, a request model will
 Since abstracts are referenced far more frequently than implementations, they use the simplified
 type while implementations must specify they are implementations e.g `.service` for the abstract vs
 `.service.implementation` for the implantation.
+
+## Organize by Feature ([ADR-0011](../../adr/0011-angular-folder-structure.md))
+
+The folder structure should be organized by feature, in a hierarchial manner. With features in turn
+being owned by a team. Below is a simplified folder structure which may diverge somewhat from the
+current structure.
+
+In the example we have a single team, `auth` which has a single feature _Emergency Access_. The
+_Emergency Access_ feature consists of a service, some components and a pipe. The feature is further
+broken down into a `view` feature which handles viewing another users vault.
+
+```ts
+apps/web/src/app/
+├─ core/                         // Core services vital to the web app
+|  ├─ services/
+|  |  ├─ web-platform-utils.service.ts
+│  ├─ shared.module.ts
+│  ├─ index.ts
+├─ shared/                       // Shared functionality usually owned by platform
+│  ├─ feature/                   // Feature module
+│  ├─ shared.module.ts
+│  ├─ index.ts
+├─ auth/                         // Auth team
+│  ├─ shared/                    // Generic components shared across the team
+│  ├─ emergency-access/          // Feature module
+│  │  ├─ access-type.pipe.ts
+│  │  ├─ ea.module.ts
+│  │  ├─ ea-routing.module.ts
+│  │  ├─ ea.service.ts           // Service encapsulating all business logic
+│  │  ├─ ea.component.{ts,html)
+│  │  ├─ dialogs/                // Dialogs used by the root component.
+│  │  ├─ view/                   // Logical group of components for viewing ea vault
+│  │  ├─ index.ts
+│  ├─ index.ts                   // Public interface that can be used by other teams
+├─  app.component.ts
+├─ app.module.ts
+```
 
 ## Observables ([ADR-0003](../../adr/0003-observable-data-services.md))
 
