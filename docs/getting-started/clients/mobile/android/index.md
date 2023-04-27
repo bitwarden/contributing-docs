@@ -47,7 +47,7 @@ To set up a new virtual Android device for debugging:
 ### M1 Macs
 
 1.  Install and open Android Studio
-2.  In the top navbar, click on Android Studio > Preferences > Appearance & Behavior (tab) > System
+2.  In the top navbar, click on Android Studio > Settings > Appearance & Behavior (tab) > System
     Settings > Android SDK
 3.  In the SDK Platforms tab, ensure the "Show Package Details" checkbox is checked (located in the
     bottom-right)
