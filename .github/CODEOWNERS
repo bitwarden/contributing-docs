@@ -7,5 +7,8 @@
 # Leads for all reviews of documentation.
 * @bitwarden/team-leads-eng
 
+# DevOps for Actions and other workflow changes.
+.github/workflows @bitwarden/dept-devops
+
 # Architecture department for architecture content.
 docs/architecture @bitwarden/dept-architecture
