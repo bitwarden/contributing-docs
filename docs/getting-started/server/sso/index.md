@@ -11,6 +11,14 @@ You can set up SSO for development using:
 
 - [a local IdP](./local.md) (recommended)
 - [Okta](./okta.mdx)
+- a local server running the SSO project, e.g.
+
+  ```shell
+  cd bitwarden_license/src/Sso
+  dotnet restore
+  dotnet build
+  dotnet run
+  ```
 
 ## Desktop client
 
