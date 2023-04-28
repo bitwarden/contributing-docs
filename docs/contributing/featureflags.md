@@ -57,10 +57,10 @@ configuration too via `FlagDataFilePath`) with:
 }
 ```
 
-and set your keys and values. Place the file in the build output directory of what you’re planning
-on running and the system will pick it up; ensure the file is there before starting. It also
-supports live reloading so you can change the file contents and see immediate results in running /
-debugging code.
+and set your keys and values. Place the file in the root project directory (e.g. `API`) of what
+you’re planning on running and the system will pick it up; ensure the file is there before starting.
+It also supports live reloading so you can change the file contents and see immediate results in
+running / debugging code.
 
 ### Clients / Mobile
 
