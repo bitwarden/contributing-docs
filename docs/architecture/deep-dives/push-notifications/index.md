@@ -1,7 +1,3 @@
----
-sidebar_position: 40
----
-
 # Push Notifications
 
 Bitwarden uses push notifications to communicate in real-time from the Bitwarden server to its
