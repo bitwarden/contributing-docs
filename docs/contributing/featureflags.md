@@ -161,10 +161,10 @@ the retrieval methods:
 
 #### Mobile
 
-The feature flag values are retrieved through the `GetAsync()` method on the [`ConfigService`].
+The feature flag values are retrieved through the `GetAsync()` method on the `ConfigService`.
 
 To use a feature flag, you should first define the new feature flag as a string constant value in
-the [`Constants`] file.
+the `Constants` file.
 
 Once that is defined, the value can be retrieved by injecting the `IConfigService` and using one of
 the retrieval methods:
