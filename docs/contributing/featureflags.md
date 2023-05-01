@@ -37,7 +37,7 @@ client development the flags are served from the Bitwarden `Api`.
 :::note Self-hosted support
 
 Feature flags are not officially supported for self-hosted customers. Using a local `flags.json`
-file is not a supported method of sourcing feature flag values, outside of Bitwarden engineering
+file is not a supported method of sourcing feature flag values, outside of Bitwarden internal
 testing. See [Self-hosted considerations](#self-hosted-considerations) for how feature flagging
 applies to self-hosted.
 
