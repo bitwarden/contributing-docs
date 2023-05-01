@@ -132,15 +132,21 @@ in LaunchDarkly but also in code.
 All clients retrieve their feature flags by querying the `/config` endpoint on the Bitwarden API.
 Clients do not directly reference the LaunchDarkly client-side SDK.
 
-#### Web
-
-The feature flag values are retrieved through the `fetchServerConfig()` method on the
-[`ConfigService`](https://github.com/bitwarden/clients/blob/master/libs/common/src/services/config/config.service.ts).
-They are refreshed from the server at the following points in the application lifecycle:
+In order to optimize the use of feature flags, they are not retrieved from the server on every
+request for the flag value. Rather, the flags are retrieved from the server on the following
+interval:
 
 - On application startup
 - Every hour after application startup
 - On sync (both automatic and manual)
+
+Requesting a flag value from the services defined below will provide the consuming component with
+the most recent value from one of these retrieval events.
+
+#### Web
+
+The feature flag values are retrieved through the `fetchServerConfig()` method on the
+[`ConfigService`](https://github.com/bitwarden/clients/blob/master/libs/common/src/services/config/config.service.ts).
 
 To use a feature flag, you should first define the new feature flag as an enum value in the
 [`FeatureFlags`](https://github.com/bitwarden/clients/blob/master/libs/common/src/enums/feature-flag.enum.ts)
@@ -155,11 +161,7 @@ the retrieval methods:
 
 #### Mobile
 
-The feature flag values are retrieved through the `GetAsync()` method on the [`ConfigService`]. They
-are refreshed from the server at the following points in the application lifecycle:
-
-- The first time a configuration value is accessed
-- Every hour after first access
+The feature flag values are retrieved through the `GetAsync()` method on the [`ConfigService`].
 
 To use a feature flag, you should first define the new feature flag as a string constant value in
 the [`Constants`] file.
