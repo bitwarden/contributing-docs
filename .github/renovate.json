@@ -5,7 +5,7 @@
     ":combinePatchMinorReleases",
     ":dependencyDashboard",
     ":maintainLockFilesWeekly",
-    ":pinVersions",
+    ":pinAllExceptPeerDependencies",
     ":prConcurrentLimit10",
     ":rebaseStalePrs",
     "schedule:weekends",
