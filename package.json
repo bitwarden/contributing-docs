@@ -60,7 +60,7 @@
     ]
   },
   "engines": {
-    "node": ">18.14.0"
+    "node": ">=18"
   },
   "lint-staged": {
     "*": "prettier --cache --write --ignore-unknown"
