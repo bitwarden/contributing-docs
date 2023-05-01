@@ -35,8 +35,8 @@ environment.
 - [Docker](https://docs.docker.com/get-docker/) - required for server development only
 - [PowerShell](https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell-core-on-macos)
   (available via Homebrew: `brew install powershell`)
-- [NodeJS](https://nodejs.org/) v16 (preferably using a [node version manager][nvm])
-- [NPM](https://www.npmjs.com/) v8 (included with Node)
+- [NodeJS](https://nodejs.org/) v18 (preferably using a [node version manager][nvm])
+- [NPM](https://www.npmjs.com/) v9 (included with Node)
 - [Rust](https://www.rust-lang.org/tools/install) - Used for native desktop components
 - [Git](https://git-scm.com)
   - [Commit signing](../../contributing/commit-signing.mdx) is strongly recommended
