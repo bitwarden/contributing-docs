@@ -25,7 +25,7 @@ When consuming feature flags in either the client or server code, it is importan
 where the flags are sourced.
 
 The source of the flags is dependent upon the Bitwarden server instance that is being used, as for
-client development the flags are served from the Bitwarden `Api`.
+client development the flags are served from the Bitwarden API.
 
 | Server configuration | Flag source                                            |
 | -------------------- | ------------------------------------------------------ |
@@ -34,7 +34,7 @@ client development the flags are served from the Bitwarden `Api`.
 | QA Cloud             | LaunchDarkly QA                                        |
 | Production Cloud     | LaunchDarkly Production                                |
 
-:::note Self-hosted support
+:::warning Self-hosted support
 
 Feature flags are not officially supported for self-hosted customers. Using a local `flags.json`
 file is not a supported method of sourcing feature flag values, outside of Bitwarden internal
@@ -109,13 +109,13 @@ referencing the QA Cloud Bitwarden API, the flag must be configured there and no
 ### Definition in LaunchDarkly
 
 In order to test the feature flag in any deployed environment, it must first be defined in the
-LaunchDarkly web app. To do this, request the flag from your Engineering Manager - they will have
+LaunchDarkly web app. To do this, request the flag from your Engineering Manager -- they will have
 the appropriate access. You should discuss:
 
-- The data type of the flag
-- The default value of the flag
-- The possible values of the flag (for non-boolean types)
-- Any context-based rules that should drive flag behavior
+- The data type of the flag.
+- The default value of the flag.
+- The possible values of the flag (for non-boolean types).
+- Any context-based rules that should drive flag behavior.
 
 ## Consuming feature flags in code
 
@@ -136,9 +136,9 @@ In order to optimize the use of feature flags, they are not retrieved from the s
 request for the flag value. Rather, the flags are retrieved from the server on the following
 interval:
 
-- On application startup
-- Every hour after application startup
-- On sync (both automatic and manual)
+- On application startup.
+- Every hour after application startup.
+- On sync (both automatic and manual).
 
 Requesting a flag value from the services defined below will provide the consuming component with
 the most recent value from one of these retrieval events.
@@ -178,8 +178,8 @@ the retrieval methods:
 1. Inject `IFeatureService` where you need a feature flag. Note that you’ll also need
    `ICurrentContext` when accessing the feature state.
 2. Check the
-   [FeatureFlagKeys](https://github.com/bitwarden/server/blob/master/src/Core/Constants.cs) constant
-   list for the key you plan on using, and add it if not found.
+   [`FeatureFlagKeys`](https://github.com/bitwarden/server/blob/master/src/Core/Constants.cs)
+   constant list for the key you plan on using, and add it if not found.
 3. Utilize the above key constant with the appropriate method on the feature service:
 
 - `IsEnabled` for Booleans, with `false` an assumed default.
