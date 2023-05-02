@@ -48,12 +48,13 @@ applies to self-hosted.
 As shown above, local server development instances will not query LaunchDarkly for feature flag
 values.
 
-Rather, this using a local `flags.json` file data store in place of retrieving values from
-LaunchDarkly. **Without the `flags.json` data store, all flag values will resolve as their default
-("off") value.**
+If you need to change any feature flag values from their defaults during local development, you will
+need to set up a local file data source, represented in a `flags.json` file. **Without the
+`flags.json` data store, all flag values will resolve as their default ("off") value.** The file
+must be present before building the solution, but once there you can change the file contents and
+see immediate results in running / debugging code.
 
-If you need to change any feature flag values from their defaults during local development, set up
-your local flag data source as follows:
+To set up the local file data store:
 
 1. Create a file named `flags.json` file in the root project directory (e.g. `/src/Api/` for the
    `Api` project). The name and path can be changed in configuration via `FlagDataFilePath`.
@@ -68,9 +69,6 @@ your local flag data source as follows:
   }
 }
 ```
-
-Ensure the file is there before starting the build. Once there, you can change the file contents and
-see immediate results in running / debugging code.
 
 :::tip
 
