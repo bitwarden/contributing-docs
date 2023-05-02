@@ -69,8 +69,8 @@ your local flag data source as follows:
 }
 ```
 
-Ensure the file is there before starting the build, but you can change the file contents and see
-immediate results in running / debugging code.
+Ensure the file is there before starting the build. Once there, you can change the file contents and
+see immediate results in running / debugging code.
 
 :::tip
 
