@@ -1,0 +1,254 @@
+# ​Naming conventions
+
+:::caution
+
+The information in this document is a work in progress. Decisions need to be discussed and feedback
+needs to be collected before any of the information in here can be considered official.
+
+:::
+
+The main goal of the name is to describe the test in a way that makes it easy to understand what the
+test does and which cases it is intending to cover. A good list of test names gives developers the
+ability to quickly review that the suite covers all important use cases, and to easily identify gaps
+when it does not.
+
+There are many ways of describing a test but what most methods have in common is that they include
+the following
+[[1]](https://dzone.com/articles/7-popular-unit-test-naming)[[2]](https://medium.com/@stefanovskyi/unit-test-naming-conventions-dd9208eadbea)[[3]](https://learn.microsoft.com/en-us/dotnet/core/testing/unit-testing-best-practices#naming-your-tests):
+
+- Unit under test
+- State under test
+- Expected behavior
+
+We've therefore chosen to use the following format (`[]` means optional)
+
+`<unit> [given <prerequisite>] should <behavior> when <state>`
+
+### Basic example
+
+#### Example 1
+
+- **Unit:** `FormSelectionList.deselectItem`
+- **State:** called with a valid id
+- **Behavior:** create new copies of the `selectedItems` and `deselectedItems` arrays
+
+#### Example 2
+
+- **Unit:** `FormSelectionList.deselectItem`
+- **State:** called with an invalid id
+- **Behavior:** do nothing
+
+#### In practice
+
+As you have probably noticed our testing framework `jest` encourages writing tests that start with
+`it`, we’ve therefore chosen a convention that follows this pattern. Here is how the examples above
+would look like when written using this convention:
+
+```
+FormSelectionList
+  deselectItem
+    ✓ creates new copies of the selectedItems and deselectedItems arrays when called with a valid id
+    ✓ does nothing when called with a invalid id
+```
+
+In code this would look something like this:
+
+```ts
+describe("FormSelectionList", () => {
+  describe("deselectItem", () => {
+    it("should create new copies of the selectedItems and deselectedItems arrays when called with a valid id", () => {...});
+    it("should do nothing when called with an invalid id", () => {...});
+  })
+})
+```
+
+As you have probably noticed our testing framework jest encourages writing tests that start with it,
+we’ve therefore chosen a convention that follows this pattern. Here is how the examples above would
+look like when written using this convention:
+
+```
+FormSelectionList
+  deselectItem
+    ✓ creates new copies of the selectedItems and deselectedItems arrays when called with a valid id
+    ✓ does nothing when called with a invalid id
+```
+
+In code this would look something like this:
+
+```ts
+describe("FormSelectionList", () => {
+  describe("deselectItem", () => {
+    it("should create new copies of the selectedItems and deselectedItems arrays when called with a valid id", () => {...});
+    it("should do nothing when called with an invalid id", () => {...});
+  })
+})
+```
+
+### State arrangement and complex states under test
+
+Sometimes our tests require a lot of code to setup the state, and commonly parts of that code is not
+relevant for understanding the tests themselves, e.g. complex constructors for global objects.
+
+#### Duplicated code and utility functions
+
+Most times it is enough to create test utility functions that get rid of the duplicated code and
+irrelevant details. Take for example the `createCipher` function in the snippet below
+
+```ts
+describe("VaultFilter", () => {
+  describe("filterFunction", () => {
+
+    it("should return true when cipher is deleted and function is filtering for trash", () => {
+      const cipher = createCipher({ deletedDate: new Date() });
+      const filterFunction = createFilterFunction({ status: "trash" });
+
+      const result = filterFunction(cipher);
+
+      expect(result).toBe(true);
+    });
+
+    it("should return false when cipher is deleted and function is filtering for favorites", () => {
+      const cipher = createCipher({ deletedDate: new Date() });
+      const filterFunction = createFilterFunction({ status: "favorites" });
+
+      const result = filterFunction(cipher);
+
+      expect(result).toBe(false);
+    });
+
+  })
+})
+
+function createCipher(options: Partial<CipherView> = {}) {
+  const cipher = new CipherView();
+
+  cipher.favorite = options.favorite ?? false;
+  cipher.deletedDate = options.deletedDate;
+  cipher.type = options.type;
+  cipher.folderId = options.folderId;
+  cipher.collectionIds = options.collectionIds;
+  cipher.organizationId = options.organizationId;
+
+  return cipher;
+}
+
+function createFilterFunction(...) {...}
+```
+
+As you can see the `createCipher` utility function hides a lot of code that would otherwise be
+duplicated in both tests.
+
+Notice also how the function allows us hide details that are irrelevant for the behavior we are
+trying to verify. The tests make it obvious that the `deletedDate` field is the only field that is
+expected to have any effect on the behavior of the unit under test.
+
+#### Shared state and common setup blocks
+
+In certain cases, parts of the state is the same across multiple tests because they all share a set
+of common prerequisites. In those cases we can use a `describe` and `beforeEach` block to group
+tests together and to setup the common parts of the state that they share. As you may have noticed
+the previous snippet is a good example of this, where both tests require a deleted cipher. We can
+group these tests together like this (notice the `given` keyword):
+
+```ts
+describe("VaultFilter", () => {
+  describe("filterFunction", () => {
+
+    describe("given a deleted cipher", () => {
+      let cipher;
+
+      beforeEach(() => {
+        cipher = createCipher({ deletedDate: new Date() });
+      })
+
+      it("should return true when filtering for trash", () => {
+        const filterFunction = createFilterFunction({ status: "trash" });
+
+        ...
+      });
+
+      it("should return false when filtering for favorites", () => {
+        const filterFunction = createFilterFunction({ status: "favorites" });
+
+        ...
+      });
+    });
+
+  })
+})
+
+function createCipher(...) {...}
+function createFilterFunction(...) {...}
+```
+
+The result would be test names that look like this:
+
+```
+VaultFilter
+  filterFunction
+    given a deleted cipher
+      ✓ returns true when filtering for trash
+      ✓ returns false when filtering for favorites
+```
+
+## Pitfalls
+
+### Verify one behavior
+
+If you find yourself writing long names by stringing together multiple expectations by using the
+word _and,_ consider breaking up the test. A test should ideally verify a single behavior
+[[4]](https://tddmanifesto.com/a-clean-test/) to make it easier for developers to identify issues
+and for reviewers to understand why tests have been modified.
+
+#### Example
+
+- `adds item to selectedItems, removes from deselectedItems, and creates a form control when called with a valid id`
+
+Could instead be written as three different tests
+
+- `adds item to selectedItems when called with a valid id`
+- `removes item from deselectedItems when called with a valid id`
+- `creates a form control when called with a valid id`
+
+Keep in mind that it is ultimately up to the developers to decide what counts as “verifying a single
+behavior” on a case by case basis.
+
+### Include state under test
+
+A common pattern that's easy to fall into is writing test names without taking _state under test_
+into account. Take the following examples for an imaginary sorting function:
+
+#### Example without state
+
+- `should return items in alphabetic order`
+- `should return empty array`
+- `should throw error`
+
+It is not immediately obvious how many behaviors we are actually testing, instead we are grouping
+our tests based on the expected output. To understand how the sorting function works and if we have
+sufficient coverage we would have to dive into the source code for the test. You might ask questions
+such as:
+
+- What happens if I input an array with non-string values? Does it throw an error?
+- What could make the function return an empty array?
+- What if I input `null`?
+
+If we instead add state into the mix we become forced to split up the tests and properly answer the
+questions above:
+
+#### Example when taking state into consideration
+
+- `returns empty array when input is empty`
+- `returns empty array when input contains non-string values`
+- `returns item when input only contains one item`
+- `returns items in alphabetic order when input contains multiple items`
+- `throws error when input is not an array`
+
+## Test structure and clean tests
+
+[This section is WIP]
+
+A separate common convention is AAA: Arrange Act Assert.
+
+I think these conventions makes it much easier to read/understand tests while also promoting better
+testing
