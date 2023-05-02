@@ -52,11 +52,14 @@ Rather, this using a local `flags.json` file data store in place of retrieving v
 LaunchDarkly. **Without the `flags.json` data store, all flag values will resolve as their default
 ("off") value.**
 
-If you need to change any feature flag values from their defaults during local development, do the
-following:
+If you need to change any feature flag values from their defaults during local development, set up
+your local flag data source as follows:
 
-1. Create a `flags.json` file (the name and path can be changed in configuration too via
-   `FlagDataFilePath`) with a structure as follows:
+1. Create a file named `flags.json` file in the root project directory (e.g. `/src/Api/` for the
+   `Api` project). The name and path can be changed in configuration via `FlagDataFilePath`.
+
+2. Add the flags that you wish to supply to your locally-running code, in the following format,
+   replacing `someKey` with your key name and setting the desired value.
 
 ```json
 {
@@ -66,10 +69,8 @@ following:
 }
 ```
 
-2. Replace `someKey` with your key name and set the value.
-3. Place the file in the build output directory of the server project that will be consuming the
-   flag. Ensure the file is there before starting the build, but you can change the file contents
-   and see immediate results in running / debugging code.
+Ensure the file is there before starting the build, but you can change the file contents and see
+immediate results in running / debugging code.
 
 :::tip
 
