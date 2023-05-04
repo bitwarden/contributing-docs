@@ -57,7 +57,8 @@ see immediate results in running / debugging code.
 To set up the local file data store:
 
 1. Create a file named `flags.json` file in the root project directory (e.g. `/src/Api/` for the
-   `Api` project). The name and path can be changed in configuration via `FlagDataFilePath`.
+   `Api` project). The name and path can be changed via the
+   `globalSettings__LaunchDarkly__FlagDataFilePath` environment variable.
 
 2. Add the flags that you wish to supply to your locally-running code, in the following format,
    replacing `someKey` with your key name and setting the desired value.
@@ -72,10 +73,9 @@ To set up the local file data store:
 
 :::tip
 
-For consuming feature flags in the clients, the `flags.json` file should be placed in the build
-output directory of the `Api` project. This is because the `/config` endpoint that clients use to
-query for feature flags is in `Api`. Doing this will ensure that the proper flag values get
-retrieved and sent to the client.
+For consuming feature flags in the clients, the `flags.json` file should be defined in the `Api`
+project. This is because the `/config` endpoint that clients use to query for feature flags is in
+`Api`. Doing this will ensure that the proper flag values get retrieved and sent to the client.
 
 :::
 
@@ -86,15 +86,23 @@ feature flag. The team should agree on the scope of what is flagged and where th
 applied - both client-side and server-side. While there is no precise rule on what constitutes a
 "feature", work together on the best balance of flags and their respective purposes.
 
+Once you have decided that a feature flag is necessary, the first step is to decide on a name.
+Recommendations for naming are:
+
+- Name the flag using kebab-case (lowercase and dash-separated, such as `enable-feature`).
+- Name the flag in the affirmative when possible (`enable-feature`, not `disable-feature`).
+
+Once a name has been decided, add the feature flag to the
+[`FeatureFlagKeys`](https://github.com/bitwarden/server/blob/master/src/Core/Constants.cs) constants
+file on the server. This will allow the flag to be retrieved from LaunchDarkly via whichever data
+source you configure below.
+
 ### Local development
 
 As you begin work on the feature, use the `flags.json` data store to surface the flag to your
 consuming code to make sure that behavior is correct for all supported flag values. Since feature
 flags don’t have to exist in LaunchDarkly for initial development, **don’t create them online until
 you’re sure about the final implementation**.
-
-When coding locally in the client codebase against a feature flag, your approach for retrieving
-feature flags differs based on the server instance you are querying.
 
 :::tip Local client development
 
