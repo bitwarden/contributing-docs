@@ -91,6 +91,7 @@ Recommendations for naming are:
 
 - Name the flag using kebab-case (lowercase and dash-separated, such as `enable-feature`).
 - Name the flag in the affirmative when possible (`enable-feature`, not `disable-feature`).
+- Keep key names succinct.
 
 Once a name has been decided, add the feature flag to the
 [`FeatureFlagKeys`](https://github.com/bitwarden/server/blob/master/src/Core/Constants.cs) constants
@@ -184,9 +185,10 @@ the retrieval methods:
 
 1. Inject `IFeatureService` where you need a feature flag. Note that you’ll also need
    `ICurrentContext` when accessing the feature state.
-2. Check the
-   [`FeatureFlagKeys`](https://github.com/bitwarden/server/blob/master/src/Core/Constants.cs)
-   constant list for the key you plan on using, and add it if not found.
+2. Find the constant in the
+   [`FeatureFlagKeys`](https://github.com/bitwarden/server/blob/master/src/Core/Constants.cs) list
+   for the key you plan on using. It should have been added when
+   [creating a new flag](#creating-a-new-flag).
 3. Utilize the above key constant with the appropriate method on the feature service:
 
 - `IsEnabled` for Booleans, with `false` an assumed default.
