@@ -27,14 +27,14 @@ where the flags are sourced.
 The source of the flags is dependent upon the Bitwarden server instance that is being used, as for
 client development the flags are served from the Bitwarden API.
 
-| Server configuration | Flag source                                    |
-| -------------------- | ---------------------------------------------- |
-| Local development    | Local JSON file                                |
-| Self-hosted          | Flags are "off", unless local JSON is provided |
-| QA Cloud             | LaunchDarkly QA                                |
-| Production Cloud     | LaunchDarkly Production                        |
+| Server configuration | Flag source                                         |
+| -------------------- | --------------------------------------------------- |
+| Local development    | Local JSON file                                     |
+| Self-hosted          | Flags are "off", unless local JSON file is provided |
+| QA Cloud             | LaunchDarkly QA                                     |
+| Production Cloud     | LaunchDarkly Production                             |
 
-:::warning Self-hosted support
+:::caution Self-hosted support
 
 Feature flags are not officially supported for self-hosted customers. Using a local JSON file is not
 a supported method of sourcing feature flag values, outside of Bitwarden internal testing. See
