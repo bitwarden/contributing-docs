@@ -14,9 +14,13 @@
   "enabledManagers": ["github-actions", "npm"],
   "packageRules": [
     {
-      "groupName": "{{manager}}",
-      "matchManagers": ["cargo", "github-actions", "npm", "nuget"],
-      "matchPackagePatterns": ["*"],
+      "groupName": "gh minor",
+      "matchManagers": ["github-actions"],
+      "matchUpdateTypes": ["minor", "patch"]
+    },
+    {
+      "groupName": "npm minor",
+      "matchManagers": ["npm"],
       "matchUpdateTypes": ["minor", "patch"]
     }
   ]
