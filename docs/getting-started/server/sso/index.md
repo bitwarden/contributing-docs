@@ -3,7 +3,7 @@ sidebar_custom_props:
   access: bitwarden
 ---
 
-# Sign Sign-On (SSO)
+# Single Sign-On (SSO)
 
 ## Setup and configuration
 

@@ -5,9 +5,14 @@ This article will show you how to set up a local SSO Identity Provider (IdP) for
 This uses
 [Docker Test SAML 2.0 Identity Provider](https://github.com/kenchan0130/docker-simplesamlphp).
 
-## Requirements
+## Prerequisites
 
-1.  Local Bitwarden development server with the Api, Identity and Sso projects running
+1.  Bitwarden server set up and configured with the following server projects running:
+
+    - Identity
+    - API
+    - SSO (located at `server/bitwarden_license/src/Sso`)
+
 2.  Local web client running
 
 ## Configure IdP

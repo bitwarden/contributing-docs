@@ -137,23 +137,23 @@ development.
 
 If you followed [Server Setup Guide](../guide.md#create-database) when creating your
 cloud-configured database, you just need to run the same PowerShell migration script with an
-argument of `-s`:
+argument of `-selfhost`:
 
 ```bash
-pwsh migrate.ps1 -s
+pwsh migrate.ps1 -selfhost
 ```
 
 This will create a new database called `vault_dev_self_host` and/or run unknown migrations against
 it.
 
-To keep your self-hosted database up to date, calling the script with the `-s` argument in the
-future will execute new migrations against `vault_dev_self_host`.
+To keep your self-hosted database up to date, calling the script with the `-selfhost` argument in
+the future will execute new migrations against `vault_dev_self_host`.
 
 ### Define Installation Id and Key for Your Cloud Database
 
 You need to manually add the Installation key to your cloud-configured instance, so that it knows
 about your self-hosted instance and will allow access when API calls need to be made between the
-two. Feel free to do this with any tool you like, Azure Data Studio, sqlcmd, the below script
+two. Feel free to do this with any tool you like, Azure Data Studio, sqlcmd, or the below script
 
 ```bash
 /opt/mssql-tools/bin/sqlcmd -S mssql -d vault_dev -U sa -P <<SA_PASSWORD>> -I -i <<SCRIPT_FILE>>
@@ -196,7 +196,7 @@ git clone git@github.com:bitwarden/clients.git clients-selfhost
 Install the dependencies and initialize jslib:
 
 ```bash
-cd apps/web
+cd clients-selfhost
 npm ci
 ```
 
@@ -280,7 +280,7 @@ approprirate self-hosted launch configuration.
 
 ## Web Client
 
-From the `clients-selfhost` directory, you can execute
+From the `clients-selfhost/apps/web` directory, you can execute
 
 - `npm run build:bit:selfhost:watch`
 - `npm run build:oss:selfhost:watch`
