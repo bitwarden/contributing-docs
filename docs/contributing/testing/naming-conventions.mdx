@@ -33,28 +33,6 @@ We've therefore chosen to use the following format (`[]` means optional)
 #### In practice
 
 As you have probably noticed our testing framework `jest` encourages writing tests that start with
-`it`, we’ve therefore chosen a convention that follows this pattern. Here is how the examples above
-would look like when written using this convention:
-
-```
-FormSelectionList
-  deselectItem
-    ✓ creates new copies of the selectedItems and deselectedItems arrays when called with a valid id
-    ✓ does nothing when called with a invalid id
-```
-
-In code this would look something like this:
-
-```ts
-describe("FormSelectionList", () => {
-  describe("deselectItem", () => {
-    it("should create new copies of the selectedItems and deselectedItems arrays when called with a valid id", () => {...});
-    it("should do nothing when called with an invalid id", () => {...});
-  })
-})
-```
-
-As you have probably noticed our testing framework `jest` encourages writing tests that start with
 it, we've therefore chosen a convention that follows this pattern. Here is how the examples above
 would look like when written using this convention:
 
