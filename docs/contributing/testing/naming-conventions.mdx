@@ -14,7 +14,7 @@ the following:
 
 We've therefore chosen to use the following format (`[]` means optional)
 
-`<unit> [given <prerequisite>] should <behavior> when <state>`
+`<unit> [given <prerequisite>] <behavior> when <state>`
 
 ### Basic example
 
@@ -22,13 +22,13 @@ We've therefore chosen to use the following format (`[]` means optional)
 
 - **Unit:** `FormSelectionList.deselectItem`
 - **State:** called with a valid id
-- **Behavior:** create new copies of the `selectedItems` and `deselectedItems` arrays
+- **Behavior:** creates new copies of the `selectedItems` and `deselectedItems` arrays
 
 #### Example 2
 
 - **Unit:** `FormSelectionList.deselectItem`
 - **State:** called with an invalid id
-- **Behavior:** do nothing
+- **Behavior:** does nothing
 
 #### In practice
 
@@ -48,8 +48,8 @@ In code this would look something like this:
 ```ts
 describe("FormSelectionList", () => {
   describe("deselectItem", () => {
-    it("should create new copies of the selectedItems and deselectedItems arrays when called with a valid id", () => {...});
-    it("should do nothing when called with an invalid id", () => {...});
+    it("creates new copies of the selectedItems and deselectedItems arrays when called with a valid id", () => {...});
+    it("does nothing when called with an invalid id", () => {...});
   })
 })
 ```
@@ -68,7 +68,7 @@ irrelevant details. Take for example the `createCipher` function in the snippet 
 describe("VaultFilter", () => {
   describe("filterFunction", () => {
 
-    it("should return true when cipher is deleted and function is filtering for trash", () => {
+    it("returns true when cipher is deleted and function is filtering for trash", () => {
       const cipher = createCipher({ deletedDate: new Date() });
       const filterFunction = createFilterFunction({ status: "trash" });
 
@@ -77,7 +77,7 @@ describe("VaultFilter", () => {
       expect(result).toBe(true);
     });
 
-    it("should return false when cipher is deleted and function is filtering for favorites", () => {
+    it("returns false when cipher is deleted and function is filtering for favorites", () => {
       const cipher = createCipher({ deletedDate: new Date() });
       const filterFunction = createFilterFunction({ status: "favorites" });
 
@@ -131,13 +131,13 @@ describe("VaultFilter", () => {
         cipher = createCipher({ deletedDate: new Date() });
       })
 
-      it("should return true when filtering for trash", () => {
+      it("returns true when filtering for trash", () => {
         const filterFunction = createFilterFunction({ status: "trash" });
 
         ...
       });
 
-      it("should return false when filtering for favorites", () => {
+      it("returns false when filtering for favorites", () => {
         const filterFunction = createFilterFunction({ status: "favorites" });
 
         ...
@@ -190,9 +190,9 @@ into account. Take the following examples for an imaginary sorting function:
 
 #### Example without state
 
-- `should return items in alphabetic order`
-- `should return empty array`
-- `should throw error`
+- `returns items in alphabetic order`
+- `returns empty array`
+- `throws error`
 
 It is not immediately obvious how many behaviors we are actually testing, instead we are grouping
 our tests based on the expected output. To understand how the sorting function works and if we have
