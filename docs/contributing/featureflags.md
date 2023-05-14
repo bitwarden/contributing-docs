@@ -91,7 +91,8 @@ Once you have decided that a feature flag is necessary, the first step is to dec
 Recommendations for naming are:
 
 - Name the flag using kebab-case (lowercase and dash-separated, such as `enable-feature`).
-- Name the flag in the affirmative when possible (`enable-feature`, not `disable-feature`).
+- For boolean flags, it is not necessary to include the `enable` verb, as it is implied by it being
+  a feature flag. For example, `new-feature` is recommended instead of `enable-new-feature`.
 - Keep key names succinct.
 
 Once a name has been decided, add the feature flag to the
