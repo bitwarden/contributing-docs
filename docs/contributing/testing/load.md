@@ -17,16 +17,18 @@ Two environment variables are used for all tests:
   authentication.
 - `API_URL`: URL of the [API](https://github.com/bitwarden/server/tree/master/src/Api) instance for
   load testing operations once authenticated.
+- `CLIENT_ID`: `X-ClientId` header value for all requests, to track unique clients and manage rate
+  limiting.
 
 Depending on the APIs under test, password or client credentials grants are used. For password:
 
-- `USER_EMAIL`: User email address.
-- `USER_PASSWORD_HASH`: Hash of the user's master password.
+- `AUTH_USER_EMAIL`: User email address.
+- `AUTH_USER_PASSWORD_HASH`: Hash of the user's master password.
 
 For client credentials:
 
-- `CLIENT_ID`: OAuth client ID.
-- `CLIENT_SECRET`: OAuth client secret.
+- `AUTH_CLIENT_ID`: OAuth client ID.
+- `AUTH_CLIENT_SECRET`: OAuth client secret.
 
 Grafana's online presence is used to host the scripts in the cloud and has all of the above
 configured. For local testing you may need to
