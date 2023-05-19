@@ -91,7 +91,7 @@ Once you have decided that a feature flag is necessary, the first step is to dec
 Recommendations for naming are:
 
 - Name the flag using kebab-case (lowercase and dash-separated, such as `enable-feature`).
-- For boolean flags, it is not necessary to include the `enable` verb, as it is implied by it being
+- For Boolean flags, it is not necessary to include the `enable` verb, as it is implied by it being
   a feature flag. For example, `new-feature` is recommended instead of `enable-new-feature`.
 - Keep key names succinct.
 
@@ -125,13 +125,14 @@ the appropriate access. You should discuss:
 - The data type of the flag.
 - The default value of the flag.
 - The possible values of the flag (for non-boolean types).
-- Any context-based rules that should drive flag behavior. :::tip When should I request the flag in
-  LaunchDarkly?
+- Any context-based rules that should drive flag behavior.
+
+:::tip When should I request the flags in LaunchDarkly?
 
 As a general rule, feature flag should be requested for creation in LaunchDarkly as part of merging
 the code using the flag into the `master` branch. Since local development and QA testing with their
 self-hosted instances will use local data sources, the first time that a flag in LaunchDarkly would
-be referenced is when the code is deployed to a cloud environment from the `master` branch.
+be referenced is when the code is deployed to a cloud environment.
 
 :::
 
