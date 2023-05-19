@@ -72,7 +72,7 @@ the build output directory. However, if you prefer to store the file in a differ
 building the solution, but once there you can change the file contents and see immediate results in
 running / debugging code.
 
-:::tip
+:::tip Local data source for flags used in the client
 
 For consuming feature flags in the clients, the `flags.json` file should be defined in the `Api`
 project. This is because the `/config` endpoint that clients use to query for feature flags is in
@@ -91,7 +91,8 @@ Once you have decided that a feature flag is necessary, the first step is to dec
 Recommendations for naming are:
 
 - Name the flag using kebab-case (lowercase and dash-separated, such as `enable-feature`).
-- Name the flag in the affirmative when possible (`enable-feature`, not `disable-feature`).
+- For Boolean flags, it is not necessary to include the `enable` verb, as it is implied by it being
+  a feature flag. For example, `new-feature` is recommended instead of `enable-new-feature`.
 - Keep key names succinct.
 
 Once a name has been decided, add the feature flag to the
@@ -125,6 +126,15 @@ the appropriate access. You should discuss:
 - The default value of the flag.
 - The possible values of the flag (for non-boolean types).
 - Any context-based rules that should drive flag behavior.
+
+:::tip When should I request the flags in LaunchDarkly?
+
+As a general rule, feature flag should be requested for creation in LaunchDarkly as part of merging
+the code using the flag into the `master` branch. Since local development and QA testing with their
+self-hosted instances will use local data sources, the first time that a flag in LaunchDarkly would
+be referenced is when the code is deployed to a cloud environment.
+
+:::
 
 ## Consuming feature flags in code
 
@@ -206,10 +216,9 @@ Feature flags don’t necessarily have to ever be deleted from LaunchDarkly, jus
 to Jira helps create a history of the feature and there are copious logs and audit records online
 that can be kept.
 
-When defining the subtasks of a story be sure to include a technical debt cleanup task for removal
-of the feature flag from code – it’s essential that these not be left around for too long and assume
-a permanent existence. Address the technical debt at a later phase once the feature launches
-successfully.
+When defining the subtasks of a story be sure to include a cleanup task for removal of the feature
+flag from code – it’s essential that these not be left around for too long and assume a permanent
+existence. Address the task at a later phase once the feature launches successfully.
 
 ### Self-hosted considerations
 
