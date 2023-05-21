@@ -24,19 +24,20 @@ In order to have access to the features within the Bitwarden Portal, you will ne
 account to a role. This is in addition to the authentication setup above.
 
 Role membership is defined in the `adminSettings:role` section of the server application
-configuration. Each role is represented as a comma-delimited list of account email addresses. **For
-local development, the `secrets.json` that you set up when configuring your server environment
-included the user `admin@localhost` with membership in the Owner role.** If you wish to change that
-configuration, modify your user secrets using the settings defined below, updating the user secret
-to contain your account email address.
+configuration. Each role's members are represented as a comma-delimited list of account email
+addresses. For local development, your user secrets will be defined with the following account in
+each role:
 
-| Role             | Setting                      | Default Value     |
-| ---------------- | ---------------------------- | ----------------- |
-| Owner            | `adminSettings:role:owner`   | `admin@localhost` |
-| Admin            | `adminSettings:role:admin`   |                   |
-| Customer Success | `adminSettings:role:cs`      |                   |
-| Billing          | `adminSettings:role:billing` |                   |
-| Sales            | `adminSettings:role:sales`   |                   |
+| Role             | Setting                      | Default `secrets.json` Value |
+| ---------------- | ---------------------------- | ---------------------------- |
+| Owner            | `adminSettings:role:owner`   | `owner@localhost`            |
+| Admin            | `adminSettings:role:admin`   | `admin@localhost`            |
+| Customer Success | `adminSettings:role:cs`      | `cs@localhost`               |
+| Billing          | `adminSettings:role:billing` | `billing@localhost`          |
+| Sales            | `adminSettings:role:sales`   | `sales@localhost`            |
+
+If you wish to change the membership for any role, you can edit your user secrets to specify the
+desired value.
 
 :::info
 
