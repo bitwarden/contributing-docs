@@ -8,8 +8,16 @@ Bitwarden Portal authentication is done entirely through a passwordless flow, us
 through email. The email address must be listed in the `adminSettings:admins` user secret to be
 authorized.
 
-If you’ve followed the [Server Setup Guide](./guide.md) this should already be configured and will
-default to `admin@localhost`. If not, please go back and configure it now.
+If you’ve followed the [Server Setup Guide](./guide.md) this should already be configured, with the
+following accounts having access:
+
+- `owner@localhost`
+- `admin@localhost`
+- `cs@localhost`
+- `billing@localhost`
+- `sales@localhost`
+
+If not, please go back and configure it now.
 
 :::tip
 
@@ -36,8 +44,8 @@ each role:
 | Billing          | `adminSettings:role:billing` | `billing@localhost`          |
 | Sales            | `adminSettings:role:sales`   | `sales@localhost`            |
 
-If you wish to change the membership for any role, you can edit your user secrets to specify the
-desired value.
+If you wish to change the membership for any role, you can
+[edit your user secrets](./user-secrets.md) to specify the desired value.
 
 :::info
 
@@ -79,12 +87,12 @@ control on self-hosted deployments.
     dotnet run
     ```
 
-7.  Confirm it's working by using your favorite browser to navigate to your admin page. By default,
+7.  Confirm it's working by using your favorite browser to navigate to the portal URL. By default,
     this is [http://localhost:62911](http://localhost:62911).
 
 ## Logging in
 
-1.  Navigate to your admin site. By default, this is
+1.  Navigate to your portal URL. By default, this is
     [http://localhost:62911](http://localhost:62911).
 2.  Enter `admin@localhost` as the email (or whatever email you’ve configured in your user secrets)
 3.  Open MailCatcher (default is [http://localhost:1080](http://localhost:1080)) and click the login
