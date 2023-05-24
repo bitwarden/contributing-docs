@@ -26,6 +26,7 @@ See [User Secrets Reference](./user-secrets.md) for how to configure your user s
 :::
 
 <bitwarden>
+
 ### Authorization
 
 The Bitwarden Portal uses role-based access control to restrict access to application functionality.
@@ -53,7 +54,9 @@ If you wish to change the membership for any role, you can
 Role-based access control is only enforced on cloud-hosted instances. There is no role-based access
 control on self-hosted deployments.
 
-::: </bitwarden>
+:::
+
+</bitwarden>
 
 ## Setup
 
