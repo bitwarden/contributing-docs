@@ -158,6 +158,7 @@ interval:
 - On application startup.
 - Every hour after application startup.
 - On sync (both automatic and manual).
+- On environment change.
 
 Requesting a flag value from the services defined below will provide the consuming component with
 the most recent value from one of these retrieval events.
