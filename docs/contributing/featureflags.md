@@ -27,34 +27,49 @@ where the flags are sourced.
 The source of the flags is dependent upon the Bitwarden server instance that is being used, as for
 client development the flags are served from the Bitwarden API.
 
-| Server configuration | Flag source                                         |
-| -------------------- | --------------------------------------------------- |
-| Local development    | Local JSON file                                     |
-| Self-hosted          | Flags are "off", unless local JSON file is provided |
-| QA Cloud             | LaunchDarkly QA                                     |
-| Production Cloud     | LaunchDarkly Production                             |
+| Server configuration | Flag source                                                  |
+| -------------------- | ------------------------------------------------------------ |
+| Local development    | Local application settings or JSON file                      |
+| Self-hosted          | Flags are "off" unless above local configuration is provided |
+| QA Cloud             | LaunchDarkly QA                                              |
+| Production Cloud     | LaunchDarkly Production                                      |
 
 :::caution Self-hosted support
 
-Feature flags are not officially supported for self-hosted customers. Using a local JSON file is not
-a supported method of sourcing feature flag values, outside of Bitwarden internal testing. See
-[Self-hosted considerations](#self-hosted-considerations) for how feature flagging applies to
-self-hosted.
+Feature flags are not officially supported for self-hosted customers. Using application settings or
+a JSON file is not a supported method of sourcing feature flag values, outside of Bitwarden internal
+testing. See [Self-hosted considerations](#self-hosted-considerations) for how feature flagging
+applies to self-hosted.
 
 :::
 
-### Local JSON file
+### Local configuration
 
 As shown above, local server development instances will not query LaunchDarkly for feature flag
 values.
 
 If you need to change any feature flag values from their defaults during local development, you will
-need to set up a local file data source, represented in a JSON file. **Without the local data store,
-all flag values will resolve as their default ("off") value.**
+need to set up either local application settings or a file-based data source. **Without the local
+data store, all flag values will resolve as their default ("off") value.**
 
-To set up the local file data store you will need to create a JSON file of the format below,
-replacing `example-boolean-key` and `example-string-key` with your flag names and updating the value
-accordingly.
+To set up a data source via application settings, place the following in
+`appsettings.Development.json` or similar:
+
+```json
+{
+  "launchDarkly": {
+    "flagValues": {
+      "example-boolean-key": true,
+      "example-string-key": "value"
+    }
+  }
+}
+```
+
+Environment variables can also be used like with other application setting overrides. Setting flag
+values via application settings will not update until application restart.
+
+To set up a data source via a local file, create one with the following:
 
 ```json
 {
@@ -72,11 +87,14 @@ the build output directory. However, if you prefer to store the file in a differ
 building the solution, but once there you can change the file contents and see immediate results in
 running / debugging code.
 
+In either case replace `example-boolean-key` and `example-string-key` with your flag names and
+update the value(s) accordingly.
+
 :::tip Local data source for flags used in the client
 
-For consuming feature flags in the clients, the `flags.json` file should be defined in the `Api`
-project. This is because the `/config` endpoint that clients use to query for feature flags is in
-`Api`. Doing this will ensure that the proper flag values get retrieved and sent to the client.
+For consuming feature flags in the clients, the above setup should be defined in the `Api` project
+-- this is because the `/config` endpoint that clients use to query for feature flags is in `Api`.
+Doing this will ensure that the proper flag values get retrieved and sent to the client.
 
 :::
 
