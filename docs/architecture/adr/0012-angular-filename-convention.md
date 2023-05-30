@@ -12,7 +12,7 @@ tags: [clients, angular]
 
 ## Context and Problem Statement
 
-We currently use a mixed filename convention where some files follows the Angular styleguide, and
+We currently use a mixed filename convention where some files follows the Angular style guide, and
 other files use camelCase. This causes some confusion as to which convention to follow, and we
 should standardize on one convention to avoid confusion.
 

@@ -22,7 +22,7 @@ Bitwarden as they occur.
 - A [local development server](./guide.md)
 - [Web vault](../clients/web-vault/index.mdx)
 - An enterprise organization
-- Mailcatcher or a similar local mailservice so that you don't spam real email addresses with test
+- Mailcatcher or a similar local mail service so that you don't spam real email addresses with test
   invites (this is included in the server setup guide)
 
 ## Steps

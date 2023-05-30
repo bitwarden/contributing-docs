@@ -111,7 +111,7 @@ Testing passwordless notifications:
 4. Deploy the Android app to your device or emulator
 5. After deployment, open the app, login to your QA account and activate passwordless login requests
    in settings
-6. Open the web vault using your prefered browser (ex: http://localhost:8080)
+6. Open the web vault using your preferred browser (ex: http://localhost:8080)
 7. Enter the email address of an account that has previously authenticated on that device (i.e. is a
    "known device") and click Continue. When presented with the login options, click click Login with
    Device.
