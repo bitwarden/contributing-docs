@@ -43,6 +43,7 @@
   "devDependencies": {
     "@docusaurus/module-type-aliases": "2.4.1",
     "@tsconfig/docusaurus": "1.0.7",
+    "cspell": "^6.31.1",
     "husky": "8.0.3",
     "lint-staged": "13.2.2",
     "prettier": "2.8.8",
@@ -64,6 +65,7 @@
     "node": ">=18"
   },
   "lint-staged": {
-    "*": "prettier --cache --write --ignore-unknown"
+    "*": "prettier --cache --write --ignore-unknown",
+    "*.md{x,}": "cspell lint"
   }
 }
