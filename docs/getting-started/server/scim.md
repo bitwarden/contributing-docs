@@ -29,7 +29,7 @@ Bitwarden as they occur.
 
 ### Enable SCIM for your Organization
 
-1. Log in to the web vault and navigate to your organization -> Manage -> SCIM Provisioning
+1. Log in to the web vault and navigate to your organization -> Settings -> SCIM Provisioning
 2. Tick "Enable SCIM" and click save. Your SCIM URL and API Key should appear. Leave this window
    open for future reference
 

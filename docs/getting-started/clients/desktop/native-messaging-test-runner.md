@@ -11,8 +11,7 @@ at the root of the `desktop` app in `bitwarden/clients` repo.
 ## Getting Started
 
 1.  Clone the [bitwarden/clients](https://github.com/bitwarden/clients) repo
-2.  Run the desktop app locally following
-    [these](https://contributing-internal.bitwarden.com/external/clients/desktop/) instructions
+2.  Run the desktop app locally following [these](../desktop/index.mdx) instructions
 3.  In the running desktop app, go to `Preferences` and turn on the
     `Allow DuckDuckGo browser integration` setting:
 

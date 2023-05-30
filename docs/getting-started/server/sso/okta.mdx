@@ -5,18 +5,17 @@ import configImage from "./config.png";
 This guide will set up basic SSO auth using Okta. This is for testing ONLY and should not be linked
 to any production environment.
 
-Prerequisites:
+## Prerequisites
 
-1.  Bitwarden server setup and configured.
+1.  Bitwarden server set up and configured with the following server projects running:
+
+    - Identity
+    - API
+    - SSO (located at `server/bitwarden_license/src/Sso`)
+
 2.  Access to Development collection in your Bitwarden Vault
 
 ## Steps
-
-Start the following server projects:
-
-- Identity
-- API
-- SSO (located at `server/bitwarden_license/src/Sso`)
 
 In your browser do the following steps to access Okta.
 
