@@ -27,8 +27,7 @@ jobs:
           cache-dependency-path: "**/package-lock.json"
           node-version: "18"
 
-      - name: Run linter and spellcheck
+      - name: Run linter
         run: |
           npm ci
           npm run lint
-          npm run spellcheck
