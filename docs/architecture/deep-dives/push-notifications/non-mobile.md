@@ -7,7 +7,7 @@ for real-time client communication over WebSockets.
 ## Server Implementations
 
 When real-time changes must be communicated to the registered non-mobile clients, it is the
-responsibiity of the Bitwarden API for their configured server instance to distribute the
+responsibility of the Bitwarden API for their configured server instance to distribute the
 information. The server abstracts this with the
 [`IPushNotificationService`](https://github.com/bitwarden/server/blob/master/src/Core/Services/IPushNotificationService.cs)
 interface, which has different implementations based on whether the instance is cloud-hosted or
@@ -85,5 +85,5 @@ Bitwarden API submits the notifications directly to the self-hosted Notification
 
 When a non-mobile client starts and the user is authenticated, it initiates a WebSocket connection
 to the Notification service (`/notifications/hub`) for their configured server instance. This
-request includes their JWT `bearer` token, which is used to retreive the user ID, which in turn
+request includes their JWT `bearer` token, which is used to retrieve the user ID, which in turn
 determines which notifications the user receives.

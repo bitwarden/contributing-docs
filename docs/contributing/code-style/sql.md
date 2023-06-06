@@ -201,7 +201,7 @@ GO
 ### Create or Modify an Index
 
 When creating indexes, especially on heavily used tables, our production database can easily become
-offline, unusuable, hit 100% CPU and many other bad behaviors. It is often best to do this using
+offline, unusable, hit 100% CPU and many other bad behaviors. It is often best to do this using
 online index builds so as not to lock the underlying table. This may cause the index operation to
 take longer, but you will not create an underlying schema table lock which prevents all reads and
 connections to the table and instead only locks the table of updates during the operation.
