@@ -57,10 +57,9 @@ In the example we have a single team, `auth` which has a single feature _Emergen
 _Emergency Access_ feature consists of a service, some components and a pipe. The feature is further
 broken down into a `view` feature which handles viewing another users vault.
 
-The `core` and `shared` directories don't match a single team but is owned by the
-platform team. The `core` and `shared` modules are standard concepts in Angular, with `core`
-consisting of singleton services used throughout the application, and `shared` consisting of heavily
-reused components.
+The `core` and `shared` directories don't match a single team but is owned by the platform team. The
+`core` and `shared` modules are standard concepts in Angular, with `core` consisting of singleton
+services used throughout the application, and `shared` consisting of heavily reused components.
 
 ```ts
 apps/web/src/app/
