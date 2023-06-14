@@ -12,7 +12,7 @@ tags: [clients, angular]
 
 ## Context and Problem Statement
 
-We currently use a mixed filename convention where some files follows the Angular styleguide, and
+We currently use a mixed filename convention where some files follows the Angular style guide, and
 other files use camelCase. This causes some confusion as to which convention to follow, and we
 should standardize on one convention to avoid confusion.
 
@@ -45,15 +45,16 @@ At Bitwarden we also use a couple of more types:
 - `.request` - Api Request
 - `.response` - Api Response
 - `.type` - Enum
-- `.service.implementation` - Implementation of an abstract service
+- `.service.abstraction` - Abstract class for a service, used for DI, not all services needs an
+  abstract class
 
 The class names are expected to use the suffix as part of their class name as well. I.e. a service
-implementation will be named `FolderServiceImplementation`, a request model will be named
-`FolderRequest`.
+implementation will be named `FolderService`, a request model will be named `FolderRequest`.
 
-Since abstracts are referenced far more frequently than implementations, they use the simplified
-type while implementations must specify they are implementations e.g `.service` for the abstract vs
-`.service.implementation` for the implantation.
+In the event a service can't be fully implemented, an abstract class is created with the
+`Abstraction` suffix. This typically happens if the Angular and Node implementations have to differ
+for one reason or another. Traditionally interfaces would be used, but a TypeScript interface cannot
+be used to wire up dependency injection in JavaScript.
 
 ### Positive Consequences
 

@@ -54,8 +54,6 @@ web/src/app
     core.module.ts
     index.ts
   shared
-    pipes
-    components
     shared.module.ts
     index.ts
 

@@ -32,8 +32,8 @@ Docker compose will spin up a local smtp server that can be used, but it’s als
 other services such as Mailtrap, or Amazon to debug the amazon integration.
 
 - Amazon Simple Email Service - the user secrets vault item includes a separate attachment called
-  `amazon_key_for_email.json`. Add this key to your user secrets to use Amazon's mail service.
-  Caution: this will send emails to real live email addresses!
+  `additional-keys-for-cloud-services.json`. Add the `amazon` key to your user secrets to use
+  Amazon's mail service. Caution: this will send emails to real live email addresses!
 - [bytemark/docker-smtp](https://github.com/BytemarkHosting/docker-smtp) - a local SMTP server
   running on Docker.
 

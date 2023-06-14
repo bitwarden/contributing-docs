@@ -5,9 +5,14 @@ This article will show you how to set up a local SSO Identity Provider (IdP) for
 This uses
 [Docker Test SAML 2.0 Identity Provider](https://github.com/kenchan0130/docker-simplesamlphp).
 
-## Requirements
+## Prerequisites
 
-1.  Local Bitwarden development server with the Api, Identity and Sso projects running
+1.  Bitwarden server set up and configured with the following server projects running:
+
+    - Identity
+    - API
+    - SSO (located at `server/bitwarden_license/src/Sso`)
+
 2.  Local web client running
 
 ## Configure IdP
@@ -48,7 +53,7 @@ This uses
     By default, this file has two users configured: `user1` and `user2`, and both have the password
     `password`. You can add or modify users by following this format, or just use the defaults. See
     [here](https://github.com/kenchan0130/docker-simplesamlphp#advanced-usage) for more information
-    about customising this file.
+    about customizing this file.
 
 8.  Start the docker container:
 
@@ -57,7 +62,7 @@ This uses
     ```
 
 9.  You can test your user configuration by navigating to <http://localhost:8090/simplesaml>, then
-    Authentication → test configured authentication sources → example-userpass. You should be able
+    Authentication → test configured authentication sources → `example-userpass`. You should be able
     to login with the users you’ve configured.
 
 ## Configure Bitwarden
@@ -103,6 +108,6 @@ docker-compose --profile idp up -d
 
 ## Troubleshooting
 
-### Bitwarden server thows “unknown userId” error
+### Bitwarden server throws “unknown userId” error
 
 You’re missing the `uid` claim for the user in `authsources.php`.

@@ -151,7 +151,7 @@ You can connect to it using Azure Data Studio using the following credentials:
 The server uses emails for many user interactions. We provide a pre-configured instance of
 [MailCatcher](https://mailcatcher.me/), which catches any outbound email and prevents it from being
 sent to real email addresses. You can open its web interface at
-[http://localhost:1080.](http://localhost:1080.)
+[http://localhost:1080](http://localhost:1080).
 
 ### Azurite
 

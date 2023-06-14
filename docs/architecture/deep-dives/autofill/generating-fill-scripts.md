@@ -13,7 +13,7 @@ the next step is to generate what we call a "fill script". A fill script is a se
 instructions that tell the `autofill.js` content script what fields to fill and with what data it
 should fill each field.
 
-The generation of fill scripts is the responsiblity of the
+The generation of fill scripts is the responsibility of the
 [`AutofillService`](https://github.com/bitwarden/clients/blob/master/apps/browser/src/autofill/services/autofill.service.ts).
 There are three method used to perform fill script generation:
 

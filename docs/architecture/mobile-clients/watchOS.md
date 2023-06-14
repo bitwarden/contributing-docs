@@ -12,7 +12,7 @@ The watchOS application is organized as follows:
 So almost all the things related to the watch app will be in the **WatchKit Extension**, the
 WatchKit App one will be only for assets and some configs.
 
-Then in the Extension we have a layered architecure:
+Then in the Extension we have a layered architecture:
 
 - State (it's a really simplified version of the iOS state)
 - Persistence (here we use `CoreData` to interact with the Database)
@@ -86,7 +86,7 @@ is used given that it always have the latest data sent available, it's sent in t
 the counterpart device doesn't necessarily needs to be in range (so it's cached until it can be
 delivered). Additionally,
 [sendMessage](https://developer.apple.com/documentation/watchconnectivity/wcsession/1615687-sendmessage)
-is also used to signal the counterpart of some action to take fastly (like triggering a sync from
+is also used to signal the counterpart of some action to take quickly (like triggering a sync from
 the Watch).
 
 The `WatchDTO` is the object that is sent in the synchronization that has all the information for
