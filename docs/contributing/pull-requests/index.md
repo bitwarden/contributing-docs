@@ -63,7 +63,7 @@ As a Bitwarden contributor you should branch of `origin/master`, this ensures th
 always based of the latest upstream `master` even if the local `master` is out of date.
 
 ```bash
-git checkout -b <pod>/<issue-number> -t origin/master
+git checkout -b <team>/<issue-number> -t origin/master
 ```
 
 Our branching strategy is described in detail [here](branching.md).
@@ -104,14 +104,14 @@ Please follow the following checklist when creating a PR.
   - Jira will automatically add a reference to the PR in the ticket if you include the ticket number
     (e.g. EC-123) or a link to the ticket anywhere in the PR title or body.
 - Add appropriate reviewer(s).
-  - In most cases, this should be your pod. Each pod should have a GitHub team to simplify
-    requesting reviews. The pod teams are named as follows:
-    - `@pod-{podAbbreviation}`: This will notify the entire pod, including product, design, QA and
-      development
-    - `@pod-{podAbbreviation}-dev`: This will notify or assign for code review the software
-      engineers within the pod
-    - `@pod-{podAbbreviation}-qa`: This will notify or assign for code review the QA
-      engineers/SDET(s) within the pod
+  - In most cases, this should be your team. Each team should have a GitHub team to simplify
+    requesting reviews. The teams are named as follows:
+    - `@team-{teamAbbreviation}`: This will notify the entire team, including product, design, QA
+      and development
+    - `@team-{teamAbbreviation}-dev`: This will notify or assign for code review the software
+      engineers within the team
+    - `@team-{teamAbbreviation}-qa`: This will notify or assign for code review the QA
+      engineers/SDET(s) within the team
   - For design changes, tag `@dept-design`
   - Please use the
     [SME Yellowpages](https://bitwarden.atlassian.net/wiki/spaces/DEV/pages/195919928) to check if

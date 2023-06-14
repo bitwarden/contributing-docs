@@ -1,6 +1,6 @@
 # Code Review Guidelines
 
-At Bitwarden, we encourage everyone to participate in code reviews. A pod will focus primarily on
+At Bitwarden, we encourage everyone to participate in code reviews. A team will focus primarily on
 their own code reviews, but if you see something interesting, feel free to jump in and discuss.
 
 To have efficient code reviews there are a few things to keep in mind (from
