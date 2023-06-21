@@ -4,6 +4,14 @@ sidebar_position: 6
 
 # Mobile
 
+## Clone Repo
+
+Clone the Bitwarden `mobile` [repository](https://github.com/bitwarden/mobile).
+
+```bash
+git clone https://github.com/bitwarden/mobile.git
+```
+
 ## Configure Git blame
 
 We recommend that you configure git to ignore the Prettier revision:
