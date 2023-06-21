@@ -294,8 +294,7 @@ in `appSettings.json` of each project. Your user secrets file should match the s
 We provide a helper script which simplifies setting user secrets for all projects in the server
 repository.
 
-1.  Get a template `secrets.json`. We need to get an initial version of `secrets.json`, which you
-    will modify for your own secrets values.
+1.  Get a `secrets.json` template so you can modify it with your own secrets values.
 
     <community>
 
@@ -309,15 +308,18 @@ repository.
 
     <bitwarden>
 
-    - Copy the user secrets file from the shared Development collection into the `dev` folder.
-    - This `secrets.json` is configured to use the dockerized Azurite and MailCatcher instances and
-      is recommended for this guide.
+    1. Go to Bitwarden's shared Development collection.
+    2. Search for the `Server User Secrets` credentials.
+    3. Download the `secrets.json` file and copy it into the server `dev` folder. (This
+       `secrets.json` file is configured to use the dockerized Azurite and MailCatcher instances and
+       is recommended for this guide.)
 
     </bitwarden>
 
 2.  Update `secrets.json` with your own values:
 
-    - `sqlServer` > `connectionString`: insert your password where indicated
+    - `sqlServer` > `connectionString`: insert your password where indicated (this is the same
+      password you created during the Docker setup and added to `dev/.env`)
     - `identityServer` > `certificateThumbprint`: insert your Identity certificate thumbprint from
       the previous step
     - `dataProtection` > `certificateThumbprint`: insert your Data Protection certificate thumbprint
