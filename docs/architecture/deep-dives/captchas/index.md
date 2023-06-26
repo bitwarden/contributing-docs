@@ -22,7 +22,7 @@ For these requests, the server requires a captcha if either of the following are
 
 ### Login: Token requests authenticated with Resource Owner Password authentication
 
-Requests against `/identity/token` in the Identity service are validated with the
+Requests against `/identity/connect/token` in the Identity service are validated with the
 `ResourceOwnerPasswordValidator`. In this validator, we perform different checks to see if a captcha
 is required, since the endpoint is authenticated and we know the user from the request (assuming
 they are authenticated successfully).
