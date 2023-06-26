@@ -54,6 +54,15 @@ mkcert -cert-file dev-server.local.pem -key-file dev-server.local.pem localhost 
 
 2.  Open your browser and navigate to `https://localhost:8080`.
 
+3. If your client and server are running you should see the Bitwarden login screen. Lets create an account and verify it.
+  
+    * Create a new account. This could be a fake email
+    * Log into the new account.
+    * Click on Verify Email Address
+    * Navigate to http://localhost:1080/
+    * Open the no reply email and verify your email address
+
+
 :::info
 
 You can also run the Web Vault in self-hosted mode by using the `build:bit:selfhost:watch` and
