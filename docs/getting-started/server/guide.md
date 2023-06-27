@@ -276,7 +276,7 @@ To run your local server environment as a licensed instance, you will need to do
 `Licensing Certificate - Dev` from the shared Engineering collection and install it. This can be
 done by double-clicking on the downloaded certificate.
 
-- Log into your Bitwarden account
+- Log in to your company-issued Bitwarden account
 - Navigate to the Bitwarden Vault
 - Scroll down to `Licensing Certificate \* Dev
 - View attachments and download both files
@@ -338,7 +338,7 @@ repository.
     </community>
 
 3.  Once you have your `secrets.json` complete, run the below command to add the secrets to each
-    Bitwarden server project. You may have to `brew install dotnet@6` first.
+    Bitwarden server project.
 
     ```bash
     pwsh setup_secrets.ps1
