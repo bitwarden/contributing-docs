@@ -63,9 +63,7 @@ Choose a **Short-Lived Feature Branch** if the feature will:
 :::tip Still Unsure?
 
 If in doubt, lean toward creating shorter-lived feature branches directly off of `master` for each
-developer’s work, as there is overhead built in to the Long-Lived Feature Branch that can be avoided
-if smaller features can be tested and released independently, or hidden behind a feature flag until
-the changes are ready.
+developer’s work, as there is overhead built in to the Long-Lived Feature Branch.
 
 :::
 
