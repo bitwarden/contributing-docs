@@ -122,7 +122,7 @@ Please follow the following checklist when creating a PR.
 
 ### Force Pushing
 
-Once a PR has been reviewed, please avoid git operations that affects the existing git commits, i.e.
+Once a PR has been reviewed, please avoid git operations that affect the existing git commits, i.e.
 anything that requires a force push. Force pushing prevents GitHub from correctly identifying “new
 changes” to a PR forcing the reviewer to start over again.
 
