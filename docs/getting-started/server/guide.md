@@ -153,13 +153,9 @@ The server uses emails for many user interactions. We provide a pre-configured i
 sent to real email addresses. You can open its web interface at
 [http://localhost:1080](http://localhost:1080).
 
+<bitwarden>
+
 ### Azurite
-
-:::note
-
-This section applies to Bitwarden developers only.
-
-:::
 
 [Azurite](https://github.com/Azure/Azurite) is an emulator for Azure Storage API and supports Blob,
 Queues and Table storage. We use it to minimize the online dependencies required for developing in a
@@ -180,6 +176,8 @@ the following commands:
     ```bash
     pwsh setup_azurite.ps1
     ```
+
+</bitwarden>
 
 ## Create database
 
