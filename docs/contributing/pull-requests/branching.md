@@ -116,12 +116,12 @@ Branch.
 #### Syncing the Long-Lived Feature Branch
 
 We typically denote one person as being responsible for keeping the Long-Lived Feature Branch up to
-date. In most cases this will be the Tech Lead of the pod but can be anyone. This person is
+date. In most cases this will be the Tech Lead of the team but can be anyone. This person is
 responsible for keeping the feature branch reasonably up to date with master, preparing it for merge
 and more.
 
 Due to how GitHub handles reviews, this person cannot also approve the final PR for the Long-Lived
-Feature Branch. The reviewer can be anyone in the pod. However, since the work this branch is
+Feature Branch. The reviewer can be anyone in the team. However, since the work this branch is
 typically larger, some seniority with the codebase can be beneficial.
 
 #### QA
