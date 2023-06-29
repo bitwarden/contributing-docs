@@ -37,8 +37,8 @@ from someone else, and there’s nothing wrong in having two reviewers on a PR.
 
 <a id="assumptions-note"></a> When reviewing code, remember that all software is built to conform to
 a set of assumptions. Features, bug fixes, and other requirement changes represent a change in those
-assumptions. Code, after merge, should represent the best solution that fulfills the new set of requirements, which
-may not necessarily be in line with the previous solution.
+assumptions. Code, after merge, should represent the best solution that fulfills the new set of
+requirements, which may not necessarily be in line with the previous solution.
 
 :::
 
