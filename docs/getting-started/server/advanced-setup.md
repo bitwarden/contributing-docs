@@ -26,6 +26,23 @@ without actually being charged.
    card number will need to be the correct number of characters).
 4. Buy premium features to your heart's content
 
+:::info
+
+Stripe has a [policy](https://support.stripe.com/questions/test-mode-subscription-data-retention) to
+**automatically cancel** test subscriptions after 90 days and then **delete** cancelled test
+subscriptions after 30 days. This can cause unexpected Billing behaviors for long-lived premium
+users/organizations in your local server after the subscription is removed.
+
+To correct this, you must re-subscribe the organization/user to a premium plan to create a new test
+subscription.
+
+1. From the Bitwarden Portal, remove the organization/user gateway information and set their plan to
+   "Free".
+2. From the web client, add a new test payment method to the organization/user.
+3. Re-purchase the desired premium features as you would normally.
+
+:::
+
 ## Emails
 
 Docker compose will spin up a local smtp server that can be used, but it’s also possible to use
