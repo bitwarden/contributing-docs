@@ -37,9 +37,9 @@ To correct this, you must re-subscribe the organization/user to a premium plan t
 subscription.
 
 1. From the Bitwarden Portal, remove the organization/user gateway information and set their plan to
-   "Free".
-2. From the web client, add a new test payment method to the organization/user.
-3. Re-purchase the desired premium features as you would normally.
+   "Free"
+2. From the web client, add a new test payment method to the organization/user
+3. Re-purchase the desired premium features as you would normally
 
 :::
 
