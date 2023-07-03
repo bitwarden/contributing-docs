@@ -30,8 +30,8 @@ without actually being charged.
 
 Stripe has a [policy](https://support.stripe.com/questions/test-mode-subscription-data-retention) to
 **automatically cancel** test subscriptions after 90 days and then **delete** cancelled test
-subscriptions after 30 days. This can cause unexpected Billing behaviors for long-lived premium
-users/organizations in your local server after the subscription is removed.
+subscriptions after a further 30 days. This can cause unexpected billing behaviors for long-lived premium
+users and organizations on your local server.
 
 To correct this, you must re-subscribe the organization/user to a premium plan to create a new test
 subscription.
