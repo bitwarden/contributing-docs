@@ -224,23 +224,6 @@ store.
 
 Navigate to the `dev` folder in your server repo and perform the following commands.
 
-### Linux
-
-1.  Generate the certificates and save them to your certificate store:
-
-    ```bash
-    ./create_certificates_linux.sh
-    ```
-
-2.  You will receive output similar to the following. You will need this information for the next
-    section.
-
-    ```
-    Certificate fingerprints:
-    Identity Server Dev: 0BE8A0072214AB37C6928968752F698EEC3A68B5
-    Data Protection Dev: C3A6CECAD3DB580F91A52FC9C767FE780300D8AB
-    ```
-
 ### MacOS
 
 1.  Generate the certificates and save them to your keychain:
@@ -283,6 +266,23 @@ Navigate to the `dev` folder in your server repo and perform the following comma
     ----------                                -------
     0BE8A0072214AB37C6928968752F698EEC3A68B5  CN=Bitwarden Identity Server Dev
     C3A6CECAD3DB580F91A52FC9C767FE780300D8AB  CN=Bitwarden Data Protection Dev
+    ```
+
+### Linux
+
+1.  Generate the certificates and save them to your certificate store:
+
+    ```bash
+    ./create_certificates_linux.sh
+    ```
+
+2.  You will receive output similar to the following. You will need this information for the next
+    section.
+
+    ```
+    Certificate fingerprints:
+    Identity Server Dev: 0BE8A0072214AB37C6928968752F698EEC3A68B5
+    Data Protection Dev: C3A6CECAD3DB580F91A52FC9C767FE780300D8AB
     ```
 
 <bitwarden>
