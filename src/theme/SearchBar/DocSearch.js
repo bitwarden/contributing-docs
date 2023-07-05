@@ -68,7 +68,7 @@ class DocSearch {
 
     this.autocomplete.on(
       "autocomplete:selected",
-      this.handleSelected.bind(null, this.autocomplete.autocomplete)
+      this.handleSelected.bind(null, this.autocomplete.autocomplete),
     );
 
     this.autocomplete.on("autocomplete:shown", this.handleShown.bind(null, this.input));
