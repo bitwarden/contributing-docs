@@ -17,11 +17,28 @@ assist in identifying and tracking down stale branches.
 In order to tie the work on a branch to our Jira issues, the branch name should be made up of three
 parts, separated by a slash:
 
-- The team name or abbreviation (e.g. `Vault`), and
-- The Jira issue tag (e.g. `PM-1234`)
+- The team name or abbreviation (e.g. `vault`), and
+- The Jira issue tag (e.g. `pm-1234`)
 - A short description of the work being done (e.g. `update-csp-hashes`)
 
-In this example, the full branch name would be `Vault/PM-1234/update-csp-hashes`.
+In this example, the full branch name would be `vault/pm-1234/update-csp-hashes`.
+
+- Use only lower case letters in branch names.
+- Separate words with `-` and branch name sections with `/`. Only use these characters for word or
+  section separation.
+- Limit work description section to ~50 characters. Overall branch name should be ~80 characters,
+  max.
+- List of Teams. Teams with abbreviations _must_ use the abbreviation instead of the team name.
+  Teams without abbreviations _may not_ abbreviate:
+  - auth
+  - vault
+  - admin console (abbreviated to `ac`)
+  - secrets manager (abbreviated to `sm`)
+  - tools
+  - platform
+  - billing
+  - client integrations (abbreviated to `ci`)
+  - passwordless
 
 ### Branches for multiple Jira issues
 
