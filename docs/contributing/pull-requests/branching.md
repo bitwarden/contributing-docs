@@ -26,19 +26,9 @@ In this example, the full branch name would be `vault/pm-1234/update-csp-hashes`
 - Use only lower case letters in branch names.
 - Separate words with `-` and branch name sections with `/`. Only use these characters for word or
   section separation.
-- Limit work description section to ~50 characters. Overall branch name should be ~80 characters,
-  max.
-- List of Teams. Teams with abbreviations _must_ use the abbreviation instead of the team name.
-  Teams without abbreviations _may not_ abbreviate:
-  - auth
-  - vault
-  - admin console (abbreviated to `ac`)
-  - secrets manager (abbreviated to `sm`)
-  - tools
-  - platform
-  - billing
-  - client integrations (abbreviated to `ci`)
-  - passwordless
+- Limit work description section to ~50 characters. Overall branch name should be a maximum of ~80
+  characters.
+- Team names must be consistent. Either always abbreviate or do not abbreviate.
 
 ### Branches for multiple Jira issues
 
