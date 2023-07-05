@@ -234,8 +234,7 @@ Navigate to the `dev` folder in your server repo and perform the following comma
 
 2.  You will be prompted to enter a password 3 times. Create a complex password and type it into the
     `Export Password` field on each prompt. You will not be able to copy/paste.
-3.  You will receive output similar to the following. You will need this information for the next
-    section.
+3.  You will receive output similar to the following. You will need to collect the generated certificate fingerprints for use in the [Configure User Secrets](#configure-user-secrets) section.
 
     ```
     Certificate fingerprints:
@@ -256,8 +255,7 @@ Navigate to the `dev` folder in your server repo and perform the following comma
     .\create_certificates_windows.ps1
     ```
 
-2.  You will receive output similar to the following. You will need this information for the next
-    section.
+2.  You will receive output similar to the following. You will need to collect the generated certificate fingerprints for use in the [Configure User Secrets](#configure-user-secrets) section.
 
     ```
     PSParentPath: Microsoft.PowerShell.Security\Certificate::CurrentUser\My
@@ -276,8 +274,7 @@ Navigate to the `dev` folder in your server repo and perform the following comma
     ./create_certificates_linux.sh
     ```
 
-2.  You will receive output similar to the following. You will need this information for the next
-    section.
+2.  You will receive output similar to the following. You will need to collect the generated certificate fingerprints for use in the [Configure User Secrets](#configure-user-secrets) section.
 
     ```
     Certificate fingerprints:
