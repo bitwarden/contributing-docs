@@ -234,7 +234,8 @@ Navigate to the `dev` folder in your server repo and perform the following comma
 
 2.  You will be prompted to enter a password 3 times. Create a complex password and type it into the
     `Export Password` field on each prompt. You will not be able to copy/paste.
-3.  You will receive output similar to the following. You will need this information for the next
+3.  You will receive output similar to the following. You will need to collect the generated
+    certificate fingerprints for use in the [Configure User Secrets](#configure-user-secrets)
     section.
 
     ```
@@ -256,7 +257,8 @@ Navigate to the `dev` folder in your server repo and perform the following comma
     .\create_certificates_windows.ps1
     ```
 
-2.  You will receive output similar to the following. You will need this information for the next
+2.  You will receive output similar to the following. You will need to collect the generated
+    certificate fingerprints for use in the [Configure User Secrets](#configure-user-secrets)
     section.
 
     ```
@@ -266,6 +268,24 @@ Navigate to the `dev` folder in your server repo and perform the following comma
     ----------                                -------
     0BE8A0072214AB37C6928968752F698EEC3A68B5  CN=Bitwarden Identity Server Dev
     C3A6CECAD3DB580F91A52FC9C767FE780300D8AB  CN=Bitwarden Data Protection Dev
+    ```
+
+### Linux
+
+1.  Generate the certificates and save them to your certificate store:
+
+    ```bash
+    ./create_certificates_linux.sh
+    ```
+
+2.  You will receive output similar to the following. You will need to collect the generated
+    certificate fingerprints for use in the [Configure User Secrets](#configure-user-secrets)
+    section.
+
+    ```
+    Certificate fingerprints:
+    Identity Server Dev: 0BE8A0072214AB37C6928968752F698EEC3A68B5
+    Data Protection Dev: C3A6CECAD3DB580F91A52FC9C767FE780300D8AB
     ```
 
 <bitwarden>
