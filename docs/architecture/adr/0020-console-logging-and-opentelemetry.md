@@ -75,10 +75,13 @@ be removed:
 - Sentry
 - Syslog
 
-The remaining sinks -- all core functionality of Serilog -- will continue to be supported:
+The remaining sinks -- core functionality of Serilog -- will continue to be supported:
 
 - Console (implicit and driven via configuration)
 - File (largely as a fallback for deprecated or legacy logging approaches)
+
+While the Serilog [console sink][serilogconsole] is currently an implicit dependency with what's
+provided for ASP.NET Core, it will be explicitly referenced.
 
 Solutions exist for users to shift processing of logs for the removed sinks to console or file and
 retain their integration. Admin Portal users can similarly continue to use CosmosDb for log
@@ -86,13 +89,26 @@ retention, but it is suggested that application monitoring that's available be u
 should in essentially all cases be able to receive and process console logs.
 
 Cloud installations -- including Bitwarden's own -- will shift to configuration via environment
-variables or otherwise to utilize structured console logs for processing e.g.:
+variables or otherwise to utilize structured console logs for processing explicitly with [Serilog
+configuration][serilogconfig] e.g.:
 
-```bash
-Logging__Console__FormatterName=json
-Logging__Console__FormatterOptions__SingleLine=true
-Logging__Console__FormatterOptions__IncludeScopes=true
+```json
+{
+  "Serilog": {
+    "Using": ["Serilog.Sinks.Console"],
+    "MinimumLevel": "Verbose",
+    "WriteTo": [{ "Name": "Console" }],
+    "Enrich": ["FromLogContext"],
+    "Properties": {
+      "Project": "BitwardenProjectName"
+    }
+  }
+}
 ```
+
+This will allow better usage of `appsettings.json` and a richer developer experience. Existing
+built-in ASP.NET Core logging will continue to be available if desired, but the recommendation will
+be to move to a Serilog configuration.
 
 Code cleanup will be performed around Serilog usage, such as:
 
@@ -121,5 +137,7 @@ on how to approach metric collection.
 [dd]: https://www.datadoghq.com/
 [ddsink]: https://www.nuget.org/packages/serilog.sinks.datadog.logs
 [ddtracer]: https://www.nuget.org/packages/Datadog.Trace.Bundle
+[serilogconsole]: https://www.nuget.org/packages/serilog.sinks.console
+[serilogconfig]: https://www.nuget.org/packages/Serilog.Settings.Configuration/
 [otel]: https://opentelemetry.io/
 [otelsignals]: https://opentelemetry.io/docs/concepts/signals/
