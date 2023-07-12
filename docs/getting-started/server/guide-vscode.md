@@ -225,7 +225,7 @@ ports they are running on.
 
 :::note
 
-We recommend continuing with the [Web Vault](../clients/web-vault/index.mdx) afterwards, since many
+We recommend continuing with the [Web Vault](../clients/web-vault) afterwards, since many
 administrative operations can only be performed in it.
 
 :::
