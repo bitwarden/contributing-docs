@@ -246,14 +246,16 @@ After you’ve run the deployed the Dev Containers, you can use the
 [Docker Dashboard](https://docs.docker.com/desktop/dashboard/) or `docker` CLI to manage your
 containers. You should see your containers running under the `bitwarden_common` group.
 
-:::caution
+### Changing the DB Password
 
 Changing `MSSQL_SA_PASSWORD` variable after first running the Dev Containers will require a
 re-creation of the storage volume.
 
-**Warning: this will delete your development database.**
+:::warning
 
-To do this, exit the Dev Containers and run the following commands from the
+**The following will delete your development database.**
+
+To do this, stop any running server processes and run the following commands from the
 `./.devcontainer/bitwarden_common` directory:
 
 ```bash
@@ -261,7 +263,8 @@ docker compose down
 docker volume rm bitwarden_common-bitwarden_mssql-1
 ```
 
-After that, you can re-open the Dev Containers in Visual Studio Code and the database will be
-recreated with the new password.
-
 :::
+
+After destroying the DB volume, you can rebuild the Dev Containers in Visual Studio Code and the
+database using the VS Code Command Palette (Ctrl/Command+Shift+P) and selecting **Dev Containers:
+Rebuild Container**.
