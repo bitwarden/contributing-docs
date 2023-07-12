@@ -14,14 +14,21 @@ assist in identifying and tracking down stale branches.
 
 ### Branches for a specific Jira issue
 
-In order to tie the work on a branch to our Jira issues, the branch name should be made up of two
+In order to link the work on a branch to our Jira issues, the branch name should be made up of three
 parts, separated by a slash:
 
-- The team name or abbreviation (e.g. `Vault`), and
-- The Jira issue tag (e.g. `PM-1234`)
+- The team name or abbreviation (e.g. `vault`), and
+- The Jira issue tag (e.g. `pm-1234`)
 - A short description of the work being done (e.g. `update-csp-hashes`)
 
-In this example, the full branch name would be `Vault/PM-1234/update-csp-hashes`.
+In this example, the full branch name would be `vault/pm-1234/update-csp-hashes`.
+
+- Use only lower case letters in branch names.
+- Separate words with `-` and branch name sections with `/`. Only use these characters for word or
+  section separation.
+- Limit work description section to ~50 characters. Overall branch name should be a maximum of ~80
+  characters.
+- Team names must be consistent. Either always abbreviate or do not abbreviate.
 
 ### Branches for multiple Jira issues
 
