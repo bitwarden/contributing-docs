@@ -22,6 +22,13 @@ Before you start: make sure you’ve installed the recommended
 
 :::
 
+:::info
+
+A guide for developing in VS Code Dev containers can be found [here](./guide-vscode) if you prefer
+developing in a containerized environment.
+
+:::
+
 ## Clone the repository
 
 1.  Clone the Bitwarden Server project:
