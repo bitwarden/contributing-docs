@@ -14,13 +14,21 @@ assist in identifying and tracking down stale branches.
 
 ### Branches for a specific Jira issue
 
-In order to tie the work on a branch to our Jira issues, the branch name should be made up of two
+In order to link the work on a branch to our Jira issues, the branch name should be made up of three
 parts, separated by a slash:
 
-- The team name or abbreviation (e.g. `Vault`), and
-- The Jira issue tag (e.g. `PM-1234`)
+- The team name or abbreviation (e.g. `vault`), and
+- The Jira issue tag (e.g. `pm-1234`)
+- A short description of the work being done (e.g. `update-csp-hashes`)
 
-In this example, the full branch name would be `Vault/PM-1234`.
+In this example, the full branch name would be `vault/pm-1234/update-csp-hashes`.
+
+- Use only lower case letters in branch names.
+- Separate words with `-` and branch name sections with `/`. Only use these characters for word or
+  section separation.
+- Limit work description section to ~50 characters. Overall branch name should be a maximum of ~80
+  characters.
+- Team names must be consistent. Either always abbreviate or do not abbreviate.
 
 ### Branches for multiple Jira issues
 
@@ -51,22 +59,18 @@ Product.
 
 Choose a **Long-Lived Feature Branch** if the feature will:
 
-- Have multiple authors
-- Consist of multiple Pull Requests, which have already been reviewed
-- Require these multiple Pull Requests from multiple authors in order to produce the testable,
-  releasable change
+- Require multiple Pull Requests to produce a testable, releasable change, and
+- It is not possible to put the changes behind a feature flag
 
 Choose a **Short-Lived Feature Branch** if the feature will:
 
-- Have a single author
-- Consist of a single Pull Request from the Feature Branch into `master` to produce the testable,
-  releasable change
+- Require a single Pull Request to produce a testable, releasable change, or
+- It is possible to put the changes behind a feature flag while multiple PRs are in flight.
 
 :::tip Still Unsure?
 
 If in doubt, lean toward creating shorter-lived feature branches directly off of `master` for each
-developer’s work, as there is overhead built in to the Long-Lived Feature Branch that can be avoided
-if smaller features can be tested and released independently.
+developer’s work, as there is overhead built in to the Long-Lived Feature Branch.
 
 :::
 
@@ -91,8 +95,10 @@ the Long-Lived Feature Branch for the piece of functionality and create a **draf
 branch into `master`. This name should include the Jira Epic name if applicable.
 
 Each developer should then branch off of that feature branch, creating an "Issue Branch" named with
-the initiating Jira issue (e.g. `PM-1234`). We call this an Issue Branch because Jira refers to
-stories and tasks as issues and to differentiate from the Long-Lived Feature Branch above.
+the initiating Jira issue, as described in
+[branches for a specific Jira issue](#branches-for-a-specific-jira-issue). We call this an Issue
+Branch because Jira refers to stories and tasks as issues and to differentiate from the Long-Lived
+Feature Branch above.
 
 :::note
 

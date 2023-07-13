@@ -40,8 +40,12 @@ This uses
     IDP_SP_ACS_URL=http://localhost:51822/saml2/yourOrgIdHere/Acs
     ```
 
-    !!! note You should have created this `.env` file during your initial server setup. You can
-    refer back to the `.env.example` file if required.
+    :::note
+
+    You should have created this `.env` file during your initial server setup. You can refer back to
+    the `.env.example` file if required.
+
+    :::
 
 7.  Make a copy of the provided `authsources.php.example` file, which contains the configuration for
     your IdP users.

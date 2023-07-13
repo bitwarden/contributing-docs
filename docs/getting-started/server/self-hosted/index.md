@@ -72,9 +72,12 @@ repo, we'll modify them in further steps below.
 Copy the `secrets.json` file into the `dev` folder of the self-hosted repository that you just
 cloned.
 
-!!! tip The `.gitignore` configuration will prevent the `secrets.json` in the `dev` folder from
-being checked in to source control. Under no circumstances should the `secrets.json` be pushed to
-origin.
+:::tip
+
+The `.gitignore` configuration will prevent the `secrets.json` in the `dev` folder from being
+checked in to source control. Under no circumstances should the `secrets.json` be pushed to origin.
+
+:::
 
 #### `.env` File
 

@@ -63,7 +63,7 @@ As a Bitwarden contributor you should branch of `origin/master`, this ensures th
 always based of the latest upstream `master` even if the local `master` is out of date.
 
 ```bash
-git checkout -b <team>/<issue-number> -t origin/master
+git checkout -b <team>/<issue-number>/<brief-description> -t origin/master
 ```
 
 Our branching strategy is described in detail [here](branching.md).
@@ -88,43 +88,23 @@ contributor to revise their local history before pushing to the remote repositor
 is squashing multiple half-working commits. Please be sure to follow the
 [force-pushing recommendations](#force-pushing).
 
+:::warning
+
+**Avoid force push** once a PR has been reviewed.
+
+Git operations that affects the existing git commits prevent GitHub from correctly identifying “new
+changes” to a PR forcing the reviewer to start over again.
+
+:::
+
 ## Creating a Pull Request
 
 The Bitwarden repositories have a _Pull Request template_ which should be followed. This will ensure
 the PR review goes smoothly since it will provide context to the reviewer. <community> Once a
 community PRs has been created, they will be automatically be linked to an internal Jira ticket. The
-internal ticket is used for prioritization and tracking purposes. </community>
-
-<bitwarden>
-
-Please follow the following checklist when creating a PR.
-
-- The PR should always contain a Jira reference.
-  - Ensures QA have visibility in what they need to test.
-  - Jira will automatically add a reference to the PR in the ticket if you include the ticket number
-    (e.g. EC-123) or a link to the ticket anywhere in the PR title or body.
-- Add appropriate reviewer(s).
-  - In most cases, this should be your team. Each team should have a GitHub team to simplify
-    requesting reviews. The teams are named as follows:
-    - `@team-{teamAbbreviation}`: This will notify the entire team, including product, design, QA
-      and development
-    - `@team-{teamAbbreviation}-dev`: This will notify or assign for code review the software
-      engineers within the team
-    - `@team-{teamAbbreviation}-qa`: This will notify or assign for code review the QA
-      engineers/SDET(s) within the team
-  - For design changes, tag `@dept-design`
-  - Please use the
-    [SME Yellowpages](https://bitwarden.atlassian.net/wiki/spaces/DEV/pages/195919928) to check if
-    there is someone with specific knowledge of the area that can assist with reviewing complex
-    changes.
-
-</bitwarden>
-
-### Force Pushing
-
-Once a PR has been reviewed, please avoid git operations that affects the existing git commits, i.e.
-anything that requires a force push. Force pushing prevents GitHub from correctly identifying “new
-changes” to a PR forcing the reviewer to start over again.
+internal ticket is used for prioritization and tracking purposes.</community><bitwarden>Include a
+Jira ticket reference so the reviewer can gain all context on the work.</bitwarden> Tag
+`@dept-design` as a reviewer for any UI changes.
 
 ## Review process
 
