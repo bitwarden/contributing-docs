@@ -1,12 +1,57 @@
-# Bitwarden Portal
+# System Management Portal
+
+:::info Portal naming
+
+This documentation refers to the deployment of the `Admin` application in our `server` repository.
+To disambiguate this application from others in the Bitwarden landscape, we refer to it as follows:
+
+- For **Cloud-Hosted** Instances (internal to Bitwarden) &rarr; Bitwarden Portal
+- For **Self-Hosted** Instances &rarr; System Management Portal
+
+:::
+
+## Setup
+
+1.  Navigate to the `server/src/admin` directory.
+2.  Restore nuget packages:
+
+    ```bash
+    dotnet restore
+    ```
+
+3.  Install npm packages:
+
+    ```bash
+    npm ci
+    ```
+
+4.  Build the admin project:
+
+    ```bash
+    dotnet build
+    ```
+
+5.  Build out the `wwwroot` directory with the necessary stylesheets and libraries:
+
+    ```bash
+    npx gulp build
+    ```
+
+6.  Start the server:
+
+    ```bash
+    dotnet run
+    ```
+
+7.  Confirm it's working by using your favorite browser to navigate to the portal URL. By default,
+    this is [http://localhost:62911](http://localhost:62911).
 
 ## Configuring access
 
 ### Authentication
 
-Bitwarden Portal authentication is done entirely through a passwordless flow, using a link sent
-through email. The email address must be listed in the `adminSettings:admins` user secret to be
-authorized.
+Portal authentication is done entirely through a passwordless flow, using a link sent through email.
+The email address must be listed in the `adminSettings:admins` user secret to be authorized.
 
 If you’ve followed the [Server Setup Guide](./guide.md) this should already be configured, with the
 following accounts having access:
@@ -57,42 +102,6 @@ control on self-hosted deployments.
 :::
 
 </bitwarden>
-
-## Setup
-
-1.  Navigate to the `server/src/admin` directory.
-2.  Restore nuget packages:
-
-    ```bash
-    dotnet restore
-    ```
-
-3.  Install npm packages:
-
-    ```bash
-    npm ci
-    ```
-
-4.  Build the admin project:
-
-    ```bash
-    dotnet build
-    ```
-
-5.  Build out the `wwwroot` directory with the necessary stylesheets and libraries:
-
-    ```bash
-    npx gulp build
-    ```
-
-6.  Start the server:
-
-    ```bash
-    dotnet run
-    ```
-
-7.  Confirm it's working by using your favorite browser to navigate to the portal URL. By default,
-    this is [http://localhost:62911](http://localhost:62911).
 
 ## Logging in
 
