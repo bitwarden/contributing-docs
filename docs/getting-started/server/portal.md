@@ -4,7 +4,7 @@
 
 :::info Portal naming
 
-This documentation refers to the deployment of the `Admin` application in our `server` repository.
+This documentation refers to the deployment of the `Admin` project in our `server` repository.
 To disambiguate this application from others in the Bitwarden landscape, we refer to it as follows:
 
 - For **Cloud-Hosted** Instances (internal to Bitwarden) &rarr; **Bitwarden Portal**
