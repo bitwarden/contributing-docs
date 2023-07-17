@@ -1,4 +1,4 @@
-# User Secrets Reference
+# Modifying User Secrets
 
 ## Manually editing user secrets
 
