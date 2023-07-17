@@ -94,7 +94,8 @@ override section will apply instead of the value given in `GlobalSettings`.
 
 :::tip
 
-If you’re struggling to remember about user secrets, review [User Secrets](../user-secrets.md).
+If you’re struggling to remember about user secrets, review
+[User Secrets](../../../contributing/user-secrets.md).
 
 :::
 

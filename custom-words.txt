@@ -50,3 +50,5 @@ onboarded
 OIDCS
 oktapreview
 Xcodes.app
+YubiKey
+Yubico
