@@ -49,3 +49,4 @@ keypair
 onboarded
 OIDCS
 oktapreview
+Xcodes.app
