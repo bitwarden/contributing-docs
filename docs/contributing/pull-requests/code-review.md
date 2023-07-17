@@ -1,16 +1,14 @@
 # Code Review Guidelines
 
-At Bitwarden, we encourage everyone to participate in code reviews. A pod will focus primarily on
+At Bitwarden, we encourage everyone to participate in code reviews. A team will focus primarily on
 their own code reviews, but if you see something interesting, feel free to jump in and discuss.
 
 To have efficient code reviews there are a few things to keep in mind (from
 [Best Practices for Code Review | SmartBear](https://smartbear.com/learn/code-review/best-practices-for-peer-code-review/)):
 
-- As an author, keep your PRs small - ideally less than 400 lines.
+- Pull requests should be manageable. If the PR is too large -- significantly above a few hundred
+  lines -- ask the contributor if it can be split it up into multiple PRs before reviewing.
   - This can be tricky in our code base since many things are tightly coupled.
-  - Consider splitting up a PR into multiple smaller PRs to encourage easier and better quality
-    reviews.
-  - Target `master` if the code is functionally complete, otherwise target a feature branch.
 - Take your time when reviewing - expect a rate of less than 500 lines of code per hour.
 - Take breaks - don’t review for longer than 60 minutes.
 
@@ -35,6 +33,15 @@ always welcome! For example, it’s okay to leave some general comments or feedb
 that you don’t have enough knowledge to approve the changes. The author can ask for another review
 from someone else, and there’s nothing wrong in having two reviewers on a PR.
 
+:::info Note
+
+<a id="assumptions-note"></a> When reviewing code, remember that all software is built to conform to
+a set of assumptions. Features, bug fixes, and other requirement changes represent a change in those
+assumptions. Code, after merge, should represent the best solution that fulfills the new set of
+requirements, which may not necessarily be in line with the previous solution.
+
+:::
+
 ### Review statuses
 
 Please use the review statuses appropriately.
@@ -51,7 +58,8 @@ tackled.
 
 We shouldn’t hesitate to use this status, however we should give clear feedback on what needs to
 change for the PR to get approved. Likewise a PR author should not be discouraged by a _request for
-changes_, it's simply an indication that changes should be made prior to the PR being merged.
+changes_, it's simply an indication that changes should be made prior to the PR being merged. This
+is common.
 
 :::warning Discarding reviews
 
@@ -71,17 +79,26 @@ scenarios where discarding the reviews are generally seen as accepted.
 Approving a PR means that you have confidence in that the code works, and that it does what the PR
 claims. This can be based on testing the change or on previous domain knowledge.
 
-- You have read and understood the all code changes in the PR.
+- The PR targets the [correct branch](branching/#which-branching-model-to-choose).
 - You have verified that the linked Jira issue description matches the changes made in the PR.
-- The code is well structured, follows our code patterns, doesn’t have a better or more appropriate
-  solution, and is free of unintended side-effects.
+- You have read and understood the full impact of the changes suggested by the PR.
+- You attest that the changes
+  - Solve the intended problem,
+  - [solve the requirements in the best way](#assumptions-note),
+  - the code is well structured,
+  - follows our most recent, accepted patterns,
+  - and is free of unintended side-effects.
 
 If you are unsure about any of the above, consider using a different status or check in with the
 author to discuss things first. Also don’t hesitate to request a second review from someone else.
 
+If a PR affects multiple teams, approval will be required by all teams impacted. The approver for
+the team that produced the PR[^1] is responsible for approving the change as a whole, while impacted
+teams are responsible only for their portion of the codebase.
+
 ## Reviewing Techniques
 
-There are no one-size-fits-all techniques for reviewing code. However there are techniques, tools,
+There are no one-size-fits-all technique for reviewing code. However there are techniques, tools,
 and other resources that can help you review code more efficiently.
 
 ### Multiple Focus Areas
@@ -93,9 +110,14 @@ a time.
   - Is the problem being solved?
   - Is it being solved efficiently by changing in the appropriate places using the appropriate
     abstractions?
+  - Does the PR change the areas you expect to be changed?
+    - Are any missing?
+    - Are any present you didn't expect?
 - Micro View - Focus on individual files.
   - Is the code style adhered?
   - Is the code readable?
+  - Are previous patterns followed?
+  - Are previous patterns still the right choice?
 
 ### GitHub features
 
@@ -106,6 +128,8 @@ following articles.
   - commenting on multiple lines
   - suggesting code changes that the author can immediately accept and merge via the GitHub
     interface
+    - Be careful with this! You don't have the benefit of your IDE. It's easy to break syntax or
+      formatting.
 - [About comparing branches in pull requests - GitHub Docs][gh-branches] different ways to view the
   diff, including:
   - hiding whitespace (very useful if there have been lots of indentation changes)
@@ -134,3 +158,5 @@ gh pr checkout <GitHub PR number>
   https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/reviewing-changes-in-pull-requests/commenting-on-a-pull-request
 [gh-branches]:
   https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-comparing-branches-in-pull-requests
+
+[^1]: Or the team shepherding the PR, if it originated from the community

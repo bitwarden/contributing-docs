@@ -31,7 +31,8 @@ At Bitwarden we also use a couple of more types:
 - `.export` - Export Model
 - `.request` - Api Request
 - `.response` - Api Response
-- `.type` - Enum
+- `.type` - Type definition
+- `.enum` - Enum
 - `.service.abstraction` - Abstract class for a service, used for DI, not all services needs an
   abstract class
 
@@ -42,6 +43,50 @@ In the event a service can't be fully implemented, an abstract class is created 
 `Abstraction` suffix. This typically happens if the Angular and Node implementations have to differ
 for one reason or another. Traditionally interfaces would be used, but a TypeScript interface cannot
 be used to wire up dependency injection in JavaScript.
+
+## Organize by Feature ([ADR-0011](../../adr/0011-angular-folder-structure.md))
+
+We strive to follow the [Application structure and NgModules][style-structure] section from the
+Angular Style Guide.
+
+The folder structure should be organized by feature, in a hierarchial manner. With features in turn
+being owned by a team. Below is a simplified folder structure which may diverge somewhat from the
+current structure.
+
+In the example we have a single team, `auth` which has a single feature _Emergency Access_. The
+_Emergency Access_ feature consists of a service, some components and a pipe. The feature is further
+broken down into a `view` feature which handles viewing another users vault.
+
+The `core` and `shared` directories don't match a single team but is owned by the platform team. The
+`core` and `shared` modules are standard concepts in Angular, with `core` consisting of singleton
+services used throughout the application, and `shared` consisting of heavily reused components.
+
+```ts
+apps/web/src/app/
+├─ core/                         // Core services vital to the web app
+|  ├─ services/
+|  |  ├─ web-platform-utils.service.ts
+│  ├─ shared.module.ts
+│  ├─ index.ts
+├─ shared/                       // Shared functionality usually owned by platform
+│  ├─ feature/                   // Feature module
+│  ├─ shared.module.ts
+│  ├─ index.ts
+├─ auth/                         // Auth team
+│  ├─ shared/                    // Generic components shared across the team
+│  ├─ emergency-access/          // Feature module
+│  │  ├─ access-type.pipe.ts
+│  │  ├─ ea.module.ts
+│  │  ├─ ea-routing.module.ts
+│  │  ├─ ea.service.ts           // Service encapsulating all business logic
+│  │  ├─ ea.component.{ts,html)
+│  │  ├─ dialogs/                // Dialogs used by the root component.
+│  │  ├─ view/                   // Logical group of components for viewing ea vault
+│  │  ├─ index.ts
+│  ├─ index.ts                   // Public interface that can be used by other teams
+├─  app.component.ts
+├─ app.module.ts
+```
 
 ## Observables ([ADR-0003](../../adr/0003-observable-data-services.md))
 
@@ -177,3 +222,4 @@ component "Organization Reports Module" {
 [styleguide]: https://angular.io/guide/styleguide
 [style-02-01]: https://angular.io/guide/styleguide#general-naming-guidelines
 [rxjs]: https://angular.io/guide/rx-library
+[style-structure]: https://angular.io/guide/styleguide#application-structure-and-ngmodules
