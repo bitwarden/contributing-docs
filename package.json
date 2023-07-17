@@ -27,7 +27,7 @@
     "prettier": "prettier --write .",
     "lint": "prettier --check .",
     "prepare": "husky install",
-    "spellcheck": "cspell lint **/*.md{x,}"
+    "spellcheck": "cspell lint \"**/*.md{x,}\""
   },
   "dependencies": {
     "@docusaurus/core": "2.4.1",
