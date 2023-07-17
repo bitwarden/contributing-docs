@@ -70,7 +70,7 @@ If not, please go back and configure it now.
 
 :::tip
 
-See [User Secrets Reference](./user-secrets.md) for how to configure your user secrets.
+See [User Secrets](../../contributing/user-secrets.md) for how to configure your user secrets.
 
 :::
 
@@ -96,7 +96,7 @@ each role:
 | Sales            | `adminSettings:role:sales`   | `sales@localhost`            |
 
 If you wish to change the membership for any role, you can
-[edit your user secrets](./user-secrets.md) to specify the desired value.
+[edit your user secrets](../../contributing/user-secrets.md) to specify the desired value.
 
 :::info
 
