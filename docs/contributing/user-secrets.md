@@ -2,10 +2,10 @@
 
 ## Manually editing user secrets
 
-We recommend using the automated helper script described in the [Server Setup Guide](./guide.md).
-However, you can manually edit or troubleshoot your user secrets using the instructions below. If
-you are manually editing using secrets, make sure to remember to copy your changes across to all
-projects if required.
+We recommend using the automated helper script described in the
+[Server Setup Guide](../getting-started/server/guide.md). However, you can manually edit or
+troubleshoot your user secrets using the instructions below. If you are manually editing using
+secrets, make sure to remember to copy your changes across to all projects if required.
 
 ### Editing user secrets - Visual Studio on Windows
 
