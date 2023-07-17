@@ -1,9 +1,13 @@
+---
+sidebar_position: 8
+---
+
 # System Management Portal
 
 :::info Portal naming
 
-This documentation refers to the deployment of the `Admin` project in our `server` repository. To
-disambiguate this application from others in the Bitwarden landscape, we refer to it as follows:
+This documentation refers to the deployment of the `Admin` application in our `server` repository.
+To disambiguate this application from others in the Bitwarden landscape, we refer to it as follows:
 
 - For **Cloud-Hosted** Instances (internal to Bitwarden) &rarr; **Bitwarden Portal**
 - For **Self-Hosted** Instances &rarr; **System Management Portal**
@@ -66,7 +70,7 @@ If not, please go back and configure it now.
 
 :::tip
 
-See [User Secrets Reference](./user-secrets.md) for how to configure your user secrets.
+See [User Secrets](../../contributing/user-secrets.md) for how to configure your user secrets.
 
 :::
 
@@ -92,7 +96,7 @@ each role:
 | Sales            | `adminSettings:role:sales`   | `sales@localhost`            |
 
 If you wish to change the membership for any role, you can
-[edit your user secrets](./user-secrets.md) to specify the desired value.
+[edit your user secrets](../../contributing/user-secrets.md) to specify the desired value.
 
 :::info
 
