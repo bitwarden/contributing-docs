@@ -296,6 +296,13 @@ To run your local server environment as a licensed instance, you will need to do
 `Licensing Certificate - Dev` from the shared Engineering collection and install it. This can be
 done by double-clicking on the downloaded certificate.
 
+1. Log in to your company-issued Bitwarden account
+2. On the "Vaults" page, scroll down to the "Licensing Certificate - Dev" item
+3. View attachments and download both files
+4. Go to Keychain Access and set the dev.cer certificate to "Always Trust"
+5. The dev.pfx file will ask for a password. You can get this by clicking and opening the Licensing
+   Certificate - Dev item in the vault
+
 </bitwarden>
 
 ## Configure User Secrets
@@ -323,7 +330,8 @@ repository.
 
     <bitwarden>
 
-    - Copy the user secrets file from the shared Development collection into the `dev` folder.
+    - Copy the user secrets file from the shared Development collection (Your Bitwarden Vault) into
+      the `dev` folder.
     - If you don't have access to the Development collection, contact our IT Manager to arrange
       access. Make sure you have first set up a Bitwarden account using your company email address.
     - This `secrets.json` is configured to use the dockerized Azurite and MailCatcher instances and
@@ -348,8 +356,8 @@ repository.
 
     </community>
 
-3.  Once you have your `secrets.json` complete, run this command to add the secrets to each
-    Bitwarden server project:
+3.  Once you have your `secrets.json` complete, run the below command to add the secrets to each
+    Bitwarden server project.
 
     ```bash
     pwsh setup_secrets.ps1
