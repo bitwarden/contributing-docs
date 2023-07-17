@@ -1,7 +1,5 @@
 # System Management Portal
 
-<bitwarden>
-
 :::info Portal naming
 
 This documentation refers to the deployment of the `Admin` application in our `server` repository.
@@ -11,8 +9,6 @@ To disambiguate this application from others in the Bitwarden landscape, we refe
 - For **Self-Hosted** Instances &rarr; **System Management Portal**
 
 :::
-
-</bitwarden>
 
 ## Setup
 
