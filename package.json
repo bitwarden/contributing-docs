@@ -26,7 +26,8 @@
     "typecheck": "tsc",
     "prettier": "prettier --write .",
     "lint": "prettier --check .",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "spellcheck": "cspell lint \"**/*.md{x,}\""
   },
   "dependencies": {
     "@docusaurus/core": "2.4.1",
@@ -42,6 +43,7 @@
   "devDependencies": {
     "@docusaurus/module-type-aliases": "2.4.1",
     "@tsconfig/docusaurus": "2.0.0",
+    "cspell": "^6.31.2",
     "husky": "8.0.3",
     "lint-staged": "13.2.3",
     "prettier": "2.8.8",
@@ -63,6 +65,7 @@
     "node": ">=18"
   },
   "lint-staged": {
-    "*": "prettier --cache --write --ignore-unknown"
+    "*": "prettier --cache --write --ignore-unknown",
+    "*.md{x,}": "cspell lint"
   }
 }

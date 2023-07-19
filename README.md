@@ -47,6 +47,12 @@ Please follow the following (very brief) style guide:
 - Use code blocks for all commands. Don't write them in-line.
 - Avoid long paragraphs - this documentation should be to-the-point and instructional.
 
+### Spellchecker
+
+We use `cspell` for spellchecking. It will run as a pre-commit hook and in the CI pipeline.
+Spellchecking ignores single and multi-line code snippets. If required, you can add custom words
+(e.g. proper nouns and technical terms) to `custom-words.txt`.
+
 ### Conditional Content
 
 The Contributing Docs site is used both for internal and external contributors. To this end we've
