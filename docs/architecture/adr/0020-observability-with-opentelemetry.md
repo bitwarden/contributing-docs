@@ -14,9 +14,9 @@ tags: [server]
 Along with the maturation of the codebase over the years, the userbase of the platform has also
 grown significantly and more insight is needed into how services are performing at a fine-grained
 level. External profilers can certainly be attached in any running environment, but the platform
-itself needs to offer internal metrics not just to support customers running the product but to
-enable engineers to improve it and tackle performance issues with solid data and evidence as to what
-and why something should change.
+itself needs to offer internal metrics not just to support self-hosted customers running the product
+but to enable engineers to improve it and tackle performance issues with solid data and evidence as
+to what and why something should change.
 
 ## Considered Options
 
@@ -50,6 +50,8 @@ Chosen option: **Use open observability standards**.
 
 - Proprietary profiler implementations may offer signal information that OpenTelemetry can't,
   including automatic instrumentation.
+- With the capability to capture signals within the platform comes the burden of needing to maintain
+  clear policies around not capturing sensitive data.
 
 ### Plan
 
@@ -61,9 +63,16 @@ The initial implementation will provide default instrumentation details coming f
 any used HTTP clients. Automatic instrumentation at a lower level will be explored at a future date.
 It is expected that local processes will ingest logs / exports.
 
-Over time and where needed, application logic to track custom [signals][otelsignals] will be added
-for deeper insights, especially in critical code paths. Standards will be developed and documented
-on how to approach metric collection.
+Software development lifecycle enhancements will be made to clarify best practices and review
+requirements for logging or monitoring changes. A [deep dive][../../deep-dives] will be added on
+logging and monitoring to showcase patterns for adding signal collection in code. Only component
+runtime signals will be collected to start; no application payloads such as input and output data
+will be collected in signals.
+
+Over time and where needed, application logic to track custom [signals][otelsignals] will be
+approached for deeper insights, especially in critical code paths. Standards will be developed and
+documented in the above deep dive on how to approach metric collection, without also collecting
+sensitive information.
 
 [dd]: https://www.datadoghq.com/
 [ddtracer]: https://www.nuget.org/packages/Datadog.Trace.Bundle
