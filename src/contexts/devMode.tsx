@@ -70,7 +70,7 @@ function useContextValue(): ContextValue {
       devMode,
       setDevMode,
     }),
-    [devMode, setDevMode]
+    [devMode, setDevMode],
   );
 }
 

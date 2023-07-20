@@ -71,7 +71,7 @@ const Search = (props) => {
 
       props.handleSearchBarToggle && props.handleSearchBarToggle(!props.isSearchBarExpanded);
     },
-    [props.isSearchBarExpanded]
+    [props.isSearchBarExpanded],
   );
 
   if (isBrowser) {
@@ -98,7 +98,7 @@ const Search = (props) => {
         className={classnames(
           "navbar__search-input",
           { "search-bar-expanded": props.isSearchBarExpanded },
-          { "search-bar": !props.isSearchBarExpanded }
+          { "search-bar": !props.isSearchBarExpanded },
         )}
         onClick={loadAlgolia}
         onMouseOver={loadAlgolia}
