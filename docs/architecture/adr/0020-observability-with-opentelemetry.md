@@ -60,8 +60,9 @@ OpenTelemetry, and traces and metrics within the platform will become available 
 via OTLP export. Configuration will be provided to turn either on or off.
 
 The initial implementation will provide default instrumentation details coming from ASP.NET Core and
-any used HTTP clients. Automatic instrumentation at a lower level will be explored at a future date.
-It is expected that local processes will ingest logs / exports.
+any used HTTP clients. Automatic instrumentation may be explored at a future date but a code-first
+solution is desired to allow for more control and less setup during installation. It is expected
+that local processes will ingest logs / exports as desired.
 
 Software development lifecycle enhancements will be made to clarify best practices and review
 requirements for logging or monitoring changes. A [deep dive][../../deep-dives] will be added on
