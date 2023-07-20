@@ -57,7 +57,24 @@ Chosen option: **Use open observability standards**.
 
 .NET Core's `System.Diagnostics` library supports the emission of metrics compatible with
 OpenTelemetry, and traces and metrics within the platform will become available on the console and
-via OTLP export. Configuration will be provided to turn either on or off.
+via OTLP export. Configuration will be provided to turn either on or off with new application
+settings e.g.:
+
+```json
+{
+  "OpenTelemetry": {
+    "UseTracingExporter": "Console",
+    "UseMetricsExporter": "Console",
+    "Otlp": {
+      "Endpoint": "http://localhost:4318"
+    }
+  }
+}
+```
+
+Options of "Console" and "Otlp" will be available for the metrics and tracing export, along with the
+ability to specify a gRPC or HTTP endpoint for OTLP. Segmentation of activities will continue to be
+made using the configurable `ProjectName`.
 
 The initial implementation will provide default instrumentation details coming from ASP.NET Core and
 any used HTTP clients. Automatic instrumentation may be explored at a future date but a code-first
@@ -70,10 +87,11 @@ logging and monitoring to showcase patterns for adding signal collection in code
 runtime signals will be collected to start; no application payloads such as input and output data
 will be collected in signals.
 
-Over time and where needed, application logic to track custom [signals][otelsignals] will be
-approached for deeper insights, especially in critical code paths. Standards will be developed and
-documented in the above deep dive on how to approach metric collection, without also collecting
-sensitive information.
+Over time and where needed, application logic to track custom [signals][otelsignals] (activities and
+meters) will be approached for deeper insights, especially in critical code paths. Standards will be
+developed and documented in the above deep dive on how to approach metric collection, without also
+collecting sensitive information. Core utility classes will be developed that establish a
+centralization of OpenTelemetry usage and make use in components easier.
 
 [dd]: https://www.datadoghq.com/
 [ddtracer]: https://www.nuget.org/packages/Datadog.Trace.Bundle
