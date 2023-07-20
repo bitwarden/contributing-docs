@@ -52,7 +52,16 @@ mkcert -cert-file dev-server.local.pem -key-file dev-server.local.pem localhost 
     Which will target the local bitwarden instance. See [Official Server](#official-server) for
     information on how to target official servers.
 
-2.  Open your browser and navigate to `https://localhost:8080`.
+2.  Open your browser and navigate to `https://localhost:8080`. You should see the Bitwarden Log In Screen.
+
+3. If you'd like to take this a bit further, start your local server and have MailCatcher set up. Now let's create an account and verify it.
+  
+    - Create a new account. This could be a fake email
+    - Log into the new account
+    - Click on Verify Email Address
+    - Navigate to `http://localhost:1080/`
+    - Open the no reply email and verify your email address
+
 
 :::info
 

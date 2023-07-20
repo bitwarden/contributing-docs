@@ -1,6 +1,7 @@
 ---
 sidebar_custom_props:
   access: bitwarden
+sidebar_position: 6
 ---
 
 # SCIM

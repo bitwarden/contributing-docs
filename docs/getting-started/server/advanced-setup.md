@@ -1,6 +1,7 @@
 ---
 sidebar_custom_props:
   access: bitwarden
+sidebar_position: 2
 ---
 
 # Advanced Server Setup
@@ -96,6 +97,26 @@ you may need to test the PayPal integration specifically.
 
 Note: if you are testing sales tax, you will first have to create sales tax rates via the Admin
 portal.
+
+## YubiKey 2FA
+
+In order to locally test YubiKey 2FA, you must first configure your local user secrets with a
+ClientId and Key from Yubico. This is used to authenticate the API call to Yubico to validate the
+OTP provided.
+
+The steps for setting up your local server for YubiKey validation are:
+
+1. Acquire a ClientId and Key from Yubico [here](https://upgrade.yubico.com/getapikey/). Note that
+   this requires that you have a YubiKey in order to provide an OTP. If you do not have a YubiKey
+   please contact your manager.
+
+2. Update the `globalSettings:yubico:key` and `globalSettings:yubico:clientid` user secrets in the
+   `Identity` project. You can either use the [update script](./secrets/index.md) or manually
+   update:
+   ```bash
+      dotnet user-secrets set globalSettings:yubico:key [Key]
+      dotnet user-secrets set globalSettings:yubico:clientid [ClientId]
+   ```
 
 ## Reverse Proxy Setup
 

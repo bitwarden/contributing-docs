@@ -3,7 +3,7 @@ sidebar_custom_props:
   access: bitwarden
 ---
 
-# Secrets.json
+# User Secrets
 
 The server repository comes with it’s own `dev/secrets.json` file for community contributors.
 Internal Bitwarden developers will need a different user secrets file in order to properly emulate
