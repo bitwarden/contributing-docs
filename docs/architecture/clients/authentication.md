@@ -1,0 +1,320 @@
+# Authentication
+
+## Client Login Strategies
+
+Our authentication methods are defined via “strategies” in our client code. These strategies are:
+
+- Password Login Strategy: Authentication with an email address and master password.
+- Passwordless Login Strategy: Authentication with a
+  [Login with Device](https://bitwarden.com/help/log-in-with-device/) one-time access code.
+- API Login Strategy: Authentication with an API key and secret.
+- SSO Login Strategy: Authentication with an SSO IdP through SAML or OpenIDConnect.
+
+Regardless of the strategy, “logging in” to Bitwarden requires `POST`ing a request to the
+`/connect/token` endpoint on our Identity server. The contents of this request vary by several
+factors, but the most important is the login strategy.
+
+## Step 1: Client requests a token
+
+For each of these strategies, the client forms a
+[`TokenRequest`](https://github.com/bitwarden/clients/blob/master/libs/common/src/auth/models/request/identity-token/token.request.ts)
+though one of its subclasses:
+
+- [`PasswordTokenRequest`](https://github.com/bitwarden/clients/blob/master/libs/common/src/auth/models/request/identity-token/password-token.request.ts) -
+  used by Password and Passwordless Login Strategy
+- [`UserApiTokenRequest`](https://github.com/bitwarden/clients/blob/master/libs/common/src/auth/models/request/identity-token/user-api-token.request.ts) -
+  used by API Login Strategy
+- [`SSOTokenRequest`](https://github.com/bitwarden/clients/blob/master/libs/common/src/auth/models/request/identity-token/user-api-token.request.ts) -
+  used by SSO Login Strategy
+
+Each of these requests overrides the `toIdentityToken()` method, which is responsible for
+translating the information in the `TokenRequest` into the payload that will be sent to the
+`/connect/token` endpoint on our Identity server.
+
+### Common properties of all authentication requests
+
+#### Related to devices
+
+- `deviceType`
+- `deviceIdentifier`
+- `deviceName`
+
+#### Related to Login with Device
+
+- `authRequest`
+
+#### Related to 2FA
+
+- `twoFactorToken`
+- `twoFactorTokenProvider`
+- `twoFactorRemember`
+
+### Type-specific authentication request properties
+
+#### Password Token Requests
+
+- **Grant Type**: `password`
+- **Headers**: `Auth-Email` header is set to base-64 encoding of user email address
+
+| Content Property  | Description                                                                                                     |
+| ----------------- | --------------------------------------------------------------------------------------------------------------- |
+| `client_id`       | The `ClientType` enum value for the type of client making the request                                           |
+| `scope`           | `api` `offline access`                                                                                          |
+| `username`        | Email address                                                                                                   |
+| `password`        | Master Password Hash or access code if Login with Device                                                        |
+| `captchaResponse` | Captcha response token if provided (see [Captcha documentation](./../deep-dives/captchas/index.md) for details) |
+| `authRequest`     | The Login with Device authentication request ID, if this is a Login with Device request                         |
+
+#### API Token Requests
+
+- **Grant Type**: `client_credentials`
+- **Headers**: None
+
+| Content Property | Description                                                                       |
+| ---------------- | --------------------------------------------------------------------------------- |
+| `client_id`      | `client_id` provided by API client                                                |
+| `client_secret`  | `client_secret` provided by API client                                            |
+| `scope`          | `api.organization` if the `client_id` starts with “organization”, `api` otherwise |
+
+#### SSO Token Requests
+
+- **Grant Type**: `authorization_code`
+- **Headers**: None
+
+| Content Property | Description                                                           |
+| ---------------- | --------------------------------------------------------------------- |
+| `code`           | Code provided on SSO login in the code query string parameter         |
+| `code_verifier`  | Unique 64-digit verifier generated prior to SSO request on the client |
+| `redirect_uri`   | Set to `/sso-connector.html` in `SsoComponent` and `LinkSsoComponent` |
+
+## Step 2: Identity API grants access
+
+When the Identity service receives the token request at the `/connect/token` endpoint, one of two
+classes take over, based on the grant type specified in the authentication request.
+
+For more information on the responsibility of each of these validators, see the
+[IdentityServer4 documentation](https://identityserver4.readthedocs.io/en/latest/index.html).
+
+### Validating the request
+
+#### Password Token Validation (`ResourceOwnerPasswordValidator`)
+
+:::tip What grant type?
+
+This validator is responsible for issuing tokens for `password` grant type.
+
+:::
+
+In order for the request to be validated, the following must be true:
+
+- The `Auth-Email` header must be present and correct.
+- The request does not require Captcha, or if it does a valid `captchaResponse` is provided (see
+  [Captcha documentation](./../deep-dives/captchas/index.md) for details).
+- If the request has an `authRequest` property (i.e. is a Passwordless request), the access code is
+  valid and the request has not expired.
+- The password is correct. This could be either:
+  - The master password hash matches the database record for the user, or
+  - The Login with Device access code has not expired and matches the server-side code on the
+    `authRequest` presented by the client.
+- The user is not part of an organization that requires SSO.
+
+#### API Token Request Validation (`CustomTokenRequestValidator`)
+
+:::tip What grant type?
+
+This validator is responsible for issuing tokens for `client_credential` grant type.
+
+:::
+
+There are different types of clients that can request access with the client_credential grant type:
+
+| Client Type  | Purpose                                                                                                                                                                                                                       |
+| ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Installation | Used for private client communication from the self-hosted API to the push relay for mobile push notifications. Each self-hosted installation authenticates as itself and has access to submit push notification requests.    |
+| Internal     | Used for communication between the API and Notifications services. This is only used for self-hosted installations, where notifications are sent directly to the SignalR notification hub instead of going to an Azure Queue. |
+| Organization | Used for organizations to make changes on behalf of the organization and not individual users.                                                                                                                                |
+| User         | Used for individual users to perform actions using their own API token. In this case, the user’s claims are added to the `access_token` as if the user were logging in via the password flow.                                 |
+
+The different API client types all have different validation. The key to `client_credentials` grant
+type validation is the `ClientStore` that is built in to IdentityServer (and
+[overridden](https://github.com/bitwarden/server/blob/master/src/Identity/IdentityServer/ClientStore.cs)
+in our code). The `ClientStore` is queried on each request in the .NET request middleware pipeline
+to find the client for a given `client_id` from the request.
+
+| Client Type  | Validation Logic                                                                                                                                                                                  |
+| ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Installation | Ensure that the provided `client_secret` matches the installation key for the installation ID provided in `client_id`.                                                                            |
+| Internal     | Ensure that the provided `client_secret` matches the `InternalIdentityKey` configured in Global Settings. If Identity and API are sharing the same configuration, these will match by definition. |
+| Organization | Ensure that the provided `client_secret` matches the installation key for the organization ID provided in `client_id`.                                                                            |
+| User         | Ensure that the provided `client_secret` matches the API key for the user ID provided in `client_id`.                                                                                             |
+
+#### SSO Token Request Validation (`CustomTokenRequestValidator`)
+
+:::tip What grant type?
+
+This validator is responsible for issuing tokens for `authorization_code` grant type.
+
+:::
+
+The validation of the code in the authorization_code in the request is done by IdentityServer (see
+the documentation
+[here](https://identityserver4.readthedocs.io/en/latest/topics/grant_types.html#interactive-clients)).
+The code has been obtained via an SSO flow and is now being presented to IdentityServer to exchange
+for an `access_token`.
+
+### Generating a response
+
+Once the request has been validated through the appropriate logic for the given grant type, the
+Identity API will generate a response. At Bitwarden, this response contains an `access_token` with
+claims and also a custom JSON object that contains essential information to start the vault
+decryption process.
+
+:::info Known Device
+
+It is at this point, when the token request has been validated, that the requesting device is stored
+and associated with the user as a “known device”.
+
+:::
+
+#### Authentication Information
+
+For a validated password and SSO token requests (grant types of `password` and
+`authorization_code`), the response will contain an `access_token`, which is a JWT with the
+following claims:
+
+- `device` - the device identifier.
+- `premium` - a boolean indicating whether they have access to premium features.
+- `email` - the user’s email address.
+- `email_verified` - whether the user has verified their email address.
+- `sstamp` - the user’s security stamp (a unique GUID for the user stored in the `User` table and
+  regenerated when a new password or key is generated). A changed `sstamp` indicates that the user
+  should re-authenticate.
+- `name` - The user’s name.
+- **Organization claims**
+  - `orgowner` - The `ID` of any org(s) for which the user is the owner.
+  - `orgadmin` - The `ID` of any org(s) for which the user is the administrator.
+  - `orgmanager` - The `ID` of the org(s) for which the user is the manager.
+  - `orguser` - The `ID` of the org(s) for which the user is a user.
+  - `orgcustom` - The `ID` of the org(s) for which the user has custom permissions. In this case,
+    the user will also have custom claims added as defined for that org.
+- **Provider claims**
+  - `providerprovideradmin` - The `ID` of the provider(s) for which the user is an admin.
+  - `providerserviceuser` - The `ID` of the provider(s) for which the user is a user.
+
+For API token requests (grant type of `client_credentials`), the response differs based on the
+client type, as follows:
+
+| Client Type  | Claims                                                                                                                                                            |
+| ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Installation | `sub` - the installation `ID`                                                                                                                                     |
+| Internal     | `sub` - the internal `ID`                                                                                                                                         |
+| Organization | `sub` - the organization `ID`                                                                                                                                     |
+| User         | `sub` - the user ID <br /> `amr` - set to `Application` and `external` <br /> Plus all of the user claims from a password authentication request as listed above. |
+
+#### Decryption Information
+
+The response will also contain a custom JSON response object containing the following properties:
+
+| Property                           | Purpose                                                                                                                                                                                                                                                                |
+| ---------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `PrivateKey`                       | The user’s RSA private key, encrypted with the user's symmetric encryption key.                                                                                                                                                                                        |
+| `Key`                              | The user’s symmetric encryption key, encrypted with the user's master password.                                                                                                                                                                                        |
+| `UserDecryptionOptions`            | The ways that the user has available to them to decrypt their symmetric key. See [User Decryption Options](#appendix-userdecryptionoptions-details) for details.                                                                                                       |
+| `Kdf`                              | The user’s defined KDF type.                                                                                                                                                                                                                                           |
+| `KdfIterations`                    | The user’s defined KDF iterations.                                                                                                                                                                                                                                     |
+| `ForcePasswordReset`               | A boolean indicating whether the user must immediately reset their password.                                                                                                                                                                                           |
+| `MasterPasswordPolicy`             | The master password policy for any organizations of which the user is a member.                                                                                                                                                                                        |
+| `ResetMasterPassword` (_obsolete_) | A boolean indicating whether the user needs to set their master password. It is explicitly set to `false` for users with Key Connector configured. This has been superseded by `UserDecryptionOptions.HasMasterPassword` but has been left for backward compatibility. |
+
+For API token requests, the following additional properties are added to the response:
+
+- `ApiUseKeyConnector` - set to `true` if the user is set to use Key Connector for master password
+  retrieval.
+
+## Step 3: Client handles the response
+
+When a token request is verified and sent back to the client, the client is responsible for storing
+the resulting data in state properly, so that the user can authenticate and their vault can be
+decrypted.
+
+The core logic for handling the token responses is in the `processTokenResponse()` method in our
+base
+[`LoginStrategy`](https://github.com/bitwarden/clients/blob/master/libs/common/src/auth/login-strategies/login.strategy.ts).
+There, we do the following:
+
+### Use the Authentication Information to Set up the User’s Account
+
+The response contains a JWT `access_token` that contains user claims and that can be provided on
+subsequent API requests to authenticate the user, as well as a `refresh_token` that can be used to
+request a new `access_token` without prompting the user to authenticate again.
+
+The claims on the `access_token` are used to initialize the user's `AccountProfile` in state, and
+the `access_token` and `refresh_token` are stored on the `AccountTokens` in state for use on
+subsequent API requests.
+
+### Use the Decryption Information to Prepare for Decryption
+
+The `AccountKeys` (stored in `account.keys` in state) are also set up in the user's account using
+the information provided in the token response.
+
+The important keys that are set at this point are:
+
+#### Device Key (`deviceKey`)
+
+The Device Key is the symmetric encryption key stored on the user's trusted device and is used to
+decrypt the user's symmetric encryption key when using Trusted Device Encryption.
+
+It is not returned on the request (as it never leaves the device), but it is set on the
+authenticated user's account state at this point.
+
+#### User Key (`userKey`)
+
+The User Key is the symmetric encryption key used to decrypt the user's vault.
+
+The specifics of how the User Key is set are defined in each login strategy:
+
+- **Password and Login with Device strategies**
+  - The `Key` in the token response is stored in `userKeyMasterKey` in the account state, and the
+    `masterKey` already in state from the user entering their master password is used to decrypt and
+    store the `userKey`.
+- **API strategy**
+  - The `Key` in the token response is stored in `userKeyMasterKey` in the account state.
+  - If the `ApiUseKeyConnector` property is set on the token response, we retrieve the `masterKey`
+    from state and use it to decrypt and store the `userKey`.
+- **SSO strategy**
+  - Trusted Device Encryption presents us with multiple ways to obtain the User Key, and these are
+    handled here, in the SSO login strategy.
+  - These include:
+    - Using the device key if the user is on a Trusted Device
+    - Using an approved Admin Approval request to receive the key
+    - Using the master key if the user has a master password
+
+#### User Private Key (`privateKey`)
+
+If a `PrivateKey` is provided in the response, it is stored in `privateKey.encrypted` in the user's
+account state.
+
+## Appendix: `UserDecryptionOptions` Details
+
+The token response will contain an instance of `UserDecryptionOptions`. This object contains the
+following properties, which describe how a user will be able to decrypt their vault.
+
+- `HasMasterPassword` - Will be `true` if the user has a master password in the database.
+- `TrustedDeviceOption` - Contains the properties defining whether a user can decrypt their
+  symmetric key using Trusted Device Encryption.
+  - `HasAdminApproval` - Will be `true` if a user can use Admin Approval to request approval for a
+    new Trusted Device.
+  - `HasLoginApprovingDevice` - Will be `true` if a user has any eligible ("known") devices that can
+    be used to request approval for a new Trusted Device.
+  - `HasManageResetPasswordPermission` - Will be `true` if the user has the `ManageResetPassword`
+    permission. This is required so that the receiving client can know whether to require the user
+    to set a master password.
+  - `EncryptedPrivateKey` - If the device making the request is trusted, this will contain the a
+    device-specific private key, encrypted with the device key that exists only on the Trusted
+    Device.
+  - `EncryptedUserKey` - If the device making the request is trusted, this will contain the user's
+    symmetric encryption key, encrypted with the public key corresponding to the private key in
+    `EncryptedPrivateKey` above.
+- `KeyConnectorOption` - Contains the properties defining whether a user can decrypt their symmetric
+  key using Key Connector.
+  - `KeyConnectorUrl` - The URL for the Key Connector instance.
