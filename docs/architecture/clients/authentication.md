@@ -56,14 +56,15 @@ translating the information in the `TokenRequest` into the payload that will be 
 - **Grant Type**: `password`
 - **Headers**: `Auth-Email` header is set to base-64 encoding of user email address
 
-| Content Property  | Description                                                                                                     |
-| ----------------- | --------------------------------------------------------------------------------------------------------------- |
-| `client_id`       | The `ClientType` enum value for the type of client making the request                                           |
-| `scope`           | `api` `offline access`                                                                                          |
-| `username`        | Email address                                                                                                   |
-| `password`        | Master Password Hash or access code if Login with Device                                                        |
+<!-- prettier-ignore -->
+| Content Property | Description |
+| ----------------- | ------------ |
+| `client_id`       | The `ClientType` enum value for the type of client making the request. |
+| `scope`           | `api` `offline access` |
+| `username`        | Email address |
+| `password`        | Master Password Hash or access code if Login with Device |
 | `captchaResponse` | Captcha response token if provided (see [Captcha documentation](./../deep-dives/captchas/index.md) for details) |
-| `authRequest`     | The Login with Device authentication request ID, if this is a Login with Device request                         |
+| `authRequest`     | The Login with Device authentication request ID, if this is a Login with Device request |
 
 #### API Token Requests
 
@@ -128,12 +129,13 @@ This validator is responsible for issuing tokens for `client_credential` grant t
 
 There are different types of clients that can request access with the client_credential grant type:
 
-| Client Type  | Purpose                                                                                                                                                                                                                       |
-| ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Installation | Used for private client communication from the self-hosted API to the push relay for mobile push notifications. Each self-hosted installation authenticates as itself and has access to submit push notification requests.    |
+<!-- prettier-ignore -->
+| Client Type  | Purpose |
+| ------------ | ------- |
+| Installation | Used for private client communication from the self-hosted API to the push relay for mobile push notifications. Each self-hosted installation authenticates as itself and has access to submit push notification requests. |
 | Internal     | Used for communication between the API and Notifications services. This is only used for self-hosted installations, where notifications are sent directly to the SignalR notification hub instead of going to an Azure Queue. |
-| Organization | Used for organizations to make changes on behalf of the organization and not individual users.                                                                                                                                |
-| User         | Used for individual users to perform actions using their own API token. In this case, the user’s claims are added to the `access_token` as if the user were logging in via the password flow.                                 |
+| Organization | Used for organizations to make changes on behalf of the organization and not individual users. |
+| User         | Used for individual users to perform actions using their own API token. In this case, the user’s claims are added to the `access_token` as if the user were logging in via the password flow. |
 
 The different API client types all have different validation. The key to `client_credentials` grant
 type validation is the `ClientStore` that is built in to IdentityServer (and
@@ -141,12 +143,13 @@ type validation is the `ClientStore` that is built in to IdentityServer (and
 in our code). The `ClientStore` is queried on each request in the .NET request middleware pipeline
 to find the client for a given `client_id` from the request.
 
-| Client Type  | Validation Logic                                                                                                                                                                                  |
-| ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Installation | Ensure that the provided `client_secret` matches the installation key for the installation ID provided in `client_id`.                                                                            |
+<!-- prettier-ignore -->
+| Client Type  | Validation Logic |
+| ------------ | ---------------- |
+| Installation | Ensure that the provided `client_secret` matches the installation key for the installation ID provided in `client_id`. |
 | Internal     | Ensure that the provided `client_secret` matches the `InternalIdentityKey` configured in Global Settings. If Identity and API are sharing the same configuration, these will match by definition. |
-| Organization | Ensure that the provided `client_secret` matches the installation key for the organization ID provided in `client_id`.                                                                            |
-| User         | Ensure that the provided `client_secret` matches the API key for the user ID provided in `client_id`.                                                                                             |
+| Organization | Ensure that the provided `client_secret` matches the installation key for the organization ID provided in `client_id`. |
+| User         | Ensure that the provided `client_secret` matches the API key for the user ID provided in `client_id`. |
 
 #### SSO Token Request Validation (`CustomTokenRequestValidator`)
 
@@ -204,26 +207,28 @@ following claims:
 For API token requests (grant type of `client_credentials`), the response differs based on the
 client type, as follows:
 
-| Client Type  | Claims                                                                                                                                                            |
-| ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Installation | `sub` - the installation `ID`                                                                                                                                     |
-| Internal     | `sub` - the internal `ID`                                                                                                                                         |
-| Organization | `sub` - the organization `ID`                                                                                                                                     |
+<!-- prettier-ignore -->
+| Client Type  | Claims |
+| ------------ | ------ |
+| Installation | `sub` - the installation `ID` |
+| Internal     | `sub` - the internal `ID` |
+| Organization | `sub` - the organization `ID` |
 | User         | `sub` - the user ID <br /> `amr` - set to `Application` and `external` <br /> Plus all of the user claims from a password authentication request as listed above. |
 
 #### Decryption Information
 
 The response will also contain a custom JSON response object containing the following properties:
 
-| Property                           | Purpose                                                                                                                                                                                                                                                                |
-| ---------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `PrivateKey`                       | The user’s RSA private key, encrypted with the user's symmetric encryption key.                                                                                                                                                                                        |
-| `Key`                              | The user’s symmetric encryption key, encrypted with the user's master password.                                                                                                                                                                                        |
-| `UserDecryptionOptions`            | The ways that the user has available to them to decrypt their symmetric key. See [User Decryption Options](#appendix-userdecryptionoptions-details) for details.                                                                                                       |
-| `Kdf`                              | The user’s defined KDF type.                                                                                                                                                                                                                                           |
-| `KdfIterations`                    | The user’s defined KDF iterations.                                                                                                                                                                                                                                     |
-| `ForcePasswordReset`               | A boolean indicating whether the user must immediately reset their password.                                                                                                                                                                                           |
-| `MasterPasswordPolicy`             | The master password policy for any organizations of which the user is a member.                                                                                                                                                                                        |
+<!-- prettier-ignore -->
+| Property | Purpose |
+| -------- | -------- |
+| `PrivateKey` | The user’s RSA private key, encrypted with the user's symmetric encryption key. |
+| `Key` | The user’s symmetric encryption key, encrypted with the user's master password. |
+| `UserDecryptionOptions` | The ways that the user has available to them to decrypt their symmetric key. See [User Decryption Options](#appendix-userdecryptionoptions-details) for details. |
+| `Kdf` | The user’s defined KDF type. |
+| `KdfIterations` | The user’s defined KDF iterations. |
+| `ForcePasswordReset`  | A boolean indicating whether the user must immediately reset their password. |
+| `MasterPasswordPolicy` | The master password policy for any organizations of which the user is a member. |
 | `ResetMasterPassword` (_obsolete_) | A boolean indicating whether the user needs to set their master password. It is explicitly set to `false` for users with Key Connector configured. This has been superseded by `UserDecryptionOptions.HasMasterPassword` but has been left for backward compatibility. |
 
 For API token requests, the following additional properties are added to the response:
