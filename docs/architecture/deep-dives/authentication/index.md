@@ -1,6 +1,6 @@
 # Authentication
 
-## Client Login Strategies
+## Client login strategies
 
 Our authentication methods are defined via “strategies” in our client code. These strategies are:
 
@@ -48,7 +48,7 @@ strategies.
 
 ### Type-specific authentication request properties
 
-#### Password Token Requests
+#### Password token requests
 
 - **Grant Type**: `password`
 - **Headers**: `Auth-Email` header is set to base-64 encoding of user email address
@@ -63,7 +63,7 @@ strategies.
 | `captchaResponse` | Captcha response token if provided (see [Captcha documentation](./../captchas/index.md) for details) |
 | `authRequest`     | The Login with Device authentication request ID, if this is a Login with Device request |
 
-#### API Token Requests
+#### API token requests
 
 - **Grant Type**: `client_credentials`
 - **Headers**: None
@@ -74,7 +74,7 @@ strategies.
 | `client_secret`  | `client_secret` provided by API client                                            |
 | `scope`          | `api.organization` if the `client_id` starts with “organization”, `api` otherwise |
 
-#### SSO Token Requests
+#### SSO token requests
 
 - **Grant Type**: `authorization_code`
 - **Headers**: None
@@ -95,7 +95,7 @@ For more information on the responsibility of each of these validators, see the
 
 ### Validating the request
 
-#### Password Token Validation (`ResourceOwnerPasswordValidator`)
+#### Password token validation (`ResourceOwnerPasswordValidator`)
 
 :::tip What grant type?
 
@@ -118,7 +118,7 @@ In order for the request to be validated, the following must be true:
     `authRequest` presented by the client.
 - The user is not part of an organization that requires SSO.
 
-#### API Token Request Validation (`CustomTokenRequestValidator`)
+#### API token request validation (`CustomTokenRequestValidator`)
 
 :::tip What grant type?
 
@@ -150,7 +150,7 @@ to find the client for a given `client_id` from the request.
 | Organization | Ensure that the provided `client_secret` matches the installation key for the organization ID provided in `client_id`. |
 | User         | Ensure that the provided `client_secret` matches the API key for the user ID provided in `client_id`. |
 
-#### SSO Token Request Validation (`CustomTokenRequestValidator`)
+#### SSO token request validation (`CustomTokenRequestValidator`)
 
 :::tip What grant type?
 
@@ -178,7 +178,7 @@ and associated with the user as a “known device”.
 
 :::
 
-#### Authentication Information
+#### Authentication information
 
 For a validated password and SSO token requests (grant types of `password` and
 `authorization_code`), the response will contain an `access_token`, which is a JWT with the
@@ -214,7 +214,7 @@ client type, as follows:
 | Organization | `sub` - the organization `ID` |
 | User         | `sub` - the user ID <br /> `amr` - set to `Application` and `external` <br /> Plus all of the user claims from a password authentication request as listed above. |
 
-#### Decryption Information
+#### Decryption information
 
 The response will also contain a custom JSON response object containing the following properties:
 
@@ -247,7 +247,7 @@ base
 [`LoginStrategy`](https://github.com/bitwarden/clients/blob/master/libs/common/src/auth/login-strategies/login.strategy.ts)
 where we do the following:
 
-### Use the Authentication Information to Set up the User’s Account
+### Use the Authentication information to set up the user’s account
 
 The response contains a JWT `access_token` that contains user claims and that can be provided on
 subsequent API requests to authenticate the user, as well as a `refresh_token` that can be used to
@@ -257,14 +257,14 @@ The claims on the `access_token` are used to initialize the user's `AccountProfi
 the `access_token` and `refresh_token` are stored on the `AccountTokens` in state for use on
 subsequent API requests.
 
-### Use the Decryption Information to Prepare for Decryption
+### Use the decryption information to prepare for decryption
 
 The `AccountKeys` (stored in `account.keys` in state) are also set up in the user's account using
 the information provided in the token response.
 
 The important keys that are set at this point are:
 
-#### Device Key (`deviceKey`)
+#### Device key (`deviceKey`)
 
 The Device Key is the symmetric encryption key stored on the user's trusted device and is used to
 decrypt the user's symmetric encryption key when using Trusted Device Encryption.
@@ -272,7 +272,7 @@ decrypt the user's symmetric encryption key when using Trusted Device Encryption
 It is not returned on the request (as it never leaves the device), but it is set on the
 authenticated user's account state at this point.
 
-#### User Key (`userKey`)
+#### User key (`userKey`)
 
 The User Key is the symmetric encryption key used to decrypt the user's vault.
 
@@ -294,7 +294,7 @@ The specifics of how the User Key is set are defined in each login strategy:
     - Using an approved Admin Approval request to receive the key
     - Using the master key if the user has a master password
 
-#### User Private Key (`privateKey`)
+#### User private key (`privateKey`)
 
 If a `PrivateKey` is provided in the response, it is stored in `privateKey.encrypted` in the user's
 account state.

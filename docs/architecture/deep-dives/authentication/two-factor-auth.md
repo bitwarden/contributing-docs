@@ -3,7 +3,7 @@
 When a user account requires two-factor authentication (2FA), the normal Bitwarden authentication
 flow is diverted in order to handle the 2FA request.
 
-## Initial Authentication Request
+## Initial authentication request
 
 When the Identity API receives an authentication request for a user, part of the
 [validation process](./#validating-the-request) is to ensure that the user's account does not
@@ -24,7 +24,7 @@ JSON data:
 }
 ```
 
-## Handling 2FA Response on the Client
+## Handling 2FA response on the client
 
 If the client detects a
 [`IdentityTwoFactorResponse`](https://github.com/bitwarden/clients/blob/master/libs/common/src/auth/models/response/identity-two-factor.response.ts)
@@ -44,7 +44,7 @@ additions to the request body:
 - `twoFactorProvider` is set to the provider used for 2FA
 - `twoFactorRemember` is set based on whether the user chose to "remember" their 2FA response
 
-## Validating Request with 2FA Response
+## Validating request with 2FA response
 
 When the Identity API receives the second authentication request that includes the additional 2FA
 properties, it performs the authentication process again.
