@@ -18,7 +18,7 @@ JSON data:
 {
     { "TwoFactorProviders", [2FA provider keys] },
     { "TwoFactorProviders2", [2FA provider data] },
-    { "MasterPasswordPolicy", [Master Password Policy] },
+    { "MasterPasswordPolicy", [Master password policy] },
     // Only if the user has email 2FA
     { "SsoEmail2faSessionToken", [Token to allow email to be passed through SSO flow] }
 }
@@ -27,7 +27,7 @@ JSON data:
 ## Handling 2FA Response on the Client
 
 If the client detects a
-[`IdentityTwoFactorResponse](https://github.com/bitwarden/clients/blob/master/libs/common/src/auth/models/response/identity-two-factor.response.ts)
+[`IdentityTwoFactorResponse`](https://github.com/bitwarden/clients/blob/master/libs/common/src/auth/models/response/identity-two-factor.response.ts)
 when attempting to log in, it extracts the available 2FA providers from the `CustomResponse` and
 presents those to the user.
 

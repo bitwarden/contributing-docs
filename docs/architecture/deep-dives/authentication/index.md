@@ -14,7 +14,7 @@ Regardless of the strategy, “logging in” to Bitwarden requires `POST`ing a r
 `/connect/token` endpoint on our Identity server. The contents of this request vary by several
 factors, but the most important is the login strategy.
 
-## Step 1: Client requests a token
+## Client requests a token
 
 For each of these strategies, the client forms a
 [`TokenRequest`](https://github.com/bitwarden/clients/blob/master/libs/common/src/auth/models/request/identity-token/token.request.ts)
@@ -85,7 +85,7 @@ strategies.
 | `code_verifier`  | Unique 64-digit verifier generated prior to SSO request on the client |
 | `redirect_uri`   | Set to `/sso-connector.html` in `SsoComponent` and `LinkSsoComponent` |
 
-## Step 2: Identity API grants access
+## Identity API grants access
 
 When the Identity service receives the token request at the `/connect/token` endpoint, one of two
 classes take over, based on the grant type specified in the authentication request.
@@ -236,7 +236,7 @@ For API token requests, the following additional properties are added to the res
 - `ApiUseKeyConnector` - set to `true` if the user is set to use Key Connector for master password
   retrieval.
 
-## Step 3: Client handles the response
+## Client handles the response
 
 When a token request is verified and sent back to the client, the client is responsible for storing
 the resulting data in state properly, so that the user can authenticate and their vault can be
@@ -244,8 +244,8 @@ decrypted.
 
 The core logic for handling the token responses is in the `processTokenResponse()` method in our
 base
-[`LoginStrategy`](https://github.com/bitwarden/clients/blob/master/libs/common/src/auth/login-strategies/login.strategy.ts).
-There, we do the following:
+[`LoginStrategy`](https://github.com/bitwarden/clients/blob/master/libs/common/src/auth/login-strategies/login.strategy.ts)
+where we do the following:
 
 ### Use the Authentication Information to Set up the User’s Account
 
@@ -299,7 +299,7 @@ The specifics of how the User Key is set are defined in each login strategy:
 If a `PrivateKey` is provided in the response, it is stored in `privateKey.encrypted` in the user's
 account state.
 
-## Appendix: `UserDecryptionOptions` Details
+## Appendix: `UserDecryptionOptions`
 
 The token response will contain an instance of `UserDecryptionOptions`. This object contains the
 following properties, which describe how a user will be able to decrypt their vault.
@@ -309,8 +309,8 @@ following properties, which describe how a user will be able to decrypt their va
   symmetric key using Trusted Device Encryption.
   - `HasAdminApproval` - Will be `true` if a user can use Admin Approval to request approval for a
     new Trusted Device.
-  - `HasLoginApprovingDevice` - Will be `true` if a user has any eligible ("known") devices that can
-    be used to request approval for a new Trusted Device.
+  - `HasLoginApprovingDevice` - Will be `true` if a user has any eligible devices that can be used
+    to request approval for a new Trusted Device.
   - `HasManageResetPasswordPermission` - Will be `true` if the user has the `ManageResetPassword`
     permission. This is required so that the receiving client can know whether to require the user
     to set a master password.
