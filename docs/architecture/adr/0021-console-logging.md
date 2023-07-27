@@ -12,19 +12,23 @@ tags: [server]
 ## Context and Problem Statement
 
 As the server platform has matured so have the various logging extensions to support additional use
-cases and customer requests. [Serilog][serilog] is in place via shared logic for all services,
-initiated at startup, and over time additional its "sinks" with their needed configuration have been
-added as dependencies leaving this core logging layer with a growing list of conditions on how and
-when to use certain types of structured logging. Maintenance needs have grown to keep sink
-dependencies up to date and more are desired to be added. Some of the presently-available sinks have
-very little use and / or better alternatives now exist.
+cases and customer requests. [Serilog][serilog] is in place via shared "core" logic for all
+services, initiated at startup, and over time additional "sinks" for specific use cases have been
+added with their needed configuration and downstream dependencies, increasing the size of the core
+library footprint.
+
+Maintenance needs have grown to keep sink dependencies up to date and more are desired to be added.
+Some of the presently-available sinks have very little use and / or better alternatives now exist.
+There is a growing list of conditions on how and when to use certain types of structured logging.
+Service-specific configuration, predicates, and filters are in place making it difficult to know
+what will be logged and when.
 
 ## Considered Options
 
 :::note
 
-Bitwarden uses [Datadog][dd] as its monitoring tool and desires to increase its usage by engineers
-across the board to improve what we deliver.
+Bitwarden currently uses [Datadog][dd] as its monitoring tool and desires to increase its usage by
+engineers across the board to improve what we deliver.
 
 :::
 
