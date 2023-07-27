@@ -5,7 +5,7 @@ date: 2023-07-13
 tags: [server]
 ---
 
-# 0021 - Logging with the Console
+# 0021 - Logging to Standard Output
 
 <AdrTable frontMatter={frontMatter}></AdrTable>
 
