@@ -110,6 +110,10 @@ Code cleanup will be performed around Serilog usage, such as:
   as more resilient tear-down when a component stops / ends.
 - Removal of the above-deprecated sinks, in the final release of the support window.
 
+Logging functionality will be moved to a new shared library -- separate from the core -- for
+host-oriented utilities. This library will be distributed as a NuGet package so that local `server`
+projects as well as new, independent repositories for services can receive the benefits.
+
 [serilog]: https://serilog.net/
 [dd]: https://www.datadoghq.com/
 [ddsink]: https://www.nuget.org/packages/serilog.sinks.datadog.logs
