@@ -22,8 +22,8 @@ to what and why something should change.
 
 :::note
 
-Bitwarden uses [Datadog][dd] as its monitoring tool and desires to increase its usage by engineers
-across the board to improve what we deliver.
+Bitwarden currently uses [Datadog][dd] as its monitoring tool and desires to increase its usage by
+engineers across the board to improve what we deliver.
 
 :::
 
@@ -92,6 +92,10 @@ meters) will be approached for deeper insights, especially in critical code path
 developed and documented in the above deep dive on how to approach metric collection, without also
 collecting sensitive information. Core utility classes will be developed that establish a
 centralization of OpenTelemetry usage and make use in components easier.
+
+Observability functionality will be moved to a new shared library -- separate from the core -- for
+host-oriented utilities. This library will be distributed as a NuGet package so that local `server`
+projects as well as new, independent repositories for services can receive the benefits.
 
 [dd]: https://www.datadoghq.com/
 [ddtracer]: https://www.nuget.org/packages/Datadog.Trace.Bundle
