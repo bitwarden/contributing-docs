@@ -29,9 +29,9 @@ Data Tools. This is usually the optimal development environment with built in su
 comparison and much more.
 
 === "Mac & Linux" Visual Studio for Mac unfortunately does not support Database projects, however
-you may instead use [Visual Studio Code](vscode) or [Azure Data Studio](azureds) with the
-[SQL Database Projects](SDPE) extension, which provides schema comparison and more. You may also
-modify the `.sql` files directly with any text editor.
+you may instead use [Visual Studio Code][vscode] or [Azure Data Studio][azureds] with the [SQL
+Database Projects][SDPE] extension, which provides schema comparison and more. You may also modify
+the `.sql` files directly with any text editor.
 
     Do note that when adding or renaming SQL files you might need to manually update the references
     in the `.sqlproj` file.
