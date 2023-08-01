@@ -7,7 +7,7 @@ sidebar_position: 1
 :::info
 
 For instructions on how to apply database migrations, please refer to the
-[Getting Started](../../getting-started/server/database/mssql) documentation.
+[Getting Started](../../getting-started/server/database/mssql/index.md) documentation.
 
 :::
 
@@ -46,7 +46,7 @@ far and it will need to be manually edited to adhere to the code styles.
 
 ## Modifying the database
 
-Since we follow [Evolutionary Database Design _(EDD)_](./edd.md), any migration that modifies
+Since we follow [Evolutionary Database Design _(EDD)_](./edd.mdx), any migration that modifies
 existing columns most likely needs to be split into at least two parts: a backwards compatible
 transition phase, and a non-backwards compatible phase.
 
@@ -99,7 +99,7 @@ call `dbo_future`.
 [repository]:
   https://docs.microsoft.com/en-us/dotnet/architecture/microservices/microservice-ddd-cqrs-patterns/infrastructure-persistence-layer-design
 [dapper]: https://github.com/DapperLib/Dapper
-[code-style-sql]: ../../code-style/index.md#t-sql
+[code-style-sql]: ../code-style/index.md#t-sql
 [SSDT]:
   https://docs.microsoft.com/en-us/previous-versions/sql/sql-server-data-tools/hh272702(v=vs.103)?redirectedfrom=MSDN
 [vscode]: https://code.visualstudio.com/
