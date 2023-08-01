@@ -36,18 +36,19 @@ modify the `.sql` files directly with any text editor.
     Do note that when adding or renaming SQL files you might need to manually update the references
     in the `.sqlproj` file.
 
-To make a database change, start by modify the `.sql` files in `src/Sql/dbo`. These changes will
-also needs to be applied in a migration script. Migration scrips lives in `util/Migrator/DbScripts`.
+To make a database change, start by modifying the `.sql` files in `src/Sql/dbo`. These changes will
+also need to be applied in a migration script. Migration scripts are located in
+`util/Migrator/DbScripts`.
 
 You can either generate the migration scripts automatically using the _Schema Comparison_
 functionality or by manually writing them. Do note that the automatic method will only take you so
-far and it will need improved to adhere to the code styles.
+far and it will need to be manually edited to adhere to the code styles.
 
 ## Modifying the database
 
-Since we follow [Evolutionary Database Design _(EDD)_](./edd.md) any migration that modifies
-existing columns most likely needs to be split into at least two parts. A backwards compatible
-transition phase, and a non-backwards compatible.
+Since we follow [Evolutionary Database Design _(EDD)_](./edd.md), any migration that modifies
+existing columns most likely needs to be split into at least two parts: a backwards compatible
+transition phase, and a non-backwards compatible phase.
 
 ### Best Practices
 
