@@ -4,7 +4,20 @@ sidebar_position: 1
 
 # MSSQL
 
+:::info
+
+For instructions on how to apply database migrations, please refer to the
+[Getting Started](../../getting-started/server/database/mssql) documentation.
+
+:::
+
 ## SQL Database project
+
+:::warning
+
+TODO: Update
+
+:::
 
 We use a [SQL Database project][SSDT] (`sqlproj`) to develop the database locally. This means we
 have an up-to-date representation of the database in `src/Sql`, and any modifications needs to be
