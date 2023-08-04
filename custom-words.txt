@@ -52,3 +52,4 @@ oktapreview
 Xcodes.app
 YubiKey
 Yubico
+rerunnable

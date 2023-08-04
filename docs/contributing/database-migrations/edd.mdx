@@ -9,8 +9,7 @@ EDD describes a process where the database schema is continuously updated while 
 compatibility with older releases by using database transition phases.
 
 In short the Database Schema for the Bitwarden Server **must** support the previous release of the
-server. The database migrations will be performed before the code deployment, and in the event of a
-release rollback the database schema will **not** be updated.
+server at any given time.
 
 <bitwarden>
 
@@ -24,22 +23,72 @@ For background on this decision please see the [Evolutionary Database Design RFD
 
 ## Design
 
-### Nullable
+Martin Fowler's EDD defines two types of database changes: destructive and non-destructive
+([EDD -Transition Phase: All database changes are database refactors](https://www.martinfowler.com/articles/evodb.html#TransitionPhase)).
+A destructive change is any database change that requires an accompanying code change to continue
+working as expected. A non-destructive change is the opposite: a database change that does not
+require a code change to allow the application to continue working as expected.
 
-Database tables, views and stored procedures should almost always use either nullable fields or have
-a default value. Since this will allow stored procedures to omit columns, which is a requirement
-when running both old and new code.
+### Non-destructive Database Changes
 
-### EDD Process
+An example of a non-destructive change is almost always using either nullable fields or default
+values in database tables, views, and stored procedures. We have adopted this as a standard for any
+such changes. This will allow stored procedures to omit columns, which is a requirement when running
+both old and new code.
 
-The EDD breaks up each database migration into three phases. _Start_, _Transition_ and _End_.
+### Destructive Changes
+
+In our current release process where our database changes and our code changes are coupled, even a
+new column can even be considered a destructive change if the default value of the column is a
+non-constant value that needs to be computed from elsewhere.
+
+Martin Fowler's explanation of how to elegantly handle destructive database changes in an EDD way
+breaks up such a change into three phases: _Start_, _Transition_ and _End_.
 
 ![Refactoring Stages](./stages_refactoring.jpg)
 [https://www.martinfowler.com/articles/evodb.html#TransitionPhase](https://www.martinfowler.com/articles/evodb.html#TransitionPhase)
 
-This necessitates two different database migrations. The first migration adds new content and is
-backwards compatible with the existing code. The second migration removes content and is not
-backwards compatible with that same code prior to the first migration.
+We tweak the terminology to be more easily understandable in how EDD relates to our deployment
+processes in both our environments: our always-on application in the cloud and our self-host
+deployments. We use the terms: _Initial_ Phase (instead of _Start_), _Transition_ Phase, and
+_Finalization_ Phase (instead of _End_).
+
+#### Initial Phase
+
+- <u>
+    Compatible with <i>previous</i> <b>and</b> <i>next</i> application code changes
+  </u>
+- Represents the beginning of a database change
+- Updates our database schema to support any new functionality while also maintaining old
+  functionality
+- Supports both the previous version of code and the one being upgraded to
+- Run during upgrade
+- Must execute quickly to minimize downtime.
+
+#### Transition Phase
+
+- <u>
+    Compatible with <i>previous</i> <b>and</b> <i>next</i> application code changes
+  </u>
+- The time between initial migration and finalization
+- Exists to provide an opportunity to rollback server to _previous_ version prior to breaking
+  changes
+- Only data population migrations may be run at this time, if they are needed
+  - Optional step, required only when migrating data would be too slow to execute during the initial
+    migration. This might be a column population, index creation, anything to prepare our database
+    for the _next_ version
+  - Must be run as a background task during our Transition phase.
+  - These MUST run in a way where the database stays responsive during the full migration
+- Schema changes are NOT to be run during this phase.
+
+#### Finalization Phase
+
+- <u>
+    Only compatible with <i>next</i> application code; represents the point of no return for this
+    migration
+  </u>
+- Removes columns, data, and fallback code required to support _previous_ version
+- Should be run as a typical migration either during a subsequent upgrade
 
 ### Example
 
@@ -73,7 +122,7 @@ actions.
 :::
 
 <Tabs>
-<TabItem value="first" label="First Migration" default>
+<TabItem value="first" label="Initial Migration" default>
 
 ```sql
 -- Add Column
@@ -120,7 +169,7 @@ END
 ```
 
 </TabItem>
-<TabItem value="data" label="Data Migration">
+<TabItem value="data" label="Transition Migration">
 
 ```sql
 UPDATE [dbo].Customer SET
@@ -129,7 +178,7 @@ WHERE FirstName IS NULL
 ```
 
 </TabItem>
-<TabItem value="second" label="Second Migration">
+<TabItem value="second" label="Finalization Migration">
 
 ```sql
 -- Remove Column
@@ -173,49 +222,82 @@ END
 </TabItem>
 </Tabs>
 
-## Workflow
+## Our EDD Process
 
-The Bitwarden specific workflow for writing migrations are described below.
+There are some unique constraints to Bitwarden that are not addressed directly in Martin Fowler's
+EDD article.
 
-### Developer
+- Our Production instances in the cloud are required to be on at all times
+- Our self-host instances that we do not directly have access to manage must support the same EDD
+  processes; however, they do not have the same always-on application constraint
+- Minimization of manual steps in our process
 
-The development flow is described in [Migrations](./).
+The process to support all of these constraints is a complex one. Below is an image of a state
+machine that will hopefully help visualize the process and what it supports. It assumes that all
+database changes follow the standards that are laid out in [Migrations](./).
 
-### Devops
+---
 
-#### On `rc` cut
+![Bitwarden EDD State Machine](./EDD-State-Machine.jpg) \[Open Image in a new tab for better
+viewing\]
 
-Create a PR moving the future scripts.
+---
 
-- `DbScripts_future` to `DbScripts`, prefix the script with the current date, but retain the
-  existing date.
-- `dbo_future` to `dbo`.
-  <bitwarden>
-    <li>
-      Create a ticket in Jira with a `Due Date` of the release date to ensure future migrations are
-      merged in and ready to be executed. Set the ticket that created the future migration as a
-      blocker.
-    </li>
-  </bitwarden>
+### Cloud Environments
 
-#### After server release
+Since we treat both schema migrations and data migrations as just migrations, the only issues that
+we are solving for is orchestrating the runtime constraints on the migration. Eventually, all
+migrations will end up in `DbScripts`. However, to control the timing of running _Transition_ and
+associated _Finalization_ migrations, we need to keep them outside of `DbScripts` until the correct
+timing.
 
-1. Run whatever data migration scripts might be needed. (This might need to be batched and executed
-   until all the data has been migrated)
-2. After having the server run for a while execute the future migration script to clean up the
-   database.
+In our environments with always-on applications, _Transition_ scripts must be run after the new code
+has been rolled out. To execute a full deploy, we run all new migrations in `DbScripts`, roll out
+the new code, and then run all _Transition_ migrations in the `DbScripts_transition` directory as
+soon as all of the new code services are online. In the case of a critical failure after the new
+code is rolled out, we will conduct a Rollback (see Rollbacks below). _Finalization_ migrations will
+not be run until the start of the next deploy when they are moved into `DbScripts`.
+
+After this deploy, to prep for the next release, all migrations in `DbScripts_transition` are moved
+to `DbScripts` and then all migrations in `DbScripts_finalization` are moved to `DbScripts`,
+conserving their execution order for a clean install. For our current branching strategy, PRs will
+be open against `master` when `rc` is cut to prep for this release. This PR automation will also
+handle renaming the migration file and updating any reference of `[dbo_future]` to `[dbo]`.
+
+The next deploy will pick up the newly added migrations in `DbScripts` and set the previously
+rerunnable _Transition_ migrations to no longer be rerunnable, execute the _Finalization_
+migrations, and then execute any new migrations associated with the code changes that are about to
+go out.
+
+The the state of migrations in the different directories at any one time is is saved and versioned
+in our Migrator Utility which supports the EDD phased migration process in both types of
+environments.
+
+### Standard Self-host Environments
+
+We need to have a similarly orchestrated process as Cloud environments here. However, we are not
+constrained to having an always-on application. Our updated orchestration process for self-host will
+be:
+
+- Stop the Bitwarden stack as we do today
+- Start the database
+- Run all new migrations in `DbScripts` (both _Finalization_ migrations from the last deploy and any
+  _Initial_ migrations from the deploy currently going out)
+- Run all _Transition_ migrations
+- Restart the Bitwarden stack.
 
 ## Rollbacks
 
 In the event the server release failed and needs to be rolled back, it should be as simple as just
 re-deploying the previous version again. The database will **stay** in the transition phase until a
-hotfix can be released, and the server can be updated.
+hotfix can be released, and the server can be updated. Once a hotfix is ready to go out, we deploy
+that hotfix and rerun the _Transition_ migrations to verify that the DB is in the state that it is
+required to be in.
 
-The goal is to resolve the issue quickly and re-deploy the fixed code to minimize the time the
-database stays in the transition phase. Should a feature need to be completely pulled, a new
-migration needs to be written to undo the database changes and the future migration will also need
-to be updated to work with the database changes. This is generally not recommended since pending
-migrations (for other releases) will need to be revisited.
+Should a feature need to be completely pulled, a new migration needs to be written to undo the
+database changes and the future migration will also need to be updated to work with the database
+changes. This is generally not recommended since pending migrations (for other releases) will need
+to be revisited.
 
 ## Testing
 

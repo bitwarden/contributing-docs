@@ -72,4 +72,15 @@ pwsh ef_migrate.ps1 [NAME_OF_MIGRATION]
 
 This will generate the migrations, which should then be included in your PR.
 
+### [Not Yet Implemented] Manual MSSQL Migrations
+
+There may be a need for a migration to be run outside of our normal update process. These types of
+migrations should be saved for very exceptional purposes. One such reason could be an Index rebuild.
+
+1. Write a new Migration with a prefixed current date and place it in
+   `src/Migrator/DbScripts_manual`
+2. After it has been run against our Cloud environments and we are satisfied with the outcome,
+   create a PR to move it to `DbScripts`. This will enable it to be run by our Migrator processes in
+   self-host and clean installs of both cloud and self-host environments
+
 [code-style-sql]: ../code-style/sql.md
