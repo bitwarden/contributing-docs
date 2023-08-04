@@ -265,7 +265,7 @@ be open against `master` when `rc` is cut to prep for this release. This PR auto
 handle renaming the migration file and updating any reference of `[dbo_future]` to `[dbo]`.
 
 The next deploy will pick up the newly added migrations in `DbScripts` and set the previously
-rerunnable _Transition_ migrations to no longer be rerunnable, execute the _Finalization_
+repeatable _Transition_ migrations to no longer be repeatable, execute the _Finalization_
 migrations, and then execute any new migrations associated with the code changes that are about to
 go out.
 
