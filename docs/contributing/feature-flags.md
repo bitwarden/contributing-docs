@@ -67,7 +67,7 @@ To set up a data source via application settings, place the following in your
 }
 ```
 
-Remember to run `setup_secrets.ps1` and restart your server for the new secrets to take effect.
+Remember to run `dev/setup_secrets.ps1` and restart your server for the new secrets to take effect.
 
 Environment variables can also be used like with other application setting overrides.
 
