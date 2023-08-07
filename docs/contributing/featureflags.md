@@ -52,7 +52,7 @@ need to set up either local application settings or a file-based data source. **
 data store, all flag values will resolve as their default ("off") value.**
 
 To set up a data source via application settings, place the following in your
-[user secrets](../getting-started/server/user-secrets.md):
+[user secrets](./user-secrets.md):
 
 ```json
 {
