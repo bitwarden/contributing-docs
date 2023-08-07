@@ -110,15 +110,17 @@ recommendation will be to move to a Serilog configuration.
 Code cleanup will be performed around Serilog usage, such as:
 
 - Removal of overuse of inclusion predicates that complicate (or sometimes block) effective log
-  output.
-- Alignment with .NET Core and Serilog best practices on initialization and usage of Serilog itself.
+  output, for example in the uses of `AddSerilog` in place today at each consuming application.
+- Alignment with .NET Core and Serilog best practices on [initialization][seriloginit] and usage of
+  Serilog itself.
 - Improvements in logging initialization reliability and working with configuration issues, as well
   as more resilient tear-down when a component stops / ends.
 - Removal of the above-deprecated sinks, in the final release of the support window.
 
-Logging functionality will be moved to a new shared library -- separate from the core -- for
-host-oriented utilities. This library will be distributed as a NuGet package so that local `server`
-projects as well as new, independent repositories for services can receive the benefits.
+Logging functionality will be moved to a new shared library -- separate from the core project -- as
+mentioned above for host-oriented utilities. This library will be distributed as a NuGet package so
+that local `server` projects as well as new, independent repositories for services can receive the
+benefits.
 
 [serilog]: https://serilog.net/
 [dd]: https://www.datadoghq.com/
@@ -126,3 +128,4 @@ projects as well as new, independent repositories for services can receive the b
 [serilogconsole]: https://www.nuget.org/packages/serilog.sinks.console
 [serilogconfig]: https://www.nuget.org/packages/Serilog.Settings.Configuration/
 [netcorelogging]: https://learn.microsoft.com/en-us/dotnet/core/extensions/logging
+[seriloginit]: https://github.com/serilog/serilog-aspnetcore#two-stage-initialization
