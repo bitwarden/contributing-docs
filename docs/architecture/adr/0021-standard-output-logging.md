@@ -43,6 +43,12 @@ engineers across the board to improve what we deliver.
 
 Chosen option: **Consolidate logging providers**.
 
+Given long-term plans to adopt a more flexible shared (hosting extensions) library that can be used
+across services either as a project (server monolith) reference or NuGet package (and as a reference
+architecture), using Serilog as a way to extend native logging capabilities is beneficial. Details
+around how Serilog is implemented along with its advanced inputs and outputs can be extracted away
+into the shared library and driven at consuming applications via configuration.
+
 ### Positive Consequences
 
 - Streamlined logging experience across components.
