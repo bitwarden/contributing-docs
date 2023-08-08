@@ -43,13 +43,13 @@ applies to self-hosted.
 
 :::
 
-### Local configuration - user secrets
-
 Local development server instances will not query LaunchDarkly for feature flag values.
 
 If you need to change any feature flag values from their defaults during local development, you will
 need to set up either local application settings or a file-based data source. **Without the local
 data store, all flag values will resolve as their default ("off") value.**
+
+### Local configuration - user secrets
 
 To set up a data source via application settings, place the following in your
 [user secrets](./user-secrets.md):
@@ -67,6 +67,9 @@ To set up a data source via application settings, place the following in your
 }
 ```
 
+Replace `example-boolean-key` and `example-string-key` with your flag names and update the flag
+values accordingly.
+
 Remember to run `dev/setup_secrets.ps1` and restart your server for the new secrets to take effect.
 
 Environment variables can also be used like with other application setting overrides.
@@ -83,6 +86,9 @@ To set up a data source via a local file, create a `flags.json` file as follows:
   }
 }
 ```
+
+Replace `example-boolean-key` and `example-string-key` with your flag names and update the flag
+values accordingly.
 
 By default, the LaunchDarkly startup will look for this file in the root project directory (e.g.
 `/src/Api/` for the `Api` project), where it will be deployed to the build output directory.
