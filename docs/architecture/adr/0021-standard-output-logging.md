@@ -34,7 +34,7 @@ engineers across the board to improve what we deliver.
 
 - **Maintain current logging options** - Support what is available today for logging methods and
   expect those running the platform to configure what they need outside of it for log collection.
-- **Extend the plaform to specifically support Datadog** - A Serilog sink [exists][ddsink] and the
+- **Extend the platform to specifically support Datadog** - A Serilog sink [exists][ddsink] and the
   platform can send logs directly to Datadog.
 - **Consolidate logging providers** - Announce deprecation and migration plans for sinks not aligned
   with core needs and center on standard output for logs.
