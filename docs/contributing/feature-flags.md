@@ -127,10 +127,10 @@ source you configure below.
 
 ### Local development
 
-As you begin work on the feature, use the local JSON data store to surface the flag to your
-consuming code to make sure that behavior is correct for all supported flag values. Since feature
-flags don’t have to exist in LaunchDarkly for initial development, **don’t create them online until
-you’re sure about the final implementation**.
+As you begin work on the feature, use one of the local configuration options to surface the flag to
+your consuming code to make sure that behavior is correct for all supported flag values. Since
+feature flags don’t have to exist in LaunchDarkly for initial development, **don’t create them
+online until you’re sure about the final implementation**.
 
 :::tip Local client development
 
