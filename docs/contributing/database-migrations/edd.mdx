@@ -55,9 +55,7 @@ _Finalization_ Phase (instead of _End_).
 
 #### Initial Phase
 
-- <u>
-    Compatible with <i>previous</i> <b>and</b> <i>next</i> application code changes
-  </u>
+- Compatible with <i>previous</i> <b>and</b> <i>next</i> application code changes
 - Represents the beginning of a database change
 - Updates our database schema to support any new functionality while also maintaining old
   functionality
@@ -67,9 +65,7 @@ _Finalization_ Phase (instead of _End_).
 
 #### Transition Phase
 
-- <u>
-    Compatible with <i>previous</i> <b>and</b> <i>next</i> application code changes
-  </u>
+- Compatible with <i>previous</i> <b>and</b> <i>next</i> application code changes
 - The time between initial migration and finalization
 - Exists to provide an opportunity to rollback server to _previous_ version prior to breaking
   changes
@@ -83,10 +79,8 @@ _Finalization_ Phase (instead of _End_).
 
 #### Finalization Phase
 
-- <u>
-    Only compatible with <i>next</i> application code; represents the point of no return for this
-    migration
-  </u>
+- Only compatible with <i>next</i> application code; represents the point of no return for this
+  migration
 - Removes columns, data, and fallback code required to support _previous_ version
 - Should be run as a typical migration either during a subsequent upgrade
 
@@ -243,7 +237,7 @@ viewing\]
 
 ---
 
-### Cloud Environments
+### Online Environments
 
 Since we treat both schema migrations and data migrations as just migrations, the only issues that
 we are solving for is orchestrating the runtime constraints on the migration. Eventually, all
@@ -273,7 +267,7 @@ The the state of migrations in the different directories at any one time is is s
 in our Migrator Utility which supports the EDD phased migration process in both types of
 environments.
 
-### Standard Self-host Environments
+### Offline Environments
 
 We need to have a similarly orchestrated process as Cloud environments here. However, we are not
 constrained to having an always-on application. Our updated orchestration process for self-host will
