@@ -1,19 +1,23 @@
-# Custom dictionary for spellchecking
-# Before adding a word here, consider whether you can put it in a single (`) or multiline (```) code snippet instead,
-# as they are automatically ignored by the spellchecker
+# Custom dictionary for spellchecking. Before adding a word here, consider whether you can put
+# it in a single (`) or multiline (```) code snippet instead, as they are automatically ignored
+# by the spellchecker. Please keep the list sorted alphabetically.
 
 Bitwarden
 bytemark
+CODEOWNERS
 CQRS
 dockerized
+Gitter
 hotfix
-hotfixes
 hotfixed
+hotfixes
 inet
+IntelliJ
 Iterm
 jslib
 jumpcloud
 keychain
+keypair
 keyserver
 LDIF
 LLDB
@@ -21,35 +25,31 @@ Mailcatcher
 minio
 MVVM
 NGRX
+OIDCS
+oktapreview
 Omnisharp
+onboarded
 opid
 passcode
 passwordless
+pinentry
 PNSs
 proxied
+refactorings
 roadmap
 roadmaps
 SCIM
 SDET
+SDLC
+Serilog
 signtool
 signup
 sqlcmd
-TOTP
-Yellowpages
-CODEOWNERS
-SDLC
 subprocessor
-Gitter
-IntelliJ
-WCAG
-pinentry
-refactorings
 toolset
-keypair
-onboarded
-OIDCS
-oktapreview
+TOTP
+WCAG
 Xcodes.app
-YubiKey
+Yellowpages
 Yubico
-Serilog
+YubiKey
