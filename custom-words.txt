@@ -30,6 +30,7 @@ oktapreview
 Omnisharp
 onboarded
 opid
+OTLP
 passcode
 passwordless
 pinentry

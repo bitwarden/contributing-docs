@@ -11,12 +11,12 @@ tags: [server]
 
 ## Context and Problem Statement
 
-Along with the maturation of the codebase over the years, the userbase of the platform has also
-grown significantly and more insight is needed into how services are performing at a fine-grained
-level. External profilers can certainly be attached in any running environment, but the platform
-itself needs to offer internal metrics not just to support self-hosted customers running the product
-but to enable engineers to improve it and tackle performance issues with solid data and evidence as
-to what and why something should change.
+Along with the maturation of the codebase over the years, the number of users on the platform has
+also grown significantly and more insight is needed into how services are performing at a
+fine-grained level. External profilers can certainly be attached in any running environment, but the
+platform itself needs to offer internal metrics not just to support self-hosted customers running
+the product but to enable engineers to improve it and tackle performance issues with solid data and
+evidence as to what and why something should change.
 
 ## Considered Options
 
@@ -29,11 +29,11 @@ engineers across the board to improve what we deliver.
 
 - **Maintain current observability options** - Expect those running the platform to configure what
   they need outside of it for log collection and profiling / monitoring.
-- **Extend the plaform to specifically support Datadog** - [Tracing for Datadog][ddtracer] exists in
-  package form and could be coded into application startup. Datadog-specific signals and metrics can
-  be collected via code and sent to the platform.
+- **Extend the platform to specifically support Datadog** - [Tracing for Datadog][ddtracer] exists
+  in package form and could be coded into application startup. Datadog-specific signals and metrics
+  can be collected via code and sent to the platform.
 - **Implement native instrumentation** - Add logic via what's available from
-  [`System.Diagnostics`][native] for custom instrumentation, and expect profiling to be configued
+  [`System.Diagnostics`][native] for custom instrumentation, and expect profiling to be configured
   per the first option above.
 - **Use open observability standards** - Utilize [OpenTelemetry][otel] and emit signals on the
   console as well as utilize its own eventing approach for instrumentation and metrics data.
@@ -89,7 +89,7 @@ settings e.g.:
 }
 ```
 
-Options of "Console" and "Otlp" will be available for the metrics and tracing export, along with the
+Console and OTLP options will be available for the metrics and tracing export, along with the
 ability to specify a gRPC or HTTP endpoint for OTLP. Segmentation of activities will continue to be
 made using the configurable `ProjectName`.
 
