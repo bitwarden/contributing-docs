@@ -1,7 +1,7 @@
 import Tabs from "@theme/Tabs";
 import TabItem from "@theme/TabItem";
 
-# Evolutionary Database Design
+# Evolutionary database design
 
 At Bitwarden we follow
 [Evolutionary Database Design (EDD)](https://en.wikipedia.org/wiki/Evolutionary_database_design).
@@ -23,37 +23,37 @@ For background on this decision please see the [Evolutionary Database Design RFD
 
 ## Design
 
-Martin Fowler's EDD defines two types of database changes: destructive and non-destructive
-([EDD -Transition Phase: All database changes are database refactors](https://www.martinfowler.com/articles/evodb.html#TransitionPhase)).
+Two types of database changes exist: destructive and non-destructive
+([EDD - Transition Phase: All database changes are database refactors](https://www.martinfowler.com/articles/evodb.html#TransitionPhase)).
 A destructive change is any database change that requires an accompanying code change to continue
 working as expected. A non-destructive change is the opposite: a database change that does not
 require a code change to allow the application to continue working as expected.
 
-### Non-destructive Database Changes
+### Non-destructive database changes
 
 An example of a non-destructive change is almost always using either nullable fields or default
 values in database tables, views, and stored procedures. We have adopted this as a standard for any
 such changes. This will allow stored procedures to omit columns, which is a requirement when running
 both old and new code.
 
-### Destructive Changes
+### Destructive changes
 
 In our current release process where our database changes and our code changes are coupled, even a
 new column can even be considered a destructive change if the default value of the column is a
 non-constant value that needs to be computed from elsewhere.
 
-Martin Fowler's explanation of how to elegantly handle destructive database changes in an EDD way
-breaks up such a change into three phases: _Start_, _Transition_ and _End_.
+destructive database changes are handled elegantly by breaking them up into three phases: _Start_,
+_Transition_ and _End_.
 
 ![Refactoring Stages](./stages_refactoring.jpg)
 [https://www.martinfowler.com/articles/evodb.html#TransitionPhase](https://www.martinfowler.com/articles/evodb.html#TransitionPhase)
 
-We tweak the terminology to be more easily understandable in how EDD relates to our deployment
-processes in both our environments: our always-on application in the cloud and our self-host
-deployments. We use the terms: _Initial_ Phase (instead of _Start_), _Transition_ Phase, and
-_Finalization_ Phase (instead of _End_).
+We tweak the terminology to be more easily understandable in relation to our deployment processes in
+both types environments: our always-on application in the cloud and our self-host deployments. We
+use the terms: _Initial_ Phase (instead of _Start_), _Transition_ Phase, and _Finalization_ Phase
+(instead of _End_).
 
-#### Initial Phase
+#### Initial phase
 
 - Compatible with <i>previous</i> <b>and</b> <i>next</i> application code changes
 - Represents the beginning of a database change
@@ -63,7 +63,7 @@ _Finalization_ Phase (instead of _End_).
 - Run during upgrade
 - Must execute quickly to minimize downtime.
 
-#### Transition Phase
+#### Transition phase
 
 - Compatible with <i>previous</i> <b>and</b> <i>next</i> application code changes
 - The time between initial migration and finalization
@@ -77,7 +77,7 @@ _Finalization_ Phase (instead of _End_).
   - These MUST run in a way where the database stays responsive during the full migration
 - Schema changes are NOT to be run during this phase.
 
-#### Finalization Phase
+#### Finalization phase
 
 - Only compatible with <i>next</i> application code; represents the point of no return for this
   migration
@@ -216,14 +216,13 @@ END
 </TabItem>
 </Tabs>
 
-## Our EDD Process
+## Our EDD process
 
-There are some unique constraints to Bitwarden that are not addressed directly in Martin Fowler's
-EDD article.
+There are some unique constraints to how Bitwarden has to implement this process.
 
-- Our Production instances in the cloud are required to be on at all times
-- Our self-host instances that we do not directly have access to manage must support the same EDD
-  processes; however, they do not have the same always-on application constraint
+- Our Bitwarden environments in the cloud are required to be on at all times
+- Self-host instances must support the same database change process; however, they do not have the
+  same always-on application constraint
 - Minimization of manual steps in our process
 
 The process to support all of these constraints is a complex one. Below is an image of a state
@@ -237,7 +236,7 @@ viewing\]
 
 ---
 
-### Online Environments
+### Online environments
 
 Since we treat both schema migrations and data migrations as just migrations, the only issues that
 we are solving for is orchestrating the runtime constraints on the migration. Eventually, all
@@ -264,10 +263,9 @@ migrations, and then execute any new migrations associated with the code changes
 go out.
 
 The the state of migrations in the different directories at any one time is is saved and versioned
-in our Migrator Utility which supports the EDD phased migration process in both types of
-environments.
+in our Migrator Utility which supports the phased migration process in both types of environments.
 
-### Offline Environments
+### Offline environments
 
 We need to have a similarly orchestrated process as Cloud environments here. However, we are not
 constrained to having an always-on application. Our updated orchestration process for self-host will
@@ -299,7 +297,7 @@ Prior to merging a PR please ensure that the database changes run well on the cu
 version. We currently do not have an automated test suite for this and it’s up to the developers to
 ensure their database changes run correctly against the currently released version.
 
-## Further Reading
+## Further reading
 
 - [Evolutionary Database Design](https://martinfowler.com/articles/evodb.html) (Particularly
   [All database changes are database refactorings](https://martinfowler.com/articles/evodb.html#AllDatabaseChangesAreMigrations))
