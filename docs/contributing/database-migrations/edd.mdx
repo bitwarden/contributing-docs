@@ -1,6 +1,9 @@
 import Tabs from "@theme/Tabs";
 import TabItem from "@theme/TabItem";
 
+import refactoringPhases from "./stages_refactoring.jpg";
+import eddStateMachine from "./edd_state_machine.jpg";
+
 # Evolutionary database design
 
 At Bitwarden we follow
@@ -23,8 +26,7 @@ For background on this decision please see the [Evolutionary Database Design RFD
 
 ## Design
 
-Two types of database changes exist: destructive and non-destructive
-([EDD - Transition Phase: All database changes are database refactors](https://www.martinfowler.com/articles/evodb.html#TransitionPhase)).
+Two types of database changes exist: destructive and non-destructive \[[1](./edd#further-reading)\].
 A destructive change is any database change that requires an accompanying code change to continue
 working as expected. A non-destructive change is the opposite: a database change that does not
 require a code change to allow the application to continue working as expected.
@@ -45,8 +47,12 @@ non-constant value that needs to be computed from elsewhere.
 destructive database changes are handled elegantly by breaking them up into three phases: _Start_,
 _Transition_ and _End_.
 
-![Refactoring Stages](./stages_refactoring.jpg)
-[https://www.martinfowler.com/articles/evodb.html#TransitionPhase](https://www.martinfowler.com/articles/evodb.html#TransitionPhase)
+<div style={{ margin: "1em" }}>
+  <img src={refactoringPhases} alt="Refactoring Phases" />
+  <div style={{ fontSize: 12, textAlign: "center" }}>
+    Refactoring Phases [<a href="./edd#further-reading">1</a>]
+  </div>
+</div>
 
 We tweak the terminology to be more easily understandable in relation to our deployment processes in
 both types environments: our always-on application in the cloud and our self-host deployments. We
@@ -299,13 +305,13 @@ ensure their database changes run correctly against the currently released versi
 
 ## Further reading
 
-- [Evolutionary Database Design](https://martinfowler.com/articles/evodb.html) (Particularly
-  [All database changes are database refactorings](https://martinfowler.com/articles/evodb.html#AllDatabaseChangesAreMigrations))
-- [The Agile Data (AD) Method](http://agiledata.org/) (Particularly
-  [Catalog of Database Refactorings](http://agiledata.org/essays/databaseRefactoringCatalog.html))
-- [Refactoring Databases: Evolutionary Database](https://databaserefactoring.com/)
-- Refactoring Databases: Evolutionary Database Design (Addison-Wesley Signature Series (Fowler))
-  ISBN-10: 0321774515
+1. [Evolutionary Database Design](https://martinfowler.com/articles/evodb.html) (Particularly
+   [All database changes are database refactorings](https://martinfowler.com/articles/evodb.html#AllDatabaseChangesAreMigrations))
+2. [The Agile Data (AD) Method](http://agiledata.org/) (Particularly
+   [Catalog of Database Refactorings](http://agiledata.org/essays/databaseRefactoringCatalog.html))
+3. [Refactoring Databases: Evolutionary Database](https://databaserefactoring.com/)
+4. Refactoring Databases: Evolutionary Database Design (Addison-Wesley Signature Series (Fowler))
+   ISBN-10: 0321774515
 
 [edd-rfd]:
   https://bitwarden.atlassian.net/wiki/spaces/PIQ/pages/177701412/Adopt+Evolutionary+database+design
