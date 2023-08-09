@@ -60,7 +60,7 @@ processes: always-on environments and offline update environments. The terms: _I
 
 #### Initial phase
 
-- Compatible with _previous_ _and_ _next_ application code changes
+- Compatible with _X.1.0_ **and** _X.2.0_ application code changes
 - Represents the beginning of a database change
 - Updates the database schema to support any new functionality while also maintaining old
   functionality
@@ -70,22 +70,22 @@ processes: always-on environments and offline update environments. The terms: _I
 
 #### Transition phase
 
-- Compatible with _previous_ _and_ _next_ application code changes
+- Compatible with _X.1.0_ **and** _X.2.0_ application code changes
 - The time between initial migration and finalization
-- Exists to provide an opportunity to rollback server to _previous_ version prior to breaking
-  changes
+- Exists to provide an opportunity to rollback server to _X.1.0_ version prior to breaking changes
 - Only data population migrations may be run at this time, if they are needed
   - Optional step, required only when migrating data would be too slow to execute during the initial
     migration. This might be a column population, index creation, anything to prepare the database
-    for the _next_ version
+    for the _X.2.0_ version
   - Must be run as a background task during the Transition phase.
   - These MUST run in a way where the database stays responsive during the full migration
 - Schema changes are NOT to be run during this phase.
 
 #### Finalization phase
 
-- Only compatible with _next_ application code; represents the point of no return for this migration
-- Removes columns, data, and fallback code required to support _previous_ version
+- Only compatible with _X.2.0_ application code; represents the point of no return for this
+  migration
+- Removes columns, data, and fallback code required to support _X.1.0_ version
 - Should be run as a typical migration either during a subsequent upgrade
 
 ### Example
