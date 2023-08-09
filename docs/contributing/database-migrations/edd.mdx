@@ -60,7 +60,7 @@ processes: always-on environments and offline update environments. The terms: _I
 
 #### Initial phase
 
-- Compatible with <i>previous</i> <b>and</b> <i>next</i> application code changes
+- Compatible with _previous_ _and_ _next_ application code changes
 - Represents the beginning of a database change
 - Updates the database schema to support any new functionality while also maintaining old
   functionality
@@ -70,7 +70,7 @@ processes: always-on environments and offline update environments. The terms: _I
 
 #### Transition phase
 
-- Compatible with <i>previous</i> <b>and</b> <i>next</i> application code changes
+- Compatible with _previous_ _and_ _next_ application code changes
 - The time between initial migration and finalization
 - Exists to provide an opportunity to rollback server to _previous_ version prior to breaking
   changes
@@ -84,8 +84,7 @@ processes: always-on environments and offline update environments. The terms: _I
 
 #### Finalization phase
 
-- Only compatible with <i>next</i> application code; represents the point of no return for this
-  migration
+- Only compatible with _next_ application code; represents the point of no return for this migration
 - Removes columns, data, and fallback code required to support _previous_ version
 - Should be run as a typical migration either during a subsequent upgrade
 
@@ -259,7 +258,7 @@ After this deploy, to prep for the next release, all migrations in `DbScripts_tr
 to `DbScripts` and then all migrations in `DbScripts_finalization` are moved to `DbScripts`,
 conserving their execution order for a clean install. For the current branching strategy, PRs will
 be open against `master` when `rc` is cut to prep for this release. This PR automation will also
-handle renaming the migration file and updating any reference of `[dbo_future]` to `[dbo]`.
+handle renaming the migration file and updating any reference of `[dbo_finalization]` to `[dbo]`.
 
 The next deploy will pick up the newly added migrations in `DbScripts` and set the previously
 repeatable _Transition_ migrations to no longer be repeatable, execute the _Finalization_
