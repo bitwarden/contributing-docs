@@ -40,9 +40,9 @@ new code.
 
 ### Destructive changes
 
-The current release process couples database and code changes, even a new column can even be
-considered a destructive change if the default value of the column is a non-constant value that
-needs to be computed from elsewhere.
+While a new column can be added without being a destructive change, there are times when a new
+column will be considered a destructive change if the default value of the column is a non-constant
+value that needs to be computed from elsewhere.
 
 Destructive database changes are handled elegantly by breaking them up into three phases: _Start_,
 _Transition_ and _End_.
@@ -54,14 +54,14 @@ _Transition_ and _End_.
   </div>
 </div>
 
-To add terminology to compliment the above diagram, migrations that are a part of "Deploy new
-changes, migrate data, put in scaffolding code" are considered _Initial_ migrations. Migrations that
-are run during the Transition Phase are considered _Transition_ migrations. And the migrations that
-run as a part of "Remove old schema, scaffolding code" are considered _Finalization_ migrations. The
-definitions of each are helpful when discussing the type of migration in relation to orchestrating
-them during a deployment.
+To add terminology to compliment the [above diagram](./edd#destructive-changes), migrations that are
+a part of "Deploy new changes, migrate data, put in scaffolding code" are considered _Initial_
+migrations. Migrations that are run during the Transition Phase are considered _Transition_
+migrations. And the migrations that run as a part of "Remove old schema, scaffolding code" are
+considered _Finalization_ migrations. The definitions of each are helpful when discussing the type
+of migration in relation to orchestrating them during a deployment.
 
-#### Initial migrations
+### Initial migrations
 
 - Compatible with _X.1.0_ **and** _X.2.0_ application code changes
 - Represents the beginning of a database change
@@ -71,7 +71,7 @@ them during a deployment.
 - Run during upgrade
 - Must execute quickly to minimize downtime.
 
-#### Transition migrations
+### Transition migrations
 
 - Compatible with _X.1.0_ **and** _X.2.0_ application code changes
 - The time between initial migration and finalization migration
@@ -84,7 +84,7 @@ them during a deployment.
   - These MUST run in a way where the database stays responsive during the full migration
 - Schema changes are NOT to be run during this phase.
 
-#### Finalization migrations
+### Finalization migrations
 
 - Only compatible with _X.2.0_ application code; represents the point of no return for this
   migration
@@ -223,7 +223,7 @@ END
 </TabItem>
 </Tabs>
 
-## Bitwarden EDD process
+## Deployment orchestration
 
 There are some important constraints to the implementation of the process:
 
