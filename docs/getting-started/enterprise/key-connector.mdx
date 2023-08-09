@@ -35,6 +35,9 @@ understand how it works.
 MacOS requires updated SSL libraries, otherwise you will receive the error "No usable version of
 libssl was found".
 
+<Tabs>
+<TabItem value="intel" label="Intel" default>
+
 1. Install [Homebrew](https://brew.sh/)
 2. Install the OpenSSL package:
    ```bash
@@ -46,6 +49,42 @@ libssl was found".
    ```
 4. If you are running the Key Connector from a terminal, restart your terminal to make sure the
    updated `.zshrc` settings are applied
+
+</TabItem>
+<TabItem value="arm" label="ARM">
+
+Given that the Key Connector project is based on NET 5 then we need to use the x86_64 version of
+OpenSSL, thus installing x86_64 packages using Homebrew (a guide with several approaches can be
+found
+[here](https://www.wisdomgeek.com/development/installing-intel-based-packages-using-homebrew-on-the-m1-mac/)).
+
+1. Install Rosetta
+   ```bash
+   /usr/sbin/softwareupdate --install-rosetta
+   ```
+2. Set your terminal to Open using Rosetta (create a duplicate of the terminal application -> Go to
+   Get Info -> check Open using Rosetta).
+3. Install [Homebrew](https://brew.sh/)
+
+   3.a This should gives us a Homebrew living in `/usr/local` but if it doesn't work prepend
+   `arch -x86_64` before the Homebrew installation command.
+
+4. Install the OpenSSL package using the x86_64 Homebrew:
+   ```bash
+   arch -x86_64 /usr/local/homebrew/bin/brew install openssl
+   ```
+5. Set the required environment variables to point to the OpenSSL libraries:
+   ```bash
+   echo 'export DYLD_LIBRARY_PATH="/usr/local/opt/openssl@1.1/lib"' >> ~/.zshrc
+   ```
+6. If you are running the Key Connector from a terminal, restart your terminal to make sure the
+   updated `.zshrc` settings are applied or run
+   ```bash
+   source ~/.zshrc
+   ```
+
+</TabItem>
+</Tabs>
 
 ## Setup and configuration
 
@@ -138,6 +177,12 @@ Run the following command from the repository root:
 ```bash
 dotnet run --project src/KeyConnector --configuration Development
 ```
+
+:::note
+
+If running on ARM based Mac you may need to use `/usr/local/share/dotnet/x64/dotnet`
+
+:::
 
 The `--configuration` flag is required for MacOS to use the right SSL libraries.
 
