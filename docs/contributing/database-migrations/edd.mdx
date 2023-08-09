@@ -54,11 +54,14 @@ _Transition_ and _End_.
   </div>
 </div>
 
-The terminology is tweaked to be more easily understandable in relation to two types of deployment
-processes: always-on environments and offline update environments. The terms: _Initial_ Phase
-(instead of _Start_), _Transition_ Phase, and _Finalization_ Phase (instead of _End_).
+To add terminology to compliment the above diagram, migrations that are a part of "Deploy new
+changes, migrate data, put in scaffolding code" are considered _Initial_ migrations. Migrations that
+are run during the Transition Phase are considered _Transition_ migrations. And the migrations that
+run as a part of "Remove old schema, scaffolding code" are considered _Finalization_ migrations. The
+definitions of each are helpful when discussing the type of migration in relation to orchestrating
+them during a deployment.
 
-#### Initial phase
+#### Initial migrations
 
 - Compatible with _X.1.0_ **and** _X.2.0_ application code changes
 - Represents the beginning of a database change
@@ -68,10 +71,10 @@ processes: always-on environments and offline update environments. The terms: _I
 - Run during upgrade
 - Must execute quickly to minimize downtime.
 
-#### Transition phase
+#### Transition migrations
 
 - Compatible with _X.1.0_ **and** _X.2.0_ application code changes
-- The time between initial migration and finalization
+- The time between initial migration and finalization migration
 - Exists to provide an opportunity to rollback server to _X.1.0_ version prior to breaking changes
 - Only data population migrations may be run at this time, if they are needed
   - Optional step, required only when migrating data would be too slow to execute during the initial
@@ -81,7 +84,7 @@ processes: always-on environments and offline update environments. The terms: _I
   - These MUST run in a way where the database stays responsive during the full migration
 - Schema changes are NOT to be run during this phase.
 
-#### Finalization phase
+#### Finalization migrations
 
 - Only compatible with _X.2.0_ application code; represents the point of no return for this
   migration
@@ -222,7 +225,7 @@ END
 
 ## Bitwarden EDD process
 
-There are some unique constraints to how Bitwarden has to implement this process.
+There are some important constraints to the implementation of the process:
 
 - Bitwarden Production environments are required to be on at all times
 - Self-host instances must support the same database change process; however, they do not have the
