@@ -34,17 +34,17 @@ require a code change to allow the application to continue working as expected.
 ### Non-destructive database changes
 
 An example of a non-destructive change is almost always using either nullable fields or default
-values in database tables, views, and stored procedures. We have adopted this as a standard for any
-such changes. This will allow stored procedures to omit columns, which is a requirement when running
-both old and new code.
+values in database tables, views, and stored procedures. This as a standard for any such changes.
+This will allow stored procedures to omit columns, which is a requirement when running both old and
+new code.
 
 ### Destructive changes
 
-In our current release process where our database changes and our code changes are coupled, even a
-new column can even be considered a destructive change if the default value of the column is a
-non-constant value that needs to be computed from elsewhere.
+The current release process couples database and code changes, even a new column can even be
+considered a destructive change if the default value of the column is a non-constant value that
+needs to be computed from elsewhere.
 
-destructive database changes are handled elegantly by breaking them up into three phases: _Start_,
+Destructive database changes are handled elegantly by breaking them up into three phases: _Start_,
 _Transition_ and _End_.
 
 <div style={{ margin: "1em" }}>
@@ -54,16 +54,15 @@ _Transition_ and _End_.
   </div>
 </div>
 
-We tweak the terminology to be more easily understandable in relation to our deployment processes in
-both types environments: our always-on application in the cloud and our self-host deployments. We
-use the terms: _Initial_ Phase (instead of _Start_), _Transition_ Phase, and _Finalization_ Phase
-(instead of _End_).
+The terminology is tweaked to be more easily understandable in relation to two types of deployment
+processes: always-on environments and offline update environments. The terms: _Initial_ Phase
+(instead of _Start_), _Transition_ Phase, and _Finalization_ Phase (instead of _End_).
 
 #### Initial phase
 
 - Compatible with <i>previous</i> <b>and</b> <i>next</i> application code changes
 - Represents the beginning of a database change
-- Updates our database schema to support any new functionality while also maintaining old
+- Updates the database schema to support any new functionality while also maintaining old
   functionality
 - Supports both the previous version of code and the one being upgraded to
 - Run during upgrade
@@ -77,9 +76,9 @@ use the terms: _Initial_ Phase (instead of _Start_), _Transition_ Phase, and _Fi
   changes
 - Only data population migrations may be run at this time, if they are needed
   - Optional step, required only when migrating data would be too slow to execute during the initial
-    migration. This might be a column population, index creation, anything to prepare our database
+    migration. This might be a column population, index creation, anything to prepare the database
     for the _next_ version
-  - Must be run as a background task during our Transition phase.
+  - Must be run as a background task during the Transition phase.
   - These MUST run in a way where the database stays responsive during the full migration
 - Schema changes are NOT to be run during this phase.
 
@@ -222,14 +221,14 @@ END
 </TabItem>
 </Tabs>
 
-## Our EDD process
+## Bitwarden EDD process
 
 There are some unique constraints to how Bitwarden has to implement this process.
 
-- Our Bitwarden environments in the cloud are required to be on at all times
+- Bitwarden Production environments are required to be on at all times
 - Self-host instances must support the same database change process; however, they do not have the
   same always-on application constraint
-- Minimization of manual steps in our process
+- Minimization of manual steps in the process
 
 The process to support all of these constraints is a complex one. Below is an image of a state
 machine that will hopefully help visualize the process and what it supports. It assumes that all
@@ -244,22 +243,21 @@ viewing\]
 
 ### Online environments
 
-Since we treat both schema migrations and data migrations as just migrations, the only issues that
-we are solving for is orchestrating the runtime constraints on the migration. Eventually, all
-migrations will end up in `DbScripts`. However, to control the timing of running _Transition_ and
-associated _Finalization_ migrations, we need to keep them outside of `DbScripts` until the correct
-timing.
+Schema migrations and data migrations as just migrations. The underlying implementation issue is
+orchestrating the runtime constraints on the migration. Eventually, all migrations will end up in
+`DbScripts`. However, to orchestrate the running of _Transition_ and associated _Finalization_
+migrations, they are kept outside of `DbScripts` until the correct timing.
 
-In our environments with always-on applications, _Transition_ scripts must be run after the new code
-has been rolled out. To execute a full deploy, we run all new migrations in `DbScripts`, roll out
-the new code, and then run all _Transition_ migrations in the `DbScripts_transition` directory as
-soon as all of the new code services are online. In the case of a critical failure after the new
-code is rolled out, we will conduct a Rollback (see Rollbacks below). _Finalization_ migrations will
-not be run until the start of the next deploy when they are moved into `DbScripts`.
+In environments with always-on applications, _Transition_ scripts must be run after the new code has
+been rolled out. To execute a full deploy, all new migrations in `DbScripts` are run, the new code
+is rolled out, and then all _Transition_ migrations in the `DbScripts_transition` directory are run
+as soon as all of the new code services are online. In the case of a critical failure after the new
+code is rolled out, a Rollback would be conducted (see Rollbacks below). _Finalization_ migrations
+will not be run until the start of the next deploy when they are moved into `DbScripts`.
 
 After this deploy, to prep for the next release, all migrations in `DbScripts_transition` are moved
 to `DbScripts` and then all migrations in `DbScripts_finalization` are moved to `DbScripts`,
-conserving their execution order for a clean install. For our current branching strategy, PRs will
+conserving their execution order for a clean install. For the current branching strategy, PRs will
 be open against `master` when `rc` is cut to prep for this release. This PR automation will also
 handle renaming the migration file and updating any reference of `[dbo_future]` to `[dbo]`.
 
@@ -269,15 +267,15 @@ migrations, and then execute any new migrations associated with the code changes
 go out.
 
 The the state of migrations in the different directories at any one time is is saved and versioned
-in our Migrator Utility which supports the phased migration process in both types of environments.
+in the Migrator Utility which supports the phased migration process in both types of environments.
 
 ### Offline environments
 
-We need to have a similarly orchestrated process as Cloud environments here. However, we are not
-constrained to having an always-on application. Our updated orchestration process for self-host will
-be:
+The process for offline environments is similar to the always-on ones. However, since they do not
+have the constraint of always being on, the _Initial_ and _Transition_ migrations will be run one
+after the other:
 
-- Stop the Bitwarden stack as we do today
+- Stop the Bitwarden stack as done today
 - Start the database
 - Run all new migrations in `DbScripts` (both _Finalization_ migrations from the last deploy and any
   _Initial_ migrations from the deploy currently going out)
@@ -288,8 +286,8 @@ be:
 
 In the event the server release failed and needs to be rolled back, it should be as simple as just
 re-deploying the previous version again. The database will **stay** in the transition phase until a
-hotfix can be released, and the server can be updated. Once a hotfix is ready to go out, we deploy
-that hotfix and rerun the _Transition_ migrations to verify that the DB is in the state that it is
+hotfix can be released, and the server can be updated. Once a hotfix is ready to go out, it is
+deployed the _Transition_ migrations are rerun to verify that the DB is in the state that it is
 required to be in.
 
 Should a feature need to be completely pulled, a new migration needs to be written to undo the
