@@ -11,8 +11,15 @@ At Bitwarden we follow
 EDD describes a process where the database schema is continuously updated while still ensuring
 compatibility with older releases by using database transition phases.
 
-In short the Database Schema for the Bitwarden Server **must** support the previous release of the
-server at any given time.
+Additional requirements include:
+
+- **Zero-downtime deployments**: Which means that multiple versions of the application will be
+  running concurrently during the deployment window.
+- **Code rollback**: Critical defects in code should be able to be rolled back to the previous
+  version.
+
+To fulfill these additional requirements the database schema **must** support the previous release
+of the server.
 
 <bitwarden>
 
@@ -259,7 +266,7 @@ will not be run until the start of the next deploy when they are moved into `DbS
 
 After this deploy, to prep for the next release, all migrations in `DbScripts_transition` are moved
 to `DbScripts` and then all migrations in `DbScripts_finalization` are moved to `DbScripts`,
-conserving their execution order for a clean install. For the current branching strategy, PRs will
+conserving their execution order for a clean install. For the current branching strategy, ]Rs will
 be open against `master` when `rc` is cut to prep for this release. This PR automation will also
 handle renaming the migration file and updating any reference of `[dbo_finalization]` to `[dbo]`.
 
@@ -268,8 +275,8 @@ repeatable _Transition_ migrations to no longer be repeatable, execute the _Fina
 migrations, and then execute any new migrations associated with the code changes that are about to
 go out.
 
-The the state of migrations in the different directories at any one time is is saved and versioned
-in the Migrator Utility which supports the phased migration process in both types of environments.
+The state of migrations in the different directories at any one time is is saved and versioned in
+the Migrator Utility which supports the phased migration process in both types of environments.
 
 ### Offline environments
 
@@ -288,7 +295,7 @@ after the other:
 
 In the event the server release failed and needs to be rolled back, it should be as simple as just
 re-deploying the previous version again. The database will **stay** in the transition phase until a
-hotfix can be released, and the server can be updated. Once a hotfix is ready to go out, it is
+patch can be released, and the server can be updated. Once a patch is ready to go out, it is
 deployed the _Transition_ migrations are rerun to verify that the DB is in the state that it is
 required to be in.
 
