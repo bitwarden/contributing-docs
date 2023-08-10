@@ -39,10 +39,9 @@ a code change to allow the application to continue working as expected.
 
 ### Non-destructive database changes
 
-An example of a non-destructive change is almost always using either nullable fields or default
-values in database tables, views, and stored procedures. This as a standard for any such changes.
-This will allow stored procedures to omit columns, which is a requirement when running both old and
-new code.
+Non-destructive changes almost always use either nullable fields or default values in the database
+tables, views, and stored procedures. This ensures that the stored procedures can be called without
+the new columns which allows it to run with both the old and new code.
 
 ### Destructive changes
 
