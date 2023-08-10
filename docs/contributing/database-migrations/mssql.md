@@ -13,28 +13,12 @@ For instructions on how to apply database migrations, please refer to the
 
 ## SQL database project
 
-:::warning
-
-TODO: Update
-
-:::
-
-We use a [SQL Database project][SSDT] (`sqlproj`) to develop the database locally. This means we
-have an up-to-date representation of the database in `src/Sql`, and any modifications needs to be
-represented there as well. These projects behave slightly different depending on which OS you are
-using.
-
-=== "Windows" Visual Studio provides built in support for Database projects with their SQL Server
-Data Tools. This is usually the optimal development environment with built in support for schema
-comparison and much more.
-
-=== "Mac & Linux" Visual Studio for Mac unfortunately does not support Database projects, however
-you may instead use [Visual Studio Code][vscode] or [Azure Data Studio][azureds] with the [SQL
-Database Projects][SDPE] extension, which provides schema comparison and more. You may also modify
-the `.sql` files directly with any text editor.
-
-    Do note that when adding or renaming SQL files you might need to manually update the references
-    in the `.sqlproj` file.
+We use a [SDK-style SQL project][MSBuildSQL] (`sqlproj`) to develop the database locally. This means
+we have an up-to-date representation of the database in `src/Sql`, and any modifications needs to be
+represented there as well. Since SDK-style SQL projects are still in preview the tooling is not yet
+available Visual Studio. However it is available in [Visual Studio Code][vscode] and [Azure Data
+Studio][azureds] with the [SQL Database Projects][SDPE] extension, which provides schema comparison
+and more. You may also modify the `.sql` files directly with any text editor.
 
 To make a database change, start by modifying the `.sql` files in `src/Sql/dbo`. These changes will
 also need to be applied in a migration script. Migration scripts are located in
@@ -111,8 +95,8 @@ migrations should be saved for very exceptional purposes. One such reason could 
   https://docs.microsoft.com/en-us/dotnet/architecture/microservices/microservice-ddd-cqrs-patterns/infrastructure-persistence-layer-design
 [dapper]: https://github.com/DapperLib/Dapper
 [code-style-sql]: ../code-style/index.md#t-sql
-[SSDT]:
-  https://docs.microsoft.com/en-us/previous-versions/sql/sql-server-data-tools/hh272702(v=vs.103)?redirectedfrom=MSDN
+[MSBuildSQL]:
+  https://learn.microsoft.com/en-us/sql/azure-data-studio/extensions/sql-database-project-extension-sdk-style-projects?view=sql-server-ver16
 [vscode]: https://code.visualstudio.com/
 [azureds]:
   https://docs.microsoft.com/en-us/sql/azure-data-studio/download-azure-data-studio?view=sql-server-ver16
