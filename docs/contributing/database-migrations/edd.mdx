@@ -2,7 +2,6 @@ import Tabs from "@theme/Tabs";
 import TabItem from "@theme/TabItem";
 
 import refactoringPhases from "./stages_refactoring.jpg";
-import eddStateMachine from "./edd_state_machine.jpg";
 
 # Evolutionary database design
 
@@ -33,10 +32,10 @@ For background on this decision please see the [Evolutionary Database Design RFD
 
 ## Design
 
-Two types of database changes exist: destructive and non-destructive \[[1](./edd#further-reading)\].
-A destructive change is any database change that requires an accompanying code change to continue
-working as expected. A non-destructive change is the opposite: a database change that does not
-require a code change to allow the application to continue working as expected.
+Database changes can be categorized into two categories: destructive and non-destructive
+\[[1](./edd#further-reading)\]. A destructive change prevents existing functionality from working as
+expected without an accompanying code change. A non-destructive change is one that does not require
+a code change to allow the application to continue working as expected.
 
 ### Non-destructive database changes
 
