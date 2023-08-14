@@ -47,10 +47,10 @@ required.
 
 1. Copy the relevant `.sql` files from `src/Sql/dbo` to `src/Sql/dbo_future`.
 2. Remove the backwards compatibility that is no longer needed.
-3. Write a new Migration and place it in `src/Migrator/DbScripts_future`. Name it
+3. Write a new Migration and place it in `src/Migrator/DbScripts_finalization`. Name it
    `YYYY-0M-FutureMigration.sql`.
    - Typically migrations are designed to be run in sequence. However since the migrations in
-     DbScripts_future can be run out of order, care must be taken to ensure they remain compatible
+     DbScripts_finalization can be run out of order, care must be taken to ensure they remain compatible
      with the changes to DbScripts. In order to achieve this we only keep a single migration, which
      executes all backwards incompatible schema changes.
 
