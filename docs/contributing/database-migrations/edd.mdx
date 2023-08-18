@@ -1,8 +1,6 @@
 import Tabs from "@theme/Tabs";
 import TabItem from "@theme/TabItem";
 
-import refactoringPhases from "./stages_refactoring.jpg";
-
 # Evolutionary database design
 
 At Bitwarden we follow
@@ -45,17 +43,17 @@ the new columns which allows it to run with both the old and new code.
 
 ### Destructive changes
 
-While a new column can be added without being a destructive change, there are times when a new
-column will be considered a destructive change if the default value of the column is a non-constant
-value that needs to be computed from elsewhere.
-
 Destructive database changes are handled elegantly by breaking them up into three phases: _Start_,
 _Transition_ and _End_.
 
-<div style={{ margin: "1em" }}>
-  <img src={refactoringPhases} alt="Refactoring Phases" />
-  <div style={{ fontSize: 12, textAlign: "center" }}>
-    Refactoring Phases [<a href="./edd#further-reading">1</a>]
+<div style="margin: 1em">
+  <img src="./stages_refactoring.jpg" alt="Refactoring Phases" />
+  <div style="fontSize: 12, textAlign: center">
+    Refactoring Phases: [
+    <a href="https://martinfowler.com/articles/evodb.html">
+      https://martinfowler.com/articles/evodb.html
+    </a>
+    ]
   </div>
 </div>
 
