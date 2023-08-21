@@ -99,7 +99,7 @@ a future date but a code-first solution is desired to allow for more control and
 installation. It is expected that local processes will ingest logs / exports as desired.
 
 Software development lifecycle enhancements will be made to clarify best practices and review
-requirements for logging or monitoring changes. A [deep dive][/architecture/deep-dives] will be
+requirements for logging or monitoring changes. A [deep dive](/architecture/deep-dives) will be
 added on logging and monitoring to showcase patterns for adding signal collection in code. Only
 component runtime signals will be collected to start; no application payloads such as input and
 output data will be collected in signals.
