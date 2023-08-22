@@ -43,33 +43,40 @@ applies to self-hosted.
 
 :::
 
-### Local configuration
-
-As shown above, local server development instances will not query LaunchDarkly for feature flag
-values.
+Local development server instances will not query LaunchDarkly for feature flag values.
 
 If you need to change any feature flag values from their defaults during local development, you will
 need to set up either local application settings or a file-based data source. **Without the local
 data store, all flag values will resolve as their default ("off") value.**
 
-To set up a data source via application settings, place the following in
-`appsettings.Development.json` or similar:
+### Local configuration - user secrets
+
+To set up a data source via application settings, place the following in your
+[user secrets](./user-secrets.md):
 
 ```json
 {
-  "launchDarkly": {
-    "flagValues": {
-      "example-boolean-key": true,
-      "example-string-key": "value"
+  "globalSettings": {
+    "launchDarkly": {
+      "flagValues": {
+        "example-boolean-key": true,
+        "example-string-key": "value"
+      }
     }
   }
 }
 ```
 
-Environment variables can also be used like with other application setting overrides. Setting flag
-values via application settings will not update until application restart.
+Replace `example-boolean-key` and `example-string-key` with your flag names and update the flag
+values accordingly.
 
-To set up a data source via a local file, create one with the following:
+Remember to run `dev/setup_secrets.ps1` and restart your server for the new secrets to take effect.
+
+Environment variables can also be used like with other application setting overrides.
+
+### Local configuration - JSON file
+
+To set up a data source via a local file, create a `flags.json` file as follows:
 
 ```json
 {
@@ -80,15 +87,15 @@ To set up a data source via a local file, create one with the following:
 }
 ```
 
-By default, the LaunchDarkly startup will look for this file to be named `flags.json` and be placed
-in the root project directory (e.g. `/src/Api/` for the `Api` project), where it will be deployed to
-the build output directory. However, if you prefer to store the file in a different location, the
-`FlagDataFilePath` configuration setting can be used to override it. The file must be present before
-building the solution, but once there you can change the file contents and see immediate results in
-running / debugging code.
+Replace `example-boolean-key` and `example-string-key` with your flag names and update the flag
+values accordingly.
 
-In either case replace `example-boolean-key` and `example-string-key` with your flag names and
-update the value(s) accordingly.
+By default, the LaunchDarkly startup will look for this file in the root project directory (e.g.
+`/src/Api/` for the `Api` project), where it will be deployed to the build output directory.
+However, if you prefer to store the file in a different location, the `FlagDataFilePath`
+configuration setting can be used to override it. The file must be present before building the
+solution, but once there you can change the file contents and see immediate results in running /
+debugging code.
 
 :::tip Local data source for flags used in the client
 
@@ -120,10 +127,10 @@ source you configure below.
 
 ### Local development
 
-As you begin work on the feature, use the local JSON data store to surface the flag to your
-consuming code to make sure that behavior is correct for all supported flag values. Since feature
-flags don’t have to exist in LaunchDarkly for initial development, **don’t create them online until
-you’re sure about the final implementation**.
+As you begin work on the feature, use one of the local configuration options to surface the flag to
+your consuming code to make sure that behavior is correct for all supported flag values. Since
+feature flags don’t have to exist in LaunchDarkly for initial development, **don’t create them
+online until you’re sure about the final implementation**.
 
 :::tip Local client development
 
