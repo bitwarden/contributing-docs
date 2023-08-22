@@ -1,16 +1,13 @@
 import Tabs from "@theme/Tabs";
 import TabItem from "@theme/TabItem";
 
-import refactoringPhases from "./refactoring_phases.jpg";
-
 # Evolutionary database design
 
-At Bitwarden we follow
-[Evolutionary Database Design (EDD)](https://en.wikipedia.org/wiki/Evolutionary_database_design).
-EDD describes a process where the database schema is continuously updated while still ensuring
-compatibility with older releases by using database transition phases.
+At Bitwarden we follow [Evolutionary Database Design (EDD)][edd-wiki]. EDD describes a process where
+the database schema is continuously updated while still ensuring compatibility with older releases
+by defining a database transition phases.
 
-Additional requirements include:
+Bitwarden also need to support:
 
 - **Zero-downtime deployments**: Which means that multiple versions of the application will be
   running concurrently during the deployment window.
@@ -32,73 +29,76 @@ For background on this decision please see the [Evolutionary Database Design RFD
 
 ## Design
 
-Database changes can be categorized into two categories: destructive and non-destructive
+Database changes can be categorized into two categories: destructive and non-destructive changes
 \[[1](./edd#further-reading)\]. A destructive change prevents existing functionality from working as
-expected without an accompanying code change. A non-destructive change is one that does not require
-a code change to allow the application to continue working as expected.
+expected without an accompanying code change. A non-destructive change is the opposite: a database
+change that does not require a code change to allow the non-application to continue working as
+expected.
 
-### Non-destructive database changes
+### Non-destructive changes
 
-Non-destructive changes almost always use either nullable fields or default values in the database
-tables, views, and stored procedures. This ensures that the stored procedures can be called without
-the new columns which allows it to run with both the old and new code.
+Many database changes can be designed in a backwards compatible manner by using a mix of nullable
+fields and default values in the database tables, views, and stored procedures. This ensures that
+the stored procedures can be called without the new columns which allows it to run with both the old
+and new code.
 
 ### Destructive changes
 
-Destructive database changes are handled elegantly by breaking them up into three phases: _Start_,
-_Transition_ and _End_.
+Any change that cannot be done in a non-destructive manner is a destructive change. This can be as
+simple as adding a non nullable column where the value needs to be computed from existing fields, or
+renaming an existing column. To handle destructive changes it's necessary to break them up into
+three phases: _Start_, _Transition_ and _End_ as shown in the diagram below.
 
-<div style={{ margin: "1em" }}>
-  <img src={refactoringPhases} alt="Refactoring Phases" />
-  <div style={{ fontSize: 12, textAlign: "center" }}>
-    Refactoring Phases:{" "}
-    <a href="https://martinfowler.com/articles/evodb.html">
-      {" "}
-      https://martinfowler.com/articles/evodb.html{" "}
-    </a>
-  </div>
-</div>
+<figure>
 
-To add terminology to compliment the [above diagram](./edd#destructive-changes), migrations that are
-a part of "Deploy new changes, migrate data, put in scaffolding code" are considered _Initial_
-migrations. Migrations that are run during the Transition Phase are considered _Transition_
-migrations. And the migrations that run as a part of "Remove old schema, scaffolding code" are
-considered _Finalization_ migrations. The definitions of each are helpful when discussing the type
-of migration in relation to orchestrating them during a deployment.
+![Refactoring Stages](./transitions.png)
 
-### Initial migrations
+<figcaption>Refactoring Phases</figcaption>
 
-- Compatible with _X.1.0_ **and** _X.2.0_ application code changes
-- Represents the beginning of a database change
-- Updates the database schema to support any new functionality while also maintaining old
-  functionality
-- Supports both the previous version of code and the one being upgraded to
-- Run during upgrade
-- Must execute quickly to minimize downtime.
+</figure>
 
-### Transition migrations
+It's worth noting that the _Refactoring Phases_ are usually rolling, and the _End phase_ of one
+refactor is the _Transition phase_ of another. The table below details which application releases
+needs to be supported during which database phase.
 
-- Compatible with _X.1.0_ **and** _X.2.0_ application code changes
-- The time between initial migration and finalization migration
-- Exists to provide an opportunity to rollback server to _X.1.0_ version prior to breaking changes
+| Database Phase | Release X | Release X+1 | Release X+2 |
+| -------------- | --------- | ----------- | ----------- |
+| Start          | ✅        | ❌          | ❌          |
+| Transition     | ✅        | ✅          | ❌          |
+| End            | ❌        | ✅          | ✅          |
+
+### Migrations
+
+The three different migrations described in the diagram above are, _Initial migration_, _Transition
+migration_ and _ Finalization migration_ and are described in more details in this section.
+
+#### Initial migration
+
+The initial migration runs before the code deployment, and it's purpose is to add support for
+_Release X+1_ without breaking support of _Release X_. This deployment should have execute quickly
+and not contain any costly operations to ensure zero downtime.
+
+#### Transition migration
+
+The transition migration are run sometime during the transition phase, and provides an optional data
+migration should it be to slow or put to much load on the database, or otherwise making it
+unsuitable for the _initial migration_.
+
+- Compatible with _Release X_ **and** _Release X+1_ application.
 - Only data population migrations may be run at this time, if they are needed
-  - Optional step, required only when migrating data would be too slow to execute during the initial
-    migration. This might be a column population, index creation, anything to prepare the database
-    for the _X.2.0_ version
   - Must be run as a background task during the Transition phase.
-  - These MUST run in a way where the database stays responsive during the full migration
+  - Operation is batched or otherwise optimized to ensure the database stays responsive.
 - Schema changes are NOT to be run during this phase.
 
-### Finalization migrations
+#### Finalization migration
 
-- Only compatible with _X.2.0_ application code; represents the point of no return for this
-  migration
-- Removes columns, data, and fallback code required to support _X.1.0_ version
-- Should be run as a typical migration either during a subsequent upgrade
+The finalization migration removes the temporary measurements that was needed to retain backwards
+compatibility with _Release X_, and the database schema henceforth only supports _Release X+1_.
+These migrations are run as part of the deployment of _Release X+2_.
 
 ### Example
 
-Let’s look at an example, the rename column refactor is shown in the image below.
+Let's look at an example, the rename column refactor is shown in the image below.
 
 ![Rename Column Refactor](./rename-column.gif)
 
@@ -318,5 +318,6 @@ ensure their database changes run correctly against the currently released versi
 4. Refactoring Databases: Evolutionary Database Design (Addison-Wesley Signature Series (Fowler))
    ISBN-10: 0321774515
 
+[edd-wiki]: https://en.wikipedia.org/wiki/Evolutionary_database_design
 [edd-rfd]:
   https://bitwarden.atlassian.net/wiki/spaces/PIQ/pages/177701412/Adopt+Evolutionary+database+design
