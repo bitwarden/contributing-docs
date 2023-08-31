@@ -29,7 +29,7 @@ client development the flags are served from the Bitwarden API.
 
 | Server configuration | Flag source                                                  |
 | -------------------- | ------------------------------------------------------------ |
-| Local development    | Local application settings or JSON file                      |
+| Local development    | Local application settings, JSON file, or code modification  |
 | Self-hosted          | Flags are "off" unless above local configuration is provided |
 | QA Cloud             | LaunchDarkly QA                                              |
 | Production Cloud     | LaunchDarkly Production                                      |
@@ -49,7 +49,7 @@ If you need to change any feature flag values from their defaults during local d
 need to set up either local application settings or a file-based data source. **Without the local
 data store, all flag values will resolve as their default ("off") value.**
 
-### Local configuration - user secrets
+### Local configuration: user secrets
 
 To set up a data source via application settings, place the following in your
 [user secrets](./user-secrets.md):
@@ -74,7 +74,7 @@ Remember to run `dev/setup_secrets.ps1` and restart your server for the new secr
 
 Environment variables can also be used like with other application setting overrides.
 
-### Local configuration - JSON file
+### Local configuration: JSON file
 
 To set up a data source via a local file, create a `flags.json` file as follows:
 
@@ -96,6 +96,25 @@ However, if you prefer to store the file in a different location, the `FlagDataF
 configuration setting can be used to override it. The file must be present before building the
 solution, but once there you can change the file contents and see immediate results in running /
 debugging code.
+
+### Local configuration: code modification
+
+In some situations there may be a need to change a feature flag value to be something other than its
+default state before cleanup activities can fully complete, especially when deployed clients are
+still depending on the flag value being returned to ensure certain functionality. In the server
+codebase there exists a method `GetLocalOverrideFlagValues()` alongside the feature flag
+[constants definition](#server) where overrides can be placed as dictionary key-value pairs:
+
+```csharp
+return new Dictionary<string, string>()
+{
+    { ExampleBooleanKey, "true" }
+};
+```
+
+This should only be used temporarily and as part of the feature flag cleanup process, as well as to
+enable rapid feature availability for installations that are not using or aware of alternative
+configuration methods.
 
 :::tip Local data source for flags used in the client
 
@@ -154,8 +173,8 @@ the appropriate access. You should discuss:
 
 :::tip When should I request the flags in LaunchDarkly?
 
-As a general rule, feature flag should be requested for creation in LaunchDarkly as part of merging
-the code using the flag into the `master` branch. Since local development and QA testing with their
+As a general rule, feature flags should be requested for creation in LaunchDarkly as part of merging
+the code using the flag into a mainline branch. Since local development and QA testing with their
 self-hosted instances will use local data sources, the first time that a flag in LaunchDarkly would
 be referenced is when the code is deployed to a cloud environment.
 
@@ -240,7 +259,8 @@ costs.
 
 Feature flags don’t necessarily have to ever be deleted from LaunchDarkly, just unused. Linking them
 to Jira helps create a history of the feature and there are copious logs and audit records online
-that can be kept.
+that can be kept. Feature flags not accessed for a long period of time will automatically move to an
+"inactive" state that can also help with identifying technical debt to clean up.
 
 When defining the subtasks of a story be sure to include a cleanup task for removal of the feature
 flag from code – it’s essential that these not be left around for too long and assume a permanent
@@ -249,11 +269,15 @@ existence. Address the task at a later phase once the feature launches successfu
 ### Self-hosted considerations
 
 Self-hosted instances will not have access to LaunchDarkly, so the server configuration retrieved
-from the API **will always treat all feature flags as in their "off" state**. What this means in
-practice is that the feature flag must be fully removed from the code before the feature is
-available for self-hosted instances. This implies a staged feature release cycle, as follows:
+from the API will assess all feature flags as their default state unless the server is configured
+otherwise. What this means in practice is that the feature flag must be removed from the code before
+the feature is available for self-hosted instances. This implies a staged feature release cycle, as
+follows:
 
 1. Release cloud and self-hosted with feature flag off
-2. Turn on feature flag, which will enable the feature for cloud instances **only**
-3. Release cloud and self-hosted with feature flag removed, which enables the feature for
+2. Turn on feature flag, enabling the feature for cloud instances **only**
+3. Release cloud and self-hosted with the feature flag removed, therefore enabling the feature for
    self-hosted instances
+
+A self-hosted installation may choose to configure alternative [data sources](#flag-data-sources) to
+more quickly adopt a feature.
