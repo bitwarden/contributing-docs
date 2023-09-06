@@ -311,8 +311,7 @@ environments.
 If you need to test individual or organization paid features in your self hosted environment, you
 will need do the following:
 
-1. Run both of your web clients in your local development environment and your self hosted
-   environment
+1. Run both of your web clients in your local cloud environment and your self hosted environment
 2. Follow these instructions for retrieving and applying licenses:
    - [Individual Licenses](https://bitwarden.com/help/licensing-on-premise/#individual-license)
    - [Organization Licenses](https://bitwarden.com/help/licensing-on-premise/#organization-license)
