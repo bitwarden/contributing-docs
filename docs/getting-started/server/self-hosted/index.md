@@ -308,6 +308,10 @@ environments.
 
 ## [Licensed Features](https://bitwarden.com/help/licensing-on-premise/)
 
+<!-- TODO: update this to have two pathways of creating/licensing self hosted
+and provide this link for the admin portal path
+https://bitwarden.com/help/getting-started-providers/#enabling-the-self-hosted-instances -->
+
 If you need to test individual or organization paid features in your self hosted environment, you
 will need do the following:
 
