@@ -60,7 +60,7 @@ found
 
 1. Install Rosetta
    ```bash
-   /usr/sbin/softwareupdate --install-rosetta
+   softwareupdate --install-rosetta
    ```
 2. Set your terminal to Open using Rosetta (create a duplicate of the terminal application -> Go to
    Get Info -> check Open using Rosetta).
@@ -181,6 +181,10 @@ dotnet run --project src/KeyConnector --configuration Development
 :::note
 
 If running on ARM based Mac you may need to use `/usr/local/share/dotnet/x64/dotnet`
+
+```bash
+/usr/local/share/dotnet/x64/dotnet run --project src/KeyConnector --configuration Development
+```
 
 :::
 
