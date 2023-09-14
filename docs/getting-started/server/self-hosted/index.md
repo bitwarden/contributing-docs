@@ -122,7 +122,7 @@ After the updates to your `secrets.json` file in your self-hosted repo, apply yo
 running the following command:
 
 ```bash
-pwsh setup_secrets.ps1 -clear:$True
+pwsh setup_secrets.ps1 -clear
 ```
 
 You have now updated the user secrets for your self-hosted instance.
