@@ -363,8 +363,8 @@ repository.
     pwsh setup_secrets.ps1
     ```
 
-The helper script also supports an optional `-clear` switch which removes all existing settings before
-re-applying them:
+The helper script also supports an optional `-clear` switch which removes all existing settings
+before re-applying them:
 
 ```bash
 pwsh setup_secrets.ps1 -clear
