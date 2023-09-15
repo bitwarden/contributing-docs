@@ -7,7 +7,7 @@ At Bitwarden we follow [Evolutionary Database Design (EDD)][edd-wiki]. EDD descr
 the database schema is continuously updated while still ensuring compatibility with older releases
 by defining a database transition phases.
 
-Bitwarden also need to support:
+Bitwarden also needs to support:
 
 - **Zero-downtime deployments**: Which means that multiple versions of the application will be
   running concurrently during the deployment window.
@@ -39,7 +39,7 @@ expected.
 
 Many database changes can be designed in a backwards compatible manner by using a mix of nullable
 fields and default values in the database tables, views, and stored procedures. This ensures that
-the stored procedures can be called without the new columns which allows it to run with both the old
+the stored procedures can be called without the new columns and allow them to run with both the old
 and new code.
 
 ### Destructive changes
@@ -47,7 +47,7 @@ and new code.
 Any change that cannot be done in a non-destructive manner is a destructive change. This can be as
 simple as adding a non nullable column where the value needs to be computed from existing fields, or
 renaming an existing column. To handle destructive changes it's necessary to break them up into
-three phases: _Start_, _Transition_ and _End_ as shown in the diagram below.
+three phases: _Start_, _Transition_, and _End_ as shown in the diagram below.
 
 <figure>
 
@@ -70,19 +70,19 @@ needs to be supported during which database phase.
 ### Migrations
 
 The three different migrations described in the diagram above are, _Initial migration_, _Transition
-migration_ and _ Finalization migration_ and are described in more details in this section.
+migration_ and _ Finalization migration_.
 
 #### Initial migration
 
-The initial migration runs before the code deployment, and it's purpose is to add support for
-_Release X+1_ without breaking support of _Release X_. This deployment should have execute quickly
-and not contain any costly operations to ensure zero downtime.
+The initial migration runs before the code deployment, and its purpose is to add support for
+_Release X+1_ without breaking support of _Release X_. The migration should execute quickly and not
+contain any costly operations to ensure zero downtime.
 
 #### Transition migration
 
 The transition migration are run sometime during the transition phase, and provides an optional data
-migration should it be to slow or put to much load on the database, or otherwise making it
-unsuitable for the _initial migration_.
+migration should it be too slow or put too much load on the database, or otherwise make it
+unsuitable for the _Initial migration_.
 
 - Compatible with _Release X_ **and** _Release X+1_ application.
 - Only data population migrations may be run at this time, if they are needed
@@ -92,7 +92,7 @@ unsuitable for the _initial migration_.
 
 #### Finalization migration
 
-The finalization migration removes the temporary measurements that was needed to retain backwards
+The finalization migration removes the temporary measurements that were needed to retain backwards
 compatibility with _Release X_, and the database schema henceforth only supports _Release X+1_.
 These migrations are run as part of the deployment of _Release X+2_.
 
