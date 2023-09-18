@@ -42,8 +42,8 @@
   },
   "devDependencies": {
     "@docusaurus/module-type-aliases": "2.4.1",
-    "@tsconfig/docusaurus": "2.0.0",
-    "cspell": "7.3.5",
+    "@tsconfig/docusaurus": "2.0.1",
+    "cspell": "7.3.6",
     "husky": "8.0.3",
     "lint-staged": "14.0.1",
     "prettier": "3.0.3",
