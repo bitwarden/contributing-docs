@@ -1,0 +1,53 @@
+<mxfile host="app.diagrams.net" modified="2023-08-22T09:26:06.965Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:109.0) Gecko/20100101 Firefox/116.0" etag="hovSHvbrOD95EHPObRd7" version="21.6.8" type="device">
+  <diagram name="Page-1" id="lcHUyxeu1cxOqkDhXFud">
+    <mxGraphModel dx="1802" dy="393" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="PMLj0W4xVDKLJgSlkqyW-3" value="Start" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ff2603;fontColor=#ffffff;strokeColor=#000000;perimeterSpacing=0;" vertex="1" parent="1">
+          <mxGeometry x="-640" y="280" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="PMLj0W4xVDKLJgSlkqyW-4" value="Transition" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fffc02;fontColor=#000000;strokeColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="-500" y="280" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="PMLj0W4xVDKLJgSlkqyW-6" value="End" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#73fa79;" vertex="1" parent="1">
+          <mxGeometry x="-360" y="280" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="PMLj0W4xVDKLJgSlkqyW-26" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.75;exitY=1;exitDx=0;exitDy=0;dashed=1;" edge="1" parent="1" source="PMLj0W4xVDKLJgSlkqyW-17">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="-510" y="280" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="PMLj0W4xVDKLJgSlkqyW-17" value="&lt;div&gt;Deploy X + 1&lt;br&gt;&lt;/div&gt;&lt;div&gt;Initial migration&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;glass=0;" vertex="1" parent="1">
+          <mxGeometry x="-620" y="180" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="PMLj0W4xVDKLJgSlkqyW-27" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.25;exitY=1;exitDx=0;exitDy=0;dashed=1;" edge="1" parent="1" source="PMLj0W4xVDKLJgSlkqyW-20">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="-370" y="280" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="PMLj0W4xVDKLJgSlkqyW-20" value="&lt;div&gt;Deploy X + 2&lt;br&gt;&lt;/div&gt;&lt;div&gt;Finalization migration&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;glass=0;" vertex="1" parent="1">
+          <mxGeometry x="-380" y="180" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="PMLj0W4xVDKLJgSlkqyW-23" value="" style="endArrow=none;html=1;rounded=0;strokeWidth=3;targetPerimeterSpacing=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="-510" y="280" as="sourcePoint" />
+            <mxPoint x="-510" y="340" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="PMLj0W4xVDKLJgSlkqyW-24" value="" style="endArrow=none;html=1;rounded=0;strokeWidth=3;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="-370" y="280" as="sourcePoint" />
+            <mxPoint x="-370" y="340" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="PMLj0W4xVDKLJgSlkqyW-29" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;dashed=1;" edge="1" parent="1" source="PMLj0W4xVDKLJgSlkqyW-28" target="PMLj0W4xVDKLJgSlkqyW-4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="PMLj0W4xVDKLJgSlkqyW-28" value="Transition migration" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;glass=0;" vertex="1" parent="1">
+          <mxGeometry x="-500" y="370" width="120" height="60" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

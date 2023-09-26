@@ -45,3 +45,8 @@
 .menu__link--active {
   font-weight: bold;
 }
+
+figcaption {
+  text-align: center;
+  font-style: italic;
+}
