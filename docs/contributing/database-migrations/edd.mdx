@@ -1,16 +1,21 @@
 import Tabs from "@theme/Tabs";
 import TabItem from "@theme/TabItem";
 
-# Evolutionary Database Design
+# Evolutionary database design
 
-At Bitwarden we follow
-[Evolutionary Database Design (EDD)](https://en.wikipedia.org/wiki/Evolutionary_database_design).
-EDD describes a process where the database schema is continuously updated while still ensuring
-compatibility with older releases by using database transition phases.
+At Bitwarden we follow [Evolutionary Database Design (EDD)][edd-wiki]. EDD describes a process where
+the database schema is continuously updated while still ensuring compatibility with older releases
+by defining a database transition phases.
 
-In short the Database Schema for the Bitwarden Server **must** support the previous release of the
-server. The database migrations will be performed before the code deployment, and in the event of a
-release rollback the database schema will **not** be updated.
+Bitwarden also needs to support:
+
+- **Zero-downtime deployments**: Which means that multiple versions of the application will be
+  running concurrently during the deployment window.
+- **Code rollback**: Critical defects in code should be able to be rolled back to the previous
+  version.
+
+To fulfill these additional requirements the database schema **must** support the previous release
+of the server.
 
 <bitwarden>
 
@@ -24,26 +29,76 @@ For background on this decision please see the [Evolutionary Database Design RFD
 
 ## Design
 
-### Nullable
+Database changes can be categorized into two categories: destructive and non-destructive changes
+\[[1](./edd#further-reading)\]. A destructive change prevents existing functionality from working as
+expected without an accompanying code change. A non-destructive change is the opposite: a database
+change that does not require a code change to allow the non-application to continue working as
+expected.
 
-Database tables, views and stored procedures should almost always use either nullable fields or have
-a default value. Since this will allow stored procedures to omit columns, which is a requirement
-when running both old and new code.
+### Non-destructive changes
 
-### EDD Process
+Many database changes can be designed in a backwards compatible manner by using a mix of nullable
+fields and default values in the database tables, views, and stored procedures. This ensures that
+the stored procedures can be called without the new columns and allow them to run with both the old
+and new code.
 
-The EDD breaks up each database migration into three phases. _Start_, _Transition_ and _End_.
+### Destructive changes
 
-![Refactoring Stages](./stages_refactoring.jpg)
-[https://www.martinfowler.com/articles/evodb.html#TransitionPhase](https://www.martinfowler.com/articles/evodb.html#TransitionPhase)
+Any change that cannot be done in a non-destructive manner is a destructive change. This can be as
+simple as adding a non nullable column where the value needs to be computed from existing fields, or
+renaming an existing column. To handle destructive changes it's necessary to break them up into
+three phases: _Start_, _Transition_, and _End_ as shown in the diagram below.
 
-This necessitates two different database migrations. The first migration adds new content and is
-backwards compatible with the existing code. The second migration removes content and is not
-backwards compatible with that same code prior to the first migration.
+<figure>
+
+![Refactoring Stages](./transitions.png)
+
+<figcaption>Refactoring Phases</figcaption>
+
+</figure>
+
+It's worth noting that the _Refactoring Phases_ are usually rolling, and the _End phase_ of one
+refactor is the _Transition phase_ of another. The table below details which application releases
+needs to be supported during which database phase.
+
+| Database Phase | Release X | Release X+1 | Release X+2 |
+| -------------- | --------- | ----------- | ----------- |
+| Start          | ✅        | ❌          | ❌          |
+| Transition     | ✅        | ✅          | ❌          |
+| End            | ❌        | ✅          | ✅          |
+
+### Migrations
+
+The three different migrations described in the diagram above are, _Initial migration_, _Transition
+migration_ and _ Finalization migration_.
+
+#### Initial migration
+
+The initial migration runs before the code deployment, and its purpose is to add support for
+_Release X+1_ without breaking support of _Release X_. The migration should execute quickly and not
+contain any costly operations to ensure zero downtime.
+
+#### Transition migration
+
+The transition migration are run sometime during the transition phase, and provides an optional data
+migration should it be too slow or put too much load on the database, or otherwise make it
+unsuitable for the _Initial migration_.
+
+- Compatible with _Release X_ **and** _Release X+1_ application.
+- Only data population migrations may be run at this time, if they are needed
+  - Must be run as a background task during the Transition phase.
+  - Operation is batched or otherwise optimized to ensure the database stays responsive.
+- Schema changes are NOT to be run during this phase.
+
+#### Finalization migration
+
+The finalization migration removes the temporary measurements that were needed to retain backwards
+compatibility with _Release X_, and the database schema henceforth only supports _Release X+1_.
+These migrations are run as part of the deployment of _Release X+2_.
 
 ### Example
 
-Let’s look at an example, the rename column refactor is shown in the image below.
+Let's look at an example, the rename column refactor is shown in the image below.
 
 ![Rename Column Refactor](./rename-column.gif)
 
@@ -73,7 +128,7 @@ actions.
 :::
 
 <Tabs>
-<TabItem value="first" label="First Migration" default>
+<TabItem value="first" label="Initial Migration" default>
 
 ```sql
 -- Add Column
@@ -120,7 +175,7 @@ END
 ```
 
 </TabItem>
-<TabItem value="data" label="Data Migration">
+<TabItem value="data" label="Transition Migration">
 
 ```sql
 UPDATE [dbo].Customer SET
@@ -129,7 +184,7 @@ WHERE FirstName IS NULL
 ```
 
 </TabItem>
-<TabItem value="second" label="Second Migration">
+<TabItem value="second" label="Finalization Migration">
 
 ```sql
 -- Remove Column
@@ -173,49 +228,79 @@ END
 </TabItem>
 </Tabs>
 
-## Workflow
+## Deployment orchestration
 
-The Bitwarden specific workflow for writing migrations are described below.
+There are some important constraints to the implementation of the process:
 
-### Developer
+- Bitwarden Production environments are required to be on at all times
+- Self-host instances must support the same database change process; however, they do not have the
+  same always-on application constraint
+- Minimization of manual steps in the process
 
-The development flow is described in [Migrations](./).
+The process to support all of these constraints is a complex one. Below is an image of a state
+machine that will hopefully help visualize the process and what it supports. It assumes that all
+database changes follow the standards that are laid out in [Migrations](./).
 
-### Devops
+---
 
-#### On `rc` cut
+![Bitwarden EDD State Machine](./edd_state_machine.jpg) \[Open Image in a new tab for better
+viewing\]
 
-Create a PR moving the future scripts.
+---
 
-- `DbScripts_finalization` to `DbScripts`, prefix the script with the current date, but retain the
-  existing date.
-- `dbo_future` to `dbo`.
-  <bitwarden>
-    <li>
-      Create a ticket in Jira with a `Due Date` of the release date to ensure future migrations are
-      merged in and ready to be executed. Set the ticket that created the future migration as a
-      blocker.
-    </li>
-  </bitwarden>
+### Online environments
 
-#### After server release
+Schema migrations and data migrations as just migrations. The underlying implementation issue is
+orchestrating the runtime constraints on the migration. Eventually, all migrations will end up in
+`DbScripts`. However, to orchestrate the running of _Transition_ and associated _Finalization_
+migrations, they are kept outside of `DbScripts` until the correct timing.
 
-1. Run whatever data migration scripts might be needed. (This might need to be batched and executed
-   until all the data has been migrated)
-2. After having the server run for a while execute the future migration script to clean up the
-   database.
+In environments with always-on applications, _Transition_ scripts must be run after the new code has
+been rolled out. To execute a full deploy, all new migrations in `DbScripts` are run, the new code
+is rolled out, and then all _Transition_ migrations in the `DbScripts_transition` directory are run
+as soon as all of the new code services are online. In the case of a critical failure after the new
+code is rolled out, a Rollback would be conducted (see Rollbacks below). _Finalization_ migrations
+will not be run until the start of the next deploy when they are moved into `DbScripts`.
+
+After this deploy, to prep for the next release, all migrations in `DbScripts_transition` are moved
+to `DbScripts` and then all migrations in `DbScripts_finalization` are moved to `DbScripts`,
+conserving their execution order for a clean install. For the current branching strategy, PRs will
+be open against `master` when `rc` is cut to prep for this release. This PR automation will also
+handle renaming the migration file and updating any reference of `[dbo_finalization]` to `[dbo]`.
+
+The next deploy will pick up the newly added migrations in `DbScripts` and set the previously
+repeatable _Transition_ migrations to no longer be repeatable, execute the _Finalization_
+migrations, and then execute any new migrations associated with the code changes that are about to
+go out.
+
+The state of migrations in the different directories at any one time is is saved and versioned in
+the Migrator Utility which supports the phased migration process in both types of environments.
+
+### Offline environments
+
+The process for offline environments is similar to the always-on ones. However, since they do not
+have the constraint of always being on, the _Initial_ and _Transition_ migrations will be run one
+after the other:
+
+- Stop the Bitwarden stack as done today
+- Start the database
+- Run all new migrations in `DbScripts` (both _Finalization_ migrations from the last deploy and any
+  _Initial_ migrations from the deploy currently going out)
+- Run all _Transition_ migrations
+- Restart the Bitwarden stack.
 
 ## Rollbacks
 
 In the event the server release failed and needs to be rolled back, it should be as simple as just
 re-deploying the previous version again. The database will **stay** in the transition phase until a
-hotfix can be released, and the server can be updated.
+patch can be released, and the server can be updated. Once a patch is ready to go out, it is
+deployed the _Transition_ migrations are rerun to verify that the DB is in the state that it is
+required to be in.
 
-The goal is to resolve the issue quickly and re-deploy the fixed code to minimize the time the
-database stays in the transition phase. Should a feature need to be completely pulled, a new
-migration needs to be written to undo the database changes and the future migration will also need
-to be updated to work with the database changes. This is generally not recommended since pending
-migrations (for other releases) will need to be revisited.
+Should a feature need to be completely pulled, a new migration needs to be written to undo the
+database changes and the future migration will also need to be updated to work with the database
+changes. This is generally not recommended since pending migrations (for other releases) will need
+to be revisited.
 
 ## Testing
 
@@ -223,15 +308,16 @@ Prior to merging a PR please ensure that the database changes run well on the cu
 version. We currently do not have an automated test suite for this and it’s up to the developers to
 ensure their database changes run correctly against the currently released version.
 
-## Further Reading
+## Further reading
 
-- [Evolutionary Database Design](https://martinfowler.com/articles/evodb.html) (Particularly
-  [All database changes are database refactorings](https://martinfowler.com/articles/evodb.html#AllDatabaseChangesAreMigrations))
-- [The Agile Data (AD) Method](http://agiledata.org/) (Particularly
-  [Catalog of Database Refactorings](http://agiledata.org/essays/databaseRefactoringCatalog.html))
-- [Refactoring Databases: Evolutionary Database](https://databaserefactoring.com/)
-- Refactoring Databases: Evolutionary Database Design (Addison-Wesley Signature Series (Fowler))
-  ISBN-10: 0321774515
+1. [Evolutionary Database Design](https://martinfowler.com/articles/evodb.html) (Particularly
+   [All database changes are database refactorings](https://martinfowler.com/articles/evodb.html#AllDatabaseChangesAreMigrations))
+2. [The Agile Data (AD) Method](http://agiledata.org/) (Particularly
+   [Catalog of Database Refactorings](http://agiledata.org/essays/databaseRefactoringCatalog.html))
+3. [Refactoring Databases: Evolutionary Database](https://databaserefactoring.com/)
+4. Refactoring Databases: Evolutionary Database Design (Addison-Wesley Signature Series (Fowler))
+   ISBN-10: 0321774515
 
+[edd-wiki]: https://en.wikipedia.org/wiki/Evolutionary_database_design
 [edd-rfd]:
   https://bitwarden.atlassian.net/wiki/spaces/PIQ/pages/177701412/Adopt+Evolutionary+database+design

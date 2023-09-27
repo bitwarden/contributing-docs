@@ -122,7 +122,7 @@ After the updates to your `secrets.json` file in your self-hosted repo, apply yo
 running the following command:
 
 ```bash
-pwsh setup_secrets.ps1 -clear:$True
+pwsh setup_secrets.ps1 -clear
 ```
 
 You have now updated the user secrets for your self-hosted instance.
@@ -251,7 +251,7 @@ To run self-hosted from the CLI, you will need to:
 3.  Start the Identity service:
 
     ```bash
-    dotnet run -—launch-profile Identity-SelfHost
+    dotnet run --launch-profile Identity-SelfHost
     ```
 
 4.  Test that the Identity service is alive by navigating to
@@ -266,7 +266,7 @@ To run self-hosted from the CLI, you will need to:
 6.  Start the Api Service:
 
     ```bash
-    dotnet run -—launch-profile Api-SelfHost
+    dotnet run --launch-profile Api-SelfHost
     ```
 
 7.  Test that the Api service is alive by navigating to
