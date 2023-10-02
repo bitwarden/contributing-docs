@@ -1,6 +1,6 @@
-# Custom dictionary for spellchecking
-# Before adding a word here, consider whether you can put it in a single (`) or multiline (```) code snippet instead,
-# as they are automatically ignored by the spellchecker
+# Custom dictionary for spellchecking. Before adding a word here, consider whether you can put
+# it in a single (`) or multiline (```) code snippet instead, as they are automatically ignored
+# by the spellchecker. Please keep the list sorted alphabetically.
 
 Bitwarden
 bytemark
@@ -30,6 +30,7 @@ oktapreview
 Omnisharp
 onboarded
 opid
+OTLP
 passcode
 passwordless
 pinentry
@@ -41,6 +42,7 @@ roadmaps
 SCIM
 SDET
 SDLC
+Serilog
 signtool
 signup
 sprocs
