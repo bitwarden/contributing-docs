@@ -306,16 +306,18 @@ environments.
 
 </details>
 
-## [Licensed Features](https://bitwarden.com/help/licensing-on-premise/)
+## Licensed Features
 
-<!-- TODO: update this to have two pathways of creating/licensing self hosted
-and provide this link for the admin portal path
-https://bitwarden.com/help/getting-started-providers/#enabling-the-self-hosted-instances -->
+In order to develop against [licensed features](https://bitwarden.com/help/licensing-on-premise/) on
+your self-hosted instance, you will need to unlock them with a license file that is registered in
+your cloud-configured instance.
 
-If you need to test individual or organization paid features in your self hosted environment, you
-will need do the following:
+To do this, you should first start both your local cloud-configured and self-hosted web clients, as
+both environments will be necessary to acquire and apply the license.
 
-1. Run both of your web clients in your local cloud environment and your self hosted environment
-2. Follow these instructions for retrieving and applying licenses:
-   - [Individual Licenses](https://bitwarden.com/help/licensing-on-premise/#individual-license)
-   - [Organization Licenses](https://bitwarden.com/help/licensing-on-premise/#organization-license)
+You can now choose which type of license you would like to apply. The instructions vary for each,
+but the best resource is the Bitwarden Help Center documentation linked below.
+
+- [Individual license](https://bitwarden.com/help/licensing-on-premise/#individual-license)
+- [Organization license through the web vault](https://bitwarden.com/help/licensing-on-premise/#organization-license)
+- [Organization license through the Provider Portal](https://bitwarden.com/help/getting-started-providers/#enabling-the-self-hosted-instances)
