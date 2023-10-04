@@ -316,7 +316,7 @@ To do this, you should first start both your local cloud-configured and self-hos
 both environments will be necessary to acquire and apply the license.
 
 You can now choose which type of license you would like to apply. The instructions vary for each,
-but the best resource is the Bitwarden Help Center documentation linked below.
+but the best resource is the Bitwarden Help Center documentation:
 
 - [Individual license](https://bitwarden.com/help/licensing-on-premise/#individual-license)
 - [Organization license through the web vault](https://bitwarden.com/help/licensing-on-premise/#organization-license)
