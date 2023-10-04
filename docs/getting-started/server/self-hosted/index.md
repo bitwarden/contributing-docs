@@ -308,8 +308,8 @@ environments.
 
 ## Licensed Features
 
-In order to develop against [licensed features](https://bitwarden.com/help/licensing-on-premise/) on
-your self-hosted instance, you will need to unlock them with a license file that is registered in
+If you need to develop against [licensed features](https://bitwarden.com/help/licensing-on-premise/)
+on your self-hosted instance, you will need to unlock them with a license file that is registered in
 your cloud-configured instance.
 
 To do this, you should first start both your local cloud-configured and self-hosted web clients, as
