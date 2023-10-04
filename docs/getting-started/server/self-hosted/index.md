@@ -305,3 +305,19 @@ This of the `dev` object as containing both the configuration for cloud and self
 environments.
 
 </details>
+
+## Licensed Features
+
+If you need to develop against [licensed features](https://bitwarden.com/help/licensing-on-premise/)
+on your self-hosted instance, you will need to unlock them with a license file that is registered in
+your cloud-configured instance.
+
+To do this, you should first start both your local cloud-configured and self-hosted web clients, as
+both environments will be necessary to acquire and apply the license.
+
+You can now choose which type of license you would like to apply. The instructions vary for each,
+but the best resource is the Bitwarden Help Center documentation:
+
+- [Individual license](https://bitwarden.com/help/licensing-on-premise/#individual-license)
+- [Organization license through the web vault](https://bitwarden.com/help/licensing-on-premise/#organization-license)
+- [Organization license through the Provider Portal](https://bitwarden.com/help/getting-started-providers/#enabling-the-self-hosted-instances)
