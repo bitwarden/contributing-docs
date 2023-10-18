@@ -39,6 +39,7 @@ Before doing work on any of the clients, you need to clone and setup the `client
 2.  Install the dependencies:
 
     ```bash
+    cd clients
     npm ci
     ```
 
