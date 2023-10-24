@@ -55,7 +55,7 @@ version. Renovate has seen a **74%** test success rate across Renovate managed r
 a low confidence in the change. For more details read
 [Renovate documentation about Merge Confidence](https://docs.renovatebot.com/merge-confidence/).
 
-## Review
+### Review
 
 A typical dependency workflow involves the following steps:
 
@@ -80,13 +80,13 @@ The handover between developers and QA will be a Jira ticket. The ticket should 
 dependency, any relevant release notes for sections to test, and some testing notes on affected
 areas.
 
-## QA Testing
+### QA Testing
 
 While developers are responsible for writing a jira ticket with testing notes, the QA engineer
 should practice due diligence by also considering the impact of the dependency change and if needed
 discuss with the engineer about potentially increasing or decreasing the scope of testing.
 
-## Reverting
+### Reverting
 
 In the event QA finds a regression, the developer is responsible for assessing the impact and either
 immediately revert the update, or resolve the regression in a new PR.
