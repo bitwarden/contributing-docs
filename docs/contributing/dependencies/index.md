@@ -11,15 +11,17 @@ generate pull requests immediately.
 
 ## Ownership
 
-Bitwarden's repositories falls under two categories, Team-owned and shared repositories.
+Bitwarden's repositories falls under two categories, team-owned and shared repositories.
 
 ### Team-Owned repositories
 
-Team owned repositories are "owned" by a single team from a at least a dependency standpoint. The
-assigned team is responsible for reviewing, approving and merging dependency updates.
+Team owned repositories are "owned" by a single team from a dependency standpoint. The assigned team
+is responsible for reviewing, approving and merging dependency updates. Some reason a repository
+might be team-owned is because it's primarily developed by that team, or to balance out the number
+of dependencies teams have to manage.
 
-Some reason a repository might be team-owned is because it's primarily developed by that team, or to
-balance out the number of dependencies teams have to manage.
+Some examples are [`directory-connector`][dc] which is owned by the _Admin Console_ team and
+[`key-connector`][kc] which is owned by the _Auth_ team.
 
 ### Shared repositories
 
@@ -27,18 +29,9 @@ Shared repositories don't have any direct owner, instead each dependency is allo
 team assigned to a dependency is responsible for reviewing, approving and merging that dependency.
 For major upgrades the team is responsible for coordinating the upgrade with the other teams.
 
-## Workflow
+Examples of shared repositories are [`server`][server] and [`clients`][clients].
 
-Renovate will automatically create pull requests during the weekend, this naturally aligns with each
-team allocating some time during the monday to work through their queue of pull requests. The team
-should work together to resolve outstanding pull requests in a timely manner (typically within the
-week).
-
-A Renovate PR may contain a single or a group of dependencies. At Bitwarden we typically group
-dependencies we know are related and should be upgraded at the same time. We try to keep groups as
-small as possible to minimize the impact and increase confidence in approving and merging.
-
-### Example PR
+## Example PR
 
 <figure>
 
@@ -55,17 +48,35 @@ version. Renovate has seen a **74%** test success rate across Renovate managed r
 a low confidence in the change. For more details read
 [Renovate documentation about Merge Confidence](https://docs.renovatebot.com/merge-confidence/).
 
+## Workflow
+
+Renovate will automatically create pull requests during the weekend, this naturally aligns with each
+team allocating some time during the monday to work through their queue of pull requests. The team
+should work together to resolve outstanding pull requests in a timely manner (typically within the
+week).
+
+:::info
+
+The main exception being major upgrades which can sometimes take a longer time to coordinate.
+Ideally the team will have already coordinated and resolved deprecations in advance.
+
+:::
+
+A Renovate PR may contain a single or a group of dependencies. At Bitwarden we typically group
+dependencies we know are related and should be upgraded at the same time. We try to keep groups as
+small as possible to minimize the impact and increase confidence in approving and merging.
+
 ### Review
 
 A typical dependency workflow involves the following steps:
 
 1. Read the proposed changes.
-2. Review the package(s) release notes to identify if there are any deprecations or breaking changes
-   affecting Bitwarden.
+2. Review the release notes to identify if there are any deprecations or breaking changes affecting
+   our code.
    1. For breaking changes, either resolve them yourself or for major changes coordinate with the
       other teams.
    2. For deprecations, create high priority jira tickets on the affected teams backlogs with a due
-      date of the next major release (please include a reasonable buffer).
+      date well in advance of the next scheduled major release.
 3. Verify CI status
 4. If test coverage is lacking, checkout locally and manually confirm a few key areas.
 5. Review the proposed code changes, approve the PR.
@@ -90,3 +101,16 @@ discuss with the engineer about potentially increasing or decreasing the scope o
 
 In the event QA finds a regression, the developer is responsible for assessing the impact and either
 immediately revert the update, or resolve the regression in a new PR.
+
+### Closing irrelevant PRs
+
+Sometimes Renovate will create PRs for dependencies that we are currently unable to upgrade for
+various reasons. One example is `contributing-docs` which is built using `docusaurus`, which
+supports specific versions of `react`. We cannot upgrade `react` until `docusaurus` supports it.
+
+In those cases the team can comment on the PR with a reason for not upgrading and close the PR.
+
+[dc]: https://github.com/bitwarden/directory-connector
+[kc]: https://github.com/bitwarden/key-connector/
+[server]: https://github.com/bitwarden/server/
+[clients]: https://github.com/bitwarden/clients/
