@@ -7,12 +7,7 @@ sidebar_position: 2
 At Bitwarden, we encourage everyone to participate in code reviews. A team will focus primarily on
 their own code reviews, but if you see something interesting, feel free to jump in and discuss.
 
-:::tip Want to read more?
-
-You can find more tips for PR review here:
-[Best Practices for Code Review | SmartBear](https://smartbear.com/learn/code-review/best-practices-for-peer-code-review/)
-
-:::
+A few general guidelines:
 
 - Pull requests should be manageable. If the PR is too large -- significantly above a few hundred
   lines -- ask the contributor if it can be split it up into multiple PRs before reviewing.
@@ -21,7 +16,15 @@ You can find more tips for PR review here:
 - Take breaks - don’t review for longer than 60 minutes.
 
 Don’t feel bad for taking your time when doing code reviews! They often take longer than you think,
-and we should be spending as much time as needed.
+and we should be spending as much time as needed. When you find a bug or defect during PR review,
+the cost of fixing it is much smaller than if it escapes further into the development lifecycle.
+
+:::tip Want to read more?
+
+You can find more tips for PR review here:
+[Best Practices for Code Review | SmartBear](https://smartbear.com/learn/code-review/best-practices-for-peer-code-review/)
+
+:::
 
 ## Reviewing
 
