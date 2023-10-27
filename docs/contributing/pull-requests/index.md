@@ -97,33 +97,75 @@ changes” to a PR forcing the reviewer to start over again.
 
 :::
 
-## Creating a Pull Request
+## Creating a pull request
 
 The Bitwarden repositories have a _Pull Request template_ which should be followed. This will ensure
-the PR review goes smoothly since it will provide context to the reviewer. <community> Once a
-community PRs has been created, they will be automatically be linked to an internal Jira ticket. The
-internal ticket is used for prioritization and tracking purposes.</community><bitwarden>Include a
-Jira ticket reference so the reviewer can gain all context on the work.</bitwarden> Tag
-`@dept-design` as a reviewer for any UI changes.
-
-## Review process
+the PR review goes smoothly since it will provide context to the reviewer.
 
 <community>
-
-Once a Community PR has been created a Bitwarden developer will perform a code review, while we try
-to this in a reasonable time-frame, please understand that we have internal roadmaps and priorities
-that may delay this process.
-
+Once a community PRs has been created, they will be automatically be linked to an internal Jira ticket. The
+internal ticket is used for prioritization and tracking purposes.
 </community>
 
 <bitwarden>
+When creating the PR, include a Jira ticket reference so the reviewer can gain all context on the work, as well as links to any associated PRs in other repositories.
 
-While we mostly use an async review process, please don't hesitate to schedule a meeting with the
-reviewer/contributor to discuss the changes. While async communication can be useful it incurs a
-time penalty which can drag out the review process. And sometimes setting up a short call to discuss
-the changes can potentially save a lot of time.
+### Tagging reviewers
+
+We use `CODEOWNERS` in each repository to assign the reviewing teams based on the files in the PR.
+These reviews are required for the changes to be merged to `master`.
+
+You can tag additional teams or individuals for review as you see fit, including `@dept-design` for
+any design changes.
+
+### Opening the PR for review
+
+As its name implies, marking a PR as "Ready for Review" indicates that you are ready for all
+assigned teams to review it. If the changes are still in progress, leave the PR in `Draft` status.
+Doing this ensures that reviewers can act on the "Ready for Review" as their signal to begin the
+review process without further notification.
 
 </bitwarden>
+
+## Reviewing the pull request
+
+<bitwarden>
+
+At Bitwarden, we believe that the act of reviewing PRs is a critically important part of each
+engineer's job. It is as important, if not more important, than the act of writing code.
+
+To ensure that teams within the organization operate on same set of assumptions for performing
+reviews, we have agreed to a baseline set of expectations.
+
+When a PR author opens a PR for review, they should have the expectation that:
+
+- The act of opening the PR for review is the **only** notification required. Teams are responsible
+  for properly configuring notifications so that team members are aware of their obligations.
+- The reviewing team(s) will respond within **24 hours** to either:
+  - Provide a review, or
+  - Inform the author when such a review will be provided.
+
+:::info Follow-up notification
+
+If there is no response to a request for review in 24 hours, the author should reach out to the
+team(s) - or to individual engineers if assigned - via Slack to follow up.
+
+This should wait for 24 hours to allow the default process to take place and not overwhelm the team
+with notifications on multiple platforms.
+
+:::
+
+###
+
+</bitwarden>
+
+<community>
+
+Once a Community PR has been created, a Bitwarden developer will perform a code review. While we try
+to this in a reasonable time frame, please understand that we have internal roadmaps and priorities
+that may delay this process.
+
+</community>
 
 We've written up some [guidelines](./code-review.md) for reviewing code, which we recommend reading
 before performing your first code review.
