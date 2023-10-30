@@ -72,7 +72,7 @@ the watchOS one) and run it on the device.
 
 :::
 
-## Synchronization iPhone <-> Watch
+## Synchronization iPhone \<-> Watch
 
 In order to sync data between the iPhone and the Watch apps the
 [Watch Connectivity Framework](https://developer.apple.com/documentation/watchconnectivity) is used.

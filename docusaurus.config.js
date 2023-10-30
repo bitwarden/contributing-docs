@@ -1,8 +1,7 @@
 // @ts-check
 // Note: type annotations allow type checking and IDEs autocompletion
 
-const lightCodeTheme = require("prism-react-renderer/themes/github");
-const darkCodeTheme = require("prism-react-renderer/themes/dracula");
+import { themes } from "prism-react-renderer";
 
 async function createConfig() {
   const { remarkKroki } = await import("remark-kroki");
@@ -139,8 +138,8 @@ async function createConfig() {
           copyright: `Copyright © ${new Date().getFullYear()} Bitwarden Inc.`,
         },
         prism: {
-          theme: lightCodeTheme,
-          darkTheme: darkCodeTheme,
+          theme: themes.github,
+          darkTheme: themes.dracula,
           additionalLanguages: ["csharp", "powershell"],
         },
       }),

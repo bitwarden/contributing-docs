@@ -65,7 +65,7 @@ This uses
     docker-compose --profile idp up -d
     ```
 
-9.  You can test your user configuration by navigating to <http://localhost:8090/simplesaml>, then
+9.  You can test your user configuration by navigating to \<http://localhost:8090/simplesaml>, then
     Authentication → test configured authentication sources → `example-userpass`. You should be able
     to login with the users you’ve configured.
 
@@ -99,7 +99,7 @@ however any currently authenticated users will have to log out for changes to th
 effect.
 
 To log out as a user, navigate to
-<http://localhost:8090/simplesaml/module.php/core/authenticate.php?as=example-userpass> and click
+\<http://localhost:8090/simplesaml/module.php/core/authenticate.php?as=example-userpass> and click
 Logout. Alternatively, you can use a private browsing session.
 
 ### SAML configuration
