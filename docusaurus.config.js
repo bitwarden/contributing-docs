@@ -140,7 +140,7 @@ async function createConfig() {
         prism: {
           theme: themes.github,
           darkTheme: themes.dracula,
-          additionalLanguages: ["csharp", "powershell"],
+          additionalLanguages: ["bash", "csharp", "json", "powershell"],
         },
       }),
   };
