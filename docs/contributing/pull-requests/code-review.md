@@ -11,7 +11,7 @@ A few general guidelines:
 
 - Pull requests should be manageable. If the PR is too large -- significantly above a few hundred
   lines -- ask the contributor if it can be split it up into multiple PRs before reviewing.
-  - This can be tricky in our code base since many things are tightly coupled.
+  - This can be tricky in our codebase since many things are tightly coupled.
 - Take your time when reviewing - expect a rate of less than 500 lines of code per hour.
 - Take breaks - don’t review for longer than 60 minutes.
 
@@ -37,12 +37,16 @@ always welcome! For example, it’s okay to leave some general comments or feedb
 that you don’t have enough knowledge to approve the changes. The author can ask for another review
 from someone else, and there’s nothing wrong in having two reviewers on a PR.
 
+When undertaking a review, keep in mind that you are taking an ownership stake in the changes. You
+should always strive to provide actionable feedback to the author and to make yourself available for
+any clarifying questions.
+
 While we mostly use an asynchronous review process, please don't hesitate to schedule a meeting with
 the author to discuss the changes. While asynchronous communication can be useful, it incurs a time
 penalty which can drag out the review process. Sometimes setting up a short call to discuss the
 changes can potentially save a lot of time.
 
-:::info Note
+:::info Assumptions
 
 <a id="assumptions-note"></a> When reviewing code, remember that all software is built to conform to
 a set of assumptions. Features, bug fixes, and other requirement changes represent a change in those
@@ -53,9 +57,11 @@ requirements, which may not necessarily be in line with the previous solution.
 
 ### Review statuses
 
-Please use the review statuses appropriately.
+When completing a review, you can either add comments, request changes, or approve the PR. It is
+important that both the reviewer and the author understand the expectations around each type of
+review, so we use the guidelines below.
 
-:::tip Think about your audience
+:::tip Tip for effective feedback
 
 When providing comments or requesting changes, keep in mind the experience level of the author.
 
@@ -80,11 +86,10 @@ getting merged, as it will prevent someone else from approving the PR before you
 tackled.
 
 We shouldn’t hesitate to use this status. However, it does come with obligations for the reviewer.
-By blocking the PR from progressing, they have taken an ownership stake in it and should make
-themselves available to answer clarifying questions. They should also give clear feedback on what
-needs to change for the PR to get approved. Likewise, a PR author should not be discouraged by a
-request for changes, it's simply an indication that changes should be made prior to the PR being
-merged. This is common.
+By blocking the PR from progressing, you are taking on additional responsibility and should give
+clear feedback on what needs to change for the PR to get approved. Likewise, a PR author should not
+be discouraged by a request for changes, it's simply an indication that changes should be made prior
+to the PR being merged. This is common.
 
 :::warning Discarding reviews
 
