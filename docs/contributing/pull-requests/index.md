@@ -161,17 +161,25 @@ When a PR author opens a PR for review, they should have the expectation that:
   - Inform the author when a review will be provided, or
   - Ask the author to split the work into a smaller PR for review
 
-:::info Follow-up notification
+:::tip Notifications
+
+Our teams use Github notifications as the primary method of communication for PR review requests,
+and scheduled reminders are highly encouraged to facilitate prompt responses to requests.
+
+- Individual engineers are encouraged to set up [scheduled reminders][user reminders] for
+  themselves.
+- Each team has [scheduled reminders][team reminders] on a dedicated Slack channel (e.g.
+  #team-eng-platform-notifications).
+
+:::
+
+### Follow-up notification
 
 If there is no response to a request for review in 24 hours, the author should reach out to the
 team(s) -- or to individual engineers if assigned -- via Slack to follow up.
 
 This should wait for 24 hours to allow the default process to take place and not overwhelm the team
 with notifications on multiple platforms.
-
-:::
-
-###
 
 </bitwarden>
 
@@ -183,5 +191,12 @@ that may delay this process.
 
 </community>
 
+### How to perform a review
+
 We've written up some [guidelines](./code-review.md) for reviewing code, which we recommend reading
 before performing your first code review.
+
+[user reminders]:
+  https://docs.github.com/en/account-and-profile/setting-up-and-managing-your-personal-account-on-github/managing-your-membership-in-organizations/managing-your-scheduled-reminders
+[team reminders]:
+  https://docs.github.com/en/organizations/organizing-members-into-teams/managing-scheduled-reminders-for-your-team
