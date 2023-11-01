@@ -102,9 +102,11 @@ changes” to a PR forcing the reviewer to start over again.
 The Bitwarden repositories have a _Pull Request template_ which should be followed. This will ensure
 the PR review goes smoothly since it will provide context to the reviewer.<community> Once a
 community PR has been created, it will be automatically be linked to an internal Jira ticket. The
-internal ticket is used for prioritization and tracking purposes.</community> <bitwarden> When
+internal ticket is used for prioritization and tracking purposes.</community><bitwarden> When
 creating the PR include a Jira ticket reference so the reviewer can gain all context on the work as
-well as links to any associated PRs in other repositories.
+well as links to any associated PRs in other repositories.</bitwarden>
+
+<bitwarden>
 
 ### Tagging reviewers
 
