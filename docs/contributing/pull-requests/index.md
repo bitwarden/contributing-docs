@@ -100,15 +100,11 @@ changes” to a PR forcing the reviewer to start over again.
 ## Creating a pull request
 
 The Bitwarden repositories have a _Pull Request template_ which should be followed. This will ensure
-the PR review goes smoothly since it will provide context to the reviewer.
-
-<community>
-Once a community PRs has been created, they will be automatically be linked to an internal Jira ticket. The
-internal ticket is used for prioritization and tracking purposes.
-</community>
-
-<bitwarden>
-When creating the PR, include a Jira ticket reference so the reviewer can gain all context on the work, as well as links to any associated PRs in other repositories.
+the PR review goes smoothly since it will provide context to the reviewer.<community> Once a
+community PR has been created, it will be automatically be linked to an internal Jira ticket. The
+internal ticket is used for prioritization and tracking purposes.</community> <bitwarden> When
+creating the PR include a Jira ticket reference so the reviewer can gain all context on the work as
+well as links to any associated PRs in other repositories.
 
 ### Tagging reviewers
 
@@ -124,6 +120,23 @@ As its name implies, marking a PR as "Ready for Review" indicates that you are r
 assigned teams to review it. If the changes are still in progress, leave the PR in `Draft` status.
 Doing this ensures that reviewers can act on the "Ready for Review" as their signal to begin the
 review process without further notification.
+
+### Addressing feedback
+
+It is likely that you will receive some feedback on your PR. You should see this as a positive
+thing - it signifies a healthy and thorough review process and an organizational commitment to code
+quality. You may receive [comments](./code-review.md#comment) or a
+[request for changes](./code-review.md#request-changes). You are encouraged to engage in
+conversation on the PR to discuss a solution, but if any strong conflicting opinions arise it is
+often best to move the conversation to a synchronous format to avoid any misunderstanding.
+
+When any necessary changes have been made, you should address the comments or request for changes by
+responding in the PR conversation thread. You are not responsible for resolving the conversation -
+that is the prerogative of the reviewer, to ensure that they agree that the question or concern has
+been addressed.
+
+**When you are ready for a reviewer to re-visit your changes, you should request a re-review.** This
+will notify the reviewer and ensure a prompt response.
 
 </bitwarden>
 
