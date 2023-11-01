@@ -164,7 +164,7 @@ When a PR author opens a PR for review, they should have the expectation that:
 :::info Follow-up notification
 
 If there is no response to a request for review in 24 hours, the author should reach out to the
-team(s) - or to individual engineers if assigned - via Slack to follow up.
+team(s) -- or to individual engineers if assigned -- via Slack to follow up.
 
 This should wait for 24 hours to allow the default process to take place and not overwhelm the team
 with notifications on multiple platforms.
@@ -177,7 +177,7 @@ with notifications on multiple platforms.
 
 <community>
 
-Once a Community PR has been created, a Bitwarden developer will perform a code review. While we try
+Once a Community PR has been created a Bitwarden developer will perform a code review. While we try
 to this in a reasonable time frame, please understand that we have internal roadmaps and priorities
 that may delay this process.
 

@@ -44,7 +44,7 @@ any clarifying questions.
 While we mostly use an asynchronous review process, please don't hesitate to schedule a meeting with
 the author to discuss the changes. While asynchronous communication can be useful, it incurs a time
 penalty which can drag out the review process. Sometimes setting up a short call to discuss the
-changes can potentially save a lot of time.
+changes can save a lot of time.
 
 :::info Assumptions
 
@@ -145,7 +145,7 @@ a time.
   - Does the PR change the areas you expect to be changed?
     - Are any missing?
     - Are any present you didn't expect?
-  - Are there unit tests present?
+  - Are unit tests present?
 - Micro View - Focus on individual files.
   - Is the code style adhered?
   - Is the code readable?
