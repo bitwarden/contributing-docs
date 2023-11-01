@@ -137,7 +137,7 @@ responding in the PR conversation thread. You are not responsible for resolving 
 that is the prerogative of the reviewer, to ensure that they agree that the question or concern has
 been addressed.
 
-**When you are ready for a reviewer to re-visit your changes, you should request a re-review.** This
+**When you are ready for a reviewer to revisit your changes, you should request a re-review.** This
 will notify the reviewer and ensure a prompt response.
 
 </bitwarden>
