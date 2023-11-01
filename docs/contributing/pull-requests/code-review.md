@@ -74,7 +74,7 @@ themselves.
 
 #### Comment
 
-Comment is a great way to discuss things without explicitly approving or requesting changes.
+Using comments is a great way to discuss things without explicitly approving or requesting changes.
 
 We use [conventional comments](https://conventionalcomments.org) to help convey the intent and
 expected action taken from each comment on the PR.
