@@ -97,7 +97,7 @@ While researching, we'd like to ask you to refrain from:
 
 If you have something that you feel is close to exploitation, or if you'd like some information
 regarding the internal API, or generally have any questions regarding the app that would help in
-your efforts, please contact us at \<https://bitwarden.com/contact> and ask for that information. As
+your efforts, please [contact us](https://bitwarden.com/contact) and ask for that information. As
 stated above, Bitwarden wants to help you find issues, and is more than willing to help.
 
 Thank you for helping keep Bitwarden and our users safe!

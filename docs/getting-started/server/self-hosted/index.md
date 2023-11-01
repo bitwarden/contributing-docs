@@ -54,7 +54,7 @@ places:
 
 To get an Id and Key, it’s fine to either
 
-- grab them from \<https://bitwarden.com/host/>, or
+- [request a host installation ID](https://bitwarden.com/host/), or
 - generate a Guid (Id) and random alphanumeric string (key)
 
 Record these for use in the next steps.
