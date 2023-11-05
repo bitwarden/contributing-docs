@@ -163,7 +163,7 @@ When a PR author opens a PR for review, they should have the expectation that:
 
 :::tip Notifications
 
-Our teams use Github notifications as the primary method of communication for PR review requests,
+Our teams use GitHub notifications as the primary method of communication for PR review requests
 and scheduled reminders are highly encouraged to facilitate prompt responses to requests.
 
 - Individual engineers are encouraged to set up [scheduled reminders][user reminders] for
