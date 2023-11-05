@@ -133,7 +133,7 @@ conversation on the PR to discuss a solution, but if any strong conflicting opin
 often best to move the conversation to a synchronous format to avoid any misunderstanding.
 
 When any necessary changes have been made, you should address the comments or request for changes by
-responding in the PR conversation thread. You are not responsible for resolving the conversation -
+responding in the PR conversation thread. You are not responsible for resolving the conversation --
 that is the prerogative of the reviewer, to ensure that they agree that the question or concern has
 been addressed.
 
