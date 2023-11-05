@@ -126,7 +126,7 @@ review process without further notification.
 ### Addressing feedback
 
 It is likely that you will receive some feedback on your PR. You should see this as a positive
-thing - it signifies a healthy and thorough review process and an organizational commitment to code
+thing -- it signifies a healthy and thorough review process and an organizational commitment to code
 quality. You may receive [comments](./code-review.md#comment) or a
 [request for changes](./code-review.md#request-changes). You are encouraged to engage in
 conversation on the PR to discuss a solution, but if any strong conflicting opinions arise it is
