@@ -76,9 +76,6 @@ themselves.
 
 Using comments is a great way to discuss things without explicitly approving or requesting changes.
 
-We use [conventional comments](https://conventionalcomments.org) to help convey the intent and
-expected action taken from each comment on the PR. The PR author can disagree and take different action, but clarifying your position while commenting helps make your intent clearer.
-
 #### Request changes
 
 Request changes should be used when you believe something **needs** to change prior to the PR
