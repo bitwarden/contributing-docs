@@ -125,8 +125,8 @@ review process without further notification.
 
 ### Addressing feedback
 
-It is likely that you will receive some feedback on your PR. You should see this as a positive
-thing -- it signifies a healthy and thorough review process and an organizational commitment to code
+It is likely that you will receive some feedback on your PR. You should see this as a positive thing
+-- it signifies a healthy and thorough review process and an organizational commitment to code
 quality. You may receive [comments](./code-review.md#comment) or a
 [request for changes](./code-review.md#request-changes). You are encouraged to engage in
 conversation on the PR to discuss a solution, but if any strong conflicting opinions arise it is
@@ -163,8 +163,8 @@ When a PR author opens a PR for review, they should have the expectation that:
 
 :::tip Notifications
 
-Our teams use GitHub notifications as the primary method of communication for PR review requests
-and scheduled reminders are highly encouraged to facilitate prompt responses to requests.
+Our teams use GitHub notifications as the primary method of communication for PR review requests and
+scheduled reminders are highly encouraged to facilitate prompt responses to requests.
 
 - Individual engineers are encouraged to set up [scheduled reminders][user reminders] for
   themselves.
