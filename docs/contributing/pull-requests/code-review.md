@@ -39,7 +39,7 @@ from someone else, and there’s nothing wrong in having two reviewers on a PR.
 
 When undertaking a review, keep in mind that you are taking an ownership stake in the changes. You
 should always strive to provide actionable feedback to the author and to make yourself available for
-any clarifying questions.
+any clarifying questions or to pair on fixes suggested.
 
 While we mostly use an asynchronous review process, please don't hesitate to schedule a meeting with
 the author to discuss the changes. While asynchronous communication can be useful, it incurs a time
