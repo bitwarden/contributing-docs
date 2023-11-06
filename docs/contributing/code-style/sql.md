@@ -57,7 +57,7 @@ GO
 ```
 
 When adding a new `NOT NULL` column to an existing table, please re-evaluate the need for it to
-truly be required. Do not be afraid of using Nullable<T\> primitives in C# and in the application
+truly be required. Do not be afraid of using Nullable\<T\> primitives in C# and in the application
 layer, which is almost always going to be better than taking up unnecessary space in the DB per row
 with a default value, especially for new functionality or features where it will take a very long
 time to be useful for most row-level data, if at all.
