@@ -156,7 +156,7 @@ When a PR author opens a PR for review, they should have the expectation that:
 
 - The act of opening the PR for review is the **only** notification required. Teams are responsible
   for properly configuring notifications so that team members are aware of their obligations.
-- The reviewing team(s) will respond within **24 hours** to:
+- The reviewing team(s) will respond within **2-3 business days** to:
   - Provide a review,
   - Inform the author when a review will be provided, or
   - Ask the author to split the work into a
