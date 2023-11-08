@@ -92,7 +92,7 @@ is squashing multiple half-working commits. Please be sure to follow the
 
 **Avoid force push** once a PR has been reviewed.
 
-Git operations that affects the existing git commits prevent GitHub from correctly identifying “new
+Git operations that affect the existing git commits prevent GitHub from correctly identifying “new
 changes” to a PR forcing the reviewer to start over again.
 
 :::
