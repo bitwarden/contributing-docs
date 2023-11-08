@@ -159,7 +159,8 @@ When a PR author opens a PR for review, they should have the expectation that:
 - The reviewing team(s) will respond within **24 hours** to:
   - Provide a review,
   - Inform the author when a review will be provided, or
-  - Ask the author to split the work into a smaller PR for review
+  - Ask the author to split the work into a
+    [smaller PR](./branching.md/#structuring-branches-to-support-incremental-work) for review
 
 :::tip Notifications
 
