@@ -156,7 +156,7 @@ When a PR author opens a PR for review, they should have the expectation that:
 
 - The act of opening the PR for review is the **only** notification required. Teams are responsible
   for properly configuring notifications so that team members are aware of their obligations.
-- The reviewing team(s) will respond within **2-3 business days** to:
+- The reviewing team(s) will respond within **48 hours** to:
   - Provide a review,
   - Inform the author when a review will be provided, or
   - Ask the author to split the work into a
@@ -176,11 +176,19 @@ scheduled reminders are highly encouraged to facilitate prompt responses to requ
 
 ### Follow-up notification
 
-If there is no response to a request for review in 24 hours, the author should reach out to the
+If there is no response to a request for review in 48 hours, the author should reach out to the
 team(s) -- or to individual engineers if assigned -- via Slack to follow up.
 
-This should wait for 24 hours to allow the default process to take place and not overwhelm the team
+This should wait for 48 hours to allow the default process to take place and not overwhelm the team
 with notifications on multiple platforms.
+
+:::warning Urgent reviews
+
+If deployment deadlines or other concerns mean there is a need to shorten the review period for a
+pull request, the author should reach out to the reviewing team via their Slack channel. This should
+**only** be necessary for urgent requests and for follow-up after 48 hours.
+
+:::
 
 </bitwarden>
 
