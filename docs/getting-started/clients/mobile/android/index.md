@@ -6,7 +6,7 @@ Before you start, you should have the recommended [Tools and Libraries](../../..
 installed. You will also need to install:
 
 1.  Visual Studio 2022
-2.  [.NET 7.0.x (latest)](https://dotnet.microsoft.com/en-us/download/dotnet/7.0)
+2.  [.NET 7 (latest)](https://dotnet.microsoft.com/en-us/download/dotnet/7.0)
     - Note: Even if you have an M1 Mac with ARM 64 architecture, you can install all x64 SDKs to run
       android
 3.  [Xamarin (Android)](https://learn.microsoft.com/en-us/xamarin/get-started/installation/?pivots=macos-vs2022)
