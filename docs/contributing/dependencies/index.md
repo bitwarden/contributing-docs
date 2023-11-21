@@ -119,9 +119,9 @@ template for consistency. The template is available at the
 [template repository](https://github.com/bitwarden/template/blob/main/.github/renovate.json).
 
 Renovate uses a concept called
-[`PackageRules`](https://docs.renovatebot.com/configuration-options/#packagerules) which allows us
-specify ownership of dependencies, and ensure the appropriate teams are added as reviewers. Below is
-an example assigning `@angular/core` to the Platform team.
+[`PackageRules`](https://docs.renovatebot.com/configuration-options/#packagerules) that allows us to
+specify ownership of dependencies and ensure the appropriate team is added as reviewers. Below is an
+example assigning `@angular/core` to the Platform team.
 
 ```json
 {
@@ -132,7 +132,7 @@ an example assigning `@angular/core` to the Platform team.
 }
 ```
 
-For repositories maintained by a single team, there is no need to use `packageRules` to assign
+For repositories maintained by a single team there is no need to use `packageRules` to assign
 ownership. Instead ensure appropriate code owners are set up.
 
 [dc]: https://github.com/bitwarden/directory-connector
