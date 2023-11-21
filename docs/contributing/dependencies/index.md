@@ -112,6 +112,29 @@ versions of `react`. We cannot upgrade `react` until `docusaurus` supports it.
 
 In those cases the team can comment on the PR with a reason for not upgrading and close the PR.
 
+## Renovate configuration
+
+Renovate is configured by a `.github/renovate.json` file in each repository. We follow an internal
+template for consistency. The template is available at the
+[template repository](https://github.com/bitwarden/template/blob/main/.github/renovate.json).
+
+Renovate uses a concept called
+[`PackageRules`](https://docs.renovatebot.com/configuration-options/#packagerules) that allows us to
+specify ownership of dependencies and ensure the appropriate team is added as reviewers. Below is an
+example assigning `@angular/core` to the Platform team.
+
+```json
+{
+  "matchPackageNames": ["@angular/core"],
+  "description": "Platform owned dependencies",
+  "commitMessagePrefix": "[deps] Platform:",
+  "reviewers": ["team:team-platform-dev"]
+}
+```
+
+For repositories maintained by a single team there is no need to use `packageRules` to assign
+ownership. Instead ensure appropriate code owners are set up.
+
 [dc]: https://github.com/bitwarden/directory-connector
 [kc]: https://github.com/bitwarden/key-connector/
 [server]: https://github.com/bitwarden/server/
