@@ -5,13 +5,12 @@
 Before you start, you should have the recommended [Tools and Libraries](../../../tools/index.md)
 installed. You will also need to install:
 
-1.  Visual Studio 2019 (required for a dependency not included yet in VS 2022; development can be
-    done in VS 2022)
-2.  [dotnet Core 3.1 (latest)](https://dotnet.microsoft.com/en-us/download/dotnet/3.1)
+1.  Visual Studio 2022
+2.  [.NET 7.0.x (latest)](https://dotnet.microsoft.com/en-us/download/dotnet/7.0)
     - Note: Even if you have an M1 Mac with ARM 64 architecture, you can install all x64 SDKs to run
       android
 3.  [Xamarin (Android)](https://learn.microsoft.com/en-us/xamarin/get-started/installation/?pivots=macos-vs2022)
-4.  Android SDK 29
+4.  Android SDK 33
     - You can use the SDK manager in [Xamarin, Visual Studio][xamarin-vs], or [Android
       Studio][android-studio] to install this
 
