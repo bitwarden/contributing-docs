@@ -1,6 +1,6 @@
 # watchOS
 
-## Overall Architecture
+## Overall architecture
 
 The watchOS application is organized as follows:
 
@@ -72,7 +72,7 @@ the watchOS one) and run it on the device.
 
 :::
 
-## Synchronization iPhone <-> Watch
+## Synchronization between iPhone and Watch
 
 In order to sync data between the iPhone and the Watch apps the
 [Watch Connectivity Framework](https://developer.apple.com/documentation/watchconnectivity) is used.
@@ -151,7 +151,7 @@ The next ones are the states in which the Watch application can be at a given ti
 - **Need Device Owner Auth:** The user needs to set up an Apple Watch Passcode in order to use the
   app
 
-## Persistence and Encryption
+## Persistence and encryption
 
 On the Watch [CoreData](https://developer.apple.com/documentation/coredata) is used as persistence
 for the ciphers. So in order to encrypt the data in them a Value Transformer in each encrypted
