@@ -54,3 +54,7 @@ Xcodes.app
 Yellowpages
 Yubico
 YubiKey
+sandboxed
+iframes
+owasp
+clickjacking
