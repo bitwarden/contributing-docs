@@ -110,7 +110,8 @@ Sometimes Renovate will create PRs for dependencies that we are currently unable
 various reasons. For example, `contributing-docs` depends on `docusaurus`, which supports specific
 versions of `react`. We cannot upgrade `react` until `docusaurus` supports it.
 
-In those cases the team can comment on the PR with a reason for not upgrading and close the PR.
+In those cases the team can comment on the PR with a reason for not yet upgrading and defer the PR
+until a later date.
 
 ## Renovate configuration
 
