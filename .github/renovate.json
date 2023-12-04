@@ -8,10 +8,13 @@
     ":pinAllExceptPeerDependencies",
     ":prConcurrentLimit10",
     ":rebaseStalePrs",
-    "schedule:weekends",
-    ":separateMajorReleases"
+    ":separateMajorReleases",
+    "group:monorepos",
+    "schedule:weekends"
   ],
   "enabledManagers": ["github-actions", "npm"],
+  "commitMessagePrefix": "[deps]:",
+  "commitMessageTopic": "{{depName}}",
   "packageRules": [
     {
       "groupName": "gh minor",
@@ -19,9 +22,9 @@
       "matchUpdateTypes": ["minor", "patch"]
     },
     {
-      "groupName": "npm minor",
-      "matchManagers": ["npm"],
-      "matchUpdateTypes": ["minor", "patch"]
+      "matchFileNames": ["package.json"],
+      "description": "Autofill owns general dependencies in contributing docs",
+      "reviewers": ["team:team-autofill"]
     }
   ]
 }
