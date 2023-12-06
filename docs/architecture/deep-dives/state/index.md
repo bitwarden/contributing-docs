@@ -172,7 +172,7 @@ The `state$` property provides you with an `Observable<T>` that can be subscribe
 
 `GlobalState<T>` has an incredibly similar API surface as `ActiveUserState<T>` except it targets
 global scoped storage and does not emit an update to `state$` when the active user changes, only
-when the `update` method is called, in this context, or another.
+when the stored value is updated.
 
 ### `SingleUserState<T>`
 
