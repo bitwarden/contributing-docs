@@ -18,7 +18,7 @@ Core API's:
 ### `StateDefinition`
 
 `StateDefinition` is a simple API but a very core part of making the State Provider Framework work
-smoothly. Teams will interact with it only in a single, `state-definitions.ts`, file in the
+smoothly. It defines a storage location and top-level namespace for storage. Teams will interact with it only in a single, `state-definitions.ts`, file in the
 [`clients`](https://github.com/bitwarden/clients) repository. This file is located under platform
 code ownership but teams are expected to create edits to it. A team will edit this file to include a
 line like such:
@@ -77,9 +77,8 @@ const MY_DOMAIN_DATA: KeyDefinition<Record<string, MyStateElement>> =
 ```
 
 The first argument to `KeyDefinition` is always the `StateDefinition` that this key should belong
-to. The second argument should be a human readable, camelCase formatted, name of the
-`KeyDefinition`. This name should be unique amongst all other `KeyDefinition`s that consume the same
-`StateDefinition`. The responsibility of this uniqueness is on the team. As such, you should only
+to. The second argument should be a human readable, camelCase formatted name of the
+`KeyDefinition`. For example, the accounts service may wish to store a known accounts array on disk and choose `knownAccounts` to be the second argument. This name should be unique amongst all other `KeyDefinition`s that consume the same `StateDefinition`. The responsibility of this uniqueness is on the team. As such, you should only
 consume the `StateDefinition` of another team in your own `KeyDefinition` very rarely and if it is
 used, you should practice extreme caution, explicit comments stating such, and with coordination
 with the team that owns the `StateDefinition`.
@@ -135,7 +134,7 @@ class FolderService {
 `ActiveUserState<T>` is an object to help you maintain and view the state of the currently active
 user. If the currently active user changes, like through account switching. The data this object
 represents will change along with it. Gone is the need to subscribe to
-`StateService.activeAccountUnlocked$`. You can see the most likely type definition of the API's on
+`StateService.activeAccountUnlocked$`. You can see the type definition of the API on
 `ActiveUserState<T>` below:
 
 ```typescript
@@ -147,8 +146,7 @@ interface ActiveUserState<T> {
 
 :::note
 
-The definition of `update` shown above is not complete and the full definition includes more
-customization that you can view in the [Advanced Usage](#advanced-usage) section.
+Specifics around `StateUpdateOptions` are discussed in the [Advanced Usage](#advanced-usage) section.
 
 :::
 
@@ -156,17 +154,19 @@ The `update` method takes a function `updateState: (state: T) => T` that can be 
 state in both a destructive and additive way. The function gives you a representation of what is
 currently saved as your state and it requires you to return the state that you want saved into
 storage. This means if you have an array on your state, you can `push` onto the array and return the
-array back.
+array back. The return value of the `updateState` function is always used as the new state value -- do not rely on object mutation to update!
 
-The `state$` property provides you an `Observable<T>` that can be subscribed to.
+The `state$` property provides you with an `Observable<T>` that can be subscribed to.
 `ActiveUserState<T>.state$` will emit for the following reasons:
 
 - The active user changes.
-- You call the `update` method.
-- Another service in a different context calls `update` on their own instance of
+- The chosen storage location emits an update to the key defined by `KeyDefinition`. This can occur for any reason including: 
+  - You caused an update through the `update` method.
+  - Another service in a different context calls `update` on their own instance of
   `ActiveUserState<T>` made from the same `KeyDefinition`.
-- A `SingleUserState<T>` method pointing at the same `KeyDefinition` as `ActiveUserState` and
+  - A `SingleUserState<T>` method pointing at the same `KeyDefinition` as `ActiveUserState` and
   pointing at the user that is active that had `update` called
+  - Someone updates the key directly on the underlying storage service (Please don't do this)
 
 ### `GlobalState<T>`
 
@@ -177,11 +177,9 @@ when the `update` method is called, in this context, or another.
 ### `SingleUserState<T>`
 
 `SingleUserState<T>` behaves very similarly to `GlobalState<T>` where neither will react to active
-user changes and you instead give it the user you want it to care about up front. Because of that
-`SingleUserState<T>` exposes a `userId` property so you can see the user this instance is about. It
-also has an interesting way it can interact with `ActiveUserState<T>`, if you have pointed
-`SingleUserState<T>` at user who happens to be active at the time calling `update` from either of
-those services will cause an emission from both of their `state$` observables.
+user changes and you instead give it the user you want it to care about up front, which is publicly exposed as a `readonly` member. 
+
+Updates to `SingleUserState` or `ActiveUserState` handling the same `KeyDefinition` will cause eachother to emit on their `state$` observables if the `userId` handled by the `SingleUserState` happens to be active at the time of the update.
 
 ## Migrating
 
@@ -243,7 +241,7 @@ _TODO: Include PR's_
 ## Testing
 
 Testing business logic with data and observables can sometimes be cumbersome, to help make that a
-little easier, there are a sweet of helpful "fakes" that can be used instead of traditional "mocks".
+little easier, there are a suite of helpful "fakes" that can be used instead of traditional "mocks".
 Now instead of calling `mock<StateProvider>()` into your service you can instead use
 `new FakeStateProvider()`.
 
@@ -253,9 +251,7 @@ _TODO: Refine user story_
 
 ### `update`
 
-It was mentioned earlier that update has the type signature
-`update(updateState: (state: T) => T): Promise<T>` but that is not entirely true. You can treat it
-as if it has that signature and many will but it's true signature is the following:
+The update method has options defined as follows:
 
 ```typescript
 {ActiveUser|SingleUser|Global}State<T> {
