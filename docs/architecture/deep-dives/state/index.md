@@ -8,17 +8,21 @@ Core API's:
 
 ## API's
 
-- [`StateDefinition`](#statedefinition)
-- [`KeyDefinition`](#keydefinition)
+- [Storage Definitions](#storage-definitions)
+  - [`StateDefinition`](#statedefinition)
+  - [`KeyDefinition`](#keydefinition)
 - [`StateProvider`](#stateprovider)
 - [`ActiveUserState<T>`](#activeuserstatet)
 - [`GlobalState<T>`](#globalstatet)
 - [`SingleUserState<T>`](#singleuserstatet)
 
-### `StateDefinition`
+### Storage Definitions
+
+#### `StateDefinition`
 
 `StateDefinition` is a simple API but a very core part of making the State Provider Framework work
-smoothly. It defines a storage location and top-level namespace for storage. Teams will interact with it only in a single, `state-definitions.ts`, file in the
+smoothly. It defines a storage location and top-level namespace for storage. Teams will interact
+with it only in a single, `state-definitions.ts`, file in the
 [`clients`](https://github.com/bitwarden/clients) repository. This file is located under platform
 code ownership but teams are expected to create edits to it. A team will edit this file to include a
 line like such:
@@ -47,7 +51,7 @@ The Platform team will weigh the possibility of supporting secure storage down t
 
 :::
 
-### `KeyDefinition`
+#### `KeyDefinition`
 
 `KeyDefinition` builds on the idea of [`StateDefinition`](#statedefinition) but it gets more
 specific about the data to be stored. `KeyDefinition`s can also be instantiated in your own teams
@@ -77,11 +81,26 @@ const MY_DOMAIN_DATA: KeyDefinition<Record<string, MyStateElement>> =
 ```
 
 The first argument to `KeyDefinition` is always the `StateDefinition` that this key should belong
-to. The second argument should be a human readable, camelCase formatted name of the
-`KeyDefinition`. For example, the accounts service may wish to store a known accounts array on disk and choose `knownAccounts` to be the second argument. This name should be unique amongst all other `KeyDefinition`s that consume the same `StateDefinition`. The responsibility of this uniqueness is on the team. As such, you should only
-consume the `StateDefinition` of another team in your own `KeyDefinition` very rarely and if it is
-used, you should practice extreme caution, explicit comments stating such, and with coordination
-with the team that owns the `StateDefinition`.
+to. The second argument should be a human readable, camelCase formatted name of the `KeyDefinition`.
+For example, the accounts service may wish to store a known accounts array on disk and choose
+`knownAccounts` to be the second argument. This name should be unique amongst all other
+`KeyDefinition`s that consume the same `StateDefinition`. The responsibility of this uniqueness is
+on the team. As such, you should never consume the `StateDefinition` of another team in your own
+`KeyDefinition`. The third argument is an object of type
+[`KeyDefinitionOptions`](#keydefinitionoptions).
+
+##### `KeyDefinitionOptions`
+
+`deserializer` (required) - Takes a method that gives you your state in it's JSON format and makes
+you responsible for converting that into JSON back into a full JavaScript object, if you choose to
+use a class to represent your state that means having it's prototype and any method you declare on
+it. If your state is a simple value like `string`, `boolean`, `number`, or arrays of those values,
+your deserializer can be as simple as `data => data`. But, if your data has something like `Date`,
+which gets serialized as a string you will need to convert that back into a `Date` like:
+`data => new Date(data)`.
+
+`cleanupDelayMs` (optional) - Takes a number of milliseconds to wait before cleaning up the state
+after the last subscriber has unsubscribed. Defaults to 1000ms.
 
 ### `StateProvider`
 
@@ -129,7 +148,7 @@ class FolderService {
 }
 ```
 
-### ActiveUserState\<T\>
+### `ActiveUserState<T>`
 
 `ActiveUserState<T>` is an object to help you maintain and view the state of the currently active
 user. If the currently active user changes, like through account switching. The data this object
@@ -146,7 +165,8 @@ interface ActiveUserState<T> {
 
 :::note
 
-Specifics around `StateUpdateOptions` are discussed in the [Advanced Usage](#advanced-usage) section.
+Specifics around `StateUpdateOptions` are discussed in the [Advanced Usage](#advanced-usage)
+section.
 
 :::
 
@@ -154,18 +174,20 @@ The `update` method takes a function `updateState: (state: T) => T` that can be 
 state in both a destructive and additive way. The function gives you a representation of what is
 currently saved as your state and it requires you to return the state that you want saved into
 storage. This means if you have an array on your state, you can `push` onto the array and return the
-array back. The return value of the `updateState` function is always used as the new state value -- do not rely on object mutation to update!
+array back. The return value of the `updateState` function is always used as the new state value --
+do not rely on object mutation to update!
 
 The `state$` property provides you with an `Observable<T>` that can be subscribed to.
 `ActiveUserState<T>.state$` will emit for the following reasons:
 
 - The active user changes.
-- The chosen storage location emits an update to the key defined by `KeyDefinition`. This can occur for any reason including: 
+- The chosen storage location emits an update to the key defined by `KeyDefinition`. This can occur
+  for any reason including:
   - You caused an update through the `update` method.
   - Another service in a different context calls `update` on their own instance of
-  `ActiveUserState<T>` made from the same `KeyDefinition`.
+    `ActiveUserState<T>` made from the same `KeyDefinition`.
   - A `SingleUserState<T>` method pointing at the same `KeyDefinition` as `ActiveUserState` and
-  pointing at the user that is active that had `update` called
+    pointing at the user that is active that had `update` called
   - Someone updates the key directly on the underlying storage service (Please don't do this)
 
 ### `GlobalState<T>`
@@ -177,9 +199,12 @@ when the stored value is updated.
 ### `SingleUserState<T>`
 
 `SingleUserState<T>` behaves very similarly to `GlobalState<T>` where neither will react to active
-user changes and you instead give it the user you want it to care about up front, which is publicly exposed as a `readonly` member. 
+user changes and you instead give it the user you want it to care about up front, which is publicly
+exposed as a `readonly` member.
 
-Updates to `SingleUserState` or `ActiveUserState` handling the same `KeyDefinition` will cause eachother to emit on their `state$` observables if the `userId` handled by the `SingleUserState` happens to be active at the time of the update.
+Updates to `SingleUserState` or `ActiveUserState` handling the same `KeyDefinition` will cause each
+other to emit on their `state$` observables if the `userId` handled by the `SingleUserState` happens
+to be active at the time of the update.
 
 ## Migrating
 
