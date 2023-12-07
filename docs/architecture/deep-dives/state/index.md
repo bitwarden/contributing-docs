@@ -18,6 +18,21 @@ Core API's:
 
 ### Storage Definitions
 
+In order to store and retrieve data, we need to have constant keys to reference storage locations.
+This includes a storage medium (disk or memory), and a unique key. `StateDefinition` and
+`KeyDefinition` classes that allow for reasonable reuse of partial namespaces while allowing
+expansion to precise keys. They exist to help minimize the potential of overlaps in a distributed
+storage framework.
+
+:::warning
+
+Once you have created the definitions, you need to take extreme caution when changing any part of
+the namespace. If you change the name of a `StateDefinition` pointing at `"disk"` without also
+migrating data from the old name to the new name you will lose data. Data pointing at `"memory"` can
+have their name changed.
+
+:::
+
 #### `StateDefinition`
 
 `StateDefinition` is a simple API but a very core part of making the State Provider Framework work
@@ -45,9 +60,10 @@ _TODO: Make tests_
 
 :::note
 
-Secure storage is not currently supported as a storage location in the State Provider Framework. If
-you need to store data in the secure storage implementations, please continue to use `StateService`.
-The Platform team will weigh the possibility of supporting secure storage down the road.
+Secure storage is not currently supported as a storage location in the State Provider Framework. For
+now, don't migrate data that is stored in secure storage but please contact platform when you have
+data you wanted to migrate so we can prioritize a long term solution. If you need new data in secure
+storage, use `StateService` for now.
 
 :::
 
@@ -159,7 +175,7 @@ represents will change along with it. Gone is the need to subscribe to
 ```typescript
 interface ActiveUserState<T> {
   state$: Observable<T>;
-  update(updateState: (state: T) => T): Promise<T>;
+  update: <TCombine>(updateState: (state: T, dependency: TCombine) => T, stateUpdateOptions?: StateUpdateOptions<TCombine>): Promise<T>;
 }
 ```
 
@@ -254,8 +270,9 @@ export class MoveToStateProvider extends Migrator<10, 11> {
 
 `getAccounts` only gets data from the legacy account object that was used in `StateService`. As data
 gets migrated off of that account object the response from `getAccounts`, which returns a record
-where the key will be a users id and the value being the legacy account object. It can continue to
-be used to retrieve the known authenticated user ids though.
+where the key will be a users id and the value being the legacy account object.
+
+_TODO: Implement method just for user ids_
 
 :::
 
