@@ -344,3 +344,38 @@ mechanism exists today but it may be implemented in the future. As such, it is s
 evaluated.
 
 ## FAQ
+
+### Do I need to have my own in memory cache?
+
+If you previously had a memory cache that exactly represented the data you stored on disk (not
+decrypted for example), then you likely don't need that anymore. All the `*State` classes maintain
+an in memory cache of the last known value in state for as long as someone is subscribed to the
+data. The cache is cleared after 1000ms of no one subscribing to the state though. If you know you
+have sporadic subscribers and a high cost of going to disk you may increase that time using the
+`cleanupDelayMs` on `KeyDefinitionOptions`.
+
+### I store my data as a Record/Map but expose it as an array, what should I do?
+
+Give `KeyDefinition<T>` generic the record shape you want, or even use the static `record` helper
+method. Then to convert that to an array that you expose just do a simple
+`.pipe(map(data => this.transform(data)))` to convert that to the array you want to expose.
+
+### Why KeyDefinitionLike
+
+`KeyDefinitionLike` exists to help you create a frozen in time version of your `KeyDefinition` this
+is helpful in state migrations so that you don't have to import something from the greater
+application which is something that should rarely happen.
+
+### When does my deserializer run?
+
+The `deserialier` that you provide in the `KeyDefinitionOptions` is used whenever your state is
+retrieved from a storage service that stores it's data as JSON. All disk storage services serialize
+data into JSON but memory storage differs in this area across platforms. That's why it's imperative
+to include a high quality JSON deserializer even if you think your object will only be stored in
+memory. This can mean you might be able to drop the `*Data` class pattern for your code. Since the
+`*Data` class generally represented the JSON safe version of your state which we now do
+automatically through the `Jsonify<T>` given to your in your `deserializer` method.
+
+## Structure
+
+![State Diagram](State_Diagram.svg)
