@@ -61,9 +61,9 @@ This uses
     ./create_certificates_linux.sh
     ```
 
-    Then you need to paste the thumbprint, for example `0BE8A0072214AB37C6928968752F698EEC3A68B5`,
+    Paste the thumbprint, for example `0BE8A0072214AB37C6928968752F698EEC3A68B5`,
     into your `secrets.json` file under `globalSettings` > `identityServer` >
-    `certificateThumbprint`. Then you need to update your secrets as
+    `certificateThumbprint`. Update your secrets as
     [shown here](../guide.md#configure-user-secrets).
 
 8.  Make a copy of the provided `authsources.php.example` file, which contains the configuration for
