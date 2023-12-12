@@ -27,17 +27,22 @@ Requests against `/identity/connect/token` in the Identity service are validated
 is required, since the endpoint is authenticated and we know the user from the request (assuming
 they are authenticated successfully).
 
+:::info Known Devices
+
 No captchas are ever required for known devices. This check is performed before any of the rules
 below are applied.
+
+:::
 
 For these requests, the server requires a captcha if **any** of the following are true:
 
 - The CloudFlare `x-Cf-Is-Bot` header is present on the request
 - The `ForceCaptchaRequired` setting is enabled
-- The instance is cloud-hosted and the user’s email address is not verified
 - The failed login count is greater than the `MaximumFailedLoginAttempts` setting
+- The request is for a cloud-hosted user whose email is not verified and has not registered within
+  the last 24 hours
 
-The CLI performs the same captcha checks on the bw login command, but instead of prompting for a
+The CLI performs the same captcha checks on the `bw login` command, but instead of prompting for a
 captcha it accepts the API client secret. The server handles this API client secret as a “captcha
 response” in the logic below.
 

@@ -223,78 +223,6 @@ up-to-date. See [MSSQL Database](./database/mssql/index.md) for more information
 
 :::
 
-## Generate Certificates
-
-The next step is to create two self-signed certificates for local development. We provide a helper
-script that will generate these certificates and add them to your system’s keychain or certificate
-store.
-
-Navigate to the `dev` folder in your server repo and perform the following commands.
-
-### MacOS
-
-1.  Generate the certificates and save them to your keychain:
-
-    ```bash
-    sh create_certificates_mac.sh
-    ```
-
-2.  You will be prompted to enter a password 3 times. Create a complex password and type it into the
-    `Export Password` field on each prompt. You will not be able to copy/paste.
-3.  You will receive output similar to the following. You will need to collect the generated
-    certificate fingerprints for use in the [Configure User Secrets](#configure-user-secrets)
-    section.
-
-    ```
-    Certificate fingerprints:
-    Identity Server Dev: 0BE8A0072214AB37C6928968752F698EEC3A68B5
-    Data Protection Dev: C3A6CECAD3DB580F91A52FC9C767FE780300D8AB
-    ```
-
-4.  Open Keychain Access and go to your login keychain.
-5.  Double-click the `Bitwarden Data Protection Dev` and `Bitwarden Identity Server Dev`
-    certificates.
-6.  In each certificate, change the Trust settings to “Always Trust”.
-
-### Windows
-
-1.  Generate the certificates and save them to the Certificate Store:
-
-    ```bash
-    .\create_certificates_windows.ps1
-    ```
-
-2.  You will receive output similar to the following. You will need to collect the generated
-    certificate fingerprints for use in the [Configure User Secrets](#configure-user-secrets)
-    section.
-
-    ```
-    PSParentPath: Microsoft.PowerShell.Security\Certificate::CurrentUser\My
-
-    Thumbprint                                Subject
-    ----------                                -------
-    0BE8A0072214AB37C6928968752F698EEC3A68B5  CN=Bitwarden Identity Server Dev
-    C3A6CECAD3DB580F91A52FC9C767FE780300D8AB  CN=Bitwarden Data Protection Dev
-    ```
-
-### Linux
-
-1.  Generate the certificates and save them to your certificate store:
-
-    ```bash
-    ./create_certificates_linux.sh
-    ```
-
-2.  You will receive output similar to the following. You will need to collect the generated
-    certificate fingerprints for use in the [Configure User Secrets](#configure-user-secrets)
-    section.
-
-    ```
-    Certificate fingerprints:
-    Identity Server Dev: 0BE8A0072214AB37C6928968752F698EEC3A68B5
-    Data Protection Dev: C3A6CECAD3DB580F91A52FC9C767FE780300D8AB
-    ```
-
 <bitwarden>
 
 ## Install Licensing Certificate
@@ -302,6 +230,13 @@ Navigate to the `dev` folder in your server repo and perform the following comma
 To run your local server environment as a licensed instance, you will need to download the
 `Licensing Certificate - Dev` from the shared Engineering collection and install it. This can be
 done by double-clicking on the downloaded certificate.
+
+1. Log in to your company-issued Bitwarden account
+2. On the "Vaults" page, scroll down to the "Licensing Certificate - Dev" item
+3. View attachments and download both files
+4. Go to Keychain Access and set the dev.cer certificate to "Always Trust"
+5. The dev.pfx file will ask for a password. You can get this by clicking and opening the Licensing
+   Certificate - Dev item in the vault
 
 </bitwarden>
 
@@ -330,7 +265,8 @@ repository.
 
     <bitwarden>
 
-    - Copy the user secrets file from the shared Development collection into the `dev` folder.
+    - Copy the user secrets file from the shared Development collection (Your Bitwarden Vault) into
+      the `dev` folder.
     - If you don't have access to the Development collection, contact our IT Manager to arrange
       access. Make sure you have first set up a Bitwarden account using your company email address.
     - This `secrets.json` is configured to use the dockerized Azurite and MailCatcher instances and
@@ -341,10 +277,6 @@ repository.
 2.  Update `secrets.json` with your own values:
 
     - `sqlServer` > `connectionString`: insert your password where indicated
-    - `identityServer` > `certificateThumbprint`: insert your Identity certificate thumbprint from
-      the previous step
-    - `dataProtection` > `certificateThumbprint`: insert your Data Protection certificate thumbprint
-      from the previous step
 
     <community>
 
@@ -355,18 +287,18 @@ repository.
 
     </community>
 
-3.  Once you have your `secrets.json` complete, run this command to add the secrets to each
-    Bitwarden server project:
+3.  Once you have your `secrets.json` complete, run the below command to add the secrets to each
+    Bitwarden server project.
 
     ```bash
     pwsh setup_secrets.ps1
     ```
 
-The helper script also supports an optional flag which removes all existing settings before
-re-applying them:
+The helper script also supports an optional `-clear` switch which removes all existing settings
+before re-applying them:
 
 ```bash
-pwsh setup_secrets.ps1 -clear:$True
+pwsh setup_secrets.ps1 -clear
 ```
 
 ## Build and Run the Server

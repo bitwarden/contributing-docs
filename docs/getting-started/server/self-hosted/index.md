@@ -54,7 +54,7 @@ places:
 
 To get an Id and Key, it’s fine to either
 
-- grab them from <https://bitwarden.com/host/>, or
+- [request a host installation ID](https://bitwarden.com/host/), or
 - generate a Guid (Id) and random alphanumeric string (key)
 
 Record these for use in the next steps.
@@ -94,7 +94,8 @@ override section will apply instead of the value given in `GlobalSettings`.
 
 :::tip
 
-If you’re struggling to remember about user secrets, review [User Secrets](../user-secrets.md).
+If you’re struggling to remember about user secrets, review
+[User Secrets](../../../contributing/user-secrets.md).
 
 :::
 
@@ -121,7 +122,7 @@ After the updates to your `secrets.json` file in your self-hosted repo, apply yo
 running the following command:
 
 ```bash
-pwsh setup_secrets.ps1 -clear:$True
+pwsh setup_secrets.ps1 -clear
 ```
 
 You have now updated the user secrets for your self-hosted instance.
@@ -250,7 +251,7 @@ To run self-hosted from the CLI, you will need to:
 3.  Start the Identity service:
 
     ```bash
-    dotnet run -—launch-profile Identity-SelfHost
+    dotnet run --launch-profile Identity-SelfHost
     ```
 
 4.  Test that the Identity service is alive by navigating to
@@ -265,7 +266,7 @@ To run self-hosted from the CLI, you will need to:
 6.  Start the Api Service:
 
     ```bash
-    dotnet run -—launch-profile Api-SelfHost
+    dotnet run --launch-profile Api-SelfHost
     ```
 
 7.  Test that the Api service is alive by navigating to
@@ -304,3 +305,19 @@ This of the `dev` object as containing both the configuration for cloud and self
 environments.
 
 </details>
+
+## Licensed Features
+
+If you need to develop against [licensed features](https://bitwarden.com/help/licensing-on-premise/)
+on your self-hosted instance, you will need to unlock them with a license file that is registered in
+your cloud-configured instance.
+
+To do this, you should first start both your local cloud-configured and self-hosted web clients, as
+both environments will be necessary to acquire and apply the license.
+
+You can now choose which type of license you would like to apply. The instructions vary for each,
+but the best resource is the Bitwarden Help Center documentation:
+
+- [Individual license](https://bitwarden.com/help/licensing-on-premise/#individual-license)
+- [Organization license through the web vault](https://bitwarden.com/help/licensing-on-premise/#organization-license)
+- [Organization license through the Provider Portal](https://bitwarden.com/help/getting-started-providers/#enabling-the-self-hosted-instances)

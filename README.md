@@ -23,7 +23,7 @@ reflected live without having to restart the server.
 ## Build
 
 ```bash
-npm build
+npm run build
 ```
 
 This command generates static content into the `build` directory and can be served using any static
@@ -46,6 +46,12 @@ Please follow the following (very brief) style guide:
   (“click”, “type”, “restart”, etc).
 - Use code blocks for all commands. Don't write them in-line.
 - Avoid long paragraphs - this documentation should be to-the-point and instructional.
+
+### Spellchecker
+
+We use `cspell` for spellchecking. It will run as a pre-commit hook and in the CI pipeline.
+Spellchecking ignores single and multi-line code snippets. If required, you can add custom words
+(e.g. proper nouns and technical terms) to `custom-words.txt`.
 
 ### Conditional Content
 

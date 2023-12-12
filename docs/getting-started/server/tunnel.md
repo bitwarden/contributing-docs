@@ -1,6 +1,7 @@
 ---
 sidebar_custom_props:
   access: bitwarden
+sidebar_position: 5
 ---
 
 # Ingress Tunnels
@@ -41,8 +42,8 @@ certificate, making it perfect for testing with the mobile applications.
 
 ### Setup
 
-1. Install `cloudflared`, instructions are available at
-   <https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/install-and-setup/installation>.
+1. [Download](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/downloads/)
+   and install `cloudflared`
 2. Start you local web server and take note of the `$PORT` it is running on
 3. Start the tunnel using `cloudflared tunnel --url http://127.0.0.1:$PORT`
 
@@ -51,14 +52,13 @@ DNS to start resolving before trying to access it.
 
 **Note**, anyone with this URL can access the forwarded URL on your machine.
 
-## Ngrok (Requires a Free Account)
+## Ngrok
 
-1. Navigate to <https://ngrok.com/> and sign up for an account
+1. Sign up for a free ngrok account
 
 2. Follow the [official instructions](https://dashboard.ngrok.com/get-started/setup) to download. Or
    install using [brew](https://formulae.brew.sh/cask/ngrok) which supports multiple instances per
    account.
-
 3. Expose your local port using ngrok:
 
    ```bash

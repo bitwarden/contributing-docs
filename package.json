@@ -26,26 +26,29 @@
     "typecheck": "tsc",
     "prettier": "prettier --write .",
     "lint": "prettier --check .",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "spellcheck": "cspell lint \"**/*.md{x,}\""
   },
   "dependencies": {
-    "@docusaurus/core": "2.4.1",
-    "@docusaurus/preset-classic": "2.4.1",
-    "@mdx-js/react": "1.6.22",
+    "@docusaurus/core": "3.0.1",
+    "@docusaurus/preset-classic": "3.0.1",
+    "@mdx-js/react": "3.0.0",
     "clsx": "1.2.1",
-    "docusaurus-lunr-search": "2.3.2",
-    "prism-react-renderer": "1.3.5",
-    "react": "17.0.2",
-    "react-dom": "17.0.2",
-    "remark-kroki": "0.2.8"
+    "docusaurus-lunr-search": "3.3.1",
+    "prism-react-renderer": "2.3.0",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "remark-kroki": "0.3.1"
   },
   "devDependencies": {
-    "@docusaurus/module-type-aliases": "2.4.1",
-    "@tsconfig/docusaurus": "2.0.0",
+    "@docusaurus/module-type-aliases": "3.0.1",
+    "@docusaurus/tsconfig": "3.0.1",
+    "@types/react": "18.2.43",
+    "cspell": "8.1.3",
     "husky": "8.0.3",
-    "lint-staged": "13.2.3",
-    "prettier": "2.8.8",
-    "typescript": "5.1.6"
+    "lint-staged": "15.2.0",
+    "prettier": "3.1.1",
+    "typescript": "5.3.3"
   },
   "browserslist": {
     "production": [
@@ -63,6 +66,7 @@
     "node": ">=18"
   },
   "lint-staged": {
-    "*": "prettier --cache --write --ignore-unknown"
+    "*": "prettier --cache --write --ignore-unknown",
+    "*.md{x,}": "cspell lint"
   }
 }

@@ -1,6 +1,7 @@
 ---
 sidebar_custom_props:
   access: bitwarden
+sidebar_position: 2
 ---
 
 # Advanced Server Setup
@@ -25,6 +26,23 @@ without actually being charged.
 3. Your credit card details will only need to pass the front-end form validation (e.g. your credit
    card number will need to be the correct number of characters).
 4. Buy premium features to your heart's content
+
+:::info
+
+Stripe has a [policy](https://support.stripe.com/questions/test-mode-subscription-data-retention) to
+**automatically cancel** test subscriptions after 90 days and then **delete** cancelled test
+subscriptions after a further 30 days. This can cause unexpected billing behaviors for long-lived
+premium users and organizations on your local server.
+
+To correct this, you must re-subscribe the organization/user to a premium plan to create a new test
+subscription.
+
+1. From the Bitwarden Portal, remove the organization/user gateway information and set their plan to
+   "Free"
+2. From the web client, add a new test payment method to the organization/user
+3. Re-purchase the desired premium features as you would normally
+
+:::
 
 ## Emails
 
@@ -96,6 +114,26 @@ you may need to test the PayPal integration specifically.
 
 Note: if you are testing sales tax, you will first have to create sales tax rates via the Admin
 portal.
+
+## YubiKey 2FA
+
+In order to locally test YubiKey 2FA, you must first configure your local user secrets with a
+ClientId and Key from Yubico. This is used to authenticate the API call to Yubico to validate the
+OTP provided.
+
+The steps for setting up your local server for YubiKey validation are:
+
+1. Acquire a ClientId and Key from Yubico [here](https://upgrade.yubico.com/getapikey/). Note that
+   this requires that you have a YubiKey in order to provide an OTP. If you do not have a YubiKey
+   please contact your manager.
+
+2. Update the `globalSettings:yubico:key` and `globalSettings:yubico:clientid` user secrets in the
+   `Identity` project. You can either use the [update script](./secrets/index.md) or manually
+   update:
+   ```bash
+      dotnet user-secrets set globalSettings:yubico:key [Key]
+      dotnet user-secrets set globalSettings:yubico:clientid [ClientId]
+   ```
 
 ## Reverse Proxy Setup
 
