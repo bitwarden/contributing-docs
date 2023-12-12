@@ -5,8 +5,8 @@ functionality in Desktop, specifically the commands received from the DuckDuckGo
 communicates with the desktop app using Inter-process communication (IPC). It was created to enable
 development on the native messages themselves, and to give QA the ability to test these commands. It
 is located
-[here](https://github.com/bitwarden/clients/tree/master/apps/desktop/native-messaging-test-runner)
-at the root of the `desktop` app in `bitwarden/clients` repo.
+[here](https://github.com/bitwarden/clients/tree/main/apps/desktop/native-messaging-test-runner) at
+the root of the `desktop` app in `bitwarden/clients` repo.
 
 ## Getting Started
 

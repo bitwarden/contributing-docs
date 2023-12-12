@@ -11,11 +11,11 @@ Support for feature flags was added based on
 [ADR 0018](https://contributing.bitwarden.com/architecture/adr/feature-management/). Some
 highlights:
 
-- [Context](https://github.com/bitwarden/server/blob/master/src/Core/Context/ICurrentContext.cs) is
+- [Context](https://github.com/bitwarden/server/blob/main/src/Core/Context/ICurrentContext.cs) is
   provided when requesting the state of a flag. We currently allow targeting on user, organization,
   and service account. Only the IDs are sent to LaunchDarkly to avoid PII sharing.
 - All available feature flag states are provided to clients calling the
-  [configuration API](https://github.com/bitwarden/server/blob/master/src/Api/Models/Response/ConfigResponseModel.cs).
+  [configuration API](https://github.com/bitwarden/server/blob/main/src/Api/Models/Response/ConfigResponseModel.cs).
 - Environments (production, QA, and development for now) exist to segment flag states further. This
   will be automatic based on where code is running.
 
@@ -140,7 +140,7 @@ Recommendations for naming are:
 - Keep key names succinct.
 
 Once a name has been decided, add the feature flag to the
-[`FeatureFlagKeys`](https://github.com/bitwarden/server/blob/master/src/Core/Constants.cs) constants
+[`FeatureFlagKeys`](https://github.com/bitwarden/server/blob/main/src/Core/Constants.cs) constants
 file on the server. This will allow the flag to be retrieved from LaunchDarkly via whichever data
 source you configure below.
 
@@ -210,10 +210,10 @@ the most recent value from one of these retrieval events.
 #### Web
 
 The feature flag values are retrieved through the `fetchServerConfig()` method on the
-[`ConfigService`](https://github.com/bitwarden/clients/blob/master/libs/common/src/services/config/config.service.ts).
+[`ConfigService`](https://github.com/bitwarden/clients/blob/main/libs/common/src/services/config/config.service.ts).
 
 To use a feature flag, you should first define the new feature flag as an enum value in the
-[`FeatureFlags`](https://github.com/bitwarden/clients/blob/master/libs/common/src/enums/feature-flag.enum.ts)
+[`FeatureFlags`](https://github.com/bitwarden/clients/blob/main/libs/common/src/enums/feature-flag.enum.ts)
 enum.
 
 Once that is defined, the value can be retrieved by injecting the `ConfigService` and using one of
@@ -242,8 +242,8 @@ the retrieval methods:
 1. Inject `IFeatureService` where you need a feature flag. Note that you’ll also need
    `ICurrentContext` when accessing the feature state.
 2. Find the constant in the
-   [`FeatureFlagKeys`](https://github.com/bitwarden/server/blob/master/src/Core/Constants.cs) list
-   for the key you plan on using. It should have been added when
+   [`FeatureFlagKeys`](https://github.com/bitwarden/server/blob/main/src/Core/Constants.cs) list for
+   the key you plan on using. It should have been added when
    [creating a new flag](#creating-a-new-flag).
 3. Utilize the above key constant with the appropriate method on the feature service:
 
