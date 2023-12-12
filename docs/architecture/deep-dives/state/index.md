@@ -4,9 +4,8 @@ The state provider framework was designed for the purpose of allowing state to b
 but also to enforce good practices, reduce boilerplate around account switching, and provide a
 trustworthy observable stream of that state.
 
-Core API's:
 
-## API's
+## APIs
 
 - [Storage Definitions](#storage-definitions)
   - [`StateDefinition`](#statedefinition)
@@ -16,7 +15,7 @@ Core API's:
 - [`GlobalState<T>`](#globalstatet)
 - [`SingleUserState<T>`](#singleuserstatet)
 
-### Storage Definitions
+### Storage definitions
 
 In order to store and retrieve data, we need to have constant keys to reference storage locations.
 This includes a storage medium (disk or memory), and a unique key. `StateDefinition` and
@@ -289,7 +288,7 @@ Now instead of calling `mock<StateProvider>()` into your service you can instead
 
 _TODO: Refine user story_
 
-## Advanced Usage
+## Advanced usage
 
 ### `update`
 
