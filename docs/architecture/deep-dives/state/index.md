@@ -4,10 +4,9 @@ The state provider framework was designed for the purpose of allowing state to b
 but also to enforce good practices, reduce boilerplate around account switching, and provide a
 trustworthy observable stream of that state.
 
-
 ## APIs
 
-- [Storage Definitions](#storage-definitions)
+- [Storage definitions](#storage-definitions)
   - [`StateDefinition`](#statedefinition)
   - [`KeyDefinition`](#keydefinition)
 - [`StateProvider`](#stateprovider)
