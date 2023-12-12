@@ -2,9 +2,9 @@ Source code in this repository is covered by one of two licenses: (i) the GNU Ge
 (GPL) v3.0 (ii) the Creative Commons BY-NC-ND v4.0. Creative Commons licensed documents are found in
 the docs directory. Other files are GPL licensed.
 
-GPL v3.0: https://github.com/bitwarden/contributing-docs/blob/master/LICENSE_GPL.txt
+GPL v3.0: https://github.com/bitwarden/contributing-docs/blob/main/LICENSE_GPL.txt
 
-CC BY-NC-ND v4.0: https://github.com/bitwarden/contributing-docs/blob/master/LICENSE_CC.txt
+CC BY-NC-ND v4.0: https://github.com/bitwarden/contributing-docs/blob/main/LICENSE_CC.txt
 
 No grant of any rights in the trademarks, service marks, or logos of Bitwarden is made (except as
 may be necessary to comply with the notice requirements as applicable), and use of any Bitwarden
