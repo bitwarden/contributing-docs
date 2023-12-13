@@ -12,10 +12,9 @@ focused on exercising the platform at scale.
 
 Two environment variables are used for all tests:
 
-- `IDENTITY_URL`: URL of the
-  [Identity](https://github.com/bitwarden/server/tree/master/src/Identity) instance for
-  authentication.
-- `API_URL`: URL of the [API](https://github.com/bitwarden/server/tree/master/src/Api) instance for
+- `IDENTITY_URL`: URL of the [Identity](https://github.com/bitwarden/server/tree/main/src/Identity)
+  instance for authentication.
+- `API_URL`: URL of the [API](https://github.com/bitwarden/server/tree/main/src/Api) instance for
   load testing operations once authenticated.
 - `CLIENT_ID`: `X-ClientId` header value for all requests, to track unique clients and manage rate
   limiting.

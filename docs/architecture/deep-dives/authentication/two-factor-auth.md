@@ -27,13 +27,13 @@ JSON data:
 ## Handling 2FA response on the client
 
 If the client detects a
-[`IdentityTwoFactorResponse`](https://github.com/bitwarden/clients/blob/master/libs/common/src/auth/models/response/identity-two-factor.response.ts)
+[`IdentityTwoFactorResponse`](https://github.com/bitwarden/clients/blob/main/libs/common/src/auth/models/response/identity-two-factor.response.ts)
 when attempting to log in, it extracts the available 2FA providers from the `CustomResponse` and
 presents those to the user.
 
 Each 2FA method has its own UI, but in all cases the user will generate a "token" of some sort to
 capture the user's response. This token is captured on the
-[`TwoFactorComponent`](https://github.com/bitwarden/clients/blob/master/apps/desktop/src/auth/two-factor.component.ts)
+[`TwoFactorComponent`](https://github.com/bitwarden/clients/blob/main/apps/desktop/src/auth/two-factor.component.ts)
 when the user completes the 2FA process.
 
 Once the user has entered their 2FA, a new authentication request is `POST`ed to the

@@ -9,7 +9,7 @@ for real-time client communication over WebSockets.
 When real-time changes must be communicated to the registered non-mobile clients, it is the
 responsibility of the Bitwarden API for their configured server instance to distribute the
 information. The server abstracts this with the
-[`IPushNotificationService`](https://github.com/bitwarden/server/blob/master/src/Core/Services/IPushNotificationService.cs)
+[`IPushNotificationService`](https://github.com/bitwarden/server/blob/main/src/Core/Services/IPushNotificationService.cs)
 interface, which has different implementations based on whether the instance is cloud-hosted or
 self-hosted.
 
@@ -40,12 +40,12 @@ end
 ```
 
 For the Bitwarden Cloud implementation, the API uses the
-[`AzureQueuePushNotificationService`](https://github.com/bitwarden/server/blob/master/src/Core/Services/Implementations/AzureQueuePushNotificationService.cs)
+[`AzureQueuePushNotificationService`](https://github.com/bitwarden/server/blob/main/src/Core/Services/Implementations/AzureQueuePushNotificationService.cs)
 implementation. This service submits the push notification to an Azure Queue in the Bitwarden Azure
 tenant.
 
 The Bitwarden Cloud Notifications API includes a queue processor - the
-[`AzureQueueHostedService`](https://github.com/bitwarden/server/blob/master/src/Notifications/AzureQueueHostedService.cs) -
+[`AzureQueueHostedService`](https://github.com/bitwarden/server/blob/main/src/Notifications/AzureQueueHostedService.cs) -
 that monitors the Azure Queue for pending push notifications. The processor pulls messages from the
 queue and sends them to all clients registered for the initiating user or organization.
 

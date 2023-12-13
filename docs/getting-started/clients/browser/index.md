@@ -28,12 +28,12 @@ this for local development and testing, there are several options.
 
 The browser extension has the concept of a "managed environment", which is JSON configuration stored
 in
-[`development.json`](https://github.com/bitwarden/clients/blob/master/apps/browser/config/development.json),
+[`development.json`](https://github.com/bitwarden/clients/blob/main/apps/browser/config/development.json),
 within the `devFlags` object.
 
 The `managedEnvironment` setting allows the contributor to override any or all of the URLs for the
 server. The `managedEnvironment` is read in the
-[`BrowserEnvironmentService`](https://github.com/bitwarden/clients/blob/master/apps/browser/src/services/browser-environment.service.ts)
+[`BrowserEnvironmentService`](https://github.com/bitwarden/clients/blob/main/apps/browser/src/services/browser-environment.service.ts)
 and overrides the default (production) settings for any supplied URLs.
 
 There are two ways to use `managedEnvironment`, depending upon whether you will also be running the
@@ -57,9 +57,9 @@ If you are also running the web vault, you only need to set the `base` URL in th
 ```
 
 This is because the web vault includes the `webpack-dev-server` package in its
-[`webpack.config.js`](https://github.com/bitwarden/clients/blob/master/apps/web/webpack.config.js).
+[`webpack.config.js`](https://github.com/bitwarden/clients/blob/main/apps/web/webpack.config.js).
 When it is running, it proxies each of the endpoints based on the settings configured in its _own_
-[`development.json`](https://github.com/bitwarden/clients/blob/master/apps/web/config/development.json)
+[`development.json`](https://github.com/bitwarden/clients/blob/main/apps/web/config/development.json)
 configuration file:
 
 ```json
