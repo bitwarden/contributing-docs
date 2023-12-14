@@ -41,7 +41,7 @@ has signed the Contributor Agreement.
 ### Pull Request Guidelines
 
 - use `npm run lint` and fix any linting suggestions before submitting a pull request
-- commit any pull requests against the `master` branch
+- commit any pull requests against the `main` branch
 - include a link to your Community Forums post
 
 ## Localization (l10n)

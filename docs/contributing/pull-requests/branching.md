@@ -69,7 +69,7 @@ Choose a **Short-Lived Feature Branch** if the feature will:
 
 :::tip Still Unsure?
 
-If in doubt, lean toward creating shorter-lived feature branches directly off of `master` for each
+If in doubt, lean toward creating shorter-lived feature branches directly off of `main` for each
 developer’s work, as there is overhead built in to the Long-Lived Feature Branch.
 
 :::
@@ -83,16 +83,16 @@ contribution of multiple developers.
 The Long-Lived Feature Branch should **only** consist of:
 
 - PRs for approved changes from individual contributions to the feature, and
-- Merge commits from `master`
+- Merge commits from `main`
 
 Any other commits directly to the Long-Lived Feature Branch will complicate the eventual review of
-the final PR into `master` and should be avoided.
+the final PR into `main` and should be avoided.
 
 #### Development
 
 To begin development on a feature with a Long-Lived Feature branch, one contributor should create
 the Long-Lived Feature Branch for the piece of functionality and create a **draft** PR from that
-branch into `master`. This name should include the Jira Epic name if applicable.
+branch into `main`. This name should include the Jira Epic name if applicable.
 
 Each developer should then branch off of that feature branch, creating an "Issue Branch" named with
 the initiating Jira issue, as described in
@@ -110,7 +110,7 @@ Branch to collect all of these related changes to allow testing and release as a
 
 As each developer finishes their work, they should open a PR into the Long-Lived Feature Branch. It
 is imperative that every change to the Long-Lived Feature Branch have an approved PR, as otherwise
-all of these individual commits will need to be reviewed prior to the final merge to `master`. The
+all of these individual commits will need to be reviewed prior to the final merge to `main`. The
 developer should tag the appropriate development group to review the PR.
 
 When a developer approves the PR, the PR should be completed, merging that piece of the overall
@@ -123,7 +123,7 @@ Branch.
 
 We typically denote one person as being responsible for keeping the Long-Lived Feature Branch up to
 date. In most cases this will be the Tech Lead of the team but can be anyone. This person is
-responsible for keeping the feature branch reasonably up to date with master, preparing it for merge
+responsible for keeping the feature branch reasonably up to date with `main`, preparing it for merge
 and more.
 
 Due to how GitHub handles reviews, this person cannot also approve the final PR for the Long-Lived
@@ -145,7 +145,7 @@ Since each Pull Request has already been reviewed before being merged into the L
 Branch, the feature branch review is more of a sanity check. The reviewer should ensure the
 following:
 
-- The feature branch is ready to be merged into `master`.
+- The feature branch is ready to be merged into `main`.
   - Ensure the work has been QA tested, including writing QA Notes in Jira should they be needed, or
   - Verify the feature is behind a feature flag, and the crossover boundaries go through testing.
 - Review any non-reviewed commits made directly on the branch. These can be either feature work or
@@ -153,7 +153,7 @@ following:
 
 :::warning
 
-Since feature branches do not have the same protections as master, it's technically possible to
+Since feature branches do not have the same protections as `main`, it's technically possible to
 commit directly to the branch or merge a pull request without a up-to-date review. However this
 should be discouraged, and should be avoided whenever possible, the only exception being merge
 commits.
@@ -161,7 +161,7 @@ commits.
 :::
 
 When all development and functional testing is complete on the Feature Branch, the original PR into
-`master` should be moved out of Draft status and tagged with the appropriate development group for
+`main` should be moved out of Draft status and tagged with the appropriate development group for
 review.
 
 The final review can be performed using GitHub's UI, by opening the Pull Request and clicking on the
@@ -190,7 +190,7 @@ This will often be the case for small pieces of new functionality and for most b
 #### Development
 
 The developer should create a branch named with the initiating Jira issue (e.g. `PM-1234`) and
-create a **draft** PR from that branch into `master`.
+create a **draft** PR from that branch into `main`.
 
 :::note
 
@@ -201,8 +201,7 @@ which testing may be much briefer.
 
 :::
 
-During development, the `master` branch should be regularly merged into the branch to avoid
-conflicts.
+During development, the `main` branch should be regularly merged into the branch to avoid conflicts.
 
 When development is complete, the developer should prepare the PR for review:
 
@@ -211,7 +210,7 @@ When development is complete, the developer should prepare the PR for review:
 - Tag the appropriate development group for review and `@dept-design` if design approval is required
 
 When a team member approves the PR, it should **remain open** to be tested. This is critical, as
-completing the PR at this point would introduce un-tested changes into `master`.
+completing the PR at this point would introduce un-tested changes into `main`.
 
 #### QA
 
@@ -220,13 +219,13 @@ addressed with commits directly to the Short-Lived Feature Branch, triggering a 
 developer's team prior to re-introducing the new changes to QA.
 
 After QA has tested the feature and the developer has addressed any defects, the PR owner should
-complete the PR and merge the changes into the `master` branch.
+complete the PR and merge the changes into the `main` branch.
 
 ## Branching for Release
 
 On the first business day after the Development Complete date for a given release, an `rc` branch is
-created off of `master`. This is a snapshot of the ongoing work in `master` that will represent the
-code released in the upcoming version.
+created off of `main`. This is a snapshot of the ongoing work in `main` that will represent the code
+released in the upcoming version.
 
 The `rc` branch is used for regression testing. It is then used as the source for the production
 release and deployment of each of our deployed entities. When each release is made, a tag of the
@@ -247,18 +246,18 @@ separately, each client in the `clients` repo has their own named hotfix branch:
 - Browser: `hotfix-rc-browser`
 - CLI: `hotfix-rc-cli`
 
-Once the hotfix branch has been created, the individual commits in `master` are cherry-picked into
-the hotfix branches. For a client fix, this may require cherry-picking to multiple hotfix branches.
+Once the hotfix branch has been created, the individual commits in `main` are cherry-picked into the
+hotfix branches. For a client fix, this may require cherry-picking to multiple hotfix branches.
 
 Once the hotfix has been deployed, the hotfix branches are deleted.
 
 :::info Hotfix QA Testing
 
-For hotfixes, we do not perform QA testing on the feature branch prior to merging into `master`.
-This is an acknowledged risk that we have incurred in order to speed up the hotfix process and to
-avoid having to switch all of our QA testing environments from referencing our hotfix branches.
+For hotfixes, we do not perform QA testing on the feature branch prior to merging into `main`. This
+is an acknowledged risk that we have incurred in order to speed up the hotfix process and to avoid
+having to switch all of our QA testing environments from referencing our hotfix branches.
 
-Instead, hotfixed changes are merged into into `master` as soon as the PR is approved and then
+Instead, hotfixed changes are merged into into `main` as soon as the PR is approved and then
 cherry-picked to the appropriate hotfix branch(es). They are then tested on the hotfix branch.
 
 :::

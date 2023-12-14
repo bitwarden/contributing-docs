@@ -10,7 +10,7 @@ tab.
 
 Because it needs access to the DOM of the tab, the collection of the Page Details must be performed
 by a content script. The Bitwarden browser extension performs this through the
-[`CollectAutofillContentService`](https://github.com/bitwarden/clients/blob/master/apps/browser/src/autofill/services/collect-autofill-content.service.ts)
+[`CollectAutofillContentService`](https://github.com/bitwarden/clients/blob/main/apps/browser/src/autofill/services/collect-autofill-content.service.ts)
 that is initialized in the `autofill-init.ts` content script. The logic in this class is responsible
 for parsing the page DOM and returning a data structure that represents the Page Details of the
 current tab.
@@ -18,7 +18,7 @@ current tab.
 :::info Page Details
 
 For in-depth knowledge of what is contained in the Page Details, the
-[`AutofillPageDetails`](https://github.com/bitwarden/clients/blob/master/apps/browser/src/autofill/models/autofill-page-details.ts)
+[`AutofillPageDetails`](https://github.com/bitwarden/clients/blob/main/apps/browser/src/autofill/models/autofill-page-details.ts)
 TypeScript class is documented to explain the properties and their purposes.
 
 :::
@@ -252,13 +252,13 @@ details. When this occurs, the collection of the page details takes place throug
 `getPageDetails()` method of the `CollectAutofillContentService`.
 
 The `getPageDetails()` method parses the page DOM and creates an instance of the
-[`AutofillPageDetails`](https://github.com/bitwarden/clients/blob/master/apps/browser/src/autofill/models/autofill-page-details.ts)
+[`AutofillPageDetails`](https://github.com/bitwarden/clients/blob/main/apps/browser/src/autofill/models/autofill-page-details.ts)
 class.
 
 This class contains arrays of
-[`AutofillField`](https://github.com/bitwarden/clients/blob/master/apps/browser/src/autofill/models/autofill-field.ts)
+[`AutofillField`](https://github.com/bitwarden/clients/blob/main/apps/browser/src/autofill/models/autofill-field.ts)
 and
-[`AutofillForm`](https://github.com/bitwarden/clients/blob/master/apps/browser/src/autofill/models/autofill-form.ts)
+[`AutofillForm`](https://github.com/bitwarden/clients/blob/main/apps/browser/src/autofill/models/autofill-form.ts)
 objects, each of which represents a potentially fillable field on the page source. The properties on
 the objects are used in the next step of the Autofill process,
 ['Generating the Fill Scripts'](./generating-fill-scripts.md).

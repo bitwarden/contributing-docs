@@ -107,7 +107,7 @@ in .NET Core configuration build our settings for us.
 Currently, we only override `GlobalSettings`. Any other user secret that needs overriding will
 require a code change to do so. Check out `ServiceCollectionExtension.AddGlobalSettingsServices` in
 the server repository to see how we’re doing it today
-([fragile link to the code](https://github.com/bitwarden/server/blob/master/src/SharedWeb/Utilities/ServiceCollectionExtensions.cs#L448-L463)).
+([fragile link to the code](https://github.com/bitwarden/server/blob/main/src/SharedWeb/Utilities/ServiceCollectionExtensions.cs#L448-L463)).
 
 The [internal user secrets](../secrets/index.md) contains a minimum override example. You will need
 to update the following values in the `Dev:SelfHostOverride:GlobalSettings` section:
