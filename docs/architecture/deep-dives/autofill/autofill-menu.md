@@ -199,7 +199,7 @@ and prevents the introduction of new vulnerabilities through the Auto-fill Menu.
 ## Security Considerations
 
 The Auto-fill Menu heavily relies on content scripts to inject its UI into webpages. This process,
-which involves integrating code and DOM elements into pages not controlled by the extension,
+which involves injecting code and DOM elements into pages not controlled by the extension,
 necessitated stringent security measures. Throughout the design and implementation of this feature,
 we strictly adhered to [OWASP security standards and best practices](https://owasp.org/), aiming to
 effectively mitigate a broad range of security risks. Additionally, we conducted a comprehensive
