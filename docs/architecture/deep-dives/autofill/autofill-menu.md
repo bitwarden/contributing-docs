@@ -48,9 +48,9 @@ implementation specifics of this feature:
 ### Injection of the Overlay Menu
 
 An important consideration during the development of the Auto-fill Menu was addressing user concerns
-about the performance and security of an UI elements injected into an unknown webpage. As a result,
-the Auto-fill Menu has been implemented to ensure that it is injected into a webpage only when a
-user has enabled the feature.
+about the performance and security of UI elements injected into an unknown webpage. As a result, the
+Auto-fill Menu has been implemented to ensure that it is injected into a webpage only when a user
+has enabled the feature.
 
 When the Auto-fill Menu is disabled, the core autofill functionality is enabled via a content script
 named
