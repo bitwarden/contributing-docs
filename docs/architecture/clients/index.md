@@ -10,10 +10,10 @@ and a single [Git repository](https://github.com/bitwarden/clients).
 
 The mono-repository root directory contains three main folders.
 
-- `apps` - Our different application specific code, consists of `web`, `browser`, `desktop` and
+- `apps`: Our different application specific code, consists of `web`, `browser`, `desktop` and
   `cli`.
-- `bitwarden_license` - Bitwarden Licensed version of the web vault.
-- `libs` - Shared code between the different applications.
+- `bitwarden_license`: Bitwarden Licensed version of the web vault.
+- `libs`: Shared code between the different applications.
 
 ## Libs
 
@@ -51,8 +51,8 @@ concerned with bootstrapping the application and consuming and configuring code 
 
 Any code in the `apps/` that doesn't have a tight coupling with the client can be moved into a lib:
 if an exported member is wholly dependent on other libs but not `apps/`, it can likely be moved to a
-lib itself. (More concretely, this bars components that rely on global client-specific CSS, but not
-components built with Tailwind and the CL.)
+lib itself. (More concretely, this bars components that rely on global client-specific CSS — but not
+components built with Tailwind and the CL — from being included in a lib)
 
 > Having a dedicated library project is a much stronger boundary compared to just separating code
 > into folders, though. Each library has a so-called "public API", represented by an index.ts barrel
@@ -64,7 +64,7 @@ An existing example of this pattern is `@bitwarden/components`:
 
 - It is consumed by multiple apps and other libs
 - It manages a clear public and private API boundary through its barrel file
-- Code ownership is clear--the CL team only owns the files within `libs/components`
+- Code ownership is clear — the CL team only owns the files within `libs/components`
 - The CL team can make independent decisions around internal folder structure and code style
 
 As part of this process, we are also investigating utilizing additional tooling (such as Nx) to make
