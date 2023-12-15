@@ -22,7 +22,7 @@ being moved to `libs` (usually `libs/common` or `libs/angular`) if it needed to 
 multiple clients.
 
 We are attempting to move to a more modular architecture by creating additional libs that are more
-feature-focused and more accurately convey team-codeownership.
+feature-focused and more accurately convey team code ownership.
 
 - `common` - Common code shared between all the clients including CLI.
 - `angular` - Low-level Angular specific code used by all the visual clients. Code that is more tied
@@ -59,7 +59,7 @@ An existing example of this pattern is `@bitwarden/components`:
 
 - It is used by multiple apps and other libs
 - It manages a clear public and private API boundary through its barrel file.
-- Codeownership is clear--only the files within `libs/components`
+- Code ownership is clear--only the files within `libs/components`
 - The team can make independent decisions around internal folder structure and code style.
 
 As part of this process, we are also investigating utilizing additional tooling (such as Nx) to make

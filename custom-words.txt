@@ -5,7 +5,6 @@
 Bitwarden
 bytemark
 CODEOWNERS
-codeownership
 CQRS
 dockerized
 Gitter
