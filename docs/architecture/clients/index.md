@@ -15,13 +15,55 @@ The mono-repository root directory contains three main folders.
 - `bitwarden_license` - Bitwarden Licensed version of the web vault.
 - `libs` - Shared code between the different applications.
 
-`libs` contains the following projects.
+## Libs
 
-- `Common` - Common code shared between all the clients including CLI.
-- `Angular` - Angular specific code used by all the visual clients.
-- `Components` - Angular Components Library.
-- `Node` - Used to be shared code for CLI and Directory Connector CLI, but since directory connector
+Historically, much of the feature logic of Bitwarden has existed within the `apps` directories, only
+being moved to `libs` (usually `libs/common` or `libs/angular`) if it needed to be shared between
+multiple clients.
+
+We are attempting to move to a more modular architecture by creating additional libs that are more
+feature-focused and more accurately convey team-codeownership.
+
+- `common` - Common code shared between all the clients including CLI.
+- `angular` - Low-level Angular specific code used by all the visual clients. Code that is more tied
+  to Bitwarden business logic should be moved to a team-owned lib.
+- `node` - Used to be shared code for CLI and Directory Connector CLI, but since directory connector
   no longer uses the same version of libs this module is deprecated.
+- `admin-console` - Code owned by the Admin Console team.
+- `auth` - Code owned by the Auth team.
+- `billing` - Code owned by the Billing team.
+- `components` - Angular implementation of the Bitwarden design system.
+  [See more.](https://components.bitwarden.com/)
+- `exporter` - Code related to exporting; owned by the Tools team.
+- `importer` - Code related to importing; owned by the Tools team.
+- `platform` - Code owned by the Platform team.
+- `vault` - Code owned by the Vault team.
+
+For more on this approach, check out the
+[Nx documentation](https://nx.dev/concepts/more-concepts/applications-and-libraries):
+
+> place 80% of your logic into the `libs/` folder and 20% into `apps/` We are doing the opposite of
+> this right now. What code should be moved from `apps/` to `libs/`?
+
+- At this time, any code in the `/apps/web/*` that doesn't have a tight coupling with the web client
+  can be moved into a lib. For components, this means they should only be the CL, no global CSS or
+  anything exported from web-specific modules.
+
+> Having a dedicated library project is a much stronger boundary compared to just separating code
+> into folders, though. Each library has a so-called "public API", represented by an index.ts barrel
+> file. This forces developers into an "API thinking" of what should be exposed and thus be made
+> available for others to consume, and what on the others side should remain private within the
+> library itself.
+
+An existing example of this pattern is `@bitwarden/components`:
+
+- It is used by multiple apps and other libs
+- It manages a clear public and private API boundary through its barrel file.
+- Codeownership is clear--only the files within `libs/components`
+- The team can make independent decisions around internal folder structure and code style.
+
+As part of this process, we are also investigating utilizing additional tooling (such as Nx) to make
+creating new libs on the fly easier.
 
 ## Package Diagram
 
