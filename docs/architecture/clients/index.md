@@ -24,20 +24,19 @@ multiple clients.
 We are attempting to move to a more modular architecture by creating additional libs that are more
 feature-focused and more accurately convey team code ownership.
 
-- `common` - Common code shared between all the clients including CLI.
-- `angular` - Low-level Angular specific code used by all the visual clients. Code that is more tied
-  to Bitwarden business logic should be moved to a team-owned lib.
-- `node` - Used to be shared code for CLI and Directory Connector CLI, but since directory connector
-  no longer uses the same version of libs this module is deprecated.
-- `admin-console` - Code owned by the Admin Console team.
-- `auth` - Code owned by the Auth team.
-- `billing` - Code owned by the Billing team.
-- `components` - Angular implementation of the Bitwarden design system.
+- `common`: Common code shared between all the clients including CLI
+- `angular`: Low-level Angular specific utilities used by all the visual clients
+- `node`: Used to be shared code for CLI and Directory Connector CLI, but since directory connector
+  no longer uses the same version of libs this module is deprecated
+- `admin-console`: Code owned by the Admin Console team
+- `auth`: Code owned by the Auth team
+- `billing`: Code owned by the Billing team
+- `components`: Angular implementation of the Bitwarden design system
   [See more.](https://components.bitwarden.com/)
-- `exporter` - Code related to exporting; owned by the Tools team.
-- `importer` - Code related to importing; owned by the Tools team.
-- `platform` - Code owned by the Platform team.
-- `vault` - Code owned by the Vault team.
+- `exporter`: Code related to exporting; owned by the Tools team
+- `importer`: Code related to importing; owned by the Tools team
+- `platform`: Code owned by the Platform team
+- `vault`: Code owned by the Vault team
 
 For more on this approach, check out the
 [Nx documentation](https://nx.dev/concepts/more-concepts/applications-and-libraries):
@@ -58,9 +57,9 @@ anything exported from web-specific modules.
 An existing example of this pattern is `@bitwarden/components`:
 
 - It is used by multiple apps and other libs
-- It manages a clear public and private API boundary through its barrel file.
+- It manages a clear public and private API boundary through its barrel file
 - Code ownership is clear--only the files within `libs/components`
-- The team can make independent decisions around internal folder structure and code style.
+- The team can make independent decisions around internal folder structure and code style
 
 As part of this process, we are also investigating utilizing additional tooling (such as Nx) to make
 creating new libs on the fly easier.
