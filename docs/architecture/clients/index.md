@@ -42,12 +42,12 @@ feature-focused and more accurately convey team-codeownership.
 For more on this approach, check out the
 [Nx documentation](https://nx.dev/concepts/more-concepts/applications-and-libraries):
 
-> place 80% of your logic into the `libs/` folder and 20% into `apps/` We are doing the opposite of
-> this right now. What code should be moved from `apps/` to `libs/`?
+> place 80% of your logic into the `libs/` folder and 20% into `apps/`
 
-- At this time, any code in the `/apps/web/*` that doesn't have a tight coupling with the web client
-  can be moved into a lib. For components, this means they should only be the CL, no global CSS or
-  anything exported from web-specific modules.
+We are doing the opposite of this right now. What code should be moved from `apps/` to `libs/`? At
+this time, any code in the `/apps/web/*` that doesn't have a tight coupling with the web client can
+be moved into a lib. For components, this means they should only be the CL, no global CSS or
+anything exported from web-specific modules.
 
 > Having a dedicated library project is a much stronger boundary compared to just separating code
 > into folders, though. Each library has a so-called "public API", represented by an index.ts barrel
