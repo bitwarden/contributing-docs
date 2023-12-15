@@ -51,7 +51,7 @@ toolset
 TOTP
 WCAG
 Xcodes.app
+xmldoc
 Yellowpages
 Yubico
 YubiKey
-xmldoc
