@@ -47,11 +47,11 @@ To use SwaggerUI:
 3. Click "Authorize"
 4. In a separate tab, open the Web Vault and navigate to your Organization Settings page. Click
    "View API Key"
-5. Enter your organization's client_id and client_secret from the Web Vault into Swagger
-6. You can now close the Web Vault and continue in Swagger
-7. In the Scopes section, click "select all"
-8. Click "Authorize" to close the dialog
-9. You should receive a confirmation dialog. Click "Close"
+5. Enter your organization's client_id and client_secret from the Web Vault into Swagger. You can
+   now close the Web Vault and continue in Swagger
+6. In the Scopes section, click "select all"
+7. Click "Authorize" to close the dialog
+8. You should receive a confirmation dialog. Click "Close"
 
 You can now test the Public API by expanding any section, clicking "Try it out", editing the
 request, and clicking Execute. The response will be displayed below. You can also verify that your
