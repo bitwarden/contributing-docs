@@ -14,16 +14,15 @@ Public API is different in several key areas:
 | --- | --- |
 | Located at https://api.bitwarden.com | Located at https://api.bitwarden.com/public |
 | Used by official Bitwarden client applications | Used by third parties, usually in custom integrations |
-| Broad scope - can be used for anything | Narrow scope - can only be used to manage organizations |
+| Broad scope -- can be used for anything | Narrow scope -- can only be used to manage organizations |
 | Can be changed without notice | Must give notice for any breaking changes
 | Uses user credentials for authentication | Uses organization API key for authentication |
 
 ## Development guidelines
 
-1. Avoid making breaking changes - these are any changes that would require existing users of the
-   API to update their integrations to avoid errors or unexpected behavior
-   - for example, make new properties optional, so that existing integrations do not have to supply
-     a value
+1. Avoid making breaking changes -- these are any changes that would require existing users of the
+   API to update their integrations to avoid errors or unexpected behavior -- for example, make new
+   properties optional, so that existing integrations do not have to supply a value
 2. If you must make breaking changes, consider how to give advance warning to existing users.
    Communicate with Engineering, Product, and Customer Success Integration teams to coordinate any
    notice required and minimize impact
