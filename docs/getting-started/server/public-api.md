@@ -16,7 +16,7 @@ Public API is different in several key areas:
 | Used by official Bitwarden client applications | Used by third parties, usually in custom integrations |
 | Broad scope -- can be used for anything | Narrow scope -- can only be used to manage organizations |
 | Can be changed without notice | Must give notice for any breaking changes
-| Uses user credentials for authentication | Uses organization API key for authentication |
+| Utilizes user credentials for authentication | Utilizes organization API key for authentication |
 
 ## Development guidelines
 
@@ -32,7 +32,7 @@ Public API is different in several key areas:
 
 ## Developing locally
 
-When running in dev mode, the Bitwarden server includes a
+When running in dev mode the Bitwarden server includes a
 [SwaggerUI](https://swagger.io/tools/swagger-ui/) instance, similar to the one found on our
 [Help Center](https://bitwarden.com/help/api/).
 
