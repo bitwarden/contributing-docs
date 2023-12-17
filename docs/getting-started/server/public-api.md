@@ -12,7 +12,7 @@ Public API is different in several key areas:
 <!-- prettier-ignore -->
 | Private API | Public API |
 | --- | --- |
-| Located at api.bitwarden.com | Located at api.bitwarden.com/public |
+| Located at https://api.bitwarden.com | Located at https://api.bitwarden.com/public |
 | Used by official Bitwarden client applications | Used by third parties, usually in custom integrations |
 | Broad scope - can be used for anything | Narrow scope - can only be used to manage organizations |
 | Can be changed without notice | Must give notice for any breaking changes
