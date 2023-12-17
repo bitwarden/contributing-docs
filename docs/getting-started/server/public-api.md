@@ -15,7 +15,7 @@ Public API is different in several key areas:
 | Located at https://api.bitwarden.com | Located at https://api.bitwarden.com/public |
 | Used by official Bitwarden client applications | Used by third parties, usually in custom integrations |
 | Broad scope -- can be used for anything | Narrow scope -- can only be used to manage organizations |
-| Can be changed without notice | Must give notice for any breaking changes
+| Can be changed without notice (but subject to the official [support cycle](https://bitwarden.com/help/bitwarden-software-release-support/)) | Must give notice (such as deprecation warnings) for certain changes
 | Utilizes user credentials for authentication | Utilizes organization API key for authentication |
 
 ## Development guidelines
