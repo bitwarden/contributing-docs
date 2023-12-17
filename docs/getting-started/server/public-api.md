@@ -37,7 +37,7 @@ When running in dev mode the Bitwarden server includes a
 [Help Center](https://bitwarden.com/help/api/).
 
 SwaggerUI can help you test any changes you make to the Public API without having to write your own
-http requests. You can also check how your xmldoc comments will be presented by SwaggerUI when the
+HTTP requests. You can also check how your xmldoc comments will be presented by SwaggerUI when the
 Help Center is updated.
 
 To use SwaggerUI:
