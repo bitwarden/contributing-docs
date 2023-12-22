@@ -56,6 +56,13 @@ required.
 
 ### EF migrations
 
+:::tip MySQL Migrations
+
+In order for the MySQL migrations to run, you must have MySQL
+[configured](../../getting-started/server/database/ef/index.mdx) in your local environment.
+
+:::
+
 If you alter the database schema, you must create an EF migration script to ensure that EF databases
 keep pace with these changes. Developers must do this and include the migrations with their PR.
 
