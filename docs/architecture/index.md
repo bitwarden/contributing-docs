@@ -12,10 +12,8 @@ Since the web based clients mostly behave the same we will primarily cover the w
 client specific areas for the browser extension, desktop application and CLI. The Mobile application
 has its own codebase.
 
-The documentation of our architecture is primarily done using an interactive tool called IcePanel,
-and can viewed [here](https://s.icepanel.io/ZcolpeB95vuenW/itdt), or below for an interactive view.
-
+The documentation of our architecture is primarily done using an interactive tool called IcePanel.
 It's recommend to start with one of the interactive
-[Tours](https://s.icepanel.io/niB2pYJoHiNmdG/nt3i) of the Architecture.
+[Tours](https://s.icepanel.io/jCGiag2SENoQIU/EACm) of our application structure.
 
-<iframe src="https://s.icepanel.io/niB2pYJoHiNmdG/nt3i" height="800px" width="100%" frameBorder="0" title="Bitwarden - Bitwarden Architecture"></iframe>
+<iframe src="https://s.icepanel.io/jCGiag2SENoQIU/EACm" height="800px" width="100%" frameBorder="0" title="Bitwarden - Bitwarden Architecture"></iframe>
