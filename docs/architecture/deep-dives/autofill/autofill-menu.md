@@ -45,7 +45,7 @@ In addition to the visible aspects, several underlying elements have been integr
 the Auto-fill Menu is both performant and secure. The subsequent sections detail the design and
 implementation specifics of this feature:
 
-### Injection of the Overlay Menu
+### Injection of the Auto-fill Menu
 
 An important consideration during the development of the Auto-fill Menu was addressing user concerns
 about the performance and security of UI elements injected into an unknown webpage. As a result, the
