@@ -16,6 +16,6 @@ The documentation of our architecture is primarily done using an interactive too
 and can viewed [here](https://s.icepanel.io/ZcolpeB95vuenW/itdt), or below for an interactive view.
 
 It's recommend to start with one of the interactive
-[Tours](https://s.icepanel.io/ZcolpeB95vuenW/NnNG) of the Architecture.
+[Tours](https://s.icepanel.io/niB2pYJoHiNmdG/nt3i) of the Architecture.
 
-<iframe src="https://s.icepanel.io/ZcolpeB95vuenW/NnNG" height="800px" width="100%" frameBorder="0" title="Bitwarden - Bitwarden Architecture"></iframe>
+<iframe src="https://s.icepanel.io/niB2pYJoHiNmdG/nt3i" height="800px" width="100%" frameBorder="0" title="Bitwarden - Bitwarden Architecture"></iframe>
