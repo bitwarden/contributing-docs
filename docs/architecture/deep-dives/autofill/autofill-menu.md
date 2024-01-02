@@ -200,12 +200,10 @@ and prevents the introduction of new vulnerabilities through the Auto-fill Menu.
 ## Security Considerations
 
 The Auto-fill Menu heavily relies on content scripts to inject its UI into webpages. This process,
-which involves injecting code and DOM elements into pages not controlled by the extension,
-necessitated stringent security measures. Throughout the design and implementation of this feature,
-we strictly adhered to [OWASP security standards and best practices](https://owasp.org/), aiming to
-effectively mitigate a broad range of security risks. Additionally, we conducted a comprehensive
-security review with the third-party firm [Cure53](https://cure53.de/), ensuring the robust security
-of the feature.
+which entails injecting code and DOM elements into unfamiliar websites, required the implementation
+of stringent security measures. Throughout the design and implementation of this feature we worked
+to mitigate a broad range of security risks. Additionally, we conducted a comprehensive security
+review with a number of third-party organizations, ensuring the robust security of the feature.
 
 The subsequent sections detail various security considerations that were factored in during the
 design and implementation of the feature.
@@ -287,7 +285,7 @@ implemented for the Auto-fill Menu feature:
 To address the risks associated with DOM clobbering, the following defensive strategies have been
 implemented for the Auto-fill Menu feature:
 
-#### **Utilizing the isolated execution context of the content script.**
+#### **Utilizing the isolated execution context of the content script**
 
 - Web extension content scripts operate in a
   [unique, isolated context](https://developer.chrome.com/docs/extensions/mv3/content_scripts/#isolated_world),
@@ -296,7 +294,7 @@ implemented for the Auto-fill Menu feature:
   script are not accessible to the webpage's scripting environment, thus safeguarding them from
   being overwritten by the webpage.
 
-#### **Adhering to OWASP secure coding guidelines.**
+#### **Adhering to OWASP secure coding guidelines**
 
 - In developing our content scripts, we have adhered to the
   [OWASP Secure Coding Guidelines](https://cheatsheetseries.owasp.org/cheatsheets/DOM_Clobbering_Prevention_Cheat_Sheet.html#secure-coding-guidelines)
