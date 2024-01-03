@@ -14,6 +14,4 @@ has its own codebase.
 
 The documentation of our architecture is primarily done using an interactive tool called IcePanel.
 It's recommend to start with one of the interactive
-[Tours](https://s.icepanel.io/jCGiag2SENoQIU/EACm) of our application structure.
-
-<iframe src="https://s.icepanel.io/jCGiag2SENoQIU/EACm" height="800px" width="100%" frameBorder="0" title="Bitwarden - Bitwarden Architecture"></iframe>
+[tours](https://s.icepanel.io/jCGiag2SENoQIU/EACm) of our application structure.
