@@ -121,8 +121,10 @@ after the last subscriber has unsubscribed. Defaults to 1000ms.
 
 `StateProvider` is an injectable service that includes 3 methods for getting state. These three
 methods are helpers for invoking their more modular siblings `ActiveStateProvider.get`,
-`SingleUserStateProvider.get`, and `GlobalStateProvider.get` and they have the following type
-definitions:
+`SingleUserStateProvider.get`, and `GlobalStateProvider.get`, these siblings can all be injected
+into your service as well. If you prefer thin dependencies over the slightly larger changeset
+required, you can absolutely make use of the more targeted providers. `StateProvider` has the
+following type definition (aliasing the targeted providers):
 
 ```typescript
 interface StateProvider {
@@ -311,7 +313,8 @@ The `shouldUpdate` option can be useful to help avoid an unnecessary update, and
 unnecessary emission of `state$`. You might want to use this to avoid setting state to `null` when
 it is already `null`. The `shouldUpdate` method gives you in it's first parameter the value of state
 before any change has been made to it and the dependency you have, optionally, provided through
-`combineLatestWith`. To avoid setting `null` twice you could call `update` like below:
+`combineLatestWith`. To avoid setting `null` to your state when it's already `null` you could call
+`update` like below:
 
 ```typescript
 await myUserState.update(() => null, { shouldUpdate: (state) => state != null });
