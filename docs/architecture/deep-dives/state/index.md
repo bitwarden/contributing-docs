@@ -75,7 +75,8 @@ example instantiations are:
 
 ```typescript
 const MY_DOMAIN_DATA = new KeyDefinition<MyState>(MY_DOMAIN_DISK, "data", {
-  deserializer: (jsonData) => null, // convert to your data from json
+  // convert to your data from serialized representation `{ foo: string }` to fully-typed `MyState`
+  deserializer: (jsonData) => MyState.fromJSON(jsonData),
 });
 
 // Or if your state is an array, use the built in helper
@@ -83,14 +84,14 @@ const MY_DOMAIN_DATA: KeyDefinition<MyStateElement[]> = KeyDefinition.array<MySt
   MY_DOMAIN_DISK,
   "data",
   {
-    deserializer: (jsonDataElement) => null, // provide a deserializer just for the element of the array
+    deserializer: (jsonDataElement) => MyState.fromJSON(jsonDataElement), // provide a deserializer just for the element of the array
   },
 );
 
 // record
 const MY_DOMAIN_DATA: KeyDefinition<Record<string, MyStateElement>> =
   KeyDefinition.record<MyStateValue>(MY_DOMAIN_DISK, "data", {
-    deserializer: (jsonDataValue) => null, // provide a deserializer just for the value in each key-value pair
+    deserializer: (jsonDataValue) => MyState.fromJSON(jsonDataValue), // provide a deserializer just for the value in each key-valu pair
   });
 ```
 
