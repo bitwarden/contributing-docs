@@ -121,10 +121,10 @@ after the last subscriber has unsubscribed. Defaults to 1000ms.
 
 `StateProvider` is an injectable service that includes 4 methods for getting state. These four
 methods are helpers for invoking their more modular siblings `ActiveStateProvider.get`,
-`SingleUserStateProvider.get`, `GlobalStateProvider.get`, and `DerivedStateProvider`, these siblings can all be injected
-into your service as well. If you prefer thin dependencies over the slightly larger changeset
-required, you can absolutely make use of the more targeted providers. `StateProvider` has the
-following type definition (aliasing the targeted providers):
+`SingleUserStateProvider.get`, `GlobalStateProvider.get`, and `DerivedStateProvider`, these siblings
+can all be injected into your service as well. If you prefer thin dependencies over the slightly
+larger changeset required, you can absolutely make use of the more targeted providers.
+`StateProvider` has the following type definition (aliasing the targeted providers):
 
 ```typescript
 interface StateProvider {
