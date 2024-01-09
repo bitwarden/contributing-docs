@@ -79,7 +79,7 @@ scenarios where discarding the reviews are generally seen as accepted.
 Approving a PR means that you have confidence in that the code works, and that it does what the PR
 claims. This can be based on testing the change or on previous domain knowledge.
 
-- The PR targets the [correct branch](branching/#which-branching-model-to-choose).
+- The PR targets the [correct branch](branching#which-branching-model-to-choose).
 - You have verified that the linked Jira issue description matches the changes made in the PR.
 - You have read and understood the full impact of the changes suggested by the PR.
 - You attest that the changes
