@@ -14,6 +14,7 @@ hotfixes
 inet
 IntelliJ
 Iterm
+incentivizing
 jslib
 jumpcloud
 keychain

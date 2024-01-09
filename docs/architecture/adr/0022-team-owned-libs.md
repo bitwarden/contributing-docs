@@ -20,10 +20,27 @@ This pattern makes it more difficult for teams to independently manage code they
 ## Considered Options
 
 - **Do nothing** - Keep our current pattern.
-- **Template-driven forms** - Break functionality out of `apps/`, `libs/common/`, and
-  `libs/angular/` and move into libs that are smaller, feature-focused, and owned by a team.
+- **Template-driven forms** - Move functionality out of `apps/`, `libs/common/`, and `libs/angular/`
+  and move into libs that are smaller, feature-focused, and owned by a team.
 
-Source: https://angular.io/guide/forms-overview#choosing-an-approach
+This is informed by [Nx](https://nx.dev/concepts/more-concepts/applications-and-libraries), a
+monorepo tool:
+
+> A typical Nx workspace is structured into "apps" and "libs". This distinction allows us to have a
+> more modular architecture by following a separation of concerns methodology, incentivizing the
+> organization of our source code and logic into smaller, more focused and highly cohesive units.
+
+<blockquote>
+A common mental model is to see the application as "containers" that link, bundle and compile functionality implemented in libraries for being deployed. As such, if we follow a 80/20 approach:
+
+    - place 80% of your logic into the libs/ folder
+    - and 20% into apps/
+
+Note, these libraries don’t necessarily need to be built separately, but are rather consumed and
+built by the application itself directly. Hence, nothing changes from a pure deployment point of
+view.
+
+</blockquote>
 
 ## Decision Outcome
 
