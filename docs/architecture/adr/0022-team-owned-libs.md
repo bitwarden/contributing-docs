@@ -5,7 +5,7 @@ date: 2023-01-09
 tags: [clients]
 ---
 
-# 0001 - Team-owned libs
+# 0022 - Team-owned libs
 
 <AdrTable frontMatter={frontMatter}></AdrTable>
 
@@ -33,12 +33,12 @@ Chosen option: **Team-owned libs**
 
 - **Clear public API** - Each team can decide what is public and private within their library. This
   prevents teams from relying on code that is meant to be internal.
-- **Faster builds** -
 - **More team autonomy** -
 - **Easier to share code between apps** -
 - **Clearer dependency graph** - It will be easier to inspect which teams are relying internal and
   external dependencies.
 - **Simplified code ownership** -
+- **Incremental builds** -
 
 ### Negative Consequences
 
