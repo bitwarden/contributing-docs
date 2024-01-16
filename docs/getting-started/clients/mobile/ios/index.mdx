@@ -10,9 +10,15 @@ import TabItem from "@theme/TabItem";
 
 ## Requirements
 
-- [.NET 7 (latest)](https://dotnet.microsoft.com/en-us/download/dotnet/7.0)
-- Xamarin (iOS)
-- A Mac with Xcode 15 installed
+1.  Visual Studio 2022 / VS Code
+2.  [.NET 8 (latest)](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
+    - Note: Even if you have an M1 Mac with ARM 64 architecture, you can install all x64 SDKs to run
+      android
+    - On Visual Studio for Mac you may need to turn on the feature for NET 8 going to Visual
+      Studio > Preferences > Preview Features > Use the .NET 8 SDK
+3.  .NET MAUI Workload
+    - You can install this by running `dotnet workload install maui`
+4.  A Mac with Xcode 15.0 installed
 
 ## Apple Developer Account Setup
 
@@ -81,16 +87,16 @@ required.
 If this worked, you can skip the next section.
 
 If you only have the option "Generic Simulator", with a message to lower the 'Deployment Target',
-your version of Xamarin may not yet support the version of Xcode that you are using (as discussed
+your version of MAUI may not yet support the version of Xcode that you are using (as discussed
 [here](https://github.com/xamarin/xamarin-macios/issues/15954#issuecomment-1246025735)).
 
 ![](./troubleshoot-generic-simulator.png)
 
 To work around this issue, try [downloading](https://developer.apple.com/download/all/) and
 installing an older version of Xcode from Apple (you can look for guidance on which Xcode version to
-use from the Xamarin.iOS [release notes](https://github.com/xamarin/xamarin-macios/releases). After
-installing the new version of Xcode, restart Visual Studio and load your project to verify your
-available simulator options.
+use from the Xamarin.iOS [release notes](https://github.com/xamarin/xamarin-macios/releases) (this
+applies to MAUI as well). After installing the new version of Xcode, restart Visual Studio and load
+your project to verify your available simulator options.
 
 :::note
 
@@ -247,11 +253,30 @@ Next, we need to configure your Visual Studio environment for development.
 3. Open the mobile solution file (`bitwarden-mobile.sln`) in the root of your local mobile
    repository
 
-4. In the top bar, you should be able to select iOS > iPhoneSimulator > select your model and click
-   run (or your physical device if you set one up)
+4. In the top bar, you should be able to select App > Debug > select your model and click run (or
+   your physical device if you set one up)
 
 </TabItem>
 </Tabs>
+
+## Building
+
+There are currently a few problems on Visual Studio for Mac for building correctly the projects, so
+if you encounter some errors build using the CLI (previously removing bin/obj folders): For device:
+
+```
+dotnet build -f net8.0-ios -c Debug -r ios-arm64
+```
+
+For simulator:
+
+```
+dotnet build -f net8.0-ios -c Debug -r iossimulator-x64
+```
+
+If you find any errors regarding argon2Id library when building for `iossimulator-x64` then try to
+build for device `ios-arm64` as there might be some issues regarding arch differences and
+requirements for the argon2Id library to be used in `iossimulator-x64`.
 
 ## Debugging
 
@@ -261,8 +286,8 @@ The iPhone Simulator has access to localhost and you can point the client at you
 as usual. However, the app will require https by default. To allow http for testing purposes, follow
 these steps.
 
-1. Open `src/iOS/Info.plist` in Visual Studio Code or another editor so that you can edit the raw
-   XML. (Don't use the Property List Editor in Visual Studio.)
+1. Open `src/App/Platforms/iOS/Info.plist` in Visual Studio Code or another editor so that you can
+   edit the raw XML. (Don't use the Property List Editor in Visual Studio.)
 
 2. Add the following code in the top-level `<dict>` element:
 

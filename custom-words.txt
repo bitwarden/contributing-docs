@@ -8,6 +8,7 @@ clickjacking
 CODEOWNERS
 CQRS
 dockerized
+FDROID
 Gitter
 hotfix
 hotfixed
@@ -38,6 +39,7 @@ passcode
 passwordless
 pinentry
 PNSs
+precompiler
 proxied
 refactorings
 roadmap

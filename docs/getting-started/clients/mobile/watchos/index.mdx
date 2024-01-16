@@ -28,14 +28,14 @@ There are two parts from where to debug:
 - From Visual Studio for Mac (the iOS app)
 - From XCode (the watchOS app)
 
-For now, there is no way to debug both apps (iOS and watchOS) at the same time given that from
-Xamarin there is no access to debug information of the watchOS app and from XCode an iOS stub app is
+For now, there is no way to debug both apps (iOS and watchOS) at the same time given that from MAUI
+there is no access to debug information of the watchOS app and from XCode an iOS stub app is
 installed on the iPhone to debug it. So, at the moment of debugging one needs to choose which part
 to have information about, therefore whether to debug from VS4M or from XCode.
 
 :::caution
 
-When debugging from XCode the Xamarin iOS app will be replaced with the stub one from XCode. So any
+When debugging from XCode the MAUI iOS app will be replaced with the stub one from XCode. So any
 configuration on the iOS app will be lost (like server urls)
 
 When debugging from VS4M, uninstall the previous watchOS app (if any) from the Apple Watch in
@@ -46,8 +46,8 @@ previous watchOS app it doesn't get updated)
 
 ### Building
 
-Given that the Xamarin iOS app needs the output of the build of Xcode, one needs to build the
-watchOS app from XCode first and then from VS4M build the iOS app to run it on the device.
+Given that the MAUI iOS app needs the output of the build of Xcode, one needs to build the watchOS
+app from XCode first and then from VS4M build the iOS app to run it on the device.
 
 The output of XCode build is stored in a location pretty similar to the next one that is configured
 in the `iOS.csproj`:
@@ -82,5 +82,5 @@ aforementioned.
 So one can debug one end (iOS) or the other (watchOS).
 
 If needed to check something on both ends "at the same time" (like to check why a message is not
-sent/arrived), one needs to use console logging or adapt part of the Xamarin code to the iOS stub
-app on Xcode and debug the synchronization from XCode.
+sent/arrived), one needs to use console logging or adapt part of the MAUI code to the iOS stub app
+on Xcode and debug the synchronization from XCode.
