@@ -8,8 +8,8 @@ installed. You will also need to install:
 1.  Visual Studio 2022 / VS Code
 2.  [.NET 8 (latest)](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
     - Note: Even if you have an M1 Mac with ARM 64 architecture, you can install all x64 SDKs to run
-      android
-    - On Visual Studio for Mac you may need to turn on the feature for NET 8 going to Visual
+      Android
+    - On Visual Studio for Mac you may need to turn on the feature for .NET 8 by going to Visual
       Studio > Preferences > Preview Features > Use the .NET 8 SDK
 3.  .NET MAUI Workload
     - You can install this by running `dotnet workload install maui`
@@ -60,7 +60,7 @@ To set up a new virtual Android device for debugging:
 
 ![Android SDK configuration](android-sdk.png)
 
-## FDROID
+## F-Droid
 
 On `App.csproj` and `Core.csproj` we can now pass `/p:CustomConstants=FDROID` when
 building/releasing so that the `FDROID` constant is added to the defined ones at the project level

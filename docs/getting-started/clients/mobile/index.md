@@ -49,8 +49,13 @@ this time.
 
 ## Unit tests
 
-TL;DR; In order to run unit tests add the argument `/p:CustomConstants=UT` on the dotnet command for
-building/running.
+:::info TL;DR;
+
+In order to run unit tests add the argument `/p:CustomConstants=UT` on the `dotnet` command for
+building/running. To work on Unit testing or use a Test runner uncomment the `CustomConstants` line
+on the `Directory.Build.props`
+
+:::
 
 Given that the `Core.csproj` is a MAUI project with `net8.0-android;net8.0-ios` target frameworks
 and we need `net8.0` for the tests we need a way to add that. The `Core.Test.csproj` has `net8.0` as
@@ -75,17 +80,19 @@ and to run the tests go to the same folder and run:
 dotnet test -f net8.0 /p:CustomConstants=UT
 ```
 
-Finally, when working on the `Core.Test` project, go to the `Core.Test.csproj` and uncomment the
-line wit the `UT` constant so that everything is loaded accordingly in the project. Because of some
-issues the referenced projects, e.g. `Core`, are only included when the `UT` constant is in place so
-by uncommenting the line the projects will be referenced and one can work on that project.
+Finally, when working on the `Core.Test` project or when wanting to use a Test runner, go to the
+`Directory.Build.props` (located in the root) and uncomment the line referencing `CustomConstants`
+so that everything is loaded accordingly in the project. Because of some issues the referenced
+projects, e.g. `Core`, are only included when the `UT` constant is in place so by uncommenting the
+line the projects will be referenced and one can work on that project or run the tests from a Test
+runner.
 
 ## Custom constants
 
 There are custom constants to be used by the parameter `/p:CustomConstants={Value}` when
 building/running/releasing:
 
-- `FDROID`: This is used to indicate that it's and FDROID build/release
+- `FDROID`: This is used to indicate that it's and F-Droid build/release
   ([want to know more?](../mobile/android/index#fdroid))
 - `UT`: This is used when building/running the test projects or when working on one of them
   ([want to know more?](#unit-tests))

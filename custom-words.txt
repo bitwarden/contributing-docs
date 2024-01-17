@@ -8,7 +8,7 @@ clickjacking
 CODEOWNERS
 CQRS
 dockerized
-FDROID
+F-Droid
 Gitter
 hotfix
 hotfixed
