@@ -93,7 +93,7 @@ There are custom constants to be used by the parameter `/p:CustomConstants={Valu
 building/running/releasing:
 
 - `FDROID`: This is used to indicate that it's and F-Droid build/release
-  ([want to know more?](../mobile/android/index#f-droid))
+  ([want to know more?](./android/index.md#f-droid))
 - `UT`: This is used when building/running the test projects or when working on one of them
   ([want to know more?](#unit-tests))
 
