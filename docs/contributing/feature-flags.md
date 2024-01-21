@@ -262,11 +262,34 @@ to Jira helps create a history of the feature and there are copious logs and aud
 that can be kept. Feature flags not accessed for a long period of time will automatically move to an
 "inactive" state that can also help with identifying technical debt to clean up.
 
-When defining the subtasks of a story be sure to include a cleanup task for removal of the feature
-flag from code – it’s essential that these not be left around for too long and assume a permanent
-existence. Address the task at a later phase once the feature launches successfully.
+While feature flags can be left indefinitely in LaunchDarkly without accumulating technical debt, it
+is essential that any logic based on these flags be removed from code as soon as the feature
+launches successfully. When defining the tasks for feature-flagged code, be sure to include a
+cleanup task for removing this logic. You may want to consider multiple tasks - one for each of the
+steps in the removal process.
 
-### Self-hosted considerations
+### Unwinding a feature flag
+
+Due to the complexity of the different client deployments and how we expose feature flags through
+our API, it is important that each feature flag be removed in the appropriate sequence.
+
+First, remove all business logic that relies on the flag from both client and server code. This
+includes _all_ references in the client codebase, and also any business logic on the server that
+checks the flag value. This does _not_ include removing the flag from the `FeatureFlagKeys` on the
+server. We must leave this here so that old clients who have not updated continue to be served a
+`true` value when querying for the flag.
+
+This code should then be deployed to all clients and to the server. Once this has been deployed,
+clients have updated, and the self-hosted customer has updated their deployment to the latest
+version, self-hosted customers will be able to access the feature (see
+[Self-hosted considerations](#self-hosted-considerations) below)
+
+After waiting the requisite number of client releases to ensure backward compatibility, we can then
+take the next step and completely remove the feature flag from the server codebase. This can be done
+by removing the flag value from the `FeatureFlagKeys`. This should then be deployed to the server to
+complete the removal process.
+
+## Self-hosted considerations
 
 Self-hosted instances will not have access to LaunchDarkly, so the server configuration retrieved
 from the API will assess all feature flags as their default state unless the server is configured
