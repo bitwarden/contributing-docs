@@ -282,7 +282,7 @@ server. We must leave this here so that old clients who have not updated continu
 This code should then be deployed to all clients and to the server. Once this has been deployed,
 clients have updated, and the self-hosted customer has updated their deployment to the latest
 version, self-hosted customers will be able to access the feature (see
-[Self-hosted considerations](#self-hosted-considerations) below)
+[Self-hosted considerations](#self-hosted-considerations) below).
 
 After waiting the requisite number of client releases to ensure backward compatibility, we can then
 take the next step and completely remove the feature flag from the server codebase. This can be done
