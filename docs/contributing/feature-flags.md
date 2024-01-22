@@ -276,18 +276,24 @@ our API, it is important that each feature flag be removed in the appropriate se
 First, remove all business logic that relies on the flag from both client and server code. This
 includes _all_ references in the client codebase, and also any business logic on the server that
 checks the flag value. This does _not_ include removing the flag from the `FeatureFlagKeys` on the
-server. We must leave this here so that old clients who have not updated continue to be served a
-`true` value when querying for the flag.
+server -- we must leave this here so that old clients who have not updated continue to be served the
+correct "on" value when querying for the flag.
 
-This code should then be deployed to all clients and to the server. Once this has been deployed,
-clients have updated, and the self-hosted customer has updated their deployment to the latest
-version, self-hosted customers will be able to access the feature (see
-[Self-hosted considerations](#self-hosted-considerations) below).
+This code should then be deployed to all clients and to the server.
 
-After waiting the requisite number of client releases to ensure backward compatibility, we can then
-take the next step and completely remove the feature flag from the server codebase. This can be done
-by removing the flag value from the `FeatureFlagKeys`. This should then be deployed to the server to
-complete the removal process.
+:::tip Self-hosted customers
+
+Once the code referencing the flag has been removed and clients have updated, self-hosted customers
+can update to the latest version to begin using the feature. See
+[Self-hosted considerations](#self-hosted-considerations) below for more detail.
+
+:::
+
+Once we have satisfied the requirements of
+[backward compatibility](https://bitwarden.com/help/bitwarden-software-release-support/#release-support-at-bitwarden)
+for our clients, we can completely remove the feature flag from the server codebase. This can be
+done by removing the flag value from the `FeatureFlagKeys`. This should then be deployed to the
+server to complete the removal process.
 
 ## Self-hosted considerations
 
