@@ -7,8 +7,8 @@ date when the underlying observable state changes.
 ## `DeriveDefinition`
 
 Derived state has all of the same issues with storage and retrieval that normal state does. Similar
-to `KeyDefinition`, Derived state depends on `DeriveDefinition`s to define magic string keys to
-store and retrieve data from a cache. Unlike normal state, Derived state is always stored in memory.
+to `KeyDefinition`, derived state depends on `DeriveDefinition`s to define magic string keys to
+store and retrieve data from a cache. Unlike normal state, derived state is always stored in memory.
 It still takes a `StateDefinition`, but this is used only to define a namespace for the derived
 state, the storage location is ignored. _This can lead to collisions if you use the same key for two
 different derived state definitions in the same namespace._
@@ -49,7 +49,7 @@ often built from existing state and allows you to create a definition from an ex
   `DeriveDefinition`s require have a `deserializer` function that is used to convert the stored data
   back into the `TTo` type.
 - `derive` - A function that takes the current state and returns the derived state. This function
-  takes two parameters
+  takes two parameters:
   - `from` - The latest value of the parent state.
   - `deps` - dependencies used to instantiate the derived state. These are provided when the
     `DerivedState` class is instantiated. This object should contain all of the application runtime
