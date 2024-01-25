@@ -52,17 +52,17 @@ our QA team may need to use this branch name when performing QA testing on the f
 ### Which Branching Model to Choose?
 
 The main point of consideration in choosing a branching model is whether the changes can be
-introduced directly into `master` with every pull request or whether they need to be merged into a
+introduced directly into `main` with every pull request or whether they need to be merged into a
 long-lived feature branch for QA. As such, it should be planned in advance when beginning work on a
 new set of Jira stories or tasks, and it requires coordination across the entire team - Development,
 QA, and Product.
 
-Choose **branching and merging into `master`** if the feature will:
+Choose **branching and merging into `main`** if the feature will:
 
 - Require a single pull request to produce a testable, releasable change, with QA taking place on
   the PR branch, or
 - Allow multiple incremental pull requests **with the changes encapsulated behind a feature flag**,
-  with QA taking place in `master`.
+  with QA taking place in `main`.
 
 Choose **branching and merging into a long-lived feature branch** if the feature will:
 
@@ -71,14 +71,14 @@ Choose **branching and merging into a long-lived feature branch** if the feature
 
 :::tip Still Unsure?
 
-If in doubt, lean toward creating branches directly off of `master` for incremental body of work, as
+If in doubt, lean toward creating branches directly off of `main` for incremental body of work, as
 there is overhead built in to the long-lived feature branch.
 
 :::
 
 ### Structuring branches to support incremental work
 
-Regardless of whether we are merging into `master` or a long-lived feature branch, it is important
+Regardless of whether we are merging into `main` or a long-lived feature branch, it is important
 that each engineer structure their branches to support small, reviewable pull requests. When taking
 on a new story or task, and throughout the development process, the engineer should consider how the
 work could be broken apart and incrementally introduced for review and merge.
@@ -92,7 +92,7 @@ It can be helpful to think of this exercise in terms of two dimensions:
 - We can think of our branches as building blocks that are part of the final, fully constructed
   feature, with an eye toward making the resulting pull requests concise, well-defined and easily
   reviewable.
-- **It is accepted and expected that incomplete code will be merged** -- either to `master` behind a
+- **It is accepted and expected that incomplete code will be merged** -- either to `main` behind a
   feature flag or into the long-lived feature branch.
 - Examples of this include:
   - Introducing supporting services prior to UI development.
@@ -118,18 +118,18 @@ A long-lived feature branch is necessary when the body of work to produce the sm
 testable, releasable change is too large to be encapsulated in a single PR, or it requires the
 contribution of multiple developers, **and it cannot be encapsulated behind a feature flag**.
 
-The long-lived feature branch is merely a collection point for work that cannot be merged to
-`master` independently. The developer should still use
+The long-lived feature branch is merely a collection point for work that cannot be merged to `main`
+independently. The developer should still use
 [branches for small, incremental changes](#structuring-branches-to-support-incremental-work), but
-they will target the long-lived feature branch instead of `master`.
+they will target the long-lived feature branch instead of `main`.
 
 As a result, the long-lived feature branch should **only** consist of:
 
 - PRs for approved changes, and
-- Merge commits from `master`.
+- Merge commits from `main`.
 
 Any other commits directly to the long-lived feature branch will complicate the eventual review of
-the final PR into `master` and should be avoided.
+the final PR into `main` and should be avoided.
 
 The review of a long-lived feature branch should simply be a verification of each PR that has been
 The final review can be performed using GitHub's UI, by opening the Pull Request and clicking on the
@@ -147,8 +147,8 @@ please use the command `git show <hash>`. For some background and more informati
 ## Branching for Release
 
 On the first business day after the Development Complete date for a given release, an `rc` branch is
-created off of `master`. This is a snapshot of the ongoing work in `master` that will represent the
-code released in the upcoming version.
+created off of `main`. This is a snapshot of the ongoing work in `main` that will represent the code
+released in the upcoming version.
 
 The `rc` branch is used for regression testing. It is then used as the source for the production
 release and deployment of each of our deployed entities. When each release is made, a tag of the
@@ -169,18 +169,18 @@ separately, each client in the `clients` repo has their own named hotfix branch:
 - Browser: `hotfix-rc-browser`
 - CLI: `hotfix-rc-cli`
 
-Once the hotfix branch has been created, the individual commits in `master` are cherry-picked into
-the hotfix branches. For a client fix, this may require cherry-picking to multiple hotfix branches.
+Once the hotfix branch has been created, the individual commits in `main` are cherry-picked into the
+hotfix branches. For a client fix, this may require cherry-picking to multiple hotfix branches.
 
 Once the hotfix has been deployed, the hotfix branches are deleted.
 
 :::info Hotfix QA Testing
 
-For hotfixes, we do not perform QA testing on the feature branch prior to merging into `master`.
-This is an acknowledged risk that we have incurred in order to speed up the hotfix process and to
-avoid having to switch all of our QA testing environments from referencing our hotfix branches.
+For hotfixes, we do not perform QA testing on the feature branch prior to merging into `main`. This
+is an acknowledged risk that we have incurred in order to speed up the hotfix process and to avoid
+having to switch all of our QA testing environments from referencing our hotfix branches.
 
-Instead, hotfixed changes are merged into into `master` as soon as the PR is approved and then
+Instead, hotfixed changes are merged into into `main` as soon as the PR is approved and then
 cherry-picked to the appropriate hotfix branch(es). They are then tested on the hotfix branch.
 
 :::

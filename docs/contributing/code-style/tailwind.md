@@ -17,7 +17,7 @@ We also recommend using the search functionality of the
 ## Tailwind at Bitwarden
 
 We have defined our own
-[tailwind config](https://github.com/bitwarden/clients/blob/master/libs/components/tailwind.config.base.js),
+[tailwind config](https://github.com/bitwarden/clients/blob/main/libs/components/tailwind.config.base.js),
 which heavily restricts the color usage as a way to support multiple themes. To achieve this we use
 [CSS variables](https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties) in
 combination with the tailwind config. This allows us to support more than the built in dark/light
@@ -46,7 +46,7 @@ blocks. In most cases these blocks are
 ### Component Library
 
 One of the engineering initiatives at Bitwarden is the
-[Component Library](https://github.com/bitwarden/clients/tree/master/libs/components) which aims to
+[Component Library](https://github.com/bitwarden/clients/tree/main/libs/components) which aims to
 encapsulate the most commonly used core components.
 
 #### Storybook

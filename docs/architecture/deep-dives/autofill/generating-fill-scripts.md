@@ -8,13 +8,13 @@ This documentation assumes you have an understanding of
 [Page Detail Collection](collecting-page-details.md), which is the first part of the Autofill
 process.
 
-Once the page details have been collected from the page source by the `autofill.js` content script,
-the next step is to generate what we call a "fill script". A fill script is a sequence of
-instructions that tell the `autofill.js` content script what fields to fill and with what data it
-should fill each field.
+Once the page details have been collected from the page source by the `autofill-init.ts` content
+script, the next step is to generate what we call a "fill script". A fill script is a sequence of
+instructions that tell the `autofill-init.ts` content script what fields to fill and with what data
+it should fill each field.
 
 The generation of fill scripts is the responsibility of the
-[`AutofillService`](https://github.com/bitwarden/clients/blob/master/apps/browser/src/autofill/services/autofill.service.ts).
+[`AutofillService`](https://github.com/bitwarden/clients/blob/main/apps/browser/src/autofill/services/autofill.service.ts).
 There are three method used to perform fill script generation:
 
 - `doAutoFill()`
@@ -34,8 +34,8 @@ in more detail how the script is generated below.
 
 The following information is provided to the `generateFillScript()` method:
 
-1. The page details, which represent the information collected from the page in `autofill.js`. It
-   includes:
+1. The page details, which represent the information collected from the page in `autofill-init.ts`.
+   It includes:
    - A list of AutoFillForm objects, representing each Form on the page
    - A list of AutoFillField objects, representing each Field on the page
 2. The CipherView to fill in on the page
@@ -49,11 +49,11 @@ The result of the generation routine is a fill script, which is a series of inst
 The script contains an array of instructions with the following types, each of which has a
 corresponding `opid` unique identifier to tie it to an element on the page details:
 
-| Instruction Type | Description                                             |
-| ---------------- | ------------------------------------------------------- |
-| `click_on_opid`  | Click on the element represented by `opid`              |
-| `focus_by_opid`  | Set focus to the element represented by opid            |
-| `fill_by_opid`   | Fill the element represented by opid with value `value` |
+| Instruction Type | Description                                               |
+| ---------------- | --------------------------------------------------------- |
+| `click_on_opid`  | Click on the element represented by `opid`                |
+| `focus_by_opid`  | Set focus to the element represented by `opid`            |
+| `fill_by_opid`   | Fill the element represented by `opid` with value `value` |
 
 The goal of these instructions is to simulate - to the best of our ability - how the page would
 respond to an actual user entering the value into the HTML element. This is why you will see a
@@ -98,7 +98,7 @@ done by looking at all fields in the Page Details **prior** to the password in t
 either:
 
 - An exact match from the
-  [`UsernameFieldNames`](https://github.com/bitwarden/clients/blob/master/apps/browser/src/autofill/services/autofill-constants.ts)
+  [`UsernameFieldNames`](https://github.com/bitwarden/clients/blob/main/apps/browser/src/autofill/services/autofill-constants.ts)
   list, or
 - The text, email, or telephone field closest to the password field in the DOM
 
@@ -148,7 +148,7 @@ For that field, we then loop through all of the field's attributes from the `Car
 - `data-recurly`
 
 In the
-[`CreditCardAutoFillConstants`](https://github.com/bitwarden/clients/blob/master/apps/browser/src/autofill/services/autofill-constants.ts),
+[`CreditCardAutoFillConstants`](https://github.com/bitwarden/clients/blob/main/apps/browser/src/autofill/services/autofill-constants.ts),
 we define a static list of possible matching values for each of the fields on the Card Cipher type.
 For example, we define a `CardHolderFieldNames` array, which has all of the attribute values that we
 look for to find the likely "Cardholder Name" field in the DOM - and thus the field we want to fill
@@ -196,7 +196,7 @@ array. For that field, we then loop through all of the field's attributes from t
 - `data-recurly`
 
 In the
-[`IdentityAutoFillConstants`](https://github.com/bitwarden/clients/blob/master/apps/browser/src/autofill/services/autofill-constants.ts),
+[`IdentityAutoFillConstants`](https://github.com/bitwarden/clients/blob/main/apps/browser/src/autofill/services/autofill-constants.ts),
 we define a static list of possible matching values for each of the fields on the Identity Cipher
 type. For example, we define a `FirstnameFieldNames` array, which has all of the attribute values
 that we look for to find the likely "First Name" field in the DOM - and thus the field we want to
@@ -213,5 +213,8 @@ If we are able to find matching fields, we add instructions to the fill script f
 ## Performing the Fill
 
 When the script has been generated, the `AutoFillService` issues a `fillForm` command. The
-`autofill.js` content script is listening for that command and performs the action of filling in the
-content on the page based on the instructions in the script.
+`autofill-init.ts` content script is listening for that command and performs the action of filling
+in the content on the page based on the instructions in the script. The logic that fills this
+content is structured within the
+[`InsertAutofillContentService`](https://github.com/bitwarden/clients/blob/main/apps/browser/src/autofill/services/insert-autofill-content.service.ts)
+class.

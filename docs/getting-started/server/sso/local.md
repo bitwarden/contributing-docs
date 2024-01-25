@@ -47,7 +47,25 @@ This uses
 
     :::
 
-7.  Make a copy of the provided `authsources.php.example` file, which contains the configuration for
+7.  (Optional) You may generate a certificate to sign SSO requests. You can do this with a script
+    made for your OS of choice.
+
+    ```bash
+    # Mac
+    ./create_certificates_mac.sh
+
+    # Windows
+    .\create_certificates_windows.ps1
+
+    # Linux
+    ./create_certificates_linux.sh
+    ```
+
+    Paste the thumbprint, for example `0BE8A0072214AB37C6928968752F698EEC3A68B5`, into your
+    `secrets.json` file under `globalSettings` > `identityServer` > `certificateThumbprint`. Update
+    your secrets as [shown here](../guide.md#configure-user-secrets).
+
+8.  Make a copy of the provided `authsources.php.example` file, which contains the configuration for
     your IdP users.
 
     ```bash
@@ -59,15 +77,16 @@ This uses
     [here](https://github.com/kenchan0130/docker-simplesamlphp#advanced-usage) for more information
     about customizing this file.
 
-8.  Start the docker container:
+9.  Start the docker container:
 
     ```bash
     docker-compose --profile idp up -d
     ```
 
-9.  You can test your user configuration by navigating to <http://localhost:8090/simplesaml>, then
-    Authentication → test configured authentication sources → `example-userpass`. You should be able
-    to login with the users you’ve configured.
+10. You can test your user configuration by navigating to
+    [http://localhost:8090/simplesaml](http://localhost:8090/simplesaml), then Authentication → test
+    configured authentication sources → `example-userpass`. You should be able to login with the
+    users you’ve configured.
 
 ## Configure Bitwarden
 
@@ -99,8 +118,8 @@ however any currently authenticated users will have to log out for changes to th
 effect.
 
 To log out as a user, navigate to
-<http://localhost:8090/simplesaml/module.php/core/authenticate.php?as=example-userpass> and click
-Logout. Alternatively, you can use a private browsing session.
+[http://localhost:8090/simplesaml/module.php/core/authenticate.php?as=example-userpass](http://localhost:8090/simplesaml/module.php/core/authenticate.php?as=example-userpass)
+and click Logout. Alternatively, you can use a private browsing session.
 
 ### SAML configuration
 

@@ -41,7 +41,7 @@ git fetch upstream
 ## Branch
 
 Each new feature or bug fix should be developed on a separate branch. Branches allow you to work on
-multiple features concurrently. In most cases you should branch from `master`. However, if you are
+multiple features concurrently. In most cases you should branch from `main`. However, if you are
 working with other contributors we typically branch off a long-lived feature branch. Long-lived
 feature branches allow us to break up a single feature into multiple PRs, which can be reviewed
 individually but tested and released together.
@@ -49,7 +49,7 @@ individually but tested and released together.
 <community>
 
 As a community contributor you can use the following command to branch directly from the _upstream_
-master branch.
+`main` branch.
 
 ```bash
 git checkout -b feature/example
@@ -59,11 +59,11 @@ git checkout -b feature/example
 
 <bitwarden>
 
-As a Bitwarden contributor you should branch of `origin/master`, this ensures that the branch is
-always based of the latest upstream `master` even if the local `master` is out of date.
+As a Bitwarden contributor you should branch of `origin/main`, this ensures that the branch is
+always based of the latest upstream `main` even if the local `main` is out of date.
 
 ```bash
-git checkout -b <team>/<issue-number>/<brief-description> -t origin/master
+git checkout -b <team>/<issue-number>/<brief-description> -t origin/main
 ```
 
 Our branching strategy is described in detail [here](branching.md).

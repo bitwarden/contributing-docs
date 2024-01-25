@@ -7,6 +7,10 @@
 # Leads for all reviews of documentation.
 * @bitwarden/tech-leads
 
+# Unowned files
+package.json
+package-lock.json
+
 # DevOps for Actions and other workflow changes.
 .github/workflows @bitwarden/dept-devops
 
