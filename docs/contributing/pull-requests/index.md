@@ -160,7 +160,7 @@ When a PR author opens a PR for review, they should have the expectation that:
   - Provide a review,
   - Inform the author when a review will be provided, or
   - Ask the author to split the work into a
-    [smaller PR](./branching.md/#structuring-branches-to-support-incremental-work) for review
+    [smaller PR](./branching.md#structuring-branches-to-support-incremental-work) for review
 
 :::tip Notifications
 
