@@ -1,4 +1,5 @@
 ---
+sidebar_position: 1
 sidebar_custom_props:
   access: bitwarden
 ---
@@ -18,7 +19,7 @@ In order to link the work on a branch to our Jira issues, the branch name should
 parts, separated by a slash:
 
 - The team name or abbreviation (e.g. `vault`), and
-- The Jira issue tag (e.g. `pm-1234`)
+- The Jira issue key (e.g. `pm-1234`)
 - A short description of the work being done (e.g. `update-csp-hashes`)
 
 In this example, the full branch name would be `vault/pm-1234/update-csp-hashes`.
@@ -30,144 +31,111 @@ In this example, the full branch name would be `vault/pm-1234/update-csp-hashes`
   characters.
 - Team names must be consistent. Either always abbreviate or do not abbreviate.
 
+:::tip Multiple branches for a single Story?
+
+If you are breaking down your changes incrementally, you may find that you need multiple branches to
+implement a single story. In that case, you can either reference the appropriate subtask key in your
+branch name or include the story key for all branches, depending on whether you are using
+subtask-level work breakdown.
+
+:::
+
 ### Branches for multiple Jira issues
 
 If the branch will contain work from multiple Jira issues (most likely due to it being a
-[Long-Lived Feature Branch](#long-lived-feature-branch)), the name should be a descriptive name of
+[long-lived feature branch](#long-lived-feature-branch)), the name should be a descriptive name of
 the feature, separated by dashes (e.g. `my-long-lived-feature`). Consider brevity when possible, as
-our QA team will need to use this branch name when performing QA testing on the feature.
+our QA team may need to use this branch name when performing QA testing on the feature.
 
 ## Branching for Development
 
-The branching strategy for development depends upon whether the work will be managed using what we
-have termed a "Long-Lived Feature Branch" or not.
-
-:::note
-
-We use the term "feature" in this documentation to refer to any change to the codebase, whether it
-be for a new set of functionality, a bug fix, or refactoring existing code. It is not meant to
-exclude types of development that are not "features" per se.
-
-:::
-
 ### Which Branching Model to Choose?
 
-The choice of development branching model depends on how you plan to handle the **entire testable,
-releasable feature**. As such, it should be planned in advance when beginning work on a new set of
-Jira stories or tasks, and it requires coordination across the entire team - Development, QA, and
-Product.
+The main point of consideration in choosing a branching model is whether the changes can be
+introduced directly into `main` with every pull request or whether they need to be merged into a
+long-lived feature branch for QA. As such, it should be planned in advance when beginning work on a
+new set of Jira stories or tasks, and it requires coordination across the entire team - Development,
+QA, and Product.
 
-Choose a **Long-Lived Feature Branch** if the feature will:
+Choose **branching and merging into `main`** if the feature will:
 
-- Require multiple Pull Requests to produce a testable, releasable change, and
+- Require a single pull request to produce a testable, releasable change, with QA taking place on
+  the PR branch, or
+- Allow multiple incremental pull requests **with the changes encapsulated behind a feature flag**,
+  with QA taking place in `main`.
+
+Choose **branching and merging into a long-lived feature branch** if the feature will:
+
+- Require multiple pull requests to produce a testable, releasable change, **and**
 - It is not possible to put the changes behind a feature flag
-
-Choose a **Short-Lived Feature Branch** if the feature will:
-
-- Require a single Pull Request to produce a testable, releasable change, or
-- It is possible to put the changes behind a feature flag while multiple PRs are in flight.
 
 :::tip Still Unsure?
 
-If in doubt, lean toward creating shorter-lived feature branches directly off of `main` for each
-developer’s work, as there is overhead built in to the Long-Lived Feature Branch.
+If in doubt, lean toward creating branches directly off of `main` for incremental body of work, as
+there is overhead built in to the long-lived feature branch.
 
 :::
 
-### Long-Lived Feature Branch
+### Structuring branches to support incremental work
 
-A Long-Lived Feature Branch is necessary when the body of work to produce the smallest independent
-testable, releasable change is too large to be encapsulated in a single PR, or it requires the
-contribution of multiple developers.
+Regardless of whether we are merging into `main` or a long-lived feature branch, it is important
+that each engineer structure their branches to support small, reviewable pull requests. When taking
+on a new story or task, and throughout the development process, the engineer should consider how the
+work could be broken apart and incrementally introduced for review and merge.
 
-The Long-Lived Feature Branch should **only** consist of:
+It can be helpful to think of this exercise in terms of two dimensions:
 
-- PRs for approved changes from individual contributions to the feature, and
-- Merge commits from `main`
+#### "Horizontal" separation
 
-Any other commits directly to the Long-Lived Feature Branch will complicate the eventual review of
-the final PR into `main` and should be avoided.
+- The scope of the delivered work remains the same, but we can separate the delivery of the work
+  into smaller PRs.
+- We can think of our branches as building blocks that are part of the final, fully constructed
+  feature, with an eye toward making the resulting pull requests concise, well-defined and easily
+  reviewable.
+- **It is accepted and expected that incomplete code will be merged** -- either to `main` behind a
+  feature flag or into the long-lived feature branch.
+- Examples of this include:
+  - Introducing supporting services prior to UI development.
+  - Introducing changes that require feedback from other teams separately.
 
-#### Development
+#### "Vertical" separation
 
-To begin development on a feature with a Long-Lived Feature branch, one contributor should create
-the Long-Lived Feature Branch for the piece of functionality and create a **draft** PR from that
-branch into `main`. This name should include the Jira Epic name if applicable.
+- The scope of the delivered work can be refined and broken out into multiple different Stories or
+  Tasks.
+- Examples of this include:
+  - Introducing changes to one component or page independently others.
+  - Introducing changes on a client-by-client basis.
 
-Each developer should then branch off of that feature branch, creating an "Issue Branch" named with
-the initiating Jira issue, as described in
-[branches for a specific Jira issue](#branches-for-a-specific-jira-issue). We call this an Issue
-Branch because Jira refers to stories and tasks as issues and to differentiate from the Long-Lived
-Feature Branch above.
+### Additional considerations for long-lived feature branches
 
 :::note
 
-It is important to note that we have decided in this scenario that each of these Issue Branches
-cannot (or will not) be independently tested or released. We have introduced an intermediate Feature
-Branch to collect all of these related changes to allow testing and release as a whole.
+This section ony applies if a long-lived feature branch is necessary, which we discourage.
 
 :::
 
-As each developer finishes their work, they should open a PR into the Long-Lived Feature Branch. It
-is imperative that every change to the Long-Lived Feature Branch have an approved PR, as otherwise
-all of these individual commits will need to be reviewed prior to the final merge to `main`. The
-developer should tag the appropriate development group to review the PR.
+A long-lived feature branch is necessary when the body of work to produce the smallest independent
+testable, releasable change is too large to be encapsulated in a single PR, or it requires the
+contribution of multiple developers, **and it cannot be encapsulated behind a feature flag**.
 
-When a developer approves the PR, the PR should be completed, merging that piece of the overall
-change into the Long-Lived Feature Branch.
+The long-lived feature branch is merely a collection point for work that cannot be merged to `main`
+independently. The developer should still use
+[branches for small, incremental changes](#structuring-branches-to-support-incremental-work), but
+they will target the long-lived feature branch instead of `main`.
 
-When all Issue Branches are merged, the `needs-qa` label should be applied to the Long-Lived Feature
-Branch.
+As a result, the long-lived feature branch should **only** consist of:
 
-#### Syncing the Long-Lived Feature Branch
+- PRs for approved changes, and
+- Merge commits from `main`.
 
-We typically denote one person as being responsible for keeping the Long-Lived Feature Branch up to
-date. In most cases this will be the Tech Lead of the team but can be anyone. This person is
-responsible for keeping the feature branch reasonably up to date with `main`, preparing it for merge
-and more.
+Any other commits directly to the long-lived feature branch will complicate the eventual review of
+the final PR into `main` and should be avoided.
 
-Due to how GitHub handles reviews, this person cannot also approve the final PR for the Long-Lived
-Feature Branch. The reviewer can be anyone in the team. However, since the work this branch is
-typically larger, some seniority with the codebase can be beneficial.
-
-#### QA
-
-The QA team tests on the Long-Lived Feature Branch (note that QA comes **after** the PR is
-completed). This is because the premise of this flow is that the individual parts of the feature
-cannot be tested individually.
-
-If QA finds a defect, it should be fixed in another Issue Branch off of the Long-Lived Feature
-Branch, with another reviewed PR into the Long-Lived Feature Branch to address the problem.
-
-#### Final Review
-
-Since each Pull Request has already been reviewed before being merged into the Long-Lived Feature
-Branch, the feature branch review is more of a sanity check. The reviewer should ensure the
-following:
-
-- The feature branch is ready to be merged into `main`.
-  - Ensure the work has been QA tested, including writing QA Notes in Jira should they be needed, or
-  - Verify the feature is behind a feature flag, and the crossover boundaries go through testing.
-- Review any non-reviewed commits made directly on the branch. These can be either feature work or
-  merge commits.
-
-:::warning
-
-Since feature branches do not have the same protections as `main`, it's technically possible to
-commit directly to the branch or merge a pull request without a up-to-date review. However this
-should be discouraged, and should be avoided whenever possible, the only exception being merge
-commits.
-
-:::
-
-When all development and functional testing is complete on the Feature Branch, the original PR into
-`main` should be moved out of Draft status and tagged with the appropriate development group for
-review.
-
+The review of a long-lived feature branch should simply be a verification of each PR that has been
 The final review can be performed using GitHub's UI, by opening the Pull Request and clicking on the
 `Commits` tab. Each commit can then be checked individually.
 
-- Verify the commit has an existing review by following the Pull Request link and verifying the
+- Verify the commit has an existing review by following the pull request link and verifying the
   commit SHA hash matches. Look for `Author merged commit {hash} into branch`.
 - If not perform a regular code review of the commit.
 
@@ -175,51 +143,6 @@ Merge commits should be reviewed as well, the GitHub UI will automatically simpl
 and only show the changes made. If reviewing from the command line or through a different tool,
 please use the command `git show <hash>`. For some background and more information please read
 [How to review a merge commit](https://haacked.com/archive/2014/02/21/reviewing-merge-commits/).
-
-### Short-Lived Feature Branch
-
-A Short-Lived Feature Branch is a good fit for bodies of work that:
-
-- Can be developed by a single contributor
-- Can be reviewed in a single Pull Request
-- Can be tested independently, and
-- Can be released independently
-
-This will often be the case for small pieces of new functionality and for most bug fixes.
-
-#### Development
-
-The developer should create a branch named with the initiating Jira issue (e.g. `PM-1234`) and
-create a **draft** PR from that branch into `main`.
-
-:::note
-
-The branch name should be as short as possible, preferably just the issue name. This makes it easier
-for the QA team to switch environments to individual branches, as they have to type in the branch
-name multiple times when doing so. This is especially important for Short-Lived Feature Branches, in
-which testing may be much briefer.
-
-:::
-
-During development, the `main` branch should be regularly merged into the branch to avoid conflicts.
-
-When development is complete, the developer should prepare the PR for review:
-
-- Remove the Draft status from the PR
-- Add the `needs-qa` label to the PR
-- Tag the appropriate development group for review and `@dept-design` if design approval is required
-
-When a team member approves the PR, it should **remain open** to be tested. This is critical, as
-completing the PR at this point would introduce un-tested changes into `main`.
-
-#### QA
-
-The QA team should test on the Short-Lived Feature Branch. If any defects are found, they should be
-addressed with commits directly to the Short-Lived Feature Branch, triggering a re-review from the
-developer's team prior to re-introducing the new changes to QA.
-
-After QA has tested the feature and the developer has addressed any defects, the PR owner should
-complete the PR and merge the changes into the `main` branch.
 
 ## Branching for Release
 
