@@ -24,10 +24,10 @@ storage framework.
 
 :::warning
 
-Once you have created the definitions you need to take extreme caution when changing any part of
-the namespace. If you change the name of a `StateDefinition` pointing at `"disk"` without also
-migrating data from the old name to the new name you will lose data. Data pointing at `"memory"` can
-have its name changed.
+Once you have created the definitions you need to take extreme caution when changing any part of the
+namespace. If you change the name of a `StateDefinition` pointing at `"disk"` without also migrating
+data from the old name to the new name you will lose data. Data pointing at `"memory"` can have its
+name changed.
 
 :::
 
@@ -36,9 +36,9 @@ have its name changed.
 `StateDefinition` is a simple API but a very core part of making the State Provider Framework work
 smoothly. It defines a storage location and top-level namespace for storage. Teams will interact
 with it only in a single `state-definitions.ts` file in the
-[`clients`](https://github.com/bitwarden/clients) repository. This file is located under Platform team
-code ownership but teams are expected to create edits to it. A team will edit this file to include a
-line such as:
+[`clients`](https://github.com/bitwarden/clients) repository. This file is located under Platform
+team code ownership but teams are expected to create edits to it. A team will edit this file to
+include a line such as:
 
 ```typescript
 export const MY_DOMAIN_DISK = new StateDefinition("myDomain", "disk");
@@ -52,16 +52,16 @@ this file and will be looking to make sure that there are no duplicate entries c
 state name and state location. Teams _can_ have the same state name used for both `"disk"` and
 `"memory"` locations. Tests are included to ensure this uniqueness and core naming guidelines so you
 can ensure a review for a new `StateDefinition` entry can be done promptly and with very few
-surprises.
-
-_TODO: Make tests_
+surprises. The tests can be seen
+[here](https://github.com/bitwarden/clients/blob/main/libs/common/src/platform/state/state-definitions.spec.ts)
+([permalink](https://github.com/bitwarden/clients/blob/daef7572bf19bc34be6cc661ff02c64692d3ad3e/libs/common/src/platform/state/state-definitions.spec.ts)).
 
 :::note
 
 Secure storage is not currently supported as a storage location in the State Provider Framework. For
-now, don't migrate data that is stored in secure storage but please contact the Platform team when you have
-data you wanted to migrate so we can prioritize a long-term solution. If you need new data in secure
-storage, use `StateService` for now.
+now, don't migrate data that is stored in secure storage but please contact the Platform team when
+you have data you wanted to migrate so we can prioritize a long-term solution. If you need new data
+in secure storage, use `StateService` for now.
 
 :::
 
@@ -278,13 +278,12 @@ export class MoveToStateProvider extends Migrator<10, 11> {
 gets migrated off of that account object the response from `getAccounts`, which returns a record
 where the key will be a user's ID and the value being the legacy account object.
 
-_TODO: Implement method just for user ids_
-
 :::
 
 ### Example PRs
 
-_TODO: Include PR's_
+- [`EnvironmentService`](https://github.com/bitwarden/clients/pull/7621)
+- [Org Keys](https://github.com/bitwarden/clients/pull/7521)
 
 ## Testing
 
@@ -293,7 +292,9 @@ little easier there are a suite of helpful "fakes" that can be used instead of t
 Now instead of calling `mock<StateProvider>()` into your service you can instead use
 `new FakeStateProvider()`.
 
-_TODO: Refine user story_
+`FakeStateProvider` exposes the specific provider's fakes as properties on itself. Each of those
+specific providers gives a method `getFake` that allows you to get the fake version of state that
+you can control and `expect`.
 
 ## Advanced usage
 
