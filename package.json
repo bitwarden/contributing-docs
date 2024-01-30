@@ -26,7 +26,7 @@
     "typecheck": "tsc",
     "prettier": "prettier --write .",
     "lint": "prettier --check .",
-    "prepare": "husky install",
+    "prepare": "husky",
     "spellcheck": "cspell lint \"**/*.md{x,}\""
   },
   "dependencies": {
@@ -44,9 +44,9 @@
     "@docusaurus/tsconfig": "3.1.1",
     "@types/react": "18.2.48",
     "cspell": "8.3.2",
-    "husky": "8.0.3",
+    "husky": "9.0.7",
     "lint-staged": "15.2.0",
-    "prettier": "3.2.2",
+    "prettier": "3.2.4",
     "typescript": "5.3.3"
   },
   "browserslist": {
