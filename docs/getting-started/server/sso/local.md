@@ -85,7 +85,7 @@ This uses
 
 10. You can test your user configuration by navigating to
     [http://localhost:8090/simplesaml](http://localhost:8090/simplesaml), then Authentication → test
-    configured authentication sources → `example-userpass`. You should be able to login with the
+    configured authentication sources → `example-userpass`. You should be able to log in with the
     users you’ve configured.
 
 ## Configure Bitwarden
