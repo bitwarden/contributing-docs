@@ -13,7 +13,7 @@ This uses
     - API
     - SSO (located at `server/bitwarden_license/src/Sso`)
 
-2.  Local web client running
+2.  Local web client running.
 
 ## Configure IdP
 
