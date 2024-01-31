@@ -17,14 +17,14 @@ This uses
 
 ## Configure IdP
 
-1.  Open your local web vault and navigate to your organization → Settings → Single Sign-On
+1.  Open your local web client and navigate to your organization → Settings → Single Sign-On
 
 2.  Tick the "Allow SSO authentication" box
 
 3.  Come up with and enter an SSO Identifier
 
 4.  Select "SAML 2.0" as the SSO type. Don't save or exit this page yet, you'll need to come back to
-    it later
+    it later.
 
 5.  Open a new terminal and navigate to the `dev` folder in your server repository, e.g.
 
@@ -32,12 +32,12 @@ This uses
     cd ~/Projects/server/dev
     ```
 
-6.  Open your `.env` file and set the following environment variables, based on the "SP Entity ID"
-    and "Assertion Consumer Service (ACS) URL" values on the web vault SSO configuration page:
+6.  Open your `.env` file and set the following environment variables using the "SP Entity ID" and
+    "Assertion Consumer Service (ACS) URL" values from the SSO configuration page opened in step #2:
 
     ```bash
-    IDP_SP_ENTITY_ID=http://localhost:51822/saml2
-    IDP_SP_ACS_URL=http://localhost:51822/saml2/yourOrgIdHere/Acs
+    IDP_SP_ENTITY_ID={SP Entity ID}
+    IDP_SP_ACS_URL={ACS URL}
     ```
 
     :::note
