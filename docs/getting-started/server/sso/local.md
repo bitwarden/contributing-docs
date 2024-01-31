@@ -17,11 +17,11 @@ This uses
 
 ## Configure IdP
 
-1.  Open your local web client and navigate to your organization → Settings → Single Sign-On
+1.  Open your local web client and navigate to your organization → Settings → Single Sign-On.
 
-2.  Tick the "Allow SSO authentication" box
+2.  Tick the "Allow SSO authentication" box.
 
-3.  Come up with and enter an SSO Identifier
+3.  Come up with and enter an SSO Identifier.
 
 4.  Select "SAML 2.0" as the SSO type. Don't save or exit this page yet, you'll need to come back to
     it later.
@@ -90,7 +90,7 @@ This uses
 
 ## Configure Bitwarden
 
-1.  Go back to your window with the SSO configuration page open
+1.  Go back to your window with the SSO configuration page open.
 2.  Complete the following values in the SAML Identity Provider Configuration section:
 
     1.  Entity ID:
@@ -103,7 +103,7 @@ This uses
         ```
     3.  X509 Public Certificate: get this by opening a new tab and navigating to the Entity ID URL
         above. It will open (or download) an XML file. Copy and paste the value _between_ the
-        `<ds:X509Certificate>` tags (it should look like a B64 encoded string)
+        `<ds:X509Certificate>` tags (it should look like a B64 encoded string).
 
 3.  Save your SSO configuration
 
