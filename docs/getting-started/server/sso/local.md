@@ -33,7 +33,8 @@ This uses
     ```
 
 6.  Open your `.env` file and set the following environment variables using the "SP Entity ID" and
-    "Assertion Consumer Service (ACS) URL" values from the SSO configuration page opened in step #2:
+    "Assertion Consumer Service (ACS) URL" values from the SSO configuration page opened in step #4
+    above:
 
     ```bash
     IDP_SP_ENTITY_ID={SP Entity ID}
