@@ -1,5 +1,6 @@
 # Bitwarden as a Passkey Provider (PP)
 
-Bitwarden can also act as a Passkey Provider (PP). This means that you can use Bitwarden to generate
-and store passkeys for logging into other applications. These passkey can be used together with
-organizations just like regular passwords.
+Bitwarden can act as a Passkey Provider (PP) to generate and store passkeys for other applications.
+These can stored in either your personal vault or in an organization vault, just like regular
+passwords. This means Bitwarden supports sharing passkeys with other users in your organization by
+default.
