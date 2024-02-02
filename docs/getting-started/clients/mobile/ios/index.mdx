@@ -260,7 +260,10 @@ Next, we need to configure your Visual Studio environment for development.
 ## Building
 
 There are currently a few problems on Visual Studio for Mac for building correctly the projects, so
-if you encounter some errors build using the CLI (previously removing bin/obj folders): For device:
+if you encounter some errors, build using the CLI being into the _src/App_ folder (previously
+removing bin/obj folders):
+
+For device:
 
 ```
 dotnet build -f net8.0-ios -c Debug -r ios-arm64
@@ -272,9 +275,63 @@ For simulator:
 dotnet build -f net8.0-ios -c Debug -r iossimulator-x64
 ```
 
-If you find any errors regarding argon2Id library when building for `iossimulator-x64` then try to
-build for device `ios-arm64` as there might be some issues regarding arch differences and
-requirements for the argon2Id library to be used in `iossimulator-x64`.
+If you find any errors regarding argon2Id library when building for simulator, please be sure that
+you are building for runtime identifier `iossimulator-x64` as currently the library doesn't support
+`iossimulator-arm64`.
+
+:::tip Troubleshooting common mistake
+
+If you find the next error:
+
+> `error NETSDK1134`: Building a solution with a specific RuntimeIdentifier is not supported. If you
+> would like to publish for a single RID, specify the RID at the individual project level instead
+
+You almost surely are trying to build the app from the root folder. Instead go to _src/App_ and try
+building again.
+
+:::
+
+### Argon2Id library loading
+
+The Argon2Id library (`libargon2.a`) is loaded using `MTouchExtraArgs` in almost all csproj of the
+solution. In order to make this simpler a property was added into **Directory.Build.props** called
+`Argon2IdLoadMtouchExtraArgs` which has the code to fill in the extra args parameter. Each csproj is
+configured with this property so this is only added on the correct runtime identifiers and we can
+build the app successfully on each case.
+
+### Ignoring extensions / watchOS app
+
+Sometimes we need to quickly build the app or maybe some configuration on the iOS extensions or the
+watchOS app gets in the way. So in order to have a fast way to only care about the main app two
+properties were added to the **Directory.Build.Props** to help with this:
+
+- `IncludeBitwardeniOSExtensions`: If `True` then all the iOS extensions will be included on the
+  building of the main app, otherwise they will be skipped.
+- `IncludeBitwardenWatchOSApp`: If `True` then the watchOS app will be included on the building of
+  the main app, otherwise it will be skipped.
+
+:::warning Shared code
+
+Toggling these off can provide a faster developer experience which is really useful on a lot of
+scenarios, but always bear in mind that a lot of things are shared between the main app and the
+extensions so before pushing your work, test again with everything enabled just in case.
+
+:::
+
+### Release mode locally
+
+There are some issues that require us to build the app on **Release** configuration but locally
+without going through the CI/CD pipeline. The problem is that we don't have the code signing details
+for Distribution locally. To overcome this we can use the same `CodesignProvision` and `CodesignKey`
+we use for **Debug** but on the **Release** config. The thing is that it's a bit cumbersome to
+change that on every csproj so two properties were added to the **Directory.Build.Props** to help
+with this:
+
+- `ReleaseCodesignProvision`: `CodesignProvision` for Release config on all projects
+- `ReleaseCodesignKey`: `CodesignKey` for Release config on all projects
+
+By replacing their values, all projects will have their values applied so it's easier to build the
+app in **Release** mode locally.
 
 ## Debugging
 
