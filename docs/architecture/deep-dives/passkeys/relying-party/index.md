@@ -1,3 +1,7 @@
+---
+title: Relying Party
+---
+
 # Bitwarden as a Relying Party (RP)
 
 Bitwarden can act as a Relying Party (RP) for passkeys. This means that you can log in to Bitwarden
