@@ -1,3 +1,7 @@
+---
+title: Browser extension
+---
+
 # Browser extension provider
 
 Bitwarden supports passkeys in all browser by implementing the WebAuthn API. The browser does not
