@@ -37,7 +37,7 @@ The interaction between these two components can vary depending on the use case:
   - Mediated by the platform
   - Directly between the browser and the authenticator using e.g. USB/HID or BLE protocols.
 
-### Generic Diagram
+### Diagram
 
 The following diagram shows a generic overview of the FIDO2 architecture. The diagram is a
 high-level overview and does not include any specific details about how Bitwarden implements FIDO2.

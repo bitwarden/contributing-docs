@@ -26,10 +26,9 @@ context and does therefore not need to support the full CTAP2 protocol.
 
 :::info
 
-`FIDO2 Client` is analogous to `WebAuthn Client` in the
-[FIDO2 architecture](../architecture#overview-diagram), but is named differently due to naming
-conflicts with the RP-side of the codebase. See [Naming Convention](../naming-convention) for more
-information.
+`FIDO2 Client` is analogous to `WebAuthn Client` in the [FIDO2 Overview](../../overview#diagram),
+but is named differently due to naming conflicts with the RP-side of the codebase. See
+[Naming Convention](../../naming-convention) for more information.
 
 :::
 
