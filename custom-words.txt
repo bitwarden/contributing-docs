@@ -7,6 +7,7 @@ bytemark
 clickjacking
 CODEOWNERS
 CQRS
+CTAP
 dockerized
 Gitter
 hotfix
@@ -60,4 +61,3 @@ Yellowpages
 Yubico
 YubiKey
 YubiKeys
-CTAP
