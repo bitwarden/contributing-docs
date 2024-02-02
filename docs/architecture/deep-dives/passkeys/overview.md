@@ -1,39 +1,51 @@
 ---
-title: Browser extension
+sidebar_position: 1
 ---
 
-# Browser extension provider
+# Overview
 
-Bitwarden supports passkeys in all browser by implementing the WebAuthn API. The browser does not
-need to support WebAuthn natively, the extension will polyfill if necessary, effectively adding
-support for passkeys to any browser.
+This page provides an overview of the FIDO2 standard and its architecture. It is intended to provide
+a generic high-level understanding of FIDO2. For more information on how Bitwarden implements FIDO2,
+see [Implementations](./implementations).
 
-## Compatibility
+## What are passkeys?
 
-There are currently no browser APIs that allow extensions to provide passkeys alongside the
-browser's native implementation. This means that the only way an extension can provide passkeys is
-by completely replacing the native implementation with its own. This is done by injecting a script
-into the page that replaces the native implementation with the extension's implementation. In
-practice this is done by reassigning the `navigator.credentials.create` and
-`navigator.credentials.get` methods.
+Passkeys are another name given to the credentials defined by the two specifications:
 
-To avoid implementing support for the entire FIDO2 ecosystem (hardware keys, CaBLE, etc.), the
-extension retains the ability to trigger the native implementation (usually referred to as a
-"fallback"), if the user chooses to not proceed with Bitwarden. In practice this is done by storing
-references to the native functions in separate variables before reassigning.
+- World Wide Web Consortium’s (W3C) Web Authentication (WebAuthn)
+- FIDO Alliance’s Client-to-Authenticator Protocol (CTAP)
+
+which together make up what is usually referred to as the FIDO2 standard.
+
+At the core FIDO2 is based on public-key cryptography, where each passkey contains a unique
+public/private key-pair. The public key is given to an application during the initial credential
+creation ceremony, while the private key is never shared. The private key is then used in all
+subsequent requests to sign challenges from the application to prove ownership of the key.
 
 ## Architecture
 
-Bitwarden implements a simplified version of the FIDO2 architecture based solely on the WebAuthn API
-specification. This is because the embedded `FIDO2 Authenticator` will never be used in a standalone
-context and does therefore not need to support the full CTAP2 protocol.
+FIDO2 can be broken down into two main components: WebAuthn and CTAP. WebAuthn is a web standard
+that allows for the creation and use of passkeys through a well defined JavaScript interface, and
+CTAP is a protocol for communicating with external authenticators, such as hardware security keys
+(e.g. YubiKeys).
+
+The interaction between these two components can vary depending on the use case:
+
+- When using platform credentials, the interaction is always between the browser and the platform
+  authenticator (i.e. the operating system) using native APIs.
+- When using roaming authenticators, the interaction can be either:
+  - Mediated by the platform
+  - Directly between the browser and the authenticator using e.g. USB/HID or BLE protocols.
+
+### Generic Diagram
+
+The following diagram shows a generic overview of the FIDO2 architecture. The diagram is a
+high-level overview and does not include any specific details about how Bitwarden implements FIDO2.
 
 :::info
 
-`FIDO2 Client` is analogous to `WebAuthn Client` in the
-[FIDO2 architecture](../architecture#overview-diagram), but is named differently due to naming
-conflicts with the RP-side of the codebase. See [Naming Convention](../naming-convention) for more
-information.
+The `JavaScript Application` is also part of the `Relaying Party`, even if the diagram does not
+reflect this.
 
 :::
 
@@ -42,44 +54,53 @@ information.
 skinparam BackgroundColor transparent
 skinparam componentStyle rectangle
 
-title Browser extension FIDO2 architecture overview
+title FIDO2 Overview
 
-component "Browser" {
-    component "Web page" {
-        component "JavaScript Application"
-        component "Page Script" <<Injected>> {
-            component "WebAuthn API"
-            component "Messenger" as pageScriptMessenger
+component "Relying Party" {
+    component "Server Application" {
+        component "HTTPS API"
+        component "App"
+        component "FIDO2 Library"
 
-            [WebAuthn API] -> [pageScriptMessenger]
-        }
+        database "Database"
 
-        component "Content Script" {
-            component "Messenger" as contentScriptMessenger
-        }
 
-        component "User Agent WebAuthn API" <<Native>>
-
-        [JavaScript Application] -> [WebAuthn API]
-        [WebAuthn API] --> [User Agent WebAuthn API]
+        [HTTPS API] --> [App]
+        [App] --> [FIDO2 Library]
+        [App] -> [Database]
     }
-
-    component "Extension" {
-        component "Background Script"
-        component "FIDO2 Client"
-        component "FIDO2 Authenticator"
-        component "FIDO2 User Interface"
-        database "Vault"
-
-        [FIDO2 Client] -> [FIDO2 Authenticator]
-        [FIDO2 Authenticator] -> [Vault]
-        [FIDO2 Authenticator] --> [FIDO2 User Interface]
-    }
-
-    [pageScriptMessenger] <--> [contentScriptMessenger]
-    [contentScriptMessenger] --> [Background Script]
-    [Background Script] -> [FIDO2 Client]
 }
+
+component "Client platform" {
+    component "Browser" {
+        component "JavaScript Application"
+
+        component "User Agent" {
+            component "WebAuthn API"
+            component "WebAuthn Client"
+        }
+
+        [WebAuthn API] - [WebAuthn Client]
+        [JavaScript Application] --> [WebAuthn API]
+    }
+
+    component "Operating System" {
+        component "Platform Auth API"
+        component "Platform Auth Client"
+        component "Platform Authenticator" <<$chip{scale=0.1}>>
+
+        [Platform Auth API] - [Platform Auth Client]
+        [Platform Auth Client] --> [Platform Authenticator]
+    }
+}
+
+component "Roaming Authenticator" <<$usb{scale=0.1}>>
+
+[WebAuthn Client] --> [Roaming Authenticator] : CTAP
+[WebAuthn Client] --> [Platform Auth API]
+[Platform Auth Client] --> [Roaming Authenticator] : CTAP
+
+[JavaScript Application] -> [HTTPS API]
 
 sprite $chip <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 426 550"><path d="M416 176.619c5.523 0 10-4.477 10-10s-4.477-10-10-10h-49.152v-26.381H416c5.523 0 10-4.477 10-10s-4.477-10-10-10h-49.152V69.152c0-5.523-4.477-10-10-10h-41.086V10c0-5.523-4.477-10-10-10s-10 4.477-10 10v49.152H269.38V10c0-5.523-4.477-10-10-10s-10 4.477-10 10v49.152H223V10c0-5.523-4.477-10-10-10s-10 4.477-10 10v49.152h-26.381V10c0-5.523-4.477-10-10-10s-10 4.477-10 10v49.152h-26.381V10c0-5.523-4.477-10-10-10s-10 4.477-10 10v49.152H69.152c-5.523 0-10 4.477-10 10v41.086H10c-5.523 0-10 4.477-10 10s4.477 10 10 10h49.152v26.381H10c-5.523 0-10 4.477-10 10s4.477 10 10 10h49.152V203H10c-5.523 0-10 4.477-10 10s4.477 10 10 10h49.152v26.381H10c-5.523 0-10 4.477-10 10s4.477 10 10 10h49.152v26.381H10c-5.523 0-10 4.477-10 10s4.477 10 10 10h49.152v41.086c0 5.523 4.477 10 10 10h41.086V416c0 5.523 4.477 10 10 10s10-4.477 10-10v-49.152h26.381V416c0 5.523 4.477 10 10 10s10-4.477 10-10v-49.152H203V416c0 5.523 4.477 10 10 10s10-4.477 10-10v-49.152h26.38V416c0 5.523 4.477 10 10 10s10-4.477 10-10v-49.152h26.381V416c0 5.523 4.477 10 10 10s10-4.477 10-10v-49.152h41.086c5.523 0 10-4.477 10-10v-41.086H416c5.523 0 10-4.477 10-10s-4.477-10-10-10h-49.152v-26.381H416c5.523 0 10-4.477 10-10s-4.477-10-10-10h-49.152V223H416c5.523 0 10-4.477 10-10s-4.477-10-10-10h-49.152v-26.381H416zM346.848 203h-8.821c-5.523 0-10 4.477-10 10s4.477 10 10 10h8.821v26.381h-8.821c-5.523 0-10 4.477-10 10s4.477 10 10 10h8.821v26.381h-8.821c-5.523 0-10 4.477-10 10s4.477 10 10 10h8.821v31.086h-31.086v-8.821c0-5.523-4.477-10-10-10s-10 4.477-10 10v8.821H269.38v-8.821c0-5.523-4.477-10-10-10s-10 4.477-10 10v8.821H223v-8.821c0-5.523-4.477-10-10-10s-10 4.477-10 10v8.821h-26.381v-8.821c0-5.523-4.477-10-10-10s-10 4.477-10 10v8.821h-26.381v-8.821c0-5.523-4.477-10-10-10s-10 4.477-10 10v8.821H79.152v-31.086h8.821c5.523 0 10-4.477 10-10s-4.477-10-10-10h-8.821v-26.381h8.821c5.523 0 10-4.477 10-10s-4.477-10-10-10h-8.821V223h8.821c5.523 0 10-4.477 10-10s-4.477-10-10-10h-8.821v-26.381h8.821c5.523 0 10-4.477 10-10s-4.477-10-10-10h-8.821v-26.381h8.821c5.523 0 10-4.477 10-10s-4.477-10-10-10h-8.821V79.152h31.086v8.821c0 5.523 4.477 10 10 10s10-4.477 10-10v-8.821h26.381v8.821c0 5.523 4.477 10 10 10s10-4.477 10-10v-8.821H203v8.821c0 5.523 4.477 10 10 10s10-4.477 10-10v-8.821h26.38v8.821c0 5.523 4.477 10 10 10s10-4.477 10-10v-8.821h26.381v8.821c0 5.523 4.477 10 10 10s10-4.477 10-10v-8.821h31.086v31.086h-8.821c-5.523 0-10 4.477-10 10s4.477 10 10 10h8.821v26.381h-8.821c-5.523 0-10 4.477-10 10s4.477 10 10 10h8.821V203z"/><path d="M266.774 149.225H159.225c-5.523 0-10 4.477-10 10v107.55c0 5.523 4.477 10 10 10h107.549c5.523 0 10-4.477 10-10v-107.55c0-5.523-4.477-10-10-10zm-10 107.55h-87.549v-87.55h87.549v87.55z"/></svg>
 

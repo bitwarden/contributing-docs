@@ -1,3 +1,7 @@
+---
+sidebar_position: 6
+---
+
 # Glossary
 
 This page contains some definitions of terms used throughout the passkey documentation. For a more

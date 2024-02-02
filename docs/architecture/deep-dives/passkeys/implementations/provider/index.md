@@ -1,5 +1,6 @@
 ---
 title: Provider
+sidebar_position: 3
 ---
 
 # Bitwarden as a Passkey Provider (PP)

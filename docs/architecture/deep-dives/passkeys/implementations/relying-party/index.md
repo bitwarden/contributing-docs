@@ -1,5 +1,6 @@
 ---
 title: Relying Party
+sidebar_position: 4
 ---
 
 # Bitwarden as a Relying Party (RP)
