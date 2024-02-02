@@ -38,9 +38,9 @@ For these requests, the server requires a captcha if **any** of the following ar
 
 - The CloudFlare `x-Cf-Is-Bot` header is present on the request
 - The `ForceCaptchaRequired` setting is enabled
-- The failed login count is greater than the `MaximumFailedLoginAttempts` setting
-- The request is for a cloud-hosted user whose email is not verified and has not registered within
-  the last 24 hours
+- The failed login count is greater than the `MaximumFailedLoginAttempts` setting, or
+- The instance is cloud-hosted, the account email is not verified **and** the user registered at
+  least 24 hours ago
 
 The CLI performs the same captcha checks on the `bw login` command, but instead of prompting for a
 captcha it accepts the API client secret. The server handles this API client secret as a “captcha
