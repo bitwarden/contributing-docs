@@ -1,4 +1,4 @@
-# Passkeys
+# FIDO2 and Passkeys
 
 Bitwarden uses passkeys to provide users with a secure and convenient alternative to passwords. In
 this context Bitwarden can act as both a Relying Party (RP) and a Passkey Provider (PP). In other
