@@ -19,9 +19,10 @@ The interaction between these two components can vary depending on the use case:
 
 ## Overview diagram
 
-:::note
+:::info
 
-The JavaScript Application is also part of the RP, even if the diagram does not reflect this.
+The `JavaScript Application` is also part of the `Relaying Party`, even if the diagram does not
+reflect this.
 
 :::
 
