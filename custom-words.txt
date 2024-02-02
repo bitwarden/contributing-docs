@@ -59,4 +59,5 @@ xmldoc
 Yellowpages
 Yubico
 YubiKey
+YubiKeys
 CTAP
