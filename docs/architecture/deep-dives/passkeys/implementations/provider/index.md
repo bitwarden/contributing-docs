@@ -3,9 +3,7 @@ title: Provider
 sidebar_position: 3
 ---
 
-# Bitwarden as a Passkey Provider (PP)
+# Bitwarden as a Passkey Provider
 
-Bitwarden can act as a Passkey Provider (PP) to generate and store passkeys for other applications.
-These can stored in either your personal vault or in an organization vault, just like regular
-passwords. This means Bitwarden supports sharing passkeys with other users in your organization by
-default.
+This section provides an in-depth look at Bitwarden's implementation for providing passkeys to other
+applications.
