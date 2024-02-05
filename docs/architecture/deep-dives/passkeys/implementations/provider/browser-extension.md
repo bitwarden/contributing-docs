@@ -43,10 +43,10 @@ component "Browser" {
     component "Web page" {
         component "JavaScript Application"
         component "Page Script" <<Injected>> {
-            component "WebAuthn API"
+            component "Custom WebAuthn API"
             component "Messenger" as pageScriptMessenger
 
-            [WebAuthn API] -> [pageScriptMessenger]
+            [Custom WebAuthn API] -> [pageScriptMessenger]
         }
 
         component "Content Script" {
@@ -55,8 +55,8 @@ component "Browser" {
 
         component "User Agent WebAuthn API" <<Native>>
 
-        [JavaScript Application] -> [WebAuthn API]
-        [WebAuthn API] --> [User Agent WebAuthn API]
+        [JavaScript Application] -> [Custom WebAuthn API]
+        [Custom WebAuthn API] --> [User Agent WebAuthn API]
     }
 
     component "Extension" {
