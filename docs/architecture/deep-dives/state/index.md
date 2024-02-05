@@ -24,21 +24,30 @@ storage framework.
 
 :::warning
 
-Once you have created the definitions you need to take extreme caution when changing any part of
-the namespace. If you change the name of a `StateDefinition` pointing at `"disk"` without also
-migrating data from the old name to the new name you will lose data. Data pointing at `"memory"` can
-have its name changed.
+Once you have created the definitions you need to take extreme caution when changing any part of the
+namespace. If you change the name of a `StateDefinition` pointing at `"disk"` without also migrating
+data from the old name to the new name you will lose data. Data pointing at `"memory"` can have its
+name changed.
 
 :::
 
 #### `StateDefinition`
 
+:::note
+
+Secure storage is not currently supported as a storage location in the State Provider Framework. For
+now, don't migrate data that is stored in secure storage but please contact the Platform team when
+you have data you wanted to migrate so we can prioritize a long-term solution. If you need new data
+in secure storage, use `StateService` for now.
+
+:::
+
 `StateDefinition` is a simple API but a very core part of making the State Provider Framework work
 smoothly. It defines a storage location and top-level namespace for storage. Teams will interact
 with it only in a single `state-definitions.ts` file in the
-[`clients`](https://github.com/bitwarden/clients) repository. This file is located under Platform team
-code ownership but teams are expected to create edits to it. A team will edit this file to include a
-line such as:
+[`clients`](https://github.com/bitwarden/clients) repository. This file is located under Platform
+team code ownership but teams are expected to create edits to it. A team will edit this file to
+include a line such as:
 
 ```typescript
 export const MY_DOMAIN_DISK = new StateDefinition("myDomain", "disk");
@@ -47,23 +56,28 @@ export const MY_DOMAIN_DISK = new StateDefinition("myDomain", "disk");
 The first argument to the `StateDefinition` constructor is expected to be a human readable,
 camelCase-formatted name for your domain or state area. The second argument will either be the
 string literal `"disk"` or `"memory"` dictating where all the state using this `StateDefinition`
-should be stored. The Platform team will be responsible to reviewing all new and updated entries in
-this file and will be looking to make sure that there are no duplicate entries containing the same
-state name and state location. Teams _can_ have the same state name used for both `"disk"` and
-`"memory"` locations. Tests are included to ensure this uniqueness and core naming guidelines so you
-can ensure a review for a new `StateDefinition` entry can be done promptly and with very few
-surprises.
+should be stored.
+
+The Platform team will be responsible to reviewing all new and updated entries in this file and will
+be looking to make sure that there are no duplicate entries containing the same state name and state
+location. Teams _can_ have the same state name used for both `"disk"` and `"memory"` locations.
+Tests are included to ensure this uniqueness and core naming guidelines so you can ensure a review
+for a new `StateDefinition` entry can be done promptly and with very few surprises.
 
 _TODO: Make tests_
 
-:::note
+##### Client-specific storage locations
 
-Secure storage is not currently supported as a storage location in the State Provider Framework. For
-now, don't migrate data that is stored in secure storage but please contact the Platform team when you have
-data you wanted to migrate so we can prioritize a long-term solution. If you need new data in secure
-storage, use `StateService` for now.
+An optional third parameter to the `StateDefinition` constructor is provided if you need to specify
+client-specific storage location for your state.
 
-:::
+This will most commonly be used to handle the distinction between session and local storage on the
+web client. The default `"disk"` storage for the web client is session storage, and local storage
+can be specified by defining your state as:
+
+```typescript
+export const MY_DOMAIN_DISK = new StateDefinition("myDomain", "disk", { web: "disk-local" });
+```
 
 #### `KeyDefinition`
 
@@ -382,6 +396,32 @@ to include a high quality JSON deserializer even if you think your object will o
 memory. This can mean you might be able to drop the `*Data` class pattern for your code. Since the
 `*Data` class generally represented the JSON safe version of your state which we now do
 automatically through the `Jsonify<T>` given to your in your `deserializer` method.
+
+### How do `StateService` storage options map to `StateDefinition`s?
+
+When moving state from `StateService` to the state provider pattern, you'll be asked to create a
+`StateDefinition` for your state. This should be informed by the storage location that was being
+used in the `StateService`. You can use the cross-reference below to map between the two. |
+`StateService` Option | Desired Storage Location | Desired Web (HTML) Storage Location |
+`StateDefinition` Equivalent | | --- | --- | --- | --- | |`defaultOnDiskOptions()` | Disk | Session
+| `new StateDefinition("state", "disk")` | |`defaultOnDiskLocalOptions()` | Disk | Local |
+`new StateDefinition("state", "disk", { web: "disk-local" })` | |`defaultOnDiskMemoryOptions()` |
+Disk | Session | `new StateDefinition("state", "disk")` | |`defaultInMemoryOptions()` | Memory |
+Memory | `new StateDefinition("state", "memory")` | |`defaultSecureStorageOptions()` | Disk | N/A |
+No migration path currently |
+
+#### Clarifying `defaultOnDiskMemoryOptions()`
+
+Despite its name, `defaultOnDiskMemoryOptions()` results in the web client storing the state in
+session storage, _not_ in memory. As such, the equivalent `StateDefinition` storage location is
+`"disk"`; since `"disk"` maps to session storage on the web client there is no reason to say
+`{ web: "memory" }` if your previous state service options used `defaultOnDiskMemoryOptions()`.
+
+However, we do have cases in which the `StateService` is extended in a particular client and
+different storage options are defined there for a given element of state. For example,
+`defaultOnDiskMemoryOptions()` is defined on the base `StateService` but `defaultInMemoryOptions()`
+is defined on the web implementation. To replicate this behavior with a `StateDefinition` you would
+use `new StateDefinition("state", "disk", { web: "memory" })`.
 
 ## Structure
 
