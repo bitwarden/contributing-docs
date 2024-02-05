@@ -416,8 +416,9 @@ between the two.
 
 Despite its name, `defaultOnDiskMemoryOptions()` results in the web client storing the state in
 session storage, _not_ in memory. As such, the equivalent `StateDefinition` storage location is
-`"disk"`; since `"disk"` maps to session storage on the web client there is no reason to say
-`{ web: "memory" }` if your previous state service options used `defaultOnDiskMemoryOptions()`.
+`"disk"`; since `"disk"` maps to session storage on the web client there is no reason to specify
+`{ web: "memory" }` as a client-specific storage location if your previous state service options
+used `defaultOnDiskMemoryOptions()`.
 
 However, we do have cases in which the `StateService` is extended in a particular client and
 different storage options are defined there for a given element of state. For example,
