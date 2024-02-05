@@ -19,7 +19,7 @@ which together make up what is usually referred to as the FIDO2 standard.
 
 At the core FIDO2 is based on public-key cryptography, where each passkey contains a unique
 public/private key-pair. The public key is given to an application during the initial credential
-creation ceremony, while the private key is never shared. The private key is then used in all
+creation operation, while the private key is never shared. The private key is then used in all
 subsequent requests to sign challenges from the application to prove ownership of the key.
 
 ## Architecture

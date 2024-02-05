@@ -28,7 +28,7 @@ Credentials are relatively simple data structures and only require the following
   random value, or an encrypted version of the credential (see [Storage Modes](#storage-modality)).
 - `rpId` - The identifier of the RP for which the credential was created. By default assigned the
   effective domain of the applications origin (ex: bitwarden.com).
-- `privateKey` - Private key material, created during the creation ceremony.
+- `privateKey` - Private key material, created during the creation operation.
 
 ### Notable optional fields
 
@@ -78,8 +78,8 @@ compatibility purposes.
 
 :::
 
-This credential is usable in authentication ceremonies where the RP does not provide any
-`credentialIds`, meaning that the RP does not necessarily need to first identify the user.
+This credential is usable in authentication operations where the RP does not provide any
+`credentialIds`, meaning that the RP does not need to identify the user first.
 
 As a result, an authenticator that can handle discoverable credentials can create assertion
 signatures using just an `rpId`. This enables single-click authentication flows where the returned
