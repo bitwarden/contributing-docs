@@ -401,7 +401,8 @@ automatically through the `Jsonify<T>` given to your in your `deserializer` meth
 
 When moving state from `StateService` to the state provider pattern, you'll be asked to create a
 `StateDefinition` for your state. This should be informed by the storage location that was being
-used in the `StateService`. You can use the cross-reference below to map between the two.
+used in the `StateService`. You can use the cross-reference below to help you decide how to map
+between the two.
 
 | `StateService` Option           | Desired Storage Location | Desired Web Storage Location | `StateDefinition` Equivalent                                  |
 | ------------------------------- | ------------------------ | ---------------------------- | ------------------------------------------------------------- |
