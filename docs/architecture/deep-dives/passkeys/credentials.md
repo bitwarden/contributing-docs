@@ -4,9 +4,9 @@ sidebar_position: 2
 
 # Credentials
 
-This document provides an in-depth look at the FIDO2 credential, which is the technical term used to
-refer to a passkey in the context of the FIDO2 standard. In this document they will be referred to
-as simply "credentials".
+This page provides an in-depth look at the FIDO2 credential, which is the technical term used to
+refer to a passkey in the context of the FIDO2 standard. On this page they will be referred to as
+simply "credentials".
 
 ## What is a Credential?
 
@@ -15,8 +15,8 @@ authenticator. The private key is protected by the authenticator, and the public
 server-side by the Relaying Party (RP). The authenticator uses the private key to sign challenges
 from a RP, and the RP uses the public key to verify the signature.
 
-In this document the term "credential" will be used to refer the data structure that is protected by
-the authenticator, including the private key, and any metadata that is associated with it.
+On this page the term "credential" will be used to refer the data structure that is protected by the
+authenticator, including the private key, and any metadata that is associated with it.
 
 ## Data structure
 
