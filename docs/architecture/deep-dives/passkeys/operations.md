@@ -122,3 +122,27 @@ Authentication requests are invoked using the `navigator.credentials.get()` meth
 9. **Authentication Completion**: Finally, the server responds to the client, indicating that the
    authentication process was successful. At this point, the user has successfully logged in using a
    passkey.
+
+## User Presence
+
+User presence is a measure of the user's physical presence during the registration or
+authentication. It is determined by the authenticator, which can use a variety of methods to detect
+user presence, such as a button press.
+
+The WebAuthn API always requires user presence and does not provides a way to configure this
+requirement. This is why you are always required to perform an action on your authenticator when you
+use your passkeys on the web. CTAP2 does provide a way to configure the user presence requirement,
+but this is not exposed through the WebAuthn API.
+
+## User Verification
+
+User verification is a process that ensures that the user is not only present but is also verified
+by the authenticator. This can be done using a variety of methods, such as a PIN, biometric
+verification, or a password. The WebAuthn API provides a way to specify if the RP prefers (or
+requires) user verification when a new credential is created or when an existing credential is used
+to authenticate. This is done using the `authenticatorSelection` parameter in the options object.
+
+It is worth noting that the WebAuthn API does not provide a way to forbid user verification, which
+means that in some cases the authenticator will always verify the user, even if the RP does not
+require it. An example of this is the YubiKey Bio series, which only has a fingerprint reader as a
+means of interaction, and therefore always verifies the user.

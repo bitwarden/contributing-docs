@@ -77,3 +77,23 @@ component "Browser" {
 }
 @enduml
 ```
+
+## User Presence
+
+To simplify the user experience and to avoid the need for multiple user presence checks, the
+implementation of the browser extension authenticator deviates from the WebAuthn specification, by
+terminating the process and triggering a fallback if no matching credentials are found. This is
+justified by the fact that the native implementation will always require user presence, and that the
+extension will always trigger the native implementation if the user chooses to not proceed with
+Bitwarden.
+
+### Limitations and risks
+
+This deviation from the specification is a risk, and allows an attacker to determine if a user has a
+specific credential stored in their vault (i.e. credential enumeration). This is because the
+extension will always trigger the native implementation if no matching credentials are found,
+something that web pages are able to detect (see
+[Credential existence checker](https://coroiu.github.io/webauthn-tools/security/existence-checker)).
+However, this enumeration only works for credentials bound to the attacker's `rpId` (i.e. their own
+website), and is only possible if the user has already unlocked their vault. This risk is accepted
+as a trade-off for a better user experience.
