@@ -2,7 +2,6 @@
 // Note: type annotations allow type checking and IDEs autocompletion
 
 import { themes } from "prism-react-renderer";
-import remarkDefList from "remark-deflist";
 
 async function createConfig() {
   const { remarkKroki } = await import("remark-kroki");
@@ -37,7 +36,7 @@ async function createConfig() {
             // Please change this to your repo.
             // Remove this to remove the "edit this page" links.
             editUrl: "https://github.com/bitwarden/contributing-docs/tree/main/",
-            remarkPlugins: [remarkDefList, [remarkKroki, { server: "https://kroki.io/" }]],
+            remarkPlugins: [[remarkKroki, { server: "https://kroki.io/" }]],
           },
           theme: {
             customCss: require.resolve("./src/css/custom.css"),

@@ -8,8 +8,6 @@ This page contains some definitions of terms used throughout the passkey documen
 comprehensive list, see the
 [FIDO Alliance Glossary](https://fidoalliance.org/specs/common-specs/fido-glossary-v2.1-rd-20210525.html).
 
-<!-- TODO: Look into workarounds for using `remark-deflist`. Can't make it work with prettier. -->
-
 ## Definitions
 
 <dl>
