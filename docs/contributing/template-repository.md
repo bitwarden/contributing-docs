@@ -72,20 +72,24 @@ The editor configuration used above is accessed by many linters to drive results
 
 [Renovate](https://github.com/renovatebot/renovate)
 [configuration](https://github.com/bitwarden/template/blob/main/.github/renovate.json) for managing
-dependencies. It:
+dependencies that is derived from a
+[shared configuration repository](https://github.com/bitwarden/renovate-config). It:
 
 - Combines minor and patch changes into one rollup pull request, per package manager.
 - Uses a dependency dashboard so we can see what pull requests are not yet created but still manage
   the workload.
-- Manages updates with rebases, semantic versioning, and lock file updates.
-- Has a small pull request limit as a starting point.
-- Includes major updates (the latest) as individual pull requests.
+- Manages updates semantic versioning and lock file updates. Rebases are disabled.
+- Allows an unlimited number of pull requests to be created.
+- Includes major updates (the latest) as individual pull requests. Monorepo updates are also
+  grouped.
 - Schedules runs to happen on the weekend when more Actions workers are likely available for the
-  organization.
+  organization, but also on a two-week basis to better align with the release schedule.
+- Certain build pipeline dependencies are pinned to specific versions.
 
 All package managers are recommended to be left enabled should a repository expand over time to
-include new ones. Update schedules and how many pull requests are up to the individual repository.
-Exceptions, other package manager, and dependency-specific configuration may be needed.
+include new ones, within reason for what might be in the scope of the repository. Update schedules
+and how many pull requests are up to the individual repository. Exceptions, other package manager,
+and dependency-specific configuration may be needed.
 
 Consider [best practices](https://docs.renovatebot.com/dependency-pinning/#so-whats-best) with
 pinning dependencies (especially at the root), like those used for local linting above. Development
