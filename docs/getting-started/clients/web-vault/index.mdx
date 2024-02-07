@@ -31,23 +31,23 @@ mkcert -cert-file dev-server.local.pem -key-file dev-server.local.pem localhost 
 
 1.  Build and run the Web Vault.
 
-  <community>
+  <Community>
 
   ```bash
   cd apps/web
   npm run build:oss:watch
   ```
 
-  </community>
+  </Community>
 
-  <bitwarden>
+  <Bitwarden>
 
   ```bash
   cd apps/web
   npm run build:bit:watch
   ```
 
-  </bitwarden>
+  </Bitwarden>
 
     Which will target the local bitwarden instance. See [Official Server](#official-server) for
     information on how to target official servers.
@@ -55,7 +55,7 @@ mkcert -cert-file dev-server.local.pem -key-file dev-server.local.pem localhost 
 2.  Open your browser and navigate to `https://localhost:8080`. You should see the Bitwarden Log In Screen.
 
 3. If you'd like to take this a bit further, start your local server and have MailCatcher set up. Now let's create an account and verify it.
-  
+
     - Create a new account. This could be a fake email
     - Log into the new account
     - Click on Verify Email Address
@@ -83,21 +83,21 @@ default ports). You can use the official Bitwarden server instead or configure c
 To use the official Bitwarden server, follow the build instructions above, but run the Web Vault
 using the following command:
 
-<community>
+<Community>
 
 ```bash
 ENV=cloud npm run build:oss:watch
 ```
 
-</community>
+</Community>
 
-<bitwarden>
+<Bitwarden>
 
 ```bash
 ENV=cloud npm run build:bit:watch
 ```
 
-</bitwarden>
+</Bitwarden>
 
 ### Custom Endpoints
 

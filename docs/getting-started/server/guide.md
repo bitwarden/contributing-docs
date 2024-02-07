@@ -89,7 +89,7 @@ facilitate easily customization.
     Using PowerShell, navigate to the cloned server repo location, into the `dev` folder and run the
     docker command below.
 
-    <community>
+    <Community>
 
     ```bash
     docker compose --profile mssql --profile mail up -d
@@ -98,9 +98,9 @@ facilitate easily customization.
     Which starts the MSSQL and local mail server containers, which should be suitable for most
     community contributions.
 
-    </community>
+    </Community>
 
-    <bitwarden>
+    <Bitwarden>
 
     ```bash
     docker compose --profile cloud --profile mail up -d
@@ -109,7 +109,7 @@ facilitate easily customization.
     Which starts MSSQL, mail, and Azurite container. The additional Azurite container is required to
     emulate Azure used by the Bitwarden cloud environment.
 
-    </bitwarden>
+    </Bitwarden>
 
 After you’ve run the `docker compose` command, you can use the
 [Docker Dashboard](https://docs.docker.com/desktop/dashboard/) to manage your containers. You should
@@ -216,7 +216,7 @@ up-to-date. See [MSSQL Database](./database/mssql/index.md) for more information
 
 :::
 
-<bitwarden>
+<Bitwarden>
 
 ## Install Licensing Certificate
 
@@ -231,7 +231,7 @@ done by double-clicking on the downloaded certificate.
 5. The dev.pfx file will ask for a password. You can get this by clicking and opening the Licensing
    Certificate - Dev item in the vault
 
-</bitwarden>
+</Bitwarden>
 
 ## Configure User Secrets
 
@@ -246,7 +246,7 @@ repository.
 1.  Get a template `secrets.json`. We need to get an initial version of `secrets.json`, which you
     will modify for your own secrets values.
 
-    <community>
+    <Community>
 
     Navigate to the `dev` folder in your server repo and copy the example `secrets.json` file.
 
@@ -254,9 +254,9 @@ repository.
     cp secrets.json.example secrets.json
     ```
 
-    </community>
+    </Community>
 
-    <bitwarden>
+    <Bitwarden>
 
     - Copy the user secrets file from the shared Development collection (Your Bitwarden Vault) into
       the `dev` folder.
@@ -265,20 +265,20 @@ repository.
     - This `secrets.json` is configured to use the dockerized Azurite and MailCatcher instances and
       is recommended for this guide.
 
-    </bitwarden>
+    </Bitwarden>
 
 2.  Update `secrets.json` with your own values:
 
     - `sqlServer` > `connectionString`: insert your password where indicated
 
-    <community>
+    <Community>
 
     - `installation` > `id` and `key`:
       [request a hosting installation Id and Key](https://bitwarden.com/host/) and insert them here
     - `licenseDirectory`: set this to an empty directory, this is where uploaded license files will
       be stored.
 
-    </community>
+    </Community>
 
 3.  Once you have your `secrets.json` complete, run the below command to add the secrets to each
     Bitwarden server project.
