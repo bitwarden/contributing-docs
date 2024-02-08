@@ -78,7 +78,7 @@ dependencies that is derived from a
 - Combines minor and patch changes into one rollup pull request, per package manager.
 - Uses a dependency dashboard so we can see what pull requests are not yet created but still manage
   the workload.
-- Manages updates semantic versioning and lock file updates. Rebases are disabled.
+- Manages updates with semantic versioning and lock file updates. Rebases are disabled.
 - Allows an unlimited number of pull requests to be created.
 - Includes major updates (the latest) as individual pull requests. Monorepo updates are also
   grouped.
