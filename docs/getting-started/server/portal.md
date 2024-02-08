@@ -74,7 +74,7 @@ See [User Secrets](../../contributing/user-secrets.md) for how to configure your
 
 :::
 
-<bitwarden>
+<Bitwarden>
 
 ### Authorization
 
@@ -105,7 +105,7 @@ control on self-hosted deployments.
 
 :::
 
-</bitwarden>
+</Bitwarden>
 
 ## Logging in
 

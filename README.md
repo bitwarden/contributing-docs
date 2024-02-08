@@ -64,21 +64,21 @@ across sessions.
 
 ![Context switcher](.github/dropdown.png)
 
-In order to write content that targets different context please use the `<community>` and
-`<bitwarden>` tags as demonstrated below.
+In order to write content that targets different context please use the `<Community>` and
+`<Bitwarden>` tags as demonstrated below.
 
 ```md
-<community>
+<Community>
 
 This content is shown only to community contributors.
 
-</community>
+</Community>
 
-<bitwarden>
+<Bitwarden>
 
 This content is shown only to bitwarden contributors.
 
-</bitwarden>
+</Bitwarden>
 ```
 
 The technical implementation uses a custom context called `devMode` which is persisted to local

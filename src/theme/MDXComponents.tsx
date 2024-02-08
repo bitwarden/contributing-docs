@@ -8,7 +8,7 @@ export default {
   ...MDXComponents,
 
   // Custom mapping
-  bitwarden: Bitwarden,
-  community: Community,
+  Bitwarden: Bitwarden,
+  Community: Community,
   AdrTable: AdrTable,
 };

@@ -233,7 +233,7 @@ right-clicking it while it is open and clicking "Inspect Element".
 
 This should be enough for most debugging and testing, unless you're working in native code.
 
-<bitwarden>
+<Bitwarden>
 
 :::info
 
@@ -243,4 +243,4 @@ extension. It may be useful for debugging if you’re having difficulty.
 
 :::
 
-</bitwarden>
+</Bitwarden>

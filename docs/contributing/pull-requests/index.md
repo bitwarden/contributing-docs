@@ -8,7 +8,7 @@ Pull Requests are the primary mechanism we use to write software. GitHub has som
 [documentation](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-pull-requests)
 on using the Pull Request feature.
 
-<community>
+<Community>
 
 ## Fork
 
@@ -36,7 +36,7 @@ This will allow you to pull in upstream changes easily by running.
 git fetch upstream
 ```
 
-</community>
+</Community>
 
 ## Branch
 
@@ -46,7 +46,7 @@ working with other contributors we typically branch off a long-lived feature bra
 feature branches allow us to break up a single feature into multiple PRs, which can be reviewed
 individually but tested and released together.
 
-<community>
+<Community>
 
 As a community contributor you can use the following command to branch directly from the _upstream_
 `main` branch.
@@ -55,9 +55,9 @@ As a community contributor you can use the following command to branch directly 
 git checkout -b feature/example
 ```
 
-</community>
+</Community>
 
-<bitwarden>
+<Bitwarden>
 
 As a Bitwarden contributor you should branch of `origin/main`, this ensures that the branch is
 always based of the latest upstream `main` even if the local `main` is out of date.
@@ -68,7 +68,7 @@ git checkout -b <team>/<issue-number>/<brief-description> -t origin/main
 
 Our branching strategy is described in detail [here](branching.md).
 
-</bitwarden>
+</Bitwarden>
 
 ## Commit
 
@@ -100,13 +100,13 @@ changes” to a PR forcing the reviewer to start over again.
 ## Creating a pull request
 
 The Bitwarden repositories have a _Pull Request template_ which should be followed. This will ensure
-the PR review goes smoothly since it will provide context to the reviewer.<community> Once a
+the PR review goes smoothly since it will provide context to the reviewer.<Community> Once a
 community PR has been created, it will be automatically be linked to an internal Jira ticket. The
-internal ticket is used for prioritization and tracking purposes.</community><bitwarden> When
+internal ticket is used for prioritization and tracking purposes.</Community><Bitwarden> When
 creating the PR include a Jira ticket reference so the reviewer can gain all context on the work as
-well as links to any associated PRs in other repositories.</bitwarden>
+well as links to any associated PRs in other repositories.</Bitwarden>
 
-<bitwarden>
+<Bitwarden>
 
 ### Tagging reviewers
 
@@ -140,11 +140,11 @@ been addressed.
 **When you are ready for a reviewer to revisit your changes, you should request a re-review.** This
 will notify the reviewer and ensure a prompt response.
 
-</bitwarden>
+</Bitwarden>
 
 ## Reviewing the pull request
 
-<bitwarden>
+<Bitwarden>
 
 At Bitwarden, we believe that the act of reviewing PRs is a critically important part of each
 engineer's job. It is as important, if not more important, than the act of writing code.
@@ -190,15 +190,15 @@ pull request, the author should reach out to the reviewing team via their Slack 
 
 :::
 
-</bitwarden>
+</Bitwarden>
 
-<community>
+<Community>
 
 Once a Community PR has been created a Bitwarden developer will perform a code review. While we try
 to this in a reasonable time frame, please understand that we have internal roadmaps and priorities
 that may delay this process.
 
-</community>
+</Community>
 
 ### How to perform a review
 
