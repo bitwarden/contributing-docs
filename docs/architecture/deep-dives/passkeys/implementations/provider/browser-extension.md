@@ -10,7 +10,7 @@ There are currently no browser APIs that allow extensions to provide passkeys al
 browser's native implementation. This means that the only way an extension can provide passkeys is
 by completely replacing the native implementation with its own. This is done by injecting a script
 into the page that replaces the native implementation with the extension's implementation. In
-practice this is done by reassigning the `navigator.credentials.create` and
+practice, this is done by reassigning the `navigator.credentials.create` and
 `navigator.credentials.get` methods.
 
 To avoid implementing support for the entire FIDO2 ecosystem (hardware keys, CaBLE, etc.), the
@@ -20,9 +20,10 @@ references to the native functions in separate variables before reassigning.
 
 ## Architecture
 
-Bitwarden implements a simplified version of the FIDO2 architecture based solely on the WebAuthn API
-specification. This is because the embedded `FIDO2 Authenticator` will never be used in a standalone
-context and does therefore not need to support the full CTAP2 protocol.
+Bitwarden implements a simplified version of the FIDO2 architecture based solely on the
+[WebAuthn API specification](https://www.w3.org/TR/webauthn-3/). This is because the embedded
+`FIDO2 Authenticator` will never be used in a standalone context and does not need to support the
+full CTAP2 protocol.
 
 :::info
 
@@ -83,7 +84,7 @@ component "Browser" {
 To simplify the user experience and to avoid the need for multiple user presence checks, the
 implementation of the browser extension authenticator deviates from the WebAuthn specification, by
 terminating the process and triggering a fallback if no matching credentials are found. This is
-justified by the fact that the native implementation will always require user presence, and that the
+justified by the fact that the native implementation will always require user presence, and the
 extension will always trigger the native implementation if the user chooses to not proceed with
 Bitwarden.
 

@@ -12,13 +12,13 @@ comprehensive list, see the
 
 <dl>
   <dt>Passkey</dt>
-  <dd>Any passwordless FIDO credential.</dd>
+  <dd>Any passwordless FIDO2 credential.</dd>
 
   <dt>Credential</dt>
   <dd>The technical term for a passkey. The two terms are used interchangeably.</dd>
 
   <dt>Relying Party (RP)</dt>
-  <dd>A web site or other entity that uses a FIDO protocol to authenticate users by asking for a passkey.</dd>
+  <dd>A web site or other entity that uses a FIDO2 protocol to authenticate users by asking for a passkey.</dd>
 
   <dt>Passkey Provider (PP)</dt>
   <dd>An app and/or service that is responsible for storing and managing passkeys. Many operating systems include a default passkey provider (first-party), and many also support third-party providers (like Bitwarden).</dd>

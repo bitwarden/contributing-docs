@@ -17,7 +17,7 @@ Bitwarden only supports the client-side storage modality.
 ## Discoverability
 
 Bitwarden respects discoverability requirements from RPs by saving a client-side discoverability
-flag in the passkey metadata (called `discoverable`). If this flag is set to `false` the RP will
+flag in the passkey metadata (called `discoverable`). If this flag is set to `false`, the RP will
 need to provide the `credentialId` to Bitwarden in order to perform an assertion. If the flag is set
 to `true` the passkey will be discoverable using the `rpId`. The `userHandle` is always returned if
 available.
@@ -37,5 +37,5 @@ Bitwarden does not yet fully support user verification for every request, and in
 user has been verified if the vault is unlocked. This is a limitation of the existing user
 verification services.
 
-Bitwarden will have full support for user verification soon, by using the users unlock methods, such
-as a PIN or biometric unlock, with the master password as a fallback.
+Bitwarden will have full support for user verification soon, via the user's unlock methods, such as
+a PIN or biometric unlock, with the master password as a fallback.

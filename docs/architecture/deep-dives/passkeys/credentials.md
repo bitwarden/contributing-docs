@@ -42,8 +42,8 @@ Credentials are relatively simple data structures and only require the following
 - `credentialId` - Binary data sequence that uniquely identifies the credential. It is either a
   random value, or an encrypted version of the credential (see [Storage Modes](#storage-modality)).
 - `rpId` - The identifier of the RP for which the credential was created. By default assigned the
-  effective domain of the applications origin (ex: bitwarden.com).
-- `privateKey` - Private key material, created during the creation operation.
+  effective domain of the application's origin (ex: bitwarden.com).
+- `privateKey` - Private key material, created when generating the public/private key pair.
 
 ### Notable optional fields
 
@@ -79,7 +79,7 @@ this way must be retrieved from the RP before the authenticator can use it.
 This is a credential whose `credentialId` must be provided in `allowCredentials` when calling
 `navigator.credentials.get` because it is not client-side discoverable. This is always the case when
 the credential is stored server-side, because the RP must first identify the user in order to
-discover the `credentialIds` to supply in the `navigator.credentials.get` call.
+discover the `credentialId` to supply in the `navigator.credentials.get` call.
 
 ### Client-Side Discoverable Credentials
 
@@ -98,7 +98,7 @@ This credential is usable in authentication operations where the RP does not pro
 
 As a result, an authenticator that can handle discoverable credentials can create assertion
 signatures using just an `rpId`. This enables single-click authentication flows where the returned
-assertion data contains everything the PR needs to identify and authenticate the user.
+assertion data contains everything the RP needs to identify and authenticate the user.
 
 This implies that the source of the credential must be stored either in the authenticator or the
 client platform (see [Client Side Credentials](#client-side-credentials)).

@@ -17,7 +17,7 @@ Passkeys are another name given to the credentials defined by the two specificat
 
 which together make up what is usually referred to as the FIDO2 standard.
 
-At the core FIDO2 is based on public-key cryptography, where each passkey contains a unique
+At its core, FIDO2 is based on public-key cryptography, where each passkey contains a unique
 public/private key-pair. The public key is given to an application during the initial credential
 creation operation, while the private key is never shared. The private key is then used in all
 subsequent requests to sign challenges from the application to prove ownership of the key.
@@ -26,8 +26,8 @@ subsequent requests to sign challenges from the application to prove ownership o
 
 FIDO2 can be broken down into two main components: WebAuthn and CTAP. WebAuthn is a web standard
 that allows for the creation and use of passkeys through a well defined JavaScript interface, and
-CTAP is a protocol for communicating with external authenticators, such as hardware security keys
-(e.g. YubiKeys).
+CTAP is a protocol for communicating with external authenticators (or roaming authenticators), such
+as hardware security keys (e.g. YubiKeys).
 
 The interaction between these two components can vary depending on the use case:
 
@@ -44,7 +44,7 @@ high-level overview and does not include any specific details about how Bitwarde
 
 :::info
 
-The `JavaScript Application` is also part of the `Relaying Party`, even if the diagram does not
+The `JavaScript Application` is also part of the `Relying Party`, even if the diagram does not
 reflect this.
 
 :::

@@ -5,7 +5,7 @@ sidebar_position: 3
 # Operations
 
 This document will provide an overview of two main operations performed through the WebAuthn API:
-registration and authentication.
+registering a new passkey (registration) and signing in (authentication).
 
 ## Registering a Passkey
 
@@ -31,8 +31,8 @@ Registration requests are invoked using the `navigator.credentials.create()` met
      credentials in this list.
    - **pubKeyCredParams**: A list of public key parameters that the server is willing to accept for
      the new credential. This includes the cryptographic algorithm and the key type.
-   - **rp**: An object that contains information about the Relaying Party (RP). This includes the
-     RPs name, ID, and icon.
+   - **rp**: An object that contains information about the Relying Party (RP). This includes the RPs
+     name, ID, and icon.
    - **timeout**: The time, in milliseconds, that the client is willing to wait for the
      authenticator to complete the registration process.
    - **user**: An object that contains information about the user. This includes the user's ID,
