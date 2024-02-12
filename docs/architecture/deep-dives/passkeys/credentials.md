@@ -56,12 +56,12 @@ Credentials are relatively simple data structures and only require the following
 
 ### Client-Side Credentials
 
-The credential is stored in persistent storage embedded in the authenticator, client or client
-device. This is rapidly becoming a common storage modality, as it is the only way to support synced
-credentials across multiple devices. Client-Side storage is required
+The credential is placed in a persistent storage embedded in the authenticator, client or client
+device. This is rapidly becoming a common storage mode, as it is the only way to support synced
+credentials across multiple devices. Client-side storage is required.
 
-Hardware security keys also support this storage modality, but they often have a limited storage
-capacity (e.g. the YubiKey 5 can hold up to 25 client-side credentials).
+Hardware security keys also support this storage mode, but they often have a limited capacity (e.g.
+the YubiKey 5 can hold up to 25 client-side credentials).
 
 ### Server-Side Credentials
 
