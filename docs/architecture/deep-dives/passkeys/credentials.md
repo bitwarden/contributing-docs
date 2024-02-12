@@ -56,7 +56,7 @@ Credentials are relatively simple data structures and only require the following
 
 ### Client-Side Credentials
 
-The credential is placed in a persistent storage embedded in the authenticator, client or client
+The credential is stored in persistent storage embedded in the authenticator, client or client
 device. This is rapidly becoming a common storage mode, as it is the only way to support synced
 credentials across multiple devices. Client-side storage is required.
 
@@ -65,12 +65,12 @@ the YubiKey 5 can hold up to 25 client-side credentials).
 
 ### Server-Side Credentials
 
-The credential is stored in a database managed by the RP in an encrypted form that only the original
-authenticator can decrypt. This is the traditional storage modality and is often used in 2FA flows.
+The credential is encrypted by the authenticator and stored in a database managed by the RP. This is
+the traditional storage mode and is often used in 2FA flows.
 
 This enables the authenticator to have unlimited storage capacity for credentials, since the data is
-stored by the RP instead of by the authenticator - but it means that a credential stored in this way
-must be retrieved from the RP before the authenticator can use it.
+stored by the RP instead of by the authenticator. However, this means that a credential stored in
+this way must be retrieved from the RP before the authenticator can use it.
 
 ## Discoverability
 
