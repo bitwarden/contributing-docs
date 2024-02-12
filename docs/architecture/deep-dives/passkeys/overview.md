@@ -13,7 +13,7 @@ see [Implementations](./implementations).
 Passkeys are another name given to the credentials defined by the two specifications:
 
 - World Wide Web Consortium’s (W3C) Web Authentication (WebAuthn)
-- FIDO Alliance’s Client-to-Authenticator Protocol (CTAP)
+- FIDO Alliance’s Client-to-Authenticator Protocol v2 (CTAP2)
 
 which together make up what is usually referred to as the FIDO2 standard.
 
@@ -24,9 +24,9 @@ subsequent requests to sign challenges from the application to prove ownership o
 
 ## Architecture
 
-FIDO2 can be broken down into two main components: WebAuthn and CTAP. WebAuthn is a web standard
+FIDO2 can be broken down into two main components: WebAuthn and CTAP2. WebAuthn is a web standard
 that allows for the creation and use of passkeys through a well defined JavaScript interface, and
-CTAP is a protocol for communicating with external authenticators (or roaming authenticators), such
+CTAP2 is a protocol for communicating with external authenticators (or roaming authenticators), such
 as hardware security keys (e.g. YubiKeys).
 
 The interaction between these two components can vary depending on the use case:
@@ -96,9 +96,9 @@ component "Client platform" {
 
 component "Roaming Authenticator" <<$usb{scale=0.1}>>
 
-[WebAuthn Client] --> [Roaming Authenticator] : CTAP
+[WebAuthn Client] --> [Roaming Authenticator] : CTAP2
 [WebAuthn Client] --> [Platform Auth API]
-[Platform Auth Client] --> [Roaming Authenticator] : CTAP
+[Platform Auth Client] --> [Roaming Authenticator] : CTAP2
 
 [JavaScript Application] -> [HTTPS API]
 

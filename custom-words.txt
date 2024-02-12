@@ -7,7 +7,7 @@ bytemark
 clickjacking
 CODEOWNERS
 CQRS
-CTAP
+CTAP2
 dockerized
 Gitter
 hotfix
