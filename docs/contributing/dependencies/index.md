@@ -50,12 +50,10 @@ change. For more details read
 
 ## Workflow
 
-Renovate will automatically create pull requests every other week, aligning with the mid-point of
-each sprint. This allows time for teams to assess the open PRs and adequately plan for them in the
-upcoming sprint.
-
-The expectation is that all dependencies opened by Renovate should be addressed in that upcoming
-sprint, to ensure we do not fall behind over time.
+Renovate is currently scheduled to automatically create pull requests every 2 weeks for all open
+dependencies. The goal of our dependency management process is for the teams to handle these
+dependencies in that same 2-week cadence, in order to avoid a large backlog of PRs and out-of-date
+packages building up over time.
 
 :::info Major upgrades
 
