@@ -81,12 +81,15 @@ authentication.
 If the server is able to validate the assertion, the user is authenticated, and as a part of the
 authentication response the PRF-encrypted key data is returned to the client:
 
-    - The PRF-encrypted private key
-    - The public key-encrypted user symmetric key
+    - The PRF-encrypted RSA private key
+    - The RSA public key-encrypted user symmetric key
 
-In order to decrypt the vault data, the PRF key from the credential is used to decrypt the private
-key, and this private key is used to decrypt the user's symmetric key. The symmetric key can then be
-used for vault decryption.
+In order to decrypt the vault data:
+
+    1. The PRF key from the credential is stretched with HKDF.
+    2. The resultant 32-bit encryption key is used to decrypt the RSA private key.
+    3. The RSA private key is used to decrypt the user's symmetric key.
+    4. The symmetric key is used for vault decryption.
 
 ## Tips for using your passkey for decryption
 
