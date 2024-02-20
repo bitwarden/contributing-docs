@@ -72,7 +72,7 @@ holder of the private key can decrypt it.
 
 When a user chooses to authenticate with a passkey, we request an assertion from the authenticator.
 If the passkey is registered for encryption, and the
-[platform supports it](prf.md/#what-if-i-am-prompted-for-my-master-password-when-using-a-prf-enabled-passkey),
+[platform supports it](#what-if-i-am-prompted-for-my-master-password-when-using-a-prf-enabled-passkey),
 the Bitwarden client will receive the PRF key in the assertion response.
 
 The client will then submit the assertion (without the PRF key) to the server to perform
