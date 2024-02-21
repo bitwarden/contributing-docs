@@ -77,7 +77,7 @@ Put simply: key rotation. In order to support
 [encryption key rotation](https://bitwarden.com/help/account-encryption-key/#rotate-your-encryption-key),
 a user must be able to re-encrypt the symmetric key for all registered passkeys. If the PRF key was
 used to directly encrypt the user's symmetric key then this operation would require gaining access
-to the PRF keys for each registered credential. The use of a public/private keypair allows the user
+to the PRF keys for each registered credential. The use of a public/private key pair allows the user
 to re-encrypt the new symmetric key with the public key, with the assurance that only the holder of
 the private key can decrypt it, and without having to provide access to the PRF key for each
 registered credential.
