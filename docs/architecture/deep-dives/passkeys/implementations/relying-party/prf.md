@@ -17,9 +17,8 @@ necessary for passkeys to be used for decryption as well.
 At the most abstract level, account encryption and decryption requires that the user's symmetric key
 be encrypted ("protected") with another key that is only available client-side. For master
 password-based decryption, this is done with the master key, derived through a key derivation
-function. In order to use a passkey for account decryption on login, we need such a key available on
-the passkey. Fortunately, the `prf` extension to the WebAuthn spec provides exactly this
-functionality.
+function. In order to use a passkey for account decryption, the client needs to able to derive such
+a key from the passkey. Fortunately, the `prf` extension provides exactly this functionality.
 
 The `prf` client extension specifies how a WebAuthn client can supply the output from a
 pseudo-random function ("PRF") that is unique to each credential. The secret that this function
