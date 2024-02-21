@@ -29,8 +29,8 @@ You can find more tips for PR review here:
 ## Reviewing
 
 If you feel that someone else has good knowledge of the code you are reviewing, please feel free to
-reach out to them or add them as a reviewer. <bitwarden>Bitwarden developers can use the [SME
-Yellowpages][sme-yellowpages] to look for knowledge area experts.</bitwarden>
+reach out to them or add them as a reviewer. <Bitwarden>Bitwarden developers can use the [SME
+Yellowpages][sme-yellowpages] to look for knowledge area experts.</Bitwarden>
 
 Please do **not** approve code you do not understand the implications of. Comments and concerns are
 always welcome! For example, it’s okay to leave some general comments or feedback, while also saying

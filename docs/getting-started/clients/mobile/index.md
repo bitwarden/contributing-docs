@@ -18,34 +18,34 @@ See the [Android Mobile app](./android/index.md) page to set up an Android devel
 
 ## iOS Development
 
-<bitwarden>
+<Bitwarden>
 
 See the [iOS Mobile app](./ios/index.mdx) page to set up an iOS development environment.
 
-</bitwarden>
+</Bitwarden>
 
-<community>
+<Community>
 
 Unfortunately, iOS development requires provisioning profiles and other capabilities only available
 to internal team members. We do not have any documentation for community developers at this time.
 
-</community>
+</Community>
 
 ## watchOS Development
 
-<bitwarden>
+<Bitwarden>
 
 See the [watchOS app](./watchos) page to set up an watchOS development environment.
 
-</bitwarden>
+</Bitwarden>
 
-<community>
+<Community>
 
 Unfortunately, watchOS development requires provisioning profiles and other capabilities only
 available to internal team members. We do not have any documentation for community developers at
 this time.
 
-</community>
+</Community>
 
 ## Unit tests
 
