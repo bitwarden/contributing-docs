@@ -139,3 +139,32 @@ Testing passwordless notifications:
    "known device") and click Continue. When presented with the login options, click click Login with
    Device.
 8. Check mobile device for the notification
+
+<Bitwarden>
+
+## AndroidX Credentials
+
+Currently, the
+[androidx.credentials](https://developer.android.com/jetpack/androidx/releases/credentials) official
+binding has some bugs and we cannot use it yet. Because of this, we made a binding ourselves which
+is located in here:
+[Xamarin.AndroidX.Credentials](https://github.com/bitwarden/xamarin.androidx.credentials).
+
+As of today, we are using version 1.2.0.
+
+In the projects, the package is added as a local NuGet package located in
+`lib/android/Xamarin.AndroidX.Credentials` and this source is already configured in the
+`nuget.config` file.
+
+In the case a change is needed on the binding, create a new local NuGet package and replace it in
+the aforementioned source.
+
+:::warning
+
+Do not add the project to the solution and as a project reference to the `App.csproj` /
+`Core.csproj` this will strangely make the iOS app crash on start because of solution configuration.
+Even though we couldn't find the root cause, this is the effect caused by this action.
+
+:::
+
+</Bitwarden>
