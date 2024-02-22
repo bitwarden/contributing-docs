@@ -231,6 +231,14 @@ done by double-clicking on the downloaded certificate.
 5. The dev.pfx file will ask for a password. You can get this by clicking and opening the Licensing
    Certificate - Dev item in the vault
 
+:::note
+
+Mac Users: When prompted to save the downloaded certificate and pfx file in Mac Keychain be sure to
+select "Default Keychain > login" from the dropdown. Otherwise they will not be found when
+attempting to Build and Run the Server.
+
+:::
+
 </Bitwarden>
 
 ## Configure User Secrets
