@@ -235,7 +235,7 @@ done by double-clicking on the downloaded certificate.
 
 Mac Users: When prompted to save the downloaded certificate and pfx file in Mac Keychain be sure to
 select "Default Keychain > login" from the dropdown. Otherwise they will not be found when
-attempting to Build and Run the Server.
+attempting to "Build and Run the Server".
 
 :::
 
