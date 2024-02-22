@@ -115,3 +115,14 @@ organization.
 
 [CODEOWNERS](https://github.com/bitwarden/template/blob/main/.github/CODEOWNERS) entries to be
 defined indicating a team that "owns" the code at a relevant path.
+
+## Scanning
+
+Actions workflows for code scanning. Targets two domains:
+
+- Static application security testing (SAST): Runs PR scans in an incremental mode and full scans on
+  push events.
+- Quality: Additional language-specific findings and improvements not strictly related to security.
+
+SAST results are exported as SARIF and uploaded to the GitHub Advanced Security interface for
+internal review. Quality results are also made available in the interface when security-related.
