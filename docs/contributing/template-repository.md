@@ -7,9 +7,9 @@ sidebar_custom_props:
 
 ## Location and usage
 
-A private template [repository](https://github.com/bitwarden/template) exists as a base set of files
-and overall setup for new projects that can be selected within the GitHub repository creation
-interface. It contains what's needed to get started with pull request templates, linting, continuous
+A template [repository](https://github.com/bitwarden/template) exists as a base set of files and
+overall setup for new projects that can be selected within the GitHub repository creation interface.
+It contains what's needed to get started with pull request templates, linting, continuous
 integration, and more. Core concepts that generally apply to all repositories should be created and
 reviewed there before being distributed. The template represents best practices across the company
 but should also be considered a _starting point_ for further setup within the context of a
