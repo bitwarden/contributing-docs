@@ -32,10 +32,7 @@ derived master key when using a master password to log in.
 The `prf` extension is defined above as a "client extension". This is to differentiate it from an
 "authenticator extension".
 
-The [distinction](https://w3c.github.io/webauthn/#sctn-extensions) is in which party in the WebAuthn
-ceremony exposes the extension for use. A client extension is provided by the WebAuthn client and
-consumed by the relying party, whereas an authenticator extension is provided by the authenticator
-and exposed to the client.
+The [distinction](https://www.w3.org/TR/webauthn-3/#sctn-extensions) between client extensions and authenticator extensions in WebAuthn lies in where they are processed and what they influence. An authenticator extension involves communication with and processing in both the client and authenticator, while a client extension involves only the client.
 
 The `prf` client extension _can_ be built on top of the the `hmac-secret` authenticator extension,
 but that is not a requirement.
