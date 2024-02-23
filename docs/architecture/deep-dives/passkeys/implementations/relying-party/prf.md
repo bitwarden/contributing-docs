@@ -64,7 +64,7 @@ Once we have this encryption key, we can encrypt the user's symmetric key as fol
     4. Encrypt the RSA public key with the user's symmetric key, producing `UserSymmetricKey(PublicKey)`
 
 `EncryptionKey(PrivateKey)`, `PublicKey(UserSymmetricKey)`, and `UserSymmetricKey(PublicKey)` are
-persisted to the server and associated with the registered passkey. Note that the PRF key does
+persisted on the server and associated with the registered passkey. Note that the PRF key does
 **not** leave the client at any point, to ensure zero-knowledge encryption.
 
 :::tip Why an RSA key pair?
