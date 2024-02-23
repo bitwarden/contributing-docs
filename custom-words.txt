@@ -10,6 +10,7 @@ CQRS
 CTAP2
 dockerized
 Gitter
+HKDF
 hotfix
 hotfixed
 hotfixes
