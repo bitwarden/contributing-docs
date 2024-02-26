@@ -102,3 +102,10 @@ assertion data contains everything the RP needs to identify and authenticate the
 
 This implies that the source of the credential must be stored either in the authenticator or the
 client platform (see [Client Side Credentials](#client-side-credentials)).
+
+## Storage vs Discoverability matrix
+
+|                 | Non-Discoverable | Discoverable |
+| --------------- | ---------------- | ------------ |
+| **Client-Side** | Supported        | Supported    |
+| **Server-Side** | Supported        | -            |
