@@ -32,7 +32,7 @@ comprehensive list, see the
   <dd>An optional statement provided by an authenticator which can be used by a Relying Party to identify and verify the provenance of the authenticator. Not to be confused with "attestation" which can be performed without providing a statement about the provenance of the authenticator.</dd>
 
   <dt>Assertion</dt>
-  <dd>The process used to login.</dd>
+  <dd>The process used to log in.</dd>
   <dd>The act of proving ownership of the private key, commonly referred to as authentication.</dd>
 
   <dt>Fallback</dt>

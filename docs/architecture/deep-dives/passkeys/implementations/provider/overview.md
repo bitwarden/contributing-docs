@@ -33,9 +33,7 @@ The same is not always true for the authentication process, for more information
 
 ## User Verification
 
-Bitwarden does not yet fully support user verification for every request, and instead assumes that a
-user has been verified if the vault is unlocked. This is a limitation of the existing user
-verification services.
-
-Bitwarden will have full support for user verification soon, via the user's unlock methods, such as
-a PIN or biometric unlock, with the master password as a fallback.
+Bitwarden does not yet fully support user verification for every request. This is a limitation of
+the existing user verification services. Bitwarden will have full support for user verification
+soon, via the user's unlock methods, such as a PIN or biometric unlock, with the master password as
+a fallback.

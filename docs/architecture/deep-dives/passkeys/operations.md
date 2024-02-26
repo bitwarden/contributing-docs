@@ -38,8 +38,8 @@ Registration requests are invoked using the `navigator.credentials.create()` met
    - **user**: An object that contains information about the user. This includes the user's ID,
      name, display name, and icon.
    - **extensions**: An object that contains any additional parameters that the server wants to
-     include in the registration process. An example of this is the `PRF` extension, which enables
-     the credential to be used for data encryption.
+     include in the registration process. An example of this is the PRF extension, which enables the
+     credential to be used for data encryption.
 
 3. **Client-Side WebAuthn Request:** The application receives the options object from the server and
    passes it to `navigator.credentials.create()`.
@@ -84,8 +84,10 @@ server is compromised.
 Authentication requests are invoked using the `navigator.credentials.get()` method.
 
 1. **Client-Side Request**: The application initiates the registration process by making a request
-   to the server. This request is typically triggered by a user action, such as entering a username,
-   or by clicking on a "Login with Passkey" button.
+   to the server. This request is typically triggered by a user action, such as:
+
+   - Clicking on a "Login with Passkey" button
+   - Entering a username and clicking on a "Login" button
 
 2. **Server-Side Preparation**: The server prepares for the authentication process by generating an
    options object containing a challenge, similar to the registration process. a. If the user's
