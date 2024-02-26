@@ -19,6 +19,21 @@ The current convention is:
   - Example: `WebAuthnLogin` for passkey login, `WebAuthn` for the older 2FA login.
 - Use the term `Credential` (and not `Passkey`) when referring to a FIDO2 Credential in code.
 
+## FIDO2 vs WebAuthn
+
+This naming scheme is not based on any hard rules defined in the specifications, but rather on which
+parts of FIDO2 are used to build the Provider and Relying Party code.
+
+Historically, the Provider code was built on both the WebAuthn and CTAP2 specifications and so
+`Fido2` was used to refer to it. Today, the provider code is almost exclusively based on the
+WebAuthn specification. However, if Bitwarden chooses to support any authenticator extensions in the
+future (e.g. `hmac-secret`), they will likely be defined in the CTAP2 specification.
+
+In contrast, the Relying Party code is built exclusively on the WebAuthn specification and does not
+need to refer to CTAP2 at all, which is why the term `WebAuthn` was chosen. The older 2FA
+implementation is also based on the WebAuthn specification, but it is not a "login method" and so it
+is not referred to as `WebAuthnLogin`.
+
 :::info
 
 The implementation of 2FA login will eventually be consolidated with the newer passkey login
