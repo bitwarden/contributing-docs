@@ -370,7 +370,7 @@ debugger.
 To debug:
 
 - On Windows, right-click on each project > click **Debug** > click **Start New Instance**
-- On MacOS, right-click each project > click **Start Debugging Project**
+- On macOS, right-click each project > click **Start Debugging Project**
 
 ### Rider
 
