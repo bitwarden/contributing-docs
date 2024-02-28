@@ -19,23 +19,23 @@ as well.
 ## macOS Setup
 
 Having followed the macOS setup of iOS, no additional configuration is needed given that when the
-project is opened in XCode it will automatically have the provisioning profiles set up.
+project is opened in Xcode it will automatically have the provisioning profiles set up.
 
 ## Debugging
 
 There are two parts from where to debug:
 
 - From Visual Studio for Mac (the iOS app)
-- From XCode (the watchOS app)
+- From Xcode (the watchOS app)
 
 For now, there is no way to debug both apps (iOS and watchOS) at the same time given that from MAUI
-there is no access to debug information of the watchOS app and from XCode an iOS stub app is
+there is no access to debug information of the watchOS app and from Xcode an iOS stub app is
 installed on the iPhone to debug it. So, at the moment of debugging one needs to choose which part
-to have information about, therefore whether to debug from VS4M or from XCode.
+to have information about, therefore whether to debug from VS4M or from Xcode.
 
 :::caution
 
-When debugging from XCode the MAUI iOS app will be replaced with the stub one from XCode. So any
+When debugging from Xcode the MAUI iOS app will be replaced with the stub one from Xcode. So any
 configuration on the iOS app will be lost (like server urls)
 
 When debugging from VS4M, uninstall the previous watchOS app (if any) from the Apple Watch in
@@ -47,9 +47,9 @@ previous watchOS app it doesn't get updated)
 ### Building
 
 Given that the MAUI iOS app needs the output of the build of Xcode, one needs to build the watchOS
-app from XCode first and then from VS4M build the iOS app to run it on the device.
+app from Xcode first and then from VS4M build the iOS app to run it on the device.
 
-The output of XCode build is stored in a location pretty similar to the next one that is configured
+The output of Xcode build is stored in a location pretty similar to the next one that is configured
 in the `iOS.csproj`:
 
 ```xml
@@ -59,9 +59,9 @@ in the `iOS.csproj`:
 
 It's highly likely that the folder `bitwarden-cbtqsueryycvflfzbsoteofskiyr` won't be the same on
 every Mac. So one needs to change that part in `iOS.csproj` to the one created automatically by
-XCode locally.
+Xcode locally.
 
-To know exactly which is the path: Open the Project in XCode -> Go to Product -> Show Build Folder
+To know exactly which is the path: Open the Project in Xcode -> Go to Product -> Show Build Folder
 in Finder.
 
 _This needs to be improved to have a fixed location or an easier way to get it automatically._
@@ -69,7 +69,7 @@ _This needs to be improved to have a fixed location or an easier way to get it a
 :::caution
 
 One needs to take special attention to target the same platform on both IDEs. Therefore when running
-on a device, target the device both in XCode and on VS4M when building so that the watchOS app is
+on a device, target the device both in Xcode and on VS4M when building so that the watchOS app is
 bundled correctly. Also one needs to make sure that "bitwarden WatchKit app" scheme is selected.
 
 :::
@@ -83,4 +83,4 @@ So one can debug one end (iOS) or the other (watchOS).
 
 If needed to check something on both ends "at the same time" (like to check why a message is not
 sent/arrived), one needs to use console logging or adapt part of the MAUI code to the iOS stub app
-on Xcode and debug the synchronization from XCode.
+on Xcode and debug the synchronization from Xcode.
