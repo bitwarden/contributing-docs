@@ -124,5 +124,7 @@ Actions workflows for code scanning. Targets two domains:
   push events.
 - Quality: Additional language-specific findings and improvements not strictly related to security.
 
-SAST results are exported as SARIF and uploaded to the GitHub Advanced Security interface for
-internal review. Quality results are also made available in the interface when security-related.
+SAST results are exported as
+[SARIF](https://docs.oasis-open.org/sarif/sarif/v2.1.0/sarif-v2.1.0.html) (Static Analysis Results
+Interchange Format) and uploaded to the GitHub Advanced Security interface for internal review.
+Quality results are also made available in the interface when security-related.
