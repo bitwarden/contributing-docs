@@ -37,7 +37,7 @@ You can edit this file directly, which is much easier than using the command lin
 
 ### Editing user secrets - Visual Studio Code
 
-- Install the vscode extension **.NET Core User Secrets**
+- Install the [.NET Core User Secrets](https://marketplace.visualstudio.com/items?itemName=adrianwilczynski.user-secrets) extension
 - Navigate to your project's **.csproj** file, right-click on it and select **Manage User Secrets**
 
 ### Editing user secrets - Rider
