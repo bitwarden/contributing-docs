@@ -35,6 +35,11 @@ By default, user secret files are located in:
 
 You can edit this file directly, which is much easier than using the command line tool.
 
+### Editing user secrets - Visual Studio Code
+
+- Install the vscode extension **.NET Core User Secrets**
+- Navigate to your project's **.csproj** file, right-click on it and select **Manage User Secrets**
+
 ### Editing user secrets - Rider
 
 - Navigate to **Preferences -> Plugins** and Install .NET Core User Secrets
