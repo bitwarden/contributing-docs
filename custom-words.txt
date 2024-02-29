@@ -43,6 +43,8 @@ refactorings
 roadmap
 roadmaps
 sandboxed
+SARIF
+SAST
 SCIM
 SDET
 SDLC
