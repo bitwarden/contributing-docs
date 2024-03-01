@@ -14,8 +14,8 @@ See [Server Setup Guide](../../guide.md).
 
 ## Updating the database
 
-You should run the `migrate.ps1` helper script whenever you sync with the `master` branch or create
-a new migration script. `migrate.ps1` tracks run migrations in `migrations_$DATABASENAME`, which is
+You should run the `migrate.ps1` helper script whenever you sync with the `main` branch or create a
+new migration script. `migrate.ps1` tracks run migrations in `migrations_$DATABASENAME`, which is
 typically `migrations_vault_dev`.
 
 ## Modifying the database

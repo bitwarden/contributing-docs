@@ -4,6 +4,7 @@
 
 Bitwarden
 bytemark
+clickjacking
 CODEOWNERS
 CQRS
 dockerized
@@ -11,6 +12,7 @@ Gitter
 hotfix
 hotfixed
 hotfixes
+iframes
 inet
 IntelliJ
 Iterm
@@ -31,6 +33,7 @@ Omnisharp
 onboarded
 opid
 OTLP
+owasp
 passcode
 passwordless
 pinentry
@@ -39,6 +42,9 @@ proxied
 refactorings
 roadmap
 roadmaps
+sandboxed
+SARIF
+SAST
 SCIM
 SDET
 SDLC
@@ -52,6 +58,7 @@ toolset
 TOTP
 WCAG
 Xcodes.app
+xmldoc
 Yellowpages
 Yubico
 YubiKey

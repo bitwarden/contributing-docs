@@ -8,7 +8,7 @@ Pull Requests are the primary mechanism we use to write software. GitHub has som
 [documentation](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-pull-requests)
 on using the Pull Request feature.
 
-<community>
+<Community>
 
 ## Fork
 
@@ -36,39 +36,39 @@ This will allow you to pull in upstream changes easily by running.
 git fetch upstream
 ```
 
-</community>
+</Community>
 
 ## Branch
 
 Each new feature or bug fix should be developed on a separate branch. Branches allow you to work on
-multiple features concurrently. In most cases you should branch from `master`. However, if you are
+multiple features concurrently. In most cases you should branch from `main`. However, if you are
 working with other contributors we typically branch off a long-lived feature branch. Long-lived
 feature branches allow us to break up a single feature into multiple PRs, which can be reviewed
 individually but tested and released together.
 
-<community>
+<Community>
 
 As a community contributor you can use the following command to branch directly from the _upstream_
-master branch.
+`main` branch.
 
 ```bash
 git checkout -b feature/example
 ```
 
-</community>
+</Community>
 
-<bitwarden>
+<Bitwarden>
 
-As a Bitwarden contributor you should branch of `origin/master`, this ensures that the branch is
-always based of the latest upstream `master` even if the local `master` is out of date.
+As a Bitwarden contributor you should branch of `origin/main`, this ensures that the branch is
+always based of the latest upstream `main` even if the local `main` is out of date.
 
 ```bash
-git checkout -b <team>/<issue-number>/<brief-description> -t origin/master
+git checkout -b <team>/<issue-number>/<brief-description> -t origin/main
 ```
 
 Our branching strategy is described in detail [here](branching.md).
 
-</bitwarden>
+</Bitwarden>
 
 ## Commit
 
@@ -92,38 +92,120 @@ is squashing multiple half-working commits. Please be sure to follow the
 
 **Avoid force push** once a PR has been reviewed.
 
-Git operations that affects the existing git commits prevent GitHub from correctly identifying “new
+Git operations that affect the existing git commits prevent GitHub from correctly identifying “new
 changes” to a PR forcing the reviewer to start over again.
 
 :::
 
-## Creating a Pull Request
+## Creating a pull request
 
 The Bitwarden repositories have a _Pull Request template_ which should be followed. This will ensure
-the PR review goes smoothly since it will provide context to the reviewer. <community> Once a
-community PRs has been created, they will be automatically be linked to an internal Jira ticket. The
-internal ticket is used for prioritization and tracking purposes.</community><bitwarden>Include a
-Jira ticket reference so the reviewer can gain all context on the work.</bitwarden> Tag
-`@dept-design` as a reviewer for any UI changes.
+the PR review goes smoothly since it will provide context to the reviewer.<Community> Once a
+community PR has been created, it will be automatically be linked to an internal Jira ticket. The
+internal ticket is used for prioritization and tracking purposes.</Community><Bitwarden> When
+creating the PR include a Jira ticket reference so the reviewer can gain all context on the work as
+well as links to any associated PRs in other repositories.</Bitwarden>
 
-## Review process
+<Bitwarden>
 
-<community>
+### Tagging reviewers
 
-Once a Community PR has been created a Bitwarden developer will perform a code review, while we try
-to this in a reasonable time-frame, please understand that we have internal roadmaps and priorities
+We use `CODEOWNERS` in each repository to assign the reviewing teams based on the files in the PR.
+These reviews are required for the changes to be merged to `master`.
+
+You can tag additional teams or individuals for review as you see fit, including `@dept-design` for
+any design changes.
+
+### Opening the PR for review
+
+As its name implies, marking a PR as "Ready for Review" indicates that you are ready for all
+assigned teams to review it. If the changes are still in progress, leave the PR in `Draft` status.
+Doing this ensures that reviewers can act on the "Ready for Review" as their signal to begin the
+review process without further notification.
+
+### Addressing feedback
+
+It is likely that you will receive some feedback on your PR. You should see this as a positive thing
+-- it signifies a healthy and thorough review process and an organizational commitment to code
+quality. You may receive [comments](./code-review.md#comment) or a
+[request for changes](./code-review.md#request-changes). You are encouraged to engage in
+conversation on the PR to discuss a solution, but if any strong conflicting opinions arise it is
+often best to move the conversation to a synchronous format to avoid any misunderstanding.
+
+When any necessary changes have been made, you should address the comments or request for changes by
+responding in the PR conversation thread. You are not responsible for resolving the conversation --
+that is the prerogative of the reviewer, to ensure that they agree that the question or concern has
+been addressed.
+
+**When you are ready for a reviewer to revisit your changes, you should request a re-review.** This
+will notify the reviewer and ensure a prompt response.
+
+</Bitwarden>
+
+## Reviewing the pull request
+
+<Bitwarden>
+
+At Bitwarden, we believe that the act of reviewing PRs is a critically important part of each
+engineer's job. It is as important, if not more important, than the act of writing code.
+
+To ensure that teams within the organization operate on same set of assumptions for performing
+reviews, we have agreed to a baseline set of expectations.
+
+When a PR author opens a PR for review, they should have the expectation that:
+
+- The act of opening the PR for review is the **only** notification required. Teams are responsible
+  for properly configuring notifications so that team members are aware of their obligations.
+- The reviewing team(s) will respond within **2 business days** to:
+  - Provide a review,
+  - Inform the author when a review will be provided, or
+  - Ask the author to split the work into a
+    [smaller PR](./branching.md#structuring-branches-to-support-incremental-work) for review
+
+:::tip Notifications
+
+Our teams use GitHub notifications as the primary method of communication for PR review requests and
+scheduled reminders are highly encouraged to facilitate prompt responses to requests.
+
+- Individual engineers are encouraged to set up [scheduled reminders][user reminders] for
+  themselves.
+- Each team has [scheduled reminders][team reminders] on a dedicated Slack channel (e.g.
+  #team-eng-platform-notifications).
+
+:::
+
+### Follow-up notification
+
+If there is no response to a request for review in 48 hours, the author should reach out to the
+team(s) -- or to individual engineers if assigned -- via Slack to follow up.
+
+This should wait for 48 hours to allow the default process to take place and not overwhelm the team
+with notifications on multiple platforms.
+
+:::warning Urgent reviews
+
+If deployment deadlines or other concerns mean there is a need to shorten the review period for a
+pull request, the author should reach out to the reviewing team via their Slack channel. This should
+**only** be necessary for urgent requests and for follow-up after 48 hours.
+
+:::
+
+</Bitwarden>
+
+<Community>
+
+Once a Community PR has been created a Bitwarden developer will perform a code review. While we try
+to this in a reasonable time frame, please understand that we have internal roadmaps and priorities
 that may delay this process.
 
-</community>
+</Community>
 
-<bitwarden>
-
-While we mostly use an async review process, please don't hesitate to schedule a meeting with the
-reviewer/contributor to discuss the changes. While async communication can be useful it incurs a
-time penalty which can drag out the review process. And sometimes setting up a short call to discuss
-the changes can potentially save a lot of time.
-
-</bitwarden>
+### How to perform a review
 
 We've written up some [guidelines](./code-review.md) for reviewing code, which we recommend reading
 before performing your first code review.
+
+[user reminders]:
+  https://docs.github.com/en/account-and-profile/setting-up-and-managing-your-personal-account-on-github/managing-your-membership-in-organizations/managing-your-scheduled-reminders
+[team reminders]:
+  https://docs.github.com/en/organizations/organizing-members-into-teams/managing-scheduled-reminders-for-your-team

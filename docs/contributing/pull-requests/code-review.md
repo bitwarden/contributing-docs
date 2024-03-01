@@ -1,39 +1,52 @@
+---
+sidebar_position: 2
+---
+
 # Code Review Guidelines
 
 At Bitwarden, we encourage everyone to participate in code reviews. A team will focus primarily on
 their own code reviews, but if you see something interesting, feel free to jump in and discuss.
 
-To have efficient code reviews there are a few things to keep in mind (from
-[Best Practices for Code Review | SmartBear](https://smartbear.com/learn/code-review/best-practices-for-peer-code-review/)):
+A few general guidelines:
 
 - Pull requests should be manageable. If the PR is too large -- significantly above a few hundred
   lines -- ask the contributor if it can be split it up into multiple PRs before reviewing.
-  - This can be tricky in our code base since many things are tightly coupled.
+  - This can be tricky in our codebase since many things are tightly coupled.
 - Take your time when reviewing - expect a rate of less than 500 lines of code per hour.
 - Take breaks - don’t review for longer than 60 minutes.
 
 Don’t feel bad for taking your time when doing code reviews! They often take longer than you think,
-and we should be spending as much time as needed.
+and we should be spending as much time as needed. When you find a bug or defect during PR review,
+the cost of fixing it is much smaller than if it escapes further into the development lifecycle.
 
-:::tip
+:::tip Want to read more?
 
-Bugs or defects found early in the development cycle have a much smaller cost associated with fixing
-them.
+You can find more tips for PR review here:
+[Best Practices for Code Review | SmartBear](https://smartbear.com/learn/code-review/best-practices-for-peer-code-review/)
 
 :::
 
 ## Reviewing
 
 If you feel that someone else has good knowledge of the code you are reviewing, please feel free to
-reach out to them or add them as a reviewer. <bitwarden>Bitwarden developers can use the [SME
-Yellowpages][sme-yellowpages] to look for knowledge area experts.</bitwarden>
+reach out to them or add them as a reviewer. <Bitwarden>Bitwarden developers can use the [SME
+Yellowpages][sme-yellowpages] to look for knowledge area experts.</Bitwarden>
 
 Please do **not** approve code you do not understand the implications of. Comments and concerns are
 always welcome! For example, it’s okay to leave some general comments or feedback, while also saying
 that you don’t have enough knowledge to approve the changes. The author can ask for another review
 from someone else, and there’s nothing wrong in having two reviewers on a PR.
 
-:::info Note
+When undertaking a review, keep in mind that you are taking an ownership stake in the changes. You
+should always strive to provide actionable feedback to the author and to make yourself available for
+any clarifying questions or to pair on fixes suggested.
+
+While we mostly use an asynchronous review process, please don't hesitate to schedule a meeting with
+the author to discuss the changes. While asynchronous communication can be useful, it incurs a time
+penalty which can drag out the review process. Sometimes setting up a short call to discuss the
+changes can save a lot of time.
+
+:::info Assumptions
 
 <a id="assumptions-note"></a> When reviewing code, remember that all software is built to conform to
 a set of assumptions. Features, bug fixes, and other requirement changes represent a change in those
@@ -44,11 +57,24 @@ requirements, which may not necessarily be in line with the previous solution.
 
 ### Review statuses
 
-Please use the review statuses appropriately.
+When completing a review, you can either add comments, request changes, or approve the PR. It is
+important that both the reviewer and the author understand the expectations around each type of
+review, so we use the guidelines below.
+
+:::tip Tip for effective feedback
+
+When providing comments or requesting changes, keep in mind the experience level of the author.
+
+If the engineer is new to the company and the codebase or less experienced overall, they would
+probably welcome more explicit background on your concerns and more concrete suggestions, whereas a
+more experienced engineer would prefer general guidance so that they can solve the problem
+themselves.
+
+:::
 
 #### Comment
 
-Comment is a great way to discuss things without explicitly approving or requesting changes.
+Using comments is a great way to discuss things without explicitly approving or requesting changes.
 
 #### Request changes
 
@@ -56,10 +82,11 @@ Request changes should be used when you believe something **needs** to change pr
 getting merged, as it will prevent someone else from approving the PR before your concerns have been
 tackled.
 
-We shouldn’t hesitate to use this status, however we should give clear feedback on what needs to
-change for the PR to get approved. Likewise a PR author should not be discouraged by a _request for
-changes_, it's simply an indication that changes should be made prior to the PR being merged. This
-is common.
+We shouldn’t hesitate to use this status. However, it does come with obligations for the reviewer.
+By blocking the PR from progressing, you are taking on additional responsibility and should give
+clear feedback on what needs to change for the PR to get approved. Likewise, a PR author should not
+be discouraged by a request for changes, it's simply an indication that changes should be made prior
+to the PR being merged. This is common.
 
 :::warning Discarding reviews
 
@@ -76,12 +103,14 @@ scenarios where discarding the reviews are generally seen as accepted.
 
 #### Approve
 
-Approving a PR means that you have confidence in that the code works, and that it does what the PR
+Approving a PR means that you have confidence in that the code works and that it does what the PR
 claims. This can be based on testing the change or on previous domain knowledge.
 
-- The PR targets the [correct branch](branching/#which-branching-model-to-choose).
+- The PR targets the [correct branch](branching#which-branching-model-to-choose).
 - You have verified that the linked Jira issue description matches the changes made in the PR.
 - You have read and understood the full impact of the changes suggested by the PR.
+- You have verified that all possible changes have been
+  [unit tested](./../testing/unit/naming-conventions.mdx).
 - You attest that the changes
   - Solve the intended problem,
   - [solve the requirements in the best way](#assumptions-note),
@@ -113,6 +142,7 @@ a time.
   - Does the PR change the areas you expect to be changed?
     - Are any missing?
     - Are any present you didn't expect?
+  - Are unit tests present?
 - Micro View - Focus on individual files.
   - Is the code style adhered?
   - Is the code readable?

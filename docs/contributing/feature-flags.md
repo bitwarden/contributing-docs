@@ -11,11 +11,11 @@ Support for feature flags was added based on
 [ADR 0018](https://contributing.bitwarden.com/architecture/adr/feature-management/). Some
 highlights:
 
-- [Context](https://github.com/bitwarden/server/blob/master/src/Core/Context/ICurrentContext.cs) is
+- [Context](https://github.com/bitwarden/server/blob/main/src/Core/Context/ICurrentContext.cs) is
   provided when requesting the state of a flag. We currently allow targeting on user, organization,
   and service account. Only the IDs are sent to LaunchDarkly to avoid PII sharing.
 - All available feature flag states are provided to clients calling the
-  [configuration API](https://github.com/bitwarden/server/blob/master/src/Api/Models/Response/ConfigResponseModel.cs).
+  [configuration API](https://github.com/bitwarden/server/blob/main/src/Api/Models/Response/ConfigResponseModel.cs).
 - Environments (production, QA, and development for now) exist to segment flag states further. This
   will be automatic based on where code is running.
 
@@ -140,7 +140,7 @@ Recommendations for naming are:
 - Keep key names succinct.
 
 Once a name has been decided, add the feature flag to the
-[`FeatureFlagKeys`](https://github.com/bitwarden/server/blob/master/src/Core/Constants.cs) constants
+[`FeatureFlagKeys`](https://github.com/bitwarden/server/blob/main/src/Core/Constants.cs) constants
 file on the server. This will allow the flag to be retrieved from LaunchDarkly via whichever data
 source you configure below.
 
@@ -210,10 +210,10 @@ the most recent value from one of these retrieval events.
 #### Web
 
 The feature flag values are retrieved through the `fetchServerConfig()` method on the
-[`ConfigService`](https://github.com/bitwarden/clients/blob/master/libs/common/src/services/config/config.service.ts).
+[`ConfigService`](https://github.com/bitwarden/clients/blob/main/libs/common/src/services/config/config.service.ts).
 
 To use a feature flag, you should first define the new feature flag as an enum value in the
-[`FeatureFlags`](https://github.com/bitwarden/clients/blob/master/libs/common/src/enums/feature-flag.enum.ts)
+[`FeatureFlags`](https://github.com/bitwarden/clients/blob/main/libs/common/src/enums/feature-flag.enum.ts)
 enum.
 
 Once that is defined, the value can be retrieved by injecting the `ConfigService` and using one of
@@ -242,8 +242,8 @@ the retrieval methods:
 1. Inject `IFeatureService` where you need a feature flag. Note that you’ll also need
    `ICurrentContext` when accessing the feature state.
 2. Find the constant in the
-   [`FeatureFlagKeys`](https://github.com/bitwarden/server/blob/master/src/Core/Constants.cs) list
-   for the key you plan on using. It should have been added when
+   [`FeatureFlagKeys`](https://github.com/bitwarden/server/blob/main/src/Core/Constants.cs) list for
+   the key you plan on using. It should have been added when
    [creating a new flag](#creating-a-new-flag).
 3. Utilize the above key constant with the appropriate method on the feature service:
 
@@ -262,11 +262,40 @@ to Jira helps create a history of the feature and there are copious logs and aud
 that can be kept. Feature flags not accessed for a long period of time will automatically move to an
 "inactive" state that can also help with identifying technical debt to clean up.
 
-When defining the subtasks of a story be sure to include a cleanup task for removal of the feature
-flag from code – it’s essential that these not be left around for too long and assume a permanent
-existence. Address the task at a later phase once the feature launches successfully.
+While feature flags can be left indefinitely in LaunchDarkly without accumulating technical debt, it
+is essential that any logic based on these flags be removed from code as soon as the feature
+launches successfully. When defining the tasks for feature-flagged code, be sure to include a
+cleanup task for removing this logic. You may want to consider multiple tasks - one for each of the
+steps in the removal process.
 
-### Self-hosted considerations
+### Unwinding a feature flag
+
+Due to the complexity of the different client deployments and how we expose feature flags through
+our API, it is important that each feature flag be removed in the appropriate sequence.
+
+First, remove all business logic that relies on the flag from both client and server code. This
+includes _all_ references in the client codebase, and also any business logic on the server that
+checks the flag value. This does _not_ include removing the flag from the `FeatureFlagKeys` on the
+server -- we must leave this here so that old clients who have not updated continue to be served the
+correct "on" value when querying for the flag.
+
+This code should then be deployed to all clients and to the server.
+
+:::tip Self-hosted customers
+
+Once the code referencing the flag has been removed and clients have updated, self-hosted customers
+can update to the latest version to begin using the feature. See
+[Self-hosted considerations](#self-hosted-considerations) below for more detail.
+
+:::
+
+Once we have satisfied the requirements of
+[backward compatibility](https://bitwarden.com/help/bitwarden-software-release-support/#release-support-at-bitwarden)
+for our clients, we can completely remove the feature flag from the server codebase. This can be
+done by removing the flag value from the `FeatureFlagKeys`. This should then be deployed to the
+server to complete the removal process.
+
+## Self-hosted considerations
 
 Self-hosted instances will not have access to LaunchDarkly, so the server configuration retrieved
 from the API will assess all feature flags as their default state unless the server is configured

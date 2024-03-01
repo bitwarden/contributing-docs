@@ -4,7 +4,7 @@ sidebar_position: 10
 
 # Troubleshooting
 
-## MacOS
+## macOS
 
 ### AppleCFErrorCryptographicException
 

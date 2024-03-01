@@ -54,7 +54,7 @@ places:
 
 To get an Id and Key, it’s fine to either
 
-- grab them from <https://bitwarden.com/host/>, or
+- [request a host installation ID](https://bitwarden.com/host/), or
 - generate a Guid (Id) and random alphanumeric string (key)
 
 Record these for use in the next steps.
@@ -107,7 +107,7 @@ in .NET Core configuration build our settings for us.
 Currently, we only override `GlobalSettings`. Any other user secret that needs overriding will
 require a code change to do so. Check out `ServiceCollectionExtension.AddGlobalSettingsServices` in
 the server repository to see how we’re doing it today
-([fragile link to the code](https://github.com/bitwarden/server/blob/master/src/SharedWeb/Utilities/ServiceCollectionExtensions.cs#L448-L463)).
+([fragile link to the code](https://github.com/bitwarden/server/blob/main/src/SharedWeb/Utilities/ServiceCollectionExtensions.cs#L448-L463)).
 
 The [internal user secrets](../secrets/index.md) contains a minimum override example. You will need
 to update the following values in the `Dev:SelfHostOverride:GlobalSettings` section:
@@ -305,3 +305,19 @@ This of the `dev` object as containing both the configuration for cloud and self
 environments.
 
 </details>
+
+## Licensed Features
+
+If you need to develop against [licensed features](https://bitwarden.com/help/licensing-on-premise/)
+on your self-hosted instance, you will need to unlock them with a license file that is registered in
+your cloud-configured instance.
+
+To do this, you should first start both your local cloud-configured and self-hosted web clients, as
+both environments will be necessary to acquire and apply the license.
+
+You can now choose which type of license you would like to apply. The instructions vary for each,
+but the best resource is the Bitwarden Help Center documentation:
+
+- [Individual license](https://bitwarden.com/help/licensing-on-premise/#individual-license)
+- [Organization license through the web vault](https://bitwarden.com/help/licensing-on-premise/#organization-license)
+- [Organization license through the Provider Portal](https://bitwarden.com/help/getting-started-providers/#enabling-the-self-hosted-instances)
