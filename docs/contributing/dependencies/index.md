@@ -50,15 +50,14 @@ change. For more details read
 
 ## Workflow
 
-Renovate is currently scheduled to automatically create pull requests every 2 weeks for all open
-dependencies. The goal of our dependency management process is for the teams to handle these
-dependencies in that same 2-week cadence, in order to avoid a large backlog of PRs and out-of-date
-packages building up over time.
+Renovate is currently scheduled to automatically create pull requests every 2 weeks. The goal of our
+dependency management process is for the teams to review and merge the opened pull requests in the
+same 2-week cadence. To avoid a large backlog of PRs and out-of-date packages accumulating.
 
 :::info Major upgrades
 
-Major upgrades are an exception to this time frame, as these can take longer to coordinate. Ideally
-the team will have already coordinated and resolved deprecations in advance.
+Major upgrades are an exception to this time frame, as these can take longer to coordinate. The team
+should make an effort to coordinate scheduled major updates and resolve deprecations in advance.
 
 :::
 
@@ -92,6 +91,10 @@ A typical dependency workflow involves the following steps:
 5. If test coverage is lacking, check out locally and manually confirm a few key areas.
 6. Review the proposed code changes and approve the PR.
 7. Write a Jira ticket containing testing notes for QA.
+   - Testing notes should include:
+     - What areas of the codebase are affected by the dependency to help isolate future problems.
+     - Recommendation for manual QA testing **only** if the developer identifies this as a high-risk
+       update.
 8. Merge the PR.
 9. Assign the Jira ticket to QA.
 
@@ -109,9 +112,15 @@ by ensuring that all CI jobs pass successfully, merging the PR, and marking the 
 
 ### QA testing
 
-While developers are responsible for writing a Jira ticket with testing notes, the QA engineer
-should practice due diligence by also considering the impact of the dependency change and if needed
-discuss with the engineer about potentially increasing or decreasing the scope of testing.
+By default, dependency updates do **not** undergo individual testing by QA. However, we do want our
+QA teams to be aware of the changes so that they can react appropriately if problems occur during
+regression testing. For this reason, we assign each dependency ticket to our QA team for review,
+along with a recommendation for manual testing when necessary.
+
+If the QA engineer agrees that manual testing is not required, they will mark the ticket as `Done`.
+
+If the QA engineer or the developer recommends manual testing, QA will perform the testing with the
+scope defined in the testing notes, marking the ticket `Done` only when testing is successful.
 
 ### Reverting
 
