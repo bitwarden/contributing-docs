@@ -69,7 +69,7 @@ _Stored Procedures_ that were kept around for backwards compatibility should be 
 for syncing old and new data should also be removed in this step.
 
 Since `Sql/dbo` represents the current state we need to introduce a "future" state which we will
-call `dbo_future`.
+call `dbo_finalization`.
 
 1. Copy the relevant `.sql` files from `src/Sql/dbo` to `src/Sql/dbo_finalization`.
 2. Remove the backwards compatibility which is no longer needed.
