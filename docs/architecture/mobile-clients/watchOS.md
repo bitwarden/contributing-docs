@@ -21,8 +21,8 @@ Then in the Extension we have a layered architecture:
 
 ## Integration with iOS
 
-The watchOS app is developed using `XCode` and `Swift` and we need to integrate it to the `MAUI` iOS
-application.
+The watchOS app is developed using `XCode` and `Swift` and we need to integrate it to the .NET MAUI
+iOS application.
 
 For this, the `iOS.csproj` has been adapted taking a
 [solution](https://github.com/xamarin/xamarin-macios/issues/10070#issuecomment-1033428823) provided

@@ -9,13 +9,12 @@ The mobile clients are Android, iOS with its extensions and watchOS. They all ar
 
 Principal structure is a follows:
 
-- `Core`: Shared code that focus on the logical part of the app. Several classes are a port from the
-  Web Clients to C#.
-- `App`: Shared code that focus on the presentation layer of the app and some business logic as
-  well.
-- `Android`: All the code specific to the Android platform
-- `iOS`: All the code specific to the iOS platform
-- `iOS.Core`: Shared code used by the iOS app and its extensions
+- `App`: Main .NET MAUI project that shares code between both platforms (Android & iOS). One can see
+  specific platform code under the `Platforms` folder.
+- `Core`: Shared code having both logical and UI parts of the app. Several classes are a port from
+  the Web Clients to C#. Here one can find most of the UI and logic since it's shared between App
+  and the iOS extensions.
+- `iOS.Core`: Shared code used by the main iOS app and its extensions
 - `iOS.Autofill`: iOS extension that handles Autofill
 - `iOS.Extensions`: iOS extension that handles Autofill from the bottom sheet extension
 - `iOS.ShareExtension`: iOS extension that handles sharing files through Send
@@ -38,9 +37,7 @@ title Simplified Dependencies Diagram
 
 component "Core"
 component "App"
-component "Android"
 component "iOS.Core"
-component "iOS"
 component "iOS.Autofill"
 component "iOS.Extension"
 component "iOS.ShareExtension"
@@ -52,23 +49,21 @@ component "watchOS" {
 
 [App] --> [Core]
 
-[Android] --> [App]
-
 [iOS.Core] --> [App]
 
-[iOS] --> [iOS.Core]
-[iOS] --> [iOS.Autofill]
-[iOS] --> [iOS.Extension]
-[iOS] --> [iOS.ShareExtension]
-[iOS] --> [bitwarden WatchKit App]
+[App] --> [iOS.Core]
+[App] --> [iOS.Autofill]
+[App] --> [iOS.Extension]
+[App] --> [iOS.ShareExtension]
+[App] --> [bitwarden WatchKit App]
 
-[iOS.Autofill] --> [App]
+[iOS.Autofill] --> [Core]
 [iOS.Autofill] --> [iOS.Core]
 
-[iOS.Extension] --> [App]
+[iOS.Extension] --> [Core]
 [iOS.Extension] --> [iOS.Core]
 
-[iOS.ShareExtension] --> [App]
+[iOS.ShareExtension] --> [Core]
 [iOS.ShareExtension] --> [iOS.Core]
 
 [bitwarden] --> [bitwarden WatchKit App]
