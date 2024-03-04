@@ -17,7 +17,7 @@ Before you start: make sure you’ve installed the recommended
 - Docker Desktop
 - Visual Studio 2022
 - Powershell
-- [NET 6.0 SDK](https://dotnet.microsoft.com/download)
+- [NET 8.0 SDK](https://dotnet.microsoft.com/download)
 - Azure Data Studio
 
 :::
