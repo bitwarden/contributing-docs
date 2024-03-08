@@ -26,7 +26,7 @@ export default function AdrTable({ frontMatter }): JSX.Element {
           <tr>
             <th>Status:</th>
             <td>
-              <span className={`badge badge-${badgeColors[frontMatter.status] ?? "secondary"}`}>
+              <span className={`badge badge--${badgeColors[frontMatter.status] ?? "secondary"}`}>
                 {frontMatter.status?.toUpperCase()}
               </span>
             </td>
