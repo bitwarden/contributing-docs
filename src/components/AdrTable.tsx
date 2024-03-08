@@ -7,7 +7,11 @@ const formatDate = (date: Date) => {
 };
 
 const badgeColors = {
-  "In progress": "primary",
+  Proposed: "primary",
+  Accepted: "success",
+  Rejected: "danger",
+  Deprecated: "warning",
+  Superseded: "warning",
 };
 
 export default function AdrTable({ frontMatter }): JSX.Element {
@@ -22,7 +26,7 @@ export default function AdrTable({ frontMatter }): JSX.Element {
           <tr>
             <th>Status:</th>
             <td>
-              <span className={`badge badge--${badgeColors[frontMatter.status] ?? "primary"}`}>
+              <span className={`badge badge-${badgeColors[frontMatter.status] ?? "secondary"}`}>
                 {frontMatter.status?.toUpperCase()}
               </span>
             </td>

@@ -1,6 +1,6 @@
 ---
 adr: "0019"
-status: In progress
+status: Accepted
 date: 2023-02-06
 tags: [server, clients, browser, notifications]
 ---

@@ -1,7 +1,7 @@
 ---
 title: 0012 - Angular filename convention
 adr: "0012"
-status: In progress
+status: Accepted
 date: 2022-08-23
 tags: [clients, angular]
 ---

@@ -1,6 +1,6 @@
 ---
 adr: "0007"
-status: In progress
+status: Accepted
 date: 2022-07-12
 tags: [browser, angular]
 ---

@@ -1,6 +1,6 @@
 ---
 adr: "0017"
-status: Done
+status: Accepted
 date: 2022-12-30
 tags: [mobile, watchOS]
 ---

@@ -1,6 +1,6 @@
 ---
 adr: "0016"
-status: In progress
+status: Accepted
 date: 2022-11-28
 tags: [clients, typescript]
 ---
