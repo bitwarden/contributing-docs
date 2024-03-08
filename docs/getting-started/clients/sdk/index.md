@@ -1,3 +1,7 @@
+---
+sidebar_position: 7
+---
+
 # SDK
 
 Bitwarden provides a public Software Development Kit (SDK) for [Secrets Manager][sm] and an internal
