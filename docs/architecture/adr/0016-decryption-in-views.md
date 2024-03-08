@@ -7,6 +7,8 @@ tags: [clients, typescript]
 
 # 0016 - Move Decryption and Encryption to Views
 
+<AdrTable frontMatter={frontMatter}></AdrTable>
+
 ## Context and Problem Statement
 
 Bitwarden has a couple of different models for representing data described in detail in
