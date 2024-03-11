@@ -21,7 +21,7 @@ Then in the Extension we have a layered architecture:
 
 ## Integration with iOS
 
-The watchOS app is developed using `XCode` and `Swift` and we need to integrate it to the `Xamarin`
+The watchOS app is developed using `XCode` and `Swift` and we need to integrate it to the .NET MAUI
 iOS application.
 
 For this, the `iOS.csproj` has been adapted taking a

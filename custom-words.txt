@@ -2,12 +2,14 @@
 # it in a single (`) or multiline (```) code snippet instead, as they are automatically ignored
 # by the spellchecker. Please keep the list sorted alphabetically.
 
+AndroidX
 Bitwarden
 bytemark
 clickjacking
 CODEOWNERS
 CQRS
 dockerized
+F-Droid
 Gitter
 hotfix
 hotfixed
@@ -38,6 +40,7 @@ passcode
 passwordless
 pinentry
 PNSs
+precompiler
 proxied
 refactorings
 roadmap
