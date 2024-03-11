@@ -1,11 +1,12 @@
 ---
-sidebar_position: 7
+sidebar_position: 5
 ---
 
 # SDK
 
 Bitwarden provides a public Software Development Kit (SDK) for [Secrets Manager][sm] and an internal
-SDK for the Bitwarden [Password Manager][pm]. The SDK is written in Rust.
+SDK for the Bitwarden [Password Manager][pm]. The SDK is written in Rust and provides bindings for
+multiple languages.
 
 ## Requirements
 
