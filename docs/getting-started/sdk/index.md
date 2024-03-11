@@ -13,7 +13,7 @@ multiple languages.
 - Latest stable version of Rust, preferably installed via [rustup](https://rustup.rs/).
 - Node and npm.
 
-See the [Tools and Libraries](../../tools) page for more information.
+See the [Tools and Libraries](../tools/index.md) page for more information.
 
 ## Setup instructions
 
