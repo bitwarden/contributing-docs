@@ -1,6 +1,6 @@
 ---
 adr: "0008"
-status: In progress
+status: Accepted
 date: 2022-07-15
 tags: [server]
 ---
