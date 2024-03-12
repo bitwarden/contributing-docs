@@ -1,6 +1,6 @@
 ---
 adr: "0021"
-status: In progress
+status: Accepted
 date: 2023-07-13
 tags: [server]
 ---
