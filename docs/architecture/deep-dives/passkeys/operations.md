@@ -86,8 +86,8 @@ Authentication requests are invoked using the `navigator.credentials.get()` meth
 1. **Client-Side Request**: The application initiates the registration process by making a request
    to the server. This request is typically triggered by a user action, such as:
 
-   - Clicking on a "Login with Passkey" button
-   - Entering a username and clicking on a "Login" button
+   - Clicking on a "Log in with Passkey" button
+   - Entering a username and clicking on a "Log in" button
 
 2. **Server-Side Preparation**: The server prepares for the authentication process by generating an
    options object containing a challenge, similar to the registration process. a. If the user's

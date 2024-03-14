@@ -17,23 +17,23 @@ vault.
 Bitwarden currently has two implementations for authenticating users using passkeys:
 
 - Older 2FA "WebAuthn" implementation
-- Newer "Login with Passkeys" implementation
+- Newer "Log in with Passkeys" implementation
 
 Both implementations use the same FIDO2 technologies, but are completely separate and share almost
-no code. From a user perspective "Login with Passkeys" is a first-factor authentication method,
-while the older "WebAuthn" implementation is a second-factor. "Login with Passkeys" takes advantage
+no code. From a user perspective "Log in with Passkeys" is a first-factor authentication method,
+while the older "WebAuthn" implementation is a second-factor. "Log in with Passkeys" takes advantage
 of FIDO2 User Verification and therefore completely replaces the other existing 2FA methods.
 
-The 2FA implementation will eventually be consolidated with the newer "Login with Passkey"
+The 2FA implementation will eventually be consolidated with the newer "Log in with Passkey"
 implementation.
 
 ## Storage modality
 
 - The 2FA "WebAuthn" implementation supports both client-side and server-side storage mode.
-- The "Login with Passkeys" implementation only supports the client-side storage mode.
+- The "Log in with Passkeys" implementation only supports the client-side storage mode.
 
 ## Discoverability
 
 - The 2FA "WebAuthn" implementation does not support discoverability, as it is a second-factor
   authentication method and supports the server-side storage mode.
-- The "Login with Passkeys" implementation requires discoverable credentials.
+- The "Log in with Passkeys" implementation requires discoverable credentials.

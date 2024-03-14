@@ -83,7 +83,7 @@ registered credential.
 
 :::
 
-### During passkey login
+### During passkey log in
 
 When a user chooses to authenticate with a passkey, an assertion is requested from the
 authenticator. If the passkey is registered for encryption, and the
@@ -112,5 +112,5 @@ In order to decrypt the vault data:
 
 Support for PRF varies greatly across authenticators and platforms. Only when all members of the
 WebAuthn assertion ceremony support PRF can Bitwarden obtain the key necessary for decryption. If
-you registered a passkey with PRF support, but you are prompted for your master password on login,
+you registered a passkey with PRF support, but you are prompted for your master password on log in,
 make sure you are using the same operating system and browser that you used during registration.
