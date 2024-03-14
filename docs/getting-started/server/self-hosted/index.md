@@ -37,7 +37,7 @@ cloud-configured server before worrying about getting a self-hosted instance con
 Clone the server repo into a new folder, called `server-selfhost`:
 
 ```bash
-git clone git@github.com:bitwarden/server.git server-selfhost
+git clone https://github.com/bitwarden/server.git server-selfhost
 ```
 
 Next, we’ll work on getting a self-hosted server running concurrently with a local cloud-configured
