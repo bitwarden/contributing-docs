@@ -52,6 +52,7 @@ SDLC
 Serilog
 signtool
 signup
+sprocs
 sqlcmd
 subprocessor
 toolset
