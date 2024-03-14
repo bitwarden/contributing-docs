@@ -25,16 +25,16 @@ subsequent requests to sign challenges from the application to prove ownership o
 ## Architecture
 
 FIDO2 can be broken down into two main components: WebAuthn and CTAP2. WebAuthn is a web standard
-that allows for the creation and use of passkeys through a well defined JavaScript interface, and
-CTAP2 is a protocol for communicating with external authenticators (or roaming authenticators), such
-as hardware security keys (e.g. YubiKeys).
+that allows for the creation and use of passkeys through a well-defined JavaScript interface, and
+CTAP2 is a protocol for communicating with external authenticators (also know as roaming
+authenticators), such as hardware security keys (e.g. YubiKeys).
 
 The interaction between these two components can vary depending on the use case:
 
 - When using platform credentials, the interaction is always between the browser and the platform
   authenticator (i.e. the operating system) using native APIs.
 - When using roaming authenticators, the interaction can be either:
-  - Mediated by the platform
+  - Mediated by the platform, or
   - Directly between the browser and the authenticator using e.g. USB/HID or BLE protocols.
 
 ### Diagram

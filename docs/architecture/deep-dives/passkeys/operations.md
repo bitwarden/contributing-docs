@@ -38,8 +38,8 @@ Registration requests are invoked using the `navigator.credentials.create()` met
    - **user**: An object that contains information about the user. This includes the user's ID,
      name, display name, and icon.
    - **extensions**: An object that contains any additional parameters that the server wants to
-     include in the registration process. An example of this is the PRF extension, which enables the
-     credential to be used for data encryption.
+     include in the registration process. An example of this is the `prf` extension, which enables
+     the credential to be used for data encryption.
 
 3. **Client-Side WebAuthn Request:** The application receives the options object from the server and
    passes it to `navigator.credentials.create()`.
@@ -59,7 +59,7 @@ Registration requests are invoked using the `navigator.credentials.create()` met
    attestation statement, and other relevant information.
 
 7. **Client-Side Response**: Once the credential is created, the client sends a request back to the
-   server. This request includes the newly created credential and all the other relevant information
+   server. This request includes the newly-created credential and all the other relevant information
    received from the authenticator.
 
 8. **Server-Side Validation**: The server receives the request from the client and performs several
@@ -90,10 +90,11 @@ Authentication requests are invoked using the `navigator.credentials.get()` meth
    - Entering a username and clicking on a "Log in" button
 
 2. **Server-Side Preparation**: The server prepares for the authentication process by generating an
-   options object containing a challenge, similar to the registration process. a. If the user's
-   identity is not known, the server will simply send a challenge and the `rpId`. b. If the user's
-   identity is known, the server will also send along all of the user's `credentialIds` that were
-   stored during the registration process.
+   options object containing a challenge, similar to the registration process.
+
+   a. If the user's identity is not known, the server will simply send a challenge and the `rpId`.
+   b. If the user's identity is known, the server will also send along all of the user's
+   `credentialId` that were stored during the registration process.
 
 3. **Client-Side WebAuthn Request:** The application receives the options object from the server and
    passes it to `navigator.credentials.get()`.
@@ -118,12 +119,12 @@ Authentication requests are invoked using the `navigator.credentials.get()` meth
 
 8. **Server-Side Validation**: The server receives the request from the client and performs several
    checks to validate the authenticity and integrity of the received data. This includes verifying
-   the signature of the credential against the public-key associated with the returned
+   the signature of the credential against the public key associated with the returned
    `credentialId`. This is usually performed by a code library.
 
 9. **Authentication Completion**: Finally, the server responds to the client, indicating that the
    authentication process was successful. At this point, the user has successfully logged in using a
-   passkey.
+   FIDO2 Credential.
 
 ## User Presence
 

@@ -82,7 +82,7 @@ component "Browser" {
 ## User Presence
 
 To simplify the user experience and to avoid the need for multiple user presence checks, the
-implementation of the browser extension authenticator deviates from the WebAuthn specification, by
+implementation of the browser extension authenticator deviates from the WebAuthn specification by
 terminating the process and triggering a fallback if no matching credentials are found. This is
 justified by the fact that the native implementation will always require user presence, and the
 extension will always trigger the native implementation if the user chooses to not proceed with

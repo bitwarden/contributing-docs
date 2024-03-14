@@ -25,7 +25,7 @@ This naming scheme is not based on any hard rules defined in the specifications,
 parts of FIDO2 are used to build the Provider and Relying Party code.
 
 Historically, the Provider code was built on both the WebAuthn and CTAP2 specifications and so
-`Fido2` was used to refer to it. Today, the provider code is almost exclusively based on the
+`Fido2` was used to refer to it. Today, the Provider code is almost exclusively based on the
 WebAuthn specification. However, if Bitwarden chooses to support any authenticator extensions in the
 future (e.g. `hmac-secret`), they will likely be defined in the CTAP2 specification.
 
