@@ -81,12 +81,16 @@ component "Browser" {
 
 ## User presence
 
-To simplify the user experience and to avoid the need for multiple user presence checks, the
-implementation of the browser extension authenticator deviates from the WebAuthn specification by
-terminating the process and triggering a fallback if no matching credentials are found. This is
-justified by the fact that the native implementation will always require user presence, and the
-extension will always trigger the native implementation if the user chooses to not proceed with
-Bitwarden.
+In accordance with the specification, the extension will always require a user interaction before
+any passkey operation can completed. This means that if any situation occurs where the extension
+will not be able to fulfill the request, it will first inform the user and ask them to confirm
+before returning an error or triggering the native implementation. Examples of such situations
+include:
+
+- The vault contains a credential that is included in the `excludeCredentials` list during a
+  registration operation.
+- The vault does not contain any credentials that match the `allowCredentials` list during an
+  authentication operation.
 
 ### Limitations and risks
 
