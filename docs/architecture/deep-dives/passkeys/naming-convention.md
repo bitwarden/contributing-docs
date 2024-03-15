@@ -2,7 +2,7 @@
 sidebar_position: 4
 ---
 
-# Naming Convention
+# Naming convention
 
 Since Bitwarden will both store passkeys in users' vaults and support log in with passkeys, it is
 important to understand how to refer to these two different concepts in code, regardless of how they

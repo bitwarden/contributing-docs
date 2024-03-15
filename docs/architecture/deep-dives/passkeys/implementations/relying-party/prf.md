@@ -1,4 +1,4 @@
-# Passkeys for Decryption
+# Passkeys for decryption
 
 When a user logs into their Bitwarden vault, two related but distinct operations take place -
 authentication and decryption.

@@ -7,7 +7,7 @@ sidebar_position: 3
 This document will provide an overview of two main operations performed through the WebAuthn API:
 registering a new passkey (registration) and signing in (authentication).
 
-## Registering a Passkey
+## Registering a passkey
 
 Registration requests are invoked using the `navigator.credentials.create()` method.
 
@@ -126,7 +126,7 @@ Authentication requests are invoked using the `navigator.credentials.get()` meth
    authentication process was successful. At this point, the user has successfully logged in using a
    FIDO2 Credential.
 
-## User Presence
+## User presence
 
 User presence is a measure of the user's physical presence during the registration or
 authentication. It is determined by the authenticator, which can use a variety of methods to detect
@@ -137,7 +137,7 @@ requirement. This is why you are always required to perform an action on your au
 use your passkeys on the web. CTAP2 does provide a way to configure the user presence requirement,
 but this is not exposed through the WebAuthn API.
 
-## User Verification
+## User verification
 
 User verification is a process that ensures that the user is not only present but is also verified
 by the authenticator. This can be done using a variety of methods, such as a PIN, biometric

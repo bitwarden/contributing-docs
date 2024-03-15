@@ -1,4 +1,4 @@
-# Browser Extension
+# Browser extension
 
 Bitwarden supports passkeys in all browser by implementing the WebAuthn API. The browser does not
 need to support WebAuthn natively, the extension will polyfill if necessary, effectively adding
@@ -79,7 +79,7 @@ component "Browser" {
 @enduml
 ```
 
-## User Presence
+## User presence
 
 To simplify the user experience and to avoid the need for multiple user presence checks, the
 implementation of the browser extension authenticator deviates from the WebAuthn specification by
