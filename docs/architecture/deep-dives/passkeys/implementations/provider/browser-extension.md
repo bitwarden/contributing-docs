@@ -27,9 +27,9 @@ full CTAP2 protocol.
 
 :::info
 
-`FIDO2 Client` is analogous to `WebAuthn Client` in the [FIDO2 Overview](../../overview#diagram),
-but is named differently due to naming conflicts with the RP implementation also in the Bitwarden
-codebase. See [Naming Convention](../../naming-convention) for more information.
+`FIDO2 Client` is analogous to `WebAuthn Client` in the [FIDO2 Overview](../..#diagram), but is
+named differently due to naming conflicts with the RP implementation also in the Bitwarden codebase.
+See [Naming Convention](../../naming-convention) for more information.
 
 :::
 
