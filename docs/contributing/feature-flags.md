@@ -98,7 +98,9 @@ debugging code.
     <div>
       The `flags.json` file can also define flags which respond to user context. Currently, only `UserId`and the `OrganizationId` of all organizations a user belongs to are included in our feature flagging context. The syntax for defining context-aware flags amounts to defining a `flag` object which specifies `variations` values and `rules` which are evaluated against the user context. A `fallthrough` object is also available to specify a default variation. Rules are represented by `segments`, which are defined in the same file.
 
-      a Feature flag may not appear in both the `flags` object and in the `flagValues` object.
+      A Feature flag may not appear in both the `flags` object and in the `flagValues` object.
+
+      Note that UserId is referred to as `key` in the `clauses` object while defining a segment.
     </div>
     <br/>
     <details>
