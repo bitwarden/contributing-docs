@@ -7,9 +7,9 @@ sidebar_custom_props:
 
 ## Location and usage
 
-A private template [repository](https://github.com/bitwarden/template) exists as a base set of files
-and overall setup for new projects that can be selected within the GitHub repository creation
-interface. It contains what's needed to get started with pull request templates, linting, continuous
+A template [repository](https://github.com/bitwarden/template) exists as a base set of files and
+overall setup for new projects that can be selected within the GitHub repository creation interface.
+It contains what's needed to get started with pull request templates, linting, continuous
 integration, and more. Core concepts that generally apply to all repositories should be created and
 reviewed there before being distributed. The template represents best practices across the company
 but should also be considered a _starting point_ for further setup within the context of a
@@ -115,3 +115,16 @@ organization.
 
 [CODEOWNERS](https://github.com/bitwarden/template/blob/main/.github/CODEOWNERS) entries to be
 defined indicating a team that "owns" the code at a relevant path.
+
+## Scanning
+
+Actions workflows for code scanning. Targets two domains:
+
+- Static application security testing (SAST): Runs PR scans in an incremental mode and full scans on
+  push events.
+- Quality: Additional language-specific findings and improvements not strictly related to security.
+
+SAST results are exported as
+[SARIF](https://docs.oasis-open.org/sarif/sarif/v2.1.0/sarif-v2.1.0.html) (Static Analysis Results
+Interchange Format) and uploaded to the GitHub Advanced Security interface for internal review.
+Quality results are also made available in the interface when security-related.

@@ -42,7 +42,10 @@ proxied
 refactorings
 roadmap
 roadmaps
+rustup
 sandboxed
+SARIF
+SAST
 SCIM
 SDET
 SDLC

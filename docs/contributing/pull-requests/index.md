@@ -85,8 +85,7 @@ cherry-picking, etc.).
 More advanced contributors might find it useful to
 [Rewrite History](https://git-scm.com/book/en/v2/Git-Tools-Rewriting-History). This allows a
 contributor to revise their local history before pushing to the remote repository. A common use case
-is squashing multiple half-working commits. Please be sure to follow the
-[force-pushing recommendations](#force-pushing).
+is squashing multiple half-working commits.
 
 :::warning
 

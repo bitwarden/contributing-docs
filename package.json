@@ -37,14 +37,14 @@
     "prism-react-renderer": "2.3.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "remark-kroki": "0.3.1"
+    "remark-kroki": "0.3.5"
   },
   "devDependencies": {
     "@docusaurus/module-type-aliases": "3.1.1",
     "@docusaurus/tsconfig": "3.1.1",
-    "@types/react": "18.2.56",
-    "cspell": "8.3.2",
-    "husky": "9.0.10",
+    "@types/react": "18.2.66",
+    "cspell": "8.6.0",
+    "husky": "9.0.11",
     "lint-staged": "15.2.2",
     "prettier": "3.2.5",
     "typescript": "5.3.3"
