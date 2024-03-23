@@ -79,57 +79,73 @@ can be specified by defining your state as:
 export const MY_DOMAIN_DISK = new StateDefinition("myDomain", "disk", { web: "disk-local" });
 ```
 
-#### `KeyDefinition`
+#### `KeyDefinition` and `UserKeyDefinition`
 
-`KeyDefinition` builds on the idea of [`StateDefinition`](#statedefinition) but it gets more
-specific about the data to be stored. `KeyDefinition`s can also be instantiated in your own team's
-code. This might mean creating it in the same file as the service you plan to consume it or you may
-want to have a single `key-definitions.ts` file that contains all the entries for your team. Some
-example instantiations are:
+`KeyDefinition` and `UserKeyDefinition` build on the [`StateDefinition`](#statedefinition),
+specifying a single element of state data within the `StateDefinition`.
+
+The framework provides both `KeyDefinition` and `UserKeyDefinition` for teams to use. The
+`UserKeyDefinition` should be used for defining pieces of state that are scoped at a user level.
+These will be consumed via the [`ActiveUserState<T>`](#activeuserstatet) or
+[`SingleUserState<T>`](#singleuserstatet) within your consuming services and components. The
+`UserKeyDefinition` extends the `KeyDefinition` and provides a way to specify how the state will be
+cleaned up on specific user account actions.
+
+`KeyDefinition`s and `UserKeyDefinition`s can also be instantiated in your own team's code. This
+might mean creating it in the same file as the service you plan to consume it or you may want to
+have a single `key-definitions.ts` file that contains all the entries for your team. Some example
+instantiations are:
 
 ```typescript
-const MY_DOMAIN_DATA = new KeyDefinition<MyState>(MY_DOMAIN_DISK, "data", {
+const MY_DOMAIN_DATA = new UserKeyDefinition<MyState>(MY_DOMAIN_DISK, "data", {
   // convert to your data from serialized representation `{ foo: string }` to fully-typed `MyState`
   deserializer: (jsonData) => MyState.fromJSON(jsonData),
+  clearOn: ["logout"], // can be lock, logout, both, or an empty array
 });
 
 // Or if your state is an array, use the built-in helper
-const MY_DOMAIN_DATA: KeyDefinition<MyStateElement[]> = KeyDefinition.array<MyStateElement>(
+const MY_DOMAIN_DATA: UserKeyDefinition<MyStateElement[]> = UserKeyDefinition.array<MyStateElement>(
   MY_DOMAIN_DISK,
   "data",
   {
     deserializer: (jsonDataElement) => MyState.fromJSON(jsonDataElement), // provide a deserializer just for the element of the array
   },
+  {
+    clearOn: ["logout"],
+  },
 );
 
 // record
-const MY_DOMAIN_DATA: KeyDefinition<Record<string, MyStateElement>> =
+const MY_DOMAIN_DATA: UserKeyDefinition<Record<string, MyStateElement>> =
   KeyDefinition.record<MyStateValue>(MY_DOMAIN_DISK, "data", {
     deserializer: (jsonDataValue) => MyState.fromJSON(jsonDataValue), // provide a deserializer just for the value in each key-value pair
+    clearOn: ["logout"],
   });
 ```
 
-The first argument to `KeyDefinition` is always the `StateDefinition` that this key should belong
-to. The second argument should be a human readable, camelCase-formatted name of the `KeyDefinition`.
-For example, the accounts service may wish to store a known accounts array on disk and choose
-`knownAccounts` to be the second argument. This name should be unique amongst all other
-`KeyDefinition`s that consume the same `StateDefinition`. The responsibility of this uniqueness is
-on the team. As such, you should never consume the `StateDefinition` of another team in your own
-`KeyDefinition`. The third argument is an object of type
-[`KeyDefinitionOptions`](#keydefinitionoptions).
+The arguments for defining a `KeyDefinition` or `UserKeyDefinition` are:
 
-##### `KeyDefinitionOptions`
+| Argument          | Usage                                                                                                                                                                                             |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `stateDefinition` | The `StateDefinition` to which that this key belongs                                                                                                                                              |
+| `key`             | A human readable, camelCase-formatted name for the key definition. This name should be unique amongst all other `KeyDefinition`s or `UserKeyDefinition`s that consume the same `StateDefinition`. |
+| `options`         | An object of type [`KeyDefinitionOptions`](#key-definition-options) or [`UserKeyDefinitionOptions`](#key-definition-options), which defines the behavior of the key.                              |
 
-`deserializer` (required) - Takes a method that gives you your state in it's JSON format and makes
-you responsible for converting that into JSON back into a full JavaScript object, if you choose to
-use a class to represent your state that means having its prototype and any method you declare on
-it. If your state is a simple value like `string`, `boolean`, `number`, or arrays of those values,
-your deserializer can be as simple as `data => data`. But, if your data has something like `Date`,
-which gets serialized as a string you will need to convert that back into a `Date` like:
-`data => new Date(data)`.
+:::warning
 
-`cleanupDelayMs` (optional) - Takes a number of milliseconds to wait before cleaning up the state
-after the last subscriber has unsubscribed. Defaults to 1000ms.
+It is the responsibility of the team to ensure the uniqueness of the `key` within a
+`StateDefinition`. As such, you should never consume the `StateDefinition` of another team in your
+own key definition.
+
+:::
+
+##### Key Definition Options
+
+| Option           | Required?                    | Usage                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| ---------------- | ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `deserializer`   | Yes                          | Takes a method that gives you your state in it's JSON format and makes you responsible for converting that into JSON back into a full JavaScript object, if you choose to use a class to represent your state that means having its prototype and any method you declare on it. If your state is a simple value like `string`, `boolean`, `number`, or arrays of those values, your deserializer can be as simple as `data => data`. But, if your data has something like `Date`, which gets serialized as a string you will need to convert that back into a `Date` like: `data => new Date(data)`. |
+| `cleanupDelayMs` | No                           | Takes a number of milliseconds to wait before cleaning up the state after the last subscriber has unsubscribed. Defaults to 1000ms.                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| `clearOn`        | Yes, for `UserKeyDefinition` | An additional parameter provided for `UserKeyDefinition` **only**, which allows specification of the user account `ClearEvent`s that will remove the piece of state from persistence. The available values for `ClearEvent` are `logout`, `lock`, or both. An empty array should be used if the state should not ever be removed (e.g. for settings).                                                                                                                                                                                                                                                |
 
 ### `StateProvider`
 
