@@ -62,7 +62,7 @@ If you’re struggling to remember about user secrets, review
 
 The `Dev:SelfHostOverride:GlobalSettings` section of the user secrets specifies setting overrides
 for local self-hosted development instances. Anything in the override section will apply instead of
-the value given in `GlobalSettings`. This allows you to have separate configuration (such as the
+the value given in `GlobalSettings`. This allows you to have a separate configuration (such as the
 database connection string) for your cloud and self-hosted development servers.
 
 :::warning
@@ -104,7 +104,7 @@ Be sure that your Docker container is running before setting up the database.
 
 :::
 
-We will now create a second database for our self-hosted configuration, so that the cloud-configured
+We will now create a second database for our self-hosted configuration, so that the self-hosted
 instance can have an independent data set for development.
 
 If you followed [Server Setup Guide](../guide.md#create-database) when creating your
@@ -123,9 +123,16 @@ database up-to-date with any migrations.
 
 ### Define Installation Id and Key for Your Cloud Database
 
+:::note
+
+These instructions should be moved into a script in the `dev/` directory - please submit a PR if you
+have time!
+
+:::
+
 You need to manually add the Installation key to your cloud-configured instance, so that it knows
 about your self-hosted instance and will allow access when API calls need to be made between the
-two. Feel free to do this with any tool you like, Azure Data Studio, sqlcmd, or the below script
+two. Feel free to do this with any tool you like (e.g. Azure Data Studio) or the below script:
 
 ```bash
 /opt/mssql-tools/bin/sqlcmd -S mssql -d vault_dev -U sa -P <<SA_PASSWORD>> -I -i <<SCRIPT_FILE>>
