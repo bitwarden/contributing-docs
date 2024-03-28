@@ -3,6 +3,9 @@ sidebar_custom_props:
   access: bitwarden
 ---
 
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
 # Self-Hosted Guide
 
 :::note
@@ -20,28 +23,17 @@ development server. This is useful if:
 - you need to develop self-hosted features without upsetting your normal development environment
 
 In the most common configuration, both the cloud and self-hosted development servers will be running
-with the same infrastructure configuration:
+with similar configuration:
 
 - Services running on `http://localhost:{port}` (using different port numbers for cloud vs.
   self-hosted)
-- Local SQL database (using a different database name for cloud vs. self-hosted)
+- Local SQL database (although using a different database for each server)
 
 ## Requirements
 
 This guide assumes you have completed and are familiar with the techniques in
 [Server Setup Guide](../guide.md). Please make sure you have a working development environment for a
 cloud-configured server before worrying about getting a self-hosted instance connected to it.
-
-## Setup
-
-Clone the server repo into a new folder, called `server-selfhost`:
-
-```bash
-git clone git@github.com:bitwarden/server.git server-selfhost
-```
-
-Next, we’ll work on getting a self-hosted server running concurrently with a local cloud-configured
-server.
 
 ### Generate Installation Id and Key
 
@@ -59,38 +51,7 @@ To get an Id and Key, it’s fine to either
 
 Record these for use in the next steps.
 
-### Copy Files from Cloud Instance
-
-There are two files that you will need to copy from your cloud-configured repo, which you should
-have already set up. These will be copied into your self-hosted repo. They are both in the `dev`
-folder. We copy these over to save time and effort; there is no need to go through the work to
-re-generate them when they will have nearly all the same values. Once copied to the self-hosted
-repo, we'll modify them in further steps below.
-
-#### `secrets.json` File
-
-Copy the `secrets.json` file into the `dev` folder of the self-hosted repository that you just
-cloned.
-
-:::tip
-
-The `.gitignore` configuration will prevent the `secrets.json` in the `dev` folder from being
-checked in to source control. Under no circumstances should the `secrets.json` be pushed to origin.
-
-:::
-
-#### `.env` File
-
-Copy the `.env` file into the `dev` folder of the self-hosted repository that you just cloned.
-
 ### Self-Hosted Secrets Configuration
-
-In your self-hosted repo, navigate to the `dev` folder and open the `secrets.json` file that you
-copied over.
-
-We must configure the `Dev:SelfHostOverride:GlobalSettings` section of the user secrets. This
-section specifies setting overrides for local self-hosted development instances. Anything in the
-override section will apply instead of the value given in `GlobalSettings`.
 
 :::tip
 
@@ -99,15 +60,24 @@ If you’re struggling to remember about user secrets, review
 
 :::
 
-We need to do this here because we need to be able to define setting values that true self-hosted
-instances are specifying in environment variables in their Docker containers. We are using the
-secrets file do this instead of setting environment variables on our machine and letting the build
-in .NET Core configuration build our settings for us.
+The `Dev:SelfHostOverride:GlobalSettings` section of the user secrets specifies setting overrides
+for local self-hosted development instances. Anything in the override section will apply instead of
+the value given in `GlobalSettings`. This allows you to have a separate configuration (such as the
+database connection string) for your cloud and self-hosted development servers.
+
+:::warning
+
+We configure these settings in the user secrets because we need to be able to define setting values
+that true self-hosted instances are specifying in environment variables in their Docker containers.
+We are using the secrets file do this instead of setting environment variables on our machine and
+letting the build in .NET Core configuration build our settings for us.
 
 Currently, we only override `GlobalSettings`. Any other user secret that needs overriding will
 require a code change to do so. Check out `ServiceCollectionExtension.AddGlobalSettingsServices` in
 the server repository to see how we’re doing it today
 ([fragile link to the code](https://github.com/bitwarden/server/blob/main/src/SharedWeb/Utilities/ServiceCollectionExtensions.cs#L448-L463)).
+
+:::
 
 The [internal user secrets](../secrets/index.md) contains a minimum override example. You will need
 to update the following values in the `Dev:SelfHostOverride:GlobalSettings` section:
@@ -118,8 +88,7 @@ to update the following values in the `Dev:SelfHostOverride:GlobalSettings` sect
   cloud-configured server) or a new one can be generated.
 - any other blank values
 
-After the updates to your `secrets.json` file in your self-hosted repo, apply your changes by
-running the following command:
+After saving your changes to `secrets.json`, apply your changes by running the following command:
 
 ```bash
 pwsh setup_secrets.ps1 -clear
@@ -135,9 +104,8 @@ Be sure that your Docker container is running before setting up the database.
 
 :::
 
-Navigate to the self-hosted server repository. We will create a second database for our self-hosted
-configuration, so that the cloud-configured instance can have an independent data set for
-development.
+We will now create a second database for our self-hosted configuration, so that the self-hosted
+instance can have an independent data set for development.
 
 If you followed [Server Setup Guide](../guide.md#create-database) when creating your
 cloud-configured database, you just need to run the same PowerShell migration script with an
@@ -150,14 +118,14 @@ pwsh migrate.ps1 -selfhost
 This will create a new database called `vault_dev_self_host` and/or run unknown migrations against
 it.
 
-To keep your self-hosted database up to date, calling the script with the `-selfhost` argument in
-the future will execute new migrations against `vault_dev_self_host`.
+You must call `migrate.ps1` with the `-selfhost` option in the future to keep your self-host
+database up-to-date with any migrations.
 
 ### Define Installation Id and Key for Your Cloud Database
 
 You need to manually add the Installation key to your cloud-configured instance, so that it knows
 about your self-hosted instance and will allow access when API calls need to be made between the
-two. Feel free to do this with any tool you like, Azure Data Studio, sqlcmd, or the below script
+two. Feel free to do this with any tool you like (e.g. Azure Data Studio) or the below script:
 
 ```bash
 /opt/mssql-tools/bin/sqlcmd -S mssql -d vault_dev -U sa -P <<SA_PASSWORD>> -I -i <<SCRIPT_FILE>>
@@ -188,22 +156,6 @@ VALUES
 where `<<YOUR_ID>>` is your installation id, `<<YOUR_DEV_EMAIL>>` is your email address, and
 `<<YOUR_KEY>>` is your installation key.
 
-## Client Setup
-
-The self-hosted server is of limited use if we don’t have a web portal to interact with the APIs.
-Again, it’s easiest to clone a new repository instance:
-
-```bash
-git clone git@github.com:bitwarden/clients.git clients-selfhost
-```
-
-Install the dependencies and initialize jslib:
-
-```bash
-cd clients-selfhost
-npm ci
-```
-
 ## Running
 
 ### Server
@@ -222,7 +174,8 @@ We do this differently based on how you will be running the server. In your envi
 self-hosted launch configurations (e.g. "Api-SelfHost") will set the Environment and
 `developSelfHosted` flag for you.
 
-### VS Code
+<Tabs groupId="ide">
+<TabItem value="vscode" label="Visual Studio Code" default>
 
 We have a number of launch configurations as well as combined configurations to make launching the
 services easy. By default, the individual self-host launches are hidden. Navigate to `launch.json`
@@ -230,17 +183,19 @@ to un-hide them.
 
 ![](./vs-code.png)
 
-### Visual Studio
+</TabItem>
+<TabItem value="visualstudio" label="Visual Studio / Rider">
 
-Run configurations have been made to start a given service in a self-hosted mode.
+Run configurations have been provided to start a given service in a self-hosted mode.
 
 ![](./visual-studio.png)
 
-### CLI
+</TabItem>
+<TabItem value="terminal" label="Terminal">
 
 To run self-hosted from the CLI, you will need to:
 
-1.  Open a new terminal window in the root of the self-hosted repository.
+1.  Open a new terminal window in the root of the server repository.
 2.  Restore the nuget packages required for the Identity service:
 
     ```bash
@@ -272,6 +227,12 @@ To run self-hosted from the CLI, you will need to:
 7.  Test that the Api service is alive by navigating to
     [http://localhost:4001/alive](http://localhost:4001/alive)
 
+To start any other services, follow the same format, including `--launch-profile` with the
+appropriate self-hosted launch configuration.
+
+</TabItem>
+</Tabs>
+
 :::info
 
 If you cannot connect to the Api or Identity projects, check the terminal output to confirm the
@@ -279,10 +240,7 @@ ports they are running on.
 
 :::
 
-To start the other services, follow the same format, including `--launch-profile` with the
-appropriate self-hosted launch configuration.
-
-## Web Client
+### Web Client
 
 From the `clients-selfhost/apps/web` directory, you can execute
 
