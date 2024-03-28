@@ -16,6 +16,7 @@ iframes
 inet
 IntelliJ
 Iterm
+incentivizing
 jslib
 jumpcloud
 keychain
