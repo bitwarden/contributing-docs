@@ -79,26 +79,22 @@ component "Browser" {
 @enduml
 ```
 
+## Discoverability
+
+The browser extension respects discoverability requirements from RPs by saving a client-side
+discoverability flag in the passkey metadata (called `discoverable`). If this flag is set to
+`false`, the RP will need to provide the `credentialId` to Bitwarden in order to perform an
+assertion. If the flag is set to `true` the passkey will be discoverable using the `rpId`. The
+`userHandle` is always returned if available.
+
 ## User presence
 
-In accordance with the specification, the extension will always require a user interaction before
-any passkey operation can completed. This means that if any situation occurs where the extension
-will not be able to fulfill the request, it will first inform the user and ask them to confirm
-before returning an error or triggering the native implementation. Examples of such situations
-include:
+The browser extension always requires user presence. This means that Bitwarden will never respond to
+a request without guaranteeing that the user has first interacted with their device somehow, by
+confirming or denying the request.
 
-- The vault contains a credential that is included in the `excludeCredentials` list during a
-  registration operation.
-- The vault does not contain any credentials that match the `allowCredentials` list during an
-  authentication operation.
+## User verification
 
-### Limitations and risks
-
-This deviation from the specification is a risk, and allows an attacker to determine if a user has a
-specific credential stored in their vault (i.e. credential enumeration). This is because the
-extension will always trigger the native implementation if no matching credentials are found,
-something that web pages are able to detect (see
-[Credential existence checker](https://coroiu.github.io/webauthn-tools/security/existence-checker)).
-However, this enumeration only works for credentials bound to the attacker's `rpId` (i.e. their own
-website), and is only possible if the user has already unlocked their vault. This risk is accepted
-as a trade-off for a better user experience.
+The browser extension does not yet fully support user verification. This is a limitation of the
+existing user verification services. Full support for user verification will be added soon, via the
+user's unlock methods, such as a PIN or biometric unlock, with the master password as a fallback.
