@@ -4,20 +4,22 @@ sidebar_position: 3
 
 # Operations
 
-This document will provide an overview of two main operations performed through the WebAuthn API:
+This document provides an overview of two main operations performed through the WebAuthn API:
 registering a new passkey (registration) and signing in (authentication).
 
 ## Registering a passkey
 
-Registration requests are invoked using the `navigator.credentials.create()` method.
+Registration requests are invoked using the `navigator.credentials.create()` method
+([MDN](https://developer.mozilla.org/en-US/docs/Web/API/CredentialsContainer/create)).
 
 1. **Client-Side Server Request:** The application (usually a JavaScript application running in a
    web browser) initiates the registration process by making a request to the server to create a new
    FIDO2 credential.
 
 2. **Server-Side Preparation:** The server prepares for the registration process by generating an
-   options object, usually with the help of a code library (e.g. `fido2-net-lib`). This object
-   includes the following parameters:
+   options object, usually with the help of a code library (e.g.
+   [`fido2-net-lib`](https://github.com/passwordless-lib/fido2-net-lib)). This object includes the
+   following parameters:
 
    - **attestation**: The attestation statement format to use during the registration process. This
      can be set to `none` if the server does not require attestation.
@@ -81,7 +83,8 @@ server is compromised.
 
 ## Authenticating with a Passkey
 
-Authentication requests are invoked using the `navigator.credentials.get()` method.
+Authentication requests are invoked using the `navigator.credentials.get()` method
+([MDN](https://developer.mozilla.org/en-US/docs/Web/API/CredentialsContainer/get)).
 
 1. **Client-Side Request**: The application initiates the registration process by making a request
    to the server. This request is typically triggered by a user action, such as:
