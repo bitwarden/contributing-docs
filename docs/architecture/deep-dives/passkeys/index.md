@@ -2,9 +2,7 @@
 
 :::info
 
-This page provides an overview of the FIDO2 standard and its architecture. It is intended to provide
-a generic high-level understanding of FIDO2. For more information on how Bitwarden implements FIDO2,
-see [Implementations](./implementations).
+For more information on how Bitwarden implements FIDO2, see [Implementations](./implementations).
 
 :::
 
