@@ -11,9 +11,10 @@ authenticator. The private key is protected by the authenticator, and the public
 server-side by the Relying Party (RP). The authenticator uses the private key to sign challenges
 from a RP, and the RP uses the public key to verify the signature.
 
-According to the specification, a credential is data one entity presents to another in order to
-authenticate the former to the latter. What the term "credential" refers to is generally determined
-by context, and can be one of the following:
+According to the [WebAuthn specification](https://www.w3.org/TR/webauthn-3/#public-key-credential),
+a credential is data one entity presents to another in order to authenticate the former to the
+latter. What the term "credential" refers to is generally determined by context, and can be one of
+the following:
 
 <dl>
   <dt>A public key credential source</dt>
