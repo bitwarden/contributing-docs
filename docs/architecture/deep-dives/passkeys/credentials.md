@@ -53,7 +53,7 @@ Credentials are relatively simple data structures and only require the following
 
 ## Storage modality
 
-### Client-side Credentials
+### Client-side credentials
 
 The credential is stored in persistent storage embedded in the authenticator, client, or client
 device. This is rapidly becoming a common storage mode, as it is the only way to support synced

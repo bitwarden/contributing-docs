@@ -81,7 +81,7 @@ The private key generated during the credential creation process is always prote
 authenticator/passkey provider, ensuring that the user's credentials are protected even if the
 server is compromised.
 
-## Authenticating with a Passkey
+## Authenticating with a passkey
 
 Authentication requests are invoked using the `navigator.credentials.get()` method
 ([MDN](https://developer.mozilla.org/en-US/docs/Web/API/CredentialsContainer/get)).
