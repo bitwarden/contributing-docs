@@ -12,8 +12,8 @@ see [Implementations](./implementations).
 
 Passkeys are another name given to the credentials defined by the two specifications:
 
-- World Wide Web Consortium’s (W3C) Web Authentication (WebAuthn)
-- FIDO Alliance’s Client-to-Authenticator Protocol v2 (CTAP2)
+- [World Wide Web Consortium’s (W3C) Web Authentication (WebAuthn)](https://www.w3.org/TR/webauthn-3/)
+- [FIDO Alliance’s Client-to-Authenticator Protocol v2 (CTAP2)](https://fidoalliance.org/specs/fido-v2.1-ps-20210615/fido-client-to-authenticator-protocol-v2.1-ps-20210615.html)
 
 which together make up what is usually referred to as the FIDO2 standard.
 
