@@ -51,10 +51,10 @@ figcaption {
   font-style: italic;
 }
 
-dt {
+.theme-doc-markdown dt {
   font-weight: bold;
 }
 
-dd {
+.theme-doc-markdown dd {
   margin-bottom: 1rem;
 }
