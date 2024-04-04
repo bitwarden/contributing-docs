@@ -3,7 +3,7 @@ import TabItem from "@theme/TabItem";
 
 # Kubernetes
 
-The Bitwarden Secrets Manager Kubernetes Operator (sm-operator) is a tool for teams to integrate
+The Bitwarden Secrets Manager Kubernetes Operator (`sm-operator`) is a tool for teams to integrate
 Bitwarden Secrets Manager into their Kubernetes workflows seamlessly.
 
 The sm-operator uses a
@@ -61,7 +61,7 @@ The Dev Container will not work correctly if you are using a container engine ot
 You will also need:
 
 - A
-  [Bitwarden Organization with Secrets Manager](https://bitwarden.com/help/sign-up-for-secrets-manager/).
+  [Bitwarden organization with Secrets Manager](https://bitwarden.com/help/sign-up-for-secrets-manager/).
   You will need the organization ID GUID for your organization.
 - An [access token](https://bitwarden.com/help/access-tokens/) for a Secrets Manager service account
   tied to the projects you want to pull.
@@ -122,7 +122,7 @@ be updated to change the behavior of the operator:
 - **BW_SECRETS_MANAGER_REFRESH_INTERVAL** - Specifies the refresh interval in seconds for syncing
   secrets between Secrets Manager and K8s secrets. The minimum value is 180.
 
-## Running and Debugging
+## Running and debugging
 
 1. Install the Custom Resource Definition into the cluster using `make install` or by using the
    Visual Studio Task called "apply-crd" from the "Tasks: Run Task" in the command palette.
@@ -132,7 +132,7 @@ be updated to change the behavior of the operator:
 
 :::info
 
-You can also run this (without debugger) in one step by running: `make install run`
+You can also run this (without a debugger) in one step by running: `make install run`
 
 :::
 
