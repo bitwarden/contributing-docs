@@ -7,8 +7,10 @@ bytemark
 clickjacking
 CODEOWNERS
 CQRS
+CTAP2
 dockerized
 Gitter
+HKDF
 hotfix
 hotfixed
 hotfixes
@@ -64,3 +66,4 @@ Yubico
 YubiKey
 bitwardensecret
 Kubebuilder
+YubiKeys

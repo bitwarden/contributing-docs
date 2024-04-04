@@ -108,28 +108,35 @@ transformed$ = observable$.pipe(map(transform));
 </div>
 ```
 
-### Unsubscribe using `takeUntil`
+### Unsubscribe using `takeUntilDestroyed`
 
 Dangling subscriptions are a common cause of memory leaks. To avoid this we use the
 [`prefer-takeUntil`](https://github.com/cartant/eslint-plugin-rxjs-angular/blob/main/docs/rules/prefer-takeuntil.md)
-rule. Which requires that any subscription is first piped through a `takeUntil` operator.
+rule. Which requires that any subscription is first piped through a
+[`takeUntilDestroyed`](https://angular.io/api/core/rxjs-interop/takeUntilDestroyed) operator.
 
 The main benefit of the `takeUntil` pattern is that reviewers can at a quick glance verify the
 subscription is cleaned up.
 
 ```ts
-private destroy = new Subject<void>();
+constructor() {
+  // takeUntilDestroyed must be called from an injector context
+  this.observable$
+    .pipe(takeUntilDestroyed())
+    .subscribe(value => console.log);
+}
+```
+
+When not called from an injector context, you can pass the `DestroyRef` as an argument.
+
+```ts
+constructor(private destroyRef: DestroyRef){}
 
 ngOnInit() {
   this.observable$
-    .pipe(takeUntil(this.destroy$))
-    // This subscription will automatically be cleaned up when `this.destroy$` emits.
+    .pipe(takeUntilDestroyed(this.destroyRef))
+    // This subscription will automatically be cleaned up when the component is destroyed
     .subscribe(value => console.log);
-}
-
-ngOnDestroy() {
-  this.destroy.next();
-  this.destroy.complete();
 }
 ```
 
