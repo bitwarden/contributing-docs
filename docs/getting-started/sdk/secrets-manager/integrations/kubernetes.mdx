@@ -14,7 +14,8 @@ registered on the cluster and then synchronize on a configurable interval.
 
 :::info
 
-If you're new to Secrets Manager, you should read the [Help Center documentation][help] first to
+If you're new to Secrets Manager, you should read the
+[Help Center documentation](https://bitwarden.com/help/secrets-manager-overview/) first to
 understand how it works.
 
 :::
@@ -114,11 +115,11 @@ Container is created or `make setup` has been run. The following environment var
 be updated to change the behavior of the operator:
 
 - **BW_API_URL** - Sets the Bitwarden API URL that the Secrets Manager SDK uses. This is useful for
-  self-host scenarios, as well as hitting European servers
+  self-host scenarios, as well as hitting European servers.
 - **BW_IDENTITY_API_URL** - Sets the Bitwarden Identity service URL that the Secrets Manager SDK
-  uses. This is useful for self-host scenarios, as well as hitting European servers
+  uses. This is useful for self-host scenarios, as well as hitting European servers.
 - **BW_SECRETS_MANAGER_STATE_PATH** - Sets the base path where Secrets Manager SDK stores its state
-  files
+  files.
 - **BW_SECRETS_MANAGER_REFRESH_INTERVAL** - Specifies the refresh interval in seconds for syncing
   secrets between Secrets Manager and K8s secrets. The minimum value is 180.
 
@@ -127,7 +128,7 @@ be updated to change the behavior of the operator:
 1. Install the Custom Resource Definition into the cluster using `make install` or by using the
    Visual Studio Task called "apply-crd" from the "Tasks: Run Task" in the command palette.
 
-1. To debug the code, just hit F5. You can also use `make run` at the command line to run without
+2. To debug the code, just hit F5. You can also use `make run` at the command line to run without
    debugging.
 
 :::info
@@ -167,7 +168,7 @@ the secret via an ephemeral build agent.
    be creating your BitwardenSecret object:
    `kubectl create secret generic bw-auth-token -n <some-namespace> --from-literal=token="<Auth-Token-Here>"`
 
-1. Install an instances of BitwardenSecret. An example can be found in
+2. Install an instances of BitwardenSecret. An example can be found in
    [config/samples/k8s_v1_bitwardensecret.yaml](https://github.com/bitwarden/sm-kubernetes/blob/main/src/sm-operator/config/samples/k8s_v1_bitwardensecret.yaml)
    You will want to copy this example and update it for your own needs. Then apply it like so:
    `kubectl apply -f -n <some-namespace> k8s_v1_bitwardensecret.yaml`
@@ -216,7 +217,7 @@ different routes for deploying the image.
 1. Build and push your image to a registry location (local or otherwise) specified by `IMG`:
    `make docker-build docker-push IMG=<some-registry>/sm-operator:tag`
 
-1. Deploy the controller to the cluster with the image specified by `IMG`:
+2. Deploy the controller to the cluster with the image specified by `IMG`:
    `make deploy IMG=<some-registry>/sm-operator:tag`
 
 </TabItem>
@@ -225,7 +226,7 @@ different routes for deploying the image.
 1. Build and push your image directly to Kind by using the Visual Studio Code Command Palette. Open
    the palette (F1) and select Tasks: Run Task and select "docker-build" followed by "kind-push".
 
-1. Deploy the Kubernetes objects to Kind by using the Visual Studio Code Command Palette. Open the
+2. Deploy the Kubernetes objects to Kind by using the Visual Studio Code Command Palette. Open the
    palette (F1) and select Tasks: Run Task and select "deploy".
 
 </TabItem>
@@ -250,7 +251,7 @@ To view the logs of an operator deployed via the steps above:
 1. Run `kubectl get pods -n sm-operator-system`. This will retrieve the name of the installed
    operator pod.
 
-1. Run `kubectl logs -n sm-operator-system <name-of-pod-from-previous-step>`
+2. Run `kubectl logs -n sm-operator-system <name-of-pod-from-previous-step>`
 
 ### Undeploy controller
 
@@ -297,5 +298,3 @@ make manifests
 
 More information can be found via the
 [Kubebuilder Documentation](https://book.kubebuilder.io/introduction.html)
-
-[help]: https://bitwarden.com/help/secrets-manager-overview/
