@@ -24,7 +24,7 @@ understand how it works.
 
 :::info
 
-Most of required setup can be handled using Visual Studio Code Dev Containers. That is the
+Most of the required setup can be handled using Visual Studio Code Dev Containers. That is the
 recommended approach, especially for macOS and Windows users.
 
 :::
@@ -86,7 +86,7 @@ to work correctly.
 Dev Container setup is automated. This will create a Kind cluster and setup all necessary software
 and SDK binaries.
 
-- Press `F1` to open the command palette
+- Open the command palette (using `Cmd/Ctrl`+`Shift`+`P` or `F1` depending on user settings)
 - Start typing `Dev Containers: Reopen in Container`
 
 </TabItem>
@@ -163,12 +163,17 @@ machine terminal history. For production systems, consider using a CSI secrets d
 the secret via an ephemeral build agent.
 
 :::
+:::info
 
+Make sure to run the following commands in the dev container terminal in VS Code.
+
+:::
 1. Create a secret to house the Secrets Manager authentication token in the namespace where you will
    be creating your BitwardenSecret object:
    `kubectl create secret generic bw-auth-token -n <some-namespace> --from-literal=token="<Auth-Token-Here>"`
+   **Note:** To get a list of namespaces, run `kubectl get namespaces`
 
-2. Install an instances of BitwardenSecret. An example can be found in
+2. Install an instance of BitwardenSecret. An example can be found in
    [config/samples/k8s_v1_bitwardensecret.yaml](https://github.com/bitwarden/sm-kubernetes/blob/main/src/sm-operator/config/samples/k8s_v1_bitwardensecret.yaml)
    You will want to copy this example and update it for your own needs. Then apply it like so:
    `kubectl apply -n <some-namespace> -f k8s_v1_bitwardensecret.yaml`
