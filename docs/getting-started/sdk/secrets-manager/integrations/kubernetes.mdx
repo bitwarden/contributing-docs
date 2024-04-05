@@ -171,7 +171,7 @@ the secret via an ephemeral build agent.
 2. Install an instances of BitwardenSecret. An example can be found in
    [config/samples/k8s_v1_bitwardensecret.yaml](https://github.com/bitwarden/sm-kubernetes/blob/main/src/sm-operator/config/samples/k8s_v1_bitwardensecret.yaml)
    You will want to copy this example and update it for your own needs. Then apply it like so:
-   `kubectl apply -f -n <some-namespace> k8s_v1_bitwardensecret.yaml`
+   `kubectl apply -n <some-namespace> -f k8s_v1_bitwardensecret.yaml`
 
 #### BitwardenSecret manifest
 
