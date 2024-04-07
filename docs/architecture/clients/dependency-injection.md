@@ -90,8 +90,12 @@ the example above):
 export class MyServicesModule {}
 ```
 
-:::note The `useAngularDecorators` option is not type safe - it is your responsibility to ensure
-that the class actually uses the `@Injectable` decorator. :::
+:::note
+
+The `useAngularDecorators` option is not type safe - it is your responsibility to ensure that the
+class actually uses the `@Injectable` decorator.
+
+:::
 
 Our primary service modules require the use of `safeProvider`, otherwise you will receive type
 errors. However, you should use `safeProvider` wherever you are configuring an Angular provider to
