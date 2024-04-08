@@ -163,20 +163,41 @@ machine terminal history. For production systems, consider using a CSI secrets d
 the secret via an ephemeral build agent.
 
 :::
+
 :::info
 
-Make sure to run the following commands in the dev container terminal in VS Code.
+Make sure to run the following commands in the Dev Container terminal in VS Code.
 
 :::
+
 1. Create a secret to house the Secrets Manager authentication token in the namespace where you will
    be creating your BitwardenSecret object:
    `kubectl create secret generic bw-auth-token -n <some-namespace> --from-literal=token="<Auth-Token-Here>"`
-   **Note:** To get a list of namespaces, run `kubectl get namespaces`
+
+:::info
+
+To get a list of namespaces, run `kubectl get namespaces`
+
+:::
 
 2. Install an instance of BitwardenSecret. An example can be found in
-   [config/samples/k8s_v1_bitwardensecret.yaml](https://github.com/bitwarden/sm-kubernetes/blob/main/src/sm-operator/config/samples/k8s_v1_bitwardensecret.yaml)
+   [config/samples/k8s_v1_bitwardensecret.yaml](https://github.com/bitwarden/sm-kubernetes/blob/main/src/sm-operator/config/samples/k8s_v1_bitwardensecret.yaml).
    You will want to copy this example and update it for your own needs. Then apply it like so:
    `kubectl apply -n <some-namespace> -f k8s_v1_bitwardensecret.yaml`
+
+3. In the Debug Console window, you should see messages stating that the secret started and
+   completed synchronization.
+
+4. Run the following to view if the secret was created: `kubectl get secrets -n <some-namespace>`
+
+5. Run the following to view the structure and data of the synchronized secret:
+   `kubectl get secret -n <some-namespace> <secret-name> -o yaml`
+
+:::info
+
+The secret values are stored as Base64 encoded strings.
+
+:::
 
 #### BitwardenSecret manifest
 
@@ -184,10 +205,10 @@ Think of the BitwardenSecret object as the synchronization settings that will be
 operator to create and synchronize a Kubernetes secret. This Kubernetes secret will live inside of a
 namespace and will be injected with the data available to a Secrets Manager service account. The
 resulting Kubernetes secret will include all secrets that a specific service account has access to.
-The sample manifest
+The sample file
 ([config/samples/k8s_v1_bitwardensecret.yaml](https://github.com/bitwarden/sm-kubernetes/blob/main/src/sm-operator/config/samples/k8s_v1_bitwardensecret.yaml))
-gives the basic structure of the BitwardenSecret. The key settings that you will want to update are
-listed below:
+provides the basic structure of a BitwardenSecret manifest. The key settings that you will want to
+update are listed below:
 
 - **metadata.name**: The name of the BitwardenSecret object you are deploying
 - **spec.organizationId**: The Bitwarden organization ID you are pulling Secrets Manager data from
