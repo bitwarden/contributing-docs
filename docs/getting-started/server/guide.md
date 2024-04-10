@@ -17,7 +17,7 @@ Before you start: make sure you’ve installed the recommended
 - Docker Desktop
 - Visual Studio 2022
 - Powershell
-- [NET 6.0 SDK](https://dotnet.microsoft.com/download)
+- [NET 8.0 SDK](https://dotnet.microsoft.com/download)
 - Azure Data Studio
 
 :::
@@ -120,7 +120,7 @@ see your containers running under the `bitwardenserver` group.
 Changing `MSSQL_PASSWORD` variable after first running docker compose will require a re-creation of
 the storage volume.
 
-**Warning: this will delete your development database.**
+**Warning: this will delete your development database.**
 
 To do this, run
 
@@ -197,17 +197,14 @@ Navigate to the `dev` folder in your server repo and perform the following steps
     pwsh migrate.ps1
     ```
 
-2.  You should receive confirmation that each migration script has run successfully:
+2.  You should receive confirmation that the migration scripts have run successfully:
 
     ```
-    Performing /mnt/migrator/DbScripts/2017-08-19_00_InitialSetup.sql
-    Performing /mnt/migrator/DbScripts/2017-08-22_00_LicenseCheckScripts.sql
-    Performing /mnt/migrator/DbScripts/2017-08-30_00_CollectionWriteOnly.sql
-    [...]
+    info: Bit.Migrator.DbMigrator[12482444]
+          Migrating database.
+    info: Bit.Migrator.DbMigrator[12482444]
+          Migration successful.
     ```
-
-If migrations are being skipped even though this is a new database, see
-[MSSQL Database Troubleshooting](./database/mssql/index.md#troubleshooting).
 
 :::note
 

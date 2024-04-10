@@ -4,13 +4,16 @@
 
 AndroidX
 Bitwarden
+bitwardensecret
 bytemark
 clickjacking
 CODEOWNERS
 CQRS
+CTAP2
 dockerized
 F-Droid
 Gitter
+HKDF
 hotfix
 hotfixed
 hotfixes
@@ -23,6 +26,7 @@ jumpcloud
 keychain
 keypair
 keyserver
+Kubebuilder
 LDIF
 LLDB
 Mailcatcher
@@ -45,7 +49,10 @@ proxied
 refactorings
 roadmap
 roadmaps
+rustup
 sandboxed
+SARIF
+SAST
 SCIM
 SDET
 SDLC
@@ -62,3 +69,4 @@ xmldoc
 Yellowpages
 Yubico
 YubiKey
+YubiKeys

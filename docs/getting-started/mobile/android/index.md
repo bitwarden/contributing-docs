@@ -2,7 +2,7 @@
 
 ## Requirements
 
-Before you start, you should have the recommended [Tools and Libraries](../../../tools/index.md)
+Before you start, you should have the recommended [Tools and Libraries](../../tools/index.md)
 installed. You will also need to install:
 
 1.  Visual Studio 2022 / VS Code
@@ -95,7 +95,7 @@ Studio on your Mac natively, you'll need to configure the endpoint addresses usi
 ### Using Server Tunneling
 
 Instead of configuring your device or emulator, you can instead use a
-[proxy tunnel to your local server](../../../server/tunnel.md) and have your app connect to it
+[proxy tunnel to your local server](../../server/tunnel.md) and have your app connect to it
 directly.
 
 ### Push Notifications
@@ -116,7 +116,7 @@ So, in order to receive notifications while debugging, you have two options:
 ### Testing Passwordless Locally
 
 Before you can start testing and debugging passwordless logins, make sure your local server setup is
-running correctly ([server setup](../../../server/guide.md)). You should also be able to deploy your
+running correctly ([server setup](../../server/guide.md)). You should also be able to deploy your
 Android app to your device or emulator.
 
 :::note
@@ -130,7 +130,8 @@ Testing passwordless notifications:
 
 1. Start your local server (`Api`, `Identity`, `Notifications`)
 2. Make sure your mobile device can [connect to your local server](#using-server-tunneling)
-3. [Start the web client](../../web-vault/index.mdx), as you will need it to make login requests
+3. [Start the web client](../../clients/web-vault/index.mdx), as you will need it to make login
+   requests
 4. Deploy the Android app to your device or emulator
 5. After deployment, open the app, login to your QA account and activate passwordless login requests
    in settings

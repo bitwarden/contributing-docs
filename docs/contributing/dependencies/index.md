@@ -50,15 +50,14 @@ change. For more details read
 
 ## Workflow
 
-Renovate will automatically create pull requests during the weekend, which naturally aligns with
-each team allocating some time during the following Monday to work through their respective queue of
-pull requests. The teams should work together to resolve outstanding pull requests within the week
-to avoid stagnation.
+Renovate is currently scheduled to automatically create pull requests every 2 weeks. The goal of our
+dependency management process is for the teams to review and merge the opened pull requests in the
+same 2-week cadence. To avoid a large backlog of PRs and out-of-date packages accumulating.
 
-:::info
+:::info Major upgrades
 
-The main exception being major upgrades that can sometimes take a longer amount of time to
-coordinate. Ideally the team will have already coordinated and resolved deprecations in advance.
+Major upgrades are an exception to this time frame, as these can take longer to coordinate. The team
+should make an effort to coordinate scheduled major updates and resolve deprecations in advance.
 
 :::
 
@@ -67,37 +66,61 @@ typically group dependencies we know are related and should be upgraded at the s
 keep groups as small as possible to minimize the impact and increase confidence in approving and
 merging.
 
+### Jira ticket
+
+A Jira ticket will automatically be created for each Renovate PR that is opened. It will be assigned
+to the appropriate team based on the dependency ownership.
+
+The Jira ticket should be used to track the work through sprint planning, prioritization, review,
+and testing.
+
 ### Review
 
 A typical dependency workflow involves the following steps:
 
-1. Read the proposed changes.
-2. Review the release notes of each dependency, for each released version between the current and
+1. Move the Jira ticket to In Progress.
+2. Read the proposed changes.
+3. Review the release notes of each dependency, for each released version between the current and
    the proposed upgrade. Identify if there are any deprecations or breaking changes affecting our
    code.
-   1. For breaking changes, either resolve them yourself, or for major changes, coordinate with the
-      other teams.
-   2. For deprecations, create high priority Jira tickets on the affected teams' backlogs with a due
-      date at least one sprint before the next scheduled major release of the dependency.
-3. Verify CI status.
-4. If test coverage is lacking, check out locally and manually confirm a few key areas.
-5. Review the proposed code changes and approve the PR.
-6. Write a Jira ticket containing testing notes for QA.
-7. Merge the PR. Assign the Jira ticket to QA.
+   1. For **breaking changes**, either resolve them yourself, or for major changes, coordinate with
+      the other teams.
+   2. For **deprecations**, create high priority Jira tickets on the affected teams' backlogs with a
+      due date at least one sprint before the next scheduled major release of the dependency.
+4. Verify CI status.
+5. If test coverage is lacking, check out locally and manually confirm a few key areas.
+6. Review the proposed code changes and approve the PR.
+7. Write a Jira ticket containing testing notes for QA.
+   - Testing notes should include:
+     - What areas of the codebase are affected by the dependency to help isolate future problems.
+     - Recommendation for manual QA testing **only** if the developer identifies this as a high-risk
+       update.
+8. Merge the PR.
+9. Assign the Jira ticket to QA.
 
 If you need to change the code to resolve any issues, please tag a team member for the final review.
 
-### Jira ticket
+:::tip Type Definitions
 
-The handoff between developers and QA will be a Jira ticket. The ticket should contain the affected
-dependency, any relevant release notes for sections to test, and some testing notes on affected
-areas.
+Many of our client dependency packages have corresponding type definition dependencies (e.g.
+`@types/jest` for our Jest dependencies). These packages do not contain any business logic.
+
+In order to streamline the process and avoid unnecessary QA time, it is sufficient to handle these
+by ensuring that all CI jobs pass successfully, merging the PR, and marking the ticket as Done.
+
+:::
 
 ### QA testing
 
-While developers are responsible for writing a Jira ticket with testing notes, the QA engineer
-should practice due diligence by also considering the impact of the dependency change and if needed
-discuss with the engineer about potentially increasing or decreasing the scope of testing.
+By default, dependency updates do **not** undergo individual testing by QA. However, we do want our
+QA teams to be aware of the changes so that they can react appropriately if problems occur during
+regression testing. For this reason, we assign each dependency ticket to our QA team for review,
+along with a recommendation for manual testing when necessary.
+
+If the QA engineer agrees that manual testing is not required, they will mark the ticket as `Done`.
+
+If the QA engineer or the developer recommends manual testing, QA will perform the testing with the
+scope defined in the testing notes, marking the ticket `Done` only when testing is successful.
 
 ### Reverting
 

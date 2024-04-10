@@ -33,16 +33,29 @@ At Bitwarden we also use a couple of more types:
 - `.response` - Api Response
 - `.type` - Type definition
 - `.enum` - Enum
-- `.service.abstraction` - Abstract class for a service, used for DI, not all services needs an
-  abstract class
 
 The class names are expected to use the suffix as part of their class name as well. I.e. a service
 implementation will be named `FolderService`, a request model will be named `FolderRequest`.
 
-In the event a service can't be fully implemented, an abstract class is created with the
-`Abstraction` suffix. This typically happens if the Angular and Node implementations have to differ
-for one reason or another. Traditionally interfaces would be used, but a TypeScript interface cannot
-be used to wire up dependency injection in JavaScript.
+### Abstract & Default Implementations
+
+The Bitwarden clients codebase serves multiple clients, one of which is node based and unable to
+utilize the Angular Dependency Injection. In order to make code useable in both Angular and non
+Angular based clients we generally use _abstract_ classes to define interfaces. Ideally we would use
+_interfaces_ but TypeScript interfaces exists at compile time only and therefore cannot be used to
+wire up dependency injection in JavaScript.
+
+All consumers will use the abstract class as a parameter in their constructor which will be manually
+wired up in the CLI and use Angular dependency injection in Angular contexts. In the case a
+dependency is only used in the Angular client, the abstract class can be omitted and the
+implementation referenced directly using `@Injectable`.
+
+To improve readability and avoid potential confusion caused by import aliases, we avoid naming
+implementations the same name as the abstract class. Depending on the class usage the following
+prefixes are allowed:
+
+- `Default`: Used for the default implementation of an abstract class.
+- `Web`, `Browser`, `Desktop` and `Cli` for platform specific implementations.
 
 ## Organize by Feature ([ADR-0011](../../adr/0011-angular-folder-structure.md))
 

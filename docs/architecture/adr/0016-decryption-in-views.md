@@ -1,11 +1,13 @@
 ---
 adr: "0016"
-status: In progress
+status: Accepted
 date: 2022-11-28
 tags: [clients, typescript]
 ---
 
 # 0016 - Move Decryption and Encryption to Views
+
+<AdrTable frontMatter={frontMatter}></AdrTable>
 
 ## Context and Problem Statement
 
