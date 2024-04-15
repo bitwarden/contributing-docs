@@ -83,9 +83,9 @@ dotnet test -f net8.0 /p:CustomConstants=UT
 Finally, when working on the `Core.Test` project or when wanting to use a Test runner, go to the
 `Directory.Build.props` (located in the root) and uncomment the line referencing `CustomConstants`
 so that everything is loaded accordingly in the project. Because of some issues, the referenced
-projects, e.g. `Core`, are only included when the `UT` constant is in place. By uncommenting
-this line the projects will be referenced and one can work on that project or run the tests from a
-Test runner.
+projects, e.g. `Core`, are only included when the `UT` constant is in place. By uncommenting this
+line the projects will be referenced and one can work on that project or run the tests from a Test
+runner.
 
 ## Custom constants
 
