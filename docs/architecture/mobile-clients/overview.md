@@ -16,5 +16,5 @@ differs:
 
 ## Presentation
 
-The presentation layer is implemented using `Xamarin.Forms` for the mobile apps, except for the
-watchOS one which uses `SwiftUI` [see ADR](../adr/watchOS-use-swift)
+The presentation layer is implemented using .NET MAUI for the mobile apps, except for the watchOS
+one which uses SwiftUI [see ADR](../adr/watchOS-use-swift)
