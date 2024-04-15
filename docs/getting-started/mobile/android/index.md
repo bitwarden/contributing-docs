@@ -8,7 +8,7 @@ installed. You will also need to install:
 1.  [Visual Studio 2022](https://visualstudio.microsoft.com/vs/mac/)
 2.  [.NET 7 (latest)](https://dotnet.microsoft.com/en-us/download/dotnet/7.0)
     - Note: Even if you have an ARM64 based Mac (M1, M2, M3, etc.), you can install all x64 SDKs to
-      run android
+      run Android
 3.  [Xamarin (Android)](https://learn.microsoft.com/en-us/xamarin/get-started/installation/?pivots=macos-vs2022)
 4.  Android SDK 33
     - You can use the SDK manager in [Xamarin, Visual Studio][xamarin-vs], or [Android
@@ -50,7 +50,7 @@ To set up a new virtual Android device for debugging:
     Settings > Android SDK
 3.  In the SDK Platforms tab, ensure the "Show Package Details" checkbox is checked (located in the
     bottom-right)
-4.  Bellow each Android API you'll see several System Images, pick one of the `ARM 64 v8a` and wait
+4.  Bellow each Android API you'll see several System Images, pick one of the `ARM 64 v8a` and wait
     for it to download
 5.  Go to View > Tool Windows > Device Manager
 6.  Inside Device Manager, create a device using the previously downloaded system image
