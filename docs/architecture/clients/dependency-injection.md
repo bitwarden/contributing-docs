@@ -37,6 +37,37 @@ If a service is used in an Angular context only, it can use the Angular `@Inject
 automatically configure its dependencies. If a service is used in mixed contexts (e.g.
 `libs/common`), it must not use Angular decorators and its dependencies must be manually configured.
 
+## Interfaces
+
+A service should implement an interface defined by an abstract class if:
+
+1. The service will be used across multiple client apps, or
+2. You want to define multiple interfaces for your service to limit what functionality is available
+   to different consumers
+
+For example, you may want to use interfaces to prevent outside modules from calling your internal
+methods:
+
+```ts
+// Injected in other modules
+abstract class MyService {
+  externalMethod: () => void;
+}
+
+// Injected in the MyService feature module
+abstract class InternalMyService extends MyService {
+  internalMethod: () => void;
+}
+
+class MyService implements InternalMyService {
+  externalMethod: () => void;
+  internalMethod: () => void;
+}
+```
+
+If neither of these apply to you, you probably don't need to define an abstract interface for your
+service.
+
 ## Configuring DI
 
 ### Angular contexts
