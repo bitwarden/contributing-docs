@@ -5,9 +5,9 @@
 Before you start, you should have the recommended [Tools and Libraries](../../tools/index.md)
 installed. You will also need to install:
 
-1.  Visual Studio 2022
+1.  [Visual Studio 2022](https://visualstudio.microsoft.com/vs/mac/)
 2.  [.NET 7 (latest)](https://dotnet.microsoft.com/en-us/download/dotnet/7.0)
-    - Note: Even if you have an M1 Mac with ARM 64 architecture, you can install all x64 SDKs to run
+    - Note: Even if you have an ARM64 based Mac (M1, M2, M3, etc.), you can install all x64 SDKs to run
       android
 3.  [Xamarin (Android)](https://learn.microsoft.com/en-us/xamarin/get-started/installation/?pivots=macos-vs2022)
 4.  Android SDK 33
@@ -43,7 +43,7 @@ To set up a new virtual Android device for debugging:
 5.  Once this has completed, the emulated Android device will be available as a build target under
     Android > Debug > (name of device)
 
-### M1 Macs
+### ARM64 Macs
 
 1.  Install and open Android Studio
 2.  In the top navbar, click on Android Studio > Settings > Appearance & Behavior (tab) > System
