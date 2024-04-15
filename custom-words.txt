@@ -3,6 +3,7 @@
 # by the spellchecker. Please keep the list sorted alphabetically.
 
 Bitwarden
+bitwardensecret
 bytemark
 clickjacking
 CODEOWNERS
@@ -23,6 +24,7 @@ jumpcloud
 keychain
 keypair
 keyserver
+Kubebuilder
 LDIF
 LLDB
 Mailcatcher
