@@ -70,9 +70,9 @@ service.
 
 ## Configuring DI
 
-### Angular contexts
+### Angular modules
 
-Angular contexts use ngModules
+Angular contexts generally use ngModules
 [dependency providers](https://angular.io/guide/dependency-injection-providers) to configure DI. For
 example:
 
@@ -131,6 +131,37 @@ class actually uses the `@Injectable` decorator.
 Our primary service modules require the use of `safeProvider`, otherwise you will receive type
 errors. However, you should use `safeProvider` wherever you are configuring an Angular provider to
 benefit from its type checking.
+
+### Angular root module
+
+Services that will be used globally and which don't have an abstract interface can be registered
+using the `provideIn` property. This avoids having to create and manage service modules. When
+exporting services through feature modules, it can be tricky to manage their lifetime, and it's easy
+to end up with instances of the service being created.
+
+```ts
+@Injectable({
+  provideIn: "root",
+})
+export class MyService {}
+```
+
+### Angular components
+
+Services that do are not stateful and/or are only supposed to be used locally to extract complex
+logic from a component can be injected directly into standalone components, completely bypassing
+modules.
+
+```ts
+@Component({
+  providers: [
+    // This example assumes that MyService uses @Injectable decorators and does not have an abstract interface
+    safeProvider(MyService),
+  ],
+  standalone: true,
+})
+export class MyComponent {}
+```
 
 ### Non-Angular contexts
 
