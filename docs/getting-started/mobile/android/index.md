@@ -7,8 +7,8 @@ installed. You will also need to install:
 
 1.  Visual Studio 2022 / VS Code
 2.  [.NET 8 (latest)](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
-    - Note: Even if you have an M1 Mac with ARM 64 architecture, you can install all x64 SDKs to run
-      Android
+    - Note: Even if you have an ARM64 based Mac (M1, M2, M3, etc.), you can install all x64 SDKs to
+      run Android
     - On Visual Studio for Mac you may need to turn on the feature for .NET 8 by going to Visual
       Studio > Preferences > Preview Features > Use the .NET 8 SDK
 3.  .NET MAUI Workload
@@ -46,14 +46,14 @@ To set up a new virtual Android device for debugging:
 5.  Once this has completed, the emulated Android device will be available as a build target under
     App > Debug > (name of device)
 
-### M1 Macs
+### ARM64 Macs
 
 1.  Install and open Android Studio
 2.  In the top navbar, click on Android Studio > Settings > Appearance & Behavior (tab) > System
     Settings > Android SDK
 3.  In the SDK Platforms tab, ensure the "Show Package Details" checkbox is checked (located in the
     bottom-right)
-4.  Bellow each Android API you'll see several System Images, pick one of the `ARM 64 v8a` and wait
+4.  Bellow each Android API you'll see several System Images, pick one of the `ARM 64 v8a` and wait
     for it to download
 5.  Go to View > Tool Windows > Device Manager
 6.  Inside Device Manager, create a device using the previously downloaded system image
