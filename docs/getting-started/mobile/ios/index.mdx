@@ -307,10 +307,10 @@ building again.
 
 ### Argon2Id library loading
 
-The Argon2Id library (`libargon2.a`) is loaded using `MTouchExtraArgs` in almost all csproj of the
+The Argon2Id library (`libargon2.a`) is loaded using `MTouchExtraArgs` in almost all projects of the
 solution. In order to make this simpler a property was added into **Directory.Build.props** called
-`Argon2IdLoadMtouchExtraArgs` which has the code to fill in the extra args parameter. Each csproj is
-configured with this property so this is only added on the correct runtime identifiers and we can
+`Argon2IdLoadMtouchExtraArgs` which has the code to fill in the extra args parameter. Each project
+is configured with this property so this is only added on the correct runtime identifiers and we can
 build the app successfully on each case.
 
 ### Ignoring extensions / watchOS app
@@ -338,7 +338,7 @@ There are some issues that require us to build the app on **Release** configurat
 without going through the CI/CD pipeline. The problem is that we don't have the code signing details
 for Distribution locally. To overcome this we can use the same `CodesignProvision` and `CodesignKey`
 we use for **Debug** but on the **Release** config. The thing is that it's a bit cumbersome to
-change that on every csproj so two properties were added to the **Directory.Build.Props** to help
+change that on every project so two properties were added to the **Directory.Build.Props** to help
 with this:
 
 - `ReleaseCodesignProvision`: `CodesignProvision` for Release config on all projects
