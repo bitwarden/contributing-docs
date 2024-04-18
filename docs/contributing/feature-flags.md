@@ -13,7 +13,8 @@ highlights:
 
 - [Context](https://github.com/bitwarden/server/blob/main/src/Core/Context/ICurrentContext.cs) is
   provided when requesting the state of a flag. We currently allow targeting on user, organization,
-  and service account. Only the IDs are sent to LaunchDarkly to avoid PII sharing.
+  and machine account (previously known as service account). Only the IDs are sent to LaunchDarkly
+  to avoid PII sharing.
 - All available feature flag states are provided to clients calling the
   [configuration API](https://github.com/bitwarden/server/blob/main/src/Api/Models/Response/ConfigResponseModel.cs).
 - Environments (production, QA, and development for now) exist to segment flag states further. This
