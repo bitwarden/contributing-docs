@@ -13,7 +13,7 @@ data for each API call.
 We can generally group the public models into the following categories:
 
 - **View models**: These are models that generally represents a decrypted state, examples are
-  `CipherView`, `CipherListVIew`, `FolderView`, etc.
+  `CipherView`, `CipherListView`, `FolderView`, etc.
 - **Request models**: These are models that are used to send data into the SDK. Some examples are
   `ProjectGetRequest`, `ProjectCreateRequest`, etc.
 - **Response models**: Returns data from the SDK, one example is `ProjectResponse`.

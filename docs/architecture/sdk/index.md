@@ -2,7 +2,7 @@
 sidebar_position: 3
 ---
 
-# SDK
+# SDK Architecture
 
 Bitwarden provides a public Software Development Kit (SDK) for [Secrets Manager][sm] and an internal
 SDK for the Bitwarden [Password Manager][pm]. The SDK is written in Rust and provides bindings for
@@ -27,8 +27,8 @@ crate as lean as possible. This has multiple benefits including:
 ### `bitwarden` crate
 
 The `bitwarden` crate is the main entry point for the SDK and is responsible for wiring up the sub
-crates. It contains a `Client` struct which represents a single SDK instance. The `Client` struct
-implements multiple callable methods that may manipulate the state of the SDK.
+crates. It contains a `Client` struct which represents a single account instance in the SDK. The
+`Client` struct implements multiple callable methods that may manipulate the state of the SDK.
 
 ## Language bindings
 
