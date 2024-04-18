@@ -6,7 +6,8 @@ sidebar_position: 3
 
 Bitwarden provides a public Software Development Kit (SDK) for [Secrets Manager][sm] and an internal
 SDK for the Bitwarden [Password Manager][pm]. The SDK is written in Rust and provides bindings for
-multiple languages.
+multiple languages. The general end goal of the SDK is to own everything up to the presentational
+layers. This includes but is not limited to: API calls, data models, encryption, and business logic.
 
 <Bitwarden>We have collected a list of various learning resources on
 [Confluence](https://bitwarden.atlassian.net/wiki/spaces/DEV/pages/517898288/Rust+Learning+Resources).</Bitwarden>
