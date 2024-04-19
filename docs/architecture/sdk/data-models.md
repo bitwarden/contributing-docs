@@ -1,7 +1,7 @@
 # Data Models
 
 The SDK is expected to be used in a variety of projects, and to that end it defines a stable public
-interface. Care must be taken to avoid exposing the inner workings on the SDK including it's data
+interface. Care must be taken to avoid exposing the inner workings on the SDK including its data
 model.
 
 ## Public interface
@@ -20,7 +20,7 @@ We can generally group the public models into the following categories:
 
 ## Internal models
 
-The SDK also maintains internal models
+The SDK also maintains internal models:
 
 - **Api models**: These are [auto-generated models](./server-bindings.md) that are used to interact
   with the server.
