@@ -5,13 +5,16 @@
 Before you start, you should have the recommended [Tools and Libraries](../../tools/index.md)
 installed. You will also need to install:
 
-1.  Visual Studio 2022
-2.  [.NET 7 (latest)](https://dotnet.microsoft.com/en-us/download/dotnet/7.0)
-    - Note: Even if you have an M1 Mac with ARM 64 architecture, you can install all x64 SDKs to run
-      android
-3.  [Xamarin (Android)](https://learn.microsoft.com/en-us/xamarin/get-started/installation/?pivots=macos-vs2022)
-4.  Android SDK 33
-    - You can use the SDK manager in [Xamarin, Visual Studio][xamarin-vs], or [Android
+1.  Visual Studio 2022 / VS Code
+2.  [.NET 8 (latest)](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
+    - Note: Even if you have an ARM64 based Mac (M1, M2, M3, etc.), you can install all x64 SDKs to
+      run Android
+    - On Visual Studio for Mac you may need to turn on the feature for .NET 8 by going to Visual
+      Studio > Preferences > Preview Features > Use the .NET 8 SDK
+3.  .NET MAUI Workload
+    - You can install this by running `dotnet workload install maui`
+4.  Android SDK 34
+    - You can use the SDK manager in [Visual Studio][xamarin-vs], or [Android
       Studio][android-studio] to install this
 
 To make sure you have the Android SDK and Emulator installed:
@@ -41,28 +44,49 @@ To set up a new virtual Android device for debugging:
 4.  Visual Studio will then download the image for that device. The download progress is shown in
     the progress in the Android Device Manager dialog.
 5.  Once this has completed, the emulated Android device will be available as a build target under
-    Android > Debug > (name of device)
+    App > Debug > (name of device)
 
-### M1 Macs
+### ARM64 Macs
 
 1.  Install and open Android Studio
 2.  In the top navbar, click on Android Studio > Settings > Appearance & Behavior (tab) > System
     Settings > Android SDK
 3.  In the SDK Platforms tab, ensure the "Show Package Details" checkbox is checked (located in the
     bottom-right)
-4.  Bellow each Android API you'll see several System Images, pick one of the `ARM 64 v8a` and wait
+4.  Bellow each Android API you'll see several System Images, pick one of the `ARM 64 v8a` and wait
     for it to download
 5.  Go to View > Tool Windows > Device Manager
 6.  Inside Device Manager, create a device using the previously downloaded system image
 
 ![Android SDK configuration](android-sdk.png)
 
+## F-Droid
+
+On `App.csproj` and `Core.csproj` we can now pass `/p:CustomConstants=FDROID` when
+building/releasing so that the `FDROID` constant is added to the defined ones at the project level
+and we can use that with precompiler directives, e.g.:
+
+```c#
+#if FDROID
+    // perform operation only for FDROID.
+#endif
+```
+
+## Building
+
+There are currently a few problems on Visual Studio for Mac for building correctly the projects, so
+if you encounter some errors build using the CLI (previously removing bin/obj folders):
+
+```
+dotnet build -f net8.0-android -c Debug
+```
+
 ## Testing and Debugging
 
 ### Using the Android Emulator
 
-In order to access `localhost:<port>` resources in the Android Emulator when debugging using Xamarin
-studio on your Mac natively, you'll need to configure the endpoint addresses using
+In order to access `localhost:<port>` resources in the Android Emulator when debugging using Visual
+Studio on your Mac natively, you'll need to configure the endpoint addresses using
 `<http://10.0.2.2:<port>`\> in order to access `localhost`, which maps the Android proxy by design.
 
 [xamarin-vs]: https://learn.microsoft.com/en-us/xamarin/android/get-started/installation/android-sdk
@@ -116,3 +140,32 @@ Testing passwordless notifications:
    "known device") and click Continue. When presented with the login options, click click Login with
    Device.
 8. Check mobile device for the notification
+
+<Bitwarden>
+
+## AndroidX Credentials
+
+Currently, the
+[androidx.credentials](https://developer.android.com/jetpack/androidx/releases/credentials) official
+binding has some bugs and we cannot use it yet. Because of this, we made a binding ourselves which
+is located in here:
+[Xamarin.AndroidX.Credentials](https://github.com/bitwarden/xamarin.androidx.credentials).
+
+As of today, we are using version 1.2.0.
+
+In the projects, the package is added as a local NuGet package located in
+`lib/android/Xamarin.AndroidX.Credentials` and this source is already configured in the
+`nuget.config` file.
+
+In the case a change is needed on the binding, create a new local NuGet package and replace it in
+the aforementioned source.
+
+:::warning
+
+Do not add the project to the solution and as a project reference to the `App.csproj` /
+`Core.csproj` this will strangely make the iOS app crash on start because of solution configuration.
+Even though we couldn't find the root cause, this is the effect caused by this action.
+
+:::
+
+</Bitwarden>
