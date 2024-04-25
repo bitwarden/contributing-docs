@@ -79,7 +79,10 @@ Angular contexts generally use ngModules
 [dependency providers](https://angular.io/guide/dependency-injection-providers) to configure DI. For
 example:
 
-:::danger[DON'T DO THIS] This is a simplified example only - read on to learn about safeProvider.
+:::danger[DON'T DO THIS] 
+
+This is a simplified example only - read on to learn about safeProvider.
+
 :::
 
 ```ts
