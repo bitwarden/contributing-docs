@@ -181,7 +181,7 @@ injected into services, causing runtime errors.
 
 ### Shared Angular DI
 
-`libs/angular` contains `jslib-services.module.ts`, a services module which registers common
+`libs/angular` contains `JslibServicesModule`, a services module which registers common
 dependencies used across Angular Typescript clients (web, browser and desktop).
 
 A client may override this DI if a client-specific configuration is required.
