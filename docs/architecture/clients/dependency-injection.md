@@ -156,9 +156,8 @@ export class MyService {}
 
 ### Angular components
 
-Services that are not stateful and/or are only supposed to be used locally to extract complex
-logic from a component can be injected directly into standalone components, completely bypassing
-modules.
+Services that are not stateful and/or are only supposed to be used locally to extract complex logic
+from a component can be injected directly into standalone components, completely bypassing modules.
 
 ```ts
 @Component({
@@ -181,8 +180,8 @@ injected into services, causing runtime errors.
 
 ### Shared Angular DI
 
-`libs/angular` contains `JslibServicesModule`, a services module which registers common
-dependencies used across Angular Typescript clients (web, browser and desktop).
+`libs/angular` contains `JslibServicesModule`, a services module which registers common dependencies
+used across Angular Typescript clients (web, browser and desktop).
 
 A client may override this DI if a client-specific configuration is required.
 
@@ -213,8 +212,8 @@ services are registered in all the above locations.
 
 Desktop DI is split across the following locations:
 
-- `services.module.ts` is the main services module for the Electron renderer process. It imports
-  `JslibServicesModule`
+- `services.module.ts` is the main services module for the Electron renderer process, which is
+  responsible for bootstrapping and rendering the Bitwarden app. It imports `JslibServicesModule`
 - `main.ts` manually instantiates services used in the main process. It does not use any dependency
   injection framework
 
