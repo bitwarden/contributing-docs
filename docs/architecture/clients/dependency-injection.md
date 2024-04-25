@@ -156,7 +156,7 @@ export class MyService {}
 
 ### Angular components
 
-Services that do are not stateful and/or are only supposed to be used locally to extract complex
+Services that are not stateful and/or are only supposed to be used locally to extract complex
 logic from a component can be injected directly into standalone components, completely bypassing
 modules.
 
