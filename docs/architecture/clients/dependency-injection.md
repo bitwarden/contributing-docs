@@ -51,17 +51,17 @@ methods:
 ```ts
 // Injected in other modules
 abstract class MyService {
-  externalMethod: () => void;
+  abstract externalMethod(): void;
 }
 
 // Injected in the MyService feature module
 abstract class InternalMyService extends MyService {
-  internalMethod: () => void;
+  abstract internalMethod(): void;
 }
 
 class MyService implements InternalMyService {
-  externalMethod: () => void;
-  internalMethod: () => void;
+  abstract externalMethod(): void;
+  abstract internalMethod(): void;
 }
 ```
 
