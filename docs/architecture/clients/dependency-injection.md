@@ -79,6 +79,9 @@ Angular contexts generally use ngModules
 [dependency providers](https://angular.io/guide/dependency-injection-providers) to configure DI. For
 example:
 
+:::danger[DON'T DO THIS] This is a simplified example only - read on to learn about safeProvider.
+:::
+
 ```ts
 @NgModule({
   providers: [
@@ -105,6 +108,8 @@ implements the abstract interface, or that the `deps` array matches the construc
 We provide a helper function called `safeProvider`, which acts as a wrapper around each provider
 entry and provides compile-time type checking of your configuration. For example (continuing with
 the example above):
+
+:::tip[RECOMMENDED] safeProvider is the preferred way to register services in ngModules. :::
 
 ```ts
 @NgModule({
