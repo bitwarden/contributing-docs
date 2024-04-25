@@ -112,7 +112,12 @@ We provide a helper function called `safeProvider`, which acts as a wrapper arou
 entry and provides compile-time type checking of your configuration. For example (continuing with
 the example above):
 
-:::tip[RECOMMENDED] safeProvider is the preferred way to register services in ngModules. :::
+:::tip[RECOMMENDED] 
+
+`safeProvider` is the preferred way to register services in ngModules. 
+
+:::
+
 
 ```ts
 @NgModule({
