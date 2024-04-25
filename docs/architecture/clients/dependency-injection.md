@@ -33,6 +33,9 @@ Services should be organized as follows depending on where they're used:
 - `libs/angular` for services used by **multiple clients** in **Angular contexts only**
 - `apps/<client-name>` for services used by a single client only
 
+Some teams also have their own `libs` folder, which are structured similarly. e.g. `libs/auth`,
+containing `libs/auth/common` and `libs/auth/angular`. These should be used if available.
+
 If a service is used in an Angular context only, it can use the Angular `@Injectable` decorator to
 automatically configure its dependencies. If a service is used in mixed contexts (e.g.
 `libs/common`), it must not use Angular decorators and its dependencies must be manually configured.
