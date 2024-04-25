@@ -145,7 +145,7 @@ benefit from its type checking.
 Services that will be used globally and which don't have an abstract interface can be registered
 using the `provideIn` property. This avoids having to create and manage service modules. When
 exporting services through feature modules, it can be tricky to manage their lifetime, and it's easy
-to end up with instances of the service being created.
+to end up with multiple instances of the service being created.
 
 ```ts
 @Injectable({
