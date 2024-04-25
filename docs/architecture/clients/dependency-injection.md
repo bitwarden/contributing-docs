@@ -172,7 +172,7 @@ export class MyComponent {}
 
 ### Non-Angular contexts
 
-Non-Angular contexts do not use a DI framework and must manually instantiate their dependencies **in
+Non-Angular contexts do not use a DI framework and must therefore manually instantiate their dependencies **in
 the correct order**. Instantiating dependencies out of order may result in null values being
 injected into services, causing runtime errors.
 
