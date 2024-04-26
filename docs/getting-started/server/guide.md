@@ -181,63 +181,6 @@ the following commands:
     pwsh setup_azurite.ps1
     ```
 
-## Create database
-
-You now have the MSSQL server running in Docker. The next step is to create the database that will
-be used by the Bitwarden server.
-
-We provide a helper script which will create the development database `vault_dev` and also run all
-migrations.
-
-Navigate to the `dev` folder in your server repo and perform the following steps:
-
-1.  Create the database and run all migrations:
-
-    ```bash
-    pwsh migrate.ps1
-    ```
-
-2.  You should receive confirmation that the migration scripts have run successfully:
-
-    ```
-    info: Bit.Migrator.DbMigrator[12482444]
-          Migrating database.
-    info: Bit.Migrator.DbMigrator[12482444]
-          Migration successful.
-    ```
-
-:::note
-
-You’ll need to re-run the migration helper script regularly to keep your local development database
-up-to-date. See [MSSQL Database](./database/mssql/index.md) for more information.
-
-:::
-
-<Bitwarden>
-
-## Install Licensing Certificate
-
-To run your local server environment as a licensed instance, you will need to download the
-`Licensing Certificate - Dev` from the shared Engineering collection and install it. This can be
-done by double-clicking on the downloaded certificate.
-
-:::note
-
-Mac users: When prompted to save the downloaded certificate and PFX file in Keychain Access be sure
-to select "Default Keychain > login" from the dropdown otherwise they will not be found when
-attempting to "Build and Run the Server".
-
-:::
-
-1. Log in to your company-issued Bitwarden account
-2. On the "Vaults" page, scroll down to the "Licensing Certificate - Dev" item
-3. View attachments and download both files
-4. Go to Keychain Access and set the dev.cer certificate to "Always Trust"
-5. The dev.pfx file will ask for a password. You can get this by clicking and opening the Licensing
-   Certificate - Dev item in the vault
-
-</Bitwarden>
-
 ## Configure User Secrets
 
 [User secrets](https://docs.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-6.0)
@@ -298,6 +241,63 @@ before re-applying them:
 ```bash
 pwsh setup_secrets.ps1 -clear
 ```
+
+## Create database
+
+You now have the MSSQL server running in Docker. The next step is to create the database that will
+be used by the Bitwarden server.
+
+We provide a helper script which will create the development database `vault_dev` and also run all
+migrations.
+
+Navigate to the `dev` folder in your server repo and perform the following steps:
+
+1.  Create the database and run all migrations:
+
+    ```bash
+    pwsh migrate.ps1
+    ```
+
+2.  You should receive confirmation that the migration scripts have run successfully:
+
+    ```
+    info: Bit.Migrator.DbMigrator[12482444]
+          Migrating database.
+    info: Bit.Migrator.DbMigrator[12482444]
+          Migration successful.
+    ```
+
+:::note
+
+You’ll need to re-run the migration helper script regularly to keep your local development database
+up-to-date. See [MSSQL Database](./database/mssql/index.md) for more information.
+
+:::
+
+<Bitwarden>
+
+## Install Licensing Certificate
+
+To run your local server environment as a licensed instance, you will need to download the
+`Licensing Certificate - Dev` from the shared Engineering collection and install it. This can be
+done by double-clicking on the downloaded certificate.
+
+:::note
+
+Mac users: When prompted to save the downloaded certificate and PFX file in Keychain Access be sure
+to select "Default Keychain > login" from the dropdown otherwise they will not be found when
+attempting to "Build and Run the Server".
+
+:::
+
+1. Log in to your company-issued Bitwarden account
+2. On the "Vaults" page, scroll down to the "Licensing Certificate - Dev" item
+3. View attachments and download both files
+4. Go to Keychain Access and set the dev.cer certificate to "Always Trust"
+5. The dev.pfx file will ask for a password. You can get this by clicking and opening the Licensing
+   Certificate - Dev item in the vault
+
+</Bitwarden>
 
 ## Build and Run the Server
 
