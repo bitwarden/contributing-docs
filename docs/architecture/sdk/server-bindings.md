@@ -6,8 +6,8 @@ These bindings are regularly updated to ensure they stay in sync with the server
 
 The bindings are exposed as multiple crates, one for each backend service:
 
-- `bitwarden-api-api`: For the `Api` service, which contains most of the server side functionality.
-- `bitwarden-api-identity`: For the `Identity` service, which is used for authentication.
+- `bitwarden-api-api`: For the `Api` service that contains most of the server side functionality.
+- `bitwarden-api-identity`: For the `Identity` service that is used for authentication.
 
 When performing any API calls the goal is to use the generated bindings as much as possible. This
 ensures any changes to the server are accurately reflected in the SDK. The generated bindings are

@@ -12,20 +12,20 @@ data for each API call.
 
 We can generally group the public models into the following categories:
 
-- **View models**: These are models that generally represents a decrypted state, examples are
-  `CipherView`, `CipherListView`, `FolderView`, etc.
-- **Request models**: These are models that are used to send data into the SDK. Some examples are
+- **View models**: Models that generally represents a decrypted state, examples are `CipherView`,
+  `CipherListView`, `FolderView`, etc.
+- **Request models**: Models that are used to send data into the SDK. Some examples are
   `ProjectGetRequest`, `ProjectCreateRequest`, etc.
-- **Response models**: Returns data from the SDK, one example is `ProjectResponse`.
+- **Response models**: Returns data from the SDK e.g. `ProjectResponse`.
 
 ## Internal models
 
 The SDK also maintains internal models:
 
-- **Api models**: These are [auto-generated models](./server-bindings.md) that are used to interact
-  with the server.
-- **Domain models**: These are the general data models used to represent a specific concern in the
-  SDK. For example, `Cipher`, `Folder`, etc.
+- **API models**: [Auto-generated models](./server-bindings.md) that are used to interact with the
+  server.
+- **Domain models**: General data models used to represent a specific concern in the SDK. For
+  example, `Cipher`, `Folder`, etc.
 - **DTO**: Data Transfer Objects are used to transfer data between layers of the SDK. They are
   generally used to decouple the domain models from the API models.
 

@@ -19,10 +19,8 @@ multiple internal crates. Review the repository README for more information abou
 crates.
 
 We generally strive towards extracting features into separate crates to keep the core `bitwarden`
-crate as lean as possible. This has multiple benefits including:
-
-- Faster compile. Unchanged crates are not recompiled.
-- Promotes clear ownership of features.
+crate as lean as possible. This has multiple benefits such as faster compile-time and clear
+ownership of features.
 
 ### `bitwarden` crate
 
@@ -37,7 +35,7 @@ written bindings for a C API, and programmatically generated bindings.
 
 ### C bindings
 
-Many language bindings utilize the `bitwarden-c` crate which exposes a C API. This is then combined
+Many language bindings utilize the `bitwarden-c` crate that exposes a C API. This is then combined
 with hand written bindings for the specific language. Since manually writing FFI bindings is time
 consuming and difficult we generally provide a JSON based API through the `bitwarden-json` crate
 which allows the language bindings to just contain three FFI functions, `init`, `run_command` and
@@ -46,14 +44,13 @@ which allows the language bindings to just contain three FFI functions, `init`, 
 ### Mobile bindings
 
 We use [UniFFI](https://github.com/mozilla/uniffi-rs/) to generate bindings for the mobile
-platforms, more specifically we publish android and iOS libraries with Kotlin and Swift bindings.
-While UniFFI supports additional languages they typically lag a few releases behind the UniFFI core
-library.
+platforms, more specifically we publish Android and iOS libraries with Kotlin and Swift bindings,
+respectively. While UniFFI supports additional languages they typically lag a few releases behind
+the UniFFI core library.
 
 The Android bindings are currently published on
-[GitHub Packages](https://github.com/bitwarden/sdk/packages/1945788) in the SDK repository. While
-the swift package is published in the
-[`sdk-swift` repository](https://github.com/bitwarden/sdk-swift).
+[GitHub Packages](https://github.com/bitwarden/sdk/packages/1945788) in the SDK repository. The
+swift package is published in the [`sdk-swift` repository](https://github.com/bitwarden/sdk-swift).
 
 ### Web bindings
 
