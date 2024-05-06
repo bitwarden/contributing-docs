@@ -203,9 +203,10 @@ A client may override this DI if a client-specific configuration is required.
 `core.module.ts` contains the main services module for the web client. It imports
 `JslibServicesModule`.
 
-However, the web module heavily uses [feature modules](https://angular.io/guide/feature-modules) to
-divide its code by feature. Feature modules should configure their own DI wherever possible for
-feature-specific (non-global) services.
+However, the web module heavily uses [feature modules](https://angular.io/guide/feature-modules) and
+[standalone components](https://angular.io/guide/standalone-components) to divide its code by
+feature. Feature modules and standalone components should configure their own DI wherever possible
+for feature-specific (non-global, non-stateful) services.
 
 ### Browser
 
