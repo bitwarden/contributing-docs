@@ -36,9 +36,10 @@ Services should be organized as follows depending on where they're used:
 Some teams also have their own `libs` folder, which are structured similarly. e.g. `libs/auth`,
 containing `libs/auth/common` and `libs/auth/angular`. These should be used if available.
 
-If a service is used in an Angular context only, it can use the Angular `@Injectable` decorator to
-automatically configure its dependencies. If a service is used in mixed contexts (e.g.
-`libs/common`), it must not use Angular decorators and its dependencies must be manually configured.
+If a service is used in an Angular context only (e.g. `app/<angular-only-client>` or
+`libs/angular`), it can use the Angular `@Injectable` decorator to automatically configure its
+dependencies. If a service is used in mixed contexts (e.g. `libs/common`), it must not use Angular
+decorators and its dependencies must be manually configured.
 
 ## Interfaces
 
@@ -210,7 +211,6 @@ Browser DI is split across the following locations:
 - `main.background.ts` manually instantiates services used in the background page (for manifest v2)
   or the service worker (for manifest v3). It does not use any dependency injection framework
 - a series of exported factory functions with the naming convention `[name]-service.factory.ts`.
-  These may be used in manifest v3 service workers in the future
 
 The background page/service worker still does a lot of work in the browser extension, so many
 services are registered in all the above locations.
