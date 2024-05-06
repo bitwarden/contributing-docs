@@ -24,6 +24,11 @@ This has important consequences for how we write services and how we configure D
 - non-Angular contexts do not use any dependency injection framework and must manually instantiate
   their dependencies
 
+The overall effect of these items is that we use Angular DI in a non-standard way. It forces
+interfaces to be abstract classes and requires that we manually wire up dependencies in service
+modules, rather than relying on `Inject` decorators that would import Angular dependencies into
+non-Angular contexts.
+
 ## Services
 
 Services should be organized as follows depending on where they're used:
