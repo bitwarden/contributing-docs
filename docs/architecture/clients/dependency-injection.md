@@ -214,8 +214,8 @@ Browser DI is split across the following locations:
 
 - `services.module.ts` is the main services module for the browser extension popup. It imports
   `JslibServicesModule`
-- `main.background.ts` manually instantiates services used in the background page (for manifest v2)
-  or the service worker (for manifest v3). It does not use any dependency injection framework
+- `main.background.ts` manually instantiates services used in the background page (for Manifest v2)
+  or the service worker (for Manifest v3). It does not use any dependency injection framework
 - a series of exported factory functions with the naming convention `[name]-service.factory.ts`.
   These were used early in development for Manifest v3, but will be removed in the near future.
 
