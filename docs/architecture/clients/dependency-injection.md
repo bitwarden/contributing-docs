@@ -217,7 +217,7 @@ Browser DI is split across the following locations:
 - `main.background.ts` manually instantiates services used in the background page (for Manifest v2)
   or the service worker (for Manifest v3). It does not use any dependency injection framework
 - a series of exported factory functions with the naming convention `[name]-service.factory.ts`.
-  These were used early in development for Manifest v3, but will be removed in the near future.
+  These were used early in development for Manifest v3, but will be removed in the near future
 
 The background page/service worker still does a lot of work in the browser extension, so many
 services are registered in all the above locations.
