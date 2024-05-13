@@ -17,6 +17,15 @@ Before you start, you must complete the [Clients repository setup instructions](
     npm run build:watch
     ```
 
+    :::note
+
+    The build commands use
+    [Manifest v3](https://developer.chrome.com/docs/extensions/develop/migrate/what-is-mv3) by
+    default. If you are building for Firefox or otherwise need a Manifest v2 build, you should use
+    the command `npm run build:watch:mv2` instead.
+
+    :::
+
 2.  Load the unpacked browser extension in your browser using the instructions in the next section.
 
 ## Environment Setup
