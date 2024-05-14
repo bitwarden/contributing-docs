@@ -7,7 +7,7 @@ The Bitwarden Secrets Manager Kubernetes Operator (`sm-operator`) is a tool for 
 Bitwarden Secrets Manager into their Kubernetes workflows seamlessly.
 
 The sm-operator uses a
-[controller](https://github.com/bitwarden/sm-kubernetes/blob/main/src/sm-operator/internal/controller/bitwardensecret_controller.go)
+[controller](https://github.com/bitwarden/sm-kubernetes/blob/main/internal/controller/bitwardensecret_controller.go)
 to synchronize Bitwarden Secrets into Kubernetes secrets. It does so by registering a Custom
 Resource Definition of BitwardenSecret into the cluster. It will listen for new BitwardenSecrets
 registered on the cluster and then synchronize on a configurable interval.
@@ -75,10 +75,7 @@ Clone the repository:
 git clone https://github.com/bitwarden/sm-kubernetes.git
 ```
 
-Open Visual Studio Code to the
-[src/sm-operator](https://github.com/bitwarden/sm-kubernetes/tree/main/src/sm-operator) subfolder.
-Opening here will allow all of the Dev Container, Go language extensions, tasks, and launch settings
-to work correctly.
+Open Visual Studio Code at the repository root.
 
 <Tabs>
 <TabItem value="dev-container" label="Dev Container" default>
@@ -109,10 +106,9 @@ full path of the repository.
 
 ### Configuration settings
 
-A `.env` file will be created under
-[src/sm-operator](https://github.com/bitwarden/sm-kubernetes/tree/main/src/sm-operator) once the Dev
-Container is created or `make setup` has been run. The following environment variable settings can
-be updated to change the behavior of the operator:
+A `.env` file will be created in the repository root once the Dev Container is created or
+`make setup` has been run. The following environment variable settings can be updated to change the
+behavior of the operator:
 
 - **BW_API_URL** - Sets the Bitwarden API URL that the Secrets Manager SDK uses. This is useful for
   self-host scenarios, as well as hitting European servers.
@@ -181,7 +177,7 @@ To get a list of namespaces, run `kubectl get namespaces`
 :::
 
 2. Install an instance of BitwardenSecret. An example can be found in
-   [config/samples/k8s_v1_bitwardensecret.yaml](https://github.com/bitwarden/sm-kubernetes/blob/main/src/sm-operator/config/samples/k8s_v1_bitwardensecret.yaml).
+   [config/samples/k8s_v1_bitwardensecret.yaml](https://github.com/bitwarden/sm-kubernetes/blob/main/config/samples/k8s_v1_bitwardensecret.yaml).
    You will want to copy this example and update it for your own needs. Then apply it like so:
    `kubectl apply -n <some-namespace> -f k8s_v1_bitwardensecret.yaml`
 
@@ -206,7 +202,7 @@ operator to create and synchronize a Kubernetes secret. This Kubernetes secret w
 namespace and will be injected with the data available to a Secrets Manager machine account
 (previously known as service account). The resulting Kubernetes secret will include all secrets that
 a specific machine account has access to. The sample file
-([config/samples/k8s_v1_bitwardensecret.yaml](https://github.com/bitwarden/sm-kubernetes/blob/main/src/sm-operator/config/samples/k8s_v1_bitwardensecret.yaml))
+([config/samples/k8s_v1_bitwardensecret.yaml](https://github.com/bitwarden/sm-kubernetes/blob/main/config/samples/k8s_v1_bitwardensecret.yaml))
 provides the basic structure of a BitwardenSecret manifest. The key settings that you will want to
 update are listed below:
 
@@ -262,7 +258,7 @@ different routes for deploying the image.
 
 Custom configuration of URLs, refresh interval, and state path is handled by updating the
 environment variables in
-[config/manager/manager.yaml](https://github.com/bitwarden/sm-kubernetes/blob/main/src/sm-operator/config/manager/manager.yaml)
+[config/manager/manager.yaml](https://github.com/bitwarden/sm-kubernetes/blob/main/config/manager/manager.yaml)
 when working with the container.
 
 :::
@@ -315,7 +311,7 @@ Using the Visual Studio Code "Testing" tab is not currently supported.
 ## Modifying the API definitions
 
 If you are editing the API definitions via
-[api/v1/bitwardensecret_types.go](https://github.com/bitwarden/sm-kubernetes/blob/main/src/sm-operator/api/v1/bitwardensecret_types.go),
+[api/v1/bitwardensecret_types.go](https://github.com/bitwarden/sm-kubernetes/blob/main/api/v1/bitwardensecret_types.go),
 re-generate the manifests using:
 
 ```sh
