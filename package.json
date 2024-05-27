@@ -43,7 +43,7 @@
     "@docusaurus/module-type-aliases": "3.3.2",
     "@docusaurus/tsconfig": "3.3.2",
     "@types/react": "18.2.79",
-    "cspell": "8.8.1",
+    "cspell": "8.8.3",
     "husky": "9.0.11",
     "lint-staged": "15.2.2",
     "prettier": "3.2.5",
