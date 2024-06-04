@@ -47,8 +47,7 @@ The Dev Container will not work correctly if you are using a container engine ot
 
 - [Visual Studio Code](https://code.visualstudio.com/)
 - [Visual Studio Code Go Extension](https://marketplace.visualstudio.com/items?itemName=golang.go)
-- [Go](https://go.dev/dl/) version 1.20 or 1.21
-- [Operator-SDK](https://sdk.operatorframework.io/docs/installation/#install-from-github-release)
+- [Go](https://go.dev/dl/) version 1.21
 - [musl-gcc](https://wiki.musl-libc.org/getting-started.html)
 - [Make](https://www.gnu.org/software/make/)
 - [kubectl](https://kubernetes.io/docs/tasks/tools/)
@@ -80,8 +79,7 @@ Open Visual Studio Code at the repository root.
 <Tabs>
 <TabItem value="dev-container" label="Dev Container" default>
 
-Dev Container setup is automated. This will create a Kind cluster and setup all necessary software
-and SDK binaries.
+Dev Container setup is automated. This will create a Kind cluster and setup all necessary software.
 
 - Open the command palette (using `Cmd/Ctrl`+`Shift`+`P` or `F1` depending on user settings)
 - Start typing `Dev Containers: Reopen in Container`
@@ -99,7 +97,7 @@ full path of the repository.
 
 - Install all requirements listed in the Direct Setup requirements
 - Create a Kind cluster using `kind create cluster`
-- Run `make setup` to download the appropriate Secrets Manager SDK binaries
+- Run `make setup` to create a default .env file.
 
 </TabItem>
 </Tabs>
