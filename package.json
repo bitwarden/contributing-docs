@@ -15,7 +15,9 @@
   "private": true,
   "scripts": {
     "docusaurus": "docusaurus",
-    "start": "docusaurus start",
+    "start": "./scripts/docusaurus-start.sh",
+    "start:insecure": "docusaurus start",
+    "setup:ssl": "./scripts/generate-certs.sh",
     "build": "docusaurus build",
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy",
