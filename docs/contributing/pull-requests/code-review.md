@@ -115,8 +115,16 @@ claims. This can be based on testing the change or on previous domain knowledge.
   - Solve the intended problem,
   - [solve the requirements in the best way](#assumptions-note),
   - the code is well structured,
-  - follows our most recent, accepted patterns,
+  - follows our most recent, accepted patterns as defined in our [ADRs](../../architecture/adr/),
   - and is free of unintended side-effects.
+
+:::warning Evolutionary Database Design
+
+For any database changes, be sure that they follow
+[EDD](../../contributing/database-migrations/edd.mdx). This is important as the lack of EDD support
+will **not** be caught by any unit, integration, or regression testing.
+
+:::
 
 If you are unsure about any of the above, consider using a different status or check in with the
 author to discuss things first. Also don’t hesitate to request a second review from someone else.
