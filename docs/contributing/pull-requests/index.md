@@ -115,6 +115,8 @@ These reviews are required for the changes to be merged to `master`.
 You can tag additional teams or individuals for review as you see fit, including `@dept-design` for
 any design changes.
 
+</Bitwarden>
+
 ### Opening the PR for review
 
 As its name implies, marking a PR as "Ready for Review" indicates that you are ready for all
@@ -122,26 +124,7 @@ assigned teams to review it. If the changes are still in progress, leave the PR 
 Doing this ensures that reviewers can act on the "Ready for Review" as their signal to begin the
 review process without further notification.
 
-### Addressing feedback
-
-It is likely that you will receive some feedback on your PR. You should see this as a positive thing
--- it signifies a healthy and thorough review process and an organizational commitment to code
-quality. You may receive [comments](./code-review.md#comment) or a
-[request for changes](./code-review.md#request-changes). You are encouraged to engage in
-conversation on the PR to discuss a solution, but if any strong conflicting opinions arise it is
-often best to move the conversation to a synchronous format to avoid any misunderstanding.
-
-When any necessary changes have been made, you should address the comments or request for changes by
-responding in the PR conversation thread. You are not responsible for resolving the conversation --
-that is the prerogative of the reviewer, to ensure that they agree that the question or concern has
-been addressed.
-
-**When you are ready for a reviewer to revisit your changes, you should request a re-review.** This
-will notify the reviewer and ensure a prompt response.
-
-</Bitwarden>
-
-## Reviewing the pull request
+## Managing the review process
 
 <Bitwarden>
 
@@ -199,7 +182,24 @@ that may delay this process.
 
 </Community>
 
-### How to perform a review
+### Addressing feedback
+
+It is likely that you will receive some feedback on your PR. You should see this as a positive thing
+-- it signifies a healthy and thorough review process and an organizational commitment to code
+quality. You may receive [comments](./code-review.md#comment) or a
+[request for changes](./code-review.md#request-changes). You are encouraged to engage in
+conversation on the PR to discuss a solution, but if any strong conflicting opinions arise it is
+often best to move the conversation to a synchronous format to avoid any misunderstanding.
+
+When any necessary changes have been made, you should address the comments or request for changes by
+responding in the PR conversation thread. You are not responsible for resolving the conversation --
+that is the prerogative of the reviewer, to ensure that they agree that the question or concern has
+been addressed.
+
+**When you are ready for a reviewer to revisit your changes, you should request a re-review.** This
+will notify the reviewer and ensure a prompt response.
+
+## Performing a review
 
 We've written up some [guidelines](./code-review.md) for reviewing code, which we recommend reading
 before performing your first code review.
