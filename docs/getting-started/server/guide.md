@@ -54,7 +54,7 @@ Before you start: make sure you’ve installed the recommended
 
 We provide a [Docker Compose](https://docs.docker.com/compose/) configuration, which is used during
 development to provide the required dependencies. This is split up into multiple service profiles to
-facilitate easily customization.
+facilitate easy customization.
 
 1.  Some Docker settings are configured in the environment file, `dev/.env`. Copy the example
     environment file:
