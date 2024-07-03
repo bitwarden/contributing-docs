@@ -1,11 +1,16 @@
 ---
 sidebar_position: 2
+sidebar_custom_props:
+  access: bitwarden
 ---
 
-# Code Review Guidelines
+# Code Review
 
 At Bitwarden, we encourage everyone to participate in code reviews. A team will focus primarily on
 their own code reviews, but if you see something interesting, feel free to jump in and discuss.
+
+We believe that the act of reviewing PRs is a critically important part of each engineer's job. It
+is as important, if not more important, than the act of writing code.
 
 A few general guidelines:
 
@@ -23,6 +28,33 @@ the cost of fixing it is much smaller than if it escapes further into the develo
 
 You can find more tips for PR review here:
 [Best Practices for Code Review | SmartBear](https://smartbear.com/learn/code-review/best-practices-for-peer-code-review/)
+
+:::
+
+## Responding to review requests
+
+To ensure that teams within the organization operate on same set of assumptions for performing
+reviews, we have agreed to a baseline set of expectations.
+
+When a PR author opens a PR for review, they should have the expectation that:
+
+- The act of opening the PR for review is the **only** notification required. Teams are responsible
+  for properly configuring notifications so that team members are aware of their obligations.
+- The reviewing team(s) will respond within **two business days** to:
+  - Provide a review,
+  - Inform the author when a review will be provided, or
+  - Ask the author to split the work into a
+    [smaller PR](./branching.md#structuring-branches-to-support-incremental-work) for review
+
+:::tip Notifications
+
+Our teams use GitHub notifications as the primary method of communication for PR review requests and
+scheduled reminders are highly encouraged to facilitate prompt responses to requests.
+
+- Individual engineers are encouraged to set up [scheduled reminders][user reminders] for
+  themselves.
+- Each team has [scheduled reminders][team reminders] on a dedicated Slack channel (e.g.
+  #team-eng-platform-notifications).
 
 :::
 
@@ -191,6 +223,10 @@ without managing remote branches - for example:
 gh pr checkout <GitHub PR number>
 ```
 
+[user reminders]:
+  https://docs.github.com/en/account-and-profile/setting-up-and-managing-your-personal-account-on-github/managing-your-membership-in-organizations/managing-your-scheduled-reminders
+[team reminders]:
+  https://docs.github.com/en/organizations/organizing-members-into-teams/managing-scheduled-reminders-for-your-team
 [sme-yellowpages]: https://bitwarden.atlassian.net/wiki/spaces/DEV/pages/195919928
 [gh-commenting]:
   https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/reviewing-changes-in-pull-requests/commenting-on-a-pull-request
