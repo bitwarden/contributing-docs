@@ -1,11 +1,16 @@
 ---
 sidebar_position: 2
+sidebar_custom_props:
+  access: bitwarden
 ---
 
-# Code Review Guidelines
+# Code Review
 
 At Bitwarden, we encourage everyone to participate in code reviews. A team will focus primarily on
 their own code reviews, but if you see something interesting, feel free to jump in and discuss.
+
+We believe that the act of reviewing PRs is a critically important part of each engineer's job. It
+is as important, if not more important, than the act of writing code.
 
 A few general guidelines:
 
@@ -23,6 +28,33 @@ the cost of fixing it is much smaller than if it escapes further into the develo
 
 You can find more tips for PR review here:
 [Best Practices for Code Review | SmartBear](https://smartbear.com/learn/code-review/best-practices-for-peer-code-review/)
+
+:::
+
+## Responding to review requests
+
+To ensure that teams within the organization operate on same set of assumptions for performing
+reviews, we have agreed to a baseline set of expectations.
+
+When a PR author opens a PR for review, they should have the expectation that:
+
+- The act of opening the PR for review is the **only** notification required. Teams are responsible
+  for properly configuring notifications so that team members are aware of their obligations.
+- The reviewing team(s) will respond within **two business days** to:
+  - Provide a review,
+  - Inform the author when a review will be provided, or
+  - Ask the author to split the work into a
+    [smaller PR](./branching.md#structuring-branches-to-support-incremental-work) for review
+
+:::tip Notifications
+
+Our teams use GitHub notifications as the primary method of communication for PR review requests and
+scheduled reminders are highly encouraged to facilitate prompt responses to requests.
+
+- Individual engineers are encouraged to set up [scheduled reminders][user reminders] for
+  themselves.
+- Each team has [scheduled reminders][team reminders] on a dedicated Slack channel (e.g.
+  #team-eng-platform-notifications).
 
 :::
 
@@ -115,8 +147,16 @@ claims. This can be based on testing the change or on previous domain knowledge.
   - Solve the intended problem,
   - [solve the requirements in the best way](#assumptions-note),
   - the code is well structured,
-  - follows our most recent, accepted patterns,
+  - follows our most recent, accepted patterns as defined in our [ADRs](../../architecture/adr/),
   - and is free of unintended side-effects.
+
+:::warning Evolutionary Database Design
+
+For any database changes, be sure that they follow
+[EDD](../../contributing/database-migrations/edd.mdx). This is important as the lack of EDD support
+will **not** be caught by any unit, integration, or regression testing.
+
+:::
 
 If you are unsure about any of the above, consider using a different status or check in with the
 author to discuss things first. Also don’t hesitate to request a second review from someone else.
@@ -183,6 +223,10 @@ without managing remote branches - for example:
 gh pr checkout <GitHub PR number>
 ```
 
+[user reminders]:
+  https://docs.github.com/en/account-and-profile/setting-up-and-managing-your-personal-account-on-github/managing-your-membership-in-organizations/managing-your-scheduled-reminders
+[team reminders]:
+  https://docs.github.com/en/organizations/organizing-members-into-teams/managing-scheduled-reminders-for-your-team
 [sme-yellowpages]: https://bitwarden.atlassian.net/wiki/spaces/DEV/pages/195919928
 [gh-commenting]:
   https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/reviewing-changes-in-pull-requests/commenting-on-a-pull-request
