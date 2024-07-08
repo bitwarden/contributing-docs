@@ -21,7 +21,7 @@ Build and run:
 
 ```bash
 cd apps/cli
-npm run build:watch
+npm run build:bit:watch
 ```
 
 By default, this will use the official Bitwarden servers. You can target your local server by using
