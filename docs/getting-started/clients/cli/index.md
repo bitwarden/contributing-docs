@@ -19,10 +19,23 @@ Before you start, you must complete the [Clients repository setup instructions](
 
 Build and run:
 
+<Bitwarden>
+
 ```bash
 cd apps/cli
 npm run build:bit:watch
 ```
+
+</Bitwarden>
+
+<Community>
+
+```bash
+cd apps/cli
+npm run build:oss:watch
+```
+
+</Community>
 
 By default, this will use the official Bitwarden servers. You can target your local server by using
 the [config command](https://bitwarden.com/help/article/cli/#config). You may need to
