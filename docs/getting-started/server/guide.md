@@ -24,13 +24,12 @@ Before you start: make sure you’ve installed the recommended
 
 ## Clone the repository
 
-1.  Clone the Bitwarden Server project:
+Clone the Bitwarden Server project and navigate to the root of the cloned repository:
 
-    ```bash
-    git clone https://github.com/bitwarden/server.git
-    ```
-
-2.  Open a terminal and navigate to the root of the cloned repository.
+```bash
+git clone https://github.com/bitwarden/server.git
+cd server
+```
 
 ## Configure Git
 
