@@ -15,7 +15,9 @@
   "private": true,
   "scripts": {
     "docusaurus": "docusaurus",
-    "start": "docusaurus start",
+    "start": "./scripts/docusaurus-start.sh",
+    "start:insecure": "docusaurus start",
+    "setup:ssl": "./scripts/generate-certs.sh",
     "build": "docusaurus build",
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy",
@@ -30,24 +32,24 @@
     "spellcheck": "cspell lint \"**/*.md{x,}\""
   },
   "dependencies": {
-    "@docusaurus/core": "3.1.1",
-    "@docusaurus/preset-classic": "3.1.1",
+    "@docusaurus/core": "3.4.0",
+    "@docusaurus/preset-classic": "3.4.0",
     "@mdx-js/react": "3.0.1",
-    "docusaurus-lunr-search": "3.3.2",
+    "docusaurus-lunr-search": "3.4.0",
     "prism-react-renderer": "2.3.1",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
-    "remark-kroki": "0.3.1"
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "remark-kroki": "0.3.6"
   },
   "devDependencies": {
-    "@docusaurus/module-type-aliases": "3.1.1",
-    "@docusaurus/tsconfig": "3.1.1",
-    "@types/react": "18.2.56",
-    "cspell": "8.3.2",
-    "husky": "9.0.10",
-    "lint-staged": "15.2.2",
-    "prettier": "3.2.5",
-    "typescript": "5.3.3"
+    "@docusaurus/module-type-aliases": "3.4.0",
+    "@docusaurus/tsconfig": "3.4.0",
+    "@types/react": "18.3.3",
+    "cspell": "8.10.4",
+    "husky": "9.0.11",
+    "lint-staged": "15.2.7",
+    "prettier": "3.3.2",
+    "typescript": "5.5.3"
   },
   "browserslist": {
     "production": [
@@ -62,7 +64,8 @@
     ]
   },
   "engines": {
-    "node": ">=18"
+    "node": "~20",
+    "npm": "~10"
   },
   "lint-staged": {
     "*": "prettier --cache --write --ignore-unknown",

@@ -54,7 +54,7 @@ Before you start: make sure you’ve installed the recommended
 
 We provide a [Docker Compose](https://docs.docker.com/compose/) configuration, which is used during
 development to provide the required dependencies. This is split up into multiple service profiles to
-facilitate easily customization.
+facilitate easy customization.
 
 1.  Some Docker settings are configured in the environment file, `dev/.env`. Copy the example
     environment file:
@@ -120,7 +120,7 @@ see your containers running under the `bitwardenserver` group.
 Changing `MSSQL_PASSWORD` variable after first running docker compose will require a re-creation of
 the storage volume.
 
-**Warning: this will delete your development database.**
+**Warning: this will delete your development database.**
 
 To do this, run
 
@@ -180,66 +180,6 @@ the following commands:
     ```bash
     pwsh setup_azurite.ps1
     ```
-
-## Create database
-
-You now have the MSSQL server running in Docker. The next step is to create the database that will
-be used by the Bitwarden server.
-
-We provide a helper script which will create the development database `vault_dev` and also run all
-migrations.
-
-Navigate to the `dev` folder in your server repo and perform the following steps:
-
-1.  Create the database and run all migrations:
-
-    ```bash
-    pwsh migrate.ps1
-    ```
-
-2.  You should receive confirmation that each migration script has run successfully:
-
-    ```
-    Performing /mnt/migrator/DbScripts/2017-08-19_00_InitialSetup.sql
-    Performing /mnt/migrator/DbScripts/2017-08-22_00_LicenseCheckScripts.sql
-    Performing /mnt/migrator/DbScripts/2017-08-30_00_CollectionWriteOnly.sql
-    [...]
-    ```
-
-If migrations are being skipped even though this is a new database, see
-[MSSQL Database Troubleshooting](./database/mssql/index.md#troubleshooting).
-
-:::note
-
-You’ll need to re-run the migration helper script regularly to keep your local development database
-up-to-date. See [MSSQL Database](./database/mssql/index.md) for more information.
-
-:::
-
-<Bitwarden>
-
-## Install Licensing Certificate
-
-To run your local server environment as a licensed instance, you will need to download the
-`Licensing Certificate - Dev` from the shared Engineering collection and install it. This can be
-done by double-clicking on the downloaded certificate.
-
-:::note
-
-Mac users: When prompted to save the downloaded certificate and PFX file in Keychain Access be sure
-to select "Default Keychain > login" from the dropdown otherwise they will not be found when
-attempting to "Build and Run the Server".
-
-:::
-
-1. Log in to your company-issued Bitwarden account
-2. On the "Vaults" page, scroll down to the "Licensing Certificate - Dev" item
-3. View attachments and download both files
-4. Go to Keychain Access and set the dev.cer certificate to "Always Trust"
-5. The dev.pfx file will ask for a password. You can get this by clicking and opening the Licensing
-   Certificate - Dev item in the vault
-
-</Bitwarden>
 
 ## Configure User Secrets
 
@@ -301,6 +241,63 @@ before re-applying them:
 ```bash
 pwsh setup_secrets.ps1 -clear
 ```
+
+## Create database
+
+You now have the MSSQL server running in Docker. The next step is to create the database that will
+be used by the Bitwarden server.
+
+We provide a helper script which will create the development database `vault_dev` and also run all
+migrations.
+
+Navigate to the `dev` folder in your server repo and perform the following steps:
+
+1.  Create the database and run all migrations:
+
+    ```bash
+    pwsh migrate.ps1
+    ```
+
+2.  You should receive confirmation that the migration scripts have run successfully:
+
+    ```
+    info: Bit.Migrator.DbMigrator[12482444]
+          Migrating database.
+    info: Bit.Migrator.DbMigrator[12482444]
+          Migration successful.
+    ```
+
+:::note
+
+You’ll need to re-run the migration helper script regularly to keep your local development database
+up-to-date. See [MSSQL Database](./database/mssql/index.md) for more information.
+
+:::
+
+<Bitwarden>
+
+## Install Licensing Certificate
+
+To run your local server environment as a licensed instance, you will need to download the
+`Licensing Certificate - Dev` from the shared Engineering collection and install it. This can be
+done by double-clicking on the downloaded certificate.
+
+:::note
+
+Mac users: When prompted to save the downloaded certificate and PFX file in Keychain Access be sure
+to select "Default Keychain > login" from the dropdown otherwise they will not be found when
+attempting to "Build and Run the Server".
+
+:::
+
+1. Log in to your company-issued Bitwarden account
+2. On the "Vaults" page, scroll down to the "Licensing Certificate - Dev" item
+3. View attachments and download both files
+4. Go to Keychain Access and set the dev.cer certificate to "Always Trust"
+5. The dev.pfx file will ask for a password. You can get this by clicking and opening the Licensing
+   Certificate - Dev item in the vault
+
+</Bitwarden>
 
 ## Build and Run the Server
 

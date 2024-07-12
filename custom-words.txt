@@ -2,13 +2,18 @@
 # it in a single (`) or multiline (```) code snippet instead, as they are automatically ignored
 # by the spellchecker. Please keep the list sorted alphabetically.
 
+AndroidX
 Bitwarden
+bitwardensecret
 bytemark
 clickjacking
 CODEOWNERS
 CQRS
+CTAP2
 dockerized
+F-Droid
 Gitter
+HKDF
 hotfix
 hotfixed
 hotfixes
@@ -21,6 +26,7 @@ jumpcloud
 keychain
 keypair
 keyserver
+Kubebuilder
 LDIF
 LLDB
 Mailcatcher
@@ -38,6 +44,7 @@ passcode
 passwordless
 pinentry
 PNSs
+precompiler
 proxied
 refactorings
 roadmap
@@ -54,6 +61,7 @@ signtool
 signup
 sprocs
 sqlcmd
+struct
 subprocessor
 toolset
 TOTP
@@ -63,3 +71,4 @@ xmldoc
 Yellowpages
 Yubico
 YubiKey
+YubiKeys

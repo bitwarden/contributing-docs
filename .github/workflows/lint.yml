@@ -1,4 +1,3 @@
----
 name: Lint
 
 on:
@@ -6,28 +5,23 @@ on:
     paths-ignore:
       - ".github/workflows/**"
   workflow_dispatch:
-    inputs: {}
-
-defaults:
-  run:
-    shell: bash
 
 jobs:
   lint:
     name: Lint
     runs-on: ubuntu-22.04
+
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - name: Check out repo
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
 
       - name: Set up Node
         uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
         with:
           cache: "npm"
           cache-dependency-path: "**/package-lock.json"
-          node-version: "18"
 
-      - name: Run linter and spellcheck
+      - name: Lint and spellcheck
         run: |
           npm ci
           npm run lint

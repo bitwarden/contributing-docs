@@ -17,6 +17,15 @@ Before you start, you must complete the [Clients repository setup instructions](
     npm run build:watch
     ```
 
+    :::note
+
+    The build commands use
+    [Manifest v3](https://developer.chrome.com/docs/extensions/develop/migrate/what-is-mv3) by
+    default. If you are building for Firefox or otherwise need a Manifest v2 build, you should use
+    the command `npm run build:watch:mv2` instead.
+
+    :::
+
 2.  Load the unpacked browser extension in your browser using the instructions in the next section.
 
 ## Environment Setup
@@ -185,12 +194,13 @@ The easiest way to develop the extension is to build and debug it using Xcode.
 1. Build the extension:
 
    ```bash
-   npm run build:watch
+   npm run build:watch:mv2
    ```
 
 2. Edit `build/manifest.json`. Move the `nativeMessaging` permission from the `optional_permissions`
    section into the `permissions` section
-3. Edit `build/index.html`, replace `<html class="__BROWSER__">` to `<html class="browser_safari">`.
+3. Edit `build/popup/index.html`, replace `<html class="__BROWSER__">` to
+   `<html class="browser_safari">`.
 4. Open `src/safari/desktop.xcodeproj` in Xcode
 5. Run the "desktop" target.
 

@@ -14,19 +14,13 @@ See [Server Setup Guide](../../guide.md).
 
 ## Updating the database
 
-You should run the `migrate.ps1` helper script whenever you sync with the `main` branch or create a
-new migration script. `migrate.ps1` tracks run migrations in `migrations_$DATABASENAME`, which is
-typically `migrations_vault_dev`.
+The `dev/migrate.ps1` helper script uses our
+[MsSql Migrator Utility](https://github.com/bitwarden/server/tree/main/util/MsSqlMigratorUtility) to
+run migrations. You should run the helper script whenever you sync with the `main` branch or create
+a new migration script. Migrations that have already been run are tracked in the `Migration` table
+of your database.
 
 ## Modifying the database
 
 The process for modifying the database is described in
 [Migrations](./../../../../contributing/database-migrations/mssql.md).
-
-## Troubleshooting
-
-### New database, but skipping migrations
-
-Migration records are stored by vault database name, which is typically either `vault_dev` or
-`vault_dev_self_host`. If you’ve deleted these in order to start fresh, you should delete the
-corresponding `migrations_$DATABASENAME` database.
