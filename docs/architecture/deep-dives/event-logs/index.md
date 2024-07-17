@@ -13,7 +13,7 @@ triggered.
 | Trigger Location | Description |
 | ---------------- | ------------ |
 | Server | User actions that manifest as server-side operations, generally anything related to organization management. |
-| Client | User interactions on locally synced data that does not result in server-side operations. These are typically prefixed with a `Client_` prefix. One example is `Cipher_ClientAutofill` which logs auto-fill of organization items. |
+| Client | User interactions on locally synced data that does not result in server-side operations. These are typically prefixed with a `Client_` prefix. One example is `Cipher_ClientAutofill` which logs autofill of organization items. |
 
 Whenever possible we prefer to use server-side events since they incur less network traffic and
 cannot be circumvented by modifying the client.
