@@ -1,7 +1,7 @@
-
-# by the spellchecker. Please keep the list sorted alphabetically.
 # Custom dictionary for spellchecking. Before adding a word here, consider whether you can put
 # it in a single (`) or multiline (```) code snippet instead, as they are automatically ignored
+# by the spellchecker. Please keep the list sorted alphabetically.
+
 AndroidX
 Bitwarden
 bitwardensecret
