@@ -4,24 +4,40 @@ A Splunk app for reporting Bitwarden event logs.
 
 ## Contributing
 
-This app requires Python 3.8 installed. Install [Poetry][poetry] if not already installed.
+### Set up Splunk Enterprise
 
-Activate shell: `poetry shell`
+1. Install Docker
+2. If you're using an Apple Silicon Mac, open _Docker_ -> _Settings_ -> _Features in development_ ->
+   enable "Use Rosetta for x86/amd64 emulation on Apple Silicon"
+3. Run Splunk Enterprise
+   `docker run --rm --platform linux/amd64 --name splunk -d -p 8001:8000 -p 8089:8089 -e SPLUNK_START_ARGS='--accept-license' -e SPLUNK_PASSWORD='password' splunk/splunk:latest`
+   (replace 'password' with your desired admin password)
+4. Confirm that Splunk is running by navigating to http://localhost:8001
 
-Install dependencies: `poetry install --with dev`
+### Configure your environment
 
-### Local development
+1. Clone the Github repository: `git clone https://github.com/bitwarden/splunk.git`
+2. Install Python 3.8
+3. Install [Poetry][poetry]
+4. If you're using a Mac, install libmagic: `brew install libmagic`
+5. Navigate to your local repository
+6. Activate the poetry shell: `poetry shell`
+7. Tell poetry to use Python 3.8: `poetry env use python3.8`
+8. Install dependencies: `poetry install --with dev`
 
-- Install docker.
-- Run splunk enterprise
-  `docker run --rm --name splunk -d -p 8001:8000 -p 8089:8089 -e SPLUNK_START_ARGS='--accept-license' -e SPLUNK_PASSWORD='password' splunk/splunk:latest`
-- Package and Deploy to splunk:
-  - `./package.sh`
-  - `./deploy.sh`
-- Access logs:
-  - `docker exec -u splunk -it splunk bash`
-  - `tail -f /opt/splunk/var/log/splunk/bitwarden_event_logs_beta.log`
-- Access Splunk url in the browser: http://localhost:8001
-  - Enter credentials, login: `admin`, password: `password`
-  - Click on the _Apps_ -> _Bitwarden Event Logs_
-  - Complete the Setup
+### Deploy the app
+
+1. Package the app: `./package.sh`
+2. Deploy the app to Splunk: `./deploy.sh`
+3. (optional) Check the logs for errors or for debugging purposes later:
+
+- `docker exec -u splunk -it splunk bash`
+- `tail -f /opt/splunk/var/log/splunk/bitwarden_event_logs_beta.log`
+
+### Configure the app
+
+1. Access Splunk url in the browser: http://localhost:8001
+2. Enter credentials, login: `admin`, password: `password` (or the password you set above)
+3. Click on the _Apps_ -> _Bitwarden Event Logs_
+4. Complete the setup. Refer to the [Bitwarden Help Center][Bitwarden Splunk SIEM] for more
+   information about configuration
