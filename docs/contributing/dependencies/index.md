@@ -111,7 +111,7 @@ What this means is that if you do need to make changes during review, you should
 of the PR through the rest of the workflow and not leave the PR open for an extended period.
 
 If you do want Renovate to take over managing the dependencies in the PR again, you can request that
-by checking the
+by selecting the "rebase/retry" checkbox on the PR description.
 
 ![Updating a PR](image.png)
 
