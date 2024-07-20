@@ -254,9 +254,53 @@ the retrieval methods:
 
 ## Feature flag lifecycle
 
+:::tip LaunchDarkly access
+
 Let your management know when you need to change something about a feature online inside
 LaunchDarkly. Only a small number of users have accounts with LaunchDarkly to save on licensing
 costs.
+
+:::
+
+The process for updating flag values and the ownership of flag changes depends on the environment
+and change as a flag proceeds through our cloud landscape.
+
+### Development environments
+
+In the development environments, ownership of the flag values is in the hands of the development
+team. The Engineering Manager of the team is responsible for maintaining and updating flag values.
+
+By default, flags should be **enabled** in the development environment as soon as the flag is
+created. This allows the feature to be viewed and exercised by Product, Design, the development
+team, and others within the organization. There is an understanding that there may be rough edges
+around the product deployed behind a feature flag in the development environment, as parts of the
+feature may be introduced incrementally into `main` behind the feature flag. As a general rule,
+defects should not be recorded about new features without checking with the development team first,
+to avoid reporting unfinished functionality.
+
+### QA environments
+
+In the QA environments, the QA team owns the flag values. The QA Managers are responsible for
+maintaining and updating flag values as new features are enabled for QA testing.
+
+Flags should be **disabled** by default in the QA environments. This allows the flagged
+functionality to be fully built and tested by the developers and introduced into QA when ready. When
+the feature is `Ready for QA` the QA Engineers on the team should work with the QA Managers to
+enable the flag.
+
+The QA Managers are also responsible for ensuring that during regression testing the environment
+under test has the proper flag values set to match the desired production environment after
+deployment.
+
+### Production environments
+
+In the production environments, the ownership of the flag values is shared between Product and
+Engineering.
+
+Flags are **disabled** by default in the production environments. Only when the Product Manager is
+ready for the feature to be enabled should the Engineering Manager enable the flag.
+
+### Unwinding a feature flag
 
 Feature flags don’t necessarily have to ever be deleted from LaunchDarkly, just unused. Linking them
 to Jira helps create a history of the feature and there are copious logs and audit records online
@@ -268,8 +312,6 @@ is essential that any logic based on these flags be removed from code as soon as
 launches successfully. When defining the tasks for feature-flagged code, be sure to include a
 cleanup task for removing this logic. You may want to consider multiple tasks - one for each of the
 steps in the removal process.
-
-### Unwinding a feature flag
 
 Due to the complexity of the different client deployments and how we expose feature flags through
 our API, it is important that each feature flag be removed in the appropriate sequence.
