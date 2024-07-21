@@ -7,11 +7,12 @@ in Splunk.
 
 - Docker. If you're using an Apple Silicon Mac, enable _Docker Desktop_ -> _Settings_ -> _General_
   -> _Use Rosetta for x86_64/amd64 emulation on Apple Silicon_
-- Python 3.8 or 3.9
+- Python 3.7 - 3.10
 - [Poetry][poetry]
 - libmagic (macOS only), available via homebrew: `brew install libmagic`
-- A Bitwarden server with event logging configured and an enterprise organization. To set this up
-  locally, see the [Setup Guide](../server/guide.md) and [Event Logging](../server/events.md)
+- A Bitwarden Teams or Enterprise organization
+- If using a local development server - make sure the Events and EventsProcessor projects are
+  running and [Event Logging](../server/events.md) is working
 
 ## Set up and configuration
 
@@ -29,20 +30,20 @@ in Splunk.
    cd splunk
    ```
 
-3. Activate the poetry shell:
-
-   ```
-   poetry shell
-   ```
-
-4. Tell poetry to use the required Python version:
+3. Tell poetry to use the required Python version:
 
    ```
    poetry env use <executable>
    ```
 
-   Where `<executable>` is the executable for Python 3.8 or 3.9. If this is in your PATH variable
-   then you do not need to specify the full path. e.g. `poetry env use python3.8`
+   Where `<executable>` is the executable for Python. If this is in your PATH variable then you do
+   not need to specify the full path. e.g. `poetry env use python3.8`
+
+4. Activate the poetry shell:
+
+   ```
+   poetry shell
+   ```
 
 5. Install dependencies:
 
