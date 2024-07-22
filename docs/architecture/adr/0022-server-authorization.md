@@ -1,6 +1,6 @@
 ---
 adr: "0022"
-status: Accepted
+status: In Discussion
 date: 2024-06-21
 tags: [server]
 ---
@@ -81,16 +81,16 @@ resource.
 
 To use resource-based authorization in ASP.NET Core:
 
-- define a set of operations that are permitted on a resource, e.g. create, read, update, delete
-- define one or more `AuthorizationHandler` classes for the resource. The handler contains the logic
-  to decide whether a user is authorized to perform the specified operation(s) on the resource
+- you define a set of operations that are permitted on a resource, e.g. create, read, update, delete
+- you define one or more `AuthorizationHandler` classes for the resource. The handler contains the
+  logic to decide whether a user is authorized to perform the specified operation(s) on the resource
 - multiple handlers can be defined for different sources of permissions. For example, you may be
   authorized to delete a vault item because it is in your individual vault, or because you have
   access to it via an organization. This logic can be defined in separate handlers to keep each
   handler simple and single-purpose; all handlers will be called before a final result is returned
 - our experience to date strongly shows that resources (and therefore handlers) should be defined at
-  a fairly granular level. Relationships (e.g. `CollectionUser`) should be considered their own
-  resource and defined and checked separately
+  a fairly granular level, probably reflecting database entities. Relationships (e.g.
+  `CollectionUser`) should be considered their own resource and defined and checked separately
 
 To perform an authorization check:
 
@@ -105,9 +105,10 @@ To perform an authorization check:
 - already partially in use for organization collections - we would be refining and then expanding
   that use
 - handlers provide good encapsulation of authorization logic, separate to other concerns and
-  separate to the `AuthorizationService` itself
+  separate to the `AuthorizationService` implementation itself
 - the fixed `AuthorizationService` interface (accepting only the user, the resource, and the
   operations) enforces a consistent usage across our internal teams
+- teams can write and own their own handlers
 - flexibly supports additional sources of authorization (e.g. scoped user API keys) by defining
   additional handlers
 
@@ -126,12 +127,13 @@ To perform an authorization check:
     scoped to the lifetime of the request
 - for the reasons above, it is not a complete solution: it would cover _most_ but not all of our use
   cases
-- server-side solution only - client-side needs to continue to maintain its own very similar logic
-  to determine what UI flows it should show/hide and enable/disable
-- an endpoint needs to understand what resources are affected, which can be nuanced when dealing
-  with relational data (e.g. saving a vault item may require separate authorization checks for the
-  `Cipher` resource and the `CollectionCipher` relationship). However, this is likely to be an issue
-  for all solutions - you need to know how to use the interface properly
+- server-side solution only - client code (particularly in Admin Console) needs to continue to
+  maintain its own very duplicate logic to determine what UI flows it should show/hide and
+  enable/disable
+- a server endpoint needs to understand what resources are affected, which can be nuanced when
+  dealing with relational data (e.g. saving a vault item may require separate authorization checks
+  for the `Cipher` resource and the `CollectionCipher` relationship). However, this may be an issue
+  for other solutions as well
 
 ### [OpenFGA](https://openfga.dev)
 
@@ -169,14 +171,18 @@ OpenFGA has a [.NET SDK](https://github.com/openfga/dotnet-sdk) and a
   relationship with a cipher if they have a Can Edit relationship with the collection the cipher is
   in)
 - focuses on defining the model upfront, then the checks are extremely simple. Expected to result in
-  minimal duplication of logic given that you define a single model, rather than defining many
-  authorization handlers (for example)
+  minimal duplication of logic given that you define a single consistent model, rather than defining
+  many authorization handlers (for example)
 - OpenFGA queries are more flexible and performant, meaning they could cover all our use cases. In
   particular, it could totally replace authorization logic in the database; instead of performing
   table joins to determine what ciphers to return, the server would query OpenFGA with a "list
   objects request", then fetch the ciphers from the database by their ids only
 - a solution for both client and server. Clients could also query the OpenFGA store to determine
   what UI flows are available to the user, without having to duplicate logic
+- could enable more powerful reporting/dashboard features and logging/audit trails in our products
+  because we can easily determine at any time who has access to what. This is a pain point today as
+  new reports can necessitate complex database queries that require a detailed understanding of how
+  permissions are represented in our relational database
 - immutable, versioned authorization models allow for graceful changes to and between authorization
   structures
 
@@ -193,7 +199,8 @@ OpenFGA has a [.NET SDK](https://github.com/openfga/dotnet-sdk) and a
   - rewrite not just authorization checks, but any write operations (commands) to ensure that the
     OpenFGA store is always kept in step with the Bitwarden database
 - probably not compatible with Bitwarden Unified due to resource constraints (assumption only) -
-  unclear what would replace it in this case
+  unclear what would replace it in this case (more research required if we are considering this
+  option)
 
 ### Casbin
 
