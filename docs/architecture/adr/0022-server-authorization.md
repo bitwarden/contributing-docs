@@ -31,6 +31,9 @@ Password Manager, Admin Console and Provider Portal) but could be extended to ot
   restored unless it has first been (soft) deleted
 - **Resources** are data on the server that a user may try to access or modify - such as a vault
   item, organization, collection, or group
+- **User verification** is a Bitwarden-specific UI flow aimed at re-establishing a user's identity
+  before they perform a sensitive action. e.g. entering your password again before viewing an api
+  key. This is an aspect of authentication, because it relates to verifying the user's identity.
 
 ### Current practice
 
