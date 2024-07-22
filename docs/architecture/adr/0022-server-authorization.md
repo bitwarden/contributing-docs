@@ -69,7 +69,8 @@ A solution to this problem should:
 - abstract away implementation details of _how_ an action is authorized from the process of checking
   _if_ an action is authorized
 - be reusable between endpoints that access the same resource
-- support a range of authorization logic (e.g. based on role, resource, relationships, etc)
+- support a range of authorization logic (e.g. based on role, resource, relationships, etc), noting
+  that this may change again in the future
 
 ## Considered Options
 
@@ -84,12 +85,14 @@ resource.
 To use resource-based authorization in ASP.NET Core:
 
 - you define a set of operations that are permitted on a resource, e.g. create, read, update, delete
-- you define one or more `AuthorizationHandler` classes for the resource. The handler contains the
-  logic to decide whether a user is authorized to perform the specified operation(s) on the resource
+- you implement one or more `IAuthorizationHandler` classes for the resource. The handler contains
+  the logic to decide whether a user is authorized to perform the specified operation(s) on the
+  resource
 - multiple handlers can be defined for different sources of permissions. For example, you may be
   authorized to delete a vault item because it is in your individual vault, or because you have
-  access to it via an organization. This logic can be defined in separate handlers to keep each
-  handler simple and single-purpose; all handlers will be called before a final result is returned
+  access to it via an organization. The individual user logic can be defined in a separate handler
+  to the organizational logic, to keep each handler simple and single-purpose; all handlers will be
+  called before a final result is returned
 - our experience to date strongly shows that resources (and therefore handlers) should be defined at
   a fairly granular level, probably reflecting database entities. Relationships (e.g.
   `CollectionUser`) should be considered their own resource and defined and checked separately
@@ -106,11 +109,11 @@ To perform an authorization check:
 - included in ASP.NET - standard C# code, no additional dependencies
 - already partially in use for organization collections - we would be refining and then expanding
   that use
-- handlers provide good encapsulation of authorization logic, separate to other concerns and
-  separate to the `AuthorizationService` implementation itself
+- handlers provide good encapsulation of authorization logic, separate to other concerns and the
+  `AuthorizationService` implementation itself
 - the fixed `AuthorizationService` interface (accepting only the user, the resource, and the
   operations) enforces a consistent usage across our internal teams
-- teams can write and own their own handlers
+- teams can write and have code ownership over their own handlers
 - flexibly supports additional sources of authorization (e.g. scoped user API keys) by defining
   additional handlers
 
@@ -151,8 +154,8 @@ makes authorization decisions based on a user's relationship to an object (resou
 To start using OpenFGA:
 
 - you define your authorization scheme (in terms of users, objects, and relationships) in its DSL
-- you seed the OpenFGA store (database) with your users, objects, and relationships, which it will
-  use to make authorization decisions
+- you seed the OpenFGA store (database) with your current users, objects, and relationships, which
+  it will use to make authorization decisions
 - you keep the OpenFGA store up-to-date with any changes in your underlying data (e.g. as users are
   added and removed). Changes to the Bitwarden database _do not_ automatically update the OpenFGA
   store
@@ -179,10 +182,11 @@ OpenFGA has a [.NET SDK](https://github.com/openfga/dotnet-sdk) and a
   checking the existence of relationships). This is expected to result in minimal duplication of
   logic given that you define a single consistent model, rather than defining many authorization
   handlers (for example)
-- OpenFGA queries are more flexible and performant and are expected to cover all our use cases. In
-  particular, it could totally replace authorization logic in the database; instead of performing
-  table joins to determine what ciphers a user has access to, the server would query OpenFGA with a
-  "list objects request", then fetch the ciphers from the database by their ids only
+- queries are more flexible and performant and are expected to cover all our use cases:
+  - no need to fetch the resource from the database in advance, just pass ids
+  - it could totally replace authorization logic in the database; instead of performing table joins
+    to determine what ciphers a user has access to, the server would query OpenFGA with a "list
+    objects request", then fetch the ciphers from the database by their ids only
 - a solution for both client and server. Clients could also query the OpenFGA store to determine
   what UI flows are available to the user, without having to duplicate logic
 - could enable more powerful reporting/dashboard features and logging/audit trails in our products
