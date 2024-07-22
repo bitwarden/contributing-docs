@@ -1,34 +1,35 @@
 ---
 adr: "0022"
-status: In Discussion
-date: 2024-06-21
+status: Proposed
+date: 2024-07-22
 tags: [server]
 ---
 
-# 0022 - Server Authorization
+# 0022 - Authorization
 
 <AdrTable frontMatter={frontMatter}></AdrTable>
 
 ## Context and Problem Statement
 
-Authorization logic determines who is permitted to carry out actions. Our current authorization
-logic is dispersed throughout different layers of our server codebase and follows different
-patterns, some of which are no longer suitable for our changing permissions structures.
+Authorization logic decides whether a user is permitted to carry out an action. Our current
+authorization logic is dispersed throughout different layers of our server codebase and follows
+different patterns, some of which are no longer suitable for our changing permissions structures.
 
-We should decide on clear rules and patterns for implementing authorization checks on the server.
+We should decide on a single, consistent solution to how we manage authorization in Bitwarden
+applications.
 
 ### Terminology
 
 - **Authentication** is the process of verifying a user's identity. ("Who are you?") It tells you
-  who they are, but not what they can access.
+  who they are, but not what they can do
 - **Authorization** is the process of determining who can access or modify a resource. ("Are you
-  allowed to do this?") It may or may not require authentication.
+  allowed to do this?") It may or may not require authentication
 - **Validation** is the process of determining whether a request is valid according to business
   logic. ("Can this be done?") Unlike authorization, it usually does not depend on the user's
   identity (authentication) or permissions (authorization). For example, a vault item cannot be
-  restored unless it has first been (soft) deleted.
+  restored unless it has first been (soft) deleted
 - **Resources** are data on the server that a user may try to access or modify - such as a vault
-  item, organization, or group.
+  item, organization, collection, or group
 
 ### Current practice
 
@@ -45,7 +46,7 @@ To date, we have broadly used the following authorization models:
 
 This logic is spread throughout controllers in the API layer, JWT claims accessed via
 `CurrentContext`, the core service layer, and database queries. This lacks standardization and makes
-it difficult to understand and audit access control logic on any particular controller endpoint.
+it difficult to understand and audit authorization logic.
 
 ### Requirements
 
@@ -54,7 +55,8 @@ collection management enhancements. Today, the outcome of an authorization decis
 organization resource may be determined by a combination of (for example):
 
 - the user's role in the organization, and if they are a custom user, their custom permissions
-- whether the user belongs to a managed service provider who manages the organization
+- whether the user belongs to a managed service provider and (in turn) that MSPs relationship to the
+  organization
 - the user's level of access (if any) to a collection
 - the collections a vault item is associated with
 - the organization's collection management settings
@@ -73,7 +75,7 @@ A solution to this problem should:
 
 ### [ASP.NET resource-based authorization](https://learn.microsoft.com/en-us/aspnet/core/security/authorization/resourcebased?view=aspnetcore-8.0)
 
-**Summary**
+#### Summary
 
 Resource-based authorization centers authorization decisions around the **resource** being accessed,
 the **user** accessing the resource, and the **operations** (actions) they wish to take on the
@@ -99,7 +101,7 @@ To perform an authorization check:
 - for a success result, at least 1 handler must have authorized the action, and no handler must have
   expressly denied the action
 
-**Advantages**
+#### Advantages
 
 - included in ASP.NET - standard C# code, no additional dependencies
 - already partially in use for organization collections - we would be refining and then expanding
@@ -112,7 +114,7 @@ To perform an authorization check:
 - flexibly supports additional sources of authorization (e.g. scoped user API keys) by defining
   additional handlers
 
-**Disadvantages**
+#### Disadvantages
 
 - performance:
   - the `AuthorizationService` interface requires that the resources are fetched from the database
@@ -120,24 +122,23 @@ To perform an authorization check:
     operations, such as syncing a user's vault, as we cannot realistically fetch _all_ ciphers from
     the database and use `AuthorizationService` filter them. Therefore, some high frequency/high
     cost operations would continue to use authorization logic embedded in database queries
-  - additionally, the authorization logic may need to fetch additional data from the database to
-    make a decision. This may cause many database reads, particularly when iterating over multiple
-    items, unless an additional caching solution is implemented. This is probably manageable for now
-    by caching frequently needed data in `CurrentContext` or the handler itself, both of which are
+  - the authorization handlers may need to fetch additional data from the database to make a
+    decision. This may cause many database reads, particularly when iterating over multiple items,
+    unless an additional caching solution is implemented. This is probably manageable for now by
+    caching frequently needed data in `CurrentContext` or the handler itself, both of which are
     scoped to the lifetime of the request
 - for the reasons above, it is not a complete solution: it would cover _most_ but not all of our use
   cases
 - server-side solution only - client code (particularly in Admin Console) needs to continue to
-  maintain its own very duplicate logic to determine what UI flows it should show/hide and
-  enable/disable
+  maintain its own duplicate logic to determine what UI flows it should show/hide and enable/disable
 - a server endpoint needs to understand what resources are affected, which can be nuanced when
   dealing with relational data (e.g. saving a vault item may require separate authorization checks
   for the `Cipher` resource and the `CollectionCipher` relationship). However, this may be an issue
-  for other solutions as well
+  for other solutions as well, as our endpoints often update multiple resources at once
 
 ### [OpenFGA](https://openfga.dev)
 
-**Summary**
+#### Summary
 
 OpenFGA is an open-source implementation of Google's Zanzibar authorization system, which is used
 for Google Docs. It uses
@@ -147,12 +148,16 @@ makes authorization decisions based on a user's relationship to an object (resou
 > Authorization decisions are then yes or no answers to the question: "Does user U have relation R
 > with object O?".
 
-OpenFGA requires that you define your authorization scheme (in terms of users, objects, and
-relationships) in its DSL. It then maintains its own store of users, objects and relationships from
-which authorization decisions can be made. This store must be kept in line with the Bitwarden
-database, but it can then be queried very quickly and flexibly.
+To start using OpenFGA:
 
-OpenFGA supports the following queries:
+- you define your authorization scheme (in terms of users, objects, and relationships) in its DSL
+- you seed the OpenFGA store (database) with your users, objects, and relationships, which it will
+  use to make authorization decisions
+- you keep the OpenFGA store up-to-date with any changes in your underlying data (e.g. as users are
+  added and removed). Changes to the Bitwarden database _do not_ automatically update the OpenFGA
+  store
+
+OpenFGA then supports the following queries:
 
 - "check requests" (does user U have relation R with object O?) - for simple authorization checks
 - "list objects requests" (get all objects with which user U has relationship R) - for bulk read
@@ -162,7 +167,7 @@ OpenFGA supports the following queries:
 OpenFGA has a [.NET SDK](https://github.com/openfga/dotnet-sdk) and a
 [Javascript SDK](https://github.com/openfga/js-sdk) with Typescript types.
 
-**Advantages**
+#### Advantages
 
 - strong conceptual foundation - if we go through the exercise of defining our authorization logic
   in the OpenFGA model, we will have a single source of truth and hopefully draw out any issues or
@@ -170,23 +175,24 @@ OpenFGA has a [.NET SDK](https://github.com/openfga/dotnet-sdk) and a
 - designed for complex permission structures, e.g. supports cascading permissions (user has a view
   relationship with a cipher if they have a Can Edit relationship with the collection the cipher is
   in)
-- focuses on defining the model upfront, then the checks are extremely simple. Expected to result in
-  minimal duplication of logic given that you define a single consistent model, rather than defining
-  many authorization handlers (for example)
-- OpenFGA queries are more flexible and performant, meaning they could cover all our use cases. In
+- focuses on defining the model upfront, then the checks are extremely simple (because it's just
+  checking the existence of relationships). This is expected to result in minimal duplication of
+  logic given that you define a single consistent model, rather than defining many authorization
+  handlers (for example)
+- OpenFGA queries are more flexible and performant and are expected to cover all our use cases. In
   particular, it could totally replace authorization logic in the database; instead of performing
-  table joins to determine what ciphers to return, the server would query OpenFGA with a "list
-  objects request", then fetch the ciphers from the database by their ids only
+  table joins to determine what ciphers a user has access to, the server would query OpenFGA with a
+  "list objects request", then fetch the ciphers from the database by their ids only
 - a solution for both client and server. Clients could also query the OpenFGA store to determine
   what UI flows are available to the user, without having to duplicate logic
 - could enable more powerful reporting/dashboard features and logging/audit trails in our products
   because we can easily determine at any time who has access to what. This is a pain point today as
-  new reports can necessitate complex database queries that require a detailed understanding of how
-  permissions are represented in our relational database
+  new reports can require complex database queries that necessitate a detailed understanding of how
+  user permissions are represented in our relational database
 - immutable, versioned authorization models allow for graceful changes to and between authorization
   structures
 
-**Disadvantages**
+#### Disadvantages
 
 - additional external dependency that is not easily replaced once installed. However, it is
   supported by the Cloud Native Computing Foundation (itself part of the Linux Foundation), see also
@@ -203,6 +209,8 @@ OpenFGA has a [.NET SDK](https://github.com/openfga/dotnet-sdk) and a
   option)
 
 ### Casbin
+
+// TODO
 
 ### Custom Solution
 
