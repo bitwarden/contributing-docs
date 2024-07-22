@@ -15,8 +15,9 @@ Authorization logic decides whether a user is permitted to carry out an action. 
 authorization logic is dispersed throughout different layers of our server codebase and follows
 different patterns, some of which are no longer suitable for our changing permissions structures.
 
-We should decide on a single, consistent solution to how we manage authorization in Bitwarden
-applications.
+We should decide on a single, consistent solution to how we manage authorization in our
+applications. This is primarily concerned with the main Bitwarden server and client code (including
+Password Manager, Admin Console and Provider Portal) but could be extended to other products.
 
 ### Terminology
 
@@ -41,8 +42,9 @@ To date, we have broadly used the following authorization models:
 - in organizational contexts - role-based authorization, where the user is assigned a role in an
   organization, and permission is granted or denied based on the user's role. This closely tracks
   [how access control is presented to the user](https://bitwarden.com/help/user-types-access-control/).
-  However, additional requirements have been added over time which have complicated this otherwise
-  simple model
+  However, the expansion of collections has complicated this simple model, and it now looks more
+  like
+  [attribute-based access control](https://en.wikipedia.org/wiki/Attribute-based_access_control)
 
 This logic is spread throughout controllers in the API layer, JWT claims accessed via
 `CurrentContext`, the core service layer, and database queries. This lacks standardization and makes
