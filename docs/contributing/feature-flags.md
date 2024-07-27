@@ -262,8 +262,8 @@ costs.
 
 :::
 
-The process for updating flag values and the ownership of flag changes depends on the environment
-and change as a flag proceeds through our cloud landscape.
+The process and ownership considerations for updating flag values are dependent upon the environment
+and change as the flagged code progresses through the development lifecycle.
 
 ### Development environments
 
@@ -271,7 +271,7 @@ In the development environments, ownership of the flag values is in the hands of
 team. The Engineering Manager of the team is responsible for maintaining and updating flag values.
 
 By default, flags should be **enabled** in the development environment as soon as the flag is
-created. This allows the feature to be viewed and exercised by Product, Design, the development
+created. This allows the feature to be viewed and exercised by product, design, the development
 team, and others within the organization. There is an understanding that there may be rough edges
 around the product deployed behind a feature flag in the development environment, as parts of the
 feature may be introduced incrementally into `main` behind the feature flag. As a general rule,
@@ -294,24 +294,19 @@ deployment.
 
 ### Production environments
 
-In the production environments, the ownership of the flag values is shared between Product and
-Engineering.
+In the production environments, the ownership of the flag values is shared between product and
+engineering.
 
 Flags are **disabled** by default in the production environments. Only when the Product Manager is
 ready for the feature to be enabled should the Engineering Manager enable the flag.
 
 ### Unwinding a feature flag
 
-Feature flags don’t necessarily have to ever be deleted from LaunchDarkly, just unused. Linking them
-to Jira helps create a history of the feature and there are copious logs and audit records online
-that can be kept. Feature flags not accessed for a long period of time will automatically move to an
-"inactive" state that can also help with identifying technical debt to clean up.
-
-While feature flags can be left indefinitely in LaunchDarkly without accumulating technical debt, it
-is essential that any logic based on these flags be removed from code as soon as the feature
-launches successfully. When defining the tasks for feature-flagged code, be sure to include a
-cleanup task for removing this logic. You may want to consider multiple tasks - one for each of the
-steps in the removal process.
+Once the flag has been enabled in all environments and the feature is verified to be functioning as
+expected, the final steps are to remove the flagged conditional logic from our codebase, then the
+flag itself. When defining the tasks for feature-flagged code, be sure to include a cleanup task for
+removing this logic. You may want to consider multiple tasks - one for each of the steps in the
+removal process.
 
 Due to the complexity of the different client deployments and how we expose feature flags through
 our API, it is important that each feature flag be removed in the appropriate sequence.
@@ -335,8 +330,12 @@ can update to the latest version to begin using the feature. See
 Once we have satisfied the requirements of
 [backward compatibility](https://bitwarden.com/help/bitwarden-software-release-support/#release-support-at-bitwarden)
 for our clients, we can completely remove the feature flag from the server codebase. This can be
-done by removing the flag value from the `FeatureFlagKeys`. This should then be deployed to the
-server to complete the removal process.
+done by removing the flag value from the `FeatureFlagKeys`.
+
+Once the server codebase has been deployed to all environments without any references to the flag,
+the flag should be archived in LaunchDarkly. Feature flags not accessed for a long period of time
+will automatically move to an "inactive" state that can also help with identifying technical debt to
+clean up.
 
 ## Self-hosted considerations
 
