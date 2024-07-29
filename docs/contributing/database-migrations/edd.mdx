@@ -308,6 +308,26 @@ Prior to merging a PR please ensure that the database changes run well on the cu
 version. We currently do not have an automated test suite for this and it’s up to the developers to
 ensure their database changes run correctly against the currently released version.
 
+## EF-Only Databases with Code Migrations
+
+For EF only databases that use code as migrations (self-host), migrations will run before new code is deployed and therefore before the model that EF works off of has changed, since that is in the code.
+
+Columns that are referenced in queries in the database have to be deleted over 2 releases. Here's the process:
+
+1. Before the first release, delete the property in the C# class.
+
+2. Keep that column in as a shadow property. Shadow properties are properties that are defined only in the EF model but are not defined in the C# classes. This can be particularly useful when you're transitioning columns in the database schema without immediately reflecting those changes in the code.
+
+3. Test creating EF migrations. They should be empty and then can be deleted.
+
+4. Do a release.
+
+5. That column should not be a part of any queries anymore.
+
+6. Delete the shadow property configuration.
+
+7. Create migrations that will drop that column.
+
 ## Further reading
 
 1. [Evolutionary Database Design](https://martinfowler.com/articles/evodb.html) (Particularly
