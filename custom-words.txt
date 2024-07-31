@@ -71,3 +71,7 @@ Yellowpages
 Yubico
 YubiKey
 YubiKeys
+
+# Forbidden words
+!auto-fill
+!auto-filled
