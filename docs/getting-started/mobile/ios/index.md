@@ -6,7 +6,7 @@ sidebar_position: 1
 
 ## Requirements
 
-1. [XCode](https://developer.apple.com/xcode/) (version 15.4)
+1. [Xcode](https://developer.apple.com/xcode/) (version 15.4)
 2. An iPhone 15 Pro simulator (iOS 17.0.1) set up
 
 ## Setup
