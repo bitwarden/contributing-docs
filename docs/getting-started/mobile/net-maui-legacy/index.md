@@ -4,7 +4,11 @@ sidebar_position: 4
 
 # .NET MAUI (legacy)
 
-:::warning Legacy Documentation of the **legacy** mobile app done in .NET MAUI. :::
+:::warning Legacy
+
+Documentation of the **legacy** mobile app done in .NET MAUI.
+
+:::
 
 ## Configure Git blame
 

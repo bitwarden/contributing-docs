@@ -1,6 +1,10 @@
 # Android
 
-:::warning Legacy Documentation of the **legacy** Android app done in .NET MAUI. :::
+:::warning Legacy
+
+Documentation of the **legacy** Android app done in .NET MAUI.
+
+:::
 
 ## Requirements
 
