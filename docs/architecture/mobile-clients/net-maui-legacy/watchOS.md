@@ -1,5 +1,7 @@
 # watchOS
 
+:::warning Legacy Documentation of the **legacy** watchOS app architecture done in .NET MAUI. :::
+
 ## Overall architecture
 
 The watchOS application is organized as follows:

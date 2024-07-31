@@ -4,6 +4,9 @@ sidebar_position: 1
 
 # Overview
 
+:::warning Legacy Documentation of the **legacy** mobile app overview architecture done in .NET
+MAUI. :::
+
 The overall architecture of the mobile applications is pretty similar to the
 [web clients](../clients/overview.md) one following a layered architecture:
 
