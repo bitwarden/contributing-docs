@@ -59,7 +59,7 @@ sidebar_position: 1
 
 ### Running Tests
 
-Due to slight snapshot test variations between iOS version, the test target requires running in an
+Due to slight snapshot test variations between iOS versions, the test target requires running in an
 iPhone 15 Pro simulator (iOS 17.0.1).
 
 1. In Xcode's toolbar, select the project and a connected device or simulator.
