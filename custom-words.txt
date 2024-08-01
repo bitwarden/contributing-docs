@@ -6,6 +6,7 @@ AndroidX
 Bitwarden
 bitwardensecret
 bytemark
+casbin
 clickjacking
 CODEOWNERS
 CQRS
