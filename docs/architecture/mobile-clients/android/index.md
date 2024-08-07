@@ -38,7 +38,7 @@ exposing **suspending functions** that may run inside
 [coroutines](https://kotlinlang.org/docs/coroutines-guide.html) while any streaming sources of data
 are handled by exposing [Flows](https://kotlinlang.org/docs/flow.html).
 
-### Data Sources
+### Data sources
 
 The lowest level of the data layer are the "data source" classes. These are the raw sources of data
 that include data persisted in [Room](https://developer.android.com/jetpack/androidx/releases/room)
