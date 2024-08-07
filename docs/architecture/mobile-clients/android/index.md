@@ -551,7 +551,7 @@ State-based navigation should be limited to specific cases that affect the overa
 and are driven by data emitted from the data layer. All other navigation should use event-based
 navigation.
 
-#### Event-based Navigation
+#### Event-based navigation
 
 Event-based navigation is ultimately the result of some "action" sent to a VM, whether that comes
 directly from a user-interaction with the current screen or from some internal action of the VM sent
