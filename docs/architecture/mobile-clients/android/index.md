@@ -523,7 +523,7 @@ trigger actual navigation events. The app uses a mix of state-based navigation a
 (in order to determine the overall app flow the user is in) and event-based navigation (to handle
 navigation within a flow based on user interactions).
 
-#### State-based Navigation
+#### State-based navigation
 
 State-based navigation is handled by the
 [RootNavViewModel](https://github.com/bitwarden/android/blob/main/app/src/main/java/com/x8bit/bitwarden/ui/platform/feature/rootnav/RootNavViewModel.kt)
