@@ -28,7 +28,7 @@ more ready-to-consume manner by the UI layer via "repository" and "manager" clas
 then responsible for any final processing of this data for display in the UI as well for receiving
 events from the UI, updating the tracked state accordingly.
 
-## Data Layer
+## Data layer
 
 The data layer is where all the UI-independent data is stored and retrieved. It consists of both raw
 data sources as well as higher-level "repository" and "manager" classes.
