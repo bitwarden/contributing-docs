@@ -108,7 +108,7 @@ provided for dependency injection via a [Hilt Module](https://dagger.dev/hilt/mo
 This prevents the `...Impl` classes from being injected by accident and allows the interfaces to be
 easily mocked/faked in tests.
 
-## UI Layer
+## UI layer
 
 The UI layer adheres to the concept of
 [unidirectional data flow](https://developer.android.com/develop/ui/compose/architecture#udf) and
