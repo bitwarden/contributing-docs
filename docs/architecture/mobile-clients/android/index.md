@@ -559,7 +559,7 @@ as the result of some asynchronous call. The VM will send an "event" to the Comp
 will trigger a callback that will eventually make a call to a
 [NavController](https://developer.android.com/reference/androidx/navigation/NavController).
 
-#### Navigation Implementation
+#### Navigation implementation
 
 At its most basic level, Compose Navigation relies on constructing String-based URIs with a root
 path to specify a destination and both path and query parameters to handle the passing of required
