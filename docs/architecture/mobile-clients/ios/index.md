@@ -50,7 +50,7 @@ more ready-to-consume manner by the UI layer via "repository" and "service" clas
 then responsible for any final processing of this data for display in the UI as well as receiving
 events from the UI and updating the tracked state accordingly.
 
-## Core Layer
+## Core layer
 
 The core layer is where all the UI-independent data is stored and retrieved. It consists of both raw
 data sources as well as higher-level "repository" and "service" classes.
@@ -70,7 +70,7 @@ The models are roughly organized based on their use and type:
 - `Response`: Response models are typically the top-level data models that are decoded from an API
   response. These models may utilize domain and enum models that are shared between responses.
 
-### Data Stores
+### Data stores
 
 Data stores are responsible for persisting data to Core Data, Keychain, and UserDefaults. This is
 implemented by the following:
@@ -108,7 +108,7 @@ authentication
 or vault access
 ([VaultRepository](https://github.com/bitwarden/ios/blob/main/BitwardenShared/Core/Vault/Repositories/VaultRepository.swift)).
 
-### Dependency Injection
+### Dependency injection
 
 All services are contained within the
 [ServiceContainer](https://github.com/bitwarden/ios/blob/main/BitwardenShared/Core/Platform/Services/ServiceContainer.swift).
@@ -169,7 +169,7 @@ final class ExampleCoordinator: Coordinator {
 
 </details>
 
-## UI Layer
+## UI layer
 
 The UI layer utilizes a unidirectional data flow pattern that is based on coordinators and
 processors.
@@ -214,7 +214,7 @@ coordinator. An example of this is
 [AuthRouter](https://github.com/bitwarden/ios/blob/main/BitwardenShared/UI/Auth/AuthRouter.swift),
 which makes decisions around which route should be navigated to next within the authentication flow.
 
-### Routes and Events
+### Routes and events
 
 Coordinators operate on a set of routes and, optionally, events.
 
@@ -254,7 +254,7 @@ The store is the connection between the processor and the view. Views never muta
 instead, they send actions or perform effects via the store which are forwarded back to the
 processor. Views are updated by the store anytime the state changes.
 
-### Actions and Effects
+### Actions and effects
 
 Actions are triggered by the view and represent interactions with the processor that could
 potentially cause an update to state or navigation. These will usually be sent because of some user

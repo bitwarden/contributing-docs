@@ -38,6 +38,21 @@ exposing **suspending functions** that may run inside
 [coroutines](https://kotlinlang.org/docs/coroutines-guide.html) while any streaming sources of data
 are handled by exposing [Flows](https://kotlinlang.org/docs/flow.html).
 
+:::info Dependency injection
+
+Nearly all classes in the data layer consist of interfaces representing exposed behavior and a
+corresponding `...Impl` class implementing that interface (ex:
+[AuthDiskSource](https://github.com/bitwarden/android/blob/main/app/src/main/java/com/x8bit/bitwarden/data/auth/datasource/disk/AuthDiskSource.kt)
+/
+[AuthDiskSourceImpl](https://github.com/bitwarden/android/blob/main/app/src/main/java/com/x8bit/bitwarden/data/auth/datasource/disk/AuthDiskSourceImpl.kt)).
+All `...Impl` classes are intended to be manually constructed while their associated interfaces are
+provided for dependency injection via a [Hilt Module](https://dagger.dev/hilt/modules.html) (ex:
+[PlatformNetworkModule](https://github.com/bitwarden/android/blob/main/app/src/main/java/com/x8bit/bitwarden/data/platform/datasource/network/di/PlatformNetworkModule.kt)).
+This prevents the `...Impl` classes from being injected by accident and allows the interfaces to be
+easily mocked/faked in tests.
+
+:::
+
 ### Data sources
 
 The lowest level of the data layer are the "data source" classes. These are the raw sources of data
@@ -94,19 +109,6 @@ choose to expose a
 that emits data updates using the
 [DataState](https://github.com/bitwarden/android/blob/main/app/src/main/java/com/x8bit/bitwarden/data/platform/repository/model/DataState.kt)
 wrapper.
-
-### Note on Dependency Injection
-
-Nearly all classes in the data layer consist of interfaces representing exposed behavior and a
-corresponding `...Impl` class implementing that interface (ex:
-[AuthDiskSource](https://github.com/bitwarden/android/blob/main/app/src/main/java/com/x8bit/bitwarden/data/auth/datasource/disk/AuthDiskSource.kt)
-/
-[AuthDiskSourceImpl](https://github.com/bitwarden/android/blob/main/app/src/main/java/com/x8bit/bitwarden/data/auth/datasource/disk/AuthDiskSourceImpl.kt)).
-All `...Impl` classes are intended to be manually constructed while their associated interfaces are
-provided for dependency injection via a [Hilt Module](https://dagger.dev/hilt/modules.html) (ex:
-[PlatformNetworkModule](https://github.com/bitwarden/android/blob/main/app/src/main/java/com/x8bit/bitwarden/data/platform/datasource/network/di/PlatformNetworkModule.kt)).
-This prevents the `...Impl` classes from being injected by accident and allows the interfaces to be
-easily mocked/faked in tests.
 
 ## UI layer
 

@@ -15,7 +15,7 @@ it is therefore extremely important that all developers **read and follow this d
 details on what the formatter _does_ handle, refer directly to the settings in Android Studio under
 `Preferences > Editor > Code Style` and select the language of interest.
 
-## Kotlin Code Style
+## Kotlin code style
 
 The library's Kotlin code style adheres closely to both the
 [code style documentation for the Kotlin language itself](https://kotlinlang.org/docs/reference/coding-conventions.html)
@@ -308,7 +308,7 @@ ObjectConstructor(
 These types of scenarios should be avoided when possible (as described above) but are allowed when
 necessary.
 
-#### Miscellaneous Code Formatting
+#### Miscellaneous code formatting
 
 Whenever questions about code formatting arise in which multiple options are valid according to all
 previously described rules,
@@ -321,7 +321,7 @@ All public classes, functions, and properties should include documentation in th
 [KDoc style](https://kotlinlang.org/docs/kotlin-doc.html). Private classes, functions, and
 properties may optionally be documented as needed.
 
-##### Class Documentation
+##### Class documentation
 
 Classes with more than 2 constructor properties should document each individually using the
 `@property` label; otherwise the property descriptions can be incorporated into the class
@@ -502,7 +502,7 @@ val data = databaseDataSource.getData(id)
 - Private functions that handle actions should be prefixed with "handle" and suffixed with the name
   of the action. (ex: `handleSubmitClick`)
 
-## Best Practices
+## Best practices
 
 ### Kotlin {#best-practices--kotlin}
 

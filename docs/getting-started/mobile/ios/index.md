@@ -52,12 +52,12 @@ sidebar_position: 1
    $ cp Scripts/post-checkout .git/hooks/
    ```
 
-### Run the App
+### Run the app
 
 1. Open the project in Xcode 15.4+.
 2. Run the app in the Simulator with the `Bitwarden` target.
 
-### Running Tests
+### Running tests
 
 Due to slight snapshot test variations between iOS versions, the test target requires running in an
 iPhone 15 Pro simulator (iOS 17.0.1).
