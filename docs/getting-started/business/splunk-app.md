@@ -1,4 +1,4 @@
-# Splunk App
+# Splunk app
 
 The Bitwarden Splunk app fetches event log data from the Bitwarden Public API and makes it available
 in Splunk.
