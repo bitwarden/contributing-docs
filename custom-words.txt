@@ -28,6 +28,7 @@ keypair
 keyserver
 Kubebuilder
 LDIF
+libmagic
 LLDB
 Mailcatcher
 minio
