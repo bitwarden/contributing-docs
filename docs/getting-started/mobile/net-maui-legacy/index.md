@@ -6,7 +6,7 @@ sidebar_position: 4
 
 :::warning Legacy
 
-Documentation of the **legacy** mobile app done in .NET MAUI.
+Getting started the **legacy** mobile app done in .NET MAUI.
 
 :::
 

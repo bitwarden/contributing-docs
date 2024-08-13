@@ -2,7 +2,7 @@
 
 :::warning Legacy
 
-Documentation of the **legacy** Android app done in .NET MAUI.
+Getting started the **legacy** Android app done in .NET MAUI.
 
 :::
 
