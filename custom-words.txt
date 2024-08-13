@@ -3,6 +3,7 @@
 # by the spellchecker. Please keep the list sorted alphabetically.
 
 AndroidX
+AOSP
 Bitwarden
 bitwardensecret
 bytemark
@@ -21,6 +22,7 @@ iframes
 inet
 IntelliJ
 Iterm
+Jetpack
 jslib
 jumpcloud
 keychain
@@ -47,6 +49,7 @@ pinentry
 PNSs
 precompiler
 proxied
+recompositions
 refactorings
 roadmap
 roadmaps
@@ -62,9 +65,11 @@ signtool
 signup
 sqlcmd
 struct
+subfolders
 subprocessor
 toolset
 TOTP
+typealias
 WCAG
 Xcodes.app
 xmldoc
