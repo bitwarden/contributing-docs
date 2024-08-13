@@ -4,7 +4,7 @@ sidebar_position: 1
 
 # Android
 
-This section covers the architecture documentation for the Android application as well as its unit
+Architecture documentation for the Android application as well as its unit
 tests.
 
 ## Repository
