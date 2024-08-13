@@ -6,7 +6,7 @@ sidebar_position: 1
 
 :::warning Legacy
 
-Documentation of the **legacy** mobile app overview architecture done in .NET MAUI.
+This represents the **legacy** mobile app overview architecture done in .NET MAUI.
 
 :::
 

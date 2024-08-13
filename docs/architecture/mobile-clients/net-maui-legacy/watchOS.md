@@ -2,7 +2,7 @@
 
 :::warning Legacy
 
-Documentation of the **legacy** watchOS app architecture done in .NET MAUI.
+This represents the **legacy** watchOS app architecture done in .NET MAUI.
 
 :::
 
