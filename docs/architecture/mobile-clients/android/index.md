@@ -4,7 +4,7 @@ sidebar_position: 1
 
 # Android
 
-How to get started with the Android Bitwarden project in Kotlin.
+Architecture documentation for the Android application as well as its unit tests.
 
 ## Repository
 

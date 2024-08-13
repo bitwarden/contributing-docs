@@ -1,5 +1,11 @@
 # watchOS
 
+:::warning Legacy
+
+This represents the **legacy** watchOS app architecture done in .NET MAUI.
+
+:::
+
 ## Overall architecture
 
 The watchOS application is organized as follows:
