@@ -118,8 +118,9 @@ calls each authorization handler for the resource to find at least 1 that will a
 
 Third party solutions include:
 
-- [OpenFGA](https://openfga.dev), an open-source implementation of Google's Zanzibar authorization
-  system (used in Google Docs)
+- [OpenFGA](https://openfga.dev), an open-source implementation of Google's
+  [Zanzibar authorization system](https://research.google/pubs/zanzibar-googles-consistent-global-authorization-system/)
+  (used in Google Docs)
 - [Casbin](https://casbin.org/), an open-source authorization library supporting a variety of
   different models
 
