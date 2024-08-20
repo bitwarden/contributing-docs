@@ -12,6 +12,7 @@ CODEOWNERS
 CQRS
 CTAP2
 dockerized
+dotfile
 F-Droid
 Gitter
 HKDF
