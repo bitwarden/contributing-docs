@@ -32,24 +32,24 @@
     "spellcheck": "cspell lint \"**/*.md{x,}\""
   },
   "dependencies": {
-    "@docusaurus/core": "3.4.0",
-    "@docusaurus/preset-classic": "3.4.0",
+    "@docusaurus/core": "3.5.2",
+    "@docusaurus/preset-classic": "3.5.2",
     "@mdx-js/react": "3.0.1",
     "docusaurus-lunr-search": "3.4.0",
     "prism-react-renderer": "2.3.1",
     "react": "18.3.1",
     "react-dom": "18.3.1",
-    "remark-kroki": "0.3.6"
+    "remark-kroki": "0.3.7"
   },
   "devDependencies": {
-    "@docusaurus/module-type-aliases": "3.4.0",
-    "@docusaurus/tsconfig": "3.4.0",
+    "@docusaurus/module-type-aliases": "3.5.2",
+    "@docusaurus/tsconfig": "3.5.2",
     "@types/react": "18.3.3",
-    "cspell": "8.10.4",
-    "husky": "9.0.11",
-    "lint-staged": "15.2.7",
-    "prettier": "3.3.2",
-    "typescript": "5.5.3"
+    "cspell": "8.14.1",
+    "husky": "9.1.4",
+    "lint-staged": "15.2.9",
+    "prettier": "3.3.3",
+    "typescript": "5.5.4"
   },
   "browserslist": {
     "production": [

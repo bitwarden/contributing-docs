@@ -2,10 +2,16 @@
 sidebar_position: 5
 ---
 
-# Mobile Clients Architecture
+# .NET MAUI (legacy)
 
-The mobile clients are Android, iOS with its extensions and watchOS. They all are located in this
-[Git repository](https://github.com/bitwarden/mobile).
+:::warning Legacy
+
+This represents the **legacy** mobile app architecture done in .NET MAUI.
+
+:::
+
+The mobile .NET MAUI clients are Android and iOS applications with extensions and watchOS. They are
+all located at https://github.com/bitwarden/mobile.
 
 Principal structure is a follows:
 
@@ -19,7 +25,7 @@ Principal structure is a follows:
 - `iOS.Extensions`: iOS extension that handles Autofill from the bottom sheet extension
 - `iOS.ShareExtension`: iOS extension that handles sharing files through Send
 - `watchOS`: All the code specific to the watchOS platform
-  - `bitwarden`: Stub iOS app so that the watchOS app has a companion app on XCode
+  - `bitwarden`: Stub iOS app so that the watchOS app has a companion app on Xcode
   - `bitwarden WatchKit App`: Main Watch app where we set assets.
   - `bitwarden WatchKit Extension`: All the logic and presentation logic for the Watch app is here
 
