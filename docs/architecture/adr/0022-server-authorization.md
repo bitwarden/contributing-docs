@@ -39,51 +39,43 @@ Password Manager, Admin Console and Provider Portal) but could be extended to ot
 
 To date, we have broadly used the following authorization patterns:
 
-- in the individual user context, matching the user ID in the JWT to the resource being accessed.
+- in the individual user context, we match the user ID in the JWT to the resource being accessed.
   This is usually a one-to-one match (e.g. the JWT user id should match the cipher user id) without
   additional requirements
-- in organizational contexts, role-based authorization, where the user is assigned a role in an
-  organization, and permission is granted or denied based on the user's role. This closely tracks
+- in organizational contexts, we use role-based authorization, where the user is assigned a role in
+  an organization and permission is granted or denied based on that role. This closely tracks
   [how access control is presented to the user](https://bitwarden.com/help/user-types-access-control/).
   However, the expansion of collections has complicated this simple model, and it now looks more
   like
   [attribute-based access control](https://en.wikipedia.org/wiki/Attribute-based_access_control)
 
 This logic is spread throughout controllers in the API layer, JWT claims accessed via
-`CurrentContext`, the core service layer, and database queries. This lacks standardization and makes
-it difficult to understand and audit authorization logic.
+`CurrentContext`, the core service layer, and database queries.
 
 ### Requirements
 
 Our authorization requirements have increased in complexity, particularly with the release of
 collection management enhancements. Today, the outcome of an authorization decision in respect of an
-organization resource may be determined by a combination of (for example):
-
-- the user's role in the organization, and if they are a custom user, their custom permissions
-- whether the user belongs to a managed service provider that manages the organization
-- the user's level of access (if any) to a collection
-- the collections a vault item is associated with
-- the organization's collection management settings
-- the organization's enterprise policies
+organization resource could depend on the user's role, their collection relationships, organization
+settings, provider relationships, and other factors.
 
 A solution to this problem should:
 
 - separate authorization logic from other concerns
 - centralize authorization logic in a single location or pattern as much as possible
-- abstract away implementation details of _how_ an action is authorized from the process of checking
-  whether the action is authorized
+- separate authorization logic from authorization checks/enforcement
 - be reusable between endpoints that access the same resource
 - support a range of authorization logic (e.g. based on role, resource, relationships, etc)
 
 ## Considered Options
 
-### [ASP.NET Core resource-based authorization](https://learn.microsoft.com/en-us/aspnet/core/security/authorization/resourcebased?view=aspnetcore-8.0)
+### ASP.NET Core resource-based authorization
 
 #### Summary
 
-Resource-based authorization makes authorization decisions based on the **resource** being accessed,
-the **user** accessing the resource, and the **operations** (actions) they wish to take on the
-resource.
+[Resource-based authorization](https://learn.microsoft.com/en-us/aspnet/core/security/authorization/resourcebased?view=aspnetcore-8.0)
+makes authorization decisions based on the **resource** being accessed, the **user** accessing the
+resource, and the **operations** (actions) they wish to take on the resource.
 
 To define authorization logic, developers implement one or more `IAuthorizationHandler` classes for
 the resource being accessed.
@@ -97,18 +89,16 @@ calls each authorization handler for the resource to find at least 1 that will a
 - already used by Secrets Manager and for some collection operations in Password Manager
 - handlers provide good encapsulation of authorization logic, separate to other concerns and the
   `AuthorizationService` implementation itself
-- the fixed `AuthorizationService` interface (accepting only the user, the resource, and the
-  operations) enforces a consistent usage across our internal teams
+- the fixed `AuthorizationService` interface enforces a consistent usage across our teams
 - teams can write and have code ownership over their own authorization handlers
 - flexibly supports additional sources of authorization (e.g. scoped user API keys) by defining
   additional handlers
 
 #### Disadvantages
 
-- the interface works well for discrete resources (e.g. when specifying IDs or a set of IDs), but
-  less well for bulk read operations (e.g. reading all items the user has access to). Bulk read
-  operations are likely to duplicate some of the authorization logic in another class or database
-  query
+- the interface works well for specific resources, but less well for bulk read operations (e.g.
+  reading all items the user has access to). Bulk read operations are likely to duplicate some of
+  the authorization logic in another class or database query
 - server-side solution only - client code needs to maintain its own logic to enable/disable UI flows
   (although given the offline requirements of our clients, this is difficult to avoid)
 - we need to be mindful of database calls within authorization handlers, as they may be called in a
@@ -126,8 +116,8 @@ Third party solutions include:
 
 Each has its own domain-specific language (DSL) used to define authorization rules as well as a
 storage layer to store access information about the users and objects in the application. The
-storage is (most commonly) a separate database to the Bitwarden database and must be kept up-to-date
-with users' roles and relationships in Bitwarden.
+storage is generally a separate database to the Bitwarden database and must be kept up-to-date with
+users' roles and relationships in Bitwarden.
 
 #### Advantages
 
@@ -145,7 +135,7 @@ with users' roles and relationships in Bitwarden.
 - very costly to implement in terms of engineering resources, particularly for developers, BRE and
   SRE
 - risk of the authorization data store becoming out of step with the main Bitwarden database
-- may be overkill for our requirements
+- may be over-engineered for our current requirements and scale
 
 ### Custom Solution
 
