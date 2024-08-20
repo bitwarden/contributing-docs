@@ -1,6 +1,6 @@
 ---
 adr: "0015"
-status: In progress
+status: Accepted
 date: 2022-12-09
 tags: [browser, clients, typescript]
 ---

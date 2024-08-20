@@ -51,7 +51,7 @@ this naming convention:
 ## Constructors
 
 - Multiple **constructors** should be separated by a newline (empty line between)
-- Constructors with multiple arguments should have arguments should be included 1 per line
+- Constructors with multiple arguments should have 1 argument listed per line
 - Empty constructors, when necessary, should be all 1-line, i.e., `public ClassName() { }`
 
 ## Control Blocks

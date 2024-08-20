@@ -5,14 +5,13 @@ functionality in Desktop, specifically the commands received from the DuckDuckGo
 communicates with the desktop app using Inter-process communication (IPC). It was created to enable
 development on the native messages themselves, and to give QA the ability to test these commands. It
 is located
-[here](https://github.com/bitwarden/clients/tree/master/apps/desktop/native-messaging-test-runner)
-at the root of the `desktop` app in `bitwarden/clients` repo.
+[here](https://github.com/bitwarden/clients/tree/main/apps/desktop/native-messaging-test-runner) at
+the root of the `desktop` app in `bitwarden/clients` repo.
 
 ## Getting Started
 
 1.  Clone the [bitwarden/clients](https://github.com/bitwarden/clients) repo
-2.  Run the desktop app locally following
-    [these](https://contributing-internal.bitwarden.com/external/clients/desktop/) instructions
+2.  Run the desktop app locally following [these](../desktop/index.mdx) instructions
 3.  In the running desktop app, go to `Preferences` and turn on the
     `Allow DuckDuckGo browser integration` setting:
 
@@ -39,7 +38,7 @@ there. You will need to set up your accounts and vaults beforehand to test these
 
 ### Commands
 
-The commands folder contains the runable node scripts/commands. There is currently one file per
+The commands folder contains the executable node scripts/commands. There is currently one file per
 native messaging command for testing.
 
 1. **`handshake`** Sends a `bw-handshake` command and establishes communication with the native
@@ -86,15 +85,15 @@ socket.
 ### NativeMessageService
 
 This service uses the IPCService to connect to the locally running Bitwarden desktop app's IPC proxy
-service. It uses Bitwarden's crypto service and functions to handle encrytption and decryption of
-the messages. It utilizes a test public/private key pair located in the
+service. It uses Bitwarden's crypto service and functions to handle encryption and decryption of the
+messages. It utilizes a test public/private key pair located in the
 `/native-messaging-test-runner/src/variables.ts` file.
 
 ### Other
 
 #### I thought Node used JavaScript? How are we using TypeScript classes, including the ones from libs?
 
-Great question! With a little magic✨ we are compiling these TypeSript files into the JavaScript
+Great question! With a little magic✨ we are compiling these TypeScript files into the JavaScript
 that Node knows and loves. This is done is with a couple of mechanisms:
 
 - **`tsconfig.json`:** In the `paths` node of this file, the files in the paths provided are

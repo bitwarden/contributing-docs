@@ -1,0 +1,320 @@
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
+# Kubernetes
+
+The Bitwarden Secrets Manager Kubernetes Operator (`sm-operator`) is a tool for teams to integrate
+Bitwarden Secrets Manager into their Kubernetes workflows seamlessly.
+
+The sm-operator uses a
+[controller](https://github.com/bitwarden/sm-kubernetes/blob/main/internal/controller/bitwardensecret_controller.go)
+to synchronize Bitwarden Secrets into Kubernetes secrets. It does so by registering a Custom
+Resource Definition of BitwardenSecret into the cluster. It will listen for new BitwardenSecrets
+registered on the cluster and then synchronize on a configurable interval.
+
+:::info
+
+If you're new to Secrets Manager, you should read the
+[Help Center documentation](https://bitwarden.com/help/secrets-manager-overview/) first to
+understand how it works.
+
+:::
+
+## Requirements
+
+:::info
+
+Most of the required setup can be handled using Visual Studio Code Dev Containers. That is the
+recommended approach, especially for macOS and Windows users.
+
+:::
+
+<Tabs>
+<TabItem value="dev-container" label="Dev Container" default>
+
+- [Visual Studio Code](https://code.visualstudio.com/)
+- [Docker](https://www.docker.com/)
+- [Visual Studio Code Dev Containers Extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
+
+:::caution
+
+The Dev Container will not work correctly if you are using a container engine other than Docker.
+
+:::
+
+</TabItem>
+<TabItem value="direct" label="Direct Setup">
+
+- [Visual Studio Code](https://code.visualstudio.com/)
+- [Visual Studio Code Go Extension](https://marketplace.visualstudio.com/items?itemName=golang.go)
+- [Go](https://go.dev/dl/) version 1.21
+- [musl-gcc](https://wiki.musl-libc.org/getting-started.html)
+- [Make](https://www.gnu.org/software/make/)
+- [kubectl](https://kubernetes.io/docs/tasks/tools/)
+- [Docker](https://www.docker.com/) or [Podman](https://podman.io/) or another container engine
+- A [Kind Cluster](https://kind.sigs.k8s.io/docs/user/quick-start/) or other Kubernetes cluster with
+  Kubectl pointed to it as the current context for local development.
+
+</TabItem>
+</Tabs>
+
+You will also need:
+
+- A
+  [Bitwarden organization with Secrets Manager](https://bitwarden.com/help/sign-up-for-secrets-manager/).
+  You will need the organization ID GUID for your organization.
+- An [access token](https://bitwarden.com/help/access-tokens/) for a Secrets Manager machine account
+  (previously known as service account) tied to the projects you want to pull.
+
+## Setup and configuration
+
+Clone the repository:
+
+```bash
+git clone https://github.com/bitwarden/sm-kubernetes.git
+```
+
+Open Visual Studio Code at the repository root.
+
+<Tabs>
+<TabItem value="dev-container" label="Dev Container" default>
+
+Dev Container setup is automated. This will create a Kind cluster and setup all necessary software.
+
+- Open the command palette (using `Cmd/Ctrl`+`Shift`+`P` or `F1` depending on user settings)
+- Start typing `Dev Containers: Reopen in Container`
+
+</TabItem>
+<TabItem value="direct" label="Direct Setup">
+
+:::info
+
+Please note that the Visual Studio Code debugger for Go does not work correctly if you open your
+workspace via a symlink anywhere in the path. For debugging to work, you should open it from the
+full path of the repository.
+
+:::
+
+- Install all requirements listed in the Direct Setup requirements
+- Create a Kind cluster using `kind create cluster`
+- Run `make setup` to create a default .env file.
+
+</TabItem>
+</Tabs>
+
+### Configuration settings
+
+A `.env` file will be created in the repository root once the Dev Container is created or
+`make setup` has been run. The following environment variable settings can be updated to change the
+behavior of the operator:
+
+- **BW_API_URL** - Sets the Bitwarden API URL that the Secrets Manager SDK uses. This is useful for
+  self-host scenarios, as well as hitting European servers.
+- **BW_IDENTITY_API_URL** - Sets the Bitwarden Identity service URL that the Secrets Manager SDK
+  uses. This is useful for self-host scenarios, as well as hitting European servers.
+- **BW_SECRETS_MANAGER_STATE_PATH** - Sets the base path where Secrets Manager SDK stores its state
+  files.
+- **BW_SECRETS_MANAGER_REFRESH_INTERVAL** - Specifies the refresh interval in seconds for syncing
+  secrets between Secrets Manager and K8s secrets. The minimum value is 180.
+
+## Running and debugging
+
+1. Install the Custom Resource Definition into the cluster using `make install` or by using the
+   Visual Studio Task called "apply-crd" from the "Tasks: Run Task" in the command palette.
+
+2. To debug the code, just hit F5. You can also use `make run` at the command line to run without
+   debugging.
+
+:::info
+
+You can also run this (without a debugger) in one step by running: `make install run`
+
+:::
+
+### Uninstall Custom Resource Definition
+
+To delete the CRDs from the cluster:
+
+```sh
+make uninstall
+```
+
+:::info
+
+Run `make --help` for more information on all potential `make` targets
+
+:::
+
+### Create a BitwardenSecret to test
+
+With the debugger running, we now will create a BitwardenSecret object to synchronize Secret Manager
+secrets into a K8s secret:
+
+:::caution
+
+Creating the authorization token secret below via kubectl will place your authorization token in the
+machine terminal history. For production systems, consider using a CSI secrets driver or applying
+the secret via an ephemeral build agent.
+
+:::
+
+:::info
+
+Make sure to run the following commands in the Dev Container terminal in VS Code.
+
+:::
+
+1. Create a secret to house the Secrets Manager authentication token in the namespace where you will
+   be creating your BitwardenSecret object:
+   `kubectl create secret generic bw-auth-token -n <some-namespace> --from-literal=token="<Auth-Token-Here>"`
+
+:::info
+
+To get a list of namespaces, run `kubectl get namespaces`
+
+:::
+
+2. Install an instance of BitwardenSecret. An example can be found in
+   [config/samples/k8s_v1_bitwardensecret.yaml](https://github.com/bitwarden/sm-kubernetes/blob/main/config/samples/k8s_v1_bitwardensecret.yaml).
+   You will want to copy this example and update it for your own needs. Then apply it like so:
+   `kubectl apply -n <some-namespace> -f k8s_v1_bitwardensecret.yaml`
+
+3. In the Debug Console window, you should see messages stating that the secret started and
+   completed synchronization.
+
+4. Run the following to view if the secret was created: `kubectl get secrets -n <some-namespace>`
+
+5. Run the following to view the structure and data of the synchronized secret:
+   `kubectl get secret -n <some-namespace> <secret-name> -o yaml`
+
+:::info
+
+The secret values are stored as Base64 encoded strings.
+
+:::
+
+#### BitwardenSecret manifest
+
+Think of the BitwardenSecret object as the synchronization settings that will be used by the
+operator to create and synchronize a Kubernetes secret. This Kubernetes secret will live inside of a
+namespace and will be injected with the data available to a Secrets Manager machine account
+(previously known as service account). The resulting Kubernetes secret will include all secrets that
+a specific machine account has access to. The sample file
+([config/samples/k8s_v1_bitwardensecret.yaml](https://github.com/bitwarden/sm-kubernetes/blob/main/config/samples/k8s_v1_bitwardensecret.yaml))
+provides the basic structure of a BitwardenSecret manifest. The key settings that you will want to
+update are listed below:
+
+- **metadata.name**: The name of the BitwardenSecret object you are deploying
+- **spec.organizationId**: The Bitwarden organization ID you are pulling Secrets Manager data from
+- **spec.secretName**: The name of the Kubernetes secret that will be created and injected with
+  Secrets Manager data.
+- **spec.authToken**: The name of a secret inside of the Kubernetes namespace that the
+  BitwardenSecrets object is being deployed into that contains the Secrets Manager machine account
+  authorization token being used to access secrets.
+
+Secrets Manager does not guarantee unique secret names across projects, so by default secrets will
+be created with the Secrets Manager secret UUID used as the key. To make your generated secret
+easier to use, you can create a map of Bitwarden Secret IDs to Kubernetes secret keys. The generated
+secret will replace the Bitwarden Secret IDs with the mapped friendly name you provide. Below are
+the map settings available:
+
+- **bwSecretId**: This is the UUID of the secret in Secrets Manager. This can found under the secret
+  name in the Secrets Manager web portal or by using the
+  [Bitwarden Secrets Manager CLI](https://github.com/bitwarden/sdk/releases).
+- **secretKeyName**: The resulting key inside the Kubernetes secret that replaces the UUID
+
+Note that the custom mapping is made available on the generated secret for informational purposes in
+the `k8s.bitwarden.com/custom-map` annotation.
+
+## Testing the Docker image
+
+Kind on Windows has a difficult time pulling from a local registry, so we have provided two
+different routes for deploying the image.
+
+<Tabs>
+<TabItem value="registry" label="With Registry" default>
+
+1. Build and push your image to a registry location (local or otherwise) specified by `IMG`:
+   `make docker-build docker-push IMG=<some-registry>/sm-operator:tag`
+
+2. Deploy the controller to the cluster with the image specified by `IMG`:
+   `make deploy IMG=<some-registry>/sm-operator:tag`
+
+</TabItem>
+<TabItem value="kind-push" label="Push to Kind">
+
+1. Build and push your image directly to Kind by using the Visual Studio Code Command Palette. Open
+   the palette (F1) and select Tasks: Run Task and select "docker-build" followed by "kind-push".
+
+2. Deploy the Kubernetes objects to Kind by using the Visual Studio Code Command Palette. Open the
+   palette (F1) and select Tasks: Run Task and select "deploy".
+
+</TabItem>
+</Tabs>
+
+:::info
+
+Custom configuration of URLs, refresh interval, and state path is handled by updating the
+environment variables in
+[config/manager/manager.yaml](https://github.com/bitwarden/sm-kubernetes/blob/main/config/manager/manager.yaml)
+when working with the container.
+
+:::
+
+After install, create your K8s authorization token secret and a BitwardenSecret as described earlier
+in this document to test.
+
+### Viewing pod logs
+
+To view the logs of an operator deployed via the steps above:
+
+1. Run `kubectl get pods -n sm-operator-system`. This will retrieve the name of the installed
+   operator pod.
+
+2. Run `kubectl logs -n sm-operator-system <name-of-pod-from-previous-step>`
+
+### Undeploy controller
+
+To remove the controller pod installed to the cluster, run:
+
+```sh
+make undeploy
+```
+
+## Unit testing
+
+Unit tests are currently found in the following files:
+
+- internal/controller/suite_test.go
+
+- cmd/suite_test.go
+
+To run the unit tests, run `make test`. To debug the unit tests, open the file you would like to
+debug. In the `Run and Debug` tab in Visual Studio Code, change the launch configuration from
+"Debug" to "Test current file", and then press F5.
+
+:::info
+
+You will need to run `make test` prior to debugging tests, since this will setup some of the
+necessary software for the operator tests.
+
+:::
+
+:::caution
+
+Using the Visual Studio Code "Testing" tab is not currently supported.
+
+:::
+
+## Modifying the API definitions
+
+If you are editing the API definitions via
+[api/v1/bitwardensecret_types.go](https://github.com/bitwarden/sm-kubernetes/blob/main/api/v1/bitwardensecret_types.go),
+re-generate the manifests using:
+
+```sh
+make manifests
+```
+
+More information can be found via the
+[Kubebuilder Documentation](https://book.kubebuilder.io/introduction.html)

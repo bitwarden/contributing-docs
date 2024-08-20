@@ -10,7 +10,7 @@ We use the [Repository pattern][repository] with the MSSQL repositories being wr
 [Dapper][dapper]. Each repository method in turn calls a _Stored Procedure_, which primarily fetches
 data from _Views_.
 
-## Deployment Scripts
+## Deployment scripts
 
 There are specific ways deployment scripts should be structured. The goal for these standards is to
 ensure that the scripts should be re-runnable. We never intend to run scripts multiple times on an
@@ -27,10 +27,19 @@ IF OBJECT_ID('[dbo].[{table_name}]') IS NULL
 BEGIN
     CREATE TABLE [dbo].[{table_name}] (
         [Id]                UNIQUEIDENTIFIER NOT NULL,
-        '...
+        ...
         CONSTRAINT [PK_{table_name}] PRIMARY KEY CLUSTERED ([Id] ASC)
     );
 END
+GO
+```
+
+#### Deleting a table
+
+When deleting a table, use `IF EXISTS` to avoid an error if the table doesn't exist.
+
+```sql
+DROP IF EXISTS [dbo].[{table_name}]
 GO
 ```
 
@@ -48,7 +57,7 @@ GO
 ```
 
 When adding a new `NOT NULL` column to an existing table, please re-evaluate the need for it to
-truly be required. Do not be afraid of using Nullable<T\> primitives in C# and in the application
+truly be required. Do not be afraid of using Nullable\<T\> primitives in C# and in the application
 layer, which is almost always going to be better than taking up unnecessary space in the DB per row
 with a default value, especially for new functionality or features where it will take a very long
 time to be useful for most row-level data, if at all.
@@ -125,10 +134,13 @@ the underlying table in a view has been modified, you should run `sp_refreshview
 view metadata.
 
 ```sql
-EXECUTE sp_refreshview N'[dbo].[{view_name}]
+EXECUTE sp_refreshview N'[dbo].[{view_name}]'
+GO
 ```
 
-### Create or Modify a View
+### Views
+
+#### Creating or modifying a view
 
 We recommend using the `CREATE OR ALTER` syntax for adding or modifying a view.
 
@@ -139,6 +151,15 @@ SELECT
     *
 FROM
     [dbo].[{table_name}]
+GO
+```
+
+#### Deleting a view
+
+When deleting a view, use `IF EXISTS` to avoid an error if the table doesn't exist.
+
+```sql
+DROP IF EXISTS [dbo].[{view_name}]
 GO
 ```
 
@@ -156,21 +177,32 @@ END
 GO
 ```
 
-### Create or Modify a Function or Stored Procedure
+### Functions and stored procedures
+
+#### Creating or modifying a function or stored procedure
 
 We recommend using the `CREATE OR ALTER` syntax for adding or modifying a function or stored
 procedure.
 
 ```sql
 CREATE OR ALTER {PROCEDURE|FUNCTION} [dbo].[{sproc_or_func_name}]
-'...
+...
 GO
 ```
 
-### Create or Modify an Index
+#### Deleting a function or stored procedure
+
+When deleting a function or stored procedure, use `IF EXISTS` to avoid an error if it doesn't exist.
+
+```sql
+DROP IF EXISTS [dbo].[{sproc_or_func_name}]
+GO
+```
+
+### Creating or modifying an index
 
 When creating indexes, especially on heavily used tables, our production database can easily become
-offline, unusuable, hit 100% CPU and many other bad behaviors. It is often best to do this using
+offline, unusable, hit 100% CPU and many other bad behaviors. It is often best to do this using
 online index builds so as not to lock the underlying table. This may cause the index operation to
 take longer, but you will not create an underlying schema table lock which prevents all reads and
 connections to the table and instead only locks the table of updates during the operation.

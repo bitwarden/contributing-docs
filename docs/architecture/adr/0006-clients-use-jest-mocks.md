@@ -1,6 +1,6 @@
 ---
 adr: "0006"
-status: In progress
+status: Accepted
 date: 2022-07-18
 tags: [clients, tests]
 ---

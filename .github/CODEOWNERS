@@ -1,2 +1,18 @@
-# ADR code owners
-docs/architecture/adr @MGibson1 @Hinton
+# Please sort into logical groups with comment headers. Sort groups in order of specificity.
+# For example, default owners should always be the first group.
+# Sort lines alphabetically within these groups to avoid accidentally adding duplicates.
+#
+# https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Leads for all reviews of documentation.
+* @bitwarden/tech-leads
+
+# Unowned files
+package.json
+package-lock.json
+
+# DevOps for Actions and other workflow changes.
+.github/workflows @bitwarden/dept-devops
+
+# Architecture department for architecture content.
+docs/architecture @bitwarden/dept-architecture

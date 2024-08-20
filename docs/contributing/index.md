@@ -16,11 +16,12 @@ Here is how you can get involved:
 - **Request a new feature:** Go to the
   [Feature Requests category](https://community.bitwarden.com/c/feature-requests/) of the Community
   Forums. Please search existing feature requests before making a new one
-- **Write code for a new feature:** Create a new
-  [Github Discussions](https://github.com/orgs/bitwarden/discussions) post outlining your proposal.
-  Include a description of your proposed contribution, screenshots, and links to any relevant
-  [feature requests](https://community.bitwarden.com/c/feature-requests/5/none). This helps get
-  feedback from the community and Bitwarden team members before you start writing code
+- **Write code for a new feature:** Make a new post in the
+  [Password Manager](https://github.com/orgs/bitwarden/discussions/categories/password-manager) or
+  [Secrets Manager](https://github.com/orgs/bitwarden/discussions/categories/secrets-manager) GitHub
+  Discussions category. Include a description of your proposed contribution, screenshots, and links
+  to any relevant feature requests. This helps get feedback from the community and Bitwarden team
+  members before you start writing code
 - **Report a bug or submit a bugfix:** Use Github issues and pull requests
 - **Help other users:** Go to the
   [Ask the Bitwarden Community category](https://community.bitwarden.com/c/support/) on the
@@ -40,7 +41,7 @@ has signed the Contributor Agreement.
 ### Pull Request Guidelines
 
 - use `npm run lint` and fix any linting suggestions before submitting a pull request
-- commit any pull requests against the `master` branch
+- commit any pull requests against the `main` branch
 - include a link to your Community Forums post
 
 ## Localization (l10n)
@@ -96,7 +97,7 @@ While researching, we'd like to ask you to refrain from:
 
 If you have something that you feel is close to exploitation, or if you'd like some information
 regarding the internal API, or generally have any questions regarding the app that would help in
-your efforts, please contact us at <https://bitwarden.com/contact> and ask for that information. As
+your efforts, please [contact us](https://bitwarden.com/contact) and ask for that information. As
 stated above, Bitwarden wants to help you find issues, and is more than willing to help.
 
 Thank you for helping keep Bitwarden and our users safe!

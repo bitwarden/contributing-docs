@@ -17,6 +17,15 @@ Before you start, you must complete the [Clients repository setup instructions](
     npm run build:watch
     ```
 
+    :::note
+
+    The build commands use
+    [Manifest v3](https://developer.chrome.com/docs/extensions/develop/migrate/what-is-mv3) by
+    default. If you are building for Firefox or otherwise need a Manifest v2 build, you should use
+    the command `npm run build:watch:mv2` instead.
+
+    :::
+
 2.  Load the unpacked browser extension in your browser using the instructions in the next section.
 
 ## Environment Setup
@@ -28,12 +37,12 @@ this for local development and testing, there are several options.
 
 The browser extension has the concept of a "managed environment", which is JSON configuration stored
 in
-[`development.json`](https://github.com/bitwarden/clients/blob/master/apps/browser/config/development.json),
+[`development.json`](https://github.com/bitwarden/clients/blob/main/apps/browser/config/development.json),
 within the `devFlags` object.
 
 The `managedEnvironment` setting allows the contributor to override any or all of the URLs for the
 server. The `managedEnvironment` is read in the
-[`BrowserEnvironmentService`](https://github.com/bitwarden/clients/blob/master/apps/browser/src/services/browser-environment.service.ts)
+[`BrowserEnvironmentService`](https://github.com/bitwarden/clients/blob/main/apps/browser/src/services/browser-environment.service.ts)
 and overrides the default (production) settings for any supplied URLs.
 
 There are two ways to use `managedEnvironment`, depending upon whether you will also be running the
@@ -57,9 +66,9 @@ If you are also running the web vault, you only need to set the `base` URL in th
 ```
 
 This is because the web vault includes the `webpack-dev-server` package in its
-[`webpack.config.js`](https://github.com/bitwarden/clients/blob/master/apps/web/webpack.config.js).
+[`webpack.config.js`](https://github.com/bitwarden/clients/blob/main/apps/web/webpack.config.js).
 When it is running, it proxies each of the endpoints based on the settings configured in its _own_
-[`development.json`](https://github.com/bitwarden/clients/blob/master/apps/web/config/development.json)
+[`development.json`](https://github.com/bitwarden/clients/blob/main/apps/web/config/development.json)
 configuration file:
 
 ```json
@@ -168,10 +177,10 @@ from source.
 To avoid this, follow the instructions below to uninstall the Safari extension:
 
 1.  Open Safari
-2.  Click “Preferences” and then click the “Extensions” tab
+2.  Click “Settings” and then click the “Extensions” tab
 3.  Click uninstall next to the Bitwarden extension
 4.  Delete the Application with the extension.
-5.  Reopen Safari and check Preferences to confirm that there is no Bitwarden Browser extension
+5.  Reopen Safari and check Settings to confirm that there is no Bitwarden Browser extension
     installed. In case there still is a Bitwarden Extension please repeat step 3-4.
 6.  Quit and completely close Safari
 
@@ -185,12 +194,13 @@ The easiest way to develop the extension is to build and debug it using Xcode.
 1. Build the extension:
 
    ```bash
-   npm run build:watch
+   npm run build:watch:mv2
    ```
 
 2. Edit `build/manifest.json`. Move the `nativeMessaging` permission from the `optional_permissions`
    section into the `permissions` section
-3. Edit `build/index.html`, replace `<html class="__BROWSER__">` to `<html class="browser_safari">`.
+3. Edit `build/popup/index.html`, replace `<html class="__BROWSER__">` to
+   `<html class="browser_safari">`.
 4. Open `src/safari/desktop.xcodeproj` in Xcode
 5. Run the "desktop" target.
 
@@ -213,7 +223,7 @@ the extension for every change, which is slower.
     npm run dist:safari:dmg
     ```
 
-2.  Open Safari and check Preferences to confirm that the extension is installed and enabled
+2.  Open Safari and check Settings to confirm that the extension is installed and enabled
 
 :::caution
 
@@ -224,7 +234,7 @@ You may need to
 
 To enable debugging:
 
-1.  Click “Preferences” and then click the “Advanced” tab
+1.  Click “Settings” and then click the “Advanced” tab
 2.  Enable “Show Develop menu in menu bar”
 
 You can debug the background page of the browser extension by clicking
@@ -233,14 +243,14 @@ right-clicking it while it is open and clicking "Inspect Element".
 
 This should be enough for most debugging and testing, unless you're working in native code.
 
-<bitwarden>
+<Bitwarden>
 
 :::info
 
 [Deploying](https://bitwarden.atlassian.net/wiki/spaces/EN/pages/166396366/Deploying) has more
-information about building, packing and signing the MacOS Desktop client, including the Browser
+information about building, packing and signing the macOS Desktop client, including the Browser
 extension. It may be useful for debugging if you’re having difficulty.
 
 :::
 
-</bitwarden>
+</Bitwarden>

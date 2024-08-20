@@ -2,18 +2,28 @@
 sidebar_position: 2
 ---
 
-import Tabs from "@theme/Tabs";
-import TabItem from "@theme/TabItem";
-import CodeBlock from "@theme/CodeBlock";
-
 # Web Vault
 
 ## Requirements
 
 - Before you start, you must complete the [Clients repository setup instructions](../index.md).
-
 - If you want to develop against a local server instance, see the
   [Server Setup Guide](../../server/guide.md).
+
+### SSL Certificate
+
+It's recommended to generate a valid SSL certificate for local development rather than using the
+shared development cert. This will prevent browser warnings about invalid certificates and properly
+support WebAuthn which is blocked on websites with certificate errors. Please follow the
+[mkcert installation instructions](https://github.com/FiloSottile/mkcert#installation).
+
+```bash
+# Generate and install root CA
+mkcert --install
+
+# Generate cert valid for localhost, 127.0.0.1 and bitwarden.test
+mkcert -cert-file dev-server.local.pem -key-file dev-server.local.pem localhost 127.0.0.1 bitwarden.test
+```
 
 ## Build Instructions
 
@@ -21,28 +31,37 @@ import CodeBlock from "@theme/CodeBlock";
 
 1.  Build and run the Web Vault.
 
-  <community>
+  <Community>
 
   ```bash
   cd apps/web
   npm run build:oss:watch
   ```
 
-  </community>
+  </Community>
 
-  <bitwarden>
+  <Bitwarden>
 
   ```bash
   cd apps/web
   npm run build:bit:watch
   ```
 
-  </bitwarden>
+  </Bitwarden>
 
     Which will target the local bitwarden instance. See [Official Server](#official-server) for
     information on how to target official servers.
 
-2.  Open your browser and navigate to `https://localhost:8080`.
+2.  Open your browser and navigate to `https://localhost:8080`. You should see the Bitwarden Log In Screen.
+
+3. If you'd like to take this a bit further, start your local server and have MailCatcher set up. Now let's create an account and verify it.
+
+    - Create a new account. This could be a fake email
+    - Log into the new account
+    - Click on Verify Email Address
+    - Navigate to `http://localhost:1080/`
+    - Open the no reply email and verify your email address
+
 
 :::info
 
@@ -64,14 +83,21 @@ default ports). You can use the official Bitwarden server instead or configure c
 To use the official Bitwarden server, follow the build instructions above, but run the Web Vault
 using the following command:
 
-<Tabs groupId="dev">
-  <TabItem value="community" label="Community Developer" default>
-    <CodeBlock language="bash">{`ENV=cloud npm run build:oss:watch`}</CodeBlock>
-  </TabItem>
-  <TabItem value="bitwarden" label="Bitwarden Developer">
-    <CodeBlock language="bash">{`ENV=cloud npm run build:bit:watch`}</CodeBlock>
-  </TabItem>
-</Tabs>
+<Community>
+
+```bash
+ENV=cloud npm run build:oss:watch
+```
+
+</Community>
+
+<Bitwarden>
+
+```bash
+ENV=cloud npm run build:bit:watch
+```
+
+</Bitwarden>
 
 ### Custom Endpoints
 
@@ -96,4 +122,4 @@ following structure:
 
 [^1]:
     `urls` adhere to the
-    [type definition in `EnvironmentService`](https://github.com/bitwarden/clients/blob/master/libs/common/src/abstractions/environment.service.ts).
+    [type definition in `EnvironmentService`](https://github.com/bitwarden/clients/blob/main/libs/common/src/abstractions/environment.service.ts).

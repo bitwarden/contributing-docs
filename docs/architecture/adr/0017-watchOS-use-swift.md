@@ -1,6 +1,6 @@
 ---
 adr: "0017"
-status: Done
+status: Accepted
 date: 2022-12-30
 tags: [mobile, watchOS]
 ---
@@ -39,7 +39,7 @@ Chosen option: **Swift using SwiftUI**.
 - New tech stack to learn for the team
 - Even though we can debug the app properly we can't debug the iOS and the watchOS app at the same
   time (when debugging the watchOS app, a stub iOS app is installed on the iPhone so the original
-  one is overriden by the stub one)
+  one is overridden by the stub one)
 - Set up is harder given that we need to bundle the XCode built watchOS app into the Xamarin iOS app
   and update CI accordingly
 

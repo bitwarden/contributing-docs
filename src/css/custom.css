@@ -45,3 +45,16 @@
 .menu__link--active {
   font-weight: bold;
 }
+
+figcaption {
+  text-align: center;
+  font-style: italic;
+}
+
+.theme-doc-markdown dt {
+  font-weight: bold;
+}
+
+.theme-doc-markdown dd {
+  margin-bottom: 1rem;
+}

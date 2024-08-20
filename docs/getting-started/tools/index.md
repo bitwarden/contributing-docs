@@ -7,7 +7,7 @@ sidebar_position: 1
 ## Operating System
 
 All Bitwarden developers are issued with a MacBook. The tooling recommendations and instructions in
-this documentation assume that you’re using MacOS. This may require some adaptation if you’re using
+this documentation assume that you’re using macOS. This may require some adaptation if you’re using
 a different operating system.
 
 ## Recommended tools
@@ -35,9 +35,10 @@ environment.
 - [Docker](https://docs.docker.com/get-docker/) - required for server development only
 - [PowerShell](https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell-core-on-macos)
   (available via Homebrew: `brew install powershell`)
-- [NodeJS](https://nodejs.org/) v16 (preferably using a [node version manager][nvm])
-- [NPM](https://www.npmjs.com/) v8 (included with Node)
-- [Rust](https://www.rust-lang.org/tools/install) - Used for native desktop components
+- [NodeJS](https://nodejs.org/) v20 (preferably using a [node version manager][nvm])
+- [NPM](https://www.npmjs.com/) v10 (included with Node)
+- [Rust](https://www.rust-lang.org/tools/install) latest stable version - (preferably installed via
+  [rustup](https://rustup.rs/))
 - [Git](https://git-scm.com)
   - [Commit signing](../../contributing/commit-signing.mdx) is strongly recommended
 
@@ -59,14 +60,12 @@ environment.
 
 ### Visual Studio Code Extensions
 
-Visual Studio Code Extensions
-
 There are some vs code extensions that are life-savers in our line of work. A list of highly
 recommended ones include the following:
 
 - General
   - [Back & Forth](https://marketplace.visualstudio.com/items?itemName=nick-rudenko.back-n-forth) -
-    Adds forward and back buttons to top right of your editor. Simple, but I love it.
+    Adds forward and back buttons to top right of your editor. Simple, but incredibly useful.
   - [Code Spell Checker](https://marketplace.visualstudio.com/items?itemName=streetsidesoftware.code-spell-checker) -
     can be annoying, but has saved me lots of `tmes form writting oragnizations.`
   - [LiveShare](https://marketplace.visualstudio.com/items?itemName=MS-vsliveshare.vsliveshare) -

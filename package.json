@@ -1,10 +1,23 @@
 {
-  "name": "contributing-docs",
+  "name": "@bitwarden/contributing-docs",
   "version": "0.0.0",
+  "description": "Bitwarden Contributing Docs",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bitwarden/contributing-docs.git"
+  },
+  "author": "Bitwarden Inc. <hello@bitwarden.com> (https://bitwarden.com)",
+  "license": "SEE LICENSE IN LICENSE.txt",
+  "bugs": {
+    "url": "https://github.com/bitwarden/contributing-docs/issues"
+  },
+  "homepage": "https://bitwarden.com",
   "private": true,
   "scripts": {
     "docusaurus": "docusaurus",
-    "start": "docusaurus start",
+    "start": "./scripts/docusaurus-start.sh",
+    "start:insecure": "docusaurus start",
+    "setup:ssl": "./scripts/generate-certs.sh",
     "build": "docusaurus build",
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy",
@@ -15,26 +28,28 @@
     "typecheck": "tsc",
     "prettier": "prettier --write .",
     "lint": "prettier --check .",
-    "prepare": "husky install"
+    "prepare": "husky",
+    "spellcheck": "cspell lint \"**/*.md{x,}\""
   },
   "dependencies": {
-    "@docusaurus/core": "2.2.0",
-    "@docusaurus/preset-classic": "2.2.0",
-    "@mdx-js/react": "^1.6.22",
-    "clsx": "^1.2.1",
-    "docusaurus-lunr-search": "^2.3.2",
-    "prism-react-renderer": "^1.3.5",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "remark-kroki": "^0.2.7"
+    "@docusaurus/core": "3.5.2",
+    "@docusaurus/preset-classic": "3.5.2",
+    "@mdx-js/react": "3.0.1",
+    "docusaurus-lunr-search": "3.4.0",
+    "prism-react-renderer": "2.3.1",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "remark-kroki": "0.3.7"
   },
   "devDependencies": {
-    "@docusaurus/module-type-aliases": "2.2.0",
-    "@tsconfig/docusaurus": "^1.0.5",
-    "husky": "^8.0.2",
-    "lint-staged": "^13.0.3",
-    "prettier": "^2.7.1",
-    "typescript": "^4.7.4"
+    "@docusaurus/module-type-aliases": "3.5.2",
+    "@docusaurus/tsconfig": "3.5.2",
+    "@types/react": "18.3.3",
+    "cspell": "8.14.1",
+    "husky": "9.1.4",
+    "lint-staged": "15.2.9",
+    "prettier": "3.3.3",
+    "typescript": "5.5.4"
   },
   "browserslist": {
     "production": [
@@ -49,9 +64,11 @@
     ]
   },
   "engines": {
-    "node": ">=16.14"
+    "node": "~20",
+    "npm": "~10"
   },
   "lint-staged": {
-    "*.{js,jsx,css,md,mdx,tsx,ts}": "prettier --write"
+    "*": "prettier --cache --write --ignore-unknown",
+    "*.md{x,}": "cspell lint"
   }
 }

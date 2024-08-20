@@ -44,7 +44,7 @@ separately. This is baked in to the build process for `npm run electron`, but yo
 it manually.
 
 ```bash
-cd apps/desktop/desktop_native
+cd apps/desktop/desktop_native/napi
 npm run build
 ```
 
@@ -54,7 +54,7 @@ npm run build
 
 In certain environments such as WSL (Windows Subsystem for Linux), it might be necessary to
 cross-compile the native module. To do this, first make sure you have installed the relevant rust
-target. See [rustup documentation](https://rust-lang.github.io/rustup/cross-compilation.html) for
+target. See [`rustup` documentation](https://rust-lang.github.io/rustup/cross-compilation.html) for
 more information.
 
 ```bash

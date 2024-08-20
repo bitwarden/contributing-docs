@@ -1,3 +1,7 @@
+---
+sidebar_position: 4
+---
+
 # Event Logging
 
 ## Requirements
@@ -35,7 +39,7 @@ To emulate this locally:
 You should now observe that your enterprise organization is logging events (e.g. when creating an
 item or inviting a user). These should appear in the Event Logs section of the organization vault.
 
-[Azure Storage Exporer](https://learn.microsoft.com/en-us/azure/vs-azure-tools-storage-manage-with-storage-explorer)
+[Azure Storage Explorer](https://learn.microsoft.com/en-us/azure/vs-azure-tools-storage-manage-with-storage-explorer)
 lets you inspect the contents of your local Queue and Table Storage and is extremely useful for
 debugging.
 
@@ -46,7 +50,7 @@ logs directly to the `Event` table in their database.
 
 To use database storage for events:
 
-1. Run your local development server in a [self-hosted configuration](./self-hosted/index.md) (Api,
+1. Run your local development server in a [self-hosted configuration](./self-hosted/index.mdx) (Api,
    Identity and web vault)
 2. Start the Events project using `dotnet run` or your IDE (note: EventsProcessor is not required
    for self-hosted)

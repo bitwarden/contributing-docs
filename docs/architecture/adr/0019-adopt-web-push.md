@@ -1,6 +1,6 @@
 ---
 adr: "0019"
-status: In progress
+status: Accepted
 date: 2023-02-06
 tags: [server, clients, browser, notifications]
 ---
@@ -44,10 +44,9 @@ problems with long-lived background connections.
 New solutions must be able to not only scale to essentially infinite connections but balance cost
 with user growth, all the while delivering high availability. Existing options for mobile
 notifications specifically either have device limits (e.g. [Azure Notification Hubs][hubspricing])
-or lack service level guarantees while not offering modern technologies. Furthermore, some clients
-(e.g. [F-Droid][fdroid]) cannot utilize well-established (albeit proprietary) push backends. A
-single service provider is desired for as much functionality as possible, while still offering
-flexibility for self-host.
+or lack service level guarantees. Furthermore, some clients (e.g. [F-Droid][fdroid]) cannot utilize
+well-established (albeit proprietary) push backends. A single service provider is desired for as
+much functionality as possible, while still offering flexibility for self-host.
 
 ## Considered Options
 
@@ -58,63 +57,70 @@ With respect to mobile notifications:
   solution that shards devices across many Notification Hubs within new subscriptions.
 - **Adopt a new offering for mobile push notifications** - Use something other than Azure
   Notification Hubs that doesn't have limits, perhaps with some technology sacrifices.
-- **Adopt a new combined push service provider** - Not only migrate away from Azure Notification
-  Hubs but also select a service provider that supports native mobile notifications as well as other
-  desired protocols like Web Push.
 
 With respect to protocol modernization:
 
 - **Keep the SignalR solution and continue to scale up** - Maintain the cluster of notifications
   service virtual machines and keep pushing for a larger set to handle scale. Also move all mobile
   notifications to the custom solution and abandon Azure Notification Hubs.
-- **Adopt a new offering for non-mobile push notifications** - Use something other than SignalR like
-  a homegrown [Web Push][webpush] backend inside the notifications service. Host a compatible Web
-  Push backend for self-host with the clients that need it.
+- **Utilize a new approach for non-mobile push notifications** - Use something other than SignalR
+  like a homegrown [Web Push][webpush] backend inside the notifications service. Host a compatible
+  Web Push backend for self-host with the clients that need it. Use Web Push with Azure Notification
+  Hubs for the Bitwarden cloud.
 - **Adopt a new combined push service provider** - Not only migrate away from SignalR where possible
-  but also select a service provider that supports native mobile notification protocols.
-  Additionally implement a Web Push backend for self-host as described above.
+  but also select a different service provider than Azure Notification Hubs that supports native
+  mobile notification protocols. Additionally implement a Web Push backend for self-host as
+  described above.
 
 ## Decision Outcome
 
-Chosen option: **Adopt a new combined push service provider**.
+Chosen options: **Work around Azure Notification Hubs limits** and **utilize a new approach for
+non-mobile push notifications**.
+
+During research and planning of the decision, Azure Notification Hubs unveiled support for the Web
+Push protocol, therefore significantly adjusting the outcome. By continuing to use Azure
+Notification Hubs a significant technology investment can continue to be leveraged, users will not
+need to be migrated, and the focus can instead be on scale and support for new device types that can
+benefit from Web Push.
 
 ### Positive Consequences
 
 - Web Push is [well-supported][caniuse] in most places we need it and is a valuable technology
   upgrade with ease of maintenance in the future.
-- Several service providers offer Web Push backends for our cloud offering, and the protocol can be
-  implemented within the notifications service for self-host.
+- Several service providers -- including Azure Notification Hubs -- offer Web Push backends for our
+  cloud offering, and the protocol can be implemented within the notifications service for
+  self-host.
 - Web Push fits well into Manifest V3 and service workers.
 - Infrastructure maintenance burdens and cost for the notification service should significantly
   decrease.
 
 ### Negative Consequences
 
-- Need to watch Safari support for Web Push which was just recently released at time of writing.
-- Potential cost increases for selecting a different service provider.
+- Need to watch Safari support for Web Push which was somewhat recently released at time of writing.
+- Potential cost increases for utilizing multiple Azure Notification Hubs.
 
 ### Plan
 
 The notifications service will continue to exist and support APIs for the SignalR connections as
-well as new ones for Web Push. Cloud-based clients will connect to a unified service provider that
-has Web Push whenever feasible and otherwise utilize the existing SignalR implementation when Web
-Push cannot be leveraged. Self-host clients will utilize a similar blend of Web Push and SignalR
-provided by the notification service. Web Push's necessary key exchange and security (VAPID) can use
-existing in-house technology for self-host and the service provider for the cloud. Clients will
-largely migrate to Web Push connections over time and the load on SignalR will significantly reduce,
-although the latter is planned to be supported for certain clients for the foreseeable future.
+well as new ones for Web Push. Clients will connect using Web Push whenever feasible and otherwise
+utilize the existing SignalR implementation when Web Push cannot be leveraged. Self-host clients
+will utilize a similar blend of Web Push and SignalR provided by the notification service. Web
+Push's necessary key exchange and security (VAPID) can use existing in-house technology for
+self-host and the service provider for the cloud. Clients will largely migrate to Web Push
+connections over time and the load on SignalR will significantly reduce, although the latter is
+planned to be supported for certain clients for the foreseeable future.
 
-Mobile devices will all migrate to the same unified service provider that supports native iOS (APNS)
-and Android (FCM) push notification protocols alongside Web Push. Future support for [Unified
-Push][unifiedpush] will be considered alongside Web Push for incompatible clients, although the
-SignalR implementation continues to be available.
+Mobile devices will continue to use Azure Notification Hubs with native iOS (APNS) and Android (FCM)
+push notification protocols alongside Web Push. Future support for [Unified Push][unifiedpush] will
+be considered alongside Web Push for incompatible clients, although the SignalR implementation
+continues to be available.
 
 Utilizing end-to-end encryption -- with user encryptions keys -- of push notification payloads will
 be considered while migrating compatible clients to the new provider to provide stronger security of
 potentially-sensitive payload contents.
 
 [signalr]: https://dotnet.microsoft.com/en-us/apps/aspnet/signalr
-[notifications]: https://github.com/bitwarden/server/tree/master/src/Notifications
+[notifications]: https://github.com/bitwarden/server/tree/main/src/Notifications
 [podlife]: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/
 [mv3]: https://developer.chrome.com/docs/extensions/mv3/intro/
 [hubspricing]: https://azure.microsoft.com/en-us/pricing/details/notification-hubs/

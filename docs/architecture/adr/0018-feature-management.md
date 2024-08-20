@@ -1,6 +1,6 @@
 ---
 adr: "0018"
-status: In progress
+status: Accepted
 date: 2023-02-01
 tags: [server]
 ---
@@ -37,7 +37,7 @@ Chosen option: **Adopt a feature management system with local fallback**.
 
 ### Positive Consequences
 
-- Robust featureset for flags and their variations.
+- Robust feature set for flags and their variations.
 - Protection from changes and targeted impact, along with a speed in overall delivery (with managed
   functionality assumed to be turned "off").
 - Context-sensitive application of features.
@@ -50,7 +50,7 @@ Chosen option: **Adopt a feature management system with local fallback**.
 ### Plan
 
 The [server][server] codebase will adopt a .NET SDK for a service provider that offers feature
-management. Only the serverside SDK will be used to manage access and cost and feature states will
+management. Only the server-side SDK will be used to manage access and cost and feature states will
 be communicated down to calling clients where appropriate via API response elements. New features
 will be set up inside the service provider's platform, and changes to them will be streamed to the
 running applications. Access to the provider will be controlled internally.
@@ -62,10 +62,11 @@ upon startup, login, when their local configuration is updated, and when sync ev
 
 Contexts will be established that communicate to the API using supported clients. Said contexts will
 be available within the service provider for specific targeting as desired. Contexts will be
-established for the user, organization, and provider, with unique IDs for the entity as a key and
-other details as needed. Context attributes when needed can be marked as private to avoid spillover
-to the service provider, and the provider will be added to the [subprocessor list][subprocessors]
-with respective communication.
+established for the user, organization, and machine account (previously known as service account),
+with unique IDs for the entity as a key and other details as needed. Context attributes when needed
+can be marked as private to avoid spillover to the service provider, and the provider will be added
+if needed to the [subprocessor list][subprocessors] with respective communication should PII be
+used.
 
 Compile-time configuration will be converted wherever possible to use the feature management service
 provider. SDK access to the service provider will be segmented by environment; some features may

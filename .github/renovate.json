@@ -1,18 +1,17 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:base"],
-  "separateMajorMinor": true,
+  "extends": ["github>bitwarden/renovate-config"],
+  "enabledManagers": ["github-actions", "npm", "nvm"],
   "packageRules": [
     {
-      "matchManagers": ["npm"],
-      "matchPackagePatterns": ["*"],
-      "matchUpdateTypes": ["minor", "patch"],
-      "groupName": "node non-major"
+      "groupName": "gh minor",
+      "matchManagers": ["github-actions"],
+      "matchUpdateTypes": ["minor", "patch"]
     },
     {
-      "matchManagers": ["github-actions"],
-      "matchPackagePatterns": ["*"],
-      "groupName": "gh actions all"
+      "matchFileNames": ["package.json"],
+      "description": "Autofill owns general dependencies in contributing docs",
+      "reviewers": ["team:team-autofill-dev"]
     }
   ]
 }

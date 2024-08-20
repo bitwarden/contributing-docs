@@ -1,8 +1,7 @@
 // @ts-check
 // Note: type annotations allow type checking and IDEs autocompletion
 
-const lightCodeTheme = require("prism-react-renderer/themes/github");
-const darkCodeTheme = require("prism-react-renderer/themes/dracula");
+import { themes } from "prism-react-renderer";
 
 async function createConfig() {
   const { remarkKroki } = await import("remark-kroki");
@@ -36,7 +35,7 @@ async function createConfig() {
             sidebarPath: require.resolve("./sidebars.js"),
             // Please change this to your repo.
             // Remove this to remove the "edit this page" links.
-            editUrl: "https://github.com/bitwarden/contributing-docs/tree/master/",
+            editUrl: "https://github.com/bitwarden/contributing-docs/tree/main/",
             remarkPlugins: [[remarkKroki, { server: "https://kroki.io/" }]],
           },
           theme: {
@@ -139,9 +138,9 @@ async function createConfig() {
           copyright: `Copyright © ${new Date().getFullYear()} Bitwarden Inc.`,
         },
         prism: {
-          theme: lightCodeTheme,
-          darkTheme: darkCodeTheme,
-          additionalLanguages: ["csharp", "powershell"],
+          theme: themes.github,
+          darkTheme: themes.dracula,
+          additionalLanguages: ["bash", "csharp", "json", "powershell"],
         },
       }),
   };

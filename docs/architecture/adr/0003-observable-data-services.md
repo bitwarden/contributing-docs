@@ -1,6 +1,6 @@
 ---
 adr: "0003"
-status: In progress
+status: Accepted
 date: 2022-06-30
 tags: [clients, angular]
 ---
@@ -26,7 +26,7 @@ results in the components re-fetching their state manually.
 
 Chosen option: **Observable data services**, because
 
-- Allows us to quickly interate towards a more reactive data model.
+- Allows us to quickly iterate towards a more reactive data model.
   - Reactive data model lets us get rid of the event messages.
   - Components will always display the latest state.
 - Does not require a significant upfront investment.
@@ -68,7 +68,7 @@ class Component implements OnDestroy {
 ```
 
 In this example we use the `takeUntil` pattern which can be combined with an eslint rule to ensure
-each component clens up after themselves.
+each component cleans up after themselves.
 
 ## Pros and Cons of the Options
 

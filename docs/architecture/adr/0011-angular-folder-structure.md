@@ -1,7 +1,7 @@
 ---
 title: 0011 - Angular folder structure
 adr: "0011"
-status: In progress
+status: Accepted
 date: 2022-07-25
 tags: [clients, angular]
 ---
@@ -54,8 +54,6 @@ web/src/app
     core.module.ts
     index.ts
   shared
-    pipes
-    components
     shared.module.ts
     index.ts
 

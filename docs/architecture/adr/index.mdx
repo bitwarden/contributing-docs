@@ -1,3 +1,8 @@
+---
+title: ADRs
+sidebar_position: 2
+---
+
 import DocCardList from "@theme/DocCardList";
 
 # Architectural Decision Records
@@ -12,15 +17,22 @@ decision on features (e.g., infinite undo vs. limited undo).
 
 The goal of introducing Architectural Decisions (AD) in the engineering team at Bitwarden is to
 steer development towards a maintainable and expandable code base. While at the same time striving
-for uniformity across all pods.
+for uniformity across all teams.
 
 The AD will also serve as a base for proposing and planning technical debt.
 
 ### Status definition
 
-- **In progress** - ADR is ratified and we are in progress of adopting it across the project(s).
-- **Standard** - ADR is implemented and assumed to be standard.
-- **Abandoned** - ADR is abandoned, and/or replaced by another ADR.
+ADRs are:
+
+- **Proposed:** In the process of being written and reviewed. Expected to change before merging to
+  one of the statuses below.
+- **Accepted:** Ratified and expected to be utilized going forward, or already complete depending on
+  context and time of reading.
+- **Rejected:** Not accepted but recorded to preserve history and the decision-making process; for
+  reference. Likely seldom used as many ADs will transform during review.
+- **Deprecated:** No longer expected to be in place, or abandoned.
+- **Superseded:** Replaced by a future ADR, with appropriate annotation to the successor(s).
 
 ### Tags
 
@@ -29,10 +41,13 @@ and/or _server_). Feel free to create more tags should the need arise.
 
 ## Process
 
-While the process was originally created primarily for leads to discuss architectural decisions,
-it's important to us to keep the process open to suggestions from anyone. To that end, anyone is
-free to open a PR _suggesting_ an AD. The suggestions will then be discussed to reach a general
-consensus between the leads before being adopted.
+While the process was originally created primarily for engineering leaders to discuss architectural
+decisions, it's important to us to keep the process open to suggestions from anyone. To that end,
+anyone is free to open a PR _suggesting_ an AD. The suggestions will then be discussed to reach a
+general consensus amongst leadership before being adopted.
+
+Once an ADR is recorded and accepted it is expected that any related documentation around
+architecture, deep dives, process, etc. is updated to reflect the decision(s) made.
 
 ## ADRs
 

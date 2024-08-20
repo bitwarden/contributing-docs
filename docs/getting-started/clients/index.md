@@ -2,13 +2,7 @@
 sidebar_position: 3
 ---
 
-# Clients
-
-:::info
-
-For the Mobile application please visit [Mobile](mobile). This page covers the other clients.
-
-:::
+# Web clients
 
 This section contains development information for each of the Bitwarden Typescript client
 applications:
@@ -39,6 +33,7 @@ Before doing work on any of the clients, you need to clone and setup the `client
 2.  Install the dependencies:
 
     ```bash
+    cd clients
     npm ci
     ```
 

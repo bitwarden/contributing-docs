@@ -1,6 +1,6 @@
 ---
 adr: "0001"
-status: In progress
+status: Accepted
 date: 2022-05-28
 tags: [clients, angular, forms]
 ---

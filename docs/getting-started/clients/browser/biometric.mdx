@@ -25,7 +25,7 @@ _Supported:_
 _Not Supported:_
 
 - Firefox Versions 86 and earlier
-- Side-loaded MacOS Desktop Apps
+- Side-loaded macOS Desktop Apps
 - Linux OS
 
 ## General Setup Steps
@@ -50,10 +50,10 @@ extension development ID to this manifest instead.
 
 - In the local Browser project, run `npm ci`.
 - To use the local browser extension on Safari, use this command: `npm run dist:safari:dmg`. Once
-  this has built, you should see the Bitwarden Extension in Safari's Preferences under the Extension
-  menu. If not, open and build the related Xcode project (usually found in
-  `$HOME/browser/dist/Safari/dmg/desktop.xcodeproj`). It should then show up in the Preferences
-  menu, and you can enable it.
+  this has built, you should see the Bitwarden Extension in Safari's Settings under Extensions menu.
+  If not, open and build the related Xcode project (usually found in
+  `$HOME/browser/dist/Safari/dmg/desktop.xcodeproj`). It should then show up in the Settings
+  Extensions menu, and you can enable it.
 - For other browsers, use `npm run build:watch` and then load the locally built extension using the
   method described [here](./index.md#testing-and-debugging).
 
@@ -91,7 +91,8 @@ Follow the [Desktop](../desktop/index.mdx) setup document.
 
 :::caution
 
-On macOS you will either need to build a Mac App Store Development Build, or turn off gatekeeper.
+On macOS you will either need to build a [Mac App Store Development Build](../desktop/mac/index.md),
+or turn off gatekeeper.
 
 :::
 

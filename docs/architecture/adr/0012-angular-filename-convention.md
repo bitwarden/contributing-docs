@@ -1,7 +1,7 @@
 ---
 title: 0012 - Angular filename convention
 adr: "0012"
-status: In progress
+status: Accepted
 date: 2022-08-23
 tags: [clients, angular]
 ---
@@ -12,7 +12,7 @@ tags: [clients, angular]
 
 ## Context and Problem Statement
 
-We currently use a mixed filename convention where some files follows the Angular styleguide, and
+We currently use a mixed filename convention where some files follows the Angular style guide, and
 other files use camelCase. This causes some confusion as to which convention to follow, and we
 should standardize on one convention to avoid confusion.
 
@@ -45,15 +45,9 @@ At Bitwarden we also use a couple of more types:
 - `.request` - Api Request
 - `.response` - Api Response
 - `.type` - Enum
-- `.service.implementation` - Implementation of an abstract service
 
 The class names are expected to use the suffix as part of their class name as well. I.e. a service
-implementation will be named `FolderServiceImplementation`, a request model will be named
-`FolderRequest`.
-
-Since abstracts are referenced far more frequently than implementations, they use the simplified
-type while implementations must specify they are implementations e.g `.service` for the abstract vs
-`.service.implementation` for the implantation.
+implementation will be named `FolderService`, a request model will be named `FolderRequest`.
 
 ### Positive Consequences
 

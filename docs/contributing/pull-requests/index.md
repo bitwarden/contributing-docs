@@ -4,11 +4,18 @@ sidebar_position: 4
 
 # Pull Requests
 
+:::success Reviewing Pull Requests
+
+This page focuses on authoring and addressing feedback on Pull Requests. For details and
+expectations for PR reviewers, see [Code Review](./code-review.md).
+
+:::
+
 Pull Requests are the primary mechanism we use to write software. GitHub has some great
 [documentation](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-pull-requests)
 on using the Pull Request feature.
 
-<community>
+<Community>
 
 ## Fork
 
@@ -36,39 +43,39 @@ This will allow you to pull in upstream changes easily by running.
 git fetch upstream
 ```
 
-</community>
+</Community>
 
 ## Branch
 
 Each new feature or bug fix should be developed on a separate branch. Branches allow you to work on
-multiple features concurrently. In most cases you should branch from `master`. However, if you are
+multiple features concurrently. In most cases you should branch from `main`. However, if you are
 working with other contributors we typically branch off a long-lived feature branch. Long-lived
 feature branches allow us to break up a single feature into multiple PRs, which can be reviewed
 individually but tested and released together.
 
-<community>
+<Community>
 
 As a community contributor you can use the following command to branch directly from the _upstream_
-master branch.
+`main` branch.
 
 ```bash
 git checkout -b feature/example
 ```
 
-</community>
+</Community>
 
-<bitwarden>
+<Bitwarden>
 
-As a Bitwarden contributor you should branch of `origin/master`, this ensures that the branch is
-always based of the latest upstream `master` even if the local `master` is out of date.
+As a Bitwarden contributor you should branch of `origin/main`, this ensures that the branch is
+always based of the latest upstream `main` even if the local `main` is out of date.
 
 ```bash
-git checkout -b <pod>/<issue-number> -t origin/master
+git checkout -b <team>/<issue-number>/<brief-description> -t origin/main
 ```
 
 Our branching strategy is described in detail [here](branching.md).
 
-</bitwarden>
+</Bitwarden>
 
 ## Commit
 
@@ -85,65 +92,85 @@ cherry-picking, etc.).
 More advanced contributors might find it useful to
 [Rewrite History](https://git-scm.com/book/en/v2/Git-Tools-Rewriting-History). This allows a
 contributor to revise their local history before pushing to the remote repository. A common use case
-is squashing multiple half-working commits. Please be sure to follow the
-[force-pushing recommendations](#force-pushing).
+is squashing multiple half-working commits.
 
-## Creating a Pull Request
+:::warning
 
-The Bitwarden repositories have a _Pull Request template_ which should be followed. This will ensure
-the PR review goes smoothly since it will provide context to the reviewer. <community> Once a
-community PRs has been created, they will be automatically be linked to an internal Jira ticket. The
-internal ticket is used for prioritization and tracking purposes. </community>
+**Avoid force push** once a PR has been reviewed.
 
-<bitwarden>
-
-Please follow the following checklist when creating a PR.
-
-- The PR should always contain a Jira reference.
-  - Ensures QA have visibility in what they need to test.
-  - Jira will automatically add a reference to the PR in the ticket if you include the ticket number
-    (e.g. EC-123) or a link to the ticket anywhere in the PR title or body.
-- Add appropriate reviewer(s).
-  - In most cases, this should be your pod. Each pod should have a GitHub team to simplify
-    requesting reviews. The pod teams are named as follows:
-    - `@pod-{podAbbreviation}`: This will notify the entire pod, including product, design, QA and
-      development
-    - `@pod-{podAbbreviation}-dev`: This will notify or assign for code review the software
-      engineers within the pod
-    - `@pod-{podAbbreviation}-qa`: This will notify or assign for code review the QA
-      engineers/SDET(s) within the pod
-  - For design changes, tag `@dept-design`
-  - Please use the
-    [SME Yellowpages](https://bitwarden.atlassian.net/wiki/spaces/DEV/pages/195919928) to check if
-    there is someone with specific knowledge of the area that can assist with reviewing complex
-    changes.
-
-</bitwarden>
-
-### Force Pushing
-
-Once a PR has been reviewed, please avoid git operations that affects the existing git commits, i.e.
-anything that requires a force push. Force pushing prevents GitHub from correctly identifying “new
+Git operations that affect the existing git commits prevent GitHub from correctly identifying “new
 changes” to a PR forcing the reviewer to start over again.
 
-## Review process
+:::
 
-<community>
+## Creating a pull request
 
-Once a Community PR has been created a Bitwarden developer will perform a code review, while we try
-to this in a reasonable time-frame, please understand that we have internal roadmaps and priorities
+The Bitwarden repositories have a _Pull Request template_ which should be followed. This will ensure
+the PR review goes smoothly since it will provide context to the reviewer.<Community> Once a
+community PR has been created, it will be automatically be linked to an internal Jira ticket. The
+internal ticket is used for prioritization and tracking purposes.</Community><Bitwarden> When
+creating the PR include a Jira ticket reference so the reviewer can gain all context on the work as
+well as links to any associated PRs in other repositories.</Bitwarden>
+
+<Bitwarden>
+
+### Tagging reviewers
+
+We use `CODEOWNERS` in each repository to assign the reviewing teams based on the files in the PR.
+These reviews are required for the changes to be merged to `master`.
+
+You can tag additional teams or individuals for review as you see fit, including `@dept-design` for
+any design changes.
+
+### Opening the PR for review
+
+As its name implies, marking a PR as "Ready for Review" indicates that you are ready for all
+assigned teams to review it. If the changes are still in progress, leave the PR in `Draft` status.
+Doing this ensures that reviewers can act on the "Ready for Review" as their signal to begin the
+review process without further notification.
+
+You should receive a review or at least first contact from a reviewer from each assigned team within
+**two business days** of marking the PR as Ready for Review.
+
+### Follow-up notification
+
+If there is no response to a request for review for two business days, the author should reach out
+to the team(s) -- or to individual engineers if assigned -- via Slack to follow up.
+
+This should wait for two business days to allow the default process to take place and not overwhelm
+the team with notifications on multiple platforms.
+
+:::warning Urgent reviews
+
+If deployment deadlines or other concerns mean there is a need to shorten the review period for a
+pull request, the author should reach out to the reviewing team via their Slack channel. This should
+**only** be necessary for urgent requests and for follow-up after two business days.
+
+:::
+
+</Bitwarden>
+
+<Community>
+
+Once a Community PR has been created a Bitwarden developer will perform a code review. While we try
+to this in a reasonable time frame, please understand that we have internal roadmaps and priorities
 that may delay this process.
 
-</community>
+</Community>
 
-<bitwarden>
+### Addressing feedback
 
-While we mostly use an async review process, please don't hesitate to schedule a meeting with the
-reviewer/contributor to discuss the changes. While async communication can be useful it incurs a
-time penalty which can drag out the review process. And sometimes setting up a short call to discuss
-the changes can potentially save a lot of time.
+It is likely that you will receive some feedback on your PR. You should see this as a positive thing
+-- it signifies a healthy and thorough review process and an organizational commitment to code
+quality. You may receive [comments](./code-review.md#comment) or a
+[request for changes](./code-review.md#request-changes). You are encouraged to engage in
+conversation on the PR to discuss a solution, but if any strong conflicting opinions arise it is
+often best to move the conversation to a synchronous format to avoid any misunderstanding.
 
-</bitwarden>
+When any necessary changes have been made, you should address the comments or request for changes by
+responding in the PR conversation thread. You are not responsible for resolving the conversation --
+that is the prerogative of the reviewer, to ensure that they agree that the question or concern has
+been addressed.
 
-We've written up some [guidelines](./code-review.md) for reviewing code, which we recommend reading
-before performing your first code review.
+**When you are ready for a reviewer to revisit your changes, you should request a re-review.** This
+will notify the reviewer and ensure a prompt response.
