@@ -2,13 +2,13 @@
 
 Authorization logic decides whether a user is permitted to carry out an action.
 
-We use
-[ASP.NET Core resource-based authorization](https://learn.microsoft.com/en-us/aspnet/core/security/authorization/resourcebased?view=aspnetcore-8.0)
-for our server-side authorization logic.
+We use [ASP.NET Core resource-based authorization][resource-based-auth] for our server-side
+authorization logic.
 
 ## Defining authorization logic
 
-1. Identify the resource you are working with. This is generally a database entity.
+1. Identify the resource you are working with. This is generally a database entity. Here we are
+   using `Cipher` as an example resource.
 
 2. Define the different operations a user can perform on this resource:
 
@@ -25,7 +25,8 @@ for our server-side authorization logic.
 
    ```
 
-3. Define an an authorization handler for the operation and resource:
+3. Define an an authorization handler for the operation and resource. It must inherit from the
+   `AuthorizationHandler` class:
 
    ```cs
    public class CipherAuthorizationHandler : AuthorizationHandler<CipherOperationRequirement, Cipher>
@@ -45,7 +46,7 @@ for our server-side authorization logic.
        switch (requirement)
        {
            case not null when requirement == CipherOperations.Create:
-               authorized = await CanCreate(cipher);  // this is a private method that contains the authorization check
+               authorized = await CanCreate(context.User, cipher);  // this is a private method that contains the authorization check
                break;
 
            // handle other CipherOperations here
@@ -57,6 +58,12 @@ for our server-side authorization logic.
        }
    }
    ```
+
+5. Register your handler in a service extensions class:
+
+```cs
+services.AddScoped<IAuthorizationHandler, CipherAuthorizationHandler>();
+```
 
 ## Performing authorization checks
 
@@ -71,12 +78,11 @@ if (!authorizationService.Succeeded)
 ```
 
 We provide an overload method, `AuthorizeOrThrowAsync`, which encapsulates this pattern of throwing
-an error if the check fails.
+a `NotFoundError` if the check fails.
 
 ### Create
 
-Instantiate the object you want to save, then pass it to AuthorizationService to determine whether
-it can be written to the database.
+Instantiate the object you want to save, then pass it to AuthorizationService.
 
 ```cs
 var cipher = cipherRequestModel.ToCipher();
@@ -87,8 +93,7 @@ await _cipherRepository.Create(cipher);
 
 ### Read
 
-Read the object from the database, then pass it to AuthorizationService to determine whether it may
-be returned to the user.
+Read the object from the database, then pass it to AuthorizationService.
 
 ```cs
 var cipher = _cipherRepository.GetByIdAsync(id);
@@ -99,8 +104,7 @@ return new CipherResponseModel(cipher);
 
 ### Update
 
-Read the **unedited** object from the database, then pass it to AuthorizationService to determine
-whether the user can update it.
+Read the **unedited** object from the database, then pass it to AuthorizationService.
 
 ```cs
 var cipher = _cipherRepository.GetByIdAsync(id);
@@ -120,8 +124,7 @@ is not a trusted source of authorization.
 
 ### Delete
 
-Read the object from the database, then pass it to AuthorizationService to determine whether the
-user can delete it.
+Read the object from the database, then pass it to AuthorizationService.
 
 ```cs
 var cipher = _cipherRepository.GetByIdAsync(id);
@@ -135,10 +138,9 @@ await _cipherRepository.DeleteAsync(cipher);
 Some queries return all resources of a type within a particular scope. For example, rather than
 returning a specific cipher, return all ciphers for an organization.
 
-In this case, the `CurrentContextOrganization` object (a representation of the organization
-constructed from the user's claims) becomes the resource, and the operation describes the scope of
-the read. This would require a separate handler to be defined for this combination of resource and
-operation.
+In this example, the `CurrentContextOrganization` object (representing the organization) becomes the
+resource, and the operation describes the scope of the read. This would require a separate handler
+to be defined for this combination of resource and operation.
 
 ```cs
 var organization = _currentContext.GetOrganization(orgId);
@@ -147,7 +149,7 @@ await _authorizationService.AuthorizeOrThrowAsync(User, organization, CipherOper
 var result = await _cipherRepository.ReadManyByOrganizationId(orgId);
 ```
 
-Sometimes the database query itself is scoped to the UserId, such that no additional authorization
+Sometimes the database query itself is scoped to the user, such that no additional authorization
 check is required or even possible. If this is not obvious from the context, note this in a comment:
 
 ```cs
@@ -162,6 +164,9 @@ var result = await _cipherRepository.ReadManyByUserId(userId);
 Authorization checks (i.e. the call to `IAuthorizationService`) should be contained in
 [command and query classes](http://localhost:3000/architecture/server/#cqrs-adr-0008).
 
+This is the simplest way to ensure that authorization is always checked, and ensures that the
+authorization check stays in step with what the query or command actually does.
+
 ### Operation names
 
 Define your basic operations using the CRUD verbs - create, read, update, delete.
@@ -169,9 +174,16 @@ Define your basic operations using the CRUD verbs - create, read, update, delete
 ### Use 404 errors
 
 If authorization fails, return a 404 Not Found error to the client. This avoids disclosing whether
-the resource exists to a user who is not permitted to access it (i.e. neither confirm nor deny).
+the resource exists to a user who is not permitted to access it, preventing enumeration.
 
 Do not use 401 Unauthorized.
+
+### Do not put validation logic in handlers
+
+Authorization determines whether the user is permitted to carry out the action, not whether the
+action itself is valid.
+
+Put validation logic in your command, not in the authorization handler.
 
 ### Multiple handlers for a resource
 
@@ -205,6 +217,12 @@ var groupUser = new GroupUser
 await _authorizationService.AuthorizeOrThrowAsync(User, groupUser, GroupUserOperations.Create);
 ```
 
+### Composite objects
+
+Read queries do not always return atomic database entities. If you are returning a view that
+combines several different database tables, it should be treated as its own resource with its own
+handler.
+
 ### Performance
 
 Handlers may be called in a loop for multiple resources of the same type. Therefore, handlers should
@@ -222,4 +240,8 @@ needing to do this, consider:
 
 ## See also
 
-- [Authorization ADR](../adr/0022-server-authorization.md)
+- [Authorization ADR][adr]
+
+[adr]: ../adr/0022-server-authorization.md
+[resource-based-auth]:
+  https://learn.microsoft.com/en-us/aspnet/core/security/authorization/resourcebased?view=aspnetcore-8.0
