@@ -33,6 +33,7 @@ environment.
   scenarios. You can also use multiple browsers to have different browser extension version
   installed to compare them.
 - [Docker](https://docs.docker.com/get-docker/) - required for server development only
+- [Dotnet SDK](https://dotnet.microsoft.com/download) - v8.x required for server development on some environments
 - [PowerShell](https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell-core-on-macos)
   (available via Homebrew: `brew install powershell`)
 - [NodeJS](https://nodejs.org/) v20 (preferably using a [node version manager][nvm])
