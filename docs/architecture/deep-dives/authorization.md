@@ -82,7 +82,7 @@ a `NotFoundError` if the check fails.
 
 ### Create
 
-Instantiate the object you want to save, then pass it to AuthorizationService.
+Instantiate the object you want to save, then pass it to `AuthorizationService`.
 
 ```cs
 var cipher = cipherRequestModel.ToCipher();
@@ -93,7 +93,7 @@ await _cipherRepository.Create(cipher);
 
 ### Read
 
-Read the object from the database, then pass it to AuthorizationService.
+Read the object from the database, then pass it to `AuthorizationService`.
 
 ```cs
 var cipher = _cipherRepository.GetByIdAsync(id);
@@ -104,7 +104,7 @@ return new CipherResponseModel(cipher);
 
 ### Update
 
-Read the **unedited** object from the database, then pass it to AuthorizationService.
+Read the **unedited** object from the database, then pass it to `AuthorizationService`.
 
 ```cs
 var cipher = _cipherRepository.GetByIdAsync(id);
@@ -124,7 +124,7 @@ is not a trusted source of authorization.
 
 ### Delete
 
-Read the object from the database, then pass it to AuthorizationService.
+Read the object from the database, then pass it to `AuthorizationService`.
 
 ```cs
 var cipher = _cipherRepository.GetByIdAsync(id);
