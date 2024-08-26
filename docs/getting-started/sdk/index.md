@@ -10,8 +10,9 @@ multiple languages.
 
 ## Requirements
 
-- Latest stable version of Rust, preferably installed via [rustup](https://rustup.rs/).
-- Node and npm.
+- [Rust](https://www.rust-lang.org/tools/install) latest stable version - (preferably installed via
+  [rustup](https://rustup.rs/))
+- NodeJS and NPM.
 
 See the [Tools and Libraries](../tools/index.md) page for more information.
 
