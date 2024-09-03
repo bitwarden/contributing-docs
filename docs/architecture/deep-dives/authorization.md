@@ -162,7 +162,7 @@ var result = await _cipherRepository.ReadManyByUserId(userId);
 ### CQRS
 
 Authorization checks (i.e. the call to `IAuthorizationService`) should be contained in
-[command and query classes](http://localhost:3000/architecture/server/#cqrs-adr-0008).
+[command and query classes](../../architecture/server/#cqrs-adr-0008).
 
 This is the simplest way to ensure that authorization is always checked, and ensures that the
 authorization check stays in step with what the query or command actually does.
