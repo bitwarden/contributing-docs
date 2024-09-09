@@ -8,9 +8,11 @@ sidebar_position: 2
 
 ## Overview
 
-We use push notifications in the Password Manager app for two purposes:
+There are several ways push notifications are used in the Password Manager app. While there is
+[a complete list in the code](https://github.com/bitwarden/server/blob/main/src/Core/Enums/PushType.cs),
+two major purposes are:
 
-1. To sync the vault when a change was made from a different devices
+1. To sync the vault when a cipher is created, edited, or deleted on another device
 2. To allow users to log in with device
 
 However, there are a lot of things that can go wrong with push notifications, and the process is
@@ -20,8 +22,9 @@ hood and hopefully figure out what’s going on.
 ## Triggering a Push Notification
 
 The easiest way to trigger a push notification is to be logged in on both the app and a web vault,
-and to make a change in the web vault. The server should send a push notification to the device, and
-the app should update to reflect the changes—adding or deleting an item is the most obvious.
+and to create, edit, or delete a cipher in the web vault. The server should send a push notification
+to the device, and the app should update to reflect the changes—adding or deleting an item is the
+most obvious.
 
 ## Console
 
