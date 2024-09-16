@@ -73,7 +73,7 @@ To check whether the user has permissions to perform an action:
 var authorizationResult = await _authorizationService.AuthorizeAsync(User, resource, operation);
 if (!authorizationResult.Succeeded)
 {
-  throw new NotFoundError();
+  throw new NotFoundException();
 }
 ```
 
@@ -86,7 +86,7 @@ var cipher = cipherRequestModel.ToCipher();
 var authorizationResult = await _authorizationService.AuthorizeAsync(User, cipher, CipherOperations.Create);
 if (!authorizationResult.Succeeded)
 {
-  throw new NotFoundError();
+  throw new NotFoundException();
 }
 
 await _cipherRepository.Create(cipher);
@@ -101,7 +101,7 @@ var cipher = _cipherRepository.GetByIdAsync(id);
 var authorizationResult = await _authorizationService.AuthorizeAsync(User, cipher, CipherOperations.Read);
 if (!authorizationResult.Succeeded)
 {
-  throw new NotFoundError();
+  throw new NotFoundException();
 }
 
 return new CipherResponseModel(cipher);
@@ -116,7 +116,7 @@ var cipher = _cipherRepository.GetByIdAsync(id);
 var authorizationResult = await _authorizationService.AuthorizeAsync(User, cipher, CipherOperations.Update);
 if (!authorizationResult.Succeeded)
 {
-  throw new NotFoundError();
+  throw new NotFoundException();
 }
 
 // Only update the cipher after the authorization check has passed
@@ -140,7 +140,7 @@ var cipher = _cipherRepository.GetByIdAsync(id);
 var authorizationResult = await _authorizationService.AuthorizeAsync(User, cipher, CipherOperations.Delete);
 if (!authorizationResult.Succeeded)
 {
-  throw new NotFoundError();
+  throw new NotFoundException();
 }
 
 await _cipherRepository.DeleteAsync(cipher);
@@ -159,7 +159,7 @@ defined for this combination of resource and operation.
 var authorizationResult = await _authorizationService.AuthorizeAsync(User, new OrganizationResource(orgId), CipherOperations.ReadAllForOrganization);
 if (!authorizationResult.Succeeded)
 {
-  throw new NotFoundError();
+  throw new NotFoundException();
 }
 
 var result = await _cipherRepository.ReadManyByOrganizationId(orgId);
