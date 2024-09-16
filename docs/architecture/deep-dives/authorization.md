@@ -178,10 +178,10 @@ var result = await _cipherRepository.ReadManyByUserId(userId);
 
 ### Check authorization in controllers
 
-Call your authorization logic from controllers. This keeps authorization an API layer concern and
-does not complicate the business logic contained in commands and queries. It also means that every
-controller endpoint should have a call to `IAuthorizationService`, which is easier to look for in
-code review.
+Call your authorization logic from controller endpoints. This ensures that authorization is done
+upfront and avoids complicating the business logic contained in the core layer. It also means that
+every controller endpoint should have a call to `IAuthorizationService`, which is easier to look for
+in code review.
 
 You should ensure that your calls to `IAuthorizationService` cover the scope of all business logic
 executed by the endpoint.
