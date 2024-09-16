@@ -149,14 +149,15 @@ await _cipherRepository.DeleteAsync(cipher);
 ### Bulk reads
 
 Some queries return all resources of a type within a particular scope. For example, rather than
-returning a specific cipher (or a specific set of ciphers), return all ciphers for an organization.
+returning a specific cipher, return all ciphers for an organization.
 
-In this case, we use a strongly typed `OrganizationResource` wrapper around the organization ID as
-the resource. The operation describes the scope of the read. This requires a separate handler to be
-defined for this combination of resource and operation.
+In this example, the `CurrentContextOrganization` object (representing the organization) becomes the
+resource, and the operation describes the scope of the read. This would require a separate handler
+to be defined for this combination of resource and operation.
 
 ```cs
-var authorizationResult = await _authorizationService.AuthorizeAsync(User, new OrganizationResource(orgId), CipherOperations.ReadAllForOrganization);
+var organization = _currentContext.GetOrganization(orgId);
+var authorizationResult = await _authorizationService.AuthorizeAsync(User, organization, CipherOperations.ReadAllForOrganization);
 if (!authorizationResult.Succeeded)
 {
   throw new NotFoundException();
@@ -166,8 +167,7 @@ var result = await _cipherRepository.ReadManyByOrganizationId(orgId);
 ```
 
 Sometimes the database query itself is scoped to the user, such that no additional authorization
-check is required or even possible. (Although it should still require authentication.) If this is
-not obvious from the context, note this in a comment:
+check is required or even possible. If this is not obvious from the context, note this in a comment:
 
 ```cs
 // Note: this database call only returns the user's ciphers - no authorization check needed
