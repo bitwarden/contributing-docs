@@ -71,14 +71,11 @@ To check whether the user has permissions to perform an action:
 
 ```cs
 var authorizationResult = await _authorizationService.AuthorizeAsync(User, resource, operation);
-if (!authorizationService.Succeeded)
+if (!authorizationResult.Succeeded)
 {
   throw new NotFoundError();
 }
 ```
-
-We provide an overload method, `AuthorizeOrThrowAsync`, which encapsulates this pattern of throwing
-a `NotFoundError` if the check fails.
 
 ### Create
 
@@ -86,7 +83,11 @@ Instantiate the object you want to save, then pass it to `AuthorizationService`.
 
 ```cs
 var cipher = cipherRequestModel.ToCipher();
-await _authorizationService.AuthorizeOrThrowAsync(User, cipher, CipherOperations.Create);
+var authorizationResult = await _authorizationService.AuthorizeAsync(User, cipher, CipherOperations.Create);
+if (!authorizationResult.Succeeded)
+{
+  throw new NotFoundError();
+}
 
 await _cipherRepository.Create(cipher);
 ```
@@ -97,7 +98,11 @@ Read the object from the database, then pass it to `AuthorizationService`.
 
 ```cs
 var cipher = _cipherRepository.GetByIdAsync(id);
-await _authorizationService.AuthorizeOrThrowAsync(User, cipher, CipherOperations.Read);
+var authorizationResult = await _authorizationService.AuthorizeAsync(User, cipher, CipherOperations.Read);
+if (!authorizationResult.Succeeded)
+{
+  throw new NotFoundError();
+}
 
 return new CipherResponseModel(cipher);
 ```
@@ -108,7 +113,11 @@ Read the **unedited** object from the database, then pass it to `AuthorizationSe
 
 ```cs
 var cipher = _cipherRepository.GetByIdAsync(id);
-await _authorizationService.AuthorizeOrThrowAsync(User, cipher, CipherOperations.Update);
+var authorizationResult = await _authorizationService.AuthorizeAsync(User, cipher, CipherOperations.Update);
+if (!authorizationResult.Succeeded)
+{
+  throw new NotFoundError();
+}
 
 // Only update the cipher after the authorization check has passed
 cipher.Name = cipherRequest.Name;
@@ -128,7 +137,11 @@ Read the object from the database, then pass it to `AuthorizationService`.
 
 ```cs
 var cipher = _cipherRepository.GetByIdAsync(id);
-await _authorizationService.AuthorizeOrThrowAsync(User, cipher, CipherOperations.Delete);
+var authorizationResult = await _authorizationService.AuthorizeAsync(User, cipher, CipherOperations.Delete);
+if (!authorizationResult.Succeeded)
+{
+  throw new NotFoundError();
+}
 
 await _cipherRepository.DeleteAsync(cipher);
 ```
@@ -136,21 +149,25 @@ await _cipherRepository.DeleteAsync(cipher);
 ### Bulk reads
 
 Some queries return all resources of a type within a particular scope. For example, rather than
-returning a specific cipher, return all ciphers for an organization.
+returning a specific cipher (or a specific set of ciphers), return all ciphers for an organization.
 
-In this example, the `CurrentContextOrganization` object (representing the organization) becomes the
-resource, and the operation describes the scope of the read. This would require a separate handler
-to be defined for this combination of resource and operation.
+In this case, we use a strongly typed `OrganizationIdResource` wrapper around the organization ID as
+the resource. The operation describes the scope of the read. This requires a separate handler to be
+defined for this combination of resource and operation.
 
 ```cs
-var organization = _currentContext.GetOrganization(orgId);
-await _authorizationService.AuthorizeOrThrowAsync(User, organization, CipherOperations.ReadAllForOrganization);
+var authorizationResult = await _authorizationService.AuthorizeAsync(User, new OrganizationIdResource(orgId), CipherOperations.ReadAllForOrganization);
+if (!authorizationResult.Succeeded)
+{
+  throw new NotFoundError();
+}
 
 var result = await _cipherRepository.ReadManyByOrganizationId(orgId);
 ```
 
 Sometimes the database query itself is scoped to the user, such that no additional authorization
-check is required or even possible. If this is not obvious from the context, note this in a comment:
+check is required or even possible. (Although it should still require authentication.) If this is
+not obvious from the context, note this in a comment:
 
 ```cs
 // Note: this database call only returns the user's ciphers - no authorization check needed
@@ -159,13 +176,22 @@ var result = await _cipherRepository.ReadManyByUserId(userId);
 
 ## Guidelines
 
-### CQRS
+### Check authorization in controllers
 
-Authorization checks (i.e. the call to `IAuthorizationService`) should be contained in
-[command and query classes](../../architecture/server/#cqrs-adr-0008).
+Call your authorization logic from controllers. This keeps authorization an API layer concern and
+does not complicate the business logic contained in commands and queries. It also means that every
+controller endpoint should have a call to `IAuthorizationService`, which is easier to look for in
+code review.
 
-This is the simplest way to ensure that authorization is always checked, and ensures that the
-authorization check stays in step with what the query or command actually does.
+Some commands have complex authorization requirements. For example, a single command may affect
+multiple resources with different requirements, or the authorization requirements may depend on the
+parameters of the request. In this case, you can implement the `IGetAuthorizationRequirements`
+interface in your command. This returns a sequence of resource-requirement pairs which can then be
+given to `IAuthorizationService` to authorize. This is useful for keeping the controller endpoint
+simple while maintaining separation from core business logic.
+
+You should ensure that your calls to `IAuthorizationService` cover the scope of all business logic
+executed by the endpoint.
 
 ### Operation names
 
