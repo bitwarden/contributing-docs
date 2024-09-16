@@ -151,12 +151,12 @@ await _cipherRepository.DeleteAsync(cipher);
 Some queries return all resources of a type within a particular scope. For example, rather than
 returning a specific cipher (or a specific set of ciphers), return all ciphers for an organization.
 
-In this case, we use a strongly typed `OrganizationIdResource` wrapper around the organization ID as
+In this case, we use a strongly typed `OrganizationResource` wrapper around the organization ID as
 the resource. The operation describes the scope of the read. This requires a separate handler to be
 defined for this combination of resource and operation.
 
 ```cs
-var authorizationResult = await _authorizationService.AuthorizeAsync(User, new OrganizationIdResource(orgId), CipherOperations.ReadAllForOrganization);
+var authorizationResult = await _authorizationService.AuthorizeAsync(User, new OrganizationResource(orgId), CipherOperations.ReadAllForOrganization);
 if (!authorizationResult.Succeeded)
 {
   throw new NotFoundError();
@@ -182,13 +182,6 @@ Call your authorization logic from controllers. This keeps authorization an API 
 does not complicate the business logic contained in commands and queries. It also means that every
 controller endpoint should have a call to `IAuthorizationService`, which is easier to look for in
 code review.
-
-Some commands have complex authorization requirements. For example, a single command may affect
-multiple resources with different requirements, or the authorization requirements may depend on the
-parameters of the request. In this case, you can implement the `IGetAuthorizationRequirements`
-interface in your command. This returns a sequence of resource-requirement pairs which can then be
-given to `IAuthorizationService` to authorize. This is useful for keeping the controller endpoint
-simple while maintaining separation from core business logic.
 
 You should ensure that your calls to `IAuthorizationService` cover the scope of all business logic
 executed by the endpoint.
