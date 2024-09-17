@@ -125,7 +125,7 @@ To do this, run
 
 ```bash
 docker compose --profile mssql down
-docker volume rm bitwardenserver_msssql_dev_data
+docker volume rm bitwardenserver_mssql_dev_data
 ```
 
 After that, rerun the docker compose command from Step 5.
