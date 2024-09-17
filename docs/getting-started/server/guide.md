@@ -134,14 +134,10 @@ After that, rerun the docker compose command from Step 5.
 
 ### SQL Server
 
-For ARM based development environments such as the M1 Macs, we use the
-[Microsoft SQL Server](https://hub.docker.com/_/microsoft-mssql-server) docker container with
-`linux/amd64` platform emulation. It behaves identical to a SQL Server instance without emulation
-and runs on port 1433.
-
-You can connect to it using Azure Data Studio using the following credentials:
+You can connect to the Microsoft SQL Server using Azure Data Studio using the following credentials:
 
 - Server: localhost
+- Port: 1433
 - Username: sa
 - Password: (the password you set in `dev/.env`)
 
