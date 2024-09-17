@@ -134,7 +134,7 @@ After that, rerun the docker compose command from Step 5.
 
 ### SQL Server
 
-You can connect to the Microsoft SQL Server using Azure Data Studio using the following credentials:
+You can connect to the Microsoft SQL Server using Azure Data Studio with the following credentials:
 
 - Server: localhost
 - Port: 1433
