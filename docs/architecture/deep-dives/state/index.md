@@ -33,6 +33,15 @@ name changed.
 
 #### `StateDefinition`
 
+:::note
+
+Secure storage is not currently supported as a storage location in the State Provider Framework. For
+now, don't migrate data that is stored in secure storage but please contact the Platform team when
+you have data you wanted to migrate so we can prioritize a long-term solution. If you need new data
+in secure storage, use `StateService` for now.
+
+:::
+
 `StateDefinition` is a simple API but a very core part of making the State Provider Framework work
 smoothly. It defines a storage location and top-level namespace for storage. Teams will interact
 with it only in a single `state-definitions.ts` file in the
@@ -47,75 +56,96 @@ export const MY_DOMAIN_DISK = new StateDefinition("myDomain", "disk");
 The first argument to the `StateDefinition` constructor is expected to be a human readable,
 camelCase-formatted name for your domain or state area. The second argument will either be the
 string literal `"disk"` or `"memory"` dictating where all the state using this `StateDefinition`
-should be stored. The Platform team will be responsible to reviewing all new and updated entries in
-this file and will be looking to make sure that there are no duplicate entries containing the same
-state name and state location. Teams _can_ have the same state name used for both `"disk"` and
-`"memory"` locations. Tests are included to ensure this uniqueness and core naming guidelines so you
-can ensure a review for a new `StateDefinition` entry can be done promptly and with very few
-surprises. The tests can be seen
-[here](https://github.com/bitwarden/clients/blob/main/libs/common/src/platform/state/state-definitions.spec.ts)
-([permalink](https://github.com/bitwarden/clients/blob/daef7572bf19bc34be6cc661ff02c64692d3ad3e/libs/common/src/platform/state/state-definitions.spec.ts)).
+should be stored.
 
-:::note
+The Platform team will be responsible to reviewing all new and updated entries in this file and will
+be looking to make sure that there are no duplicate entries containing the same state name and state
+location. Teams _can_ have the same state name used for both `"disk"` and `"memory"` locations.
+Tests are included to ensure this uniqueness and core naming guidelines so you can ensure a review
+for a new `StateDefinition` entry can be done promptly and with very few surprises.
 
-Secure storage is not currently supported as a storage location in the State Provider Framework. For
-now, don't migrate data that is stored in secure storage but please contact the Platform team when
-you have data you wanted to migrate so we can prioritize a long-term solution. If you need new data
-in secure storage, use `StateService` for now.
+_TODO: Make tests_
 
-:::
+##### Client-specific storage locations
 
-#### `KeyDefinition`
+An optional third parameter to the `StateDefinition` constructor is provided if you need to specify
+client-specific storage location for your state.
 
-`KeyDefinition` builds on the idea of [`StateDefinition`](#statedefinition) but it gets more
-specific about the data to be stored. `KeyDefinition`s can also be instantiated in your own team's
-code. This might mean creating it in the same file as the service you plan to consume it or you may
-want to have a single `key-definitions.ts` file that contains all the entries for your team. Some
-example instantiations are:
+This will most commonly be used to handle the distinction between session and local storage on the
+web client. The default `"disk"` storage for the web client is session storage, and local storage
+can be specified by defining your state as:
 
 ```typescript
-const MY_DOMAIN_DATA = new KeyDefinition<MyState>(MY_DOMAIN_DISK, "data", {
+export const MY_DOMAIN_DISK = new StateDefinition("myDomain", "disk", { web: "disk-local" });
+```
+
+#### `KeyDefinition` and `UserKeyDefinition`
+
+`KeyDefinition` and `UserKeyDefinition` build on the [`StateDefinition`](#statedefinition),
+specifying a single element of state data within the `StateDefinition`.
+
+The framework provides both `KeyDefinition` and `UserKeyDefinition` for teams to use. The
+`UserKeyDefinition` should be used for defining pieces of state that are scoped at a user level.
+These will be consumed via the [`ActiveUserState<T>`](#activeuserstatet) or
+[`SingleUserState<T>`](#singleuserstatet) within your consuming services and components. The
+`UserKeyDefinition` extends the `KeyDefinition` and provides a way to specify how the state will be
+cleaned up on specific user account actions.
+
+`KeyDefinition`s and `UserKeyDefinition`s can also be instantiated in your own team's code. This
+might mean creating it in the same file as the service you plan to consume it or you may want to
+have a single `key-definitions.ts` file that contains all the entries for your team. Some example
+instantiations are:
+
+```typescript
+const MY_DOMAIN_DATA = new UserKeyDefinition<MyState>(MY_DOMAIN_DISK, "data", {
   // convert to your data from serialized representation `{ foo: string }` to fully-typed `MyState`
   deserializer: (jsonData) => MyState.fromJSON(jsonData),
+  clearOn: ["logout"], // can be lock, logout, both, or an empty array
 });
 
 // Or if your state is an array, use the built-in helper
-const MY_DOMAIN_DATA: KeyDefinition<MyStateElement[]> = KeyDefinition.array<MyStateElement>(
+const MY_DOMAIN_DATA: UserKeyDefinition<MyStateElement[]> = UserKeyDefinition.array<MyStateElement>(
   MY_DOMAIN_DISK,
   "data",
   {
     deserializer: (jsonDataElement) => MyState.fromJSON(jsonDataElement), // provide a deserializer just for the element of the array
   },
+  {
+    clearOn: ["logout"],
+  },
 );
 
 // record
-const MY_DOMAIN_DATA: KeyDefinition<Record<string, MyStateElement>> =
+const MY_DOMAIN_DATA: UserKeyDefinition<Record<string, MyStateElement>> =
   KeyDefinition.record<MyStateValue>(MY_DOMAIN_DISK, "data", {
     deserializer: (jsonDataValue) => MyState.fromJSON(jsonDataValue), // provide a deserializer just for the value in each key-value pair
+    clearOn: ["logout"],
   });
 ```
 
-The first argument to `KeyDefinition` is always the `StateDefinition` that this key should belong
-to. The second argument should be a human readable, camelCase-formatted name of the `KeyDefinition`.
-For example, the accounts service may wish to store a known accounts array on disk and choose
-`knownAccounts` to be the second argument. This name should be unique amongst all other
-`KeyDefinition`s that consume the same `StateDefinition`. The responsibility of this uniqueness is
-on the team. As such, you should never consume the `StateDefinition` of another team in your own
-`KeyDefinition`. The third argument is an object of type
-[`KeyDefinitionOptions`](#keydefinitionoptions).
+The arguments for defining a `KeyDefinition` or `UserKeyDefinition` are:
 
-##### `KeyDefinitionOptions`
+| Argument          | Usage                                                                                                                                                                                             |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `stateDefinition` | The `StateDefinition` to which that this key belongs                                                                                                                                              |
+| `key`             | A human readable, camelCase-formatted name for the key definition. This name should be unique amongst all other `KeyDefinition`s or `UserKeyDefinition`s that consume the same `StateDefinition`. |
+| `options`         | An object of type [`KeyDefinitionOptions`](#key-definition-options) or [`UserKeyDefinitionOptions`](#key-definition-options), which defines the behavior of the key.                              |
 
-`deserializer` (required) - Takes a method that gives you your state in it's JSON format and makes
-you responsible for converting that into JSON back into a full JavaScript object, if you choose to
-use a class to represent your state that means having its prototype and any method you declare on
-it. If your state is a simple value like `string`, `boolean`, `number`, or arrays of those values,
-your deserializer can be as simple as `data => data`. But, if your data has something like `Date`,
-which gets serialized as a string you will need to convert that back into a `Date` like:
-`data => new Date(data)`.
+:::warning
 
-`cleanupDelayMs` (optional) - Takes a number of milliseconds to wait before cleaning up the state
-after the last subscriber has unsubscribed. Defaults to 1000ms.
+It is the responsibility of the team to ensure the uniqueness of the `key` within a
+`StateDefinition`. As such, you should never consume the `StateDefinition` of another team in your
+own key definition.
+
+:::
+
+##### Key Definition Options
+
+| Option           | Required?                    | Usage                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| ---------------- | ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `deserializer`   | Yes                          | Takes a method that gives you your state in it's JSON format and makes you responsible for converting that into JSON back into a full JavaScript object, if you choose to use a class to represent your state that means having its prototype and any method you declare on it. If your state is a simple value like `string`, `boolean`, `number`, or arrays of those values, your deserializer can be as simple as `data => data`. But, if your data has something like `Date`, which gets serialized as a string you will need to convert that back into a `Date` like: `data => new Date(data)`. |
+| `cleanupDelayMs` | No                           | Takes a number of milliseconds to wait before cleaning up the state after the last subscriber has unsubscribed. Defaults to 1000ms.                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| `clearOn`        | Yes, for `UserKeyDefinition` | An additional parameter provided for `UserKeyDefinition` **only**, which allows specification of the user account `ClearEvent`s that will remove the piece of state from persistence. The available values for `ClearEvent` are `logout`, `lock`, or both. An empty array should be used if the state should not ever be removed (e.g. for settings).                                                                                                                                                                                                                                                |
 
 ### `StateProvider`
 
@@ -383,6 +413,35 @@ to include a high quality JSON deserializer even if you think your object will o
 memory. This can mean you might be able to drop the `*Data` class pattern for your code. Since the
 `*Data` class generally represented the JSON safe version of your state which we now do
 automatically through the `Jsonify<T>` given to your in your `deserializer` method.
+
+### How do `StateService` storage options map to `StateDefinition`s?
+
+When moving state from `StateService` to the state provider pattern, you'll be asked to create a
+`StateDefinition` for your state. This should be informed by the storage location that was being
+used in the `StateService`. You can use the cross-reference below to help you decide how to map
+between the two.
+
+| `StateService` Option           | Desired Storage Location | Desired Web Storage Location | `StateDefinition` Equivalent                                  |
+| ------------------------------- | ------------------------ | ---------------------------- | ------------------------------------------------------------- |
+| `defaultOnDiskOptions()`        | Disk                     | Session                      | `new StateDefinition("state", "disk")`                        |
+| `defaultOnDiskLocalOptions()`   | Disk                     | Local                        | `new StateDefinition("state", "disk", { web: "disk-local" })` |
+| `defaultOnDiskMemoryOptions()`  | Disk                     | Session                      | `new StateDefinition("state", "disk")`                        |
+| `defaultInMemoryOptions()`      | Memory                   | Memory                       | `new StateDefinition("state", "memory")`                      |
+| `defaultSecureStorageOptions()` | Disk                     | N/A                          | No migration path currently                                   |
+
+#### Clarifying `defaultOnDiskMemoryOptions()`
+
+Despite its name, `defaultOnDiskMemoryOptions()` results in the web client storing the state in
+session storage, _not_ in memory. As such, the equivalent `StateDefinition` storage location is
+`"disk"`; since `"disk"` maps to session storage on the web client there is no reason to specify
+`{ web: "memory" }` as a client-specific storage location if your previous state service options
+used `defaultOnDiskMemoryOptions()`.
+
+However, we do have cases in which the `StateService` is extended in a particular client and
+different storage options are defined there for a given element of state. For example,
+`defaultOnDiskMemoryOptions()` is defined on the base `StateService` but `defaultInMemoryOptions()`
+is defined on the web implementation. To replicate this behavior with a `StateDefinition` you would
+use `new StateDefinition("state", "disk", { web: "memory" })`.
 
 ## Structure
 
