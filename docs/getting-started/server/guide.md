@@ -125,7 +125,7 @@ To do this, run
 
 ```bash
 docker compose --profile mssql down
-docker volume rm bitwardenserver_edgesql_dev_data
+docker volume rm bitwardenserver_msssql_dev_data
 ```
 
 After that, rerun the docker compose command from Step 5.
@@ -134,10 +134,10 @@ After that, rerun the docker compose command from Step 5.
 
 ### SQL Server
 
-In order to support ARM based development environments such as the M1 Macs, we use the
-[Azure SQL Edge](https://hub.docker.com/_/microsoft-azure-sql-edge) docker container instead of a
-normal [Microsoft SQL Server](https://hub.docker.com/_/microsoft-mssql-server) container. It behaves
-mostly identical to a regular SQL Server instance and runs on port 1433.
+For ARM based development environments such as the M1 Macs, we use the
+[Microsoft SQL Server](https://hub.docker.com/_/microsoft-mssql-server) docker container with
+`linux/amd64` platform emulation. It behaves identical to a SQL Server instance without emulation
+and runs on port 1433.
 
 You can connect to it using Azure Data Studio using the following credentials:
 
