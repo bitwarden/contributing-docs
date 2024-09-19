@@ -77,17 +77,16 @@ if (!authorizationResult.Succeeded)
 }
 ```
 
+We provide an extension method, `AuthorizeOrThrowAsync`, which encapsulates this pattern of throwing
+a `NotFoundError` if the check fails.
+
 ### Create
 
 Instantiate the object you want to save, then pass it to `AuthorizationService`.
 
 ```cs
 var cipher = cipherRequestModel.ToCipher();
-var authorizationResult = await _authorizationService.AuthorizeAsync(User, cipher, CipherOperations.Create);
-if (!authorizationResult.Succeeded)
-{
-  throw new NotFoundException();
-}
+await _authorizationService.AuthorizeOrThrowAsync(User, cipher, CipherOperations.Create);
 
 await _cipherRepository.Create(cipher);
 ```
@@ -98,11 +97,7 @@ Read the object from the database, then pass it to `AuthorizationService`.
 
 ```cs
 var cipher = _cipherRepository.GetByIdAsync(id);
-var authorizationResult = await _authorizationService.AuthorizeAsync(User, cipher, CipherOperations.Read);
-if (!authorizationResult.Succeeded)
-{
-  throw new NotFoundException();
-}
+await _authorizationService.AuthorizeOrThrowAsync(User, cipher, CipherOperations.Read);
 
 return new CipherResponseModel(cipher);
 ```
@@ -113,11 +108,7 @@ Read the **unedited** object from the database, then pass it to `AuthorizationSe
 
 ```cs
 var cipher = _cipherRepository.GetByIdAsync(id);
-var authorizationResult = await _authorizationService.AuthorizeAsync(User, cipher, CipherOperations.Update);
-if (!authorizationResult.Succeeded)
-{
-  throw new NotFoundException();
-}
+await _authorizationService.AuthorizeOrThrowAsync(User, cipher, CipherOperations.Update);
 
 // Only update the cipher after the authorization check has passed
 cipher.Name = cipherRequest.Name;
@@ -137,11 +128,7 @@ Read the object from the database, then pass it to `AuthorizationService`.
 
 ```cs
 var cipher = _cipherRepository.GetByIdAsync(id);
-var authorizationResult = await _authorizationService.AuthorizeAsync(User, cipher, CipherOperations.Delete);
-if (!authorizationResult.Succeeded)
-{
-  throw new NotFoundException();
-}
+await _authorizationService.AuthorizeOrThrowAsync(User, cipher, CipherOperations.Delete);
 
 await _cipherRepository.DeleteAsync(cipher);
 ```
@@ -157,11 +144,7 @@ to be defined for this combination of resource and operation.
 
 ```cs
 var organization = _currentContext.GetOrganization(orgId);
-var authorizationResult = await _authorizationService.AuthorizeAsync(User, organization, CipherOperations.ReadAllForOrganization);
-if (!authorizationResult.Succeeded)
-{
-  throw new NotFoundException();
-}
+await _authorizationService.AuthorizeOrThrowAsync(User, organization, CipherOperations.ReadAllForOrganization);
 
 var result = await _cipherRepository.ReadManyByOrganizationId(orgId);
 ```
