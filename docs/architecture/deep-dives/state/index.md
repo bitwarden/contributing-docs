@@ -8,7 +8,7 @@ trustworthy observable stream of that state.
 
 - [Storage definitions](#storage-definitions)
   - [`StateDefinition`](#statedefinition)
-  - [`KeyDefinition`](#keydefinition)
+  - [`KeyDefinition` & `UserKeyDefinition`](#keydefinition-and-userkeydefinition)
 - [`StateProvider`](#stateprovider)
 - [`ActiveUserState<T>`](#activeuserstatet)
 - [`GlobalState<T>`](#globalstatet)
@@ -63,8 +63,6 @@ be looking to make sure that there are no duplicate entries containing the same 
 location. Teams _can_ have the same state name used for both `"disk"` and `"memory"` locations.
 Tests are included to ensure this uniqueness and core naming guidelines so you can ensure a review
 for a new `StateDefinition` entry can be done promptly and with very few surprises.
-
-_TODO: Make tests_
 
 ##### Client-specific storage locations
 
@@ -202,6 +200,13 @@ class FolderService {
 
 ### `ActiveUserState<T>`
 
+:::warning
+
+`ActiveUserState` has problems with consider not using it anymore,
+[read more](#should-i-use-activeuserstate).
+
+:::
+
 `ActiveUserState<T>` is an object to help you maintain and view the state of the currently active
 user. If the currently active user changes, like through account switching, the data this object
 represents will change along with it. Gone is the need to subscribe to
@@ -211,23 +216,8 @@ represents will change along with it. Gone is the need to subscribe to
 ```typescript
 interface ActiveUserState<T> {
   state$: Observable<T>;
-  update: <TCombine>(updateState: (state: T, dependency: TCombine) => T, stateUpdateOptions?: StateUpdateOptions<TCombine>): Promise<T>;
 }
 ```
-
-:::note
-
-Specifics around `StateUpdateOptions` are discussed in the [Advanced Usage](#advanced-usage)
-section.
-
-:::
-
-The `update` method takes a function `updateState: (state: T) => T` that can be used to update the
-state in both a destructive and additive way. The function gives you a representation of what is
-currently saved as your state and it requires you to return the state that you want saved into
-storage. This means if you have an array on your state, you can `push` onto the array and return the
-array back. The return value of the `updateState` function is always used as the new state value --
-do not rely on object mutation to update!
 
 The `state$` property provides you with an `Observable<T>` that can be subscribed to.
 `ActiveUserState<T>.state$` will emit for the following reasons:
@@ -235,10 +225,7 @@ The `state$` property provides you with an `Observable<T>` that can be subscribe
 - The active user changes.
 - The chosen storage location emits an update to the key defined by `KeyDefinition`. This can occur
   for any reason including:
-  - You caused an update through the `update` method.
-  - Another service in a different context calls `update` on their own instance of
-    `ActiveUserState<T>` made from the same `KeyDefinition`.
-  - A `SingleUserState<T>` method pointing at the same `KeyDefinition` as `ActiveUserState` and
+  - A `SingleUserState<T>` method pointing at the same `UserKeyDefinition` as `ActiveUserState` and
     pointing at the user that is active that had `update` called
   - Someone updates the key directly on the underlying storage service _(please don't do this)_
 
@@ -442,6 +429,81 @@ different storage options are defined there for a given element of state. For ex
 `defaultOnDiskMemoryOptions()` is defined on the base `StateService` but `defaultInMemoryOptions()`
 is defined on the web implementation. To replicate this behavior with a `StateDefinition` you would
 use `new StateDefinition("state", "disk", { web: "memory" })`.
+
+### Should I use `ActiveUserState`?
+
+Probably not, `ActiveUserState` is either currently in the process of or already completed the
+removal of its `update` method. This will effectively make it readonly, but you should consider
+maybe not even using it for reading either. `update` is actively bad, while reading is just not as
+dynamic of a API design.
+
+Take the following example:
+
+```typescript
+private folderState: ActiveUserState<Record<string, Folder>>
+
+renameFolder(folderId: string, newName: string) {
+  // Get state
+  const folders = await firstValueFrom(this.folderState.state$);
+  // Mutate state
+  folders[folderId].name = await encryptString(newName);
+  // Save state
+  await this.folderState.update(() => folders);
+}
+```
+
+You can imagine a scenario where the active user changes between the read and the write. This would
+be a big problem because now user A's folders was stored in state for user B. By taking a user id
+and utilizing `SingleUserState` instead you can avoid this problem by passing ensuring both
+operation happen for the same user. This is obviously an extreme example where the point between the
+read and write is pretty minimal but there are places in our application where the time between is
+much larger. Maybe information is read out and placed into a form for editing and then the form can
+be submitted to be saved.
+
+The first reason for why you maybe shouldn't use `ActiveUserState` for reading is for API
+flexibility. Even though you may not need an API to return the data of a non-active user right now,
+you or someone else may want to. If you have a method that takes the `UserId` then it can be
+consumed by someone passing in the active user or by passing a non-active user. You can now have a
+single API that is useful in multiple scenarios.
+
+The other reason is so that you can more cleanly switch users to new data when multiple streams are
+in play. Consider the following example:
+
+```typescript
+const view$ = combineLatest([
+  this.folderService.activeUserFolders$,
+  this.cipherService.activeUserCiphers$,
+]).pipe(map(([folders, ciphers]) => buildView(folders, ciphers)));
+```
+
+Since both are tied to the active user, you will get one emission when first subscribed to and
+during an account switch, you will likely get TWO other emissions. One for each, inner observable
+reacting to the new user. This could mean you try to combine the folders and ciphers of two
+accounts. This is ideally not a huge issue because the last emission will have the same users data
+but it's not ideal, and easily avoidable. Instead you can write it like this:
+
+```typescript
+const view$ = this.accountService.activeAccount$.pipe(
+  switchMap((account) => {
+    if (account == null) {
+      throw new Error("This view should only be viewable while there is an active user.");
+    }
+
+    return combineLatest([
+      this.folderService.userFolders$(account.id),
+      this.cipherService.userCiphers$(account.id),
+    ]);
+  }),
+  map(([folders, ciphers]) => buildView(folders, ciphers)),
+);
+```
+
+You have to write a little more code but you do a few things that might force you to think about the
+UX and rules around when this information should be viewed. With `ActiveUserState` it will simply
+not emit while there is no active user. But with this, you can choose what to do when there isn't an
+active user and you could simple add a `first()` to the `activeAccount$` pipe if you do NOT want to
+support account switching. An account switch will also emit the `combineLatest` information a single
+time and the info will be always for the same account.
 
 ## Structure
 
