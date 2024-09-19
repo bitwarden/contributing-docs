@@ -159,19 +159,17 @@ var result = await _cipherRepository.ReadManyByUserId(userId);
 
 ## Guidelines
 
-### Check authorization in controllers
+### Where to check authorization
 
-Call your authorization logic from controller endpoints. This ensures that authorization is done
-upfront and avoids complicating the business logic contained in the core layer. It also means that
-every controller endpoint should have a call to `IAuthorizationService`, which is easier to look for
-in code review.
-
-You should ensure that your calls to `IAuthorizationService` cover the scope of all business logic
-executed by the endpoint.
+You can check authorization in the controller endpoint or in the query/command class itself. There
+are arguments for both and this remains an open topic. However, aim to be clear and consistent in
+your approach. The most important thing is that you have authorized all actions being undertaken by
+the user.
 
 ### Operation names
 
-Define your basic operations using the CRUD verbs - create, read, update, delete.
+Define your basic operations using the CRUD verbs - create, read, update, delete. You may add
+additional operations if required by your domain.
 
 ### Use 404 errors
 
