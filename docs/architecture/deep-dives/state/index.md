@@ -58,11 +58,11 @@ camelCase-formatted name for your domain or state area. The second argument will
 string literal `"disk"` or `"memory"` dictating where all the state using this `StateDefinition`
 should be stored.
 
-The Platform team will be responsible to reviewing all new and updated entries in this file and will
-be looking to make sure that there are no duplicate entries containing the same state name and state
-location. Teams _can_ have the same state name used for both `"disk"` and `"memory"` locations.
-Tests are included to ensure this uniqueness and core naming guidelines so you can ensure a review
-for a new `StateDefinition` entry can be done promptly and with very few surprises.
+The Platform team is responsible for reviewing all new and updated entries in this file and makes
+sure that there are no duplicate entries containing the same state name and state location. Teams
+are able to have the same state name used for both `"disk"` and `"memory"` locations. Tests are
+included to ensure this uniqueness and core naming guidelines so teams can ensure a review for a new
+`StateDefinition` entry is done promptly and with very few surprises.
 
 ##### Client-specific storage locations
 
