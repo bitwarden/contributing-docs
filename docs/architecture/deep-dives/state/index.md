@@ -82,9 +82,9 @@ export const MY_DOMAIN_DISK = new StateDefinition("myDomain", "disk", { web: "di
 `KeyDefinition` and `UserKeyDefinition` build on the [`StateDefinition`](#statedefinition),
 specifying a single element of state data within the `StateDefinition`.
 
-The framework provides both `KeyDefinition` and `UserKeyDefinition` for teams to use. The
-`UserKeyDefinition` should be used for defining pieces of state that are scoped at a user level.
-These will be consumed via the [`ActiveUserState<T>`](#activeuserstatet) or
+The framework provides both `KeyDefinition` and `UserKeyDefinition` for teams to use. Use
+`UserKeyDefinition` for state scoped to a user and `KeyDefinition` for user-independent state. These
+will be consumed via the [`ActiveUserState<T>`](#activeuserstatet) or
 [`SingleUserState<T>`](#singleuserstatet) within your consuming services and components. The
 `UserKeyDefinition` extends the `KeyDefinition` and provides a way to specify how the state will be
 cleaned up on specific user account actions.
