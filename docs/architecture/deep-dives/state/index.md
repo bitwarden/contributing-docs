@@ -202,8 +202,8 @@ class FolderService {
 
 :::warning
 
-`ActiveUserState` has problems with consider not using it anymore,
-[read more](#should-i-use-activeuserstate).
+`ActiveUserState` has race condition problems. Do not use it for updates and consider transitioning
+your code to SingleUserState instead. [Read more](#should-i-use-activeuserstate)
 
 :::
 
