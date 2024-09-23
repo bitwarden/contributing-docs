@@ -7,11 +7,13 @@ AOSP
 Bitwarden
 bitwardensecret
 bytemark
+Casbin
 clickjacking
 CODEOWNERS
 CQRS
 CTAP2
 dockerized
+dotfile
 F-Droid
 Gitter
 HKDF
