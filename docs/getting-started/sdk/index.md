@@ -39,7 +39,60 @@ To build the SDK, run the following command:
 cargo build
 ```
 
+## Linking SDK to clients
+
+After modifying the SDK, it can be beneficial to test the changes in the client applications. To do
+so you will need to update the SDK reference in the client applications.
+
+These instructions assumes you have a directory structure similar to:
+
+```text
+sdk/
+clients/
+ios/
+android/
+```
+
+### Web clients
+
+The web clients uses NPM to install the SDK as a dependency. NPM offers a dedicated command
+[`link`][npm-link] which can be used to temporarily replace the packages with a local version.
+
+```bash
+# Assuming sdk is installed next to clients.
+# From the clients directory run:
+npm link ../sdk/languages/sdk-client npm link ../sdk/languages/wasm
+```
+
+:::warning
+
+Running `npm ci` or `npm install` will replace the linked packages with the published version.
+
+:::
+
+### Mobile
+
+#### Android
+
+1. Build and publish the SDK to the local Maven repository:
+
+   ```bash
+   ../sdk/languages/kotlin/publish-local.sh
+   ```
+
+2. Set the project property `LOCAL_SDK` to true in the `gradle.properties` file.
+
+#### iOS
+
+Run the bootstrap script with the `LOCAL_SDK` environment variable set to true in order to use the
+local SDK build:
+
+```bash
+LOCAL_SDK=true ./Scripts/bootstrap.sh
+```
+
 For more information on how to use the SDK, see the [repository](https://github.com/bitwarden/sdk).
 
+[npm-link]: https://docs.npmjs.com/cli/v9/commands/npm-link
 [sm]: https://bitwarden.com/products/secrets-manager/
 [pm]: https://bitwarden.com/
