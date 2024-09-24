@@ -80,7 +80,7 @@ Running `npm ci` or `npm install` will replace the linked packages with the publ
    ../sdk/languages/kotlin/publish-local.sh
    ```
 
-2. Set the project property `LOCAL_SDK` to true in the `gradle.properties` file.
+2. Set the project property `localSdk` to true in the `gradle.properties` file.
 
 #### iOS
 
