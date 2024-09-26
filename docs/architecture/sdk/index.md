@@ -34,7 +34,7 @@ contains very little logic itself.
 ### `bitwarden-core` crate
 
 The `bitwarden-core` crate contains the underlying functionality of the SDK. This includes a
-`Client` struct. Other crates in the SDK depend on `bitwarden-core` and provides extensions to the
+`Client` struct. Other crates in the SDK depend on `bitwarden-core` and provide extensions to the
 `Client` struct to implement specific domains.
 
 ## Client struct
