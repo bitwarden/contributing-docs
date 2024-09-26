@@ -11,6 +11,9 @@ layers. This includes but is not limited to: API calls, data models, encryption,
 
 <Bitwarden>We have compiled a list of resources for learning rust in a
 [Confluence page](https://bitwarden.atlassian.net/wiki/spaces/DEV/pages/517898288/Rust+Learning+Resources).</Bitwarden>
+For API documentation view the latest
+[API documentation](https://sdk-api-docs.bitwarden.com/bitwarden/index.html) which also includes
+internal private items.
 
 ## Architecture
 
