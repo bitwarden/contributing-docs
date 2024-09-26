@@ -31,10 +31,46 @@ contains very little logic itself.
 ### `bitwarden-core` crate
 
 The `bitwarden-core` crate contains the underlying functionality of the SDK. This includes a
-`Client` struct which represents a single account instance in the SDK.
+`Client` struct. Other crates in the SDK depend on `bitwarden-core` and provides extensions to the
+`Client` struct to implement specific domains.
 
-Other crates in the SDK depend on `bitwarden-core` and provides extensions to the `Client` struct to
-implement specific domains.
+## Client struct
+
+The `Client` struct is the main entry point for the SDK and represents a single account instance.
+Any action that needs to be performed on the account is generally done through the `Client` struct.
+This allows the internal to be hidden from the consumer and provides a clear API.
+
+We can extend the `Client` struct using extension traits in feature crates. This allow the
+underlying implementation to be internal to the crate with only the public API exposed through the
+`Client` struct. Below is an example of a generator extension for the `Client` struct.
+
+```rust
+pub struct ClientGenerator<'a> {
+    client: &'a Client,
+}
+
+impl<'a> ClientGenerator<'a> {
+    fn new(client: &'a Client) -> Self {
+        Self { client }
+    }
+
+    pub fn password(&self, input: PasswordGeneratorRequest) -> Result<String, PasswordError> {
+        password(input)
+    }
+
+}
+
+// Extension which exposes `generator` method on the `Client` struct.
+pub trait ClientGeneratorExt<'a> {
+    fn generator(&'a self) -> ClientGenerator<'a>;
+}
+
+impl<'a> ClientGeneratorExt<'a> for Client {
+    fn generator(&'a self) -> ClientGenerator<'a> {
+        ClientGenerator::new(self)
+    }
+}
+```
 
 ## Language bindings
 
