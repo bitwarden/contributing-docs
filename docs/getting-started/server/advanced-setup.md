@@ -82,12 +82,12 @@ File uploads are stored using one of two methods.
   }
   ```
 
-  :::note
+:::note
 
-  To properly test uploading and downloading files using direct upload, you need to set up a local
-  file server. Please add instructions here if you do this :)
+To properly test uploading and downloading files using direct upload, you need to set up a local
+file server.
 
-  :::
+:::
 
 ## PayPal
 
