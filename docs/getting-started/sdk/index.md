@@ -9,7 +9,7 @@ SDK for the Bitwarden [Password Manager][pm]. The SDK is written in Rust and pro
 multiple languages.
 
 For more in-depth documentation please review the [SDK Architecture](../../architecture/sdk) page
-and the project's [README](https://github.com/bitwarden/sdk).
+and the project's [`README`](https://github.com/bitwarden/sdk).
 
 ## Requirements
 
@@ -42,7 +42,7 @@ To build the SDK, run the following command:
 cargo build
 ```
 
-## Linking SDK to clients
+## Linking the SDK to clients
 
 After modifying the SDK, it can be beneficial to test the changes in the client applications. To do
 so you will need to update the SDK reference in the client applications.

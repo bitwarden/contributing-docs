@@ -22,7 +22,7 @@ let response: SyncResponseModel =
     bitwarden_api_api::apis::sync_api::sync_get(&config.api, exclude_subdomains).await?;
 ```
 
-You SHOULD not expose the request and response models of the auto generated bindings and SHOULD
+You *should not* expose the request and response models of the auto generated bindings and *should*
 instead define and use your own models. This ensures the server request / response models are
 decoupled from the SDK models, which allows for easier changes in the future without breaking
 backwards compatibility.

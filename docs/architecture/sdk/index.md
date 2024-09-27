@@ -9,16 +9,16 @@ SDK for the Bitwarden [Password Manager][pm]. The SDK is written in Rust and pro
 multiple languages. The general end goal of the SDK is to own everything up to the presentational
 layers. This includes but is not limited to: API calls, data models, encryption, and business logic.
 
-<Bitwarden>We have compiled a list of resources for learning rust in a
+<Bitwarden>We have compiled a list of resources for learning Rust in a
 [Confluence page](https://bitwarden.atlassian.net/wiki/spaces/DEV/pages/517898288/Rust+Learning+Resources).</Bitwarden>
 For API documentation view the latest
-[API documentation](https://sdk-api-docs.bitwarden.com/bitwarden/index.html) which also includes
+[API documentation](https://sdk-api-docs.bitwarden.com/bitwarden/index.html) that also includes
 internal private items.
 
 ## Architecture
 
 The Bitwarden SDK is structured as a single [Git repository](https://github.com/bitwarden/sdk) with
-multiple internal crates. Please review the README in the repository for up to date information
+multiple internal crates. Please review the `README` in the repository for up to date information
 about the different crates.
 
 We generally strive towards extracting features into separate crates to keep the `bitwarden-core`
