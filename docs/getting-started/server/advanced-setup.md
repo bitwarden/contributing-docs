@@ -192,9 +192,9 @@ services).
    - **Api** - `http://localhost:4100`
    - **Identity** - `http://localhost:33756`
 
-> If you need to add additional services (besides Api and Identity), add them to the
-> `dev/reverse-proxy.conf` and make sure the necessary ports are exposed in the
-> `dev/docker-compose.yml` file for the `reverse-proxy` container.
+If you need to add additional services (besides Api and Identity), add them to the
+`dev/reverse-proxy.conf` and make sure the necessary ports are exposed in the
+`dev/docker-compose.yml` file for the `reverse-proxy` container.
 
 ## NuGet with GitHub Packages
 
