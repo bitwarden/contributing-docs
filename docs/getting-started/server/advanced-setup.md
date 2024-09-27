@@ -195,3 +195,26 @@ services).
 > If you need to add additional services (besides Api and Identity), add them to the
 > `dev/reverse-proxy.conf` and make sure the necessary ports are exposed in the
 > `dev/docker-compose.yml` file for the `reverse-proxy` container.
+
+## NuGet with GitHub Packages
+
+Server-side projects and solutions may use
+[Bitwarden-shared .NET extension libraries hosted on GitHub Packages](https://github.com/orgs/bitwarden/packages?repo_name=dotnet-extensions)
+and _prerelease_ packages offered via GitHub Packages require authentication for access.
+
+First, [generate](https://github.com/settings/tokens/new) a GitHub personal access token (classic)
+with the `packages:read` scope only. You can set an expiration date but it may be easier to leave it
+without one considering the scope. Copy the token value and run:
+
+```bash
+IFS= read -rs GITHUB_PAT < /dev/tty
+```
+
+along with pasting the value and pressing Enter. Next, run:
+
+```bash
+dotnet nuget add source --username bitwarden --password $GITHUB_PAT --store-password-in-clear-text --name github --configfile ~/.nuget/NuGet/NuGet.Config "https://nuget.pkg.github.com/bitwarden/index.json"
+```
+
+which will set up the necessary global source and credentials. Any NuGet restores will now also
+utilize our GitHub Packages setup for NuGet.
