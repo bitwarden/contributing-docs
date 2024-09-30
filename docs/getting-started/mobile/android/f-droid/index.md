@@ -212,8 +212,3 @@ the changes to the F-Droid repository.
 The F-Droid repository is signed with a certificate owned by Bitwarden. Users can verify the
 validity of the repository by comparing the signature against the fingerprint provided in the
 `README.md` file.
-
-## Credits
-
-The GitHub repository was forked and adapted from
-[xarantolus/fdroid](https://github.com/xarantolus/fdroid).
