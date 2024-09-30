@@ -14,6 +14,7 @@ CQRS
 CTAP2
 dockerized
 dotfile
+fdroid
 F-Droid
 Gitter
 HKDF
@@ -73,6 +74,7 @@ toolset
 TOTP
 typealias
 WCAG
+xarantolus
 Xcodes.app
 xmldoc
 Yellowpages

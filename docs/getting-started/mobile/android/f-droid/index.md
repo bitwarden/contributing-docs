@@ -2,14 +2,14 @@
 sidebar_position: 1
 ---
 
-# F-droid
+# F-Droid
 
 ## Overview
 
-The Bitwarden F-droid repository is hosted on GitHub at https://github.com/bitwarden/f-droid. It
-contains all Bitwarden apps that are available on F-droid.
+The Bitwarden F-Droid repository is hosted on [GitHub](https://github.com/bitwarden/f-droid). It
+contains all Bitwarden apps that are available on F-Droid.
 
-The Bitwarden F-droid repository is automatically updated periodically to ensure the apps hosted in
+The Bitwarden F-Droid repository is automatically updated periodically to ensure the apps hosted in
 the repository are up to date with the latest versions released in the Google Play Store.
 
 ## Setup
@@ -21,20 +21,21 @@ Go is required to build and run the `metascoop` app.
 To download and install Go with Homebrew run :
 
 ```bash
-`brew install go`
+brew install go
 ```
 
-Other download and installation options can be found [here](https://go.dev/doc/install).
+Other download and installation options can be found on the
+[Go installation documentation](https://go.dev/doc/install).
 
-### F-droid Server and Repo Tools
+### F-Droid server and repo tools
 
-To manually update the F-droid repository, F-droid Server and Repo Tools are required. Instructions
-for downloading and installing F-droid Server and Repo Tools can be found
-[here](https://f-droid.org/en/docs/Installing_the_Server_and_Repo_Tools/).
+To manually update the F-Droid repository, F-Droid server and repo tools are required. Installation
+instructions can be found on the official
+[F-Droid server and repo tools documentation](https://f-droid.org/en/docs/Installing_the_Server_and_Repo_Tools/).
 
 ### Android SDK
 
-F-droid Server and Repo Tools requires `apksigner`, which is part of the Android SDK.
+F-Droid Server and Repo Tools requires `apksigner`, which is part of the Android SDK.
 
 To install the required Android SDK tools using Homebrew run:
 
@@ -50,16 +51,16 @@ Alternate instructions for downloading and installing the required Android SDK t
 
 The repository is organized into the following structure:
 
-- `fdroid/`: The F-droid repository where applications are hosted.
-- `metascoop/`: The Go app used to update the F-droid repository when a new version of a Bitwarden
+- `fdroid/`: The F-Droid repository where applications are hosted.
+- `metascoop/`: The Go app used to update the F-Droid repository when a new version of a Bitwarden
   app is released.
-- `repos.yml`: The file that defines the source repositories and F-droid applications available to
+- `repos.yml`: The file that defines the source repositories and F-Droid applications available to
   be hosted.
 
 ### `repos.yml`
 
 This file contains details about the source repositories that `metascoop` will search for new
-F-droid releases. It uses the following structure to declare repositories and their applications:
+F-Droid releases. It uses the following structure to declare repositories and their applications:
 
 ```yaml
 my-repository:
@@ -80,15 +81,15 @@ my-repository:
   be added to the repository by adding a new entry to the `applications` list.
   - `filename`: The name of the APK file that will be downloaded from the source repository.
   - `id`: The ID of the application. This must be unique and is used to identify the application in
-    the F-droid repository.
-  - `name`: The name of the application displayed to users when viewing applications in F-droid.
+    the F-Droid repository.
+  - `name`: The name of the application displayed to users when viewing applications in F-Droid.
   - `categories`: The categories that the application belongs to. This is used to categorize the
-    application in F-droid.
-  - `description`: The description displayed to users when viewing the application in F-droid.
+    application in F-Droid.
+  - `description`: The description displayed to users when viewing the application in F-Droid.
 
 ### `metascoop/`
 
-Bitwarden's F-droid repository is configured to automatically update apps when a new version is
+Bitwarden's F-Droid repository is configured to automatically update apps when a new version is
 detected in one of the source repositories defined in `repos.yml`.
 
 This is done by using the `metascoop` app to fetch the latest version of the source repository and
@@ -97,8 +98,8 @@ then update the repository index.
 The `metascoop` app is run periodically by the CI/CD pipeline to ensure the repository index stays
 up to date.
 
-When changes are detected in the source repository, any new releases will be added to the F-droid
-repository, and `fdroid update` will be executed to update F-droid server and repo metadata. The
+When changes are detected in the source repository, any new releases will be added to the F-Droid
+repository, and `fdroid update` will be executed to update F-Droid server and repo metadata. The
 CI/CD pipeline will automatically create a pull request to update the repository with these changes.
 
 ### `fdroid/`
@@ -106,19 +107,19 @@ CI/CD pipeline will automatically create a pull request to update the repository
 The majority of files within this directory are generated by the `metascoop` app and `fdroid` tools.
 Some files cannot be automatically generated and must be manually edited.
 
-#### F-droid repo configuration
+#### F-Droid repo configuration
 
-F-droid repository is configured in a `config.yml` file. This includes details like the name,
+F-Droid repository is configured in a `config.yml` file. This includes details like the name,
 description, and archive settings. This file is not tracked for security purposes.
 
 #### Repository icon
 
-The F-droid repository icon is stored in `fdroid/icon.png`.
+The F-Droid repository icon is stored in `fdroid/icon.png`.
 
 #### Application images
 
 Some application metadata, such as the application icons, feature graphics, and screenshots, are not
-defined in the `repos.yml` file and must be placed in the correct location within the F-droid
+defined in the `repos.yml` file and must be placed in the correct location within the F-Droid
 repository.
 
 The following directory structure is used to store the application images:
@@ -128,7 +129,7 @@ The following directory structure is used to store the application images:
 - `fdroid/repo/<app-id>/<locale>/<screen-type>Screenshots/*.png`: Screenshots from various devices.
   I.e. `fdroid/repo/com.x8bit.bitwarden/en-US/phoneScreenshots/login-screenshot.png`.
 
-Details on the metadata file structure can be found in the official F-droid docs,
+Details on the metadata file structure can be found in the official F-Droid docs,
 [here](https://f-droid.org/en/docs/All_About_Descriptions_Graphics_and_Screenshots/#in-the-f-droid-repo).
 
 ### Testing
@@ -136,7 +137,7 @@ Details on the metadata file structure can be found in the official F-droid docs
 #### Local testing
 
 The `run_metascoop.sh` and `update_repo.sh` scripts can be executed to manually check for new
-releases and update the F-droid repository. This can be especially helpful for testing.
+releases and update the F-Droid repository. This can be especially helpful for testing.
 
 When executing `run_metascoop.sh` locally, the repository keystore is required because
 `fdroid update` is executed as part of the process.
@@ -156,7 +157,7 @@ fdroid init
 
 :::note
 
-If you need access to the production F-droid keystore and config, reach out to your manager.
+If you need access to the production F-Droid keystore and config, reach out to your manager.
 
 :::
 
@@ -164,16 +165,16 @@ If you need access to the production F-droid keystore and config, reach out to y
 
 :::warning
 
-NEVER push changes signed by a locally generated keystore or config.
+Never push changes signed by a locally generated keystore or config.
 
 Using a locally generated keystore or config forces regeneration of ALL metadata and re-signs the
 repository. These changes should only be used for local testing.
 
 :::
 
-It's possible to run a local F-droid server for end-to-end testing. This type of testing requires
+It's possible to run a local F-Droid server for end-to-end testing. This type of testing requires
 setting up your machine as a web-server and copying the entire repository into your web root
-directory. Instructions on setting up a local demo repository can be found in the official F-droid
+directory. Instructions on setting up a local demo repository can be found in the official F-Droid
 docs, [here](https://f-droid.org/docs/Setup_an_F-Droid_App_Repo/#local-demo-repo-howto).
 
 :::note
@@ -204,14 +205,15 @@ server URL, when entered from an emulator, should look like: `http://10.0.2.2:80
 
 The `fdroid.yml` workflow can be triggered from the GitHub Actions tab. The workflow can be run
 without publishing changes by checking the "Dry run" checkbox. Be default, the workflow will publish
-the changes to the F-droid repository.
+the changes to the F-Droid repository.
 
 ## Security
 
-The F-droid repository is signed with a certificate owned by Bitwarden. Users can verify the
+The F-Droid repository is signed with a certificate owned by Bitwarden. Users can verify the
 validity of the repository by comparing the signature against the fingerprint provided in the
 `README.md` file.
 
 ## Credits
 
-The GitHub repository was forked and adapted from https://github.com/xarantolus/fdroid.
+The GitHub repository was forked and adapted from
+[xarantolus/fdroid](https://github.com/xarantolus/fdroid).
