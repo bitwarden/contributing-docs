@@ -81,7 +81,7 @@ This uses
 9.  Start the docker container:
 
     ```bash
-    docker-compose --profile idp up -d
+    docker compose --profile idp up -d
     ```
 
 10. You can test your user configuration by navigating to
@@ -127,7 +127,7 @@ and click Logout. Alternatively, you can use a private browsing session.
 To change the Entity ID or ACS URL, edit the `.env` file and then restart the Docker container:
 
 ```bash
-docker-compose --profile idp up -d
+docker compose --profile idp up -d
 ```
 
 ## Troubleshooting
