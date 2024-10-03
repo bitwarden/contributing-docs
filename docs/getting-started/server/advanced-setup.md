@@ -216,5 +216,8 @@ along with pasting the value and pressing Enter. Next, run:
 dotnet nuget add source --username bitwarden --password $GITHUB_PAT --store-password-in-clear-text --name github --configfile ~/.nuget/NuGet/NuGet.Config "https://nuget.pkg.github.com/bitwarden/index.json"
 ```
 
-which will set up the necessary global source and credentials. Any NuGet restores will now also
+that will set up the necessary global source and credentials. Any NuGet restores will now also
 utilize our GitHub Packages setup for NuGet.
+
+Full releases of shared libraries will go to our
+[NuGet.org presence](https://www.nuget.org/profiles/Bitwarden).
