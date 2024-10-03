@@ -199,8 +199,10 @@ If you need to add additional services (besides Api and Identity), add them to t
 ## NuGet with GitHub Packages
 
 Server-side projects and solutions may use
-[Bitwarden-shared .NET extension libraries hosted on GitHub Packages](https://github.com/orgs/bitwarden/packages?repo_name=dotnet-extensions)
-and _prerelease_ packages offered via GitHub Packages require authentication for access.
+[Bitwarden-shared .NET extension libraries](https://github.com/orgs/bitwarden/packages?repo_name=dotnet-extensions)
+and _prerelease_ packages offered via
+[GitHub Packages](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-nuget-registry)
+require authentication for access.
 
 First, [generate](https://github.com/settings/tokens/new) a GitHub personal access token (classic)
 with the `packages:read` scope only. You can set an expiration date but it may be easier to leave it
