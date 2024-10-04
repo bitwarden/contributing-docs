@@ -41,7 +41,7 @@ The `bitwarden-core` crate contains the underlying functionality of the SDK. Thi
 
 The `Client` struct is the main entry point for the SDK and represents a single account instance.
 Any action that needs to be performed on the account is generally done through the `Client` struct.
-This allows the internal to be hidden from the consumer and provides a clear API.
+This allows the internals to be hidden from the consumer and provides a clear API.
 
 We can extend the `Client` struct using extension traits in feature crates. This allow the
 underlying implementation to be internal to the crate with only the public API exposed through the

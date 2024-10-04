@@ -8,7 +8,7 @@ see the [SemVer Compatibility section](https://doc.rust-lang.org/cargo/reference
 
 There may be certain functionality that is actively being developed and is not yet stable. In these
 cases, they should be marked as such and gated behind a `unstable` feature flag. Consuming client
-applications should actively avoid merging these changes into `main`.
+applications should avoid merging changes that depend on these features into `main`.
 
 To track breaking changes, we use a [changelog file in the `bitwarden` crate][changelog]. This file
 should be updated with noteworthy changes for each PR.
