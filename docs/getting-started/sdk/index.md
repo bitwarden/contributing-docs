@@ -62,7 +62,7 @@ The web clients uses NPM to install the SDK as a dependency. NPM offers a dedica
 [`link`][npm-link] which can be used to temporarily replace the packages with a local version.
 
 ```bash
-npm link ../sdk/languages/sdk-client ../sdk/languages/wasm
+npm link ../sdk/languages/sdk-internal
 ```
 
 :::warning
