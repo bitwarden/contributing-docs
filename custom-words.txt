@@ -9,6 +9,7 @@ bitwardensecret
 bytemark
 Casbin
 clickjacking
+codebases
 CODEOWNERS
 CQRS
 CTAP2
