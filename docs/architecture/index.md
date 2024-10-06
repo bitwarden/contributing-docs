@@ -9,4 +9,5 @@ focusing initially on how the server and clients interact with each other, befor
 details of the server and clients.
 
 Since the web-based clients mostly behave the same, we will focus on the web vault while calling out
-client-specific areas for the browser extension, desktop application and CLI.
+client-specific areas for the browser extension, desktop application and CLI. The mobile
+applications have their own codebases.
