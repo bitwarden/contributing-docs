@@ -22,12 +22,14 @@ let response: SyncResponseModel =
     bitwarden_api_api::apis::sync_api::sync_get(&config.api, exclude_subdomains).await?;
 ```
 
-It's highly recommended to not expose the request and response models of the generated bindings and
-instead use your own models. This decouples the server request / response models from the SDK
-models, and allows for easier changes in the future.
+You _should not_ expose the request and response models of the auto generated bindings and _should_
+instead define and use your own models. This ensures the server request / response models are
+decoupled from the SDK models, which allows for easier changes in the future without breaking
+backwards compatibility.
 
-We recommend using either the `From` or `TryFrom` traits depending on if the conversion requires
-error handling. Below are two examples of how this can be done:
+We recommend using either the [`From`][from] or [`TryFrom`][tryfrom] [conversion traits][conversion]
+depending on if the conversion requires error handling or not. Below are two examples of how this
+can be done:
 
 ```rust
 impl TryFrom<bitwarden_api_api::models::CipherLoginUriModel> for LoginUri {
@@ -57,3 +59,6 @@ impl From<bitwarden_api_api::models::UriMatchType> for UriMatchType {
 ```
 
 [openapi]: https://github.com/OpenAPITools/openapi-generator
+[from]: https://doc.rust-lang.org/std/convert/trait.From.html
+[tryfrom]: https://doc.rust-lang.org/std/convert/trait.TryFrom.html
+[conversion]: https://doc.rust-lang.org/std/convert/index.html
