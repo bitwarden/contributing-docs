@@ -11,8 +11,5 @@
 package.json
 package-lock.json
 
-# DevOps for Actions and other workflow changes.
-.github/workflows @bitwarden/dept-devops
-
 # Architecture department for architecture content.
 docs/architecture @bitwarden/dept-architecture
