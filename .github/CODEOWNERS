@@ -13,3 +13,8 @@ package-lock.json
 
 # Architecture department for architecture content.
 docs/architecture @bitwarden/dept-architecture
+
+# Shared workflows ownership
+.github/workflows/build.yml @bitwarden/dept-bre
+
+.github/workflows/build.yml @bitwarden/tech-leads
