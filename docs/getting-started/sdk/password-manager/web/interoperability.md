@@ -6,19 +6,19 @@ smooth interactions between the two languages. In our project, we use both `wasm
 a crucial role in enabling communication between Rust and JavaScript, but it's important to
 understand when to use each one, as they serve distinct purposes.
 
-At first glance, `wasm-bindgen` and `tsify` might seem very similar. They both generate TypeScript
-definitions, and they both allow JavaScript to interact with Rust data. For developers just getting
-started, it might appear that either tool could handle all your needs. However, while both provide a
-way to bridge the two ecosystems, they achieve this in different ways and for different use cases.
-
 ## `wasm-bindgen` vs. `tsify`
 
 :::tip
 
-_In short:_ Use `tsify` unless the web-side needs to call functions or interact with Rust objects
+**In short:** Use `tsify` unless the web-side needs to call functions or interact with Rust objects
 directly, in which case, use `wasm-bindgen`.
 
 :::
+
+At first glance, `wasm-bindgen` and `tsify` might seem very similar. They both generate TypeScript
+definitions, and they both allow JavaScript to interact with Rust data. For developers just getting
+started, it might appear that either tool could handle all your needs. However, while both provide a
+way to bridge the two ecosystems, they achieve this in different ways and for different use cases.
 
 `wasm-bindgen` focuses on generating WebAssembly bindings, allowing JavaScript to directly call Rust
 functions and manipulate Rust objects. It works well for exposing Rust APIs to JavaScript but
