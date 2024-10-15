@@ -4,6 +4,13 @@ sidebar_position: 4
 
 # Pull Requests
 
+:::success Reviewing Pull Requests
+
+This page focuses on authoring and addressing feedback on Pull Requests. For details and
+expectations for PR reviewers, see [Code Review](./code-review.md).
+
+:::
+
 Pull Requests are the primary mechanism we use to write software. GitHub has some great
 [documentation](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-pull-requests)
 on using the Pull Request feature.
@@ -122,6 +129,35 @@ assigned teams to review it. If the changes are still in progress, leave the PR 
 Doing this ensures that reviewers can act on the "Ready for Review" as their signal to begin the
 review process without further notification.
 
+You should receive a review or at least first contact from a reviewer from each assigned team within
+**two business days** of marking the PR as Ready for Review.
+
+### Follow-up notification
+
+If there is no response to a request for review for two business days, the author should reach out
+to the team(s) -- or to individual engineers if assigned -- via Slack to follow up.
+
+This should wait for two business days to allow the default process to take place and not overwhelm
+the team with notifications on multiple platforms.
+
+:::warning Urgent reviews
+
+If deployment deadlines or other concerns mean there is a need to shorten the review period for a
+pull request, the author should reach out to the reviewing team via their Slack channel. This should
+**only** be necessary for urgent requests and for follow-up after two business days.
+
+:::
+
+</Bitwarden>
+
+<Community>
+
+Once a Community PR has been created a Bitwarden developer will perform a code review. While we try
+to this in a reasonable time frame, please understand that we have internal roadmaps and priorities
+that may delay this process.
+
+</Community>
+
 ### Addressing feedback
 
 It is likely that you will receive some feedback on your PR. You should see this as a positive thing
@@ -138,73 +174,3 @@ been addressed.
 
 **When you are ready for a reviewer to revisit your changes, you should request a re-review.** This
 will notify the reviewer and ensure a prompt response.
-
-</Bitwarden>
-
-## Reviewing the pull request
-
-<Bitwarden>
-
-At Bitwarden, we believe that the act of reviewing PRs is a critically important part of each
-engineer's job. It is as important, if not more important, than the act of writing code.
-
-To ensure that teams within the organization operate on same set of assumptions for performing
-reviews, we have agreed to a baseline set of expectations.
-
-When a PR author opens a PR for review, they should have the expectation that:
-
-- The act of opening the PR for review is the **only** notification required. Teams are responsible
-  for properly configuring notifications so that team members are aware of their obligations.
-- The reviewing team(s) will respond within **2 business days** to:
-  - Provide a review,
-  - Inform the author when a review will be provided, or
-  - Ask the author to split the work into a
-    [smaller PR](./branching.md#structuring-branches-to-support-incremental-work) for review
-
-:::tip Notifications
-
-Our teams use GitHub notifications as the primary method of communication for PR review requests and
-scheduled reminders are highly encouraged to facilitate prompt responses to requests.
-
-- Individual engineers are encouraged to set up [scheduled reminders][user reminders] for
-  themselves.
-- Each team has [scheduled reminders][team reminders] on a dedicated Slack channel (e.g.
-  #team-eng-platform-notifications).
-
-:::
-
-### Follow-up notification
-
-If there is no response to a request for review in 48 hours, the author should reach out to the
-team(s) -- or to individual engineers if assigned -- via Slack to follow up.
-
-This should wait for 48 hours to allow the default process to take place and not overwhelm the team
-with notifications on multiple platforms.
-
-:::warning Urgent reviews
-
-If deployment deadlines or other concerns mean there is a need to shorten the review period for a
-pull request, the author should reach out to the reviewing team via their Slack channel. This should
-**only** be necessary for urgent requests and for follow-up after 48 hours.
-
-:::
-
-</Bitwarden>
-
-<Community>
-
-Once a Community PR has been created a Bitwarden developer will perform a code review. While we try
-to this in a reasonable time frame, please understand that we have internal roadmaps and priorities
-that may delay this process.
-
-</Community>
-
-### How to perform a review
-
-We've written up some [guidelines](./code-review.md) for reviewing code, which we recommend reading
-before performing your first code review.
-
-[user reminders]:
-  https://docs.github.com/en/account-and-profile/setting-up-and-managing-your-personal-account-on-github/managing-your-membership-in-organizations/managing-your-scheduled-reminders
-[team reminders]:
-  https://docs.github.com/en/organizations/organizing-members-into-teams/managing-scheduled-reminders-for-your-team

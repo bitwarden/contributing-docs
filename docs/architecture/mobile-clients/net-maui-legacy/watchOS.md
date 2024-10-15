@@ -1,11 +1,17 @@
 # watchOS
 
+:::warning Legacy
+
+This represents the **legacy** watchOS app architecture done in .NET MAUI.
+
+:::
+
 ## Overall architecture
 
 The watchOS application is organized as follows:
 
 - `src/watchOS`: All the code specific to the watchOS platform
-  - `bitwarden`: Stub iOS app so that the watchOS app has a companion app on XCode
+  - `bitwarden`: Stub iOS app so that the watchOS app has a companion app on Xcode
   - `bitwarden WatchKit App`: Main Watch app where we set assets.
   - `bitwarden WatchKit Extension`: All the logic and presentation logic for the Watch app is here
 
@@ -21,7 +27,7 @@ Then in the Extension we have a layered architecture:
 
 ## Integration with iOS
 
-The watchOS app is developed using `XCode` and `Swift` and we need to integrate it to the .NET MAUI
+The watchOS app is developed using `Xcode` and `Swift` and we need to integrate it to the .NET MAUI
 iOS application.
 
 For this, the `iOS.csproj` has been adapted taking a
@@ -57,16 +63,16 @@ in the `Xamarin.Forms` GitHub repository and modified to our needs:
 ```
 
 So on the `PropertyGroup` the `WatchAppBundleFullPath` is assembled together depending on the
-Configuration and the Platform taking the output of the XCode watchOS app build. Then there are some
+Configuration and the Platform taking the output of the Xcode watchOS app build. Then there are some
 `ItemGroup` to include the watch app depending on if it exists and the Configuration. The task
-`_ResolvedWatchAppReferences` is the one responsible to peek into the `Bitwarden.app` built by XCode
+`_ResolvedWatchAppReferences` is the one responsible to peek into the `Bitwarden.app` built by Xcode
 and if it finds a Watch app, it will just bundle it to the Xamarin iOS application. Finally, if the
 Watch app is bundled, deep signing is enabled and the build path is printed.
 
 :::caution
 
 As one can see in the csproj, to bundle the watchOS app into the iOS app one needs to target the
-correct platform. So if one is going to use a device, target the device on XCode to build the
+correct platform. So if one is going to use a device, target the device on Xcode to build the
 watchOS app and after the build is done one can go to VS4M to build the iOS app (which will bundle
 the watchOS one) and run it on the device.
 
