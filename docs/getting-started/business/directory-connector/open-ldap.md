@@ -43,7 +43,7 @@ This is also the method used to run integration tests in the CI workflow(s).
 
 3. Use the configuration settings below:
 
-#### Directory Settings
+#### Directory settings
 
 - **Type**: Active Directory / LDAP
 
