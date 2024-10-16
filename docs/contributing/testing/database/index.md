@@ -69,7 +69,7 @@ An example entry you might add is:
   "databases": [
     {
       "type": "SqlServer",
-      "connectionString": "myConnectionString
+      "connectionString": "myConnectionString"
     }
   ]
 }
