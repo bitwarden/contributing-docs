@@ -232,13 +232,38 @@ pub struct FolderView {
 }
 ```
 
-However, note that while `tsify` generates TypeScript definitions, external types that don't derive
-`tsify` (like `Uuid` or `DateTime<Utc>`) need custom TypeScript definitions to match how they are
-serialized:
+Which generates the following TypeScript definitions:
 
 ```typescript
-export type Uuid = string;
-export type DateTime<T = unknown> = string;
+export interface FolderView {
+  id: Uuid | undefined;
+  name: string;
+  revisionDate: DateTime<Utc>;
+}
 ```
 
-This ensures the JavaScript object matches the serialized Rust structure.
+Note that, while `tsify` does generate TypeScript definitions, external types that don't derive
+`tsify` (like `Uuid` or `DateTime<Utc>`) are missing from the definitions. To fix this, external
+types need to be manually added to the TypeScript definitions found in
+`bitwarden-wasm-internal/src/custom_types.rs`, for example:
+
+```rust
+#[wasm_bindgen::prelude::wasm_bindgen(typescript_custom_section)]
+const TS_CUSTOM_TYPES: &'static str = r#"
+export type Uuid = string;
+
+/**
+ * RFC3339 compliant date-time string.
+ * @typeParam T - Not used in JavaScript.
+ */
+export type DateTime<T = unknown> = string;
+
+/**
+ * UTC date-time string. Not used in JavaScript.
+ */
+export type Utc = unknown;
+"#;
+
+```
+
+This ensures the TypesScript definitions match the serialized Rust structure.
