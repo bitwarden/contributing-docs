@@ -49,6 +49,7 @@ passcode
 passwordless
 pinentry
 PNSs
+POSIX
 precompiler
 proxied
 recompositions
