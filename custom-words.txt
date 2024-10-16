@@ -67,6 +67,7 @@ signtool
 signup
 sqlcmd
 struct
+structs
 subfolders
 subprocessor
 toolset
