@@ -3,7 +3,7 @@
 This method uses an [OpenLDAP Docker image](https://hub.docker.com/r/bitnami/openldap) to run a
 local directory service that you can use for development.
 
-This is also the method used to run integration tests in the pipeline.
+This is also the method used to run integration tests in the CI workflow(s).
 
 ## Requirements
 
