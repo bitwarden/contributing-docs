@@ -76,7 +76,7 @@ to do this unless you have special requirements.
 4. Start the OpenLDAP Docker container
 
    ```bash
-   docker-compose --profile ldap up -d
+   docker compose --profile ldap up -d
    ```
 
    If you ever change the LDIF file, you can force Docker to use the new file by running this
