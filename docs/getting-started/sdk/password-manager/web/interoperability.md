@@ -46,8 +46,6 @@ Use `wasm-bindgen` when you need JavaScript to call into Rust directly or work w
 objects (like a struct or a function in Rust). Otherwise, default to `tsify` for easier handling of
 complex types and data exchange.
 
----
-
 ## How to use `wasm-bindgen`
 
 ### Basic functions
