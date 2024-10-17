@@ -105,9 +105,6 @@ sure you update the existing values instead of creating new ones
 ```json
 "globalSettings:databaseProvider": "postgres",
 "globalSettings:postgreSql:connectionString": "Host=localhost;Username=postgres;Password=example;Database=vault_dev;Include Error Detail=true",
-
-// optional, falls back to the above connection string if not set
-"globalSettings:postgreSql:readOnlyConnectionString": "Host=localhost;Username=postgres;Password=example;Database=vault_dev;Include Error Detail=true",
 ```
 
 </TabItem>
@@ -119,9 +116,6 @@ sure you update the existing values instead of creating new ones
 ```json
 "globalSettings:databaseProvider": "mysql",
 "globalSettings:mySql:connectionString": "server=localhost;uid=root;pwd=example;database=vault_dev",
-
-// optional, falls back to the above connection string if not set
-"globalSettings:mySql:readOnlyConnectionString": "server=localhost;uid=root;pwd=example;database=vault_dev",
 ```
 
 </TabItem>
@@ -133,9 +127,6 @@ Source path. Use the file location selected in [Database Setup](#database-setup)
 ```json
 "globalSettings:databaseProvider": "sqlite",
 "globalSettings:sqlite:connectionString": "Data Source=/path/to/your/server/repo/dev/db/bitwarden.db",
-
-// optional, falls back to the above connection string if not set
-"globalSettings:sqlite:readOnlyConnectionString": "Data Source=/path/to/your/server/repo/dev/db/bitwarden.db",
 ```
 
 </TabItem>
