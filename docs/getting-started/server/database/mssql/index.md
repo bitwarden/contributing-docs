@@ -24,3 +24,24 @@ of your database.
 
 The process for modifying the database is described in
 [Migrations](./../../../../contributing/database-migrations/).
+
+## Running self-hosted locally
+
+### SQL Server (Dapper)
+
+To set up a self-hosted instance locally, you should follow the instructions
+[here](../self-hosted/). Assuming you've defined your user secrets as described in the
+[User Secrets](../../user-secrets/) documentation, you'll find that if you don't define the
+`readOnlyConnectionString` override as shown below, your self-hosted instance will fall back to use
+the regular/default connection string. This can result in unexpected behavior as your self-hosted
+instance will be reading from the wrong database.
+
+You can simply copy whatever value you have for `connectionString` and copy it to
+`readOnlyConnectionString` in your secrets.json file.
+
+```json
+{
+  "dev:selfHostOverride:globalSettings:sqlServer:connectionString": "Server=localhost;Database=vault_dev_self_host;User Id=sa;Password=your_password_here",
+  "dev:selfHostOverride:globalSettings:sqlServer:readOnlyConnectionString": "Server=localhost;Database=vault_dev_self_host;User Id=sa;Password=your_password_here"
+}
+```
