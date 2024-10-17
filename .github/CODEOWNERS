@@ -15,6 +15,4 @@ package-lock.json
 docs/architecture @bitwarden/dept-architecture
 
 # Shared workflows ownership
-.github/workflows/build.yml @bitwarden/dept-bre
-
-.github/workflows/build.yml @bitwarden/tech-leads
+.github/workflows/build.yml @bitwarden/dept-bre @bitwarden/tech-leads
