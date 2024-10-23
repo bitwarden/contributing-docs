@@ -66,7 +66,23 @@ simple addition.
 
 ### Plan
 
-TBD.
+Documentation will be provided on the Help Center or this contributing docs site indicating the
+minimally-required request headers for all clients to provide when communicating to the Bitwarden
+platform. Release notes will include mention of this and the future enforcement after three major
+releases. Documentation will also be expanded to provide guidance on how unofficial clients should
+form their provided client version specifically to accurately represent supported "windows" of
+client-server interactivity.
+
+Operations teams will perform the necessary development to validate that required headers are
+present and enable its enforcement after that time; invalid requests will be rejected as a
+`400 Bad Request`.
+
+A process will be established for integrations to submit support tickets requesting a client
+identifier and secret. Customer Success will work with operations teams to register integrations and
+deliver the needed information. Existing Bitwarden integrations will be issued their own client
+identifiers and secrets. Client details will be provided in requests to the Bitwarden platform.
+
+Self-hosted instances will not perform any checks for client identifiers or required request data.
 
 [splunk]: https://bitwarden.com/help/splunk-siem/
 [sentinel]: https://bitwarden.com/help/microsoft-sentinel-siem/
