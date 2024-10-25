@@ -160,6 +160,14 @@ export class User {
 }
 ```
 
+### About the `free` Method
+
+When working with `wasm-bindgen`, you may notice that all generated classes have a `free` method.
+This method is used to forcibly free the memory allocated for the Rust object when it is no longer
+needed in JavaScript. In most cases you can safely ignore this method, as the memory will be cleaned
+up automatically. For more information see
+[Support for Weak References](https://rustwasm.github.io/docs/wasm-bindgen/reference/weak-references.html).
+
 ## How to use `tsify`
 
 While `wasm-bindgen` is ideal for exposing Rust functions and objects to JavaScript, `tsify` is
