@@ -206,8 +206,6 @@ export interface Address {
   street: string;
   city: string;
 }
-
-export function get_user(): User;
 ```
 
 Note how `tsify` creates TypeScript interfaces, whereas `wasm-bindgen` creates classes that
