@@ -170,11 +170,6 @@ up automatically. For more information see
 
 ## How to use `tsify`
 
-While `wasm-bindgen` is ideal for exposing Rust functions and objects to JavaScript, `tsify` is
-better suited for exposing complex data models. The `tsify` approach generates TypeScript bindings
-automatically from Rust structs and works by serializing Rust data into JavaScript-compatible
-objects.
-
 ### Basic Types
 
 To return a struct from Rust to JavaScript using `tsify`, derive `Serialize`, `Deserialize`, and
