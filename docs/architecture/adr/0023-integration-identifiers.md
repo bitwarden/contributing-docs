@@ -68,10 +68,11 @@ simple addition.
 
 Documentation will be provided on the Help Center or this contributing docs site indicating the
 minimally-required request headers for all clients to provide when communicating to the Bitwarden
-platform. Release notes will include mention of this and the future enforcement after three major
-releases. Documentation will also be expanded to provide guidance on how unofficial clients should
-form their provided client version specifically to accurately represent supported "windows" of
-client-server interactivity.
+platform. Release notes will include mention of this and the future enforcement after a set number
+of major releases. Documentation will also be expanded to offer guidance on how unofficial clients
+should form their provided client version to accurately represent supported "windows" of
+client-server interactivity (or a mapping to the latest Bitwarden server release they have certified
+or tested their integration against) as well as an appropriate [device type][devicetypes].
 
 Operations teams will perform the necessary development to validate that required headers are
 present and enable its enforcement after that time; requests will be rejected as a `400 Bad Request`
@@ -89,3 +90,4 @@ Self-hosted instances will not perform any checks for client identifiers or requ
 
 [splunk]: https://bitwarden.com/help/splunk-siem/
 [sentinel]: https://bitwarden.com/help/microsoft-sentinel-siem/
+[devicetypes]: https://github.com/bitwarden/server/blob/main/src/Core/Enums/DeviceType.cs
