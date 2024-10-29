@@ -74,8 +74,9 @@ form their provided client version specifically to accurately represent supporte
 client-server interactivity.
 
 Operations teams will perform the necessary development to validate that required headers are
-present and enable its enforcement after that time; invalid requests will be rejected as a
-`400 Bad Request`.
+present and enable its enforcement after that time; requests will be rejected as a `400 Bad Request`
+when required headers are missing and a `403 Forbidden` when provided headers or their values are
+not supported.
 
 A process will be established for integrations to submit support tickets requesting a client
 identifier and secret. Customer Success will work with operations teams to register integrations and
