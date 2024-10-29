@@ -84,7 +84,9 @@ identifier. Customer Success will work with operations teams to register integra
 the needed information. Existing Bitwarden integrations will be issued their own client identifiers.
 Client details will be provided in requests to the Bitwarden platform, with the goal being the
 identification of scale and conformance per client; attestation and the guarantee that a client is
-who they say they are will be considered as a future effort.
+who they say they are will be considered as a future effort. Subsequent enhancements may occur
+beyond the client identifier wherein API keys and authentication token scopes will further refine
+permissions of an integration.
 
 Self-hosted instances will not perform any checks for client identifiers or required request data.
 
