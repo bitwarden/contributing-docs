@@ -79,9 +79,11 @@ when required headers are missing and a `403 Forbidden` when provided headers or
 not supported.
 
 A process will be established for integrations to submit support tickets requesting a client
-identifier and secret. Customer Success will work with operations teams to register integrations and
-deliver the needed information. Existing Bitwarden integrations will be issued their own client
-identifiers and secrets. Client details will be provided in requests to the Bitwarden platform.
+identifier. Customer Success will work with operations teams to register integrations and deliver
+the needed information. Existing Bitwarden integrations will be issued their own client identifiers.
+Client details will be provided in requests to the Bitwarden platform, with the goal being the
+identification of scale and conformance per client; attestation and the guarantee that a client is
+who they say they are will be considered as a future effort.
 
 Self-hosted instances will not perform any checks for client identifiers or required request data.
 
