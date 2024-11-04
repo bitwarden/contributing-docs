@@ -142,7 +142,6 @@ code --install-extension ckolkman.vscode-postgres
 
 ```
 
-
 ## Optional tools
 
 The following tools may be useful depending on your preferences or what you’re developing.
