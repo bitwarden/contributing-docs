@@ -107,6 +107,42 @@ recommended ones include the following:
   - [PostgreSQL](https://marketplace.visualstudio.com/items?itemName=ckolkman.vscode-postgres) -
     syntax highlighting for PostgreSQL
 
+#### CLI Installation
+
+```bash
+# General
+code --install-extension nick-rudenko.back-n-forth
+code --install-extension streetsidesoftware.code-spell-checker
+code --install-extension ms-vsliveshare.vsliveshare
+
+# C#
+code --install-extension ms-dotnettools.csharp
+code --install-extension formulahendry.dotnet-test-explorer
+code --install-extension adrianwilczynski.user-secrets
+
+# Git
+code --install-extension mhutchie.git-graph
+code --install-extension donjayamanne.githistory
+code --install-extension eamodio.gitlens
+
+# TypeScript / Angular
+code --install-extension angular.ng-template
+code --install-extension orta.vscode-jest
+code --install-extension esbenp.prettier-vscode
+code --install-extension dbaeumer.vscode-eslint
+
+# Rust
+code --install-extension rust-lang.rust-analyzer
+code --install-extension tamasfe.even-better-toml
+code --install-extension vadimcn.vscode-lldb
+
+# Databases
+code --install-extension jakebathman.mysql-syntax
+code --install-extension ckolkman.vscode-postgres
+
+```
+
+
 ## Optional tools
 
 The following tools may be useful depending on your preferences or what you’re developing.
