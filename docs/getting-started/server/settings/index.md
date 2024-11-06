@@ -46,7 +46,9 @@ services and set expectations.
 
 :::info[Relevant For]
 
-- Shared web :::
+- Shared web
+
+:::
 
 - **type**: `Boolean`
 - **default**: `False`
@@ -60,7 +62,9 @@ this is used only while setting up nginx trusted reverse proxies. See
 
 :::info[Relevant For]
 
-- Shared Web :::
+- Shared Web
+
+:::
 
 - **type**: `String`
 - **default**: `""`
@@ -106,28 +110,43 @@ the two server instances.
 
 ## Billing Settings
 
-:::note TODO :::
+:::note
+
+TODO
+
+:::
 
 ## Ip Rate Limiting
 
 :::info[Relevant For]
 
 - Identity
-- Api :::
+- Api
 
-:::note TODO :::
+:::
+
+:::note
+
+TODO
+
+:::
 
 ## Icons Settings
 
 :::info[Relevant For]
 
-- Icons :::
+- Icons
+
+:::
 
 Settings for the Icons service, which provides a proxy for downloading website favicons. These
 settings are all related to caching icons.
 
-:::info Only favicons 50 kilobytes or less in size are cached. Failures to pull a favicon are also
-cached. :::
+:::info
+
+Only favicons 50 kilobytes or less in size are cached. Failures to pull a favicon are also cached.
+
+:::
 
 ### CacheEnabled
 
