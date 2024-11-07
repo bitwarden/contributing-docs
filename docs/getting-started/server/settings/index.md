@@ -123,9 +123,21 @@ All projects
 Sets local filesystem logging directory. This value is only used if [Sentry.Dsn](#sentry) and
 [Syslog.Destination](#destination) are null.
 
-###
+### LogDirectoryByProject
 
-cloud environment.
+:::info[Relevant For]
+
+All projects
+
+:::
+
+- **type**: `Boolean`
+- **default**: `True`
+- **full name**: `globalSettings__logDirectoryByProject`
+
+Splits logs into multiple files per project. The name of the project's log file is given by
+[project name](#projectname). This value is only relevant if [LogDirectory](#logdirectory) is being
+used.
 
 ## Dev
 
