@@ -139,6 +139,22 @@ Splits logs into multiple files per project. The name of the project's log file 
 [project name](#projectname). This value is only relevant if [LogDirectory](#logdirectory) is being
 used.
 
+### LogRollBySizeLimit
+
+:::info[Relevant For]
+
+All projects
+
+:::
+
+- **type**: `nullable long`
+- **default**: `null`
+- **full name**: `globalSettings__logRollBySizeLimit`
+
+Sets the size limit for log files. A new log file will be rolled into when the size limit is
+reached. If null, rolls log files by date. This value is only relevant if
+[LogDirectory](#logdirectory) is being used.
+
 ## Dev
 
 - **type**: `Namespace`
