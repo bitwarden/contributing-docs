@@ -105,6 +105,26 @@ All projects (Mail, Logging, Feature Flags, Service Bus)
 
 This value is used all over the place to specify the exact project being run. Useful for things like
 providing context in feature flags, or getting default values for service bus subscriptions in our
+
+### LogDirectory
+
+:::info[Relevant For]
+
+All projects
+
+:::
+
+- **type**: `String`
+- **default**:
+  - **cloud**: `null`
+  - **selfhost**: `etc/bitwarden/logs`
+- **full name**: `globalSettings__logDirectory`
+
+Sets local filesystem logging directory. This value is only used if [Sentry.Dsn](#sentry) and
+[Syslog.Destination](#destination) are null.
+
+###
+
 cloud environment.
 
 ## Dev

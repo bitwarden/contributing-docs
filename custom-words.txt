@@ -63,6 +63,7 @@ SAST
 SCIM
 SDET
 SDLC
+selfhost
 selfhosted
 Serilog
 signtool
