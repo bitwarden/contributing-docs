@@ -155,6 +155,21 @@ Sets the size limit for log files. A new log file will be rolled into when the s
 reached. If null, rolls log files by date. This value is only relevant if
 [LogDirectory](#logdirectory) is being used.
 
+### EnableDevLogging
+
+:::info[Relevant For]
+
+All projects
+
+:::
+
+- **type**: `Boolean`
+- **default**: `False`
+- **full name**: `globalSettings__enableDevLogging`
+
+Bypasses log filters used to ensure secrets are not persisted in logs. Only respected if the hosting
+environment is development.
+
 ## Dev
 
 - **type**: `Namespace`
