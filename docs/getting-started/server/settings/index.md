@@ -33,7 +33,11 @@ Settings for the Core Bitwarden Project. Not all settings are relevant for all p
 
 ### SelfHosted
 
-:::info[Relevant For] All projects :::
+:::info[Relevant For]
+
+All projects
+
+:::
 
 - **type**: `Boolean`
 - **default**: `False`
@@ -75,13 +79,19 @@ A `,` delineated list of reverse proxies to trust. See
 
 ### SiteName
 
-:::info[Relevant For] All projects (Mail and Logging) :::
+:::info[Relevant For]
+
+All projects (Mail and Logging)
+
+:::
 
 - **type**: `String`
 - **default**: `""`
 - **full name**: `globalSettings__siteName`
 
 Specifies the name of the hosted website in emails and logging.
+
+### ProjectName
 
 ## Dev
 
@@ -93,7 +103,11 @@ Settings for development environments.
 
 ### selfHostOverride
 
-:::info[Relevant For] All Projects :::
+:::info[Relevant For]
+
+All Projects
+
+:::
 
 - **type**: `Namespace`
 - **default**: N/A
