@@ -170,6 +170,26 @@ All projects
 Bypasses log filters used to ensure secrets are not persisted in logs. Only respected if the hosting
 environment is development.
 
+### LicenseDirectory
+
+:::note
+
+self host only
+
+:::
+
+:::info[Relevant For]
+
+All projects
+
+:::
+
+- **type**: `String`
+- **default**: `/etc/bitwarden/core/licenses`
+- **full name**: `globalSettings__licenseDirectory`
+
+Sets the directory to look for organization licenses in for self hosted environments.
+
 ## Dev
 
 - **type**: `Namespace`
