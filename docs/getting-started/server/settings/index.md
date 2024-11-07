@@ -93,6 +93,20 @@ Specifies the name of the hosted website in emails and logging.
 
 ### ProjectName
 
+:::info[Relevant For]
+
+All projects (Mail, Logging, Feature Flags, Service Bus)
+
+:::
+
+- **type**: `String`
+- **default**: `""`
+- **full name**: `globalSettings__projectName`
+
+This value is used all over the place to specify the exact project being run. Useful for things like
+providing context in feature flags, or getting default values for service bus subscriptions in our
+cloud environment.
+
 ## Dev
 
 - **type**: `Namespace`
