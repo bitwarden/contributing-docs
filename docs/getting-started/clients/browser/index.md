@@ -14,9 +14,8 @@ Before you start, you must complete the [Clients repository setup instructions](
 
     ```bash
     cd apps/browser
-    npm run build:watch:chrome
-
     # Replace chrome with "edge", "firefox", "opera" or "safari" to build for other browsers.
+    npm run build:watch:chrome
     ```
 
 2.  Load the unpacked browser extension in your browser using the instructions in the next section.
