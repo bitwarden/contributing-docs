@@ -58,7 +58,7 @@ The web clients uses NPM to install the SDK as a dependency. NPM offers a dedica
 [`link`][npm-link] which can be used to temporarily replace the packages with a local version.
 
 ```bash
-npm link ../sdk-internal/languages/js/sdk-internal
+npm link ../sdk-internal/crates/bitwarden-wasm-internal/npm
 ```
 
 :::warning
@@ -74,7 +74,7 @@ Running `npm ci` or `npm install` will replace the linked packages with the publ
 1. Build and publish the SDK to the local Maven repository:
 
    ```bash
-   ../sdk-internal/languages/kotlin/publish-local.sh
+   ../sdk-internal/crates/bitwarden-uniffi/kotlin/publish-local.sh
    ```
 
 2. Set the user property `localSdk=true` in the `user.properties` file.
