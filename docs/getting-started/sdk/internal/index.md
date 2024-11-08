@@ -4,8 +4,8 @@ sidebar_position: 5
 
 # Internal SDK
 
-For more in-depth documentation please review the [SDK Architecture](../../architecture/sdk) and the
-Internal SDK project's [`README`](https://github.com/bitwarden/sdk-internal).
+For more in-depth documentation please review the [SDK Architecture](../../../architecture/sdk) and
+the Internal SDK project's [`README`](https://github.com/bitwarden/sdk-internal).
 
 ## Requirements
 
@@ -13,7 +13,7 @@ Internal SDK project's [`README`](https://github.com/bitwarden/sdk-internal).
   [rustup](https://rustup.rs/))
 - NodeJS and NPM.
 
-See the [Tools and Libraries](../tools/index.md) page for more information.
+See the [Tools and Libraries](../../tools/index.md) page for more information.
 
 ## Setup instructions
 
