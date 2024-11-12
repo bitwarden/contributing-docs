@@ -27,6 +27,15 @@ patterns:
           .*?         # match any characters, lazily (so that we stop at the next tilde)
           `           # match the closing `
       /gx
+  - name: single_word_anchors
+    pattern: |
+      /
+          \[          # match the opening [
+          [^\]]*?     # match any characters except ], which closes the link
+          \]\(        # match the closing ] and opening (
+          \#[a-z]*     # match the anchor text
+          \)          # match the closing )
+      /gx
 languageSettings:
   - languageId:
       - markdown
@@ -34,3 +43,4 @@ languageSettings:
     ignoreRegExpList:
       - markdown_code_block
       - markdown_code_inline
+      - single_word_anchors

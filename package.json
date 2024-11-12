@@ -35,11 +35,14 @@
     "@docusaurus/core": "3.5.2",
     "@docusaurus/preset-classic": "3.5.2",
     "@mdx-js/react": "3.1.0",
+    "autoprefixer": "^10.4.20",
     "docusaurus-lunr-search": "3.5.0",
+    "postcss": "^8.4.49",
     "prism-react-renderer": "2.4.0",
     "react": "18.3.1",
     "react-dom": "18.3.1",
-    "remark-kroki": "0.3.7"
+    "remark-kroki": "0.3.7",
+    "tailwindcss": "^3.4.14"
   },
   "devDependencies": {
     "@docusaurus/module-type-aliases": "3.5.2",
@@ -49,6 +52,7 @@
     "husky": "9.1.6",
     "lint-staged": "15.2.10",
     "prettier": "3.3.3",
+    "type-fest": "^4.26.1",
     "typescript": "5.6.3"
   },
   "browserslist": {
