@@ -153,22 +153,64 @@ const namedColors = Object.freeze({
 } as const);
 /* cSpell:enable */
 
+/**
+ * Converts an HSL color value to RGB. Conversion formula
+ * adapted from https://en.wikipedia.org/wiki/HSL_color_space.
+ * Assumes h is in [0, 360] and s and l are contained in the set [0, 100] and
+ * returns r, g, and b in the set [0, 255].
+ *
+ * Adapted from https://stackoverflow.com/a/9493060
+ *
+ * @param h The hue
+ * @param s The saturation
+ * @param l The lightness
+ * @returns The RGB representation
+ */
+function hslToRgb(h, s, l): RgbColor {
+  let r, g, b;
+
+  if (s === 0) {
+    r = g = b = l; // achromatic
+  } else {
+    const normalizedH = h > 1 ? h / 360 : h;
+    const normalizedS = s > 1 ? s / 100 : s;
+    const normalizedL = l > 1 ? l / 100 : l;
+    const q =
+      normalizedL < 0.5
+        ? normalizedL * (1 + normalizedS)
+        : normalizedL + normalizedS - normalizedL * normalizedS;
+    const p = 2 * normalizedL - q;
+    r = hueToRgb(p, q, normalizedH + 1 / 3);
+    g = hueToRgb(p, q, normalizedH);
+    b = hueToRgb(p, q, normalizedH - 1 / 3);
+  }
+
+  const rgb = `rgb(${Math.round(r * 255)},${Math.round(g * 255)},${Math.round(b * 255)})`;
+  return rgb as RgbColor;
+}
+
+function hueToRgb(p, q, t) {
+  if (t < 0) t += 1;
+  if (t > 1) t -= 1;
+  if (t < 1 / 6) return p + (q - p) * 6 * t;
+  if (t < 1 / 2) return q;
+  if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
+  return p;
+}
+
 export function stringToColor(str: string): string {
   let hash = 0;
   for (let i = 0; i < str.length; i++) {
     hash = str.charCodeAt(i) + ((hash << 5) - hash);
   }
-  let color = "#";
-  for (let i = 0; i < 3; i++) {
-    const value = (hash >> (i * 8)) & 0xff;
-    color += ("00" + value.toString(16)).substr(-2);
-  }
+  let color = `hsl(${hash % 360}, 84%, 80%)`;
   return color;
 }
 
 type Octet = IntRange<0, 255>;
 type RgbColor = `rgb(${number},${number},${number})`;
 type RgbaColor = `rgba(${number},${number},${number},${number})`;
+type HslColor = `hsl(${number},${number},${number})`;
 type HexColor = `#${string}`;
 
 type Color = {
@@ -199,6 +241,13 @@ function isRgbaColor(color: string): color is RgbaColor {
   }
 }
 
+function isHslColor(color: string): color is HslColor {
+  color = color.toLowerCase();
+  if (color.startsWith("hsl(") && color.endsWith(")") && color.split(",").length === 3) {
+    return true;
+  }
+}
+
 function isHexColor(color: string): color is HexColor {
   return color.toLowerCase().startsWith("#");
 }
@@ -222,8 +271,13 @@ export function rgb(color: string): { r: Octet; g: Octet; b: Octet; a: number } 
     color = namedColors[color.toLowerCase()];
   }
 
+  if (isHslColor(color)) {
+    const parts = color.match(/[\.\d]+/g).map((v) => parseFloat(v));
+    color = hslToRgb(parts[0], parts[1], parts[2]);
+  }
+
   if (isRgbColor(color) || isRgbaColor(color)) {
-    const parts = color.match(/[\.\d]/g).map((v) => parseInt(v, 10));
+    const parts = color.match(/[\.\d]+/g).map((v) => parseInt(v, 10));
     return {
       r: parts[0] as Octet,
       g: parts[1] as Octet,
