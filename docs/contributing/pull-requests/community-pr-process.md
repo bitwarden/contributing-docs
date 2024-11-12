@@ -18,7 +18,7 @@ requests, and why some changes may move more quickly to completion than others.
 ## Product assessment
 
 When your community contribution is received, the first step is for our Product team to evaluate
-whether the change aligns with the vision for the Bitwarden product. This is more relevant for
+whether the change aligns with the vision for the Bitwarden products. This is more relevant for
 feature enhancements than bugs, but it is important for us to assess whether the change conflicts
 with larger upcoming changes on the roadmap or would potentially replace work already on the backlog
 for a team.
@@ -31,7 +31,7 @@ Once Product has signed off on the change, it moves to our Engineering teams.
 ## Engineering assessment
 
 The Engineering team(s) responsible for the change depend largely on what code was changed. We use
-Github code owners to manage the areas in our repositories owned by each team, and the responsible
+GitHub code owners to manage the areas in our repositories owned by each team, and the responsible
 team(s) will be automatically tagged as reviewers on the PR that you raise to merge your changes.
 
 :::tip Assigned reviewers
@@ -42,8 +42,8 @@ team's backlog.
 
 :::
 
-The responsible Engineering teams will review the change and ensure that there are no concerns
-around how the change was implemented. This is generally more applicable for larger sets of changes,
+The responsible Engineering team(s) will review the change and ensure that there are no concerns
+around how the change was implemented; this is generally more applicable for larger sets of changes,
 where the team needs to ensure that the change aligns with the architectural vision for how the code
 should be structured. Community contributors following practices exhibited in the current codebase
 may not be aware of existing tech debt or patterns that are no longer encouraged for new
