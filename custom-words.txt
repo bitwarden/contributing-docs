@@ -49,6 +49,7 @@ passcode
 passwordless
 pinentry
 PNSs
+POSIX
 precompiler
 proxied
 recompositions
@@ -67,6 +68,7 @@ signtool
 signup
 sqlcmd
 struct
+structs
 subfolders
 subprocessor
 toolset
