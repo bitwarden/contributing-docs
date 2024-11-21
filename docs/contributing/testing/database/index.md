@@ -1,6 +1,6 @@
 # Database Integration Testing
 
-Since Bitwarden has multiple database options (4), testing them all automatically is incredibly
+Since Bitwarden has multiple database options, testing them all automatically is incredibly
 important so that we don't have to have a full QA process for each database type. This is where the
 `Infrastructure.IntegrationTest` project comes in, allowing the setup of tests similarly to how the
 databases are consumed in the applications through their common interfaces, generally an
