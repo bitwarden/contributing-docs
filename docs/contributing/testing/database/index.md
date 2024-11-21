@@ -19,11 +19,12 @@ use for MySql, Postgres, and SQLite.
 
 The goal of database tests is to test the business logic that is encapsulated in a given method. If
 the stored procedure in SQL Server then calls another procedure to update the
-`User.AccountRevisionDate` then the same EF implementation should do that as well. By running
-the test against all variants we are ensuring all the variants are feature-equal. Locally, you may
-want to only run the SQL Server tests along with one EF implementation; SQLite is often the easiest in that situation.
-This may work well for a very long time and save you some time overall but there are differences
-between the EF database providers such that you will one day get errors in the CI pipeline.
+`User.AccountRevisionDate` then the same EF implementation should do that as well. By running the
+test against all variants we are ensuring all the variants are feature-equal. Locally, you may want
+to only run the SQL Server tests along with one EF implementation; SQLite is often the easiest in
+that situation. This may work well for a very long time and save you some time overall but there are
+differences between the EF database providers such that you will one day get errors in the CI
+pipeline.
 
 ## Configure the databases
 
