@@ -2,14 +2,14 @@
 
 Since Bitwarden has multiple database options (4), testing them all automatically is incredibly
 important so that we don't have to have a full QA process for each database type. This is where the
-`Infrastructure.IntegrationTest` project comes in, it allows setting up tests similarly to how the
-databases are consumed in the application. Through their common interface, generally an
-`I*Repository`. These tests are automatically ran on all supported databases in our testing
+`Infrastructure.IntegrationTest` project comes in, allowing the setup of tests similarly to how the
+databases are consumed in the applications through their common interfaces, generally an
+`I*Repository`. These tests are automatically executed on all supported databases in our testing
 pipeline.
 
 ## Creating a new test
 
-To create a new database test, just add the `[DatabaseTheory]` and `[DatabaseData]` attributes to
+To create a new database test just add the `[DatabaseTheory]` and `[DatabaseData]` attributes to
 test. Now, in the parameters of the test you are able to "inject" any repository layer services
 directly into the test. The test will run for every database that is
 [configured in the current environment](#configure-the-tests). Since you inject the interface of the
@@ -32,11 +32,11 @@ The databases are expected to have the latest migrations applied to them.
 ## Configure the tests
 
 The tests are configured through
-[.NET Configuration](https://learn.microsoft.com/en-us/dotnet/core/extensions/configuration). In the
-order they are applied, user secrets, environment variables prefixed with `BW_TEST_`, and command
+[.NET Configuration](https://learn.microsoft.com/en-us/dotnet/core/extensions/configuration) in the
+order they are applied: user secrets, environment variables prefixed with `BW_TEST_`, and command
 line args.
 
-```C#
+```csharp
 public class Root
 {
     public Database[] Databases { get; set; }
@@ -52,10 +52,10 @@ public class Database
 ```
 
 The `Type` property is an enum with the supported values being `SqlServer`, `MySql`, `Postgres`, or
-`Sqlite`. The `UseEf` property is only utilized it the `Type` is set to `SqlServer`, by default
-`SqlServer` will be configured with the Dapper repositories but by setting `UseEf` to `true`, it
+`Sqlite`. The `UseEf` property is only utilized if the `Type` is set to `SqlServer`; by default
+`SqlServer` will be configured with the Dapper repositories, however by setting `UseEf` to `true` it
 will be configured with the Entity Framework Core repositories. `Enabled` allows you to easily
-disable one database but not delete the entry, it can be helpful if you are encountering a problem
+disable one database but not delete the entry; it can be helpful if you are encountering a problem
 with just a single database type and want to run the tests just for it instead of for all of them.
 
 ### Locally
@@ -75,7 +75,7 @@ An example entry you might add is:
 }
 ```
 
-You can also configure the tests just like the pipeline, read more below.
+You can also configure the tests just like the pipeline.
 
 ### Pipeline
 
@@ -84,7 +84,7 @@ The database tests have been pre-configured to run on all supported databases in
 ([permalink](https://github.com/bitwarden/server/blob/f7bc5dfb2ea31ca7b4c36238295cdcc4008ad958/.github/workflows/test-database.yml))
 file.
 
-The pipeline uses environment variables, an example entry you might add is:
+The pipeline uses environment variables. An example entry you might add is:
 
 ```bash
 BW_TEST_DATABASES__0__TYPE: SqlServer
