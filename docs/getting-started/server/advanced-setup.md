@@ -46,8 +46,11 @@ subscription.
 
 ## Emails
 
-Docker compose will spin up a local smtp server that can be used, but it’s also possible to use
-other services such as Mailtrap, or Amazon to debug the amazon integration.
+Docker compose will spin up a local smtp server that can be used. Go to `http://localhost:1080` to
+view the email content locally.
+
+It’s also possible to use other services such as Mailtrap, or Amazon to debug the amazon
+integration.
 
 - Amazon Simple Email Service - the user secrets vault item includes a separate attachment called
   `additional-keys-for-cloud-services.json`. Add the `amazon` key to your user secrets to use
