@@ -21,8 +21,8 @@ Before you start, you must complete the [Clients repository setup instructions](
 
     The build commands use
     [Manifest v3](https://developer.chrome.com/docs/extensions/develop/migrate/what-is-mv3) by
-    default. If you are building for Firefox or otherwise need a Manifest v2 build, you should use
-    the command `npm run build:watch:mv2` instead.
+    default. If you are building for a non-Chrome browser like Firefox or Safari, you should use the
+    command `npm run build:watch:<browser client name>` instead.
 
     :::
 
@@ -194,7 +194,7 @@ The easiest way to develop the extension is to build and debug it using Xcode.
 1. Build the extension:
 
    ```bash
-   npm run build:watch:mv2
+   npm run build:watch:safari
    ```
 
 2. Edit `build/manifest.json`. Move the `nativeMessaging` permission from the `optional_permissions`
