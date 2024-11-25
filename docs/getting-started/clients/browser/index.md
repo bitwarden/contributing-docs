@@ -10,21 +10,13 @@ Before you start, you must complete the [Clients repository setup instructions](
 
 ## Build Instructions
 
-1.  Build and run the extension:
+1.  Build and run the extension, this command differs depending on the browser you are building for.
 
     ```bash
     cd apps/browser
-    npm run build:watch
+    # Replace chrome with "edge", "firefox", "opera" or "safari" to build for other browsers.
+    npm run build:watch:chrome
     ```
-
-    :::note
-
-    The build commands use
-    [Manifest v3](https://developer.chrome.com/docs/extensions/develop/migrate/what-is-mv3) by
-    default. If you are building for Firefox or otherwise need a Manifest v2 build, you should use
-    the command `npm run build:watch:mv2` instead.
-
-    :::
 
 2.  Load the unpacked browser extension in your browser using the instructions in the next section.
 
@@ -194,15 +186,11 @@ The easiest way to develop the extension is to build and debug it using Xcode.
 1. Build the extension:
 
    ```bash
-   npm run build:watch:mv2
+   npm run build:watch:safari
    ```
 
-2. Edit `build/manifest.json`. Move the `nativeMessaging` permission from the `optional_permissions`
-   section into the `permissions` section
-3. Edit `build/popup/index.html`, replace `<html class="__BROWSER__">` to
-   `<html class="browser_safari">`.
-4. Open `src/safari/desktop.xcodeproj` in Xcode
-5. Run the "desktop" target.
+2. Open `src/safari/desktop.xcodeproj` in Xcode
+3. Run the "desktop" target.
 
 :::note
 
@@ -213,14 +201,14 @@ not automatically reload.
 
 #### Production build
 
-The other alternative is to use the "proper" build process through gulp. This method doesn't require
-any manual processing of the output since gulp does it for us. However we have to completely rebuild
-the extension for every change, which is slower.
+The other alternative is to use the "proper" build process. This method doesn't require manually
+opening Xcode, however we have to completely rebuild the extension for every change, which is
+slower.
 
 1.  Build the extension for Safari
 
     ```bash
-    npm run dist:safari:dmg
+    npm run dist:safari
     ```
 
 2.  Open Safari and check Settings to confirm that the extension is installed and enabled
