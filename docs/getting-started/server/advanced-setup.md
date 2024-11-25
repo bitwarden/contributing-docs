@@ -46,8 +46,9 @@ subscription.
 
 ## Emails
 
-Docker compose will spin up a local smtp server that can be used. Go to `http://localhost:1080` to
-view the email content locally.
+Docker compose will spin up a local smtp server, Mailcatcher, that can be used. See the
+[Setup Guide](https://contributing.bitwarden.com/getting-started/server/guide/#mailcatcher) for more
+information about Mailcatcher.
 
 It’s also possible to use other services such as Mailtrap, or Amazon to debug the amazon
 integration.
