@@ -7,6 +7,15 @@ on protections for locked vaults.
 
 :::
 
+:::info Note
+
+Bitwarden does not currently support Trusted Execution Environments (TEEs). While TEEs could
+potentially provide a secure processing space for vault data on compromised devices, their use is
+limited by the environments in which Bitwarden operates. For this reason, TEEs are not considered
+when defining what constitutes a fully compromised device.
+
+:::
+
 When hardware or OS-level integrity is fully compromised, vault data may become accessible to
 attackers. While Bitwarden continuously strives to provide robust protections, certain threats fall
 beyond the reach of software-based security measures.
