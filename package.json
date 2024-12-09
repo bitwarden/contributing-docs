@@ -44,7 +44,7 @@
   "devDependencies": {
     "@docusaurus/module-type-aliases": "3.6.3",
     "@docusaurus/tsconfig": "3.6.3",
-    "@types/react": "18.3.12",
+    "@types/react": "18.3.14",
     "cspell": "8.16.1",
     "husky": "9.1.7",
     "lint-staged": "15.2.10",
