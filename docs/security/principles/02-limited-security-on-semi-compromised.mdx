@@ -1,0 +1,17 @@
+# P02 - Limited security for vaults on semi-compromised devices
+
+:::info Note
+
+This principle applies only to unlocked vaults. Refer to [P01](./locked-vault-is-secure) for details
+on protections for locked vaults.
+
+:::
+
+A semi-compromised device is one where malware exists in User Space but has not breached Kernel or
+OS-level protections. On such devices, clients must leverage available protections to prevent
+malware from accessing plaintext vault data while the vault is unlocked.
+
+- **Technical controls** (e.g., data compartmentalization or HSMs): Clients should maximize the use
+  of Kernel/OS-level protections or other available system mechanisms to safeguard vault data.
+- **Administrative controls** (e.g., biometrics, 2FA, approval flows): Clients should balance
+  security and usability, avoiding excessive complexity in the user flow.
