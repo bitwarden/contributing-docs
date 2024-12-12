@@ -59,7 +59,7 @@ The lowest level of the data layer are the "data source" classes. These are the 
 that include data persisted in [Room](https://developer.android.com/jetpack/androidx/releases/room)
 / [SharedPreferences](https://developer.android.com/reference/android/content/SharedPreferences),
 data retrieved from network requests using [Retrofit](https://github.com/square/retrofit), and data
-retrieved via interactions with the [Bitwarden SDK](https://github.com/bitwarden/sdk).
+retrieved via interactions with the [Bitwarden SDK](https://github.com/bitwarden/sdk-internal).
 
 Note that these data sources are constructed in a manner that adheres to a very important principle
 of the app: **that function calls should not throw exceptions** (see the

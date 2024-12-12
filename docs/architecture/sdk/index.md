@@ -17,9 +17,9 @@ internal private items.
 
 ## Architecture
 
-The Bitwarden SDK is structured as a single [Git repository](https://github.com/bitwarden/sdk) with
-multiple internal crates. Please review the `README` in the repository for up to date information
-about the different crates.
+The Bitwarden SDK is structured as a single
+[Git repository](https://github.com/bitwarden/sdk-internal) with multiple internal crates. Please
+review the `README` in the repository for up to date information about the different crates.
 
 We generally strive towards extracting features into separate crates to keep the `bitwarden-core`
 crate as lean as possible. This has multiple benefits such as faster compile-time and clear
@@ -98,9 +98,7 @@ WebAssembly module that can be used in JavaScript / TypeScript. To ensure compat
 browsers that do not support WebAssembly, we also generate a JavaScript module from the WebAssembly
 that can be used as a fallback.
 
-The WebAssembly module is published on [npm](https://www.npmjs.com/package/@bitwarden/sdk-wasm) and
-prerelease builds are published on
-[GitHub Packages](https://github.com/bitwarden/sdk/pkgs/npm/sdk-wasm).
+The WebAssembly module is published on [npm](https://www.npmjs.com/package/@bitwarden/sdk-internal).
 
 ### C bindings
 
