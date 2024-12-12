@@ -60,7 +60,7 @@ data sources as well as higher-level "repository" and "service" classes.
 The lowest level of the core layer are the data model objects. These are the raw sources of data
 that include data retrieved or sent via network requests, data persisted with
 [CoreData](https://developer.apple.com/documentation/coredata/), and data that is used to interact
-with the [Bitwarden SDK](https://github.com/bitwarden/sdk).
+with the [Bitwarden SDK](https://github.com/bitwarden/sdk-internal).
 
 The models are roughly organized based on their use and type:
 

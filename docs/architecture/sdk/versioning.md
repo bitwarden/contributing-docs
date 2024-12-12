@@ -10,7 +10,9 @@ There may be certain functionality that is actively being developed and is not y
 cases, they should be marked as such and gated behind a `unstable` feature flag. Consuming client
 applications should avoid merging changes that depend on these features into `main`.
 
-To track breaking changes, we use a [changelog file in the `bitwarden` crate][changelog]. This file
-should be updated with noteworthy changes for each PR.
+## Public APIs
 
-[changelog]: https://github.com/bitwarden/sdk/blob/main/crates/bitwarden/CHANGELOG.md
+To track breaking changes to the public APIs for Secrets Manager, we use a [changelog file in the
+`bitwarden` crate][changelog]. This file should be updated with noteworthy changes.
+
+[changelog]: https://github.com/bitwarden/sdk-sm/blob/main/crates/bitwarden/CHANGELOG.md
