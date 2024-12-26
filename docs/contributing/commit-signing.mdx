@@ -21,22 +21,13 @@ their commits.
 
 ## Setting up commit signing
 
-Github supports commit signing with GPG, SSH and S/MIME. If you're unsure what to use, we recommend
-SSH.
-
-1.  Follow the [Github documentation][github-verification] to configure commit signing
-
-2.  Configure your preferred git tool below
-
-3.  Push a test commit to Github and ensure that the "Verified" badge appears next to the commit
-    description:
-
-    ![Image showing the Verified badge in Github](./commit-signing.png)
+Github supports commit signing with GPG, SSH and S/MIME.
 
 :::tip
 
-We recommend you create a new commit signing key instead of reusing your Github authentication key,
-and that you protect the key with a strong passphrase or password.
+If you're unsure what to use, we recommend SSH. Create a new commit signing key instead of reusing
+your Github authentication key. Remember to protect the key with a
+[strong passphrase or password](password-generation).
 
 ```bash
 EMAIL=your.commit.email@example.com
@@ -49,6 +40,15 @@ git config --global user.signingkey=~/.ssh/bw-signing.pub
 (Remove the `--global` flags to only apply this setting to the current repository)
 
 :::
+
+1.  Follow the [Github documentation][github-verification] to configure commit signing
+
+2.  Configure your preferred git tool below
+
+3.  Push a test commit to Github and ensure that the "Verified" badge appears next to the commit
+    description:
+
+    ![Image showing the Verified badge in Github](./commit-signing.png)
 
 ### Command Line
 
@@ -103,5 +103,6 @@ Refer to
   [this troubleshooting document](https://gist.github.com/paolocarrasco/18ca8fe6e63490ae1be23e84a7039374)
   for more help with this error
 
+[password-generation]: https://bitwarden.com/help/generator/#password-types
 [github-verification]:
   https://docs.github.com/en/authentication/managing-commit-signature-verification/about-commit-signature-verification
