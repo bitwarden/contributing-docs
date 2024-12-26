@@ -22,33 +22,31 @@ their commits.
 ## Setting up commit signing
 
 Github supports commit signing with GPG, SSH and S/MIME. If you're unsure what to use, we recommend
-GPG.
+SSH.
 
-1.  Install GnuPG:
+1.  Follow the [Github documentation][github-verification] to configure commit signing
 
-  <Tabs groupId="os">
+2.  Configure your preferred git tool below
 
-    <TabItem value="mac" label="macOS">
-
-    ```bash
-    brew install gnupg
-    echo "export GPG_TTY=$(tty)" >> ~/.zshrc
-    ```
-
-    Restart your open terminal for this to take effect
-
-    </TabItem>
-
-  </Tabs>
-
-2.  Follow the [Github documentation][github-verification] to configure commit signing
-
-3.  Configure your preferred git tool below
-
-4.  Push a test commit to Github and ensure that the "Verified" badge appears next to the commit
+3.  Push a test commit to Github and ensure that the "Verified" badge appears next to the commit
     description:
 
     ![Image showing the Verified badge in Github](./commit-signing.png)
+
+:::tip
+
+We recommend you create a new commit signing key instead of reusing your Github authentication key,
+and that you protect the key with a strong passphrase or password.
+
+```bash
+EMAIL=your.commit.email@example.com
+ssh-keygen -f ~/.ssh/bw-signing -C "$EMAIL" -t ed25519
+git.config --global user.email "$EMAIL"
+git config --global gpg.format=ssh
+git config --global user.signingkey=~/.ssh/bw-signing.pub
+```
+
+(Remove the `--global` flags to only apply this setting to the current repository) :::
 
 ### Command Line
 
@@ -58,10 +56,11 @@ GPG.
   git commit -S
   ```
 
-- To avoid using the `-S` flag every time, you can sign all commits by default:
+- To avoid using the `-S` flag every time, you can sign all commits and tags by default:
 
   ```bash
   git config --global commit.gpgSign true
+  git config --global tag.gpgSign true
   ```
 
   (Remove the `--global` flag to only apply this setting to the current repository)
