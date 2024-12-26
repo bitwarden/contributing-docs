@@ -25,30 +25,32 @@ Github supports commit signing with GPG, SSH and S/MIME.
 
 :::tip
 
-If you're unsure what to use, we recommend SSH. Create a new commit signing key instead of reusing
-your Github authentication key. Remember to protect the key with a [strong passphrase or
-password][password-generation].
+If you're unsure what to use, we recommend you create a commit signing key using SSH. Remember to
+protect the key with a [strong passphrase or password][password-generation].
 
 ```bash
-EMAIL=your.commit.email@example.com
-ssh-keygen -f ~/.ssh/bw-signing -C "$EMAIL" -t ed25519
-git.config --global user.email "$EMAIL"
-git config --global gpg.format=ssh
-git config --global user.signingkey=~/.ssh/bw-signing.pub
+ssh-keygen -f ~/.ssh/bw-signing -C "$(git config --get user.email)" -t ed25519
 ```
-
-(Remove the `--global` flags to only apply this setting to the current repository)
 
 :::
 
-1.  Follow the [Github documentation][github-verification] to configure commit signing
+### Configuration
 
-2.  Configure your preferred git tool below
+1. Configure git to sign using SSH.
 
-3.  Push a test commit to Github and ensure that the "Verified" badge appears next to the commit
-    description:
+   ```bash
+   git config --global gpg.format=ssh
+   git config --global user.signingkey=~/.ssh/bw-signing.pub
+   ```
 
-    ![Image showing the Verified badge in Github](./commit-signing.png)
+2. Follow the [Github documentation][github-verification] to configure commit signing
+
+3. Configure your preferred git tool below
+
+4. Push a test commit to Github and ensure that the "Verified" badge appears next to the commit
+   description:
+
+   ![Image showing the Verified badge in Github](./commit-signing.png)
 
 ### Command Line
 
