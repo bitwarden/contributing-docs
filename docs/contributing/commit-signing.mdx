@@ -29,7 +29,9 @@ If you're unsure what to use, we recommend you create a commit signing key using
 protect the key with a [strong passphrase or password][password-generation].
 
 ```bash
-ssh-keygen -f ~/.ssh/bw-signing -C "$(git config --get user.email)" -t ed25519
+# path to save your private signing key
+KEY_FILE=~/.ssh/bw-signing
+ssh-keygen -f $KEY_FILE -C "$(git config --global --get user.email)" -t ed25519
 ```
 
 :::
@@ -40,7 +42,7 @@ ssh-keygen -f ~/.ssh/bw-signing -C "$(git config --get user.email)" -t ed25519
 
    ```bash
    git config --global gpg.format=ssh
-   git config --global user.signingkey=~/.ssh/bw-signing.pub
+   git config --global user.signingkey="${KEY_FILE}.pub"
    ```
 
 2. Follow the [Github documentation][github-verification] to configure commit signing
