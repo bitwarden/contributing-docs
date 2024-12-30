@@ -43,8 +43,6 @@ ssh-keygen -f ~/.ssh/bw-signing -C "$(git config --get user.email)" -t ed25519
    git config --global user.signingkey=~/.ssh/bw-signing.pub
    ```
 
-   (Remove the `--global` flag to only apply this setting to the current repository.)
-
 2. Follow the [Github documentation][github-verification] to configure commit signing
 
 3. Configure your preferred git tool below
@@ -68,8 +66,6 @@ ssh-keygen -f ~/.ssh/bw-signing -C "$(git config --get user.email)" -t ed25519
   git config --global commit.gpgSign true
   git config --global tag.gpgSign true
   ```
-
-  (Remove the `--global` flag to only apply this setting to the current repository.)
 
 ### Visual Studio Code
 
