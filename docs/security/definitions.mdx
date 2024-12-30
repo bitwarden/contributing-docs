@@ -1,0 +1,131 @@
+---
+sidebar_position: 2
+---
+
+# Definitions
+
+<dl>
+  <dt>Vault data</dt>
+  <dd>
+    The collection of a user's private information that they choose to store securely within Bitwarden's secure environment.
+    This typically includes highly sensitive data such as:
+
+      - **Passwords**: Credentials for various websites, applications, and services.
+      - **Usernames**: Associated usernames for accounts.
+      - **Secure Notes**: Encrypted notes containing sensitive information that the user wants to keep
+        secure.
+      - **Credit Card Information**: Payment card details like card number, expiration date, CVV, etc.
+      - **Identities**: Personal information such as names, addresses, phone numbers, and email addresses
+        that can be used to autofill forms.
+      - **Attachments**: Any files uploaded by the user to be stored securely within the vault.
+
+    Vault data may also refer to less sensitive data such as metadata:
+
+      - **Last Updated**: The last time an item was updated.
+      - **Created Date**: The date an item was created.
+
+  </dd>
+  <dt>User</dt>
+  <dd>
+    An individual who uses Bitwarden to store, manage, and access vault data.
+  </dd>
+  <dt>Client</dt>
+  <dd>
+    The software application that the User interacts with to access their vault data. This includes
+    the official Bitwarden web vault, desktop applications, mobile applications, browser extensions, and any
+    other software provided by Bitwarden that interacts with the Bitwarden server to access or manage vault data.
+  </dd>
+  <dt>Protected data</dt>
+  <dd>
+    Data stored in a format that is unreadable without additional information. Usually synonymous to
+    encrypted, but with additional expectations about how the key is stored. Encrypted data which is
+    stored together with its decryption key in plain text is not considered to be protected, even
+    thought it is encrypted.
+  </dd>
+  <dt>Communication channel</dt>
+  <dd>
+    A medium through which two or more entities, such as processes,
+applications, or systems, exchange data or messages. This can include communication between
+components on the same machine, such as inter-process communication (IPC), or over a network, such
+as between a client and a server. Common types of communication channels include sockets, APIs,
+message queues, shared memory, and HTTP connections.
+  </dd>
+  <dt>Secure channel</dt>
+  <dd>
+    A communication channel that provides confidentiality and integrity for the data transmitted
+    between two or more parties.
+
+    - **Confidentiality**: The data is unreadable to unauthorized
+    parties, typically using encryption.
+    - **Integrity**: The data cannot be altered or tampered with
+    without detection during transmission.
+
+  </dd>
+  <dt>Trusted channel</dt>
+  <dd>
+    A secure channel that also provides authenticity.
+
+    - **Authenticity**: The identities of the
+    communicating parties are verified, ensuring that data is exchanged only between the intended
+    parties.
+
+  </dd>
+  <dt>Partially trusted channel</dt>
+  <dd>
+    A communication channel where trust is asymmetrical, meaning only some of the parties trust the
+    channel. One party may have verified the other(s) and thus trusts the channel, while the other
+    party or parties may not have done so, making the channel trusted by one party but untrusted by
+    the other(s).
+  </dd>
+  <dt>Fully trusted Channel</dt>
+  <dd>
+    A communication channel where all parties have verified each other’s identities. This means the
+    channel provides confidentiality, integrity, and authenticity, ensuring that the data is secure,
+    unaltered, and exchanged only between the trusted parties.
+  </dd>
+  <dt>Data at rest</dt>
+  <dd>
+    Any data that is stored on a device or medium that is not actively being used, processed, or
+    transmitted. This includes (but is not limited to) data stored on disk on the users devices, or on
+    disk on the server side.
+  </dd>
+  <dt>Data in use</dt>
+  <dd>
+    Any data that is actively being used, processed or accessed. This includes (but is not limited to) data that is
+    temporarily held in volatile memory (like RAM) for quick access, computation, or rendering.
+  </dd>
+  <dt>Data in transit</dt>
+  <dd>
+    Data that is actively being transferred from one location to another, such as between memory locations, processes,
+    or between devices across a network.
+  </dd>
+  <dt>Data sharing</dt>
+  <dd>
+    The controlled process in which data leaves the Bitwarden secure environment unprotected. As a consequence the
+    guarantees made by this document will no longer apply. The receiving party may or may not have its own guarantees.
+  </dd>
+  <dt>Data leaking</dt>
+  <dd>
+    The process in which data unintentionally leaves the Bitwarden secure environment unprotected.
+  </dd>
+  <dt>Informed and explicit consent</dt>
+  <dd>
+    The process by which the User is provided with all relevant information regarding an action, understands it, and
+    agrees to the terms in a clear and unmistakable way.
+
+    - **Informed**: The person giving consent must have all necessary information to understand what they are agreeing to.
+      All or parts of the information may be assumed to be implicitly provided/understood by the context in which the user
+      is giving consent. This includes:
+      - **Purpose**: A clear explanation of what the consent is for, such as how their data will be used or what actions will be taken.
+      - **Risks and Benefits**: Disclosure of any potential risks, benefits, or consequences associated with their consent.
+      - **Alternatives**: Information about any alternatives to consenting and what happens if they choose not to consent.
+      - **Rights**: A description of their rights, such as the right to withdraw consent at any time without penalty.
+    - **Explicit consent**: Consent must be given clearly and unambiguously, typically through a direct and affirmative action,
+      such as clicking "I agree" or a similar action.
+
+  </dd>
+  <dt>Certify</dt>
+  <dd>Officially recognize (someone or something) as possessing certain qualifications or meeting certain standards.</dd>
+  <dt>Bitwarden secure environment</dt>
+  <dd>Any process or application that adheres to the "Security" section is treated as "within the Bitwarden secure environment".</dd>
+</dl>

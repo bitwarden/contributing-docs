@@ -1,0 +1,21 @@
+# P01 - A locked vault is secure
+
+Clients must ensure that highly sensitive vault data cannot be accessed in plain text once the vault
+has been locked, even if the device becomes compromised after the lock occurs. Protections are not
+guaranteed if the device is compromised before the vault is locked.
+
+## Technical Considerations
+
+Achieving this principle depends on the limitations of the platform and environment. For instance,
+in environments like JavaScript, where memory management is not fully under the control of the
+client, there may be residual plaintext in memory after the vault is locked. While ideal protection
+cannot be guaranteed in such cases, efforts must be made to minimize these risks through techniques
+such as clearing memory buffers and leveraging platform security features when available.
+
+## Key storage mechanisms must provide adequate protection
+
+Mechanisms used for storing encryption keys when the vault is locked, such as PINs or auto-login,
+must provide an appropriate level of security. If encryption keys are stored in less secure
+environments (e.g. in the OS's keyring), the associated risks must be carefully considered and
+mitigated to ensure that unauthorized access to the vault remains limited, even when convenience
+features are used.
