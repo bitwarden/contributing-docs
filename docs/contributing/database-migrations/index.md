@@ -39,9 +39,20 @@ required.
 
 #### Backwards compatible migration
 
-1. Modify the source `.sql` files in `src/Sql/dbo`.
-2. Write a migration script, and place it in `util/Migrator/DbScripts`. Each script must be prefixed
-   with the current date.
+1. **Modify the source `.sql` files in `src/Sql/dbo`:**
+
+   This directory contains the current representation of the Bitwarden database structure. Any
+   changes here are meant to reflect the intended state of the database schema. Keeping this
+   directory updated ensures that the source of truth for the database structure is accurate and
+   up-to-date.
+
+2. **Write a migration script, and place it in `util/Migrator/DbScripts`:**
+
+   This directory is used for storing migration scripts that will be executed to transition the
+   database from its current state to the new state as defined in `src/Sql/dbo`. Each script must be
+   prefixed with the current date to ensure they are run in the correct order. These scripts are
+   essential for applying the changes incrementally and maintaining backwards compatibility during
+   the transition phase.
 
 #### Non-backwards compatible migration
 
