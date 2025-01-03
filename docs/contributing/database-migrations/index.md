@@ -54,6 +54,13 @@ required.
      compatible with the changes to DbScripts. In order to achieve this we only keep a single
      migration, which executes all backwards incompatible schema changes.
 
+> **Note on creating migrations:** The separate database definitions in src/Sql/.../dbo serve as a
+> "master" reference for the intended and final state of the database at that time. This is crucial
+> because this state of files at the current moment may differ from when a migration was added in
+> the past. These definitions act as a lint and validation step to ensure that migrations work as
+> expected, and the separation helps maintain clarity and accuracy in the database schema management
+> and synchronization processes.
+
 ### EF migrations
 
 If you alter the database schema, you must create an EF migration script to ensure that EF databases
