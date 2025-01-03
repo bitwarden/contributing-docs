@@ -39,20 +39,9 @@ required.
 
 #### Backwards compatible migration
 
-1. **Modify the source `.sql` files in `src/Sql/dbo`:**
-
-   This directory contains the current representation of the Bitwarden database structure. Any
-   changes here are meant to reflect the intended state of the database schema. Keeping this
-   directory updated ensures that the source of truth for the database structure is accurate and
-   up-to-date.
-
-2. **Write a migration script, and place it in `util/Migrator/DbScripts`:**
-
-   This directory is used for storing migration scripts that will be executed to transition the
-   database from its current state to the new state as defined in `src/Sql/dbo`. Each script must be
-   prefixed with the current date to ensure they are run in the correct order. These scripts are
-   essential for applying the changes incrementally and maintaining backwards compatibility during
-   the transition phase.
+1. Modify the source `.sql` files in `src/Sql/dbo`.
+2. Write a migration script, and place it in `util/Migrator/DbScripts`. Each script must be prefixed
+   with the current date.
 
 #### Non-backwards compatible migration
 
@@ -64,6 +53,13 @@ required.
      DbScripts_finalization can be run out of order, care must be taken to ensure they remain
      compatible with the changes to DbScripts. In order to achieve this we only keep a single
      migration, which executes all backwards incompatible schema changes.
+
+> **Note on creating migrations:** The separate database definitions in src/Sql/.../dbo serve as a
+> "master" reference for the intended and final state of the database at that time. This is crucial
+> because this state of files at the current moment may differ from when a migration was added in
+> the past. These definitions act as a lint and validation step to ensure that migrations work as
+> expected, and the separation helps maintain clarity and accuracy in the database schema management
+> and synchronization processes.
 
 ### EF migrations
 
