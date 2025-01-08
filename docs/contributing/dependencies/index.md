@@ -31,6 +31,12 @@ For major upgrades the team is responsible for coordinating the upgrade with the
 
 Examples of shared repositories are [`server`][server] and [`clients`][clients].
 
+#### Adding a dependency to a shared repository
+
+When adding a new dependency to a shared repository it MUST be owned by a team. It's up to the
+engineer adding the dependency to determine the appropriate team and get their approval for the
+addition before merging the PR.
+
 ## Example PR
 
 <figure>
