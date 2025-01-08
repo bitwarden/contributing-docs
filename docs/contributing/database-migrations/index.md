@@ -29,11 +29,18 @@ Style][code-style-sql] first, since they have a major impact in how we write mig
 
 :::info
 
-The separate database definitions in src/Sql/.../dbo serve as a "master" reference for the intended
-and final state of the database at that time. This is crucial because this state of files at the
-current moment may differ from when a migration was added in the past. These definitions act as a
-lint and validation step to ensure that migrations work as expected, and the separation helps
+The separate database definitions in `src/Sql/.../dbo` serve as a "master" reference for the
+intended and final state of the database at that time. This is crucial because this state of files
+at the current moment may differ from when a migration was added in the past. These definitions act
+as a lint and validation step to ensure that migrations work as expected, and the separation helps
 maintain clarity and accuracy in the database schema management and synchronization processes.
+
+Additionally, `src/Server` is a regular `sqlproj` as described in the
+[SQL Database Project Extension SDK Style Projects](https://learn.microsoft.com/en-us/azure-data-studio/extensions/sql-database-project-extension-sdk-style-projects).
+However, instead of using the auto-generated migrations from DAC, as detailed in
+[Data-tier Applications](https://learn.microsoft.com/en-us/sql/relational-databases/data-tier-applications/data-tier-applications?view=sql-server-ver16),
+we manually write migrations. This approach is chosen to enhance performance and prevent accidental
+data loss. This is why there are both a `sqlproj` and standalone migrations.
 
 :::
 
