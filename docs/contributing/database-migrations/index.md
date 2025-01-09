@@ -36,12 +36,12 @@ definitions act as a lint and validation step to ensure that migrations work as 
 separation helps maintain clarity and accuracy in database schema management and synchronization
 processes.
 
-Additionally, an
+Additionally, a
 [SQL database project](https://learn.microsoft.com/en-us/azure-data-studio/extensions/sql-database-project-extension-sdk-style-projects)
 is in place; however, instead of using the auto-generated migrations from
 [DAC](https://learn.microsoft.com/en-us/sql/relational-databases/data-tier-applications/data-tier-applications?view=sql-server-ver16),
 we manually write migrations. This approach is chosen to enhance performance and prevent accidental
-data loss, which is why we have both an `sqlproj` and standalone migrations.
+data loss, which is why we have both a `sqlproj` and standalone migrations.
 
 :::
 
