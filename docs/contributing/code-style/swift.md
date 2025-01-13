@@ -20,6 +20,27 @@ useful starting point.
 In this document, "class" will be used to mean more generally classes, structs, actors, enums, and
 protocols as things apply in each case.
 
+## Xcode
+
+Xcode has several settings that can be helpful for code formatting. In particular, under Settings ->
+Text Editing -> Editing:
+
+- You can update "Reformat code at column" and turn on "Show reformatting guide" to have a visual
+  notation of 120 characters per line.
+- You can turn on "Automatically trim trailing whitespace" and "Including whitespace-only lines".
+
+On Settings -> Text Editing -> Indentation:
+
+- We "Prefer indent using" spaces.
+- We prefer both "Tab width" and "Indent width" to be 4 spaces.
+- We do _not_ "Indent switch/case labels" in "Swift", but we do in "C/Objective-C/C++".
+
+As well, Xcode has several useful hotkeys for formatting:
+
+- `Control`+`I` will re-indent all selected lines, or the line the cursor is currently on.
+- `Control`+`M` will break a comma-separated list of parameters or array members into separate lines
+  per member.
+
 ## MARK comments
 
 We use
