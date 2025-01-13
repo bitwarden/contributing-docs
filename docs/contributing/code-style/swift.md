@@ -80,11 +80,11 @@ class ClassName {
 - We generally follow the recommendations for
   [Symbol Documentation in Source Files](https://www.swift.org/documentation/docc/writing-symbol-documentation-in-your-source-files).
 - Each class should have a documentation comment indicating what the class does.
-- Each member of a class should have a documentation comment.
-  - We do not typically do this for `DefaultThing` members that conform to a `Thing` protocol in the
-    same file; the documentation comment on the protocol method is sufficient. However, private
-    properties/methods or other properties/methods not for conformance of `Thing` inside of
-    `DefaultThing` should still have documentation comments.
+- Each symbol within a class should have a documentation comment.
+  - We do not typically do this for `DefaultThing` properties or methods that conform to a `Thing`
+    protocol in the same file; the documentation comment on that property or method in the protocol
+    is sufficient. However, private properties/methods or other properties/methods not for
+    conformance of `Thing` inside of `DefaultThing` should still have documentation comments.
 - Method documentation comments also include a list of parameters and documentation on the return
   value.
 
