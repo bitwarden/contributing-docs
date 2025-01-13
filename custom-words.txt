@@ -13,6 +13,8 @@ codebases
 CODEOWNERS
 CQRS
 CTAP2
+deinitializer
+deinitializers
 dockerized
 dotfile
 F-Droid
@@ -23,6 +25,7 @@ hotfixed
 hotfixes
 iframes
 inet
+initialisms
 IntelliJ
 Iterm
 Jetpack
