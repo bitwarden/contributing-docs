@@ -27,6 +27,7 @@ We use
 extensively in the codebase.
 
 - Before each class definition, we use a MARK comment with a divider to denote the class.
+  - This is optional if there is only one class in the file.
 - Within each class definition, we use MARK comments to mark out the different sections of the file.
   This is the SwiftLint-enforced order:
   - Cases
