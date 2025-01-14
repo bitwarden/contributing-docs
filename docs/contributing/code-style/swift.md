@@ -145,3 +145,10 @@ class ClassName {
   methods without side effects, these should be verb phrases.
 - We prefer "Tapped" instead of "Pressed", "Touched", or "Clicked" when describing buttons or other
   screen elements being tapped, in line with Apple calling this a tap gesture.
+
+## File Names
+
+- Swift files are named per Swift convention of CamelCase of the primary class name in the file.
+- Unless there is an overriding convention—such as with a `Fastfile`—supporting files such a YAML
+  configuration file or script is named in lowercase with hyphens in place of spaces; this is
+  sometimes referred to as kebab-case.
