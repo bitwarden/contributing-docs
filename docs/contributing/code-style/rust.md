@@ -14,19 +14,19 @@ will generally allow you to write more idiomatic Rust code.
 
 ## Avoid panics
 
-Panics are forbidden in the Bitwarden codebase outside of tests. Errors should be handled gracefully
-and returned to the caller. `clippy` will forbid you from using `unwrap`. While `expect` is allowed,
-it should be used sparingly and should always provide a helpful message indicating why it can never
-occur.
+Panics are highly discouraged in the Bitwarden codebase outside of tests. Errors should be handled
+gracefully and returned to the caller. `clippy` will forbid you from using `unwrap`. While `expect`
+is allowed, it should be used sparingly and should always provide a helpful message indicating why
+it can never occur.
 
 Some scenarios where `expect` are allowed are:
 
-- Calling libraries that guarantee that the allowed inputs never results in Err or None.
+- Calling libraries that guarantee that the allowed inputs never results in `Err` or `None`.
 - Operating on slices or arrays where the index is guaranteed to be within bounds.
 
 ## Discourage match
 
-Rust often provide good alternatives to doing match on `Option`s and `Result`s.
+Rust often provide good alternatives to doing match on `Option` and `Result`.
 
 ### if let
 
@@ -49,8 +49,7 @@ if let Ok(value) = result {
 ### Options
 
 We use `clippy` to enforce general guidelines for working with
-[`Option`](https://doc.rust-lang.org/std/option/enum.Option.html)s. Generally reach for methods
-like:
+[`Option`](https://doc.rust-lang.org/std/option/enum.Option.html). Generally reach for methods like:
 
 #### map
 
@@ -120,7 +119,7 @@ foo.ok_or("error");
 
 ### Results
 
-When working on [`Result`](https://doc.rust-lang.org/std/result/enum.Result.html)s it might be
+When working with [`Result`](https://doc.rust-lang.org/std/result/enum.Result.html) it might be
 tempting to use match to get the value out of the result. Instead, use the `?` operator to propagate
 the error.
 
