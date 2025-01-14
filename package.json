@@ -32,8 +32,8 @@
     "spellcheck": "cspell lint \"**/*.md{x,}\""
   },
   "dependencies": {
-    "@docusaurus/core": "3.6.3",
-    "@docusaurus/preset-classic": "3.6.3",
+    "@docusaurus/core": "3.7.0",
+    "@docusaurus/preset-classic": "3.7.0",
     "@mdx-js/react": "3.1.0",
     "docusaurus-lunr-search": "3.5.0",
     "prism-react-renderer": "2.4.1",
@@ -42,8 +42,8 @@
     "remark-kroki": "0.3.7"
   },
   "devDependencies": {
-    "@docusaurus/module-type-aliases": "3.6.3",
-    "@docusaurus/tsconfig": "3.6.3",
+    "@docusaurus/module-type-aliases": "3.7.0",
+    "@docusaurus/tsconfig": "3.7.0",
     "@types/react": "18.3.18",
     "cspell": "8.17.1",
     "husky": "9.1.7",
