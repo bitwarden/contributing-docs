@@ -196,47 +196,36 @@ If you would like to verify that everything worked correctly:
 
 ## Testing EF Changes
 
-In your `server/dev/secrets.json` file find these two blocks of secrets:
+In your `server/dev/secrets.json` file find or add this block of secrets in the root of the json structure:
 
-- This block is used for your primary Bitwarden database for each supported provider type. These are
-  what your running development server will connect to. You should already have passwords set up in
-  this block.
-  - If you do: ensure the username/password combos for each of your global database types are
-    applied to their siblings in the `databases` block.
-  - If you do not: please see the user secrets section of the server setup guide for doing this.
-  ```
-  "sqlServer": {
-    "connectionString": "Server=localhost;Database=vault_dev;User Id=SA;Password=___________;Encrypt=True;TrustServerCertificate=True;"
-  },
-  "postgreSql": {
-    "connectionString": "Host=localhost;Username=postgres;Password=_________;Database=vault_dev"
-  },
-  "mySql": {
-    "connectionString": "server=localhost;uid=root;pwd=_________;database=vault_dev"
-  },
-  "sqlite": {
-    "connectionString": "Data Source=/path/to/bitwardenServer/repository/server/dev/db/bitwarden.sqlite"
-  },
-  ```
-- This block is used for test databases for each supported provider type. These are what integration
-  tests will connect to. You should update the password for these connection strings to match your
-  existing databases if you have not already. If these settings are not present at all in your
-  `secrets.json` file just add them to the bottom. These settings _do not_ go in `globalSettings`.
-  Then run `pwsh setup_secrets.ps1 -clear` to apply them to your local projects.
-  ```
-  "databases:0:type": "Postgres",
-  "databases:0:connectionString": "Host=localhost;Username=postgres;Password=_________;Database=ef_test",
-  "databases:0:enabled": "true",
-  "databases:1:type": "Sqlite",
-  "databases:1:enabled": "true",
-  "databases:1:connectionString": "Data Source=_________",
-  "databases:2:type": "MySql",
-  "databases:2:connectionString": "server=localhost;uid=root;pwd=_________;database=ef_test",
-  "databases:2:enabled": "true",
-  "databases:3:type": "SqlServer",
-  "databases:3:connectionString": "Server=localhost;Database=ef_test;User Id=SA;Password=_________;Encrypt=True;TrustServerCertificate=True;",
-  "databases:3:enabled": "true"
-  ```
+```
+"databases:0:type": "Postgres",
+"databases:0:connectionString": "Host=localhost;Username=postgres;Password=_________;Database=ef_test",
+"databases:0:enabled": "true",
+"databases:1:type": "Sqlite",
+"databases:1:enabled": "true",
+"databases:1:connectionString": "Data Source=_________",
+"databases:2:type": "MySql",
+"databases:2:connectionString": "server=localhost;uid=root;pwd=_________;database=ef_test",
+"databases:2:enabled": "true",
+"databases:3:type": "SqlServer",
+"databases:3:connectionString": "Server=localhost;Database=ef_test;User Id=SA;Password=_________;Encrypt=True;TrustServerCertificate=True;",
+"databases:3:enabled": "true"
+```
+
+:::info
+
+The example database indexe + type combinations are required for the tooling
+to work, and to support multiple versions of the same database running tests
+at the same time.
+
+:::
+
+This block is used for test databases for each supported provider type. These are what integration
+tests will connect to. You should update the password for these connection strings to match your
+existing databases if you have not already. If these settings are not present at all in your
+`secrets.json` file just add them to the bottom. These settings _do not_ go in `globalSettings`.
+Then run `pwsh setup_secrets.ps1 -clear` to apply them to your local projects.
 
 With connection strings applied to your projects: ensure your databases are all migrated using
 `pwsh server/dev/migrate.ps1 --all`. Then you can run EF tests from the
