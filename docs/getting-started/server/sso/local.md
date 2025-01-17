@@ -15,6 +15,9 @@ This uses
 
 2.  Local web client running.
 
+3.  An enterprise account created with the testing credit card located here:
+    [Advanced Server Setup](../advanced-setup.md).
+
 ## Configure IdP
 
 1.  Open your local web client and navigate to your organization → Settings → Single Sign-On.
