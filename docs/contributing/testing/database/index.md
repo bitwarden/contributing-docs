@@ -61,9 +61,9 @@ with just a single database type and want to run the tests just for it instead o
 
 ### Locally
 
-To set the tests up locally you may want to add the configuration to your `server/dev/secrets.json` file.
-You may have already done this during setup and can just run the tests with `dotnet test`. If not,
-please refer to
+To set the tests up locally you may want to add the configuration to your `server/dev/secrets.json`
+file. You may have already done this during setup and can just run the tests with `dotnet test`. If
+not, please refer to
 [the getting started guide](/getting-started/server/database/ef/#testing-ef-changes).
 
 You can also configure the tests just like the pipeline.
