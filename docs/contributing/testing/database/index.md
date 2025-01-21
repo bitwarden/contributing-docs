@@ -72,7 +72,6 @@ You can also configure the tests just like the pipeline.
 
 The database tests have been pre-configured to run on all supported databases in the
 [`test-database.yml`](https://github.com/bitwarden/server/blob/main/.github/workflows/test-database.yml)
-([permalink](https://github.com/bitwarden/server/blob/f7bc5dfb2ea31ca7b4c36238295cdcc4008ad958/.github/workflows/test-database.yml))
 file.
 
 The pipeline uses environment variables. An example entry you might add is:
