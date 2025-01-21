@@ -12,7 +12,7 @@ With this information available we decided to utilize the [High Availibility Rep
 
 ## Vision
 
-More read-only capabilities should be used. Especially after stored procedures have been tuned and there are prominent performance bottlenecks relating to read-only queries. 
+More read-only capabilities should be used in conjunction with read-only replicas. Especially after stored procedures have been tuned and there are prominent performance bottlenecks relating to read-only queries. 
 
 
 ## Usage
