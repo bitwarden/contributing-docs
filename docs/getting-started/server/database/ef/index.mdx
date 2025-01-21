@@ -224,7 +224,7 @@ multiple versions of the same database running tests at the same time.
 This block is used for test databases for each supported provider type. These are what integration
 tests will connect to. You should update the password for these connection strings to match your
 existing databases if you have not already. If these settings are not present at all in your
-`secrets.json` file just add them to the bottom. These settings _do not_ go in `globalSettings`.
+`server/dev/secrets.json` file just add them to the bottom. These settings _do not_ go in `globalSettings`.
 Then run `pwsh setup_secrets.ps1 -clear` to apply them to your local projects.
 
 With connection strings applied to your projects: ensure your databases are all migrated using
