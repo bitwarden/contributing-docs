@@ -16,7 +16,7 @@ the fallback mechanism, which meant it was using the default connection string t
 primary DB.
 
 With this information available we decided to utilize the
-[High Availibility Replica](https://learn.microsoft.com/en-us/azure/azure-sql/database/service-tier-hyperscale-replicas?view=azuresql#high-availability-replica)
+[High Availability Replica](https://learn.microsoft.com/en-us/azure/azure-sql/database/service-tier-hyperscale-replicas?view=azuresql#high-availability-replica)
 that was available to use. This allowed Bitwarden to double the max worker limit (along with
 compute, memory, network throughput) without needing to scale up the primary database. The HA
 replica replicates the primary instance by mirroring the transaction log records.
@@ -39,7 +39,7 @@ We currently use the read-only replica in two areas
 
 - [CAP Theorem](https://en.wikipedia.org/wiki/CAP_theorem) applies here. Microsoft does not
   guarantee data consistency and
-  [propoagation latency](https://learn.microsoft.com/en-us/azure/azure-sql/database/read-scale-out?view=azuresql#data-consistency)
+  [propagation latency](https://learn.microsoft.com/en-us/azure/azure-sql/database/read-scale-out?view=azuresql#data-consistency)
   could vary greatly. For business logic that need consistency, read-only replicas are not a viable
   solution.
 - Lack of observability - Currently there is limited visibility into query performance metrics as
