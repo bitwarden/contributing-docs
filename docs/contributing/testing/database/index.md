@@ -17,9 +17,8 @@ a stored procedure in SQL Server calls another procedure to update the
 `User.AccountRevisionDate` then the corresponding EF implementation should do that as well. By running the
 test against all variants, we are ensuring all the variants are feature-equal.
 to only run the SQL Server tests along with one EF implementation; SQLite is often the easiest in
-that situation. This may work well for a very long time and save you some time overall but there are
-differences between the EF database providers such that you will one day get errors in the CI
-pipeline.
+that regard. The other supported EF database providers will still run in the pipeline to catch any
+differences between them.
 
 ## Configure the databases
 
