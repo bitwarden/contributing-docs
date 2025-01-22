@@ -1,34 +1,33 @@
 # Database Integration Testing
 
-Since Bitwarden has multiple database options, automated testing is extremely important to avoid time-consuming manual testing for each database type. The `Infrastructure.IntegrationTest` project allows you to write tests that are automatically executed on all supported databases in our testing pipeline.
+Since Bitwarden has multiple database options, automated testing is extremely important to avoid
+time-consuming manual testing for each database type. The `Infrastructure.IntegrationTest` project
+allows you to write tests that are automatically executed on all supported databases in our testing
+pipeline.
 
 ## Creating a new test
 
-To create a new database test, add the `[DatabaseTheory]` and `[DatabaseData]` attributes to
-test. Then, use the parameters of the test to inject any repository layer services
-you need. The test will run for every database that is
-[configured in the current environment](#configure-the-tests). Since you inject the interface of the
-service, some runs of the test will use the Dapper-based repository implementation targeting
-Microsoft SQL Server and others will use the Entity Framework Core based implementations (which we
-use for MySql, Postgres, and SQLite).
+To create a new database test, add the `[DatabaseTheory]` and `[DatabaseData]` attributes to test.
+Then, use the parameters of the test to inject any repository layer services you need. The test will
+run for every database that is [configured in the current environment](#configure-the-tests). Since
+you inject the interface of the service, some runs of the test will use the Dapper-based repository
+implementation targeting Microsoft SQL Server and others will use the Entity Framework Core based
+implementations (which we use for MySql, Postgres, and SQLite).
 
-The goal of database tests is to test the business logic that is encapsulated in a given method. For example, if
-a stored procedure in SQL Server calls another procedure to update the
-`User.AccountRevisionDate` then the corresponding EF implementation should do that as well. By running the
-test against all variants, we are ensuring all the variants are feature-equal.
-to only run the SQL Server tests along with one EF implementation; SQLite is often the easiest in
-that regard. The other supported EF database providers will still run in the pipeline to catch any
+The goal of database tests is to test the business logic that is encapsulated in a given method. For
+example, if a stored procedure in SQL Server calls another procedure to update the
+`User.AccountRevisionDate` then the corresponding EF implementation should do that as well. By
+running the test against all variants, we are ensuring all the variants are feature-equal. to only
+run the SQL Server tests along with one EF implementation; SQLite is often the easiest in that
+regard. The other supported EF database providers will still run in the pipeline to catch any
 differences between them.
-
-## Configure the databases
-
-The databases are expected to have the latest migrations applied.
 
 ## Configure the tests
 
 The tests are configured through
-[.NET Configuration](https://learn.microsoft.com/en-us/dotnet/core/extensions/configuration). They are applied in the following order: user secrets, environment variables prefixed with `BW_TEST_`, and command
-line args.
+[.NET Configuration](https://learn.microsoft.com/en-us/dotnet/core/extensions/configuration). They
+are applied in the following order: user secrets, environment variables prefixed with `BW_TEST_`,
+and command line args.
 
 ```csharp
 public class Root
