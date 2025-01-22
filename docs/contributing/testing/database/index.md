@@ -4,13 +4,13 @@ Since Bitwarden has multiple database options, automated testing is extremely im
 
 ## Creating a new test
 
-To create a new database test just add the `[DatabaseTheory]` and `[DatabaseData]` attributes to
-test. Now, in the parameters of the test you are able to "inject" any repository layer services
-directly into the test. The test will run for every database that is
+To create a new database test, add the `[DatabaseTheory]` and `[DatabaseData]` attributes to
+test. Then, use the parameters of the test to inject any repository layer services
+you need. The test will run for every database that is
 [configured in the current environment](#configure-the-tests). Since you inject the interface of the
-service, some runs of the test will use the Dapper based repository implementation targeting
-Microsoft SQL Server and others will use the Entity Framework Core based implementations, which we
-use for MySql, Postgres, and SQLite.
+service, some runs of the test will use the Dapper-based repository implementation targeting
+Microsoft SQL Server and others will use the Entity Framework Core based implementations (which we
+use for MySql, Postgres, and SQLite).
 
 The goal of database tests is to test the business logic that is encapsulated in a given method. If
 the stored procedure in SQL Server then calls another procedure to update the
