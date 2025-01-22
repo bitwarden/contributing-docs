@@ -28,8 +28,7 @@ The databases are expected to have the latest migrations applied.
 ## Configure the tests
 
 The tests are configured through
-[.NET Configuration](https://learn.microsoft.com/en-us/dotnet/core/extensions/configuration) in the
-order they are applied: user secrets, environment variables prefixed with `BW_TEST_`, and command
+[.NET Configuration](https://learn.microsoft.com/en-us/dotnet/core/extensions/configuration). They are applied in the following order: user secrets, environment variables prefixed with `BW_TEST_`, and command
 line args.
 
 ```csharp
