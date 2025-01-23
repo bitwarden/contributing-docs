@@ -26,6 +26,20 @@ Before you start, you must complete the [Clients repository setup instructions](
 
     :::
 
+    :::warning
+
+    You will likely see:
+
+    > FATAL ERROR: Reached heap limit Allocation failed - JavaScript heap out of memory
+
+    If you do, run with:
+
+    ```bash
+    NODE_OPTIONS="--max-old-space-size=8192" npm run build:watch
+    ```
+
+    :::
+
 2.  Load the unpacked browser extension in your browser using the instructions in the next section.
 
 ## Environment Setup
