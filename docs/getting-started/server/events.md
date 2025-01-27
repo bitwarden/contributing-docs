@@ -54,3 +54,94 @@ To use database storage for events:
    Identity and web vault)
 2. Start the Events project using `dotnet run` or your IDE (note: EventsProcessor is not required
    for self-hosted)
+
+## Distributed Events (optional)
+
+There is a new system which will add support for distributing events via an AMQP messaging system.
+In the future this will enable new integrations by allowing for a means to subscribe to events via
+messaging stream.
+
+As an initial proof of concept, there is an optional RabbitMQ implementation that refactors the way
+events are handled when running locally or self-hosted. Instead of writing directly to the `Events`
+table via the `EventsRepository`, it will broadcast each event via a RabbitMQ exchange. A new
+`RabbitMqEventRepositoryListener` then subscribes to the RabbitMQ exchange and writes to the
+`Events` table via the `EventsRepository`. The end result is the same (events are stored in the
+database), but this allows for other integrations to subscribe.
+
+To illustrate this, there is also a `RabbitMqEventHttpPostListener` which subscribes to the RabbitMQ
+events exchange and `POST`s each event to a configurable URL. This is meant to be a simple, concrete
+example of how multiple integrations are enabled by moving to distributed events.
+
+### Without RabbitMQ configured
+
+If RabbitMQ is not configured the order of operations is:
+
+1. `EventService`
+2. `RepositoryEventWriteService`
+3. `Events Database Table`
+
+### With RabbitMQ configured
+
+With RabbitMQ is configured the outcome is the same, but there are more operations:
+
+1. `EventService`
+2. `RabbitMqEventWriteService`
+3. `RabbitMQ Exhange`
+   1. `RabbitMqEventRepositoryListener`
+      1. `Events Database Table`
+   2. `RabbitMqEventHttpPostListener` (if configured)
+      1. `POST` to configured URL
+
+To enable the new RabbitMQ-based event stream, take the following steps:
+
+### Running the RabbitMQ container
+
+1.  Verify that you've set a username and password in the `.env` file (see `.env.example` for an
+    example)
+
+2.  Use Docker Compose to run the container with your current settings:
+
+    ```bash
+    docker compose --profile rabbitmq up -d
+    ```
+
+3.  This will run the RabbitMQ container with your username and password on localhost with the
+    standard ports
+
+4.  To verify this is running, open `http://localhost:15672` in a browser and login with the
+    username and password in your `.env` file.
+
+### Configuring the server to use RabbitMQ for events
+
+1.  Add the following to your `secrets.json` file, changing the defaults to match your `.env` file:
+
+    ```json
+        "rabbitMq": {
+          "hostName": "localhost",
+          "username": "bitwarden",
+          "password": "SET_A_PASSWORD_HERE_123",
+          "exchangeName": "events-exchange"
+        },
+    ```
+
+2.  (optional) To use the `RabbitMqEventHttpPostListener`, specify a destination URL that will
+    receive the POST.
+
+    ```json
+        "rabbitMqHttpPostUrl": "<HTTP POST URL>",
+    ```
+
+    - Tip: [RequestBin](http://requestbin.com/) provides an easy to set up server that will receive
+      these requests and let you inspect them.
+
+3.  Re-run the powershell script to add these secrets to each Bitwarden project:
+
+    ```bash
+    pwsh setup_secrets.ps1
+    ```
+
+4.  Start (or restart) all of your projects to pick up the new settings
+
+With these changes in place, you should see the database events written as before, but you'll also
+see in the RabbitMQ management interface that the messages are flowing through the configured
+exchange.
