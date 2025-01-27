@@ -75,12 +75,6 @@ async function createConfig() {
               sidebarId: "architecture",
             },
             {
-              type: "docSidebar",
-              position: "left",
-              label: "Security",
-              sidebarId: "security",
-            },
-            {
               type: "custom-dev",
               position: "right",
             },
