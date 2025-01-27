@@ -74,7 +74,7 @@ example of how multiple integrations are enabled by moving to distributed events
 
 ```kroki type=mermaid
 graph TD
-	  subgraph Optional RabbitMQ implementation
+	  subgraph With RabbitMQ
         B1[EventService]
         B2[RabbitMQEventWriteService]
         B3[RabbitMQ exchange]
@@ -89,7 +89,7 @@ graph TD
         B5 -->|HTTP POST| B7
     end
 
-    subgraph Existing self-hosted implementation
+    subgraph Without RabbitMQ
         A1[EventService]
         A2[RepositoryEventWriteService]
         A3[Events Database Table]
