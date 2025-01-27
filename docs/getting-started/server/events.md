@@ -55,7 +55,7 @@ To use database storage for events:
 2. Start the Events project using `dotnet run` or your IDE (note: EventsProcessor is not required
    for self-hosted)
 
-## Distributed Events (optional)
+## Distributed events (optional)
 
 There is a new system which will add support for distributing events via an AMQP messaging system.
 In the future this will enable new integrations by allowing for a means to subscribe to events via
@@ -72,25 +72,34 @@ To illustrate this, there is also a `RabbitMqEventHttpPostListener` which subscr
 events exchange and `POST`s each event to a configurable URL. This is meant to be a simple, concrete
 example of how multiple integrations are enabled by moving to distributed events.
 
-### Without RabbitMQ configured
+```kroki type=mermaid
+graph TD
+	  subgraph Optional RabbitMQ implementation
+        B1[EventService]
+        B2[RabbitMQEventWriteService]
+        B3[RabbitMQ exchange]
+        B4[RabbitMqEventRepositoryListener]
+        B5[RabbitMqEventHttpPostListener]
+        B6[Events Database Table]
+        B7[HTTP Server]
 
-If RabbitMQ is not configured the order of operations is:
+        B1 -->|IEventWriteService| B2 --> B3
+        B3--> B4 --> B6
+        B3--> B5
+        B5 -->|HTTP POST| B7
+    end
 
-1. `EventService`
-2. `RepositoryEventWriteService`
-3. `Events Database Table`
+    subgraph Existing self-hosted implementation
+        A1[EventService]
+        A2[RepositoryEventWriteService]
+        A3[Events Database Table]
 
-### With RabbitMQ configured
+        A1 -->|IEventWriteService| A2 --> A3
 
-With RabbitMQ is configured the outcome is the same, but there are more operations:
+end
 
-1. `EventService`
-2. `RabbitMqEventWriteService`
-3. `RabbitMQ Exhange`
-   1. `RabbitMqEventRepositoryListener`
-      1. `Events Database Table`
-   2. `RabbitMqEventHttpPostListener` (if configured)
-      1. `POST` to configured URL
+
+```
 
 To enable the new RabbitMQ-based event stream, take the following steps:
 
