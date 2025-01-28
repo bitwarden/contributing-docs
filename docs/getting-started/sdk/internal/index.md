@@ -32,48 +32,15 @@ See the [Tools and Libraries](../../tools/index.md) page for more information.
 
 ## Building the SDK
 
-To build the SDK, run the following command:
+The SDK is built for different platforms, all of which have their own build instructions. For more
+information on how to for a specific platform, refer to the readmes for the different crates:
 
-```bash
-cargo build
-```
+- **Web**: `crates/bitwarden-wasm-internal`
+- **iOS**: `crates/bitwarden-uniffi/swift`
+- **Android**: `crates/bitwarden-uniffi/kotlin`
 
-### Web clients
-
-The SDK is integrated into the web clients as a WebAssembly module. To build the SDK for the web
-clients, run the following command:
-
-```bash
-cd crates/bitwarden-wasm-internal
-./build.sh
-```
-
-If you encounter any issues make sure that you have you have the required dependencies installed.
-See `crates/bitwarden-wasm-internal/README.md` for more information.
-
-### Mobile clients
-
-The SDK is integrated into the mobile clients as a shared library using the UniFFI framework. The
-SDK is built for each platform separately.
-
-#### Android
-
-The SDK is integrated into the Android client as a Maven dependency. The commands for building the
-Android library differ depending on which CPU architecture you are targeting. For more information,
-see the `crates/bitwarden-uniffi/kotlin/README.md` file.
-
-#### iOS
-
-The SDK is integrated into the iOS client as a Swift package. To build the SDK for iOS, run the
-following command:
-
-```bash
-cd crates/bitwarden-uniffi/swift
-./build.sh
-```
-
-If you encounter any issues make sure that you have you have the required dependencies installed.
-See `crates/bitwarden-uniffi/swift/README.md` for more information.
+If you encounter any issues, please check the readme and make sure that you have installed all of
+the required dependencies for that platform.
 
 ## Linking the SDK to clients
 
