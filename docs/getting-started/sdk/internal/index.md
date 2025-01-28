@@ -39,8 +39,8 @@ information on how to build for a specific platform, refer to the readmes for th
 - **iOS**: `crates/bitwarden-uniffi/swift`
 - **Android**: `crates/bitwarden-uniffi/kotlin`
 
-If you encounter any issues, please check the readme and make sure that you have installed all of
-the required dependencies for that platform.
+Please be aware that each platform has its own set of dependencies that need to be installed before
+building. Make sure to double check the readme if you encounter any issues.
 
 ## Linking the SDK to clients
 
