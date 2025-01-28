@@ -125,19 +125,23 @@ To enable the new RabbitMQ-based event stream, take the following steps:
 1.  Add the following to your `secrets.json` file, changing the defaults to match your `.env` file:
 
     ```json
-        "rabbitMq": {
-          "hostName": "localhost",
-          "username": "bitwarden",
-          "password": "SET_A_PASSWORD_HERE_123",
-          "exchangeName": "events-exchange"
-        },
+    "eventLogging": {
+      "rabbitMq": {
+        "hostName": "localhost",
+        "username": "bitwarden",
+        "password": "SET_A_PASSWORD_HERE_123",
+        "exchangeName": "events-exchange",
+        "eventRepositoryQueueName": "events-write-queue",
+      }
+    }
     ```
 
-2.  (optional) To use the `RabbitMqEventHttpPostListener`, specify a destination URL that will
-    receive the POST.
+2.  (optional) To use the RabbitMqEventHttpPostListener, specify a queue name and destination URL
+    that will receive the POST inside the RabbitMq object:
 
     ```json
-        "rabbitMqHttpPostUrl": "<HTTP POST URL>",
+        "httpPostQueueName": "events-httpPost-queue",
+        "httpPostUrl": "<HTTP POST URL>",
     ```
 
     - Tip: [RequestBin](http://requestbin.com/) provides an easy to set up server that will receive
