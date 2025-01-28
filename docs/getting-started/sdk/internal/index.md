@@ -33,7 +33,7 @@ See the [Tools and Libraries](../../tools/index.md) page for more information.
 ## Building the SDK
 
 The SDK is built for different platforms, all of which have their own build instructions. For more
-information on how to for a specific platform, refer to the readmes for the different crates:
+information on how to build for a specific platform, refer to the readmes for the different crates:
 
 - **Web**: `crates/bitwarden-wasm-internal`
 - **iOS**: `crates/bitwarden-uniffi/swift`
