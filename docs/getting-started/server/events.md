@@ -111,7 +111,7 @@ end
 
     - The compose configuration uses the username and password from the `env` file.
     - It is configured to run on localhost with RabbitMQ's standard ports, but this can be
-      customized in the docker configuration.
+      customized in the Docker configuration.
 
 3.  To verify this is running, open `http://localhost:15672` in a browser and login with the
     username and password in your `.env` file.
@@ -143,7 +143,7 @@ end
     - Tip: [RequestBin](http://requestbin.com/) provides an easy to set up server that will receive
       these requests and let you inspect them.
 
-3.  Re-run the powershell script to add these secrets to each Bitwarden project:
+3.  Re-run the PowerShell script to add these secrets to each Bitwarden project:
 
     ```bash
     pwsh setup_secrets.ps1
