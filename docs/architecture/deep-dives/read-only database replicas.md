@@ -1,23 +1,12 @@
-# Azure SQL read-only replica
+# Read-only database replicas
 
 ## Context
 
-Prior to April 2022, we had been noticing repeated errors that resemble the following:
+Bitwarden Utilizes [Azure SQL Hyperscale](https://learn.microsoft.com/en-us/azure/azure-sql/database/service-tier-hyperscale?view=azuresql)
 
-`Resource ID : 1. The request limit for the database is 300 and has been reached. See 'http://go.microsoft.com/fwlink/?LinkId=267637' for assistance.`
-
-To address the issue seen frequently during reconnects, we looked into our top query at the time and
-determined it to be the
-[User_ReadAccountRevisionDateById](https://github.com/bitwarden/server/blob/main/src/Sql/dbo/Stored%20Procedures/User_ReadAccountRevisionDateById.sql)
-stored procedure. Furthermore, the
-[readonlyconnection string setting](https://github.com/bitwarden/server/blob/5423e5d52fe2aac28db457107579aa91709c9bb7/src/Core/Settings/GlobalSettings.cs#L245-#L250)
-had been stubbed out already and needed to be utilized. Up until this point we had been utilizing
-the fallback mechanism, which meant it was using the default connection string to connect to the
-primary DB.
-
-With this information available we decided to utilize the
+We decided to utilize the
 [High Availability Replica](https://learn.microsoft.com/en-us/azure/azure-sql/database/service-tier-hyperscale-replicas?view=azuresql#high-availability-replica)
-that was available to use. This allowed Bitwarden to double the max worker limit (along with
+that was available to use as a read replica. This allowed Bitwarden to double the max worker limit (along with
 compute, memory, network throughput) without needing to scale up the primary database. The HA
 replica replicates the primary instance by mirroring the transaction log records.
 
