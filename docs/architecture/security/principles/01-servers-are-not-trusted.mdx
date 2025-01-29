@@ -1,0 +1,37 @@
+# P01 - Servers are not trusted
+
+Clients do not need to trust Bitwarden server or web infrastructure to be good actors in supplying
+data to keep an account's encrypted content secure. In other words, the special status of providing
+a network sync for client data does not enable a server, or any entity between the server and
+client, to take any action that would aid in decryption of a user's vault by the server.
+
+This is what we mean when we sometimes refer to "End-to-end encrypted."
+
+## Account key sharing as a feature
+
+This principle does not mean that clear text data are never shared, but rather that any such
+exposure is always declared to the user and exclusively between accounts, never to the server or
+infrastructure.
+
+## Exceptions
+
+On occasion, product features require breaking this principle in a controlled manner. These
+exceptions are always a last resort, tightly limited scope, and we are always looking for
+improvements to remove them. All exceptions are outlined here.
+
+### Key Connector
+
+Key connector is a self-host test only feature that allows an Organization to log in and unlock with
+SSO and no password input. This feature is specifically limited to self-hosted instances due to
+breaking this principle. It is possible for a Bitwarden server to create an authentication token,
+contact the Key Connector server, and retrieve key material that will allow decryption of a user's
+vault. For these reasons we encourage strict isolation of key connector servers to private networks
+and only to be used by advanced self-hosted users.
+
+### Icons service
+
+The Bitwarden icons service enables the retrieval of site favicons to decorate vault items in the
+Bitwarden clients. To enable this functionality, clients do send clear text domain name information
+to the Bitwarden icons service. These URIs are normally encrypted in a vault, but we do this to
+aggregate access to the requested domain, speed up loading of vaults, and ensure favicons accurately
+represent the associated URI. This feature is easily disabled in client settings.
