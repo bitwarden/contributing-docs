@@ -196,30 +196,37 @@ If you would like to verify that everything worked correctly:
 
 ## Testing EF Changes
 
-Since we allow for multiple databases it is important that any changes to EF repositories/models are
-tested against all possible databases. You may want to use a database that is different from your
-local development database because the tests may add or remove data. To apply migrations to a
-database different from your global settings run the following commands from the root of your
-repository
+In your `server/dev/secrets.json` file find or add this block of secrets in the root of the json
+structure:
 
-```bash
-# EntityFramework CLI Reference: https://learn.microsoft.com/en-us/ef/core/cli/dotnet
-
-# Migrate Postgres database ex connection string: Host=localhost;Username=postgres;Password=SET_A_PASSWORD_HERE_123;Database=vault_dev_test
-dotnet ef database update --startup-project util/PostgresMigrations --connection "[POSTGRES_CONNECTION_STRING]"
-
-# Migrate MySql database ex connection string: server=localhost;uid=root;pwd=SET_A_PASSWORD_HERE_123;database=vault_dev_test
-dotnet ef database update --startup-project util/MySqlMigrations --connection "[MYSQL_CONNECTION_STRING]"
-
-cd test/Infrastructure.IntegrationTest
-
-# https://learn.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-6.0&tabs=windows#secret-manager
-dotnet user-secrets set "Ef:Postgres" "[POSTGRES_CONNECTION_STRING]"
-dotnet user-secrets set "Ef:MySql" "[MYSQL_CONNECTION_STRING]"
-
-# You can also set the connection string for your normal development MS SQL database like below
-dotnet user-secrets set "Dapper:SqlServer" "[MSSQL_CONNECTION_STRING]"
+```
+"databases:0:type": "Postgres",
+"databases:0:connectionString": "Host=localhost;Username=postgres;Password=_________;Database=ef_test",
+"databases:0:enabled": "true",
+"databases:1:type": "Sqlite",
+"databases:1:enabled": "true",
+"databases:1:connectionString": "Data Source=_________",
+"databases:2:type": "MySql",
+"databases:2:connectionString": "server=localhost;uid=root;pwd=_________;database=ef_test",
+"databases:2:enabled": "true",
+"databases:3:type": "SqlServer",
+"databases:3:connectionString": "Server=localhost;Database=ef_test;User Id=SA;Password=_________;Encrypt=True;TrustServerCertificate=True;",
+"databases:3:enabled": "true"
 ```
 
-You can then run just those tests from the `test/Infrastructure.IntegrationTest` folder using
-`dotnet test`.
+:::info
+
+The example database index + type combinations are required for the tooling to work, and to support
+multiple versions of the same database running tests at the same time.
+
+:::
+
+This block is used for test databases for each supported provider type. These are what integration
+tests will connect to. You should update the password for these connection strings to match your
+existing databases if you have not already. If these settings are not present at all in your
+`server/dev/secrets.json` file just add them to the bottom. These settings _do not_ go in
+`globalSettings`. Then run `pwsh setup_secrets.ps1 -clear` to apply them to your local projects.
+
+With connection strings applied to your projects: ensure your databases are all migrated using
+`pwsh server/dev/migrate.ps1 --all`. Then you can run EF tests from the
+`test/Infrastructure.IntegrationTest` folder using `dotnet test`.
