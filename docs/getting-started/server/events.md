@@ -57,20 +57,19 @@ To use database storage for events:
 
 ## Distributed events (optional)
 
-There is a new system which will add support for distributing events via an AMQP messaging system.
-In the future this will enable new integrations by allowing for a means to subscribe to events via
-messaging stream.
+Events can be distributed via an AMQP messaging system. This messaging system enables new
+integrations to subscribe to the events.
 
-As an initial proof of concept, there is an optional RabbitMQ implementation that refactors the way
-events are handled when running locally or self-hosted. Instead of writing directly to the `Events`
-table via the `EventsRepository`, it will broadcast each event via a RabbitMQ exchange. A new
-`RabbitMqEventRepositoryListener` then subscribes to the RabbitMQ exchange and writes to the
-`Events` table via the `EventsRepository`. The end result is the same (events are stored in the
-database), but this allows for other integrations to subscribe.
+The RabbitMQ implementation adds a step that refactors the way events are handled when running
+locally or self-hosted. Instead of writing directly to the `Events` table via the
+`EventsRepository`, each event is broadcast to a RabbitMQ exchange. A new
+`RabbitMqEventRepositoryListener` subscribes to the RabbitMQ exchange and writes to the `Events`
+table via the `EventsRepository`. The end result is the same (events are stored in the database),
+but the addition of the RabbitMQ exchange allows for other integrations to subscribe.
 
-To illustrate this, there is also a `RabbitMqEventHttpPostListener` which subscribes to the RabbitMQ
-events exchange and `POST`s each event to a configurable URL. This is meant to be a simple, concrete
-example of how multiple integrations are enabled by moving to distributed events.
+To illustrate the ability to fan-out events, `RabbitMqEventHttpPostListener` subscribes to the
+RabbitMQ events exchange and `POST`s each event to a configurable URL. This is meant to be a simple,
+concrete example of how multiple integrations are enabled by moving to distributed events.
 
 ```kroki type=mermaid
 graph TD
@@ -97,11 +96,7 @@ graph TD
         A1 -->|IEventWriteService| A2 --> A3
 
 end
-
-
 ```
-
-To enable the new RabbitMQ-based event stream, take the following steps:
 
 ### Running the RabbitMQ container
 
@@ -114,10 +109,11 @@ To enable the new RabbitMQ-based event stream, take the following steps:
     docker compose --profile rabbitmq up -d
     ```
 
-3.  This will run the RabbitMQ container with your username and password on localhost with the
-    standard ports
+    - The compose configuration uses the username and password from the `env` file.
+    - It is configured to run on localhost with RabbitMQ's standard ports, but this can be
+      customized in the docker configuration.
 
-4.  To verify this is running, open `http://localhost:15672` in a browser and login with the
+3.  To verify this is running, open `http://localhost:15672` in a browser and login with the
     username and password in your `.env` file.
 
 ### Configuring the server to use RabbitMQ for events
@@ -157,4 +153,4 @@ To enable the new RabbitMQ-based event stream, take the following steps:
 
 With these changes in place, you should see the database events written as before, but you'll also
 see in the RabbitMQ management interface that the messages are flowing through the configured
-exchange.
+exchange/queues.
