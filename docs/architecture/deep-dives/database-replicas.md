@@ -25,7 +25,7 @@ We currently use the read-only replica in two areas
    [defined](https://github.com/search?q=repo%3Abitwarden%2Fserver%20path%3A%2F%5Esrc%5C%2FInfrastructure%5C.Dapper%5C%2FRepositories%5C%2F%2F%20ReadOnlyConnectionString&type=code)
 2. Data engineering pipelines that require direct connection to the database
 
-## Gotchas/Considerations
+## Gotchas / Considerations
 
 - [CAP Theorem](https://en.wikipedia.org/wiki/CAP_theorem) applies here. Microsoft does not
   guarantee data consistency and
