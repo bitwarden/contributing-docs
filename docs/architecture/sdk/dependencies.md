@@ -11,8 +11,8 @@ dependencies you have are directly related to the time it takes for a clean buil
 permanently increase the base maintenance cost of the project as they require frequent updates to
 keep up with security patches and new features.
 
-To that effort we **must** be conservative with adding dependencies. And we ask that you consider the
-following when evaluating a new dependency:
+To that effort we **must** be conservative with adding dependencies. And we ask that you consider
+the following when evaluating a new dependency:
 
 - Do we already have a dependency or transient dependency that does the same thing? If so we
   _should_ use that instead.
