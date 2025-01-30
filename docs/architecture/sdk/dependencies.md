@@ -59,4 +59,15 @@ To provide a more developer friendly experience for managing dependencies we def
 dependencies in our workspace `Cargo.toml`. This allow us to update dependencies across the
 workspace by modifying a single file.
 
+Internal dependencies i.e. dependencies that are part of the same workspace **must** be defined
+using workspace definitions.
+
+```toml
+# Bad
+bitwarden-core = { version = "1.0", path = "../bitwarden-core" }
+
+# Good
+bitwarden-core = { workspace = true }
+```
+
 dep-res: https://doc.rust-lang.org/cargo/reference/resolver.html
