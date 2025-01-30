@@ -35,7 +35,7 @@ We currently use the read-only replica in two areas
 - Lack of observability - Currently there is limited visibility into query performance metrics as
   well as resource utilization on the replica itself.
 - Long-running queries on read-only replicas can cause
-  [blocking](https://learn.microsoft.com/en-us/azure/azure-sql/database/read-scale-out?view=azuresql#long-running-queries-on-read-only-replicas)
+  [blocking](https://learn.microsoft.com/en-us/azure/azure-sql/database/read-scale-out?view=azuresql#long-running-queries-on-read-only-replicas).
 - The HA replica is not a backup and should not be treated as such. If a destructive migration had
   been run on the primary instance it will be reflected on the HA replica. DR procedures will have
   to be carried out in this scenario and there will be data loss.
