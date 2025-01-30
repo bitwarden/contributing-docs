@@ -21,6 +21,7 @@ HKDF
 hotfix
 hotfixed
 hotfixes
+Hyperscale
 iframes
 inet
 IntelliJ
