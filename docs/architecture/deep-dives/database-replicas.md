@@ -32,7 +32,7 @@ We currently use the read-only replica in two areas
   [propagation latency](https://learn.microsoft.com/en-us/azure/azure-sql/database/read-scale-out?view=azuresql#data-consistency)
   could vary greatly. For business logic that need consistency, read-only replicas are not a viable
   solution.
-- Lack of observability - Currently there is limited visibility into query performance metrics as
+- Lack of observability -- currently there is limited visibility into query performance metrics as
   well as resource utilization on the replica itself.
 - Long-running queries on read-only replicas can cause
   [blocking](https://learn.microsoft.com/en-us/azure/azure-sql/database/read-scale-out?view=azuresql#long-running-queries-on-read-only-replicas).
