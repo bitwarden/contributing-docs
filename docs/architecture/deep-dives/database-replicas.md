@@ -1,4 +1,4 @@
-# Read-only database replicas
+# Read-Only Database Replicas
 
 ## Context
 
