@@ -2,7 +2,7 @@
 
 ## Context
 
-Bitwarden Utilizes
+Bitwarden utilizes
 [Azure SQL Hyperscale](https://learn.microsoft.com/en-us/azure/azure-sql/database/service-tier-hyperscale?view=azuresql)
 
 and its
