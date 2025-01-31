@@ -21,7 +21,7 @@ read-only queries.
 We currently use the read-only replica in two areas:
 
 1. [Methods within the Dapper repositories](https://github.com/search?q=repo%3Abitwarden%2Fserver+%22using+%28var+connection+%3D+new+SqlConnection%28ReadOnlyConnectionString%29%29%22&type=code)
-   with `using (var connection = new SqlConnection(ConnectionString))` defined.
+   with `using (var connection = new SqlConnection(ReadOnlyConnectionString))` defined.
 2. Data engineering pipelines that require direct connection to the database.
 
 ## Gotchas / Considerations
