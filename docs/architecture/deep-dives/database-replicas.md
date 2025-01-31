@@ -7,7 +7,7 @@ Bitwarden Utilizes
 
 and its
 [high-availability replica](https://learn.microsoft.com/en-us/azure/azure-sql/database/service-tier-hyperscale-replicas?view=azuresql#high-availability-replica)
-available as a read replica. This allows Bitwarden to double the max worker limit (along with
+available as a _read_ replica. This allows Bitwarden to double the max worker limit (along with
 compute, memory, and network throughput) without needing to scale up the primary database. The HA
 replica replicates the primary instance by mirroring the transaction log records.
 
