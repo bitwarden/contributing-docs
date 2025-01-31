@@ -13,7 +13,7 @@ replica replicates the primary instance by mirroring the transaction log records
 
 ## Vision
 
-More read-only capabilities should be used in conjunction with read-only replicas - Especially after
+More read-only capabilities should be used in conjunction with read-only replicas, especially after
 stored procedures have been tuned and there are prominent performance bottlenecks relating to
 read-only queries.
 
