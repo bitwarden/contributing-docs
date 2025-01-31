@@ -2,14 +2,7 @@
 
 ## Context
 
-Bitwarden utilizes
-[Azure SQL Hyperscale](https://learn.microsoft.com/en-us/azure/azure-sql/database/service-tier-hyperscale?view=azuresql)
-
-and its
-[high-availability replica](https://learn.microsoft.com/en-us/azure/azure-sql/database/service-tier-hyperscale-replicas?view=azuresql#high-availability-replica)
-available as a _read_ replica. This allows Bitwarden to double the max worker limit (along with
-compute, memory, and network throughput) without needing to scale up the primary database. The HA
-replica replicates the primary instance by mirroring the transaction log records.
+Bitwarden utilizes [Azure SQL Hyperscale](https://learn.microsoft.com/en-us/azure/azure-sql/database/service-tier-hyperscale?view=azuresql) and its [high-availability replica](https://learn.microsoft.com/en-us/azure/azure-sql/database/service-tier-hyperscale-replicas?view=azuresql#high-availability-replica) available as a _read_ replica. This allows Bitwarden to double the max worker limit (along with compute, memory, and network throughput) without needing to scale up the primary database. The HA replica replicates the primary instance by mirroring the transaction log records.
 
 ## Vision
 
@@ -21,8 +14,7 @@ read-only queries.
 
 We currently use the read-only replica in two areas:
 
-1. Dapper repositories with the `ReadOnlyConnectionString`
-   [defined](https://github.com/search?q=repo%3Abitwarden%2Fserver%20path%3A%2F%5Esrc%5C%2FInfrastructure%5C.Dapper%5C%2FRepositories%5C%2F%2F%20ReadOnlyConnectionString&type=code).
+1. [Methods within the Dapper repositories](https://github.com/search?q=repo%3Abitwarden%2Fserver+%22using+%28var+connection+%3D+new+SqlConnection%28ReadOnlyConnectionString%29%29%22&type=code) with `using (var connection = new SqlConnection(ConnectionString))` defined.
 2. Data engineering pipelines that require direct connection to the database.
 
 ## Gotchas / Considerations
