@@ -5,7 +5,7 @@
 Bitwarden Utilizes
 [Azure SQL Hyperscale](https://learn.microsoft.com/en-us/azure/azure-sql/database/service-tier-hyperscale?view=azuresql)
 
-Bitwarden utilizes the
+and its
 [high-availability replica](https://learn.microsoft.com/en-us/azure/azure-sql/database/service-tier-hyperscale-replicas?view=azuresql#high-availability-replica)
 available as a read replica. This allows Bitwarden to double the max worker limit (along with
 compute, memory, and network throughput) without needing to scale up the primary database. The HA
