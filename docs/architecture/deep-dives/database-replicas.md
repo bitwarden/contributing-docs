@@ -19,7 +19,7 @@ read-only queries.
 
 ## Usage
 
-We currently use the read-only replica in two areas
+We currently use the read-only replica in two areas:
 
 1. Dapper repositories with the `ReadOnlyConnectionString`
    [defined](https://github.com/search?q=repo%3Abitwarden%2Fserver%20path%3A%2F%5Esrc%5C%2FInfrastructure%5C.Dapper%5C%2FRepositories%5C%2F%2F%20ReadOnlyConnectionString&type=code).
