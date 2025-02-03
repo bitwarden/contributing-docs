@@ -20,8 +20,6 @@ environment.
 
 - [Visual Studio Code](https://code.visualstudio.com/) - used for all Typescript projects.
   Suboptimal for C#. Be sure to install [extensions](#visual-studio-code-extensions)
-- [Visual Studio for Mac](https://visualstudio.microsoft.com/vs/mac/) - Pretty good at C# (Server
-  and Mobile)
 - [Xcode](https://developer.apple.com/xcode/) - required for iOS Mobile development and Safari web
   extension
 
