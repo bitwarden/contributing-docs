@@ -46,8 +46,11 @@ subscription.
 
 ## Emails
 
-Docker compose will spin up a local smtp server that can be used, but it’s also possible to use
-other services such as Mailtrap, or Amazon to debug the amazon integration.
+Docker compose will spin up a local smtp server, Mailcatcher, that can be used. See the
+[Setup Guide](./guide.md#mailcatcher) for more information about Mailcatcher.
+
+It’s also possible to use other services such as Mailtrap, or Amazon to debug the amazon
+integration.
 
 - Amazon Simple Email Service - the user secrets vault item includes a separate attachment called
   `additional-keys-for-cloud-services.json`. Add the `amazon` key to your user secrets to use
@@ -82,12 +85,12 @@ File uploads are stored using one of two methods.
   }
   ```
 
-  :::note
+:::note
 
-  To properly test uploading and downloading files using direct upload, you need to set up a local
-  file server. Please add instructions here if you do this :)
+To properly test uploading and downloading files using direct upload, you need to set up a local
+file server.
 
-  :::
+:::
 
 ## PayPal
 
@@ -192,6 +195,34 @@ services).
    - **Api** - `http://localhost:4100`
    - **Identity** - `http://localhost:33756`
 
-> If you need to add additional services (besides Api and Identity), add them to the
-> `dev/reverse-proxy.conf` and make sure the necessary ports are exposed in the
-> `dev/docker-compose.yml` file for the `reverse-proxy` container.
+If you need to add additional services (besides Api and Identity), add them to the
+`dev/reverse-proxy.conf` and make sure the necessary ports are exposed in the
+`dev/docker-compose.yml` file for the `reverse-proxy` container.
+
+## NuGet with GitHub Packages
+
+Server-side projects and solutions may use
+[Bitwarden-shared .NET extension libraries](https://github.com/orgs/bitwarden/packages?repo_name=dotnet-extensions)
+and _prerelease_ packages offered via
+[GitHub Packages](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-nuget-registry)
+require authentication for access.
+
+First, [generate](https://github.com/settings/tokens/new) a GitHub personal access token (classic)
+with the `packages:read` scope only. You can set an expiration date but it may be easier to leave it
+without one considering the scope. Copy the token value and run:
+
+```bash
+IFS= read -rs GITHUB_PAT < /dev/tty
+```
+
+along with pasting the value and pressing Enter. Next, run:
+
+```bash
+dotnet nuget add source --username bitwarden --password $GITHUB_PAT --store-password-in-clear-text --name github --configfile ~/.nuget/NuGet/NuGet.Config "https://nuget.pkg.github.com/bitwarden/index.json"
+```
+
+that will set up the necessary global source and credentials. Any NuGet restores will now also
+utilize our GitHub Packages setup for NuGet.
+
+Full releases of shared libraries will go to our
+[NuGet.org presence](https://www.nuget.org/profiles/Bitwarden).

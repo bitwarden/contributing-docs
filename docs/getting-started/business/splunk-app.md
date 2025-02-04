@@ -1,0 +1,105 @@
+# Splunk app
+
+The Bitwarden Splunk app fetches event log data from the Bitwarden Public API and makes it available
+in Splunk.
+
+## Requirements
+
+- Docker. If you're using an Apple Silicon Mac, enable _Docker Desktop_ -> _Settings_ -> _General_
+  -> _Use Rosetta for x86_64/amd64 emulation on Apple Silicon_
+- Python 3.7 - 3.10
+- [Poetry][poetry]
+- libmagic (macOS only), available via homebrew: `brew install libmagic`
+- A Bitwarden Teams or Enterprise organization
+- If using a local development server - make sure the Events and EventsProcessor projects are
+  running and [Event Logging](../server/events.md) is working
+
+## Set up and configuration
+
+### Configure your environment
+
+1. Clone the Github repository:
+
+   ```
+   git clone https://github.com/bitwarden/splunk.git
+   ```
+
+2. Navigate to the root of the repository:
+
+   ```
+   cd splunk
+   ```
+
+3. Tell poetry to use the required Python version:
+
+   ```
+   poetry env use <executable>
+   ```
+
+   Where `<executable>` is the executable for Python. If this is in your PATH variable then you do
+   not need to specify the full path. e.g. `poetry env use python3.8`
+
+4. Activate the poetry shell:
+
+   ```
+   poetry shell
+   ```
+
+5. Install dependencies:
+
+   ```
+   poetry install --with dev
+   ```
+
+### Set up Splunk Enterprise
+
+1. Run Splunk Enterprise:
+
+   ```
+   docker run --rm --platform linux/amd64 --name splunk -d -p 8001:8000 -p 8089:8089 -e SPLUNK_START_ARGS='--accept-license' -e SPLUNK_PASSWORD='password' splunk/splunk:latest
+   ```
+
+   Please note this will set the admin password to `password`. This is for development purposes
+   only.
+
+2. Confirm that Splunk is running by navigating to http://localhost:8001
+
+### Deploy the app
+
+1. Package the app:
+
+   ```
+   ./package.sh
+   ```
+
+   This will produce a packaged Splunk app in `output/bitwarden_event_logs.tar.gz`
+
+2. Deploy the app to Splunk:
+
+   ```
+   ./deploy.sh
+   ```
+
+   This will restart Splunk and it may take a few seconds to become available again after the script
+   is finished
+
+3. (optional) Check the logs for errors or for debugging purposes later:
+   ```
+   docker exec -u splunk -it splunk tail -f /opt/splunk/var/log/splunk/bitwarden_event_logs_beta.log
+   ```
+
+### Configure the app in Splunk
+
+1. Navigate to the Splunk web app: http://localhost:8001
+
+2. Log in with the username `admin` and the password `password`
+
+3. Click on the _Apps_ -> _Bitwarden Event Logs_
+
+4. Complete the setup. Refer to the [Bitwarden Help Center][Bitwarden Splunk SIEM] for more
+   information about configuration
+
+You should now see your organization events in _Apps_ -> _Bitwarden Event Logs_ -> _Dashboards_.
+
+[Bitwarden Splunk SIEM]: https://bitwarden.com/help/splunk-siem/
+[poetry]: https://python-poetry.org/docs/#installation

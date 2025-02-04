@@ -21,34 +21,38 @@ their commits.
 
 ## Setting up commit signing
 
-Github supports commit signing with GPG, SSH and S/MIME. If you're unsure what to use, we recommend
-GPG.
+Github supports commit signing with GPG, SSH and S/MIME.
 
-1.  Install GnuPG:
+:::tip
 
-  <Tabs groupId="os">
+If you're unsure what to use, we recommend you create a commit signing key using SSH. Remember to
+protect the key with a [strong passphrase or password][password-generation].
 
-    <TabItem value="mac" label="macOS">
+```bash
+# path to save your private signing key
+KEY_FILE=~/.ssh/bw-signing
+ssh-keygen -f $KEY_FILE -C "$(git config --global --get user.email)" -t ed25519
+```
 
-    ```bash
-    brew install gnupg
-    echo "export GPG_TTY=$(tty)" >> ~/.zshrc
-    ```
+:::
 
-    Restart your open terminal for this to take effect
+### Configuration
 
-    </TabItem>
+1. Configure git to sign using SSH.
 
-  </Tabs>
+   ```bash
+   git config --global gpg.format ssh
+   git config --global user.signingkey "${KEY_FILE}.pub"
+   ```
 
-2.  Follow the [Github documentation][github-verification] to configure commit signing
+2. Follow the [Github documentation][github-verification] to configure commit signing
 
-3.  Configure your preferred git tool below
+3. Configure your preferred git tool below
 
-4.  Push a test commit to Github and ensure that the "Verified" badge appears next to the commit
-    description:
+4. Push a test commit to Github and ensure that the "Verified" badge appears next to the commit
+   description:
 
-    ![Image showing the Verified badge in Github](./commit-signing.png)
+   ![Image showing the Verified badge in Github](./commit-signing.png)
 
 ### Command Line
 
@@ -58,13 +62,12 @@ GPG.
   git commit -S
   ```
 
-- To avoid using the `-S` flag every time, you can sign all commits by default:
+- To avoid using the `-S` flag every time, you can sign all commits and tags by default:
 
   ```bash
   git config --global commit.gpgSign true
+  git config --global tag.gpgSign true
   ```
-
-  (Remove the `--global` flag to only apply this setting to the current repository)
 
 ### Visual Studio Code
 
@@ -102,5 +105,6 @@ Refer to
   [this troubleshooting document](https://gist.github.com/paolocarrasco/18ca8fe6e63490ae1be23e84a7039374)
   for more help with this error
 
+[password-generation]: https://bitwarden.com/help/generator/#password-types
 [github-verification]:
   https://docs.github.com/en/authentication/managing-commit-signature-verification/about-commit-signature-verification

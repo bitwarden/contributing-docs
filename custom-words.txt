@@ -3,14 +3,18 @@
 # by the spellchecker. Please keep the list sorted alphabetically.
 
 AndroidX
+AOSP
 Bitwarden
 bitwardensecret
 bytemark
+Casbin
 clickjacking
+codebases
 CODEOWNERS
 CQRS
 CTAP2
 dockerized
+dotfile
 F-Droid
 Gitter
 HKDF
@@ -18,10 +22,12 @@ hostkey
 hotfix
 hotfixed
 hotfixes
+Hyperscale
 iframes
 inet
 IntelliJ
 Iterm
+Jetpack
 jslib
 jumpcloud
 keychain
@@ -29,6 +35,7 @@ keypair
 keyserver
 Kubebuilder
 LDIF
+libmagic
 LLDB
 Mailcatcher
 minio
@@ -46,8 +53,10 @@ passwordless
 pinentry
 PKCS
 PNSs
+POSIX
 precompiler
 proxied
+recompositions
 refactorings
 roadmap
 roadmaps
@@ -64,9 +73,12 @@ signup
 sqlcmd
 sshsig
 struct
+structs
+subfolders
 subprocessor
 toolset
 TOTP
+typealias
 WCAG
 Xcodes.app
 xmldoc
@@ -74,3 +86,7 @@ Yellowpages
 Yubico
 YubiKey
 YubiKeys
+
+# Forbidden words
+!auto-fill
+!auto-filled

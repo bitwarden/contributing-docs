@@ -31,6 +31,13 @@ For major upgrades the team is responsible for coordinating the upgrade with the
 
 Examples of shared repositories are [`server`][server] and [`clients`][clients].
 
+#### Adding a dependency to a shared repository
+
+When adding a new dependency to a shared repository it **must** be owned by a team. It's up to the
+engineer adding the dependency to determine the appropriate team and get their approval for the
+addition before merging the PR. Please check [Renovate configuration](#renovate-configuration) for
+more information on how to assign ownership.
+
 ## Example PR
 
 <figure>
@@ -98,7 +105,22 @@ A typical dependency workflow involves the following steps:
 8. Merge the PR.
 9. Assign the Jira ticket to QA.
 
-If you need to change the code to resolve any issues, please tag a team member for the final review.
+#### Changing a generated PR
+
+When reviewing the PR, you may rarely have to make changes to the branch yourself.
+
+However, caution should be taken when doing so. If a non-Renovate user pushes changes to the
+Renovate-generated PR, Renovate assumes that it is no longer responsible for maintaining the PR.
+**This means that further updates to the package(s) included in the PR will be blocked until the
+modified PR has been merged.**
+
+What this means is that if you do need to make changes during review, you should maintain ownership
+of the PR through the rest of the workflow and not leave the PR open for an extended period.
+
+If you do want Renovate to take over managing the dependencies in the PR again, you can request that
+by selecting the "rebase/retry" checkbox on the PR description.
+
+![Updating a PR](image.png)
 
 :::tip Type Definitions
 

@@ -15,6 +15,9 @@ This uses
 
 2.  Local web client running.
 
+3.  An enterprise account created with the testing credit card located here:
+    [Advanced Server Setup](../advanced-setup.md).
+
 ## Configure IdP
 
 1.  Open your local web client and navigate to your organization → Settings → Single Sign-On.
@@ -81,7 +84,7 @@ This uses
 9.  Start the docker container:
 
     ```bash
-    docker-compose --profile idp up -d
+    docker compose --profile idp up -d
     ```
 
 10. You can test your user configuration by navigating to
@@ -127,7 +130,7 @@ and click Logout. Alternatively, you can use a private browsing session.
 To change the Entity ID or ACS URL, edit the `.env` file and then restart the Docker container:
 
 ```bash
-docker-compose --profile idp up -d
+docker compose --profile idp up -d
 ```
 
 ## Troubleshooting

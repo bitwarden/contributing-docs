@@ -3,6 +3,40 @@
 This section contains development information for the Bitwarden Secrets Manager CLI, language
 wrappers, and integrations based on the SDK.
 
+For more in-depth documentation please review the [SDK Architecture](../../../architecture/sdk),
+Secrets Manager SDK project's [`README`](https://github.com/bitwarden/sdk-sm).
+
+## Requirements
+
+- [Rust](https://www.rust-lang.org/tools/install) latest stable version - (preferably installed via
+  [rustup](https://rustup.rs/))
+- NodeJS and NPM.
+
+See the [Tools and Libraries](../../tools/index.md) page for more information.
+
+## Setup instructions
+
+1.  Clone the repository:
+
+    ```bash
+    git clone https://github.com/bitwarden/sdk-sm.git
+    cd sdk
+    ```
+
+2.  Install the dependencies:
+
+    ```bash
+    npm ci
+    ```
+
+## Building the SDK
+
+To build the SDK, run the following command:
+
+```bash
+cargo build
+```
+
 ## Web client
 
 To start the web client, follow the
@@ -17,4 +51,6 @@ If you have enabled Secrets Manager for your org and do not see Secrets Manager 
 switcher, you may need to manually enable it for your user by going to **Admin Console** ->
 **Members** -> check _"This user can access Secrets Manager"_ for your user.
 
-::: ![Enable for user](enable-sm.png)
+![Enable for user](enable-sm.png)
+
+:::

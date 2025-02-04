@@ -27,6 +27,24 @@ Style][code-style-sql] first, since they have a major impact in how we write mig
 
 :::
 
+:::info
+
+The separate database definitions in `src/Sql/.../dbo` serve as a "master" reference for the
+intended and final state of the database at that time. This is crucial because the state of database
+definitions at the current moment may differ from when a migration was added in the past. These
+definitions act as a lint and validation step to ensure that migrations work as expected, and the
+separation helps maintain clarity and accuracy in database schema management and synchronization
+processes.
+
+Additionally, a
+[SQL database project](https://learn.microsoft.com/en-us/azure-data-studio/extensions/sql-database-project-extension-sdk-style-projects)
+is in place; however, instead of using the auto-generated migrations from
+[DAC](https://learn.microsoft.com/en-us/sql/relational-databases/data-tier-applications/data-tier-applications?view=sql-server-ver16),
+we manually write migrations. This approach is chosen to enhance performance and prevent accidental
+data loss, which is why we have both a `sqlproj` and standalone migrations.
+
+:::
+
 In accordance with the tenets of [Evolutionary Database Design](./edd.mdx), each change needs to be
 considered to be split into two parts:
 

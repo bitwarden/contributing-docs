@@ -267,29 +267,29 @@ and the
 
 On iOS devices, push token registration occurs through the Apple Push Notification service (APNs).
 
-When a user logs in to the iOS application or switches accounts, the application loads the
-[`GroupingsPage`](https://github.com/bitwarden/mobile/blob/main/src/App/Pages/Vault/GroupingsPage/GroupingsPage.xaml.cs).
-In the
-[`GroupingsPage`](https://github.com/bitwarden/mobile/blob/main/src/App/Pages/Vault/GroupingsPage/GroupingsPage.xaml.cs)
-initialization, we first check to make sure the device has accepted push notifications. If not, the
-Bitwarden push notification prompt is shown. This prompt explains why iOS will be requesting push
-notifications for the Bitwarden mobile app.
+When a user logs in to the iOS application or switches accounts, the application loads the initial
+vault screen. The
+[`VaultListProcessor`](https://github.com/bitwarden/ios/blob/main/BitwardenShared/UI/Vault/Vault/VaultList/VaultListProcessor.swift)
+manages this screen, and as part of its processes checks to make sure the device has accepted push
+notifications. If not, the Bitwarden push notification prompt is shown. This prompt explains why iOS
+will be requesting push notifications for the Bitwarden mobile app.
 
 If the user accepts this prompt, or if they already have accepted it, the application checks to see
 if the _current user_ has registered for push notifications within the last day. If they have never
 registered before, or if more than one day has elapsed, the Bitwarden app registers with iOS for
-push notifications, requesting a push token. This is done in the `RegisterAsync()` method in
-[`iOSPushNotificationService`](https://github.com/bitwarden/mobile/blob/main/src/iOS/Services/iOSPushNotificationService.cs).
-`RegisterAsync()` executes the iOS platform-specific method required to begin the token request
-process from APNs.
+push notifications, requesting a push token.
 
-The response from APNs with the push token is received asynchronously. When a token is obtained for
-the device, the `OnRegisteredSuccess()` method in
-[`iOSPushNotificationHandler`](https://github.com/bitwarden/mobile/blob/main/src/iOS/Services/iOSPushNotificationHandler.cs)
-is triggered. This then calls the `OnRegisteredAsync()` method of the
-[`PushNotificationListenerService`](https://github.com/bitwarden/mobile/blob/main/src/App/Services/PushNotificationListenerService.cs),
-passing along the newly-acquired token. This method is responsible for sending the push token to the
-back-end API to register the device + user combination for push notifications.
+The registration for push notifications is handled by calling
+[`registerForRemoteNotifications()`](https://developer.apple.com/documentation/uikit/uiapplication/1623078-registerforremotenotifications)
+on `UIApplication`. The response from APNs with the push token is then received asynchronously. When
+the token is obtained, the delegate methods on
+[`AppDelegate`](https://github.com/bitwarden/ios/blob/main/Bitwarden/Application/AppDelegate.swift)
+are called, which acts as a passthrough for the
+[`AppProcessor`](https://github.com/bitwarden/ios/blob/main/BitwardenShared/UI/Platform/Application/AppProcessor.swift)
+which itself acts more or less as a passthrough for the
+[`NotificationService`](https://github.com/bitwarden/ios/blob/main/BitwardenShared/Core/Platform/Services/NotificationService.swift),
+which in its `didRegister()` method is responsible for sending the push token to the back-end API to
+register the device and user combination for push notifications.
 
 :::note
 
@@ -300,3 +300,10 @@ not usually the case, we check on a daily basis to ensure that the Bitwarden Azu
 is up to date.
 
 :::
+
+<Bitwarden>
+
+Further information on how to debug issues with push notifications on iOS can be found
+[in the mobile section](https://contributing.bitwarden.com/architecture/mobile-clients/ios/push-notification-troubleshooting).
+
+</Bitwarden>

@@ -1,0 +1,122 @@
+---
+sidebar_position: 4
+---
+
+# Requirements
+
+The requirements in this section are organized hierarchically, with top-level requirements defining
+the core rules and obligations that must be met, serving as broad objectives for Bitwarden's
+security model. Sub-requirements expand on these by addressing specific scenarios, exceptions, or
+clarifications, and may override their parent requirement when explicitly stated. Sibling
+requirements at the same level must remain independent and free of contradictions.
+
+## Vault data (VD)
+
+:::warning Draft - Early version
+
+This section is still in its early stages and does not yet reflect current or future standards.
+
+:::
+
+1. Vault data **MUST** be protected _at rest_.
+
+   - a. The Client **MUST** encrypt vault data stored on disk.
+   - b. The Client **MUST** use the UserKey to encrypt vault data stored on the Server.
+   - c. The Client **SHOULD** ensure that no mechanisms exist such that vault data may be stored to
+     disk unencrypted without user consent. This includes cases where it is not the Client itself
+     that stores the data to disk.
+   - d. The Client **MUST** encrypt any vault data derivatives that can be used to re-create the
+     original form or are considered to be vault data on their own.
+   - e. The Client **MUST NOT** store any artifacts (e.g. encryption keys) on disk such that the
+     encrypted vault data can be decrypted without any additional information provided by the User.
+     - i. The Client **MAY** store such artifacts if given an _informed and explicit consent_ by the
+       User.
+   - f. The Client **MUST NOT** store any artifacts (e.g. encryption keys) such that the vault data
+     can be decrypted by the Server, regardless of consent.
+
+2. Vault data **MAY** be unprotected while _in use_.
+
+   - a. The Client **MAY** decrypt all vault data during vault unlock.
+     - i. The Client **SHOULD** minimize the quantity of decrypted vault data.
+   - b. The Client **MAY** leave vault data encrypted after unlock.
+   - c. The Client **SHOULD** ensure that unprotected data is not present in memory when no longer
+     _in use_.
+
+3. Vault data **SHOULD** be protected while _in transit_.
+
+   - 1. The Client **MAY** use unprotected transmissions to the display/monitor.
+   - 2. The Client **SHOULD** use a trusted channel when the transmission crosses process
+        boundaries.
+   - 3. The Client **MUST** use a trusted channel if there is a risk that the data can be
+        eavesdropped by unintended parties.
+   - 4. The Client **MUST** certify that the receiver is within the Bitwarden secure environment.
+   - 5. The Client **MUST** use a trusted channel when the transmission crosses device boundaries.
+
+4. Vault data **MUST NOT** be exported without an _informed and explicit consent_ by the User.
+
+   - 1. The Client **MAY** trust the OS to gather consent.
+   - 2. The Client **MAY** augment the OS when the consent process is not sufficiently clear or
+        explicit.
+   - 3. The Client **SHOULD** guarantee that the third party is the receiver.
+
+## Encryption keys (EK)
+
+:::warning Draft - Early version
+
+This section is still in its early stages and does not yet reflect current or future standards.
+
+:::
+
+1. The UserKey **MUST** have 256 bits of security.
+2. The UserKey **MUST** be protected _at rest_.
+3. The UserKey **MAY** be unprotected while _in use_.
+4. The UserKey **MUST** be protected while _in transit_.
+5. The UserKey **MUST NOT** be exported.
+
+## Authentication tokens (AT)
+
+:::warning Draft - Early version
+
+This section is still in its early stages and does not yet reflect current or future standards.
+
+:::
+
+1. The authentication tokens **MUST** be protected at rest if the client provides a mechanism for
+   secure storage.
+2. The authentication tokens **MUST** be protected in transit.
+
+## Secure channels (SC)
+
+:::info Reviewed - Awaiting implementation
+
+This section has been reviewed and is awaiting implementation.
+
+:::
+
+1. A secure channel **MUST NOT** transmit unprotected data.
+   - a. Metadata related to the communication protocol **MAY** be transmitted unprotected.
+   - b. Metadata related to the communication protocol **MUST** be authenticated.
+2. A secure channel **MUST** protect against unauthorized modifications of the data.
+3. A secure channel **MUST** protect against replay of messages.
+4. A secure channel **MAY** detect loss of data (e.g. dropped messages).
+5. A long-lived secure channel **MUST** protect against the decryption of previously transmitted
+   data in the event of a future key compromise.
+   - a. High-traffic channels **MAY** expose a greater amount of data during key compromise to
+     maintain an acceptable user experience.
+6. A long-lived secure channel **MUST** recover from key compromise to restore full confidentiality.
+   - a. High-traffic channels **MAY** experience a longer recovery period to maintain an acceptable
+     user experience.
+
+## Trusted channels (TC)
+
+:::warning Draft - Early version
+
+This section is still in its early stages and does not yet reflect current or future standards.
+
+:::
+
+1. A trusted channel **MUST** also be a secure channel.
+2. A trusted channel **MUST** guarantee the receiver(s), including unintended ones.
+   - a. The OS **MAY** be trusted to provide this guarantee.
+   - b. The User **MAY** be trusted to provide this guarantee (e.g. using fingerprints)
+3. A trusted channel **MAY** be partially trusted.
