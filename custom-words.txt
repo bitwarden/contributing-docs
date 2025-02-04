@@ -9,6 +9,7 @@ bitwardensecret
 bytemark
 Casbin
 clickjacking
+codebases
 CODEOWNERS
 CQRS
 CTAP2
@@ -20,6 +21,7 @@ HKDF
 hotfix
 hotfixed
 hotfixes
+Hyperscale
 iframes
 inet
 IntelliJ

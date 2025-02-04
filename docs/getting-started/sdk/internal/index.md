@@ -32,11 +32,15 @@ See the [Tools and Libraries](../../tools/index.md) page for more information.
 
 ## Building the SDK
 
-To build the SDK, run the following command:
+The SDK is built for different platforms, all of which have their own build instructions. For more
+information on how to build for a specific platform, refer to the readmes for the different crates:
 
-```bash
-cargo build
-```
+- **Web**: `crates/bitwarden-wasm-internal`
+- **iOS**: `crates/bitwarden-uniffi/swift`
+- **Android**: `crates/bitwarden-uniffi/kotlin`
+
+Please be aware that each platform has its own set of dependencies that need to be installed before
+building. Make sure to double check the readme if you encounter any issues.
 
 ## Linking the SDK to clients
 

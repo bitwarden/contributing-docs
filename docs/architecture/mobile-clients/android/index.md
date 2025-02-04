@@ -59,13 +59,13 @@ The lowest level of the data layer are the "data source" classes. These are the 
 that include data persisted in [Room](https://developer.android.com/jetpack/androidx/releases/room)
 / [SharedPreferences](https://developer.android.com/reference/android/content/SharedPreferences),
 data retrieved from network requests using [Retrofit](https://github.com/square/retrofit), and data
-retrieved via interactions with the [Bitwarden SDK](https://github.com/bitwarden/sdk).
+retrieved via interactions with the [Bitwarden SDK](https://github.com/bitwarden/sdk-internal).
 
 Note that these data sources are constructed in a manner that adheres to a very important principle
 of the app: **that function calls should not throw exceptions** (see the
-[style and best practices documentation](styles-best-practices.md#best-practices--kotlin) for more
-details.) In the case of data sources, this tends to mean that suspending functions like those
-representing network requests or Bitwarden SDK calls should return a
+[style and best practices documentation](/docs/contributing/code-style/android-kotlin.md#best-practices--kotlin)
+for more details.) In the case of data sources, this tends to mean that suspending functions like
+those representing network requests or Bitwarden SDK calls should return a
 [Result](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-result/) type. This is an important
 responsibility of the data layer as a wrapper around other third party libraries, as dependencies
 like Retrofit and the Bitwarden SDK tend to throw exceptions to indicate errors instead.
@@ -369,7 +369,7 @@ components. If there is any new unique UI component that is added, it should alw
 it should be made a shareable component.
 
 Refer to the
-[style and best practices documentation](styles-best-practices.md#best-practices--jetpack-compose)
+[style and best practices documentation](/docs/contributing/code-style/android-kotlin.md#best-practices--jetpack-compose)
 for additional information on best practices when using Compose.
 
 #### State-hoisting
