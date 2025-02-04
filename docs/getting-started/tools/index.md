@@ -20,6 +20,8 @@ environment.
 
 - [Visual Studio Code](https://code.visualstudio.com/) - used for all Typescript projects.
   Suboptimal for C#. Be sure to install [extensions](#visual-studio-code-extensions)
+- [JetBrains Rider](https://www.jetbrains.com/rider/download/) - fully featured IDE for C#, .NET &
+  more.
 - [Xcode](https://developer.apple.com/xcode/) - required for iOS Mobile development and Safari web
   extension
 
@@ -109,8 +111,6 @@ recommended ones include the following:
 
 The following tools may be useful depending on your preferences or what you’re developing.
 
-- [JetBrains Rider](https://www.jetbrains.com/rider/) ($) - an alternative to Visual Studio and/or
-  Visual Studio Code
 - [Microsoft Azure Storage Explorer](https://azure.microsoft.com/en-us/features/storage-explorer/) -
   for connecting to or working with local Azure table storage and queues
 - [Parallels](https://www.parallels.com/) - For running Windows VMs
