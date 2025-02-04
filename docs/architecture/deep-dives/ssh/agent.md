@@ -28,8 +28,8 @@ Logging into a server, the client and server first exchange the set of algorithm
 key exchange and signing. The server has a host key, which is saved locally. Since - in contrast to
 TLS - we don't have central authorities proving the authenticity of a server, the first time
 connecting to a server the client will ask the user to verify the fingerprint of the server, saving
-it subsequently to the `known_hosts` file. In following authentication requests the client will
-check the fingerprint against the saved one, to prevent subsequent machine-in-the-middle attacks.
+it subsequently to the `known_hosts` file. In subsequent authentication requests the client will
+compare the fingerprint against the saved one, to prevent subsequent machine-in-the-middle attacks.
 
 The client and server then agree on authentication methods that they can continue with (for instance
 public key, password). For public keys, the client then offers the public keys to the server, and the server
