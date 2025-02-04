@@ -86,12 +86,12 @@ applications when forwarding the agent are untrusted, the agent requires user ve
 signing operations. In total, the ssh agent feature consists of multiple components:
 
 - [Desktop Native] The agent itself, handling the socket / pipe and signing requests
-- [Desktop Native] A key store that holds the private keys and corresponding cipher id's for the keys
-  of the active and unlocked account
+- [Desktop Native] A key store that holds the private keys and corresponding cipher id's for the
+  keys of the active and unlocked account
 - [Desktop Native & Desktop Electron] A communication layer that allows the native module to show UV
   prompts in the UI
-- [Desktop Electron] A UI component that shows the UV prompts and allows the user to accept or deny the
-  signing request
+- [Desktop Electron] A UI component that shows the UV prompts and allows the user to accept or deny
+  the signing request
 
 The key store is synced on an interval from the renderer process and receives the decrypted private
 keys from the vault ciphers. When locking / changing users, the private keys of the keystore are
