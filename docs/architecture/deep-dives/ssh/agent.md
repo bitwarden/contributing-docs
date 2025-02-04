@@ -1,17 +1,20 @@
 # SSH Agent
 
 An ssh agent acts as a program that holds a set of private keys and provides a way to sign
-challenges with those keys. These challenges can be sign in requests for logging into a server, and
-in newer SSH versions, they can also be used to sign arbitrary data (git commits, but also regular
-files). SSH private keys never leave the vault.
+challenges with those keys, without ever letting the private keys leave the vault. These challenges
+can be sign in requests for logging into a server, and in newer SSH versions, they can also be used
+to sign arbitrary data (git commits, but also regular files).
 
 ## OS interface
 
 On Unix-like systems (Mac, Linux, BSDs), the ssh-agent is provided via a Unix domain socket. The
-agent provides this socket and any application that wants to use the agent connects via this socket,
-usually by getting the socket path from the `SSH_AUTH_SOCK` environment variable.
+agent provides this socket and any application that wants to use the agent connects via this socket.
+This is done by getting the socket path from the `SSH_AUTH_SOCK` environment variable.
 
-On Windows, the agent is provided via a global named pipe at `\\.\pipe\openssh-ssh-agent`. Since only a single application can act as the pipe server, the OpenSSH agent service first needs to be disabled in Windows. After which the Bitwarden desktop app can start the agent listening on this pipe.
+On Windows, the agent is provided via a global named pipe at `\\.\pipe\openssh-ssh-agent`. Since
+only a single application can act as the pipe server, the OpenSSH agent service first needs to be
+disabled in Windows. After which the Bitwarden desktop app can start the agent listening on this
+pipe.
 
 ## SSH Agent Protocol
 
@@ -30,14 +33,14 @@ it subsequently to the `known_hosts` file. In subsequent authentication requests
 compare the fingerprint against the saved one, to prevent subsequent machine-in-the-middle attacks.
 
 The client and server then agree on authentication methods that they can continue with (for instance
-public key, password). For public keys, the client then offers the public keys to the server, and the server
-will reply which keys it accepts. To prevent leaking the set of keys the client has, they can
-additionally configure to offer specific keys to a specific server.
+public key, password). For public keys, the client then offers the public keys to the server, and
+the server will reply which keys it accepts. To prevent leaking the set of keys the client has, they
+can additionally configure to offer specific keys to a specific server.
 
 The ssh client then, for all accepted keys - one by one - asks the agent to sign the login request
 for that specific key. This means that if a server accepts multiple keys, the agent might be asked
 multiple times to provide UV with different keys. These might be detectable by parsing the login
-request to sign, since it contains the user and server hostkey. The sign request does not contain
+request to sign, since it contains the user and server host key. The sign request does not contain
 the IP or hostname of the server, but this could be inferred using the `known_hosts` file.
 
 Only if public key authentication fails will it fallback to password.

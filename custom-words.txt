@@ -18,7 +18,6 @@ dotfile
 F-Droid
 Gitter
 HKDF
-hostkey
 hotfix
 hotfixed
 hotfixes
@@ -51,7 +50,6 @@ owasp
 passcode
 passwordless
 pinentry
-PKCS
 PNSs
 POSIX
 precompiler
