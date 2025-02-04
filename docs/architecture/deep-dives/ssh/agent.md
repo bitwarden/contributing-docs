@@ -11,9 +11,7 @@ On Unix-like systems (Mac, Linux, BSDs), the ssh-agent is provided via a Unix do
 agent provides this socket and any application that wants to use the agent connects via this socket,
 usually by getting the socket path from the `SSH_AUTH_SOCK` environment variable.
 
-On Windows, the agent is provided via a global named pipe at `\\.\pipe\openssh-ssh-agent`. For this,
-the OpenSSH agent service needs to be disabled in Windows, at which point the Bitwarden desktop app
-can start the agent listening on this pipe.
+On Windows, the agent is provided via a global named pipe at `\\.\pipe\openssh-ssh-agent`. Since only a single application can act as the pipe server, the OpenSSH agent service first needs to be disabled in Windows. After which the Bitwarden desktop app can start the agent listening on this pipe.
 
 ## SSH Agent Protocol
 
