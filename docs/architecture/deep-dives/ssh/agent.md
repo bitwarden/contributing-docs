@@ -32,7 +32,7 @@ it subsequently to the `known_hosts` file. In following authentication requests 
 check the fingerprint against the saved one, to prevent subsequent machine-in-the-middle attacks.
 
 The client and server then agree on authentication methods that they can continue with (for instance
-public key, password). For public keys, the client then offers keys to the server, and the server
+public key, password). For public keys, the client then offers the public keys to the server, and the server
 will reply which keys it accepts. To prevent leaking the set of keys the client has, they can
 additionally configure to offer specific keys to a specific server.
 
