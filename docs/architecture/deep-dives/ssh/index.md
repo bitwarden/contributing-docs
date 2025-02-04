@@ -10,7 +10,7 @@ For more information on how Bitwarden implements SSH Agent, see [SSH Agent](./ag
 
 SSH keys are asymmetric key pairs that can be used for signing. Historically, they were intended for
 logging into servers, but recently they can also be used for signing arbitrary data, such as git
-commits or even regular files. These keys consist of a private key, and an associated public key and
+commits or even regular files. These key pairs consist of a private key, an associated public key and
 fingerprint. The latter two can be used to verify a signature created using the private key.
 
 When stored on disk, private keys can be stored in different formats. The modern, widely supported
