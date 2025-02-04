@@ -4,6 +4,7 @@ An ssh agent acts as a program that holds a set of private keys
 and provides a way to sign challenges with those keys. These challenges
 can be sign in requests for logging into a server, and in newer SSH versions,
 they can also be used to sign arbitrary data (git commits, but also regular files).
+SSH private keys never leave the vault.
 
 ## OS interface
 
@@ -45,13 +46,24 @@ Only if public key authentication fails will it fallback to password.
 Any clients can access the agent via the socket / pipe. Further SSH supports a feature called agent forwarding.
 Forwarding can be used to log into a remote server A, and allow that server to access server B and authenticate to it,
 without ever giving the keys to server A. While convenient, care has to be taken, both about which servers the agent
-is forwarded to, but also to require more user verification for signing operations.
+is forwarded to, but also to always require user verification for signing operations.
 
 ## SSH Signatures
 
-The ssh agent can not only sign login requests but also arbitrary data. While this is currently not parsed
-and used by the Bitwarden Desktop app, the format for these signature requests
-is specified at [Protocol.sshsig](https://github.com/openssh/openssh-portable/blob/master/PROTOCOL.sshsig).
+The ssh agent can not only sign login requests but also arbitrary data. The format for these signature requests
+is specified at [Protocol.sshsig](https://github.com/openssh/openssh-portable/blob/master/PROTOCOL.sshsig). During
+a signature request, the desktop client detects SSHSIG requests and parses the namespace, passing it on to the UI to present.
+
+## Verifying SSH Client Processes
+
+In order to present details about which application is requesting access to the any SSH key, information about
+the connecting process is gathered. On unix, this works via the `SO_PEERCRED` `socketopt`. This provides the PID of the
+connecting process. On Windows, [`GetNamedPipeClientPRocessId`](https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-getnamedpipeclientprocessid) is used.
+
+Using the process id, further information about the process (process name, signature, application name, application logo)
+can be acquired, but for now, just process name is used. Depending on the client application, the process hierarchy might look different, and the process connecting might be a one-time child process of the application that the user expects to connect.
+
+When agent forwarding is used, an `EXTENSION` command is sent to the client with the `extension_name` set to [`session-bind@openssh.com`](https://raw.githubusercontent.com/openssh/openssh-portable/refs/heads/master/PROTOCOL.agent). This is detected and noted on the connection, so that the clients can handle this appropriately.
 
 ## Architecture in Bitwarden Desktop
 
@@ -62,7 +74,7 @@ requires user verification for signing operations. In total, the ssh agent featu
 - [Desktop Native] The agent itself, handling the socket / pipe and signing requests
 - [Desktop Native] A key store that holds the private keys and corresponding cipher id's for the keys of the active and unlocked account
 - [Desktop Native & Desktop Electron] A communication layer that allows the native module to show UV prompts in the UI
-- [Desktop Electron] A UI component that shows the UV promts and allows the user to accept or deny the signing request
+- [Desktop Electron] A UI component that shows the UV prompts and allows the user to accept or deny the signing request
 
-The key store is synced on an interval from the renderer process and receives the decrytped private keys from the vault ciphers.
-When locking / changing users, the keystore is wiped.
+The key store is synced on an interval from the renderer process and receives the decrypted private keys from the vault ciphers.
+When locking / changing users, the private keys of the keystore are wiped. When locking, the public keys are kept, so that listing still works. This means that when locked after unlocking once, the correct ssh key for a server can be chosen, and a signing request made. This then prompts the user to unlock their vault in order to approve the request.
