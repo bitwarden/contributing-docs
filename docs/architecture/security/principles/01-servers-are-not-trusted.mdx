@@ -30,8 +30,9 @@ used by advanced self-hosted users.
 
 ### Icons service
 
-The Bitwarden icons service enables the retrieval of site favicons to decorate vault items in the
-Bitwarden clients. To enable this functionality, clients do send clear text domain name information
-to the Bitwarden icons service. These URIs are normally encrypted in a vault, but we do this to
-aggregate access to the requested domain, speed up loading of vaults, and ensure favicons accurately
-represent the associated URI. This feature is easily disabled in client settings.
+The Bitwarden icons service provides site favicons to decorate vault items in the Bitwarden clients.
+To enable this functionality, clients need to send clear text domain name information to the
+Bitwarden icons service. Communicated information is limited to vault item URIs matching some simple
+structural requirement. These URIs are encrypted in a vault, but we do this to aggregate access to
+the requested domain, speed up loading of vaults, and ensure favicons accurately represent the
+associated URI. This feature is easily disabled in client settings.
