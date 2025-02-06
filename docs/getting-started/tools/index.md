@@ -21,7 +21,7 @@ environment.
 - [Visual Studio Code](https://code.visualstudio.com/) - used for all Typescript projects.
   Suboptimal for C#. Be sure to install [extensions](#visual-studio-code-extensions)
 - [JetBrains Rider](https://www.jetbrains.com/rider/download/) - fully featured IDE for C#, .NET &
-  more.
+  more. Bitwarden developers should contact IT for a license
 - [Xcode](https://developer.apple.com/xcode/) - required for iOS Mobile development and Safari web
   extension
 
