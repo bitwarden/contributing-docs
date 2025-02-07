@@ -18,7 +18,7 @@ Before you start: make sure you’ve installed the recommended
 - Visual Studio 2022
 - Powershell
 - [NET 8.0 SDK](https://dotnet.microsoft.com/download)
-- Azure Data Studio
+- Your preferred database management tool
 
 :::
 
@@ -134,7 +134,8 @@ After that, rerun the docker compose command from Step 5.
 
 ### SQL Server
 
-You can connect to the Microsoft SQL Server using Azure Data Studio with the following credentials:
+You can connect to the Microsoft SQL Server using your preferred database management tool with the
+following credentials:
 
 - Server: localhost
 - Port: 1433
