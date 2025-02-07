@@ -68,16 +68,16 @@ of listening to the stream of events is decoupled from the act of responding to 
 
 **Listeners**
 
-- One ListenerService per communication platform (i.e. one for RabbitMQ, one for Azure Service Bus)
-- Multiple instances can be configured to run independently, each with its own Handler and
-  subscription/queue.
-- Perform all the aspects of setup/teardown, subscription, etc. for the messaging platform, but do
+- One listener per communication platform (e.g. one for RabbitMQ, one for Azure Service Bus).
+- Multiple instances can be configured to run independently, each with its own handler and
+  subscription / queue.
+- Perform all the aspects of setup / teardown, subscription, etc. for the messaging platform, but do
   not directly process any events themselves. Instead, they delegate to the handler with which they
   are configured.
 
 **Handlers**
 
-- One EventHandler per integration (e.g. currently HttpPost, EventRepository)
+- One handler per integration (e.g. HTTP post or event database repository).
 - Completely isolated from and know nothing of the messaging platform in use. This allows them to be
   freely reused across different communication platforms.
 - Perform all aspects of handling an event.
@@ -85,8 +85,8 @@ of listening to the stream of events is decoupled from the act of responding to 
   aspects of messaging.
 
 This combination allows for a configuration inside of `Startup.cs` that pairs instances of the
-ListenerService for the currently running messaging platform with any number of Handlers. It also
-allows for quick development of new Handlers as they are focused only on the task of handling a
+listener service for the currently running messaging platform with any number of handlers. It also
+allows for quick development of new handlers as they are focused only on the task of handling a
 specific event.
 
 ### RabbitMQ implementation
@@ -229,12 +229,12 @@ end
 
 #### Running the Azure Service Bus emulator
 
-1. Make sure you have Azurite setup locally (as
+1. Make sure you have Azurite set up locally (as
    [per the normal instructions](https://contributing.bitwarden.com/getting-started/server/guide#azurite)
-   for writing Events to Azure Table Storage). In addition, this assumes you're using the `mssql`
+   for writing events to Azure Table Storage). In addition, this assumes you're using the `mssql`
    default profile and have the `${MSSQL_PASSWORD}` set via `.env`.
 
-2. Run docker compose to add/start the local emulator:
+2. Run Docker Compose to add/start the local emulator:
 
 ```bash
 docker compose --profile servicebus up -d
