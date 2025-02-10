@@ -31,15 +31,15 @@ improvements to remove them. All exceptions are outlined here.
 Key connector is a self-host only feature that allows an organization user to log in and unlock with
 SSO and no password input. This feature is specifically limited to self-hosted instances due to this
 principle. It is possible for a Bitwarden server to create an authentication token, contact the Key
-Connector server, and retrieve key material that will allow decryption of a user's vault. For these
-reasons we encourage strict isolation of key connector servers to private networks and only to be
-used by advanced self-hosted users.
+Connector server, and retrieve key material that will allow decryption of a user's encrypted data.
+For these reasons we encourage strict isolation of key connector servers to private networks and
+only to be used by advanced self-hosted users.
 
 ### Icons service
 
 The Bitwarden icons service provides site favicons to decorate vault items in the Bitwarden clients.
 To enable this functionality, clients need to send clear text domain name information to the
-service. Communicated information is limited to vault item URIs matching some simple structural
-requirement. These URIs are encrypted in a vault, but we do this to aggregate access to the
-requested domain, speed up loading of vaults, and ensure favicons accurately represent the
-associated URI. This feature is easily disabled in client settings.
+service. Communicated information is limited to vault item URIs. These URIs are part of a user's
+encrypted content, but we do this to aggregate access to the requested domain, speed up loading of
+vaults, and ensure favicons accurately represent the associated URI. This feature is easily disabled
+in client settings.
