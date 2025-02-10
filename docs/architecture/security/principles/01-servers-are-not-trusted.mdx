@@ -6,7 +6,11 @@ for client data does not grant the server, or any intermediary between the serve
 ability to reduce the effective security of the protections that guard a user's data. If a user
 chooses a weaker form of protection (e.g., a password instead of a passkey), that is an intentional
 user decision, but the server must not be able to manipulate or coerce a client into reducing
-security beyond what the user knowingly configures.
+security beyond what the user knowingly configures. In addition to inability to weaken a user's
+encrypted data, the server and any necessary infrastructure cannot masquerade chosen clear text data
+as belonging in the set of a users encrypted data. The total sum of a user's encrypted data is fully
+isolated from the server and infrastructure. It cannot be read nor expanded outside of the user's
+client context
 
 This is what we mean when we sometimes refer to "End-to-end encrypted."
 
