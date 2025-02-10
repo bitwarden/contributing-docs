@@ -1,9 +1,12 @@
 # P01 - Servers are not trusted
 
-Clients do not need to trust Bitwarden server or web infrastructure to be good actors to keep an
-account's encrypted content secure. In other words, the special status of providing a network sync
-for client data does not enable a server, or any entity between the server and client, to take any
-action that would aid in decryption of a user's vault by the server.
+Clients do not need to trust Bitwarden's server or other web infrastructure to act as good actors in
+order to keep an account's encrypted content secure. The special status of providing a network sync
+for client data does not grant the server, or any intermediary between the server and client, the
+ability to reduce the effective security of the protections that guard a user's data. If a user
+chooses a weaker form of protection (e.g., a password instead of a passkey), that is an intentional
+user decision, but the server must not be able to manipulate or coerce a client into reducing
+security beyond what the user knowingly configures.
 
 This is what we mean when we sometimes refer to "End-to-end encrypted."
 
