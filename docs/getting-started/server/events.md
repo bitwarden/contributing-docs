@@ -99,9 +99,9 @@ the RabbitMQ exchange and writes to the `Events` table via the `EventsRepository
 the same (events are stored in the database), but the addition of the RabbitMQ exchange allows for
 other integrations to subscribe.
 
-To illustrate the ability to fan-out events, an `RabbitMqEventListenerService` instance, configured
-with an `HttpPostEventHandler` subscribes to the RabbitMQ events exchange and `POST`s each event to
-a configurable URL. This is meant to be a simple, concrete example of how multiple integrations are
+To illustrate the ability to fan-out events, a `RabbitMqEventListenerService` instance, configured
+with a `WebhookEventHandler` subscribes to the RabbitMQ events exchange and `POST`s each event to a
+configurable URL. This is meant to be a simple, concrete example of how multiple integrations are
 enabled by moving to distributed events.
 
 ```kroki type=mermaid
@@ -111,7 +111,7 @@ graph TD
         B2[RabbitMQEventWriteService]
         B3[RabbitMQ exchange]
         B4[EventRepositoryHandler]
-        B5[HttpPostEventHandler]
+        B5[WebhookEventHandler]
         B6[Events Database Table]
         B7[HTTP Server]
 
@@ -161,18 +161,22 @@ end
         "password": "SET_A_PASSWORD_HERE_123",
         "exchangeName": "events-exchange",
         "eventRepositoryQueueName": "events-write-queue",
-        "httpPostQueueName": "events-httpPost-queue",
+        "webhookQueueName": "events-webhook-queue",
       }
-      "httpPostUrl": "<HTTP POST URL>",
+      "webhookUrl": "<HTTP POST URL>",
     }
     ```
 
-2.  (optional) The `httpPostQueueName` and `httpPostUrl` specified above are optional. If they are
-    defined, an `HttpPostEventHandler` will be added to a `RabbitMqEventListenerService` instance
-    that will `POST` the event to the configured URL.
+2.  (optional) The `webhookQueueName` and `webhookUrl` specified above are optional. If they are
+    defined, a `WebhookEventHandler` will be added to a `RabbitMqEventListenerService` instance that
+    will `POST` the event to the configured URL.
 
-    - Tip: [RequestBin](http://requestbin.com/) provides an easy to set up server that will receive
-      these requests and let you inspect them.
+    :::info
+
+    [RequestBin](http://requestbin.com/) provides an easy to set up server that will receive these
+    requests and let you inspect them.
+
+    :::
 
 3.  Re-run the PowerShell script to add these secrets to each Bitwarden project:
 
@@ -195,8 +199,8 @@ instance of `AzureServiceBusEventListenerService` is then configured with the
 Similar to RabbitMQ above, the end result is the same (events are stored in Azure Table Storage),
 but the addition of the service bus topic allows for other integrations to subscribe.
 
-As with the RabbitMQ implementation above, an `HttpPostEventHandler` can be configured to run and
-POST events to a URL via a separate subscription.
+As with the RabbitMQ implementation above, a `WebhookEventHandler` can be configured to run and POST
+events to a URL via a separate subscription.
 
 ```kroki type=mermaid
 graph TD
@@ -205,7 +209,7 @@ graph TD
         B2[AzureServiceBusEventWriteService]
         B3[Azure Service Bus Topic]
         B4[AzureTableStorageEventHandler]
-        B5[HttpPostEventHandler]
+        B5[WebhookEventHandler]
         B6[Events in Azure Tables]
         B7[HTTP Server]
 
@@ -240,8 +244,12 @@ end
 docker compose --profile servicebus up -d
 ```
 
-- Note: The service bus emulator waits 15 seconds before starting. You can check the console in
-  Docker desktop to make sure it's up before launching the server.
+:::info
+
+The service bus emulator waits 15 seconds before starting. You can check the console in Docker
+desktop or run `docker logs service-bus` to verify the service is up before launching the server.
+
+:::
 
 #### Configuring the server to use Azure Service Bus for events
 
@@ -253,14 +261,15 @@ docker compose --profile servicebus up -d
 		"connectionString": "\"Endpoint=sb://localhost;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=SAS_KEY_VALUE;UseDevelopmentEmulator=true;\"",
 		"topicName": "event-logging",
 		"eventRepositorySubscriptionName": "events-write-subscription",
-		"httpPostSubscriptionName": "events-httpPost-subscription"
+		"webhookSubscriptionName": "events-webhook-subscription"
 	  },
-	  "httpPostUrl": "<Optional URL here>"
+	  "webhookUrl": "<Optional URL here>"
 	},
 ```
 
-- The `httpPostUrl` and `httpPostSubscriptionName` configure the optional HTTP POST handler. If they
-  are not present, the handler will not be run.
+- The `webhookUrl` and `webhookSubscriptionName` configure the optional Webhook handler. If they are
+  not present, the handler will not be run. If you choose not to use the webhook handler, you should
+  also remove the `events-webhook-subscription` from `servicebusemulator_config.json`
 
 2. Re-run the secrets script to publish the new secrets
 
