@@ -253,7 +253,7 @@ desktop or run `docker logs service-bus` to verify the service is up before laun
 
 #### Configuring the server to use Azure Service Bus for events
 
-1. Add the following to your `sercrets.json` in `dev` to configure the service bus:
+1. Add the following to your `secrets.json` in `dev` to configure the service bus:
 
 ```json
 	"eventLogging": {
@@ -261,15 +261,9 @@ desktop or run `docker logs service-bus` to verify the service is up before laun
 		"connectionString": "\"Endpoint=sb://localhost;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=SAS_KEY_VALUE;UseDevelopmentEmulator=true;\"",
 		"topicName": "event-logging",
 		"eventRepositorySubscriptionName": "events-write-subscription",
-		"webhookSubscriptionName": "events-webhook-subscription"
-	  },
-	  "webhookUrl": "<Optional URL here>"
+	  }
 	},
 ```
-
-- The `webhookUrl` and `webhookSubscriptionName` configure the optional Webhook handler. If they are
-  not present, the handler will not be run. If you choose not to use the webhook handler, you should
-  also remove the `events-webhook-subscription` from `servicebusemulator_config.json`
 
 2. Re-run the secrets script to publish the new secrets
 
@@ -278,3 +272,38 @@ pwsh setup_secrets.ps1 -clear
 ```
 
 3. Start or re-start all services, including `EventsProcessor`.
+
+### Configuring the Webhook Handler (optional)
+
+1. Edit the `servicebusemulator_config.json` file to add a subscription to the main `event-logging`
+   topic:
+
+```json
+{
+  "Name": "events-webhook-subscription"
+}
+```
+
+2. Restart the server-bus container to pick up these changes
+
+3. Add the webhook subscription name and URL configuration to `secrets.json`
+
+```json
+  "eventLogging": {
+    "azureServiceBus": {
+    "connectionString": "\"Endpoint=sb://localhost;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=SAS_KEY_VALUE;UseDevelopmentEmulator=true;\"",
+    "topicName": "event-logging",
+    "eventRepositorySubscriptionName": "events-write-subscription",
+    "webhookSubscriptionName": "events-webhook-subscription"
+    },
+    "webhookUrl": "<Optional URL here>"
+  },
+```
+
+4. Publish the new secrets to the apps:
+
+   ```bash
+   pwsh setup_secrets.ps1 -clear
+   ```
+
+5. Restart all services, including `EventsProcessor`
