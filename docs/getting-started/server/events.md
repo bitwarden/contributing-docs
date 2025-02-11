@@ -273,7 +273,7 @@ pwsh setup_secrets.ps1 -clear
 
 3. Start or re-start all services, including `EventsProcessor`.
 
-### Configuring the Webhook Handler (optional)
+### Configuring the webhook (optional)
 
 1. Edit the `servicebusemulator_config.json` file to add a subscription to the main `event-logging`
    topic:
