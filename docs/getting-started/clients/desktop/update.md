@@ -29,7 +29,8 @@ process without messing around in a GitHub repo.
     },
     ```
 
-4.  Create `.aws/credentials` inside the Users home directory (Windows: C:\Users\username, Linux: ~/) with the following content
+4.  Create `.aws/credentials` inside the Users home directory (Windows: C:\Users\username, Linux:
+    ~/) with the following content
 
     ```bash
     [default]
