@@ -38,7 +38,7 @@ in Splunk.
    ```
 
    Where `<executable>` is the executable for Python. If this is in your PATH variable then you do
-   not need to specify the full path. e.g. `poetry env use python3.9`
+   not need to specify the full path. e.g. `poetry env use python3.9`.
 
 4. Install dependencies:
 
@@ -67,7 +67,7 @@ in Splunk.
    ./package.sh
    ```
 
-   This will produce a packaged Splunk app in `output/bitwarden_event_logs.tar.gz`
+   This will produce a packaged Splunk app in `output/bitwarden_event_logs.tar.gz`.
 
 2. Deploy the app to Splunk:
 
@@ -85,16 +85,25 @@ in Splunk.
 
 ### Configure the app in Splunk
 
-1. Navigate to the Splunk web app: http://localhost:8001
+1. Navigate to the Splunk web app: http://localhost:8001.
 
-2. Log in with the username `admin` and the password `password`
+2. Log in with the username `admin` and the password `password`.
 
-3. Click on the _Apps_ -> _Bitwarden Event Logs_
+3. Click on the _Apps_ -> _Bitwarden Event Logs_.
 
 4. Complete the setup. Refer to the [Bitwarden Help Center][Bitwarden Splunk SIEM] for more
-   information about configuration
+   information about configuration.
 
-You should now see your organization events in _Apps_ -> _Bitwarden Event Logs_ -> _Dashboards_.
+:::warning
+
+Splunk uses https and requires additional configuration to work with your local dev server. We don't
+have instructions for this yet. In the meantime, we recommend configuring Splunk to use a Bitwarden
+cloud deployment (such as production or an internal QA environment).
+
+:::
+
+You should now see your organization events in _Apps_ -> _Bitwarden Event Logs_ -> _Dashboards_. If
+no event logs appear, check the Splunk logs (see above).
 
 [Bitwarden Splunk SIEM]: https://bitwarden.com/help/splunk-siem/
 [poetry]: https://python-poetry.org/docs/#installation
