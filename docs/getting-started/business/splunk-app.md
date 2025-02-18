@@ -9,6 +9,7 @@ in Splunk.
   -> _Use Rosetta for x86_64/amd64 emulation on Apple Silicon_
 - Python 3.7 - 3.10
 - [Poetry][poetry]
+  - Also install Poetry export plugin with `poetry self add poetry-plugin-export`
 - libmagic (macOS only), available via homebrew: `brew install libmagic`
 - A Bitwarden Teams or Enterprise organization
 - If using a local development server - make sure the Events and EventsProcessor projects are
@@ -37,15 +38,9 @@ in Splunk.
    ```
 
    Where `<executable>` is the executable for Python. If this is in your PATH variable then you do
-   not need to specify the full path. e.g. `poetry env use python3.8`
+   not need to specify the full path. e.g. `poetry env use python3.9`
 
-4. Activate the poetry shell:
-
-   ```
-   poetry shell
-   ```
-
-5. Install dependencies:
+4. Install dependencies:
 
    ```
    poetry install --with dev
@@ -56,7 +51,7 @@ in Splunk.
 1. Run Splunk Enterprise:
 
    ```
-   docker run --rm --platform linux/amd64 --name splunk -d -p 8001:8000 -p 8089:8089 -e SPLUNK_START_ARGS='--accept-license' -e SPLUNK_PASSWORD='password' splunk/splunk:latest
+   docker run --rm --platform linux/amd64 --name splunk -d -p 8001:8000 -p 8089:8089 -e SPLUNK_START_ARGS='--accept-license' -e SPLUNK_PASSWORD='password' splunk/splunk:9.3
    ```
 
    Please note this will set the admin password to `password`. This is for development purposes
@@ -85,7 +80,7 @@ in Splunk.
 
 3. (optional) Check the logs for errors or for debugging purposes later:
    ```
-   docker exec -u splunk -it splunk tail -f /opt/splunk/var/log/splunk/bitwarden_event_logs_beta.log
+   docker exec -u splunk -it splunk tail -f /opt/splunk/var/log/splunk/bitwarden_event_logs.log
    ```
 
 ### Configure the app in Splunk

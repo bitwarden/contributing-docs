@@ -25,12 +25,6 @@ We generally strive towards extracting features into separate crates to keep the
 crate as lean as possible. This has multiple benefits such as faster compile-time and clear
 ownership of features.
 
-### `bitwarden` crate
-
-The `bitwarden` crate represents the entry point for consumers of the SDK and is responsible for
-providing a cohesive interface. The crate re-exports functionality of the internal crates and
-contains very little logic itself.
-
 ### `bitwarden-core` crate
 
 The `bitwarden-core` crate contains the underlying functionality of the SDK. This includes a

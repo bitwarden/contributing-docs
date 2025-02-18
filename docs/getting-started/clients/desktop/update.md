@@ -1,7 +1,7 @@
 # Update testing
 
 Sometimes it might be necessary to test the update flow of the desktop application. This document
-will attempt to describe how to do so in details.
+will attempt to describe how to do so in detail.
 
 The desktop applications are published to our GitHub page, which we can’t really do for development
 purposes. To provide a fairly similar environment, we run a local S3 simulator which lets us
@@ -19,7 +19,7 @@ process without messing around in a GitHub repo.
 
     ![](./minio-access-rule.png)
 
-3.  Modify the `package.json` with the following `publish` settings.
+3.  Modify the `electron-builder.json` with the following `publish` settings.
 
     ```json
     "publish" : {
@@ -29,7 +29,8 @@ process without messing around in a GitHub repo.
     },
     ```
 
-4.  Create `.aws/credentials` inside the Users directory (Windows) with the following content
+4.  Create `.aws/credentials` inside the Users home directory (Windows: C:\Users\username, Linux:
+    ~/) with the following content
 
     ```bash
     [default]
@@ -42,8 +43,10 @@ process without messing around in a GitHub repo.
 1.  Generate a local build using `npm run publish:win:dev`
 2.  Install the build within `dist/nsis-web/Bitwarden-Installer-1.32.0.exe`
 3.  Update the version number in `src/package.json`
-4.  Publish the new version using `npm run publish:win:dev`
+4.  Publish the new version using: `npm run publish:win:dev`
 5.  The app should now prompt for an update.
+
+Note: This can also be done on Linux, just use `npm run publish:lin` for steps 1 and 4.
 
 Related:
 [https://www.electron.build/tutorials/test-update-on-s3-locally](https://www.electron.build/tutorials/test-update-on-s3-locally)
