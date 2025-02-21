@@ -72,7 +72,6 @@ Serilog
 signtool
 signup
 sqlcmd
-sshsig
 struct
 structs
 subfolders

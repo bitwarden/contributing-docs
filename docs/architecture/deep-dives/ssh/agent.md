@@ -25,9 +25,9 @@ operations are always allowed by default, while sign operations require user ver
 
 ### Signing during login
 
-When logging into a server, the client and server first exchange the set of algorithms they support for
-key exchange and signing. The server has a host key, which is saved locally. Since - in contrast to
-TLS - we don't have central authorities proving the authenticity of a server, the first time
+When logging into a server, the client and server first exchange the set of algorithms they support
+for key exchange and signing. The server has a host key, which is saved locally. Since - in contrast
+to TLS - we don't have central authorities proving the authenticity of a server, the first time
 connecting to a server the client will ask the user to verify the fingerprint of the server, saving
 it subsequently to the `known_hosts` file. In subsequent authentication requests the client will
 compare the fingerprint against the saved one, to prevent subsequent machine-in-the-middle attacks.
@@ -57,9 +57,9 @@ verification for signing operations.
 
 The ssh agent can not only sign login requests but also arbitrary data. The format for these
 signature requests is specified at
-[Protocol.sshsig](https://github.com/openssh/openssh-portable/blob/master/PROTOCOL.sshsig). During a
-signature request, the desktop client detects `SSHSIG` requests and parses the namespace, passing it
-on to the UI to present.
+[`Protocol.sshsig`](https://github.com/openssh/openssh-portable/blob/master/PROTOCOL.sshsig). During
+a signature request, the desktop client detects `SSHSIG` requests and parses the namespace, passing
+it on to the UI to present.
 
 ## Verifying SSH Client Processes
 
