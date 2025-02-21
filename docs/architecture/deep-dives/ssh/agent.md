@@ -58,7 +58,7 @@ verification for signing operations.
 The ssh agent can not only sign login requests but also arbitrary data. The format for these
 signature requests is specified at
 [Protocol.sshsig](https://github.com/openssh/openssh-portable/blob/master/PROTOCOL.sshsig). During a
-signature request, the desktop client detects SSHSIG requests and parses the namespace, passing it
+signature request, the desktop client detects `SSHSIG` requests and parses the namespace, passing it
 on to the UI to present.
 
 ## Verifying SSH Client Processes
