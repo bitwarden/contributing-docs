@@ -25,7 +25,7 @@ operations are always allowed by default, while sign operations require user ver
 
 ### Signing during login
 
-Logging into a server, the client and server first exchange the set of algorithms they support for
+When logging into a server, the client and server first exchange the set of algorithms they support for
 key exchange and signing. The server has a host key, which is saved locally. Since - in contrast to
 TLS - we don't have central authorities proving the authenticity of a server, the first time
 connecting to a server the client will ask the user to verify the fingerprint of the server, saving
