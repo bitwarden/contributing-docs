@@ -24,5 +24,5 @@ a passphrase, the encryption key is derived from the passphrase using a
 [KDF](https://en.wikipedia.org/wiki/Key_derivation_function) such as bcrypt. SSH private keys can be
 encrypted using different ciphers (`AES-128`, `AES-192`, `AES-256`, `3DES`). Keys can be used
 directly by applications, but more commonly they are loaded and held in an SSH agent. An agents
-can - after decrypting - hold the keys in memory and provide signing capabilities. Further, keys can
+can - after decrypting - hold the keys in memory and provide signing capabilities. Keys can
 also be stored on hardware tokens like Yubikeys (`ed25519-sk`).
