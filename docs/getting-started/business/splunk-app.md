@@ -54,9 +54,13 @@ in Splunk.
    docker run --rm --platform linux/amd64 --name splunk -d -p 8001:8000 -p 8089:8089 -e SPLUNK_START_ARGS='--accept-license' -e SPLUNK_PASSWORD='password' splunk/splunk:9.3
    ```
 
-:::warning If you are using an Apple Silicon Mac, you must use up to version 9.3 of splunk. As of
-version 9.4, splunk depends on the use of the AVX instruction set for its KVStore, which is not
-supported by Apple Silicon. :::
+:::warning
+
+If you are using an Apple Silicon Mac, you must use up to version 9.3 of Splunk. As of version 9.4,
+Splunk depends on the use of the AVX instruction set for its KVStore, which is not supported by
+Apple Silicon.
+
+:::
 
 Please note this will set the admin password to `password`. This is for development purposes only.
 
