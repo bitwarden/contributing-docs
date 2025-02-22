@@ -10,9 +10,10 @@ trustworthy observable stream of that state.
   - [`StateDefinition`](#statedefinition)
   - [`KeyDefinition` & `UserKeyDefinition`](#keydefinition-and-userkeydefinition)
 - [`StateProvider`](#stateprovider)
-- [`ActiveUserState<T>`](#activeuserstatet)
+- [`Update`](#updating-state-with-update)
 - [`GlobalState<T>`](#globalstatet)
 - [`SingleUserState<T>`](#singleuserstatet)
+- [`ActiveUserState<T>`](#activeuserstatet)
 
 ### Storage definitions
 
@@ -214,6 +215,8 @@ type StateUpdateOptions = {
   msTimeout?: number
 }
 ```
+
+#### Using `shouldUpdate` to filter unnecessary updates
 
 We recommend using `shouldUpdate` when possible. This will avoid unnecessary I/O for redundant
 updates and avoid an unnecessary emission of `state$`.
