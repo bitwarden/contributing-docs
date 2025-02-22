@@ -198,6 +198,76 @@ class FolderService {
 }
 ```
 
+### Updating state with `update`
+
+The update method has options defined as follows:
+
+```typescript
+{ActiveUser|SingleUser|Global}State<T> {
+  // ... rest of type left out for brevity
+  update<TCombine>(updateState: (state: T, dependency: TCombine) => T, options?: StateUpdateOptions);
+}
+
+type StateUpdateOptions = {
+  shouldUpdate?: (state: T, dependency: TCombine) => boolean;
+  combineLatestWith?: Observable<TCombine>;
+  msTimeout?: number
+}
+```
+
+We recommend using `shouldUpdate` when possible. This will avoid unnecessary I/O for redundant
+updates and avoid an unnecessary emission of `state$`.
+
+A common use of this would be to avoid setting state to `null` when it is already `null`. The
+`shouldUpdate` method gives you in its first parameter the value of state before any change has been
+made to it and the dependency you have, optionally, provided through `combineLatestWith`. To avoid
+setting `null` to your state when it's already `null` you could call `update` like below:
+
+```typescript
+await myUserState.update(() => null, { shouldUpdate: (state) => state != null });
+```
+
+The `combineLatestWith` option can be useful when updates to your state depend on the data from
+another stream of data. In
+[this example](https://github.com/bitwarden/clients/blob/2eebf890b5b1cfbf5cb7d1395ed921897d0417fd/libs/common/src/auth/services/account.service.ts#L88-L107)
+you can see how we don't want to set a user ID to the active account ID unless that user ID exists
+in our known accounts list. This can be preferred over the more manual implementation like such:
+
+```typescript
+const accounts = await firstValueFrom(this.accounts$);
+if (accounts?.[userId] == null) {
+  throw new Error();
+}
+await this.activeAccountIdState.update(() => userId);
+```
+
+The use of the `combineLatestWith` option is preferred because it fixes a couple subtle issues.
+First, the use of `firstValueFrom` with no `timeout`. Behind the scenes we enforce that the
+observable given to `combineLatestWith` will emit a value in a timely manner, in this case a
+`1000ms` timeout but that number is configurable through the `msTimeout` option. The second issue it
+fixes is that we don't guarantee that your `updateState` function is called the instant that the
+`update` method is called. We do however promise that it will be called before the returned promise
+resolves or rejects. This may be because we have a lock on the current storage key. No such locking
+mechanism exists today but it may be implemented in the future. As such, it is safer to use
+`combineLatestWith` because the data is more likely to retrieved closer to when it needs to be
+evaluated.
+
+### `GlobalState<T>`
+
+`GlobalState<T>` has an incredibly similar API surface as `ActiveUserState<T>` except it targets
+global-scoped storage and does not emit an update to `state$` when the active user changes, only
+when the stored value is updated.
+
+### `SingleUserState<T>`
+
+`SingleUserState<T>` behaves very similarly to `GlobalState<T>` where neither will react to active
+user changes and you instead give it the user you want it to care about up front, which is publicly
+exposed as a `readonly` member.
+
+Updates to `SingleUserState` or `ActiveUserState` handling the same `KeyDefinition` will cause each
+other to emit on their `state$` observables if the `userId` handled by the `SingleUserState` happens
+to be active at the time of the update.
+
 ### `ActiveUserState<T>`
 
 :::warning
@@ -229,79 +299,6 @@ The `state$` property provides you with an `Observable<T>` that can be subscribe
     pointing at the user that is active that had `update` called
   - Someone updates the key directly on the underlying storage service _(please don't do this)_
 
-### `GlobalState<T>`
-
-`GlobalState<T>` has an incredibly similar API surface as `ActiveUserState<T>` except it targets
-global-scoped storage and does not emit an update to `state$` when the active user changes, only
-when the stored value is updated.
-
-### `SingleUserState<T>`
-
-`SingleUserState<T>` behaves very similarly to `GlobalState<T>` where neither will react to active
-user changes and you instead give it the user you want it to care about up front, which is publicly
-exposed as a `readonly` member.
-
-Updates to `SingleUserState` or `ActiveUserState` handling the same `KeyDefinition` will cause each
-other to emit on their `state$` observables if the `userId` handled by the `SingleUserState` happens
-to be active at the time of the update.
-
-## Migrating
-
-Migrating data to state providers is incredibly similar to migrating data in general. You create
-your own class that extends `Migrator<From, To>`. That will require you to implement your own
-`migrate(migrationHelper: MigrationHelper)` method. `MigrationHelper` already includes methods like
-`get` and `set` for getting and settings value to storage by their string key. There are also
-methods for getting and setting using your `KeyDefinition` or `KeyDefinitionLike` object to and from
-user and global state. An example of how you might use these new helpers is below:
-
-```typescript
-type ExpectedGlobalState = { myGlobalData: string };
-
-type ExpectedAccountState = { myUserData: string };
-
-const MY_GLOBAL_KEY_DEFINITION: KeyDefinitionLike = {
-  stateDefinition: { name: "myState" },
-  key: "myGlobalKey",
-};
-const MY_USER_KEY_DEFINITION: KeyDefinitionLike = {
-  stateDefinition: { name: "myState" },
-  key: "myUserKey",
-};
-
-export class MoveToStateProvider extends Migrator<10, 11> {
-  async migrate(migrationHelper: MigrationHelper): Promise<void> {
-    const existingGlobalData = await migrationHelper.get<ExpectedGlobalState>("global");
-
-    await migrationHelper.setGlobal(MY_GLOBAL_KEY_DEFINITION, {
-      myGlobalData: existingGlobalData.myGlobalData,
-    });
-
-    const updateAccount = async (userId: string, account: ExpectedAccountState) => {
-      await migrationHelper.setUser(MY_USER_KEY_DEFINITION, {
-        myUserData: account.myUserData,
-      });
-    };
-
-    const accounts = await migrationHelper.getAccounts<ExpectedAccountState>();
-
-    await Promise.all(accounts.map(({ userId, account }) => updateAccount(userId, account)));
-  }
-}
-```
-
-:::note
-
-`getAccounts` only gets data from the legacy account object that was used in `StateService`. As data
-gets migrated off of that account object the response from `getAccounts`, which returns a record
-where the key will be a user's ID and the value being the legacy account object.
-
-:::
-
-### Example PRs
-
-- [`EnvironmentService`](https://github.com/bitwarden/clients/pull/7621)
-- [Org Keys](https://github.com/bitwarden/clients/pull/7521)
-
 ## Testing
 
 Testing business logic with data and observables can sometimes be cumbersome. To help make that a
@@ -312,61 +309,6 @@ Now instead of calling `mock<StateProvider>()` into your service you can instead
 `FakeStateProvider` exposes the specific provider's fakes as properties on itself. Each of those
 specific providers gives a method `getFake` that allows you to get the fake version of state that
 you can control and `expect`.
-
-## Advanced usage
-
-### `update`
-
-The update method has options defined as follows:
-
-```typescript
-{ActiveUser|SingleUser|Global}State<T> {
-  // ... rest of type left out for brevity
-  update<TCombine>(updateState: (state: T, dependency: TCombine) => T, options?: StateUpdateOptions);
-}
-
-type StateUpdateOptions = {
-  shouldUpdate?: (state: T, dependency: TCombine) => boolean;
-  combineLatestWith?: Observable<TCombine>;
-  msTimeout?: number
-}
-```
-
-The `shouldUpdate` option can be useful to help avoid an unnecessary update, and therefore avoid an
-unnecessary emission of `state$`. You might want to use this to avoid setting state to `null` when
-it is already `null`. The `shouldUpdate` method gives you in its first parameter the value of state
-before any change has been made to it and the dependency you have, optionally, provided through
-`combineLatestWith`. To avoid setting `null` to your state when it's already `null` you could call
-`update` like below:
-
-```typescript
-await myUserState.update(() => null, { shouldUpdate: (state) => state != null });
-```
-
-The `combineLatestWith` option can be useful when updates to your state depend on the data from
-another stream of data. In
-[this example](https://github.com/bitwarden/clients/blob/2eebf890b5b1cfbf5cb7d1395ed921897d0417fd/libs/common/src/auth/services/account.service.ts#L88-L107)
-you can see how we don't want to set a user ID to the active account ID unless that user ID exists
-in our known accounts list. This can be preferred over the more manual implementation like such:
-
-```typescript
-const accounts = await firstValueFrom(this.accounts$);
-if (accounts?.[userId] == null) {
-  throw new Error();
-}
-await this.activeAccountIdState.update(() => userId);
-```
-
-The use of the `combineLatestWith` option is preferred because it fixes a couple subtle issues.
-First, the use of `firstValueFrom` with no `timeout`. Behind the scenes we enforce that the
-observable given to `combineLatestWith` will emit a value in a timely manner, in this case a
-`1000ms` timeout but that number is configurable through the `msTimeout` option. The second issue it
-fixes is that we don't guarantee that your `updateState` function is called the instant that the
-`update` method is called. We do however promise that it will be called before the returned promise
-resolves or rejects. This may be because we have a lock on the current storage key. No such locking
-mechanism exists today but it may be implemented in the future. As such, it is safer to use
-`combineLatestWith` because the data is more likely to retrieved closer to when it needs to be
-evaluated.
 
 ## FAQ
 
@@ -400,35 +342,6 @@ to include a high quality JSON deserializer even if you think your object will o
 memory. This can mean you might be able to drop the `*Data` class pattern for your code. Since the
 `*Data` class generally represented the JSON safe version of your state which we now do
 automatically through the `Jsonify<T>` given to your in your `deserializer` method.
-
-### How do `StateService` storage options map to `StateDefinition`s?
-
-When moving state from `StateService` to the state provider pattern, you'll be asked to create a
-`StateDefinition` for your state. This should be informed by the storage location that was being
-used in the `StateService`. You can use the cross-reference below to help you decide how to map
-between the two.
-
-| `StateService` Option           | Desired Storage Location | Desired Web Storage Location | `StateDefinition` Equivalent                                  |
-| ------------------------------- | ------------------------ | ---------------------------- | ------------------------------------------------------------- |
-| `defaultOnDiskOptions()`        | Disk                     | Session                      | `new StateDefinition("state", "disk")`                        |
-| `defaultOnDiskLocalOptions()`   | Disk                     | Local                        | `new StateDefinition("state", "disk", { web: "disk-local" })` |
-| `defaultOnDiskMemoryOptions()`  | Disk                     | Session                      | `new StateDefinition("state", "disk")`                        |
-| `defaultInMemoryOptions()`      | Memory                   | Memory                       | `new StateDefinition("state", "memory")`                      |
-| `defaultSecureStorageOptions()` | Disk                     | N/A                          | No migration path currently                                   |
-
-#### Clarifying `defaultOnDiskMemoryOptions()`
-
-Despite its name, `defaultOnDiskMemoryOptions()` results in the web client storing the state in
-session storage, _not_ in memory. As such, the equivalent `StateDefinition` storage location is
-`"disk"`; since `"disk"` maps to session storage on the web client there is no reason to specify
-`{ web: "memory" }` as a client-specific storage location if your previous state service options
-used `defaultOnDiskMemoryOptions()`.
-
-However, we do have cases in which the `StateService` is extended in a particular client and
-different storage options are defined there for a given element of state. For example,
-`defaultOnDiskMemoryOptions()` is defined on the base `StateService` but `defaultInMemoryOptions()`
-is defined on the web implementation. To replicate this behavior with a `StateDefinition` you would
-use `new StateDefinition("state", "disk", { web: "memory" })`.
 
 ### Should I use `ActiveUserState`?
 
