@@ -1,18 +1,21 @@
-# P01 - Servers are not trusted
+# P01 - Servers are zero knowledge
 
-Clients do not need to trust Bitwarden's server or other web infrastructure to act as good actors in
-order to keep an account's encrypted content secure. The special status of providing a network sync
-for client data does not grant the server, or any intermediary between the server and client, the
-ability to reduce the effective security of the protections that guard a user's data. If a user
-chooses a weaker form of protection (e.g., a password instead of a passkey), that is an intentional
-user decision, but the server must not be able to manipulate or coerce a client into reducing
-security beyond what the user knowingly configures. In addition to inability to weaken a user's
-encrypted data, the server and any necessary infrastructure cannot masquerade chosen clear text data
-as belonging in the set of a users encrypted data. The total sum of a user's encrypted data is fully
-isolated from the server and infrastructure. It cannot be read nor expanded outside of the user's
-client context
+There is no possibility for an attacker or Bitwarden employee to access your unencrypted data by
+compromising Bitwarden's infrastructure. Bitwarden has no ability to decrypt or add to your data.
+Your key, which Bitwarden cannot access, is the only thing that can be used to decrypt your data or
+create new encrypted data.
 
-This is what we mean when we sometimes refer to "End-to-end encrypted."
+More precisely, the special status of providing a network sync for client data does not grant the
+server, or any intermediary between the server and client, the ability to reduce the effective
+security of the protections that guard a user's data. If a user chooses a weaker form of protection
+(e.g., a password instead of a passkey), that is an intentional user decision, but the server must
+not be able to manipulate or coerce a client into reducing security beyond what the user knowingly
+configures. Additionally. the server and any necessary infrastructure cannot masquerade chosen clear
+text data as belonging in the set of a users encrypted data. The total sum of a user's encrypted
+data is fully isolated from the server and infrastructure. It cannot be read nor expanded outside of
+the user's client context.
+
+This is what we mean when we sometimes refer to "End-to-end encrypted" or "Zero Knowledge."
 
 ## Account key sharing as a feature
 
