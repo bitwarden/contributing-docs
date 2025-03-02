@@ -219,22 +219,67 @@ type StateUpdateOptions = {
 #### Using `shouldUpdate` to filter unnecessary updates
 
 We recommend using `shouldUpdate` when possible. This will avoid unnecessary I/O for redundant
-updates and avoid an unnecessary emission of `state$`.
+updates and avoid an unnecessary emission of `state$`. The `shouldUpdate` method gives you in its
+first parameter the value of state before any change has been made, and the dependency you have,
+optionally, provided through `combineLatestWith`.
 
-A common use of this would be to avoid setting state to `null` when it is already `null`. The
-`shouldUpdate` method gives you in its first parameter the value of state before any change has been
-made to it and the dependency you have, optionally, provided through `combineLatestWith`. To avoid
-setting `null` to your state when it's already `null` you could call `update` like below:
+If your state is a simple JavaScript primitive type, this can be done with the strict equal operator
+(===):
 
 ```typescript
-await myUserState.update(() => null, { shouldUpdate: (state) => state != null });
+const USES_KEYCONNECTOR: UserKeyDefinition<boolean> = ...;
+
+async setUsesKeyConnector(value: boolean, userId: UserId) {
+  // Only do the update if the current value saved in state
+  // differs in equality of the incoming value.
+  await this.stateProvider.getUser(userId, USES_KEYCONNECTOR).update(
+    currentValue => currentValue !== value
+  );
+}
 ```
 
+For more complex state, implementing a custom equality operator is recommended. It's important that
+if you implement an equality function that you then negate the output of that function for use in
+`shouldUpdate()` since you will want to go through the update when they are NOT the same value.
+
+```typescript
+type Cipher = { id: string, username: string, password: string, revisionDate: Date };
+const LAST_USED_CIPHER: UserKeyDefinition<Cipher> = ...;
+
+async setLastUsedCipher(lastUsedCipher: Cipher | null, userId: UserId) {
+  await this.stateProvider.getUser(userId, LAST_USED_CIPHER).update(
+    currentValue => !this.areEqual(currentValue, lastUsedCipher)
+  );
+}
+
+areEqual(a: Cipher | null, b: Cipher | null) {
+  if (a == null) {
+    return b == null;
+  }
+
+  if (b == null) {
+    return false;
+  }
+
+  // Option one - Full equality, comparing every property for value equality
+  return a.id === b.id &&
+    a.username === b.username &&
+    a.password === b.password &&
+    a.revisionDate === b.revisionDate;
+
+  // Option two - Partial equality based on requirement that any update would
+  // bump the revision date.
+  return a.id === b.id && a.revisionDate === b.revisionDate;
+}
+```
+
+#### Using `combineLatestWith` option to control updates
+
 The `combineLatestWith` option can be useful when updates to your state depend on the data from
-another stream of data. In
-[this example](https://github.com/bitwarden/clients/blob/2eebf890b5b1cfbf5cb7d1395ed921897d0417fd/libs/common/src/auth/services/account.service.ts#L88-L107)
-you can see how we don't want to set a user ID to the active account ID unless that user ID exists
-in our known accounts list. This can be preferred over the more manual implementation like such:
+another stream of data.
+
+For example, if we were asked to set a `userId` to the active account only if that `userId` exists
+in our known accounts list, an initial approach could do the check as follows:
 
 ```typescript
 const accounts = await firstValueFrom(this.accounts$);
@@ -244,16 +289,42 @@ if (accounts?.[userId] == null) {
 await this.activeAccountIdState.update(() => userId);
 ```
 
-The use of the `combineLatestWith` option is preferred because it fixes a couple subtle issues.
-First, the use of `firstValueFrom` with no `timeout`. Behind the scenes we enforce that the
-observable given to `combineLatestWith` will emit a value in a timely manner, in this case a
-`1000ms` timeout but that number is configurable through the `msTimeout` option. The second issue it
-fixes is that we don't guarantee that your `updateState` function is called the instant that the
-`update` method is called. We do however promise that it will be called before the returned promise
-resolves or rejects. This may be because we have a lock on the current storage key. No such locking
-mechanism exists today but it may be implemented in the future. As such, it is safer to use
-`combineLatestWith` because the data is more likely to retrieved closer to when it needs to be
-evaluated.
+However, this implementation has a few subtle issues that the `combineLatestWith` option addresses:
+
+- The use of `firstValueFrom` with no `timeout`. Behind the scenes we enforce that the observable
+  given to `combineLatestWith` will emit a value in a timely manner, in this case a `1000ms`
+  timeout, but that number is configurable through the `msTimeout` option.
+- We don't guarantee that your `updateState` function is called the instant that the `update` method
+  is called. We do, however, promise that it will be called before the returned promise resolves or
+  rejects. This may be because we have a lock on the current storage key. No such locking mechanism
+  exists today but it may be implemented in the future. As such, it is safer to use
+  `combineLatestWith` because the data is more likely to retrieved closer to when it needs to be
+  evaluated.
+
+We recommend instead using the `combineLatestWith` option within the `update()` method to address
+these issues:
+
+```typescript
+await this.activeAccountIdState.update(
+  (_, accounts) => {
+    if (userId == null) {
+      // indicates no account is active
+      return null;
+    }
+    if (accounts?.[userId] == null) {
+      throw new Error("Account does not exist");
+    }
+    return userId;
+  },
+  {
+    combineLatestWith: this.accounts$,
+    shouldUpdate: (id) => {
+      // update only if userId changes
+      return id !== userId;
+    },
+  },
+);
+```
 
 ### `GlobalState<T>`
 
@@ -313,6 +384,25 @@ Now instead of calling `mock<StateProvider>()` into your service you can instead
 specific providers gives a method `getFake` that allows you to get the fake version of state that
 you can control and `expect`.
 
+## Migrating
+
+Migrating data to state providers is incredibly similar to migrating data in general. You create
+your own class that extends `Migrator<From, To>`. That will require you to implement your own
+`migrate(migrationHelper: MigrationHelper)` method. `MigrationHelper` already includes methods like
+`get` and `set` for getting and settings value to storage by their string key. There are also
+methods for getting and setting using your `KeyDefinition` or `KeyDefinitionLike` object to and from
+user and global state.
+
+For examples of migrations, you can reference the
+[existing](https://github.com/bitwarden/clients/tree/main/libs/common/src/state-migrations/migrations)
+migrations list.
+
+## Testing
+
+@@ -313,61 +310,6 @@ Now instead of calling `mock<StateProvider>()` into your service you can
+instead specific providers gives a method `getFake` that allows you to get the fake version of state
+that you can control and `expect`.
+
 ## FAQ
 
 ### Do I need to have my own in-memory cache?
@@ -330,7 +420,7 @@ Give `KeyDefinition<T>` generic the record shape you want, or even use the stati
 method. Then to convert that to an array that you expose just do a simple
 `.pipe(map(data => this.transform(data)))` to convert that to the array you want to expose.
 
-### Why KeyDefinitionLike
+### Why `KeyDefinitionLike`?
 
 `KeyDefinitionLike` exists to help you create a frozen-in-time version of your `KeyDefinition`. This
 is helpful in state migrations so that you don't have to import something from the greater
