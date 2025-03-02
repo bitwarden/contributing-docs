@@ -223,8 +223,8 @@ updates and avoid an unnecessary emission of `state$`. The `shouldUpdate` method
 first parameter the value of state before any change has been made, and the dependency you have,
 optionally, provided through `combineLatestWith`.
 
-If your state is a simple JavaScript primitive type, this can be done with the strict equal operator
-(===):
+If your state is a simple JavaScript primitive type, this can be done with the strict equality
+operator (`===`):
 
 ```typescript
 const USES_KEYCONNECTOR: UserKeyDefinition<boolean> = ...;
