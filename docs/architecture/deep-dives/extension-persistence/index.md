@@ -1,7 +1,7 @@
 # Extension Persistence
 
-By default, when the browser extension popup closes, the user's current view and any data that was
-entered is lost. This introduces friction in several workflows within our client, such as:
+By default, when the browser extension popup closes, the user's current view and any data entered
+without saving is lost. This introduces friction in several workflows within our client, such as:
 
 - Performing actions that require email OTP entry, since the user must navigate from the popup to
   get to their email inbox
@@ -37,44 +37,49 @@ events occur:
 Route history is persisted on the extension automatically, with no specific implementation required
 on any component.
 
-The `ViewCacheService` implementation ensures that the popup will open at the same route as was
-active when it closed, provided that none of the lifetime expiration events have occurred.
+The persistence layer ensures that the popup will open at the same route as was active when it
+closed, provided that none of the lifetime expiration events have occurred.
 
-:::tip Excluding a route If a particular route should be excluded from the history and not
-persisted, add `doNotSaveUrl: true` to the `data` property on the route. :::
+:::tip Excluding a route
 
-### Form data persistence
+If a particular route should be excluded from the history and not persisted, add
+`doNotSaveUrl: true` to the `data` property on the route.
 
-In order to persist data entered or state created within a component, so that a user's full
-in-progress state is restored when the popup re-opens, we provide a
+:::
+
+### View data persistence
+
+Route persistence ensures that the user will land back on the route that they were on when the popup
+closed, but it does not persist any state or form data that the user may have modified. In order to
+persist that data, the component is responsible for registering that data with the
 [`ViewCacheService`](https://github.com/bitwarden/clients/blob/main/libs/angular/src/platform/abstractions/view-cache.service.ts).
+This is done prescriptively to ensure that only necessary data is cached and that it is done with
+intention by the component.
 
-The `ViewCacheService` can be used in your component and provides an interface for caching both
-individual state and `FormGroup`s.
+The `ViewCacheService` provides an interface for caching both individual state and `FormGroup`s.
 
-For individual data, use the `signal()` method to create a writeable
-[signal](https://angular.dev/guide/signals) wrapper around the desired state. The signal will emit
-when the value in the cache changes
+#### Caching individual data elements
+
+For individual pieces of state, use the `signal()` method on the `ViewCacheService` to create a
+writeable [signal](https://angular.dev/guide/signals) wrapper around the desired state.
 
 ```typescript
-
 const mySignal = this.viewCacheService.signal({
     key: "my-state-key"
     initialValue: null
 });
-
 ```
+
+The signal will emit when the value in the cache changes.
 
 Setting the value should be done through the signal's `set()` method:
 
 ```typescript
-
 const mySignal = this.viewCacheService.signal({
     key: "my-state-key"
     initialValue: null
 });
 mySignal.set("value")
-
 ```
 
 :::note Equality comparison
@@ -85,7 +90,9 @@ the updated value is not equal to the current signal state. See documentation
 
 :::
 
-For persisting form data, the `ViewCacheService` supplies a `formGroup()` method. Which manages the
+#### Caching form data
+
+For persisting form data, the `ViewCacheService` supplies a `formGroup()` method, which manages the
 persistence of any entered form data to the cache and the initialization of the form from the cached
 data. You can supply the `FormGroup` in the `control` parameter of the method, and the
 `ViewCacheService` will:
@@ -104,7 +111,7 @@ this.loginDetailsForm = this.viewCacheService.formGroup({
 });
 ```
 
-#### What about other clients?
+## What about other clients?
 
 The `ViewCacheService` is designed to be injected into shared, client-agnostic components. A
 `NoopViewCacheService` is provided and injected for non-extension clients, preserving a single
