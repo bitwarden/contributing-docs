@@ -40,6 +40,9 @@ on any component.
 The `ViewCacheService` implementation ensures that the popup will open at the same route as was
 active when it closed, provided that none of the lifetime expiration events have occurred.
 
+:::tip Excluding a route If a particular route should be excluded from the history and not
+persisted, add `doNotSaveUrl: true` to the `data` property on the route. :::
+
 ### Form data persistence
 
 In order to persist data entered or state created within a component, so that a user's full
