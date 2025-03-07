@@ -158,3 +158,41 @@ Some appropriate operators are:
   consider carefully if this is the right operator for your use case. mergeMap will flatten
   observables but not care about the order. If ordering is important use `concatMap`. If you only
   care about the latest value use `switchMap`.
+
+## Import statements
+
+We have a couple of guidelines for import statements, which are enforced using the eslint rules
+[`no-restricted-imports`](https://eslint.org/docs/latest/rules/no-restricted-imports),
+[`import/order`](https://github.com/import-js/eslint-plugin-import/blob/main/docs/rules/order.md),
+and
+[`import/no-restricted-paths`](https://github.com/import-js/eslint-plugin-import/blob/main/docs/rules/no-restricted-paths.md).
+
+These rules aim to:
+
+- Prevent relative imports across package boundaries.
+- Restrict packages from importing application specific code.
+- Enforce a convention for the order of import statements.
+
+### Packages
+
+#### Imports within the same package
+
+Use relative imports when importing within the same package. For example, `MyNewService` and
+`LogService` are both in the `@bitwarden/common` package.
+
+```typescript
+import { LogService } from "../../abstractions/log.service";
+
+export class MyNewService {}
+```
+
+#### Imports from different packages
+
+For imports from different packages, use absolute imports. For example `DifferentPackageService` is
+not in `@bitwarden/common` and needs to import `LogService` from `@bitwarden/common`.
+
+```typescript
+import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
+
+export class DifferentPackageService {}
+```
