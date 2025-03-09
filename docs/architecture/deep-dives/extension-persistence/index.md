@@ -30,6 +30,9 @@ events occur:
 - Account switching is used to switch the active account
 - The extension popup has been closed for 2 minutes
 
+In addition, cached form data is cleared when a browser extension navigation event occurs (e.g.
+switching between tabs in the extension).
+
 ## Types of persistence
 
 ### Route history persistence
@@ -97,14 +100,12 @@ Putting this together, the most common implementation pattern would be:
 2. **Restore state from the signal.** If cached data exists, the signal will contain that data. The
    component or service should use this data to re-create the state from prior to the popup closing.
 3. **Set new state** in the cache when it changes. Ensure that any updates to the data are persisted
-   to the cache with `set()`, so that the cache reflects the latest state
+   to the cache with `set()`, so that the cache reflects the latest state`
 
 #### Caching form data
 
-For persisting form data, the `ViewCacheService` supplies a `formGroup()` method, which manages the
-persistence of any entered form data to the cache and the initialization of the form from the cached
-data. You can supply the `FormGroup` in the `control` parameter of the method, and the
-`ViewCacheService` will:
+`For persisting form data, the`ViewCacheService`supplies a`formGroup()`method, which manages the persistence of any entered form data to the cache and the initialization of the form from the cached data. You can supply the`FormGroup`in the`control`parameter of the method, and the`ViewCacheService`
+will:
 
 - Initialize the form the a cached value, if it exists
 - Save form value to cache when it changes
