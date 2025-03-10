@@ -104,7 +104,9 @@ Putting this together, the most common implementation pattern would be:
 
 #### Caching form data
 
-`For persisting form data, the`ViewCacheService`supplies a`formGroup()`method, which manages the persistence of any entered form data to the cache and the initialization of the form from the cached data. You can supply the`FormGroup`in the`control`parameter of the method, and the`ViewCacheService`
+For persisting form data, the`ViewCacheService`supplies a`formGroup()`method, which manages the
+persistence of any entered form data to the cache and the initialization of the form from the cached
+data. You can supply the`FormGroup`in the`control`parameter of the method, and the`ViewCacheService`
 will:
 
 - Initialize the form the a cached value, if it exists
