@@ -173,9 +173,7 @@ These rules aim to:
 - Restrict packages from importing application specific code.
 - Enforce a convention for the order of import statements.
 
-### Packages
-
-#### Imports within the same package
+### Imports within the same package
 
 Use relative imports when importing within the same package. For example, `MyNewService` and
 `LogService` are both in the `@bitwarden/common` package.
@@ -186,7 +184,7 @@ import { LogService } from "../../abstractions/log.service";
 export class MyNewService {}
 ```
 
-#### Imports from different packages
+### Imports from different packages
 
 For imports from different packages, use absolute imports. For example `DifferentPackageService` is
 not in `@bitwarden/common` and needs to import `LogService` from `@bitwarden/common`.
