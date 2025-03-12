@@ -1,8 +1,3 @@
----
-sidebar_custom_props:
-  access: bitwarden
----
-
 # Feature Flags
 
 ## Background
@@ -97,6 +92,107 @@ However, if you prefer to store the file in a different location, the `FlagDataF
 configuration setting can be used to override it. The file must be present before building the
 solution, but once there you can change the file contents and see immediate results in running /
 debugging code.
+
+<details>
+  <summary>Context-aware feature flag JSON</summary>
+  <div>
+    <div>
+      The `flags.json` file can also define flags which respond to user context. Currently, only `UserId`and the `OrganizationId` of all organizations a user belongs to are included in our feature flagging context. The syntax for defining context-aware flags amounts to defining a `flag` object which specifies `variations` values and `rules` which are evaluated against the user context. A `fallthrough` object is also available to specify a default variation. Rules are represented by `segments`, which are defined in the same file.
+
+      A feature flag may not appear in both the `flags` object and in the `flagValues` object.
+
+      Note that `UserId` is referred to as `key` in the `clauses` object while defining a segment.
+    </div>
+    <br/>
+    <details>
+      <summary>
+        JSON example
+      </summary>
+      <div>
+
+```json
+{
+  "flagValues": {
+    "example-single-boolean-key": true,
+  },
+  "flags": {
+    "example-advanced-configuration": {
+      "key": "example-advanced-configuration",
+      "on": true,
+      "variations": [
+          false,
+          true
+      ],
+      "fallthrough": {
+        "variation": 0
+      },
+      "rules": [
+        {
+          "variation": 1,
+          "clauses": [
+            {
+              "contextKind": "user",
+              "attribute": "segmentMatch",
+              "op": "segmentMatch",
+              "values": [
+                "user-segment"
+              ]
+            }
+          ]
+        }
+      ],
+      "version": 1
+    }
+  },
+  "segments": {
+    "user-segment": {
+      "key": "user-segment",
+      "rules": [
+        {
+          "clauses": [
+            {
+              "contextKind": "user",
+              "attribute": "key",
+              "op": "in",
+              "values": [
+                "<<UserIdGuid>>",
+                "<<UserIdGuid>>"
+                ...
+              ]
+            }
+          ]
+        }
+      ],
+      "version": 1
+    },
+    "organization-segment": {
+      "key": "organization-segment",
+      "rules": [
+        {
+          "clauses": [
+            {
+              "contextKind": "user",
+              "attribute": "organizations",
+              "op": "in",
+              "values": [
+                "<<OragnizationIdGuid>>",
+                "<<OragnizationIdGuid>>"
+                ...
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
+```
+
+      </div>
+    </details>
+
+  </div>
+</details>
 
 ### Local configuration: code modification
 
