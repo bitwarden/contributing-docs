@@ -100,7 +100,7 @@ Putting this together, the most common implementation pattern would be:
 2. **Restore state from the signal.** If cached data exists, the signal will contain that data. The
    component or service should use this data to re-create the state from prior to the popup closing.
 3. **Set new state** in the cache when it changes. Ensure that any updates to the data are persisted
-   to the cache with `set()`, so that the cache reflects the latest state`
+   to the cache with `set()`, so that the cache reflects the latest state
 
 #### Caching form data
 
