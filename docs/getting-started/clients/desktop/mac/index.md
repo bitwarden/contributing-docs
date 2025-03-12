@@ -52,7 +52,7 @@ security add-generic-password -a "<apple_id>" -w "<app_specific_password>" -s "A
 
 ### Provisioning Profile
 
-1. Ask DevOps (@DevOps in slack) to have your `Apple Development` signing certificate added to the
+1. Ask DevOps (@BRE in slack) to have your `Apple Development` signing certificate added to the
    provisioning profile, and your Mac `Provisioning UDID` added to the whitelist. The
    `Provisioning UDID` can be found by going to `About This Mac > System Report...` and copying the
    `Provisioning UDID:` row.
