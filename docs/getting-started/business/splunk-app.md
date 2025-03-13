@@ -51,8 +51,7 @@ in Splunk.
 1. Run Splunk Enterprise:
 
    ```
-   cd dev
-   docker compose up -d
+   docker compose -f dev/docker-compose.yml up -d
    ```
 
 :::warning
