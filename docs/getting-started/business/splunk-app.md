@@ -51,7 +51,8 @@ in Splunk.
 1. Run Splunk Enterprise:
 
    ```
-   docker run --rm --platform linux/amd64 --name splunk -d -p 8001:8000 -p 8089:8089 -e SPLUNK_START_ARGS='--accept-license' -e SPLUNK_PASSWORD='password' splunk/splunk:9.3
+   cd dev
+   docker compose up -d
    ```
 
 :::warning
