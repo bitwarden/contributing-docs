@@ -185,7 +185,7 @@ class DomainService {
   }
 
   async clearStateValue(userId: UserId): Promise<void> {
-    await this.stateProvider.getUserState$(userId, DOMAIN_USER_STATE).update((state) => null);
+    await this.stateProvider.getUser(userId, DOMAIN_USER_STATE).update((state) => null);
   }
 }
 ```
@@ -263,7 +263,14 @@ that the update has taken place before the `firstValueFrom()` executes, in which
 (cached) value of the observable will be returned.
 
 Use of `firstValueFrom()` should be avoided. If you find yourself trying to use `firstValueFrom()`,
-consider propagating the underlying observable instead of leaving reactivity. :::
+consider propagating the underlying observable instead of leaving reactivity.
+
+If you do need to obtain the result of an update in a non-reactive way, you should use the result
+returned from the `update()` method. This should be used instead of immediately re-requesting the
+value through `firstValueFrom()`. The `update()` will return the value that will be persisted to
+state, after any `shouldUpdate()` filters are applied.
+
+:::
 
 #### Using `shouldUpdate` to filter unnecessary updates
 
