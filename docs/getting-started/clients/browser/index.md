@@ -209,14 +209,14 @@ not automatically reload.
 
 #### Production build
 
-The other alternative is to use the "proper" build process through gulp. This method doesn't require
-any manual processing of the output since gulp does it for us. However we have to completely rebuild
-the extension for every change, which is slower.
+The other alternative is to use the release build process through webpack. This method doesn't
+require any manual processing of the output since webpack does it for us. However we have to
+completely rebuild the extension for every change, which is slower.
 
 1.  Build the extension for Safari
 
     ```bash
-    npm run dist:safari:dmg
+    npm run dist:safari
     ```
 
 2.  Open Safari and check Settings to confirm that the extension is installed and enabled
@@ -224,7 +224,7 @@ the extension for every change, which is slower.
 :::caution
 
 You may need to
-[Configure Safari in macOS to Run Unsigned Extensions](https://developer.apple.com/documentation/safariservices/safari_web_extensions/running_your_safari_web_extension#3744467).
+[Configure Safari in macOS to Run Unsigned Extensions](https://developer.apple.com/documentation/safariservices/running-your-safari-web-extension#Configure-Safari-in-macOS-to-run-unsigned-extensions).
 
 :::
 
