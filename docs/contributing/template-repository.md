@@ -45,7 +45,7 @@ configurations when enforcing rules.
 via NPM are used to locally lint and format changed files. Run:
 
 ```bash
-npm install
+npm install --save-dev husky lint-staged
 ```
 
 after cloning your new repository to install the necessary Git hooks.
