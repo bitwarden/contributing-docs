@@ -45,6 +45,7 @@ sidebar_position: 1
    - Select `Import`.
    - Find the `bitwarden-style.xml` file in the project's `docs/` directory.
    - Import "from" `BitwardenStyle` "to" `BitwardenStyle`.
+   - Check the box, `Enable EditorConfig support`.
    - Hit `Apply` and `OK` to save the changes and exit Preferences.
 
    Note that in some cases you may need to restart Android Studio for the changes to take effect.
