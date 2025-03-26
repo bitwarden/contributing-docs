@@ -36,9 +36,9 @@ sidebar_position: 1
 3. Setup the code style formatter:
 
    All code must follow the guidelines described in the
-   [Code Style Guidelines document](docs/STYLE_AND_BEST_PRACTICES.md). To aid in adhering to these
-   rules, all contributors should apply `docs/bitwarden-style.xml` as their code style scheme. In
-   IntelliJ / Android Studio:
+   [Code Style Guidelines document](docs/contributing/code-style/android-kotlin.md). To aid in
+   adhering to these rules, all contributors should apply `docs/bitwarden-style.xml` as their code
+   style scheme. In IntelliJ / Android Studio:
 
    - Navigate to `Preferences > Editor > Code Style`.
    - Hit the `Manage` button next to `Scheme`.
