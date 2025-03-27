@@ -161,8 +161,8 @@ dependency and revisiting the upgrade in the future.
 
 ## Renovate configuration
 
-Renovate is configured by a `.github/renovate.json` file in each repository. We follow an internal
-template for consistency. The template is available at the
+Renovate is configured by a `.github/renovate.json` (or `.github/renovate.json5`) file in each
+repository. We follow an internal template for consistency. The template is available at the
 [template repository](https://github.com/bitwarden/template/blob/main/.github/renovate.json).
 
 Renovate uses a concept called
