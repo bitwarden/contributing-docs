@@ -255,22 +255,20 @@ desktop or run `docker logs service-bus` to verify the service is up before laun
 
 1. Add the following to your `secrets.json` in `dev` to configure the service bus:
 
-```json
-    "eventLogging": {
-      "azureServiceBus": {
-        "connectionString": "\"Endpoint=sb://localhost;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=SAS_KEY_VALUE;UseDevelopmentEmulator=true;\"",
-        "topicName": "event-logging",
-        "eventRepositorySubscriptionName": "events-write-subscription",
-        "slackSubscriptionName": "events-slack-subscription",
-        "webhookSubscriptionName": "events-webhook-subscription",
-      }
-    },
-```
+   ```json
+       "eventLogging": {
+         "azureServiceBus": {
+           "connectionString": "\"Endpoint=sb://localhost;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=SAS_KEY_VALUE;UseDevelopmentEmulator=true;\"",
+           "topicName": "event-logging",
+           "eventRepositorySubscriptionName": "events-write-subscription",
+           "slackSubscriptionName": "events-slack-subscription",
+           "webhookSubscriptionName": "events-webhook-subscription",
+         }
+       },
+   ```
 
-    :::info
-    (optional) The `slackSubscriptionName` and `webhookSubscriptionName` specified above are optional. If
-    they are not defined, the system will use the above default names.
-    :::
+   :::info (optional) The `slackSubscriptionName` and `webhookSubscriptionName` specified above are
+   optional. If they are not defined, the system will use the above default names. :::
 
 2. Re-run the secrets script to publish the new secrets
 
@@ -279,3 +277,66 @@ pwsh setup_secrets.ps1 -clear
 ```
 
 3. Start or re-start all services, including `EventsProcessor`.
+
+### Integrations and IntegrationConfigurations
+
+Organizations can configure Integrations and IntegrationConfigurations to send events to different
+endpoints. Each handler maps to a specific integration and checks for the configuration when it
+receives an event. Currently, there are integrations/handlers for Slack and webhooks (as mentioned
+above).
+
+**OrganizationIntegration**
+
+- This is the top level object that enables a specific integration for the Organization
+- It includes any properties that apply to the entire integration across all events
+
+  - For slack, it consists of the token:
+
+    ```json
+    { "token": "xoxb-token-from-slack" }
+    ```
+
+  - For webhooks, it is `null`. However, even though there is no configuration, an organization must
+    have a webhook `OrganizationIntegration` to enable configuration via
+    `OrganizationIntegrationConfiguration`
+
+**OrganizationIntegrationConfiguration**
+
+- This contains the configurations specific to each `EventType` for the integration.
+- `Configuration` contains the event-specific configuration
+
+  - For Slack, this would contain what channel to send the message to:
+
+    ```json
+    { "channelId": "C123456" }
+    ```
+
+  - For Webhook, this is the URL the request should be sent to:
+
+    ```json
+    { "url": "https://api.example.com" }
+    ```
+
+- `Template` contains a template string the is expected to be filled in with the contents of the
+  actual event.
+  - The tokens in the string are wrapped in `#` characters. For instance, the UserId would be
+    `#UserId#`
+  - The `IntegrationTemplateProcessor` does the actual work of replacing these tokens with
+    introspected values from the provided `EventMessage`.
+  - Note that the template does not enforce any structure - it could be a freeform text message to
+    send via Slack, or a JSON body to send via webhook. We simply store and use it as a string for
+    the most flexibility.
+
+**OrganizationIntegrationConfigurationDetails**
+
+- The database has a view - `OrganizationIntegrationConfigurationDetailsView` - which is a join of
+  `OrganizationIntegration` and `OrganizationIntegrationConfiguration` on the
+  `OrganizationIntegration.Id`.
+- This is represented in code as an array of `OrganizationIntegrationConfigurationDetails` objects
+  returned to the handler, with the combined configuration details in `MergedConfiguration` and the
+  `Template` that defines the contents to send to the specific service.
+- This allows us to query for a specific Organization (by id) and an `IntegrationType` for an
+  `EventType` and return a combined object with the configuration details of both tables.
+- The job of the handler is to iterate over these detail objects, fill in the Template with values
+  from the actual EventMessage, and send the message to the integration using the
+  `MergedConfiguration` details.
