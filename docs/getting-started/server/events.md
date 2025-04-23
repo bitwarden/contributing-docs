@@ -99,10 +99,11 @@ the RabbitMQ exchange and writes to the `Events` table via the `EventsRepository
 the same (events are stored in the database), but the addition of the RabbitMQ exchange allows for
 other integrations to subscribe.
 
-Two additional handlers are available to be configured as well. A `RabbitMqEventListenerService`
-instance, configured with a `WebhookEventHandler` subscribes to the RabbitMQ events exchange and
-`POST`s each event to a configurable URL. An additional `RabbitMqEventListenerService` configured
-with a `SlackEventHandler` can post messages to Slack channels or DMs.
+Additional handlers - each paired with their own `RabbitMqEventListenerService` and listening to
+their own queue - are available to be configured as well.
+
+- `SlackEventHandler` posts messages to Slack channels or DMs.
+- `WebhookEventHandler` `POST`s each event to a configurable URL.
 
 ```kroki type=mermaid
 graph TD
@@ -171,8 +172,12 @@ end
     }
     ```
 
-    :::info (optional) The `slackQueueName` and `webhookQueueName` specified above are optional. If
-    they are not defined, the system will use the above default names. :::
+    :::info
+
+    The `slackQueueName` and `webhookQueueName` specified above are optional. If they are not
+    defined, the system will use the above default names.
+
+    :::
 
 2.  Re-run the PowerShell script to add these secrets to each Bitwarden project:
 
@@ -240,16 +245,16 @@ end
 
 2. Run Docker Compose to add/start the local emulator:
 
-```bash
-docker compose --profile servicebus up -d
-```
+   ```bash
+   docker compose --profile servicebus up -d
+   ```
 
-:::info
+   :::info
 
-The service bus emulator waits 15 seconds before starting. You can check the console in Docker
-desktop or run `docker logs service-bus` to verify the service is up before launching the server.
+   The service bus emulator waits 15 seconds before starting. You can check the console in Docker
+   desktop or run `docker logs service-bus` to verify the service is up before launching the server.
 
-:::
+   :::
 
 #### Configuring the server to use Azure Service Bus for events
 
@@ -267,23 +272,26 @@ desktop or run `docker logs service-bus` to verify the service is up before laun
        },
    ```
 
-   :::info (optional) The `slackSubscriptionName` and `webhookSubscriptionName` specified above are
-   optional. If they are not defined, the system will use the above default names. :::
+   :::info
+
+   The `slackSubscriptionName` and `webhookSubscriptionName` specified above are optional. If they
+   are not defined, the system will use the above default names.
+
+   :::
 
 2. Re-run the secrets script to publish the new secrets
 
-```bash
-pwsh setup_secrets.ps1 -clear
-```
+   ```bash
+   pwsh setup_secrets.ps1 -clear
+   ```
 
 3. Start or re-start all services, including `EventsProcessor`.
 
-### Integrations and IntegrationConfigurations
+### Integrations and integration configurations
 
-Organizations can configure integration configurations to send events to different
-endpoints -- each handler maps to a specific integration and checks for the configuration when it
-receives an event. Currently, there are integrations / handlers for Slack and webhooks (as mentioned
-above).
+Organizations can configure integration configurations to send events to different endpoints -- each
+handler maps to a specific integration and checks for the configuration when it receives an event.
+Currently, there are integrations / handlers for Slack and webhooks (as mentioned above).
 
 **`OrganizationIntegration`**
 
@@ -323,20 +331,6 @@ above).
     `#UserId#`
   - The `IntegrationTemplateProcessor` does the actual work of replacing these tokens with
     introspected values from the provided `EventMessage`.
-  - The template does not enforce any structure -- it could be a freeform text message to
-    send via Slack, or a JSON body to send via webhook; it is simply stored and used as a string for
-    the most flexibility.
-
-**OrganizationIntegrationConfigurationDetails**
-
-- The database has a view - `OrganizationIntegrationConfigurationDetailsView` - which is a join of
-  `OrganizationIntegration` and `OrganizationIntegrationConfiguration` on the
-  `OrganizationIntegration.Id`.
-- This is represented in code as an array of `OrganizationIntegrationConfigurationDetails` objects
-  returned to the handler, with the combined configuration details in `MergedConfiguration` and the
-  `Template` that defines the contents to send to the specific service.
-- This allows us to query for a specific Organization (by id) and an `IntegrationType` for an
-  `EventType` and return a combined object with the configuration details of both tables.
-- The job of the handler is to iterate over these detail objects, fill in the Template with values
-  from the actual EventMessage, and send the message to the integration using the
-  `MergedConfiguration` details.
+  - The template does not enforce any structure -- it could be a freeform text message to send via
+    Slack, or a JSON body to send via webhook; it is simply stored and used as a string for the most
+    flexibility.
