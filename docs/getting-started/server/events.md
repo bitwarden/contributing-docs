@@ -99,10 +99,11 @@ the RabbitMQ exchange and writes to the `Events` table via the `EventsRepository
 the same (events are stored in the database), but the addition of the RabbitMQ exchange allows for
 other integrations to subscribe.
 
-To illustrate the ability to fan-out events, a `RabbitMqEventListenerService` instance, configured
-with a `WebhookEventHandler` subscribes to the RabbitMQ events exchange and `POST`s each event to a
-configurable URL. This is meant to be a simple, concrete example of how multiple integrations are
-enabled by moving to distributed events.
+Additional handlers - each paired with their own `RabbitMqEventListenerService` and listening to
+their own queue - are available to be configured as well.
+
+- `SlackEventHandler` posts messages to Slack channels or DMs.
+- `WebhookEventHandler` `POST`s each event to a configurable URL.
 
 ```kroki type=mermaid
 graph TD
@@ -114,11 +115,15 @@ graph TD
         B5[WebhookEventHandler]
         B6[Events Database Table]
         B7[HTTP Server]
+        B8[SlackEventHandler]
+        B9[Slack]
 
         B1 -->|IEventWriteService| B2 --> B3
         B3-->|RabbitMqEventListenerService| B4 --> B6
         B3-->|RabbitMqEventListenerService| B5
         B5 -->|HTTP POST| B7
+        B3-->|RabbitMqEventListenerService| B8
+        B8 -->|HTTP POST| B9
     end
 
     subgraph Without RabbitMQ
@@ -161,30 +166,26 @@ end
         "password": "SET_A_PASSWORD_HERE_123",
         "exchangeName": "events-exchange",
         "eventRepositoryQueueName": "events-write-queue",
+        "slackQueueName": "events-slack-queue",
         "webhookQueueName": "events-webhook-queue",
       }
-      "webhookUrl": "<HTTP POST URL>",
     }
     ```
 
-2.  (optional) The `webhookQueueName` and `webhookUrl` specified above are optional. If they are
-    defined, a `WebhookEventHandler` will be added to a `RabbitMqEventListenerService` instance that
-    will `POST` the event to the configured URL.
-
     :::info
 
-    [RequestBin](http://requestbin.com/) provides an easy to set up server that will receive these
-    requests and let you inspect them.
+    The `slackQueueName` and `webhookQueueName` specified above are optional. If they are not
+    defined, the system will use the above default names.
 
     :::
 
-3.  Re-run the PowerShell script to add these secrets to each Bitwarden project:
+2.  Re-run the PowerShell script to add these secrets to each Bitwarden project:
 
     ```bash
     pwsh setup_secrets.ps1
     ```
 
-4.  Start (or restart) all of your projects to pick up the new settings
+3.  Start (or restart) all of your projects to pick up the new settings
 
 With these changes in place, you should see the database events written as before, but you'll also
 see in the RabbitMQ management interface that the messages are flowing through the configured
@@ -199,8 +200,8 @@ instance of `AzureServiceBusEventListenerService` is then configured with the
 Similar to RabbitMQ above, the end result is the same (events are stored in Azure Table Storage),
 but the addition of the service bus topic allows for other integrations to subscribe.
 
-As with the RabbitMQ implementation above, a `WebhookEventHandler` can be configured to run and POST
-events to a URL via a separate subscription.
+As with the RabbitMQ implementation above, a `SlackEventHandler` and `WebhookEventHandler` can be
+configured to publish events to Slack and/or a webhook.
 
 ```kroki type=mermaid
 graph TD
@@ -212,11 +213,15 @@ graph TD
         B5[WebhookEventHandler]
         B6[Events in Azure Tables]
         B7[HTTP Server]
+        B8[SlackEventHandler]
+        B9[Slack]
 
         B1 -->|IEventWriteService| B2 --> B3
         B3-->|AzureServiceBusEventListenerService| B4 --> B6
         B3-->|AzureServiceBusEventListenerService| B5
         B5 -->|HTTP POST| B7
+        B3-->|AzureServiceBusEventListenerService| B8
+        B8 -->|HTTP POST| B9
     end
 
     subgraph With Storage Queue
@@ -240,70 +245,92 @@ end
 
 2. Run Docker Compose to add/start the local emulator:
 
-```bash
-docker compose --profile servicebus up -d
-```
+   ```bash
+   docker compose --profile servicebus up -d
+   ```
 
-:::info
+   :::info
 
-The service bus emulator waits 15 seconds before starting. You can check the console in Docker
-desktop or run `docker logs service-bus` to verify the service is up before launching the server.
+   The service bus emulator waits 15 seconds before starting. You can check the console in Docker
+   desktop or run `docker logs service-bus` to verify the service is up before launching the server.
 
-:::
+   :::
 
 #### Configuring the server to use Azure Service Bus for events
 
 1. Add the following to your `secrets.json` in `dev` to configure the service bus:
 
-```json
-	"eventLogging": {
-	  "azureServiceBus": {
-		"connectionString": "\"Endpoint=sb://localhost;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=SAS_KEY_VALUE;UseDevelopmentEmulator=true;\"",
-		"topicName": "event-logging",
-		"eventRepositorySubscriptionName": "events-write-subscription",
-	  }
-	},
-```
+   ```json
+       "eventLogging": {
+         "azureServiceBus": {
+           "connectionString": "\"Endpoint=sb://localhost;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=SAS_KEY_VALUE;UseDevelopmentEmulator=true;\"",
+           "topicName": "event-logging",
+           "eventRepositorySubscriptionName": "events-write-subscription",
+           "slackSubscriptionName": "events-slack-subscription",
+           "webhookSubscriptionName": "events-webhook-subscription",
+         }
+       },
+   ```
+
+   :::info
+
+   The `slackSubscriptionName` and `webhookSubscriptionName` specified above are optional. If they
+   are not defined, the system will use the above default names.
+
+   :::
 
 2. Re-run the secrets script to publish the new secrets
-
-```bash
-pwsh setup_secrets.ps1 -clear
-```
-
-3. Start or re-start all services, including `EventsProcessor`.
-
-### Configuring the webhook (optional)
-
-1. Edit the `servicebusemulator_config.json` file to add a subscription to the main `event-logging`
-   topic:
-
-```json
-{
-  "Name": "events-webhook-subscription"
-}
-```
-
-2. Restart the server-bus container to pick up these changes
-
-3. Add the webhook subscription name and URL configuration to `secrets.json`
-
-```json
-  "eventLogging": {
-    "azureServiceBus": {
-    "connectionString": "\"Endpoint=sb://localhost;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=SAS_KEY_VALUE;UseDevelopmentEmulator=true;\"",
-    "topicName": "event-logging",
-    "eventRepositorySubscriptionName": "events-write-subscription",
-    "webhookSubscriptionName": "events-webhook-subscription"
-    },
-    "webhookUrl": "<Optional URL here>"
-  },
-```
-
-4. Publish the new secrets to the apps:
 
    ```bash
    pwsh setup_secrets.ps1 -clear
    ```
 
-5. Restart all services, including `EventsProcessor`
+3. Start or re-start all services, including `EventsProcessor`.
+
+### Integrations and integration configurations
+
+Organizations can configure integration configurations to send events to different endpoints -- each
+handler maps to a specific integration and checks for the configuration when it receives an event.
+Currently, there are integrations / handlers for Slack and webhooks (as mentioned above).
+
+**`OrganizationIntegration`**
+
+- The top level object that enables a specific integration for the organization.
+- Includes any properties that apply to the entire integration across all events.
+
+  - For Slack, it consists of the token:
+
+    ```json
+    { "token": "xoxb-token-from-slack" }
+    ```
+
+  - For webhooks, it is `null`. However, even though there is no configuration, an organization must
+    have a webhook `OrganizationIntegration` to enable configuration via
+    `OrganizationIntegrationConfiguration`.
+
+**`OrganizationIntegrationConfiguration`**
+
+- This contains the configurations specific to each `EventType` for the integration.
+- `Configuration` contains the event-specific configuration.
+
+  - For Slack, this would contain what channel to send the message to:
+
+    ```json
+    { "channelId": "C123456" }
+    ```
+
+  - For Webhook, this is the URL the request should be sent to:
+
+    ```json
+    { "url": "https://api.example.com" }
+    ```
+
+- `Template` contains a template string that is expected to be filled in with the contents of the
+  actual event.
+  - The tokens in the string are wrapped in `#` characters. For instance, the UserId would be
+    `#UserId#`
+  - The `IntegrationTemplateProcessor` does the actual work of replacing these tokens with
+    introspected values from the provided `EventMessage`.
+  - The template does not enforce any structure -- it could be a freeform text message to send via
+    Slack, or a JSON body to send via webhook; it is simply stored and used as a string for the most
+    flexibility.
