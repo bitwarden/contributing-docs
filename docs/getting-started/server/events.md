@@ -280,17 +280,17 @@ pwsh setup_secrets.ps1 -clear
 
 ### Integrations and IntegrationConfigurations
 
-Organizations can configure Integrations and IntegrationConfigurations to send events to different
-endpoints. Each handler maps to a specific integration and checks for the configuration when it
-receives an event. Currently, there are integrations/handlers for Slack and webhooks (as mentioned
+Organizations can configure integration configurations to send events to different
+endpoints -- each handler maps to a specific integration and checks for the configuration when it
+receives an event. Currently, there are integrations / handlers for Slack and webhooks (as mentioned
 above).
 
-**OrganizationIntegration**
+**`OrganizationIntegration`**
 
-- This is the top level object that enables a specific integration for the Organization
-- It includes any properties that apply to the entire integration across all events
+- The top level object that enables a specific integration for the organization.
+- Includes any properties that apply to the entire integration across all events.
 
-  - For slack, it consists of the token:
+  - For Slack, it consists of the token:
 
     ```json
     { "token": "xoxb-token-from-slack" }
@@ -298,12 +298,12 @@ above).
 
   - For webhooks, it is `null`. However, even though there is no configuration, an organization must
     have a webhook `OrganizationIntegration` to enable configuration via
-    `OrganizationIntegrationConfiguration`
+    `OrganizationIntegrationConfiguration`.
 
-**OrganizationIntegrationConfiguration**
+**`OrganizationIntegrationConfiguration`**
 
 - This contains the configurations specific to each `EventType` for the integration.
-- `Configuration` contains the event-specific configuration
+- `Configuration` contains the event-specific configuration.
 
   - For Slack, this would contain what channel to send the message to:
 
@@ -317,14 +317,14 @@ above).
     { "url": "https://api.example.com" }
     ```
 
-- `Template` contains a template string the is expected to be filled in with the contents of the
+- `Template` contains a template string that is expected to be filled in with the contents of the
   actual event.
   - The tokens in the string are wrapped in `#` characters. For instance, the UserId would be
     `#UserId#`
   - The `IntegrationTemplateProcessor` does the actual work of replacing these tokens with
     introspected values from the provided `EventMessage`.
-  - Note that the template does not enforce any structure - it could be a freeform text message to
-    send via Slack, or a JSON body to send via webhook. We simply store and use it as a string for
+  - The template does not enforce any structure -- it could be a freeform text message to
+    send via Slack, or a JSON body to send via webhook; it is simply stored and used as a string for
     the most flexibility.
 
 **OrganizationIntegrationConfigurationDetails**
