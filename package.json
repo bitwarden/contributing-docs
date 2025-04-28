@@ -65,7 +65,7 @@
   },
   "engines": {
     "node": "~22.14.0",
-    "npm": "~11.2.0"
+    "npm": "~11.3.0"
   },
   "lint-staged": {
     "*": "prettier --cache --write --ignore-unknown",
