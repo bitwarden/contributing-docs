@@ -10,9 +10,10 @@ trustworthy observable stream of that state.
   - [`StateDefinition`](#statedefinition)
   - [`KeyDefinition` & `UserKeyDefinition`](#keydefinition-and-userkeydefinition)
 - [`StateProvider`](#stateprovider)
-- [`ActiveUserState<T>`](#activeuserstatet)
+- [`Update`](#updating-state-with-update)
 - [`GlobalState<T>`](#globalstatet)
 - [`SingleUserState<T>`](#singleuserstatet)
+- [`ActiveUserState<T>`](#activeuserstatet)
 
 ### Storage definitions
 
@@ -84,8 +85,8 @@ specifying a single element of state data within the `StateDefinition`.
 
 The framework provides both `KeyDefinition` and `UserKeyDefinition` for teams to use. Use
 `UserKeyDefinition` for state scoped to a user and `KeyDefinition` for user-independent state. These
-will be consumed via the [`ActiveUserState<T>`](#activeuserstatet) or
-[`SingleUserState<T>`](#singleuserstatet) within your consuming services and components. The
+will be consumed via the [`SingleUserState<T>`](#singleuserstatet) or
+[`ActiveUserState<T>`](#activeuserstatet) within your consuming services and components. The
 `UserKeyDefinition` extends the `KeyDefinition` and provides a way to specify how the state will be
 cleaned up on specific user account actions.
 
@@ -142,21 +143,20 @@ own key definition.
 | Option           | Required?                    | Usage                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
 | ---------------- | ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `deserializer`   | Yes                          | Takes a method that gives you your state in it's JSON format and makes you responsible for converting that into JSON back into a full JavaScript object, if you choose to use a class to represent your state that means having its prototype and any method you declare on it. If your state is a simple value like `string`, `boolean`, `number`, or arrays of those values, your deserializer can be as simple as `data => data`. But, if your data has something like `Date`, which gets serialized as a string you will need to convert that back into a `Date` like: `data => new Date(data)`. |
-| `cleanupDelayMs` | No                           | Takes a number of milliseconds to wait before cleaning up the state after the last subscriber has unsubscribed. Defaults to 1000ms.                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| `cleanupDelayMs` | No                           | Takes a number of milliseconds to wait before cleaning up the state after the last subscriber has unsubscribed. Defaults to 1000ms. When this is set to 0, no `share()` is used on the underlying observable stream.                                                                                                                                                                                                                                                                                                                                                                                 |
 | `clearOn`        | Yes, for `UserKeyDefinition` | An additional parameter provided for `UserKeyDefinition` **only**, which allows specification of the user account `ClearEvent`s that will remove the piece of state from persistence. The available values for `ClearEvent` are `logout`, `lock`, or both. An empty array should be used if the state should not ever be removed (e.g. for settings).                                                                                                                                                                                                                                                |
 
 ### `StateProvider`
 
-`StateProvider` is an injectable service that includes 4 methods for getting state. These four
-methods are helpers for invoking their more modular siblings `ActiveStateProvider.get`,
-`SingleUserStateProvider.get`, `GlobalStateProvider.get`, and `DerivedStateProvider`. These siblings
-can all be injected into your service as well. If you prefer thin dependencies over the slightly
-larger changeset required, you can absolutely make use of the more targeted providers.
-`StateProvider` has the following type definition (aliasing the targeted providers):
+`StateProvider` is an injectable service that includes 3 methods for getting state. These three
+methods are helpers for invoking their more modular siblings `SingleUserStateProvider.get`,
+`GlobalStateProvider.get`, and `DerivedStateProvider`. These siblings can all be injected into your
+service as well. If you prefer thin dependencies over the slightly larger changeset required, you
+can absolutely make use of the more targeted providers. `StateProvider` has the following type
+definition (aliasing the targeted providers):
 
 ```typescript
 interface StateProvider {
-  getActive<T>(keyDefinition: KeyDefinition<T>): ActiveUserState<T>;
   getUser<T>(userId: UserId, keyDefinition: KeyDefinition<T>): SingleUserState<T>;
   getGlobal<T>(keyDefinition: KeyDefinition<T>): GlobalState<T>;
   getDerived<TFrom, TTo, TDeps>(
@@ -164,158 +164,81 @@ interface StateProvider {
     deriveDefinition: DeriveDefinition<TFrom, TTo, TDeps>,
     dependenciess: TDeps,
   );
+  // Deprecated, do not use.
+  getActive<T>(keyDefinition: KeyDefinition<T>): ActiveUserState<T>;
 }
 ```
 
-A very common practice will be to inject `StateProvider` in your service's constructor and call
-`getActive`, `getGlobal`, or both in your constructor and then store private properties for the
-resulting `ActiveUserState<T>` and / or `GlobalState<T>`. It's less common to need to call `getUser`
-in the constructor because it will require you to know the `UserId` of the user you are attempting
-to edit. Instead you will add `private` to the constructor argument injecting `StateProvider` and
-instead use it in a method like in the below example.
+You will most likely use `StateProvider` in a domain service that is responsible for managing the
+state, with the state values being scoped to a single user. The `StateProvider` should be injected
+as a `private` member into the class, with the `getUser()` helper method to retrieve the current
+state value for the provided `userId`. See a simple example below:
 
 ```typescript
-import { FOLDERS_USER_STATE, FOLDERS_GLOBAL_STATE } from "../key-definitions";
+import { DOMAIN_USER_STATE } from "../key-definitions";
 
-class FolderService {
-  private folderGlobalState: GlobalState<GlobalFolderState>;
-  private folderUserState: ActiveUserState<Record<string, FolderState>>;
+class DomainService {
+  constructor(private stateProvider: StateProvider) {}
 
-  folders$: Observable<Folder[]>;
-
-  constructor(private stateProvider: StateProvider) {
-    this.folderUserState = stateProvider.getActive(FOLDERS_USER_STATE);
-    this.folderGlobalState = stateProvider.getGlobal(FOLDERS_GLOBAL_STATE);
-
-    this.folders$ = this.folderUserState.pipe(
-      map((foldersRecord) => this.transform(foldersRecord)),
-    );
+  private getStateValue(userId: UserId): SingleUserState<DomainObject> {
+    return this.stateProvider.getUser(userId, DOMAIN_USER_STATE);
   }
 
-  async clear(userId: UserId): Promise<void> {
-    await this.stateProvider.getUser(userId, FOLDERS_USER_STATE).update((state) => null);
+  async clearStateValue(userId: UserId): Promise<void> {
+    await this.stateProvider.getUser(userId, DOMAIN_USER_STATE).update((state) => null);
   }
 }
 ```
+
+Each of the methods on the `StateProvider` will return an object typed based on the state requested:
+
+#### `GlobalState<T>`
+
+`GlobalState<T>` is an object to help you maintain and view the state of global-scoped storage. You
+can see the type definition of the API on `GlobalState<T>` below:
+
+```typescript
+interface GlobalState<T> {
+  state$: Observable<T | null>;
+}
+```
+
+The `state$` property provides you with an `Observable<T>` that can be subscribed to.
+`GlobalState<T>.state$` will emit when the chosen storage location emits an update to the state
+defined by the corresponding `KeyDefinition`.
+
+#### `SingleUserState<T>`
+
+`SingleUserState<T>` behaves very similarly to `GlobalState<T>`, but for state that is defined as
+user-scoped with a `UserKeyDefinition`. The `UserId` for the state's user exposed as a `readonly`
+member.
+
+The `state$` property provides you with an `Observable<T>` that can be subscribed to.
+`SingleUserState<T>.state$` will emit when the chosen storage location emits an update to the state
+defined by the corresponding `UserKeyDefinition` for the requested `userId`.
+
+:::note
+
+Updates to `SingleUserState` or `ActiveUserState` handling the same `KeyDefinition` will cause each
+other to emit on their `state$` observables if the `userId` handled by the `SingleUserState` happens
+to be active at the time of the update.
+
+:::
 
 ### `ActiveUserState<T>`
 
 :::warning
 
 `ActiveUserState` has race condition problems. Do not use it for updates and consider transitioning
-your code to SingleUserState instead. [Read more](#should-i-use-activeuserstate)
+your code to SingleUserState instead. [Read more.](#should-i-use-activeuserstate)
 
 :::
 
 `ActiveUserState<T>` is an object to help you maintain and view the state of the currently active
-user. If the currently active user changes, like through account switching, the data this object
-represents will change along with it. Gone is the need to subscribe to
-`StateService.activeAccountUnlocked$`. You can see the type definition of the API on
-`ActiveUserState<T>` below:
+user. If the currently-active user changes, like through account switching, the data this object
+represents will change along with it.
 
-```typescript
-interface ActiveUserState<T> {
-  state$: Observable<T>;
-}
-```
-
-The `state$` property provides you with an `Observable<T>` that can be subscribed to.
-`ActiveUserState<T>.state$` will emit for the following reasons:
-
-- The active user changes.
-- The chosen storage location emits an update to the key defined by `KeyDefinition`. This can occur
-  for any reason including:
-  - A `SingleUserState<T>` method pointing at the same `UserKeyDefinition` as `ActiveUserState` and
-    pointing at the user that is active that had `update` called
-  - Someone updates the key directly on the underlying storage service _(please don't do this)_
-
-### `GlobalState<T>`
-
-`GlobalState<T>` has an incredibly similar API surface as `ActiveUserState<T>` except it targets
-global-scoped storage and does not emit an update to `state$` when the active user changes, only
-when the stored value is updated.
-
-### `SingleUserState<T>`
-
-`SingleUserState<T>` behaves very similarly to `GlobalState<T>` where neither will react to active
-user changes and you instead give it the user you want it to care about up front, which is publicly
-exposed as a `readonly` member.
-
-Updates to `SingleUserState` or `ActiveUserState` handling the same `KeyDefinition` will cause each
-other to emit on their `state$` observables if the `userId` handled by the `SingleUserState` happens
-to be active at the time of the update.
-
-## Migrating
-
-Migrating data to state providers is incredibly similar to migrating data in general. You create
-your own class that extends `Migrator<From, To>`. That will require you to implement your own
-`migrate(migrationHelper: MigrationHelper)` method. `MigrationHelper` already includes methods like
-`get` and `set` for getting and settings value to storage by their string key. There are also
-methods for getting and setting using your `KeyDefinition` or `KeyDefinitionLike` object to and from
-user and global state. An example of how you might use these new helpers is below:
-
-```typescript
-type ExpectedGlobalState = { myGlobalData: string };
-
-type ExpectedAccountState = { myUserData: string };
-
-const MY_GLOBAL_KEY_DEFINITION: KeyDefinitionLike = {
-  stateDefinition: { name: "myState" },
-  key: "myGlobalKey",
-};
-const MY_USER_KEY_DEFINITION: KeyDefinitionLike = {
-  stateDefinition: { name: "myState" },
-  key: "myUserKey",
-};
-
-export class MoveToStateProvider extends Migrator<10, 11> {
-  async migrate(migrationHelper: MigrationHelper): Promise<void> {
-    const existingGlobalData = await migrationHelper.get<ExpectedGlobalState>("global");
-
-    await migrationHelper.setGlobal(MY_GLOBAL_KEY_DEFINITION, {
-      myGlobalData: existingGlobalData.myGlobalData,
-    });
-
-    const updateAccount = async (userId: string, account: ExpectedAccountState) => {
-      await migrationHelper.setUser(MY_USER_KEY_DEFINITION, {
-        myUserData: account.myUserData,
-      });
-    };
-
-    const accounts = await migrationHelper.getAccounts<ExpectedAccountState>();
-
-    await Promise.all(accounts.map(({ userId, account }) => updateAccount(userId, account)));
-  }
-}
-```
-
-:::note
-
-`getAccounts` only gets data from the legacy account object that was used in `StateService`. As data
-gets migrated off of that account object the response from `getAccounts`, which returns a record
-where the key will be a user's ID and the value being the legacy account object.
-
-:::
-
-### Example PRs
-
-- [`EnvironmentService`](https://github.com/bitwarden/clients/pull/7621)
-- [Org Keys](https://github.com/bitwarden/clients/pull/7521)
-
-## Testing
-
-Testing business logic with data and observables can sometimes be cumbersome. To help make that a
-little easier there are a suite of helpful "fakes" that can be used instead of traditional "mocks".
-Now instead of calling `mock<StateProvider>()` into your service you can instead use
-`new FakeStateProvider()`.
-
-`FakeStateProvider` exposes the specific provider's fakes as properties on itself. Each of those
-specific providers gives a method `getFake` that allows you to get the fake version of state that
-you can control and `expect`.
-
-## Advanced usage
-
-### `update`
+### Updating state with `update`
 
 The update method has options defined as follows:
 
@@ -332,22 +255,87 @@ type StateUpdateOptions = {
 }
 ```
 
-The `shouldUpdate` option can be useful to help avoid an unnecessary update, and therefore avoid an
-unnecessary emission of `state$`. You might want to use this to avoid setting state to `null` when
-it is already `null`. The `shouldUpdate` method gives you in its first parameter the value of state
-before any change has been made to it and the dependency you have, optionally, provided through
-`combineLatestWith`. To avoid setting `null` to your state when it's already `null` you could call
-`update` like below:
+:::warning `firstValueFrom()` and state updates
+
+A usage pattern of updating state and then immediately requesting a value through `firstValueFrom()`
+**will not always result in the updated value being returned**. This is because we cannot guarantee
+that the update has taken place before the `firstValueFrom()` executes, in which case the previous
+(cached) value of the observable will be returned.
+
+Use of `firstValueFrom()` should be avoided. If you find yourself trying to use `firstValueFrom()`,
+consider propagating the underlying observable instead of leaving reactivity.
+
+If you do need to obtain the result of an update in a non-reactive way, you should use the result
+returned from the `update()` method. This should be used instead of immediately re-requesting the
+value through `firstValueFrom()`. The `update()` will return the value that will be persisted to
+state, after any `shouldUpdate()` filters are applied.
+
+:::
+
+#### Using `shouldUpdate` to filter unnecessary updates
+
+We recommend using `shouldUpdate` when possible. This will avoid unnecessary I/O for redundant
+updates and avoid an unnecessary emission of `state$`. The `shouldUpdate` method gives you in its
+first parameter the value of state before any change has been made, and the dependency you have,
+optionally, provided through `combineLatestWith`.
+
+If your state is a simple JavaScript primitive type, this can be done with the strict equality
+operator (`===`):
 
 ```typescript
-await myUserState.update(() => null, { shouldUpdate: (state) => state != null });
+const USES_KEYCONNECTOR: UserKeyDefinition<boolean> = ...;
+
+async setUsesKeyConnector(value: boolean, userId: UserId) {
+  // Only do the update if the current value saved in state
+  // differs in equality of the incoming value.
+  await this.stateProvider.getUser(userId, USES_KEYCONNECTOR).update(
+    currentValue => currentValue !== value
+  );
+}
 ```
 
+For more complex state, implementing a custom equality operator is recommended. It's important that
+if you implement an equality function that you then negate the output of that function for use in
+`shouldUpdate()` since you will want to go through the update when they are NOT the same value.
+
+```typescript
+type Cipher = { id: string, username: string, password: string, revisionDate: Date };
+const LAST_USED_CIPHER: UserKeyDefinition<Cipher> = ...;
+
+async setLastUsedCipher(lastUsedCipher: Cipher | null, userId: UserId) {
+  await this.stateProvider.getUser(userId, LAST_USED_CIPHER).update(
+    currentValue => !this.areEqual(currentValue, lastUsedCipher)
+  );
+}
+
+areEqual(a: Cipher | null, b: Cipher | null) {
+  if (a == null) {
+    return b == null;
+  }
+
+  if (b == null) {
+    return false;
+  }
+
+  // Option one - Full equality, comparing every property for value equality
+  return a.id === b.id &&
+    a.username === b.username &&
+    a.password === b.password &&
+    a.revisionDate === b.revisionDate;
+
+  // Option two - Partial equality based on requirement that any update would
+  // bump the revision date.
+  return a.id === b.id && a.revisionDate === b.revisionDate;
+}
+```
+
+#### Using `combineLatestWith` option to control updates
+
 The `combineLatestWith` option can be useful when updates to your state depend on the data from
-another stream of data. In
-[this example](https://github.com/bitwarden/clients/blob/2eebf890b5b1cfbf5cb7d1395ed921897d0417fd/libs/common/src/auth/services/account.service.ts#L88-L107)
-you can see how we don't want to set a user ID to the active account ID unless that user ID exists
-in our known accounts list. This can be preferred over the more manual implementation like such:
+another stream of data.
+
+For example, if we were asked to set a `userId` to the active account only if that `userId` exists
+in our known accounts list, an initial approach could do the check as follows:
 
 ```typescript
 const accounts = await firstValueFrom(this.accounts$);
@@ -357,16 +345,86 @@ if (accounts?.[userId] == null) {
 await this.activeAccountIdState.update(() => userId);
 ```
 
-The use of the `combineLatestWith` option is preferred because it fixes a couple subtle issues.
-First, the use of `firstValueFrom` with no `timeout`. Behind the scenes we enforce that the
-observable given to `combineLatestWith` will emit a value in a timely manner, in this case a
-`1000ms` timeout but that number is configurable through the `msTimeout` option. The second issue it
-fixes is that we don't guarantee that your `updateState` function is called the instant that the
-`update` method is called. We do however promise that it will be called before the returned promise
-resolves or rejects. This may be because we have a lock on the current storage key. No such locking
-mechanism exists today but it may be implemented in the future. As such, it is safer to use
-`combineLatestWith` because the data is more likely to retrieved closer to when it needs to be
-evaluated.
+However, this implementation has a few subtle issues that the `combineLatestWith` option addresses:
+
+- The use of `firstValueFrom` with no `timeout`. Behind the scenes we enforce that the observable
+  given to `combineLatestWith` will emit a value in a timely manner, in this case a `1000ms`
+  timeout, but that number is configurable through the `msTimeout` option.
+- We don't guarantee that your `updateState` function is called the instant that the `update` method
+  is called. We do, however, promise that it will be called before the returned promise resolves or
+  rejects. This may be because we have a lock on the current storage key. No such locking mechanism
+  exists today but it may be implemented in the future. As such, it is safer to use
+  `combineLatestWith` because the data is more likely to retrieved closer to when it needs to be
+  evaluated.
+
+We recommend instead using the `combineLatestWith` option within the `update()` method to address
+these issues:
+
+```typescript
+await this.activeAccountIdState.update(
+  (_, accounts) => {
+    if (userId == null) {
+      // indicates no account is active
+      return null;
+    }
+    if (accounts?.[userId] == null) {
+      throw new Error("Account does not exist");
+    }
+    return userId;
+  },
+  {
+    combineLatestWith: this.accounts$,
+    shouldUpdate: (id) => {
+      // update only if userId changes
+      return id !== userId;
+    },
+  },
+);
+```
+
+#### Conditions under which emission not guaranteed after `update()`
+
+The `state$` property is **not guaranteed** to emit a value after an update where the value would
+conventionally be considered equal. It _is_ emitted in many cases but not guaranteed. The reason for
+this is because we leverage on platform APIs to initiate state emission. In particular, we use the
+`chrome.storage.{area}.onChanged` event to facilitate the `state$` observable in the extension
+client, and Chrome won’t emit a change if the value is the same. You can easily see this with the
+below instructions:
+
+```
+chrome.storage.local.onChanged.addListener(console.log);
+chrome.storage.local.set({ key: true });
+chrome.storage.local.set({ key: true });
+```
+
+The second instance of calling `set` will not log a changed event. As a result, the `state$` relying
+on this value will not emit. Due to nuances like this, using a `StateProvider` as an event stream is
+discouraged, and we recommend using `MessageSender` for events that you always want sent to
+subscribers.
+
+## Testing
+
+Testing business logic with data and observables can sometimes be cumbersome. To help make that a
+little easier there are a suite of helpful "fakes" that can be used instead of traditional "mocks".
+Now instead of calling `mock<StateProvider>()` into your service you can instead use
+`new FakeStateProvider()`.
+
+`FakeStateProvider` exposes the specific provider's fakes as properties on itself. Each of those
+specific providers gives a method `getFake` that allows you to get the fake version of state that
+you can control and `expect`.
+
+## Migrating
+
+Migrating data to state providers is incredibly similar to migrating data in general. You create
+your own class that extends `Migrator<From, To>`. That will require you to implement your own
+`migrate(migrationHelper: MigrationHelper)` method. `MigrationHelper` already includes methods like
+`get` and `set` for getting and settings value to storage by their string key. There are also
+methods for getting and setting using your `KeyDefinition` or `KeyDefinitionLike` object to and from
+user and global state.
+
+For examples of migrations, you can reference the
+[existing](https://github.com/bitwarden/clients/tree/main/libs/common/src/state-migrations/migrations)
+migrations list.
 
 ## FAQ
 
@@ -385,7 +443,7 @@ Give `KeyDefinition<T>` generic the record shape you want, or even use the stati
 method. Then to convert that to an array that you expose just do a simple
 `.pipe(map(data => this.transform(data)))` to convert that to the array you want to expose.
 
-### Why KeyDefinitionLike
+### Why `KeyDefinitionLike`?
 
 `KeyDefinitionLike` exists to help you create a frozen-in-time version of your `KeyDefinition`. This
 is helpful in state migrations so that you don't have to import something from the greater
@@ -400,35 +458,6 @@ to include a high quality JSON deserializer even if you think your object will o
 memory. This can mean you might be able to drop the `*Data` class pattern for your code. Since the
 `*Data` class generally represented the JSON safe version of your state which we now do
 automatically through the `Jsonify<T>` given to your in your `deserializer` method.
-
-### How do `StateService` storage options map to `StateDefinition`s?
-
-When moving state from `StateService` to the state provider pattern, you'll be asked to create a
-`StateDefinition` for your state. This should be informed by the storage location that was being
-used in the `StateService`. You can use the cross-reference below to help you decide how to map
-between the two.
-
-| `StateService` Option           | Desired Storage Location | Desired Web Storage Location | `StateDefinition` Equivalent                                  |
-| ------------------------------- | ------------------------ | ---------------------------- | ------------------------------------------------------------- |
-| `defaultOnDiskOptions()`        | Disk                     | Session                      | `new StateDefinition("state", "disk")`                        |
-| `defaultOnDiskLocalOptions()`   | Disk                     | Local                        | `new StateDefinition("state", "disk", { web: "disk-local" })` |
-| `defaultOnDiskMemoryOptions()`  | Disk                     | Session                      | `new StateDefinition("state", "disk")`                        |
-| `defaultInMemoryOptions()`      | Memory                   | Memory                       | `new StateDefinition("state", "memory")`                      |
-| `defaultSecureStorageOptions()` | Disk                     | N/A                          | No migration path currently                                   |
-
-#### Clarifying `defaultOnDiskMemoryOptions()`
-
-Despite its name, `defaultOnDiskMemoryOptions()` results in the web client storing the state in
-session storage, _not_ in memory. As such, the equivalent `StateDefinition` storage location is
-`"disk"`; since `"disk"` maps to session storage on the web client there is no reason to specify
-`{ web: "memory" }` as a client-specific storage location if your previous state service options
-used `defaultOnDiskMemoryOptions()`.
-
-However, we do have cases in which the `StateService` is extended in a particular client and
-different storage options are defined there for a given element of state. For example,
-`defaultOnDiskMemoryOptions()` is defined on the base `StateService` but `defaultInMemoryOptions()`
-is defined on the web implementation. To replicate this behavior with a `StateDefinition` you would
-use `new StateDefinition("state", "disk", { web: "memory" })`.
 
 ### Should I use `ActiveUserState`?
 
