@@ -6,24 +6,20 @@ of using enums, we use constant objects.
 ## Our Recommended Approach
 
 ```ts
-export const CipherTypes = {
-  Login: 1,
-  SecureNote: 2,
-  Card: 3,
-  Identity: 4,
-  SshKey: 5,
+export const PasskeyActions = {
+  Register: "register",
+  Authenticate: "authenticate",
 } as const;
 
-export type CipherTypeValue = (typeof CipherTypes)[keyof typeof CipherTypes];
+export type PasskeyActionValue = (typeof PasskeyActions)[keyof typeof PasskeyActions];
 
-declare function useCipher(type: CipherTypeValue): void;
+declare function usePasskeyAction(action: PasskeyActionValue): void;
 
-useCipher(CipherTypes.Login); // ✅ Valid
-useCipher(42); // ❌ Invalid
+usePasskey(PasskeyActions.Register); // ✅ Valid
+usePasskey(0); // ❌ Invalid
 ```
 
 ## Resources Used
 
 - https://dev.to/ivanzm123/dont-use-enums-in-typescript-they-are-very-dangerous-57bh
 - https://www.typescriptlang.org/docs/handbook/enums.html#objects-vs-enums
-- https://devblogs.microsoft.com/typescript/announcing-typescript-5-8-beta/#the---erasablesyntaxonly-optio
