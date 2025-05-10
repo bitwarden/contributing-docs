@@ -15,6 +15,13 @@ Renovate is configured by a `.github/renovate.json` (or `.github/renovate.json5`
 repository. We follow an internal template for consistency. The template is available at the
 [template repository](https://github.com/bitwarden/template/blob/main/.github/renovate.json).
 
+It is generally recommended that all repositories extend the
+[default](https://github.com/bitwarden/renovate-config/blob/main/default.json) configuration from
+our shared [`renovate-config`](https://github.com/bitwarden/renovate-config) repository, as the
+template repository does. This configuration includes the
+[`:pinAllExceptPeerDependencies`](https://docs.renovatebot.com/presets-default/#pinallexceptpeerdependencies)
+preset, which we use to ensure that all of our dependencies are pinned by default.
+
 ## Ownership
 
 Bitwarden's repositories fall under two categories: team-owned and shared.
