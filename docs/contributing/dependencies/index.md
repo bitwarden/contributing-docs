@@ -12,15 +12,39 @@ generate pull requests immediately.
 ## Renovate configuration
 
 Renovate is configured by a `.github/renovate.json` (or `.github/renovate.json5`) file in each
-repository. We follow an internal template for consistency. The template is available at the
+repository. We follow an internal template for consistency. The template is available in the
 [template repository](https://github.com/bitwarden/template/blob/main/.github/renovate.json).
 
-It is generally recommended that all repositories extend the
+It is recommended that all repositories extend the
 [default](https://github.com/bitwarden/renovate-config/blob/main/default.json) configuration from
-our shared [`renovate-config`](https://github.com/bitwarden/renovate-config) repository, as the
-template repository does. This configuration includes the
-[`:pinAllExceptPeerDependencies`](https://docs.renovatebot.com/presets-default/#pinallexceptpeerdependencies)
-preset, which we use to ensure that all of our dependencies are pinned by default.
+our [shared configuration repository](https://github.com/bitwarden/renovate-config), which is
+included when a new repository is created from the template.
+
+The default configuration:
+
+- Combines minor and patch changes into one rollup pull request, per package manager.
+- Uses a dependency dashboard so we can see what pull requests are not yet created but still manage
+  the workload.
+- Manages updates with semantic versioning and lock file updates. Rebases are disabled.
+- Allows an unlimited number of pull requests to be created.
+- Includes major updates (the latest) as individual pull requests. Monorepo updates are also
+  grouped.
+- Schedules runs to happen on the weekend when more Actions workers are likely available for the
+  organization, but also on a two-week basis to better align with the release schedule.
+- Certain build pipeline dependencies are pinned to specific versions.
+
+See [Management Strategies](#management-strategies) below for more detail on why we have chosen
+these configuration options.
+
+All package managers are recommended to be left enabled should a repository expand over time to
+include new ones, within reason for what might be in the scope of the repository. Update schedules
+and how many pull requests are up to the individual repository. Exceptions, other package manager,
+and dependency-specific configuration may be needed.
+
+Consider [best practices](https://docs.renovatebot.com/dependency-pinning/#so-whats-best) with
+pinning dependencies (especially at the root). Development dependencies such as formatters and
+linters deserve communication and coordinated rollout across all teams so that code style is
+consistent per our standards and the editor configurations seen in the template repository itself.
 
 ## Ownership
 
