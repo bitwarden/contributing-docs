@@ -55,7 +55,7 @@ Note: This can also be done on Mac and Linux, just use `npm run publish:mac` and
 ## Staged rollouts
 
 The process for testing staged rollouts is a bit cumbersome, as it requires updating the update
-manifests and uploading them manually.The detailed steps on how to do a staged update are as
+manifests and uploading them manually. The detailed steps on how to do a staged update are as
 follows:
 
 - Create and publish an update as mentioned in the previous section.
@@ -64,16 +64,17 @@ follows:
   `latest.yml`/`latest-mac.yml`/`latest-linux.yml`, depending on your platform.
 - Open the file in your preferred editor, and add a line at the end in the format
   `stagingPercentage: X`, as shown in the image below.
-  - `X` must be an integer greater than zero and equal or less than 100.
+  - `X` is the percentage of users that will get the update. It must be an integer greater than zero
+    and equal or less than 100.
 - Upload the file to the bucket again by drag-and-dropping it into the file list.
 
   ![](./minio-manifest-rollout.png)
 
-When checking updates using staged rollouts, `electron-updater` will use a random per-installation
-GUID and derive a rollout percentage from it. Then it will refuse to apply any updates where the
-staging percentage in the update manifest is less than the generated one. This randomness
-complicates testing, but it's possible to replace the random GUID by a fixed one to guarantee
-reproducible tests:
+When checking updates using staged rollouts, `electron-updater` will use a random persistent
+per-installation GUID and derive a rollout percentage from it. Then it will refuse to apply any
+updates where the staging percentage in the downloaded update manifest is less than the
+per-installation percentage. This randomness complicates testing, but it's possible to replace the
+random GUID by a fixed one to guarantee reproducible tests:
 
 - Navigate to the application's data folder. In Windows this is
   `C:\Users\<user>\AppData\Roaming\Bitwarden`
