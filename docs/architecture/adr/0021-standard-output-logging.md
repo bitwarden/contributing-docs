@@ -45,16 +45,16 @@ Chosen option: **Consolidate logging providers**.
 
 Given long-term plans to adopt a more flexible shared (hosting extensions) library that can be used
 across services either as a project (server monolith) reference or NuGet package (and as a reference
-architecture), using Microsoft.Extensions.Logging as the core way to do logging is beneficial. The
+architecture), using `Microsoft.Extensions.Logging` as the core way to do logging is beneficial. The
 out-of-the-box defaults are generally good enough for local and self-hosted usage. Our shared
 library will be able to have automatic defaults for our cloud usage though, namely using JSON
-logging along with including scopes. It also gives us a built in way to be able to override any of
+logging along with including scopes. It also gives us a built-in way to be able to override any of
 these details through any of our configuration providers.
 
 We will continue to offer file based logging through Serilog but will be able to reduce our NuGet
 packages to only `Serilog.Extensions.Logging.File`. In an effort to reduce our own upkeep and allow
-maximal customization we will be deprecating the log settings in `GlobalSettings`. Instead we will
-use refer to [`Serilog` documentation][serilogconfig] to offer both more options and more standard
+maximal customization we will be deprecating the log settings in `GlobalSettings`; instead we will
+refer to [`Serilog` documentation][serilogconfig] to offer both more options and more standard
 naming.
 
 ### Positive Consequences
@@ -66,7 +66,7 @@ naming.
   providers.
 - Allow self-host customers to configure the console log format.
 - Not require any new configuration for our cloud that is currently using
-  Microsoft.Extensions.Logging.
+  `Microsoft.Extensions.Logging`.
 
 ### Negative Consequences
 
@@ -101,7 +101,7 @@ should in essentially all cases be able to receive and process standard output l
 
 Cloud installations -- including Bitwarden's own -- will shift to configuration via environment
 variables or otherwise to utilize structured standard output logs for processing explicitly with
-[Microsoft.Extensions.Logging configuration][melconfig] this will also allow online updates if the
+[`Microsoft.Extensions.Logging` configuration][melconfig] this will also allow online updates if the
 configuration is done through a provider that supports change detection e.g.:
 
 ```json
