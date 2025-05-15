@@ -118,9 +118,8 @@ documentation.
 :::
 
 For our client projects that are not intended to be consumed as libraries our strategy is to pin all
-dependencies.
-
-In addition, we use `package-lock.json` and `Cargo.lock` lock files, as recommended by Renovate.
+dependencies. In addition, we use `package-lock.json` and `Cargo.lock` lock files, as recommended by
+Renovate.
 
 #### Unpinned dependencies
 
