@@ -17,8 +17,8 @@ repository. We follow an internal template for consistency. The template is avai
 
 It is recommended that all repositories extend the
 [default](https://github.com/bitwarden/renovate-config/blob/main/default.json) configuration from
-our [shared configuration repository](https://github.com/bitwarden/renovate-config), which is
-included when a new repository is created from the template.
+our [shared configuration repository](https://github.com/bitwarden/renovate-config) that is included
+when a new repository is created from the template.
 
 The default configuration:
 
@@ -38,11 +38,11 @@ these configuration options.
 
 All package managers are recommended to be left enabled should a repository expand over time to
 include new ones, within reason for what might be in the scope of the repository. Update schedules
-and how many pull requests are up to the individual repository. Exceptions, other package manager,
+and how many pull requests are up to the individual repository. Exceptions, other package managers,
 and dependency-specific configuration may be needed.
 
 Consider [best practices](https://docs.renovatebot.com/dependency-pinning/#so-whats-best) with
-pinning dependencies (especially at the root). Development dependencies such as formatters and
+pinning dependencies, especially at the root. Development dependencies such as formatters and
 linters deserve communication and coordinated rollout across all teams so that code style is
 consistent per our standards and the editor configurations seen in the template repository itself.
 
@@ -102,13 +102,13 @@ sustainable for all responsible teams.
 
 Renovate is currently scheduled to automatically create pull requests every 2 weeks. The goal of our
 dependency management process is for the teams to review and merge the opened pull requests in the
-same 2-week cadence. To avoid a large backlog of PRs and out-of-date packages accumulating.
+same 2-week cadence -- to avoid a large backlog of PRs and out-of-date packages accumulating.
 
 :::
 
-### Dependency Pinning Strategies
+### Dependency pinning strategies
 
-#### Pinned Dependencies
+#### Pinned dependencies
 
 :::info Why do we pin dependencies?
 
@@ -117,20 +117,20 @@ documentation.
 
 :::
 
-For our client projects which are not intended to be consumed as libraries, our strategy is to pin
-all dependencies.
+For our client projects that are not intended to be consumed as libraries our strategy is to pin all
+dependencies.
 
 In addition, we use `package-lock.json` and `Cargo.lock` lock files, as recommended by Renovate.
 
-#### Unpinned Dependencies
+#### Unpinned dependencies
 
-For projects that are intended to be consumed as libraries (e.g. our SDKs), our strategy is not to
-pin all dependencies, so that consumers are not locked in to a particular version. As Renovate
+For projects that are intended to be consumed as libraries (e.g. our SDKs) our strategy is not to
+pin dependencies so that consumers are not locked in to a particular version. As Renovate
 [recommends](https://docs.renovatebot.com/dependency-pinning/):
 
 > It is usually a bad idea to pin all your dependencies because it will introduce an unnecessarily
-> narrow range (one release!) and cause most users of your package to bloat their node_modules with
-> duplicates.
+> narrow range (one release!) and cause most users of your package to bloat their `node_modules`
+> with duplicates.
 
 Instead, the [recommended configuration](https://docs.renovatebot.com/presets-config/#configjs-lib)
 for libraries is to pin only `devDependencies` and leave the others as ranges.
@@ -186,8 +186,8 @@ dependencies to a single team, so that only a single team is responsible for the
 
 For all of our dependencies, we default to:
 
-1. Combining minor and patch updates into a single PR for a given dependency, and
-2. _Not_ combining major updates with any minor or patch updates for a given dependency
+- Combining minor and patch updates into a single PR for a given dependency, and
+- _Not_ combining major updates with any minor or patch updates for a given dependency
 
 We do this because we want to reduce the noise of separate minor and patch updates, but we also
 don’t want to miss out on incremental minor/patch updates while we do the larger body of work for a
@@ -203,7 +203,7 @@ dependencies into a single PR, which is covered in
 In order to maintain a sustainable number of update PRs for our teams to review, we have elected to
 send most patch updates through Renovate's
 [Dependency Dashboard Approval](https://docs.renovatebot.com/configuration-options/#dependencydashboardapproval)
-flow. This means that Renovate will _not_ automatically generate a PR for these updates. Rather, it
+flow. This means that Renovate will _not_ automatically generate a PR for these updates; rather, it
 will list them in a "Pending Approval" section of the Dependency Dashboard. If a team desires to
 update the dependency to pull in a bug fix that affects our code, they can trigger the pull request
 to be created from the dashboard.
@@ -213,8 +213,8 @@ to be created from the dashboard.
 In order for a dependency update PR to successfully move through the review process, it must be
 assigned a reviewer. We do this one of two ways:
 
-1. Through GitHub `CODEOWNERS`
-2. Through reviewer assignment in Renovate
+- Through GitHub `CODEOWNERS`
+- Through reviewer assignment in Renovate
 
 #### Assigning reviewers through `CODEOWNERS`
 
