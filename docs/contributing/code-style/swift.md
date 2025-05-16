@@ -158,8 +158,6 @@ class ClassName {
   is reasonable.
 - If possible, keys (and therefore corresponding localized text) should be the same between iOS and
   Android.
-- We have not been particularly consistent about this in the past, but are working to unify against
-  these standards.
 
 Some examples:
 
