@@ -51,7 +51,6 @@ strategies.
 #### Password token requests
 
 - **Grant Type**: `password`
-- **Headers**: `Auth-Email` header is set to base-64 encoding of user email address
 
 <!-- prettier-ignore -->
 | Content Property | Description |
@@ -104,7 +103,6 @@ This validator is responsible for issuing tokens for `password` grant type.
 
 In order for the request to be validated, the following must be true:
 
-- The `Auth-Email` header must be present and correct.
 - The request does not require 2FA, or if it does a valid `twoFactorToken` is provided (see
   [2FA documentation](two-factor-auth.md))
 - If the request has an `authRequest` property (i.e. is a Passwordless request), the access code is
