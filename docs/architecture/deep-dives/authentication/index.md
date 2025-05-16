@@ -89,7 +89,7 @@ When the Identity service receives the token request at the `/connect/token` end
 classes take over, based on the grant type specified in the authentication request.
 
 For more information on the responsibility of each of these validators, see the
-[IdentityServer4 documentation](https://identityserver4.readthedocs.io/en/latest/index.html).
+[IdentityServer documentation](https://docs.duendesoftware.com/identityserver/).
 
 ### Validating the request
 
