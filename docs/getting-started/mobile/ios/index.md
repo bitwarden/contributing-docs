@@ -55,10 +55,11 @@ sidebar_position: 1
 ### Run the app
 
 1. Open the project in Xcode 16.3+.
-2. Run the app in the Simulator with the `Bitwarden` target for the Password Manager app or `Authenticator` for the Authenticator app.
+2. Run the app in the Simulator with the `Bitwarden` target for the Password Manager app or
+   `Authenticator` for the Authenticator app.
 
-> [!TIP]
-> To open the workspace in Xcode, just go to the root folder with the CLI and run:
+> [!TIP] To open the workspace in Xcode, just go to the root folder with the CLI and run:
+>
 > ```sh
 > open Bitwarden.xcworkspace
 > ```
