@@ -27,6 +27,8 @@ The default configuration:
   the workload.
 - Manages updates with semantic versioning and lock file updates. Rebases are disabled.
 - Allows an unlimited number of pull requests to be created.
+- Delays creation of pull requests until at least seven days after the dependency version release,
+  to ensure any post-release security issues are addressed.
 - Includes major updates (the latest) as individual pull requests. Monorepo updates are also
   grouped.
 - Schedules runs to happen on the weekend when more Actions workers are likely available for the
