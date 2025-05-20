@@ -10,16 +10,16 @@ server, or any intermediary between the server and client, the ability to reduce
 security of the protections that guard a user's data. If a user chooses a weaker form of protection
 (e.g., a password instead of a passkey), that is an intentional user decision, but the server must
 not be able to manipulate or coerce a client into reducing security beyond what the user knowingly
-configures. Additionally. the server and any necessary infrastructure cannot masquerade chosen clear
-text data as belonging in the set of a users encrypted data. The total sum of a user's encrypted
-data is fully isolated from the server and infrastructure. It cannot be read nor expanded outside of
-the user's client context.
+configures. Additionally, the server or it's infrastructure cannot masquerade it's own plaintext
+data as belonging in the set of the user's encrypted data. The total sum of a user's encrypted data
+is fully isolated from the server and infrastructure; it cannot be read nor expanded outside of the
+user's client context.
 
 This is what we mean when we sometimes refer to "End-to-end encrypted" or "Zero Knowledge."
 
 ## Account key sharing as a feature
 
-This principle does not mean that clear text data is never shared, but rather that any such exposure
+This principle does not mean that plaintext data is never shared, but rather that any such exposure
 requires informed and explicit consent from the user and is exclusively between accounts, never to
 the server or infrastructure.
 
@@ -41,8 +41,8 @@ only to be used by advanced self-hosted users.
 ### Icons service
 
 The Bitwarden icons service provides site favicons to decorate vault items in the Bitwarden clients.
-To enable this functionality, clients need to send clear text domain name information to the
-service. Communicated information is limited to vault item URIs. These URIs are part of a user's
-encrypted content, but we do this to speed up loading of vaults, ensure favicons accurately
-represent the associated URI, and avoid leaking vault contents to local network administrators. This
-feature is easily disabled in client settings.
+To enable this functionality, clients need to send plaintext domain name information to the service.
+Communicated information is limited to vault item URIs. These URIs are part of a user's encrypted
+content, but we do this to speed up loading of vaults, ensure favicons accurately represent the
+associated URI, and avoid leaking vault contents to local network administrators. This feature is
+easily disabled in client settings.
