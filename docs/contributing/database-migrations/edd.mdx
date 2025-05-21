@@ -1,3 +1,7 @@
+---
+sidebar_position: 3
+---
+
 import Tabs from "@theme/Tabs";
 import TabItem from "@theme/TabItem";
 
@@ -239,7 +243,7 @@ There are some important constraints to the implementation of the process:
 
 The process to support all of these constraints is a complex one. Below is an image of a state
 machine that will hopefully help visualize the process and what it supports. It assumes that all
-database changes follow the standards that are laid out in [Migrations](./).
+database changes follow the standards that are laid out in [Migrations](./mssql.md).
 
 ---
 
@@ -265,8 +269,7 @@ will not be run until the start of the next deploy when they are moved into `DbS
 After this deploy, to prep for the next release, all migrations in `DbScripts_transition` are moved
 to `DbScripts` and then all migrations in `DbScripts_finalization` are moved to `DbScripts`,
 conserving their execution order for a clean install. For the current branching strategy, PRs will
-be open against `main` when `rc` is cut to prep for this release. This PR automation will also
-handle renaming the migration file and updating any reference of `[dbo_finalization]` to `[dbo]`.
+be open against `main` when `rc` is cut to prep for this release.
 
 The next deploy will pick up the newly added migrations in `DbScripts` and set the previously
 repeatable _Transition_ migrations to no longer be repeatable, execute the _Finalization_

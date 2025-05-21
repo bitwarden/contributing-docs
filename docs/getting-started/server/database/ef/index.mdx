@@ -40,9 +40,9 @@ each.
 
 Our EF implementations currently support Postgres, MySQL, and SQLite3.
 
-## Setting Up EF Databases
+## Creating the database
 
-The workflow here is broadly the same as with the normal MSSQL implementation: set up the docker
+The workflow here is broadly the same as with the normal MSSQL implementation: set up the Docker
 container, configure user secrets, and run migrations against their relating databases in
 chronological order.
 
@@ -139,7 +139,7 @@ that the changes take effect.
 
 :::
 
-### Migrations
+## Updating the database
 
 <Tabs
     groupId="provider"
@@ -185,7 +185,7 @@ You can also run migrations for all database providers at once using
 pwsh migrate.ps1 -all
 ```
 
-### Optional: Verify
+### Verifying changes
 
 If you would like to verify that everything worked correctly:
 
@@ -194,7 +194,7 @@ If you would like to verify that everything worked correctly:
   - Note: this requires a configured MSSQL database. You may also need to set up other EF providers
     for tests to pass.
 
-## Testing EF Changes
+## Testing changes
 
 In your `server/dev/secrets.json` file find or add this block of secrets in the root of the json
 structure:
@@ -230,3 +230,8 @@ existing databases if you have not already. If these settings are not present at
 With connection strings applied to your projects: ensure your databases are all migrated using
 `pwsh server/dev/migrate.ps1 --all`. Then you can run EF tests from the
 `test/Infrastructure.IntegrationTest` folder using `dotnet test`.
+
+## Modifying the database
+
+The process for modifying the database is described in
+[Migrations](./../../../../contributing/database-migrations/ef.md).
