@@ -19,6 +19,8 @@ dockerized
 dotfile
 F-Droid
 Gitter
+heisenbug
+heisenbugs
 HKDF
 hotfix
 hotfixed
