@@ -5,26 +5,28 @@ sidebar_position: 2
 # Database migrations
 
 In accordance with the tenets of [Evolutionary Database Design](./edd.mdx), each change needs to be
-considered to be split into two parts:
+considered to be split into three parts:
 
-1. A transition (backwards-compatible) migration
-2. A finalization (breaking-change) migration
+1. An initial change that is backwards compatible
+2. A transition change that migrates data and procedures
+3. A finalization change containing breaking changes
+
+The initial and transition changes are typically released simultaneously. They must be in separate
+migration files.
 
 Migrations must follow Bitwarden's
 [self-hosted server release policy](https://bitwarden.com/help/bitwarden-software-release-support/#bitwarden-self-hosted-server).
 This implies a staged migration cycle, as follows:
 
 1. Release the initial migration
-2. Release the transition migration (this may be combined with the initial release)
-3. Wait at least 1 major server version
+2. Release the transition migration
+3. Skip at least 1 major server version
 4. Release the finalization migration
 
 :::note
 
 When your change does not introduce breaking changes (i.e. all changes are backwards-compatible in
-their final form), only the transition phase is required.
-
-:::
+their final form), only the initial and transition migrations occur. :::
 
 ## Applying migrations
 
