@@ -10,17 +10,17 @@ considered to be split into two parts:
 1. A backwards-compatible migration
 2. A breaking-change migration
 
-Backwards compatible migrations should remain in place for at least one full release before being
-removed to mitigate the risk of data loss. This implies a staged migration cycle, as follows:
+Migrations must follow Bitwarden's [self-hosted server release policy](release-policy). This implies
+a staged migration cycle, as follows:
 
-1. Release the backwards-compatible transition migration
-2. Wait at least 1 release
+1. Release the backwards-compatible migration
+2. Wait at least 1 major server version
 3. Release the breaking-change migration
 
 :::note
 
-It is possible that a change may not introduce breaking changes (i.e. all changes may be
-backwards-compatible in their final form). In that case, only one phase of changes is required.
+When your change does not introduce breaking changes (i.e. all changes are backwards-compatible in
+their final form), only one phase of changes is required.
 
 :::
 
@@ -83,4 +83,6 @@ pwsh ef_migrate.ps1 [NAME_OF_MIGRATION]
 
 This will generate the migrations, which should then be included in your PR.
 
+[release-policy]:
+  https://bitwarden.com/help/bitwarden-software-release-support/#bitwarden-self-hosted-server
 [code-style-sql]: ../code-style/sql.md
