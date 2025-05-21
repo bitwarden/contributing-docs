@@ -10,8 +10,9 @@ considered to be split into two parts:
 1. A backwards-compatible migration
 2. A breaking-change migration
 
-Migrations must follow Bitwarden's [self-hosted server release policy](release-policy). This implies
-a staged migration cycle, as follows:
+Migrations must follow Bitwarden's
+[self-hosted server release policy](https://bitwarden.com/help/bitwarden-software-release-support/#bitwarden-self-hosted-server).
+This implies a staged migration cycle, as follows:
 
 1. Release the backwards-compatible migration
 2. Wait at least 1 major server version
@@ -83,6 +84,4 @@ pwsh ef_migrate.ps1 [NAME_OF_MIGRATION]
 
 This will generate the migrations, which should then be included in your PR.
 
-[release-policy]:
-  https://bitwarden.com/help/bitwarden-software-release-support/#bitwarden-self-hosted-server
 [code-style-sql]: ../code-style/sql.md
