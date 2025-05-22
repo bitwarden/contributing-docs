@@ -7,7 +7,8 @@ sidebar_position: 2
 :::info
 
 For instructions on how to apply database migrations, please refer to the
-[Getting Started](../../getting-started/server/database/ef/index.mdx) documentation.
+[Getting Started](../../getting-started/server/database/ef/index.mdx#updating-the-database)
+documentation.
 
 :::
 

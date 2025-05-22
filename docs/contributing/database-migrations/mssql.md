@@ -7,7 +7,8 @@ sidebar_position: 1
 :::info
 
 For instructions on how to apply database migrations, please refer to the
-[Getting Started](../../getting-started/server/database/mssql/index.md) documentation.
+[Getting Started](../../getting-started/server/database/mssql/index.md#updating-the-database)
+documentation.
 
 :::
 
