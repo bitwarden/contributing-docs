@@ -21,19 +21,30 @@ write migrations.
 
 ## SQL database project
 
+We use a
+[SDK-style SQL project](https://learn.microsoft.com/en-us/sql/azure-data-studio/extensions/sql-database-project-extension-sdk-style-projects?view=sql-server-ver16)
+(`.sqlproj`) to develop the database locally -- this means we have an up-to-date representation of
+the database in `src/Sql`, and any modifications need to be represented there as well. SDK-style SQL
+projects are available in Visual Studio Code that provides schema comparison and more. You may also
+modify the `.sql` files directly with any text editor.
+
+To make a database change, start by modifying the `.sql` files in `src/Sql/dbo`. These changes will
+also need to be applied in a migration script. Migration scripts are located in
+`util/Migrator/DbScripts`.
+
+You can either generate the migration scripts automatically using the _Schema Comparison_
+functionality or by manually writing them. Do note that the automatic method will only take you so
+far and it will need to be manually edited to adhere to the code styles.
+
+For added safeguards we have automated linting and validation to ensure the SQL project is always up
+to date with the migrations.
+
 The separate database definitions in `src/Sql/.../dbo` serve as a "master" reference for the
 intended and final state of the database at that time. This is crucial because the state of database
 definitions at the current moment may differ from when a migration was added in the past. These
 definitions act as a lint and validation step to ensure that migrations work as expected, and the
 separation helps maintain clarity and accuracy in database schema management and synchronization
 processes.
-
-Additionally, a
-[SQL database project](https://learn.microsoft.com/en-us/azure-data-studio/extensions/sql-database-project-extension-sdk-style-projects)
-is in place; however, instead of using the auto-generated migrations from
-[DAC](https://learn.microsoft.com/en-us/sql/relational-databases/data-tier-applications/data-tier-applications?view=sql-server-ver16),
-we manually write migrations. This approach is chosen to enhance performance and prevent accidental
-data loss, which is why we have both a `sqlproj` and standalone migrations.
 
 ## Modifying the database
 
