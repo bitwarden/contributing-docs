@@ -71,7 +71,7 @@ follows:
   ![](./minio-manifest-rollout.png)
 
 When checking updates using staged rollouts, `electron-updater` will use a random persistent
-per-installation GUID and derive a rollout percentage from it. Then it will refuse to apply any
+per-installation GUID and derive a rollout percentage from it. It will then refuse to apply any  
 updates where the staging percentage in the downloaded update manifest is less than the
 per-installation percentage. This randomness complicates testing, but it's possible to replace the
 random GUID by a fixed one to guarantee reproducible tests:
@@ -82,13 +82,13 @@ random GUID by a fixed one to guarantee reproducible tests:
   `c8beb766-67f5-4058-b6a1-7031fef1c31a`.
 - This GUID has a rollout percentage of 99.5, which means that:
   - Using `stagingPercentage: 100` will guarantee the client is part of the staged rollout.
-  - Using any other value will guarantee the client is NOT part of the rollout.
+  - Using any other value almost guarantee the client will NOT be part of the rollout.
 
 ## Troubleshooting
 
 ### Issues when running the publishing command
 
-If the publish command returns errors when uploading the artifacts, ensure the credentials were
+If the publish command returns an error when uploading the artifacts, ensure the credentials were  
 created successfully as mentioned in step 5 of the preparation section. If the problem persists,
 some other application on your system might have reserved port `9000` <Bitwarden>(On MacOS, ZScaler
 tends to reserve ports in this range)</Bitwarden>. You can use the following command on UNIX systems
