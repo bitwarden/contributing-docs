@@ -15,8 +15,8 @@ For instructions on how to apply database migrations, please refer to the
 
 We use a [SDK-style SQL project][MSBuildSQL] (`sqlproj`) to develop the database locally. This means
 we have an up-to-date representation of the database in `src/Sql`, and any modifications needs to be
-represented there as well. Since SDK-style SQL projects are still in preview the tooling is not yet
-available Visual Studio. However it is available in [Visual Studio Code][vscode] and [Azure Data
+represented there as well. SDK-style SQL projects are still in preview the tooling is not yet
+available in Visual Studio. However it is available in [Visual Studio Code][vscode] and [Azure Data
 Studio][azureds] with the [SQL Database Projects][SDPE] extension, which provides schema comparison
 and more. You may also modify the `.sql` files directly with any text editor.
 
@@ -27,6 +27,9 @@ also need to be applied in a migration script. Migration scripts are located in
 You can either generate the migration scripts automatically using the _Schema Comparison_
 functionality or by manually writing them. Do note that the automatic method will only take you so
 far and it will need to be manually edited to adhere to the code styles.
+
+For added safe guards we have automated linting and validation to ensure the SQL project is always
+up to date with the migrations.
 
 ## Modifying the database
 

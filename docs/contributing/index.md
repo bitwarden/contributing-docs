@@ -62,7 +62,7 @@ a translation correction), please register an account at Crowdin and join our pr
 - [https://crowdin.com/project/bitwarden-web](https://crowdin.com/project/bitwarden-web)
 
 If the language that you are interested in translating is not already listed, create a new account
-on Crowdin, join the project, and [contact the project owner](https://crowdin.com/profile/dwbit).
+on Crowdin, join the project, and [contact the project owner](https://crowdin.com/profile/wsalmon).
 
 You can read Crowdin's getting started guide for translators here:
 [https://support.crowdin.com/crowdin-intro/](https://support.crowdin.com/crowdin-intro/).

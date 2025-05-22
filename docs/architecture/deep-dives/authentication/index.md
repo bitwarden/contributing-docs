@@ -60,7 +60,6 @@ strategies.
 | `scope`           | `api` `offline access` |
 | `username`        | Email address |
 | `password`        | Master Password Hash or access code if Login with Device |
-| `captchaResponse` | Captcha response token if provided (see [Captcha documentation](./../captchas/index.md) for details) |
 | `authRequest`     | The Login with Device authentication request ID, if this is a Login with Device request |
 
 #### API token requests
@@ -106,8 +105,6 @@ This validator is responsible for issuing tokens for `password` grant type.
 In order for the request to be validated, the following must be true:
 
 - The `Auth-Email` header must be present and correct.
-- The request does not require Captcha, or if it does a valid `captchaResponse` is provided (see
-  [Captcha documentation](./../captchas/index.md) for details).
 - The request does not require 2FA, or if it does a valid `twoFactorToken` is provided (see
   [2FA documentation](two-factor-auth.md))
 - If the request has an `authRequest` property (i.e. is a Passwordless request), the access code is

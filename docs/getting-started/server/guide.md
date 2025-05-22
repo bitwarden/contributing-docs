@@ -18,19 +18,18 @@ Before you start: make sure you’ve installed the recommended
 - Visual Studio 2022
 - Powershell
 - [NET 8.0 SDK](https://dotnet.microsoft.com/download)
-- Azure Data Studio
+- Your preferred database management tool
 
 :::
 
 ## Clone the repository
 
-1.  Clone the Bitwarden Server project:
+Clone the Bitwarden Server project and navigate to the root of the cloned repository:
 
-    ```bash
-    git clone https://github.com/bitwarden/server.git
-    ```
-
-2.  Open a terminal and navigate to the root of the cloned repository.
+```bash
+git clone https://github.com/bitwarden/server.git
+cd server
+```
 
 ## Configure Git
 
@@ -126,7 +125,7 @@ To do this, run
 
 ```bash
 docker compose --profile mssql down
-docker volume rm bitwardenserver_edgesql_dev_data
+docker volume rm bitwardenserver_mssql_dev_data
 ```
 
 After that, rerun the docker compose command from Step 5.
@@ -135,14 +134,11 @@ After that, rerun the docker compose command from Step 5.
 
 ### SQL Server
 
-In order to support ARM based development environments such as the M1 Macs, we use the
-[Azure SQL Edge](https://hub.docker.com/_/microsoft-azure-sql-edge) docker container instead of a
-normal [Microsoft SQL Server](https://hub.docker.com/_/microsoft-mssql-server) container. It behaves
-mostly identical to a regular SQL Server instance and runs on port 1433.
-
-You can connect to it using Azure Data Studio using the following credentials:
+You can connect to the Microsoft SQL Server using your preferred database management tool with the
+following credentials:
 
 - Server: localhost
+- Port: 1433
 - Username: sa
 - Password: (the password you set in `dev/.env`)
 

@@ -152,9 +152,8 @@ pull request, the author should reach out to the reviewing team via their Slack 
 
 <Community>
 
-Once a Community PR has been created a Bitwarden developer will perform a code review. While we try
-to this in a reasonable time frame, please understand that we have internal roadmaps and priorities
-that may delay this process.
+When your pull request is received, it will follow our
+[community contribution review process](community-pr-process.md).
 
 </Community>
 

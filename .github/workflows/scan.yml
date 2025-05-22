@@ -5,8 +5,14 @@ on:
   push:
     branches:
       - "main"
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches-ignore:
+      - main
   pull_request_target:
-    types: [opened, synchronize]
+    types: [opened, synchronize, reopend]
+    branches:
+      - "main"
 
 jobs:
   check-run:
@@ -24,12 +30,12 @@ jobs:
 
     steps:
       - name: Check out repo
-        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           ref: ${{ github.event.pull_request.head.sha }}
 
       - name: Scan with Checkmarx
-        uses: checkmarx/ast-github-action@92b6d52097badece63efe997ffe75207010bb80c # 2.0.29
+        uses: checkmarx/ast-github-action@ef93013c95adc60160bc22060875e90800d3ecfc # 2.3.19
         env:
           INCREMENTAL:
             "${{ contains(github.event_name, 'pull_request') && '--sast-incremental' || '' }}"
@@ -45,9 +51,15 @@ jobs:
             --output-path . ${{ env.INCREMENTAL }}
 
       - name: Upload Checkmarx results to GitHub
-        uses: github/codeql-action/upload-sarif@b611370bb5703a7efb587f9d136a52ea24c5c38c # v3.25.11
+        uses: github/codeql-action/upload-sarif@45775bd8235c68ba998cffa5171334d58593da47 # v3.28.15
         with:
           sarif_file: cx_result.sarif
+          sha:
+            ${{ contains(github.event_name, 'pull_request') && github.event.pull_request.head.sha ||
+            github.sha }}
+          ref:
+            ${{ contains(github.event_name, 'pull_request') && format('refs/pull/{0}/head',
+            github.event.pull_request.number) || github.ref }}
 
   quality:
     name: Quality scan
@@ -59,17 +71,17 @@ jobs:
 
     steps:
       - name: Check out repo
-        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           fetch-depth: 0
           ref: ${{  github.event.pull_request.head.sha }}
 
       - name: Scan with SonarCloud
-        uses: sonarsource/sonarcloud-github-action@e44258b109568baa0df60ed515909fc6c72cba92 # v2.3.0
+        uses: sonarsource/sonarqube-scan-action@aa494459d7c39c106cc77b166de8b4250a32bb97 # v5.1.0
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           args: >
-            -Dsonar.organization=${{ github.repository_owner }} -Dsonar.projectKey=${{
+            -Dsonar.organization=${{ github.repository_owner }}  -Dsonar.projectKey=${{
             github.repository_owner }}_${{ github.event.repository.name }}
+            -Dsonar.pullrequest.key=${{ github.event.pull_request.number }}
