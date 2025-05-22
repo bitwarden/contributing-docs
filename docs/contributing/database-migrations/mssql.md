@@ -70,8 +70,13 @@ These changes should be written from the perspective of "all data has been migra
 stored procedures that were kept around for backwards compatibility should be removed. Any logic for
 syncing old and new data should also be removed in this step.
 
-1. Remove the backwards compatibility that is no longer needed.
-2. Write a new Migration and place it in `src/Migrator/DbScripts_finalization`. Name it
+Since the `dbo` schema represents the current state we need to introduce a "future" state that we
+will call `dbo_finalization`.
+
+1. Copy the relevant `.sql` files from `src/Sql/dbo` to `src/Sql/dbo_finalization`.
+2. Remove the backwards compatibility logic that is no longer needed e.g. dual reads and writes to
+   columns.
+3. Write a new Migration and place it in `src/Migrator/DbScripts_finalization`. Name it
    `YYYY-0M-FinalizationMigration.sql`.
    - Typically migrations are designed to be run in sequence. However since the migrations in
      `DbScripts_finalization` can be run out of order, care must be taken to ensure they remain

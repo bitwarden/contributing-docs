@@ -275,7 +275,8 @@ will not be run until the start of the next deploy when they are moved into `DbS
 After this deploy, to prep for the next release, all migrations in `DbScripts_transition` are moved
 to `DbScripts` and then all migrations in `DbScripts_finalization` are moved to `DbScripts`,
 conserving their execution order for a clean install. For the current branching strategy, PRs will
-be open against `main` when `rc` is cut to prep for this release.
+be open against `main` when `rc` is cut to prep for this release. This PR automation will also
+handle renaming the migration file and updating any reference of `[dbo_finalization]` to `[dbo]`.
 
 The next deploy will pick up the newly added migrations in `DbScripts` and set the previously
 repeatable _Transition_ migrations to no longer be repeatable, execute the _Finalization_
