@@ -43,13 +43,12 @@ considered as split into two parts:
 1. A backwards-compatible transition migration
 2. A non-backwards-compatible final migration
 
-It is likely that a change does not require a non-backwards-compatible end phase e.g. all changes
-may be backwards-compatible in their final form; in that case, only one phase of changes is
-required. With the use of beta testing, partial roll-outs, [feature flags](../feature-flags.md),
-etc. the often-chosen path is to spread a change across several major releases with a calculated
-future state that can perform a "cleanup" migration that is backwards-compatible but still
-represents an overall-_incompatible_ change beyond the boundaries of what we need for individual
-release safety.
+Most changes are entirely backwards-compatible in their final form. If this is the case, only one
+phase of changes is required. With the use of beta testing, partial roll-outs,
+[feature flags](../feature-flags.md), etc. the often-chosen path is to spread a change across
+several major releases with a calculated future state that can perform a "cleanup" migration that is
+backwards-compatible but still represents an overall-_incompatible_ change beyond the boundaries of
+what we need for individual release safety.
 
 ### Backwards compatible migration
 
