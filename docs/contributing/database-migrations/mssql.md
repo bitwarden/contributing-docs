@@ -56,7 +56,7 @@ what we need for individual release safety.
 2. Write a migration script, and place it in `util/Migrator/DbScripts`. Each script must be prefixed
    with the current date.
 
-Please take care to ensure:
+Tips to ensure backwards compatibility:
 
 - any existing stored procedure accepts the same input parameters and that new parameters have
   nullable defaults
