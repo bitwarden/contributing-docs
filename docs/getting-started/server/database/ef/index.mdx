@@ -59,53 +59,6 @@ chronological order.
 You can have multiple databases configured and switch between them by changing the value of the
 `globalSettings:databaseProvider` user secret. You don’t have to delete your connection strings.
 
-### Database Setup
-
-<Tabs
-    groupId="provider"
-    values={providers}>
-<TabItem value="postgres">
-
-In the `dev` folder of your server repository, run
-
-```bash
-export POSTGRES_PASSWORD='example'
-docker compose --profile postgres up
-```
-
-:::note
-
-`POSTGRES_PASSWORD` only needs to be defined for database setup. It does not need to be defined to
-run the mysql profile.
-
-:::
-
-</TabItem>
-<TabItem value="mysql">
-
-In the `dev` folder of your server repository, run
-
-```bash
-export MYSQL_ROOT_PASSWORD='example'
-docker compose --profile mysql up
-```
-
-:::note
-
-`MYSQL_ROOT_PASSWORD` only needs to be defined for database setup. It does not need to be defined to
-run the mysql profile.
-
-:::
-
-</TabItem>
-<TabItem value="sqlite">
-
-Select a location for your database file. You can use the `dev` folder of your server repository.
-Git is configured to ignore `.db` files in this repository for this purpose.
-
-</TabItem>
-</Tabs>
-
 ### User secrets
 
 Add the following values to your API, Identity, and Admin user secrets.
@@ -155,6 +108,41 @@ that the changes take effect.
 
 :::
 
+### Database Setup
+
+<Tabs
+    groupId="provider"
+    values={providers}>
+<TabItem value="postgres">
+
+1. Confirm that `POSTGRES_PASSWORD` in `dev/.env` matches the password in `dev/secrets.json`.
+
+2. In the `dev` folder of your server repository, run
+
+```bash
+docker compose --profile postgres up
+```
+
+</TabItem>
+<TabItem value="mysql">
+
+1. Confirm that `MYSQL_ROOT_PASSWORD` in `dev/.env` matches the password in `dev/secrets.json`.
+
+2. In the `dev` folder of your server repository, run
+
+```bash
+docker compose --profile mysql up
+```
+
+</TabItem>
+<TabItem value="sqlite">
+
+Select a location for your database file. You can use the `dev` folder of your server repository.
+Git is configured to ignore `.db` files in this repository for this purpose.
+
+</TabItem>
+</Tabs>
+
 ### Migrations
 
 <Tabs
@@ -168,7 +156,7 @@ In the `dev` folder run the following to update the database to the latest migra
 pwsh migrate.ps1 -postgres
 ```
 
-The `-postgres` flag on `migrate.ps1` will run `dotnet ef` commands to perform the migrations.
+The `-postgres` flag on `migrate.ps1` runs `dotnet ef` commands to perform the migrations.
 
 </TabItem>
 <TabItem value="mysql">
@@ -179,7 +167,7 @@ In the `dev` folder run the following to update the database to the latest migra
 pwsh migrate.ps1 -mysql
 ```
 
-The `-mysql` flag on `migrate.ps1` will run `dotnet ef` commands to perform the migrations.
+The `-mysql` flag on `migrate.ps1` runs `dotnet ef` commands to perform the migrations.
 
 </TabItem>
 <TabItem value="sqlite">
@@ -190,7 +178,7 @@ In the `dev` folder run the following to update the database to the latest migra
 pwsh migrate.ps1 -sqlite
 ```
 
-The `-sqlite` flag on `migrate.ps1` will run `dotnet ef` commands to perform the migrations.
+The `-sqlite` flag on `migrate.ps1` runs `dotnet ef` commands to perform the migrations.
 
 :::note
 
