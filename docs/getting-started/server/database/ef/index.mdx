@@ -143,6 +143,14 @@ Git is configured to ignore `.db` files in this repository for this purpose.
 </TabItem>
 </Tabs>
 
+:::tip[Confirm your database connection!]
+
+If you run into connection errors, double check that your `.env` and `secrets.json` files have
+matching passwords. If they do, you may have initialized your database incorrectly. Delete the
+Docker storage volume and initialize the database from scratch.
+
+:::
+
 ### Migrations
 
 <Tabs
