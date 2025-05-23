@@ -69,8 +69,16 @@ You can have multiple databases configured and switch between them by changing t
 In the `dev` folder of your server repository, run
 
 ```bash
+export POSTGRES_PASSWORD='example'
 docker compose --profile postgres up
 ```
+
+:::note
+
+`POSTGRES_PASSWORD` only needs to be defined for database setup. It does not need to be defined to
+run the mysql profile.
+
+:::
 
 </TabItem>
 <TabItem value="mysql">
@@ -78,14 +86,22 @@ docker compose --profile postgres up
 In the `dev` folder of your server repository, run
 
 ```bash
+export MYSQL_ROOT_PASSWORD='example'
 docker compose --profile mysql up
 ```
+
+:::note
+
+`MYSQL_ROOT_PASSWORD` only needs to be defined for database setup. It does not need to be defined to
+run the mysql profile.
+
+:::
 
 </TabItem>
 <TabItem value="sqlite">
 
-Select a location for your database file. You can use the `dev` folder of your server repository,
-git is configured to ignore `.db` files in this repository for this purpose.
+Select a location for your database file. You can use the `dev` folder of your server repository.
+Git is configured to ignore `.db` files in this repository for this purpose.
 
 </TabItem>
 </Tabs>
@@ -126,7 +142,7 @@ Source path. Use the file location selected in [Database Setup](#database-setup)
 
 ```json
 "globalSettings:databaseProvider": "sqlite",
-"globalSettings:sqlite:connectionString": "Data Source=/path/to/your/server/repo/dev/db/bitwarden.db",
+"globalSettings:sqlite:connectionString": "Data Source=/path/to/your/server/repo/dev/bitwarden.db",
 ```
 
 </TabItem>
@@ -175,6 +191,13 @@ pwsh migrate.ps1 -sqlite
 ```
 
 The `-sqlite` flag on `migrate.ps1` will run `dotnet ef` commands to perform the migrations.
+
+:::note
+
+The migrator creates the database file if it doesn't exist, but it does not create folders. If you
+get an error that the path doesn't exist, it's referring to missing folders.
+
+:::
 
 </TabItem>
 </Tabs>
