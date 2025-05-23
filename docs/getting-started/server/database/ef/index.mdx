@@ -91,19 +91,13 @@ sure you update the existing values instead of creating new ones
 <TabItem value="sqlite">
 
 Add the following values to your API, Identity, and Admin user secrets. Note, you must set the Data
-Source path.
+Source path. Git is configured to ignore `.db` files in the server repository so that the sqlite
+database can be stored in `dev`. You can use any path with write permissions.
 
 ```json
 "globalSettings:databaseProvider": "sqlite",
 "globalSettings:sqlite:connectionString": "Data Source=/path/to/your/server/repo/dev/bitwarden.db",
 ```
-
-:::note
-
-Git is configured to ignore `.db` files in the server repository so that the sqlite database can be
-stored in `dev`. You can use any path with write permissions.
-
-:::
 
 </TabItem>
 </Tabs>
