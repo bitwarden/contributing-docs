@@ -123,6 +123,14 @@ that the changes take effect.
 docker compose --profile postgres up
 ```
 
+:::tip[Confirm your database connection!]
+
+If you run into connection errors, double check that your `.env` and `secrets.json` files have
+matching passwords. If they do, you may have initialized your database incorrectly. Delete the
+Docker storage volume and initialize the database from scratch.
+
+:::
+
 </TabItem>
 <TabItem value="mysql">
 
@@ -134,15 +142,6 @@ docker compose --profile postgres up
 docker compose --profile mysql up
 ```
 
-</TabItem>
-<TabItem value="sqlite">
-
-Select a location for your database file. You can use the `dev` folder of your server repository.
-Git is configured to ignore `.db` files in this repository for this purpose.
-
-</TabItem>
-</Tabs>
-
 :::tip[Confirm your database connection!]
 
 If you run into connection errors, double check that your `.env` and `secrets.json` files have
@@ -150,6 +149,23 @@ matching passwords. If they do, you may have initialized your database incorrect
 Docker storage volume and initialize the database from scratch.
 
 :::
+
+</TabItem>
+<TabItem value="sqlite">
+
+Select a location for your database file. You can use the `dev` folder of your server repository.
+Git is configured to ignore `.db` files in this repository for this purpose.
+
+:::tip[Confirm your database path!]
+
+The migrator creates the database file if it doesn't exist, but it does not create folders. If you
+get an error that the path doesn't exist, double check that the path exists and that the folder
+containing the sqlite database has write and/or create permissions.
+
+:::
+
+</TabItem>
+</Tabs>
 
 ### Migrations
 
