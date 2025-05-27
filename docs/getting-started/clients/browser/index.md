@@ -125,10 +125,16 @@ Once configured, your local Custom Environment should look like this:
 
 To load the browser extension build:
 
-1.  Navigate to `chrome://extensions` in your address bar. This will open the extensions page
-2.  Enable “developer mode” (toggle switch)
-3.  Click the “Load unpacked” button
-4.  Open the `build` folder of your local repository and confirm your choice
+1. Build the extension for Chrome:
+
+   ```bash
+   npm run build:watch
+   ```
+
+2. Navigate to `chrome://extensions` in your address bar. This will open the extensions page
+3. Enable “developer mode” (toggle switch)
+4. Click the “Load unpacked” button
+5. Open the `build` folder of your local repository and confirm your choice
 
 You will now have your local build of the browser extension installed.
 
