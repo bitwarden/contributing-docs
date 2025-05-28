@@ -128,7 +128,7 @@ When contributing to Bitwarden with Nx:
    ```bash
    nx affected --target=test
    nx affected --target=lint
-   ``
+   ```
 
 ## Getting Help
 
