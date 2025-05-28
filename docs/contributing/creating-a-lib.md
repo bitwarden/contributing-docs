@@ -1,7 +1,7 @@
 # Creating a New Library
 
 This guide explains how to create a new library in the Bitwarden monorepo using Nx.
-    
+
 ## Prerequisites
 
 - Node.js and npm installed
@@ -13,15 +13,19 @@ This guide explains how to create a new library in the Bitwarden monorepo using 
 We use the `@nx/js` plugin to generate new libraries. Follow these steps to create a new library:
 
 1. From the root of the monorepo, run the generator command:
+
    ```bash
    nx g @nx/js:lib my-new-lib --directory=libs/my-new-lib
    ```
+
    Replace `my-new-lib` with the name of your library.
 
-2. The generator will ask you questions about the library configuration. Here are recommended settings:
+2. The generator will ask you questions about the library configuration. Here are recommended
+   settings:
+
    - **Which bundler would you like to use?** Select `none` (we use our own bundling setup)
    - **What should be the project name?** The same name as your library (e.g., `my-new-lib`)
-   - **Would you like to add a package.json?** Select `Yes` 
+   - **Would you like to add a package.json?** Select `Yes`
    - **Which unit test runner would you like to use?** Select `jest` (our standard test runner)
 
 3. Once generated, the library will have this structure:
@@ -47,13 +51,14 @@ libs/
 }
 ```
 
-5. Update the library's path in the root `tsconfig.base.json` file to make it available to other projects:
+5. Update the library's path in the root `tsconfig.base.json` file to make it available to other
+   projects:
 
 ```json
 {
   "compilerOptions": {
     "paths": {
-      "@bitwarden/my-new-lib": ["libs/my-new-lib/src"],
+      "@bitwarden/my-new-lib": ["libs/my-new-lib/src"]
     }
   }
 }
@@ -78,4 +83,5 @@ import { someFunction } from "@bitwarden/my-new-lib";
 - Follow the Bitwarden code style guidelines
 - Document your library's public API
 - Write unit tests for your library's functionality
-- If your library has dependencies on other libraries, make sure to add them to the `project.json` file
+- If your library has dependencies on other libraries, make sure to add them to the `project.json`
+  file

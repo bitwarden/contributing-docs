@@ -2,14 +2,20 @@
 
 ## What is Nx?
 
-Nx is a powerful open-source build system designed specifically for monorepo development. It provides tools and techniques for enhancing developer productivity, optimizing CI performance, and maintaining code quality in complex JavaScript/TypeScript codebases that contain multiple applications and libraries within a single repository.
+Nx is a powerful open-source build system designed specifically for monorepo development. It
+provides tools and techniques for enhancing developer productivity, optimizing CI performance, and
+maintaining code quality in complex JavaScript/TypeScript codebases that contain multiple
+applications and libraries within a single repository.
 
 ## Why We're Using Nx
-    
-We use Nx in the Bitwarden clients monorepo to improve our development workflow and build efficiency. Key advantages include:
+
+We use Nx in the Bitwarden clients monorepo to improve our development workflow and build
+efficiency. Key advantages include:
 
 ### 1. Unified Commands
-Instead of navigating to specific directories and running individual build commands, you can now execute commands for any project from the repository root:
+
+Instead of navigating to specific directories and running individual build commands, you can now
+execute commands for any project from the repository root:
 
 ```bash
 # Old way
@@ -25,36 +31,50 @@ nx test common
 ```
 
 ### 2. Build Caching
-Nx automatically caches build results. If code and dependencies haven't changed, subsequent builds are significantly faster, often restoring results from cache instantly. This saves considerable build time and memory.
+
+Nx automatically caches build results. If code and dependencies haven't changed, subsequent builds
+are significantly faster, often restoring results from cache instantly. This saves considerable
+build time and memory.
 
 ### 3. Intelligent Dependency Management
-Nx understands the dependencies between projects. Running a build for one project automatically builds its dependencies first if needed:
+
+Nx understands the dependencies between projects. Running a build for one project automatically
+builds its dependencies first if needed:
 
 You can visualize these dependencies with:
+
 ```bash
 nx graph
 ```
 
 ### 4. Configuration-Based Projects
-Each app and library can be defined as a project with a `project.json` file that specifies its build configurations, targets, and other settings. This replaces many scripts previously defined in individual `package.json` files.
+
+Each app and library can be defined as a project with a `project.json` file that specifies its build
+configurations, targets, and other settings. This replaces many scripts previously defined in
+individual `package.json` files.
 
 ## Key Nx Terminology
 
-- *nx.json*: The primary configuration file for the Nx workspace, located at the root. Defines global settings, plugins, workspace layout, and target defaults.
+- _nx.json_: The primary configuration file for the Nx workspace, located at the root. Defines
+  global settings, plugins, workspace layout, and target defaults.
 
-- *project.json*: A configuration file in each project's directory that defines the targets (tasks) for that specific project and the executors used to run them.
+- _project.json_: A configuration file in each project's directory that defines the targets (tasks)
+  for that specific project and the executors used to run them.
 
-- *Target*: A specific task that can be performed on a project, like `build`, `serve`, `lint`, or `test`. Run with `nx <target> <project-name>`.
+- _Target_: A specific task that can be performed on a project, like `build`, `serve`, `lint`, or
+  `test`. Run with `nx <target> <project-name>`.
 
-- *Executor*: The code responsible for performing a target's action, typically provided by Nx plugins (e.g., `@nx/webpack:webpack` for running Webpack builds).
+- _Executor_: The code responsible for performing a target's action, typically provided by Nx
+  plugins (e.g., `@nx/webpack:webpack` for running Webpack builds).
 
-- *Configuration*: A named set of options for running a target in different modes, accessed via the `--configuration` flag (e.g., `nx build browser --configuration=chrome-mv3`).
+- _Configuration_: A named set of options for running a target in different modes, accessed via the
+  `--configuration` flag (e.g., `nx build browser --configuration=chrome-mv3`).
 
 ## Using Nx
 
 To use the Nx cli you have two options:
 
-1. Install nx globally 
+1. Install nx globally
 2. Use npx
 
 ## Common Commands
@@ -114,17 +134,21 @@ Nx stores its cache in the `.nx/cache` directory at the root of the repository. 
 - Build artifacts
 - Metadata about the task execution
 
-The cache is created based on the inputs defined for each target. If none of the inputs have changed, Nx will restore the previous output.
+The cache is created based on the inputs defined for each target. If none of the inputs have
+changed, Nx will restore the previous output.
 
 ## Contributing Guidelines
 
 When contributing to Bitwarden with Nx:
 
-1. *Use Nx commands* from the repository root instead of navigating to individual project directories.
-2. *Respect project boundaries* - imports between projects should follow the established dependency graph.
-3. *When adding new dependencies* between projects, ensure they're reflected in imports in the code.
-4. *For new scripts or build steps*, add them to the appropriate project's `project.json` file rather than to individual `package.json` files.
-5. *Test affected projects* before submitting a PR:
+1. _Use Nx commands_ from the repository root instead of navigating to individual project
+   directories.
+2. _Respect project boundaries_ - imports between projects should follow the established dependency
+   graph.
+3. _When adding new dependencies_ between projects, ensure they're reflected in imports in the code.
+4. _For new scripts or build steps_, add them to the appropriate project's `project.json` file
+   rather than to individual `package.json` files.
+5. _Test affected projects_ before submitting a PR:
    ```bash
    nx affected --target=test
    nx affected --target=lint
