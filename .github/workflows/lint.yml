@@ -20,6 +20,7 @@ jobs:
         with:
           cache: "npm"
           cache-dependency-path: "**/package-lock.json"
+          node-version-file: ".nvmrc"
 
       - name: Lint and spellcheck
         run: |
