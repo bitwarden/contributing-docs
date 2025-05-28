@@ -5,7 +5,7 @@
 Nx is a powerful open-source build system designed specifically for monorepo development. It provides tools and techniques for enhancing developer productivity, optimizing CI performance, and maintaining code quality in complex JavaScript/TypeScript codebases that contain multiple applications and libraries within a single repository.
 
 ## Why We're Using Nx
-
+    
 We use Nx in the Bitwarden clients monorepo to improve our development workflow and build efficiency. Key advantages include:
 
 ### 1. Unified Commands
@@ -36,7 +36,7 @@ nx graph
 ```
 
 ### 4. Configuration-Based Projects
-Each app and library can be defined as a project with a =project.json= file that specifies its build configurations, targets, and other settings. This replaces many scripts previously defined in individual =package.json= files.
+Each app and library can be defined as a project with a `project.json` file that specifies its build configurations, targets, and other settings. This replaces many scripts previously defined in individual `package.json` files.
 
 ## Key Nx Terminology
 
@@ -44,11 +44,11 @@ Each app and library can be defined as a project with a =project.json= file that
 
 - *project.json*: A configuration file in each project's directory that defines the targets (tasks) for that specific project and the executors used to run them.
 
-- *Target*: A specific task that can be performed on a project, like =build=, =serve=, =lint=, or =test=. Run with =nx <target> <project-name>=.
+- *Target*: A specific task that can be performed on a project, like `build`, `serve`, `lint`, or `test`. Run with `nx <target> <project-name>`.
 
-- *Executor*: The code responsible for performing a target's action, typically provided by Nx plugins (e.g., =@nx/webpack:webpack= for running Webpack builds).
+- *Executor*: The code responsible for performing a target's action, typically provided by Nx plugins (e.g., `@nx/webpack:webpack` for running Webpack builds).
 
-- *Configuration*: A named set of options for running a target in different modes, accessed via the =--configuration= flag (e.g., =nx build browser --configuration=chrome-mv3=).
+- *Configuration*: A named set of options for running a target in different modes, accessed via the `--configuration` flag (e.g., `nx build browser --configuration=chrome-mv3`).
 
 ## Using Nx
 
@@ -108,7 +108,7 @@ nx affected --target=build --dry-run
 
 ## Understanding the Cache
 
-Nx stores its cache in the =.nx/cache= directory at the root of the repository. This includes:
+Nx stores its cache in the `.nx/cache` directory at the root of the repository. This includes:
 
 - Terminal outputs
 - Build artifacts
@@ -123,7 +123,7 @@ When contributing to Bitwarden with Nx:
 1. *Use Nx commands* from the repository root instead of navigating to individual project directories.
 2. *Respect project boundaries* - imports between projects should follow the established dependency graph.
 3. *When adding new dependencies* between projects, ensure they're reflected in imports in the code.
-4. *For new scripts or build steps*, add them to the appropriate project's =project.json= file rather than to individual =package.json= files.
+4. *For new scripts or build steps*, add them to the appropriate project's `project.json` file rather than to individual `package.json` files.
 5. *Test affected projects* before submitting a PR:
    ```bash
    nx affected --target=test
@@ -135,7 +135,7 @@ When contributing to Bitwarden with Nx:
 If you're having issues with Nx:
 
 1. Check the [Nx documentation](https://nx.dev/getting-started/intro)
-2. Run =nx --help= or =nx <command> --help= for command-specific help
+2. Run `nx --help` or `nx <command> --help` for command-specific help
 3. Reach out to the Platform team for assistance with Nx-specific problems
 
 ## References
