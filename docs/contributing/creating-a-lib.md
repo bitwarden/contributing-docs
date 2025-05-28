@@ -24,9 +24,8 @@ We use the `@nx/js` plugin to generate new libraries. Follow these steps to crea
    settings:
 
    - **Which bundler would you like to use?** Select `none` (we use our own bundling setup)
-   - **What should be the project name?** The same name as your library (e.g., `my-new-lib`)
-   - **Would you like to add a package.json?** Select `Yes`
-   - **Which unit test runner would you like to use?** Select `jest` (our standard test runner)
+   - **Which linter would you like to use?**
+   - **Which unit test runner would you like to use?**
 
 3. Once generated, the library will have this structure:
 
