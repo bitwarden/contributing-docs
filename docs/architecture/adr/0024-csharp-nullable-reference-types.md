@@ -85,7 +85,8 @@ you do that. It does mean that you may get runtime null errors in tests a little
 tests have a much quicker runtime feedback loop than the general application so this is not usually
 a big problem.
 
-Coding standards will be [updated](../../contributing/code-style/csharp.md#nullable-reference-types) to indicate usage of NRTs.
+Coding standards will be [updated](../../contributing/code-style/csharp.md#nullable-reference-types)
+to indicate usage of NRTs.
 
 [errors]:
   https://us3.datadoghq.com/error-tracking?query=error.type%3ASystem.NullReferenceException&fromUser=true&refresh_mode=sliding&source=all&from_ts=1747751457422&to_ts=1748356257422&live=true
