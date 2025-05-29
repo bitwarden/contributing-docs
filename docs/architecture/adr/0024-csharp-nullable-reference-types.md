@@ -12,16 +12,16 @@ tags: [server]
 ## Context and Problem Statement
 
 C# 8 introduced nullable reference types (NRT) that allow for enhanced compiler tracking of null
-references. This enables nullability problems to be caught sooner during the compilation phase vs. the
-runtime phase -- one of those problems is `NullReferenceException` that happens when you try to
+references. This enables nullability problems to be caught sooner during the compilation phase vs.
+the runtime phase -- one of those problems is `NullReferenceException` that happens when you try to
 interact with a reference when it is actually a `null` reference. We see [thousands of
 these][errors] exceptions every week.
 
 ### Nullable Reference Types
 
 > Nullable reference types are a group of features that minimize the likelihood that your code
-> causes the runtime to throw `System.NullReferenceException`. Three features help you avoid
-> these exceptions, including the ability to explicitly mark a reference type as nullable:
+> causes the runtime to throw `System.NullReferenceException`. Three features help you avoid these
+> exceptions, including the ability to explicitly mark a reference type as nullable:
 >
 > - Improved static flow analysis that determines if a variable might be null before dereferencing
 >   it.
@@ -33,14 +33,14 @@ these][errors] exceptions every week.
 
 ### Enablement
 
-NRT can be enabled project-wide with `<Nullable>enable</Nullable>` in the project file; this
-enables the default for all files in that project. Each file can also choose to opt in or out through a
+NRT can be enabled project-wide with `<Nullable>enable</Nullable>` in the project file; this enables
+the default for all files in that project. Each file can also choose to opt in or out through a
 compiler directive `#nullable enable` or `#nullable disable` respectively.
 
 ## Considered Options
 
-- **Do not enable NRT** - We've already started enabling NRT and it would be akin to
-  disallowing code comments. It can be pretty easy for just one team to adopt if they want to do so.
+- **Do not enable NRT** - We've already started enabling NRT and it would be akin to disallowing
+  code comments. It can be pretty easy for just one team to adopt if they want to do so.
 - **Disabled project-wide, enabled at the file level** - where we are today, as it allows teams to
   opt into using it when you want. The problem is it's easy to want to use NRT but forget to enable
   it in the file.
@@ -86,14 +86,14 @@ A PR would be created for each team to add the disable and once all of those mer
 Nullable repo-wide would be made. Each team would then have a tech debt ticket created for them to
 remove the exclusion from their file and fix resulting null warnings.
 
-The plan does _not_ involve migrating our test projects to have nullable enabled but to allow nullable
-annotations only for them; this is actually already in place today. Often in test files you
+The plan does _not_ involve migrating our test projects to have nullable enabled but to allow
+nullable annotations only for them; this is actually already in place today. Often in test files you
 explicitly want to go against the null annotations of files in order to test unhappy paths; for
-example, you may want to pass in `null` and assert that the method throws a `ArgumentNullException` when
-that is done. It's a bit nicer to not have to use the null assertion operator `!` every time you do
-that. It does mean that you may get runtime null errors in tests a little more often but tests have
-a much quicker runtime feedback loop than the general application so this is not usually a big
-problem.
+example, you may want to pass in `null` and assert that the method throws a `ArgumentNullException`
+when that is done. It's a bit nicer to not have to use the null assertion operator `!` every time
+you do that. It does mean that you may get runtime null errors in tests a little more often but
+tests have a much quicker runtime feedback loop than the general application so this is not usually
+a big problem.
 
 ### Guidelines
 
@@ -102,8 +102,8 @@ Below are some helpful guidelines for migrating files to be nullable annotated.
 #### Null forgiving operator
 
 It may sometimes be needed to assert to the compiler that you know something is not null even when
-it thinks it might be - to do that you can use the [`!` operator][null-forgiving]. You may want to do
-this for properties that you know are populated elsewhere; for example:
+it thinks it might be - to do that you can use the [`!` operator][null-forgiving]. You may want to
+do this for properties that you know are populated elsewhere; for example:
 
 ```c#
 public class User
