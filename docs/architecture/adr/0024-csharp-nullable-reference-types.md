@@ -87,57 +87,7 @@ a big problem.
 
 ### Guidelines
 
-Below are some helpful guidelines for migrating files to be nullable annotated.
-
-#### Null forgiving operator
-
-It may sometimes be needed to assert to the compiler that you know something is not null even when
-it thinks it might be - to do that you can use the [`!` operator][null-forgiving]. You may want to
-do this for properties that you know are populated elsewhere; for example:
-
-```c#
-public class User
-{
-    public string Email { get; set; }
-}
-```
-
-the compiler will complain that `Email` isn't guaranteed to be non-null but since we know that the
-database enforces this column as non-null. One way to fix this is to add a `= null!` after the
-property. Another option will be to use the [`required` modifier](#required-modifier) after the
-access modifier.
-
-#### `required` modifier
-
-The `required` modifier can be nice to place on properties that are required to have a value during
-construction but you don't want to include it in the constructor. The compiler ensures that those
-properties are always set and will therefore not warn about a possible null reference.
-
-##### `required` modifier vs `[Required]` attribute
-
-When using the `required` modifier it's important to understand the difference between it and how it
-affects model binding and validation. [Read more][required-attribute]
-
-#### Null attributes
-
-There are a [suite of attributes][null-state-attributes] that help inform the compiler about the
-null-state for your code.
-
-#### Debug.Assert
-
-Another thing to help the compiler with null state awareness is [`Debug.Assert`][debug-assert]. You
-can use it to place a null check that as long as business rules haven't changed will always be true.
-For example you might have an assertion like `Debug.Assert(user.IsVerified)` in a part of the app
-that only expects verified users. `Debug.Assert` works by using one of the aforementioned attributes
-`[DoesNotReturnIf(false)]` to make it work in case you want to implement your own assertion.
+[C# Nullable Reference Type Guidelines](../../contributing/code-style/csharp.md#nullable-reference-types).
 
 [errors]:
   https://us3.datadoghq.com/error-tracking?query=error.type%3ASystem.NullReferenceException&fromUser=true&refresh_mode=sliding&source=all&from_ts=1747751457422&to_ts=1748356257422&live=true
-[null-forgiving]:
-  https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/operators/null-forgiving
-[null-state-attributes]:
-  https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/attributes/nullable-analysis
-[required-attribute]:
-  https://learn.microsoft.com/en-us/aspnet/core/mvc/models/validation?view=aspnetcore-9.0#non-nullable-reference-types-and-required-attribute
-[debug-assert]:
-  https://learn.microsoft.com/en-us/dotnet/api/system.diagnostics.debug.assert?view=net-9.0
