@@ -81,6 +81,7 @@ TOTP
 typealias
 WCAG
 Xcodes.app
+xcworkspace
 xmldoc
 Yellowpages
 Yubico
