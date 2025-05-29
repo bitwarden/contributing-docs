@@ -72,16 +72,6 @@ in our `Directory.Build.props` file to enable NRT for all non-test projects. For
 warnings, we will add `#nullable disable` (with a following new line) to the top of the file. If
 there are files that are already compatible with having NRT on then they will automatically get it.
 
-This change would have the following amount of files changed for each team:
-
-- @bitwarden/team-admin-console-dev: 63
-- @bitwarden/team-auth-dev: 64
-- @bitwarden/team-billing-dev: 36
-- @bitwarden/team-data-insights-and-reporting-dev: 4
-- @bitwarden/team-key-management-dev: 3
-- @bitwarden/team-tools-dev: 7
-- @bitwarden/team-vault-dev: 19
-
 A PR would be created for each team to add the disable and once all of those merge a PR enabling
 Nullable repo-wide would be made. Each team would then have a tech debt ticket created for them to
 remove the exclusion from their file and fix resulting null warnings.
