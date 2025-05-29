@@ -86,7 +86,7 @@ if (someBooleanExpression && someVariable != null && someVariable.IsTrue)
 
 ## Nullable Reference Types
 
-Nullable reference types should be used to make safer code.
+Nullable reference types can be used to make safer code.
 
 ### Null forgiving operator
 
