@@ -115,7 +115,7 @@ properties are always set and will therefore not warn about a possible null refe
 #### `required` modifier vs `[Required]` attribute
 
 When using the `required` modifier it's important to understand the difference between it and how it
-affects model binding and validation. [Read more][required-attribute]
+affects model binding and validation. [Read more][required-attribute].
 
 ### Null attributes
 
