@@ -86,3 +86,5 @@ Chosen option: **Deprecate enum use**
 
 - Update contributing docs with patterns and best practices for enum replacement.
 - Update the reporting level of the lint to "warning".
+
+[no-enum-lint]: https://github.com/bitwarden/clients/blob/main/libs/eslint/platform/no-enums.mjs
