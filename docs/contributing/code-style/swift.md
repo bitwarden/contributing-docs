@@ -144,10 +144,12 @@ class ClassName {
 
 ## Localization
 
-- We use Crowdin to crowd-source our localizations, based off of the English text. As well, we still
-  use `.strings` files for localization. Therefore only the English `Localizable.strings` file needs
-  to be updated when adding strings; we have regular jobs in GitHub that take care of syncing other
-  translations with Crowdin.
+- We use Crowdin to crowd-source our localizations, based off of the English text. More information
+  on how to contribute translations and how we use Crowdin within Bitwarden can be found
+  [here](https://contributing.bitwarden.com/contributing/#localization-l10n).
+- We use `.strings` files for localization. Therefore only the English `Localizable.strings` file
+  needs to be updated when adding strings; we have regular jobs in GitHub that take care of syncing
+  other translations with Crowdin.
 - Keys in `Localizable.strings` should be a CamelCased string of the English text, rather than a
   description of where the key is used. As a result, if the English text changes, the key should
   likewise change—this allows translators in Crowdin to know that they need to likewise update the
