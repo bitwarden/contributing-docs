@@ -25,9 +25,9 @@ worst cases, their limitations may be unknown, and thus unguarded. Reducing or e
 
 ### Detection
 
-Typescript deprecation can be linted using a fairly short ESlint plugin. The code has
-[already been contributed to main](no-enum-lint) as a suggestion. The same PR adds `FIXME` comments
-for each team to address.
+Typescript deprecation can be linted using a fairly short ESlint plugin. The code has [already been
+contributed to main][no-enum-lint] as a suggestion. The same PR adds `FIXME` comments for each team
+to address.
 
 ### Replacement code
 
