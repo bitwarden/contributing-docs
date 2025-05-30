@@ -86,6 +86,7 @@ Yellowpages
 Yubico
 YubiKey
 YubiKeys
+typesafe
 
 # Forbidden words
 !auto-fill
