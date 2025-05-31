@@ -13,7 +13,7 @@ tags: [server]
 
 `Microsoft.Extensions.DependencyInjection` (the DI provider we use) has last one wins behavior. This
 means that if you inject two services of the same service type the last implementation that was
-registered. For example:
+registered wins. For example:
 
 ```csharp
 services.AddSingleton<IMyService, ImplementationOne>();
@@ -55,21 +55,28 @@ services.TryAddEnumerable(ServiceDescriptor.Singleton<IMyService, Implementation
 ```
 
 `TryAddEnumerable` won't add the service to the container if the service type **and** implementation
-type are different. This leads you to one of the three scenarios where you would specifically
-**not** want to use the `TryAdd` overloads, if you did want to use inject an
-`IEnumerable<IMyService>` **and** wanted that list to have multiple services of the same
-implementation.
+type are the same. This leads you to one of the three scenarios where you would specifically **not**
+want to use the `TryAdd` overloads.
 
-The second scenario is you know for an absolute fact that you are the first to register a given
-service type. In this case it is more acceptable to not use `TryAdd` overloads although it likely
-doesn't hurt anything and in favor of not breaking the rules, it's still encouraged to use `TryAdd`.
+## Scenario 1
 
-The third scenario would be if you know you are the last to register a service and you need to
-override whatever implementation might have previously been registered. The ideal place to make
-these decisions is earlier in DI instead of after but until `TryAdd` is fully adopted the only place
-to get it to work is at the very end. You should be very careful while doing this and include a
-justification for each such usage. You likely even want to go a step further and manually remove the
-service descriptor that you don't want and then inject yours into it. For example:
+If you did want to use inject an `IEnumerable<IMyService>` **and** wanted that list to have multiple
+services of the same implementation.
+
+## Scenario 2
+
+You know for an absolute fact that you are the first to register a given service type. In this case
+it is more acceptable to not use `TryAdd` overloads although it likely doesn't hurt anything and in
+favor of not breaking the rules, it's still encouraged to use `TryAdd`.
+
+## Scenario 3
+
+If you know you are the last to register a service and you need to override whatever implementation
+might have previously been registered. The ideal place to make these decisions is earlier in DI
+instead of after but until `TryAdd` is fully adopted the only place to get it to work is at the very
+end. You should be very careful while doing this and include a justification for each such usage.
+You likely even want to go a step further and manually remove the service descriptor that you don't
+want and then inject yours into it. For example:
 
 ```csharp
 services.TryAddSingleton<IMyService, DefaultImplementation>();
