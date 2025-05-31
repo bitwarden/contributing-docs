@@ -94,7 +94,7 @@ It may sometimes be needed to assert to the compiler that you know something is 
 it thinks it might be - to do that you can use the [`!` operator][null-forgiving]. You may want to
 do this for properties that you know are populated elsewhere; for example:
 
-```c#
+```csharp
 public class User
 {
     public string Email { get; set; }
