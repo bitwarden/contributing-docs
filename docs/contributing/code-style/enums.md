@@ -6,16 +6,20 @@ of using enums, we use constant objects.
 ## Our Recommended Approach
 
 ```ts
-export const PasskeyActions = {
+export const _PasskeyAction = Object.freeze({
   Register: "register",
   Authenticate: "authenticate",
-} as const;
+} as const);
 
-export type PasskeyActionValue = (typeof PasskeyActions)[keyof typeof PasskeyActions];
+export type PasskeyAction = (typeof _PasskeyAction)[keyof typeof _PasskeyAction];
+export const PasskeyAction: { [K in keyof typeof _PasskeyAction]: PasskeyAction } = _PasskeyAction;
 
-declare function usePasskeyAction(action: PasskeyActionValue): void;
+// Usage examples
+const register = PasskeyAction.Register; // ✅ Type = const register: PasskeyAction
 
-usePasskey(PasskeyActions.Register); // ✅ Valid
+declare function usePasskey(action: PasskeyAction): void;
+
+usePasskey(PasskeyAction.Authenticate); // ✅ Valid
 usePasskey(0); // ❌ Invalid
 ```
 
