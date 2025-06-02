@@ -47,18 +47,8 @@ storage options, default generator values, generator UI rules (constraints), and
 
 ### Preferences
 
-## Logging
+...
 
-The generator's reactivity model is time-sensitive, which makes identifying and diagnosing runtime
-behaviors difficult. Consider, for example, interactively debugging an observable subject to
-`timeout()`. Because the computer's clock keeps running when the debugger is paused, stopping a
-program subject to this operation can exhaust the timeout, resulting in
-[heisenbugs](https://en.wikipedia.org/wiki/Heisenbug). The generator's permanent runtime logging
-facilities decrease this complexity of debugging by writing structured logs using the
-`SemanticLogger`.
+## Further Reading
 
-When a generator creates a logger, it sets the log's `type` parameter. This can be filtered by
-editing XYZ.
-
-> [!WARNING] The `SemanticLogger` writes arbitrary runtime information into the console. It is
-> automatically disabled outside of development environments to mitigate data leaks.
+- [generator internals](https://github.com/bitwarden/clients/blob/main/libs/tools/generator/CONVENTIONS.md)
