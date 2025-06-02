@@ -45,9 +45,9 @@
     "@docusaurus/module-type-aliases": "3.7.0",
     "@docusaurus/tsconfig": "3.7.0",
     "@types/react": "19.1.2",
-    "cspell": "8.19.2",
+    "cspell": "9.0.2",
     "husky": "9.1.7",
-    "lint-staged": "15.5.1",
+    "lint-staged": "16.0.0",
     "prettier": "3.5.3",
     "typescript": "5.8.3"
   },
