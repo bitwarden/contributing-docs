@@ -78,7 +78,7 @@ export function asCipherType(value: number): CipherType | undefined {
   return isCipherType(value) ? value : undefined;
 }
 
-export function nameOfCipherType(name: CipherType): keyof CipherType | undefined {
+export function nameOfCipherType(value: CipherType): keyof CipherType | undefined {
   return namesByCipherType.get(value);
 }
 ```
