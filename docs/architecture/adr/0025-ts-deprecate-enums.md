@@ -102,7 +102,8 @@ like the following causes a compiler error:
 type SomeType = { [CipherType.SecureNote]: boolean };
 ```
 
-[This issue is fixed as of TypeScript 5.8](no-member-fields-fixed).
+[This issue is fixed as of TypeScript 5.8](no-member-fields-fixed) and won't be explored further in
+this document.
 
 ## Considered Options
 
