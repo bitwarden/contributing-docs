@@ -29,13 +29,14 @@ TypeScript deprecation can be linted using a fairly short ESLint plugin. The cod
 contributed to main][no-enum-lint] as a suggestion. The same PR adds `FIXME` comments for each team
 to address.
 
-### Replacement code
+### Replacement pattern
 
 In most cases, enums are unnecessary. A readonly (`as const`) object coupled with a type alias
 avoids both code generation and type inconsistencies.
 
 ```ts
-export const CipherType = {
+// declare the raw data and reduce repetition with an inner type
+const _CipherType = {
   Login: 1,
   SecureNote: 2,
   Card: 3,
@@ -43,22 +44,70 @@ export const CipherType = {
   SshKey: 5,
 } as const;
 
-export type CipherType = (typeof CipherType)[keyof typeof CipherType];
+type _CipherType = typeof _CipherType;
 
-// Can be imported together
-import { CipherType } from "./cipher-type";
+// derive the enum-like type from the raw data
+export type CipherType = _CipherType[keyof _CipherType];
 
-// Used as a type
-function doSomething(type: CipherType) {}
-
-// And used as a value (just like a regular `enum`)
-doSomething(CipherType.Card);
+// assert that the raw data is of the enum-like type
+export const CipherType: Readonly<{ [K in keyof typeof _CipherType]: CipherType }> =
+  Object.freeze(_CipherType);
 ```
+
+This code creates a type `CipherType` that allows arguments and variables to be typed similarly to
+an enum. It also strongly types the `CiperType` constant so that direct accesses of its members
+preserve type safety. No type assertions are needed to work directly with `CipherType`.
+
+This pattern has two negative consequences. First, mapped types cannot determine that a mapped type
+is fully specified. Code like the following causes a compiler error:
+
+```ts
+type MappedType = { [K in CipherType]: boolean };
+
+const instance: MappedType = {
+  [CipherType.Login]: true,
+  [CipherType.SecureNote]: true,
+  [CipherType.Card]: true,
+  [CipherType.Identity]: true,
+  [CipherType.SshKey]: true,
+};
+```
+
+This happens because each enum members' literal type is overridden by `CipherType`. The compiler
+cannot determine that every kind of `CipherType` is listed. There are a few workarounds:
+
+```ts
+// option A: use a type assertion to construct the mapped type
+const instance: MappedType = {
+  [CipherType.Login]: true,
+  // ...
+} as MappedType;
+
+// option B: make the type partial and it fully typechecks, but you
+//   need to inspect its properties to use them.
+type PartialMappedType = { [K in CipherType]?: boolean };
+const instance = {
+  [CipherType.Login]: true,
+  // ...
+};
+if (instance[CipherType.Login]) {
+  // work with `instance`
+}
+```
+
+The other problem is that mapped types cannot specify the enum-like's members as field names. Code
+like the following causes a compiler error:
+
+```ts
+type SomeType = { [CipherType.SecureNote]: boolean };
+```
+
+[This issue is fixed as of TypeScript 5.8](no-member-fields-fixed).
 
 ## Considered Options
 
 - **Allow enums, but advise against them** - This is the current state of affairs. With this option,
-  teams **must** address the readmes, but _may_ address them by disabling the lint.
+  teams **must** address the FIXMEs, but _may_ address them by disabling the lint.
 - **Deprecate enum use** - Allow enums to exist for historic purposes, but prohibit the introduction
   of new ones. Increase the lint to a "warning" and allow the lint to be disabled.
 - **Eliminate enum use** - Prohibit the introduction of any new enum and replace all enums in the
@@ -88,3 +137,5 @@ Chosen option: **Deprecate enum use**
 - Update the reporting level of the lint to "warning".
 
 [no-enum-lint]: https://github.com/bitwarden/clients/blob/main/libs/eslint/platform/no-enums.mjs
+[no-member-fields-fixed]:
+  https://devblogs.microsoft.com/typescript/announcing-typescript-5-8-beta/#preserved-computed-property-names-in-declaration-files
