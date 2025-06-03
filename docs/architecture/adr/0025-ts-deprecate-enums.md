@@ -116,7 +116,7 @@ Chosen option: **Deprecate enum use**
 
 ## Appendix A: Mapped Types and Enum-likes
 
-Mapped types cannot determine that a mapped enum-like object is fully specified. Code like the
+Mapped types cannot determine that a mapped enum-like object is fully assigned. Code like the
 following causes a compiler error:
 
 ```ts
@@ -131,9 +131,9 @@ const instance: Record<CipherType, boolean> = {
 
 #### Why does this happen?
 
-The members of `const _CipherType` all have a literal type. `_CipherType.Login`, for example, has a
-[literal type][literal-type] of `1`. `type CipherType` maps over these members, aggregating them
-into the structural type `1 | 2 | 3 | 4 | 5`.
+The members of `const _CipherType` all have a [literal type][literal-type]. `_CipherType.Login`, for
+example, has a literal type of `1`. `type CipherType` maps over these members, aggregating them into
+the structural type `1 | 2 | 3 | 4 | 5`.
 
 `const CipherType` asserts its members have `type CipherType`, which overrides the literal types the
 compiler inferred for the member in `const _CipherType`. The compiler sees the type of
