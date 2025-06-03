@@ -1,6 +1,4 @@
-# Nx at Bitwarden
-
-## What is Nx?
+# Nx
 
 Nx is a powerful open-source build system designed specifically for monorepo development. It
 provides tools and techniques for enhancing developer productivity, optimizing CI performance, and
@@ -52,6 +50,10 @@ nx graph
 Each app and library can be defined as a project with a `project.json` file that specifies its build
 configurations, targets, and other settings. This replaces many scripts previously defined in
 individual `package.json` files.
+
+### 5. Code Generation
+
+Nx ships with powerful tools for automating the creation of things like libraries.
 
 ## Key Nx Terminology
 
