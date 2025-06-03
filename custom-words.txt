@@ -79,6 +79,7 @@ subprocessor
 toolset
 TOTP
 typealias
+typesafe
 WCAG
 Xcodes.app
 xmldoc
@@ -86,7 +87,6 @@ Yellowpages
 Yubico
 YubiKey
 YubiKeys
-typesafe
 
 # Forbidden words
 !auto-fill
