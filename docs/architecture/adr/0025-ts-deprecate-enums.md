@@ -26,8 +26,8 @@ worst cases, their limitations may be unknown, and thus unguarded.
 ### Detection
 
 TypeScript deprecation can be linted using a fairly short ESLint plugin. The code has [already been
-contributed to main][no-enum-lint] as a suggestion. The same PR adds `FIXME` comments for each team
-to address.
+contributed to main][no-enum-lint] and is configured as [an error-level
+lint][no-enum-configuration]. The same PR adds `FIXME` comments for each team to address.
 
 ### The Enum-like Pattern
 
@@ -77,12 +77,12 @@ const m = new Map([[CipherType.Login, ""]]); // `m` is a `Map<CipherType, string
 
 ## Considered Options
 
-- **Allow enums, but advise against them** - This is the current state of affairs. With this option,
-  teams **must** address the FIXMEs, but _may_ address them by disabling the lint.
+- **Allow enums, but advise against them** - Allow enum use to be decided on a case-by-case basis by
+  the team that owns the enum. Reduce the level of the lint to a "suggestion".
 - **Deprecate enum use** - Allow enums to exist for historic or technical purposes, but prohibit the
-  introduction of new ones. Increase the lint to a "warning" and allow the lint to be disabled.
-- **Eliminate enum use** - Prohibit the introduction of any new enum and replace all enums in the
-  codebase with typescript objects. Increase the lint to an "error" and prohibit disabling of the
+  introduction of new ones. Reduce the lint to a "warning" and allow the lint to be disabled.
+- **Eliminate enum use** - This is the current state of affairs. Prohibit the introduction of any
+  new enum and replace all enums in the codebase with typescript objects. Prohibit disabling of the
   lint.
 
 ## Decision Outcome
@@ -106,13 +106,6 @@ Chosen option: **Deprecate enum use**
 
 - Update contributing docs with patterns and best practices for enum replacement.
 - Update the reporting level of the lint to "warning".
-
-[computed-property-names]:
-  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Object_initializer#computed_property_names
-[literal-type]: https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#literal-types
-[no-enum-lint]: https://github.com/bitwarden/clients/blob/main/libs/eslint/platform/no-enums.mjs
-[no-member-fields-fixed]:
-  https://devblogs.microsoft.com/typescript/announcing-typescript-5-8-beta/#preserved-computed-property-names-in-declaration-files
 
 ## Appendix A: Mapped Types and Enum-likes
 
@@ -194,3 +187,12 @@ if (available.includes(CipherType.Login)) {
   // ...
 }
 ```
+
+[computed-property-names]:
+  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Object_initializer#computed_property_names
+[literal-type]: https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#literal-types
+[no-enum-lint]: https://github.com/bitwarden/clients/blob/main/libs/eslint/platform/no-enums.mjs
+[no-enum-configuration]:
+  https://github.com/bitwarden/clients/blob/032fedf308ec251f17632d7d08c4daf6f41a4b1d/eslint.config.mjs#L77
+[no-member-fields-fixed]:
+  https://devblogs.microsoft.com/typescript/announcing-typescript-5-8-beta/#preserved-computed-property-names-in-declaration-files
