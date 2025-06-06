@@ -11,8 +11,8 @@ tags: [server]
 
 ## Context and Problem Statement
 
-`Microsoft.Extensions.DependencyInjection` (the DI provider we use) has last one wins behavior. This
-means that if you inject two services of the same service type the last implementation that was
+`Microsoft.Extensions.DependencyInjection` (the DI provider we use) has a "last one wins" behavior -- this
+means that if you inject two services of the same service type, the last implementation that was
 registered wins. For example:
 
 ```csharp
@@ -21,15 +21,15 @@ services.AddSingleton<IMyService, ImplementationOne>();
 services.AddSingleton<IMyService, ImplementationTwo>();
 ```
 
-when a service or controller inject `IMyService` they will be getting `ImplementationTwo` even
+When a service or controller injects `IMyService` they will be getting `ImplementationTwo` even
 though `ImplementationOne` _does_ still exist in the service container. It exists in the container
 still because if you were to instead inject `IEnumerable<IMyService>` you would receive an
 enumerable containing 2 services, one for each implementation that was registered. This **is** the
 behavior you want sometimes but it is much rarer to inject an enumerable of services as opposed to
-injecting just a single service. This is where the [`TryAdd`][try-add-definitions] overloads on
+injecting just a single service, and is where the [`TryAdd`][try-add-definitions] overloads on
 `IServiceCollection` (in the `Microsoft.Extensions.DependencyInjection.Extensions` namespace) come
-in handy. They allow you to more explicitly declare the expected usage of a service during service
-configuration time. Take the above example, it could instead be written like:
+in handy. One can more explicitly declare the expected usage of a service during service
+configuration time. The above example could instead be written like:
 
 ```csharp
 services.TryAddSingleton<IMyService, ImplementationOne>();
@@ -37,17 +37,17 @@ services.TryAddSingleton<IMyService, ImplementationOne>();
 services.TryAddSingleton<IMyService, ImplementationTwo>();
 ```
 
-Now when you inject `IMyService` you would instead be receiving `ImplementaionOne` and if you
+Now when you inject `IMyService` you would instead be receiving `ImplementationOne` and if you
 injected `IEnumerable<IMyService>` you would only get an enumerable with a single instance and it
 would also be `ImplementationOne`. There would also only be a single `ServiceDescriptor` registered
-in the container. What `TryAdd?Keyed?{Singleton|Scoped|Transient}` does under the hood is checks if
+in the container. What `TryAdd?Keyed?{Singleton|Scoped|Transient}` does under the hood is check if
 there has already been a service with type `IMyService` (and key if using a keyed service)
-registered. If one has, it will skip adding another entry with its given implementation. But if one
+registered. If one has, it will skip adding another entry with its given implementation, but if one
 has not already been added, it will add it.
 
 If you do want multiple services for a given service type (for using with `IEnumerable<IMyService>`)
-then you should likely be using the `TryAddEnumerable` overload. So if you specially wanted multiple
-implementation to be able to be injected you'd structure it like this:
+then you should likely be using the `TryAddEnumerable` overload. If you specifically wanted multiple
+implementations to be able to be injected you'd structure it like:
 
 ```csharp
 services.TryAddEnumerable(ServiceDescriptor.Singleton<IMyService, ImplementationOne>());
@@ -58,18 +58,18 @@ services.TryAddEnumerable(ServiceDescriptor.Singleton<IMyService, Implementation
 type are the same. This leads you to one of the three scenarios where you would specifically **not**
 want to use the `TryAdd` overloads.
 
-## Scenario 1
+### Scenario One
 
 If you did want to use inject an `IEnumerable<IMyService>` **and** wanted that list to have multiple
 services of the same implementation.
 
-## Scenario 2
+### Scenario Two
 
 You know for an absolute fact that you are the first to register a given service type. In this case
 it is more acceptable to not use `TryAdd` overloads although it likely doesn't hurt anything and in
 favor of not breaking the rules, it's still encouraged to use `TryAdd`.
 
-## Scenario 3
+### Scenario Three
 
 If you know you are the last to register a service and you need to override whatever implementation
 might have previously been registered. The ideal place to make these decisions is earlier in DI
@@ -91,18 +91,18 @@ This is another instance where you now know that there isn't another registratio
 elsewhere in container and so once again it might just be worth it to do `TryAddSingleton` in order
 to limit the amount of times you are breaking the rules.
 
-The benefits to using `TryAdd` on all your services is that you can create a `Add[Feature]` method
+The benefits to using `TryAdd` on all your services is that you can create an `Add[Feature]` method
 to add all the services needed to make your feature work and that method can be called many times
 with no ill-effect to the system. This means that if someone else builds a feature on top of yours
-they also can call `AddYourFeature` in their service registration. This is generally a good practice
-to do so that you don't get a runtime error about a missing dependency. This is a practice followed
+they also can call `AddYourFeature` in their service registration, which is generally a good practice
+to do so that you don't get a runtime error about a missing dependency; it is also a practice followed
 throughout the [ASP.NET Core repo][aspnetcore-repo] as well as many other libraries that integrate
-with DI. For example, data protection calls [`services.AddOptions`][add-options-example] even though
+with DI. For example, Data Protection calls [`services.AddOptions`][add-options-example] even though
 it's highly likely that something else in the application has already called it and their usage
 doesn't actually add any service. This pattern generally makes testing this method easier, as it is
-a batteries included method and it also helps show a clear dependency graph. There are a few
+a "batteries included" method and also helps show a clear dependency graph. There are a few
 services that are allowed to not be explicitly added as they are expected to always be included in
-the host. Those services are `ILogger<>`, `ILoggerFactory`, `IConfiguration`, and
+the host -- those services are `ILogger<>`, `ILoggerFactory`, `IConfiguration`, and
 `IHostEnvironment`.
 
 ## Considered Options
@@ -112,10 +112,10 @@ the host. Those services are `ILogger<>`, `ILoggerFactory`, `IConfiguration`, an
 - **Encourage usage** - Start encouraging usage through team training and encouragement to use them
   in code reviews but don't make any automatic check to enforce usage.
 - **Enforce usage** - Start enforcing usage of `TryAdd` overloads by adding the
-  `Microsoft.CodeAnalysis.BannedApiAnalyzers` nuget package and adding the non-`TryAdd` overloads to
+  `Microsoft.CodeAnalysis.BannedApiAnalyzers` NuGet package and adding the non-`TryAdd` overloads to
   the list of banned APIs. If you believe your usage of the API is valid you would add a
   `#pragma warning disable` and a comment explaining the justification.
-- **Disallow usage** - There doesn't seem like a good reason to do this, they are more explicit
+- **Disallow usage** - There doesn't seem like a good reason to do this as there are more explicit
   versions of the non-`TryAdd` overloads. If you want to use them you should be allowed to.
 
 ## Decision Outcome
@@ -137,11 +137,11 @@ Chosen option: **Encourage usage**.
 ### Plan
 
 The plan to encourage the usage will be to update our C# style guide with the recommendation to
-begin using the `TryAdd` overloads, the document should explain when you want to use each one. The
-coding guidelines can be part of a newly added document about general dependency injection
+begin using the `TryAdd` overloads (the document should explain when you want to use each one). The
+coding guidelines can be part of a newly-added document about general dependency injection
 guidelines for .NET here at Bitwarden.
 
-A one time recording learning session will also be hosted, the session will go over the new docs,
+A one-time recorded learning session will also be hosted; the session will go over the new docs,
 show off migrating existing service registrations to using the `TryAdd` overloads, and host a QnA.
 
 The migrations done in the above session as well as a few others will be made so that there are good
