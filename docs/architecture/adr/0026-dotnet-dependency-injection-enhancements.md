@@ -11,9 +11,9 @@ tags: [server]
 
 ## Context and Problem Statement
 
-`Microsoft.Extensions.DependencyInjection` (the DI provider we use) has a "last one wins" behavior -- this
-means that if you inject two services of the same service type, the last implementation that was
-registered wins. For example:
+`Microsoft.Extensions.DependencyInjection` (the DI provider we use) has a "last one wins" behavior
+-- this means that if you inject two services of the same service type, the last implementation that
+was registered wins. For example:
 
 ```csharp
 services.AddSingleton<IMyService, ImplementationOne>();
@@ -94,16 +94,16 @@ to limit the amount of times you are breaking the rules.
 The benefits to using `TryAdd` on all your services is that you can create an `Add[Feature]` method
 to add all the services needed to make your feature work and that method can be called many times
 with no ill-effect to the system. This means that if someone else builds a feature on top of yours
-they also can call `AddYourFeature` in their service registration, which is generally a good practice
-to do so that you don't get a runtime error about a missing dependency; it is also a practice followed
-throughout the [ASP.NET Core repo][aspnetcore-repo] as well as many other libraries that integrate
-with DI. For example, Data Protection calls [`services.AddOptions`][add-options-example] even though
-it's highly likely that something else in the application has already called it and their usage
-doesn't actually add any service. This pattern generally makes testing this method easier, as it is
-a "batteries included" method and also helps show a clear dependency graph. There are a few
-services that are allowed to not be explicitly added as they are expected to always be included in
-the host -- those services are `ILogger<>`, `ILoggerFactory`, `IConfiguration`, and
-`IHostEnvironment`.
+they also can call `AddYourFeature` in their service registration, which is generally a good
+practice to do so that you don't get a runtime error about a missing dependency; it is also a
+practice followed throughout the [ASP.NET Core repo][aspnetcore-repo] as well as many other
+libraries that integrate with DI. For example, Data Protection calls
+[`services.AddOptions`][add-options-example] even though it's highly likely that something else in
+the application has already called it and their usage doesn't actually add any service. This pattern
+generally makes testing this method easier, as it is a "batteries included" method and also helps
+show a clear dependency graph. There are a few services that are allowed to not be explicitly added
+as they are expected to always be included in the host -- those services are `ILogger<>`,
+`ILoggerFactory`, `IConfiguration`, and `IHostEnvironment`.
 
 ## Considered Options
 
