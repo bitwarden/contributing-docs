@@ -23,4 +23,4 @@ of your database.
 ## Modifying the database
 
 The process for modifying the database is described in
-[Migrations](./../../../../contributing/database-migrations/).
+[Migrations](./../../../../contributing/database-migrations/mssql.md).
