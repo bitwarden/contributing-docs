@@ -6,8 +6,8 @@ sidebar_position: 1
 
 ## Requirements
 
-1. [Xcode](https://developer.apple.com/xcode/) (version 15.4)
-2. An iPhone 15 Pro simulator (iOS 17.0.1) set up
+1. [Xcode](https://developer.apple.com/xcode/) (version 16.3)
+2. An iPhone 16 Pro simulator (iOS 18.1) set up
 
 ## Setup
 
@@ -54,13 +54,20 @@ sidebar_position: 1
 
 ### Run the app
 
-1. Open the project in Xcode 15.4+.
-2. Run the app in the Simulator with the `Bitwarden` target.
+1. Open the project in Xcode 16.3+.
+2. Run the app in the Simulator with the `Bitwarden` target for the Password Manager app or
+   `Authenticator` for the Authenticator app.
+
+> [!TIP] To open the workspace in Xcode, just go to the root folder with the CLI and run:
+>
+> ```sh
+> open Bitwarden.xcworkspace
+> ```
 
 ### Running tests
 
 Due to slight snapshot test variations between iOS versions, the test target requires running in an
-iPhone 15 Pro simulator (iOS 17.0.1).
+iPhone 16 Pro simulator (iOS 18.1).
 
 1. In Xcode's toolbar, select the project and a connected device or simulator.
 
