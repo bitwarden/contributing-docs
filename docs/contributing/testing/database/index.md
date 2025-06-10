@@ -115,8 +115,6 @@ The `MigrationName` must correspond to migrations in all supported databases:
   Example: `MigrationName = "ExampleDataMigration"` for `2024-01-15_00_ExampleDataMigration.sql`
 - **Entity Framework**: Must match the EF migration class name
 
-Ensure both implementations make equivalent changes for feature parity.
-
 ### Best practices
 
 1. **Validate data migrations**: Ensure data is accurately transformed.
