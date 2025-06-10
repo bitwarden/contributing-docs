@@ -75,11 +75,15 @@ BW_TEST_DATABASES__0__CONNECTIONSTRING: myConnectionString
 
 ## Testing specific database migrations
 
-When you need to test a specific database migration, you can use the [`MigrationName`](https://github.com/bitwarden/server/blob/021e69bc5dfea8be3b74f7a046a1cd48a206a712/test/Infrastructure.IntegrationTest/DatabaseDataAttribute.cs#L21) property of the `[DatabaseData]` attribute. This allows you to apply and verify a migration across all configured database providers.
+When you need to test a specific database migration, you can use the
+[`MigrationName`](https://github.com/bitwarden/server/blob/021e69bc5dfea8be3b74f7a046a1cd48a206a712/test/Infrastructure.IntegrationTest/DatabaseDataAttribute.cs#L21)
+property of the `[DatabaseData]` attribute. This allows you to apply and verify a migration across
+all configured database providers.
 
 ### Using `MigrationName`
 
-To test a migration, set the `MigrationName` property on the `[DatabaseData]` attribute and inject `IMigrationTesterService`:
+To test a migration, set the `MigrationName` property on the `[DatabaseData]` attribute and inject
+`IMigrationTesterService`:
 
 ```csharp
 [DatabaseTheory, DatabaseData(MigrationName = "ExampleDataMigration")]
@@ -88,15 +92,15 @@ public async Task TestExampleDataMigration(
     IOrganizationRepository organizationRepository)
 {
     // Arrange: Set up data before migration
-    var org = await organizationRepository.CreateAsync(new Organization 
-    { 
+    var org = await organizationRepository.CreateAsync(new Organization
+    {
         Name = "Test Org",
         Plan = "Enterprise"
     });
-    
+
     // Act: Apply the migration
     migrationTester.ApplyMigration();
-    
+
     // Assert: Verify the results after migration
     var updatedOrg = await organizationRepository.GetByIdAsync(org.Id);
     // Add assertions here to verify migration effects
@@ -106,8 +110,9 @@ public async Task TestExampleDataMigration(
 ### Migration naming conventions
 
 The `MigrationName` must correspond to migrations in all supported databases:
+
 - **SQL Server**: Must match a file in `util/Migrator/DbScripts/` ending in `<MigrationName>.sql`
-    Example: `2024-01-15_00_ExampleDataMigration.sql` for `MigrationName = "ExampleDataMigration"`
+  Example: `MigrationName = "ExampleDataMigration"` for `2024-01-15_00_ExampleDataMigration.sql`
 - **Entity Framework**: Must match the EF migration class name
 
 Ensure both implementations make equivalent changes for feature parity.
