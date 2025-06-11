@@ -80,6 +80,10 @@ When you need to test a specific database migration, you can use the
 property of the `[DatabaseData]` attribute. This allows you to apply and verify a migration across
 all configured database providers.
 
+> **Note**: This is meant for testing data migrations only. It assumes your database schema is
+> already fully up-to-date. After setting up your test data, it re-runs the specified migration to
+> verify how it transforms the data. It will not work for schema-only migrations.
+
 ### Using `MigrationName`
 
 To test a migration, set the `MigrationName` property on the `[DatabaseData]` attribute and inject
@@ -118,5 +122,6 @@ The `MigrationName` must correspond to migrations in all supported databases:
 ### Best practices
 
 1. **Validate data migrations**: Ensure data is accurately transformed.
-2. **Validate schema changes**: Confirm tables, columns, indexes, and constraints work as intended.
-3. **Use descriptive test names**: Make test names reflect the purpose and scope of the migration.
+2. **Use descriptive test names**: Make test names reflect the purpose and scope of the migration.
+3. **Remove after release**: These tests are short-lived and should be deleted after the migration
+   is deployed and verified in production (as part of EDD cleanup).
