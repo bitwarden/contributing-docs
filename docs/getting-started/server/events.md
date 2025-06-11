@@ -60,35 +60,6 @@ To use database storage for events:
 Events can be distributed via an AMQP messaging system. This messaging system enables new
 integrations to subscribe to the events. The system supports either RabbitMQ or Azure Service Bus.
 
-### Listener / Handler pattern
-
-The goal of moving to distributed events is to build additional service integrations that consume
-events. To make it easy to support multiple AMQP services (RabbitMQ and Azure Service Bus), the act
-of listening to the stream of events is decoupled from the act of responding to an event.
-
-**Listeners**
-
-- One listener per communication platform (e.g. one for RabbitMQ, one for Azure Service Bus).
-- Multiple instances can be configured to run independently, each with its own handler and
-  subscription / queue.
-- Perform all the aspects of setup / teardown, subscription, etc. for the messaging platform, but do
-  not directly process any events themselves. Instead, they delegate to the handler with which they
-  are configured.
-
-**Handlers**
-
-- One handler per integration (e.g. HTTP post or event database repository).
-- Completely isolated from and know nothing of the messaging platform in use. This allows them to be
-  freely reused across different communication platforms.
-- Perform all aspects of handling an event.
-- Allows them to be highly testable as they are isolated and decoupled from the more complicated
-  aspects of messaging.
-
-This combination allows for a configuration inside of `Startup.cs` that pairs instances of the
-listener service for the currently running messaging platform with any number of handlers. It also
-allows for quick development of new handlers as they are focused only on the task of handling a
-specific event.
-
 ### RabbitMQ implementation
 
 The RabbitMQ implementation adds a step that refactors the way events are handled when running
@@ -99,31 +70,33 @@ the RabbitMQ exchange and writes to the `Events` table via the `EventsRepository
 the same (events are stored in the database), but the addition of the RabbitMQ exchange allows for
 other integrations to subscribe.
 
-Additional handlers - each paired with their own `RabbitMqEventListenerService` and listening to
-their own queue - are available to be configured as well.
+Additional handlers - one for each integration and listening to their own queue - listen for events
+and publish messages to an additional tier if there is an active configuration that matches the
+event type, integration type, and organization. Once published to the integration tier, there are
+additional handlers that use the integration messages to perform the actual integration. In
+addition, the integration tier handles failures and retries for each specific integration.
 
-- `SlackEventHandler` posts messages to Slack channels or DMs.
-- `WebhookEventHandler` `POST`s each event to a configurable URL.
+- `SlackIntegrationHandler` posts messages to Slack channels or DMs.
+- `WebhookIntegrationHandler` `POST`s each event to a configurable URL.
 
 ```kroki type=mermaid
 graph TD
 	  subgraph With RabbitMQ
         B1[EventService]
         B2[RabbitMQEventWriteService]
-        B3[RabbitMQ exchange]
+        B3[RabbitMQ event exchange]
         B4[EventRepositoryHandler]
-        B5[WebhookEventHandler]
+        B5[WebhookIntegrationHandler]
         B6[Events Database Table]
-        B7[HTTP Server]
-        B8[SlackEventHandler]
-        B9[Slack]
+        B7[RabbitMQ integration exchange]
+        B8[SlackIntegrationHandler]
 
         B1 -->|IEventWriteService| B2 --> B3
-        B3-->|RabbitMqEventListenerService| B4 --> B6
-        B3-->|RabbitMqEventListenerService| B5
-        B5 -->|HTTP POST| B7
-        B3-->|RabbitMqEventListenerService| B8
-        B8 -->|HTTP POST| B9
+        B3 -->|RabbitMqEventListenerService| B4 --> B6
+        B3 -->|RabbitMqEventListenerService| B7
+        B7 -->|RabbitMqIntegrationListenerService| B5
+        B3 -->|RabbitMqEventListenerService| B7
+        B7 -->|RabbitMqIntegrationListenerService| B8
     end
 
     subgraph Without RabbitMQ
@@ -136,7 +109,7 @@ graph TD
 end
 ```
 
-#### Running the RabbitMQ container
+#### Running the RabbitMQ container (default using fixed-delay queues)
 
 1.  Verify that you've set a username and password in the `.env` file (see `.env.example` for an
     example)
@@ -154,6 +127,36 @@ end
 3.  To verify this is running, open `http://localhost:15672` in a browser and login with the
     username and password in your `.env` file.
 
+#### Running the RabbitMQ container (with optional delay plugin)
+
+The standard installation of RabbitMQ does not support delaying message delivery. Our default option
+instead uses retry queues with a fixed amount of delay and checks the `DelayUntilDate` in each
+message to see if it is time for them to br processed. This provides the delay needed for retries
+(with backoff and jitter applied), but it does require more processing.
+
+As an alternate approach, we have support for RabbitMQ's optional delay plugin - which does support
+adding a precise delay to a message and handles publishing at the specified time. It does require
+the plugin to be installed and enabled before running and is therefore not the default setup. To
+enable the plugin:
+
+1.  Download the latest version of the
+    [RabbitMQ delay plugin GitHub repo](https://github.com/rabbitmq/rabbitmq-delayed-message-exchange).
+2.  Add the plugin to your RabbitMQ instance. The easiest way to do this is to add the following
+    line to Docker compose, under the `volumes:`. This puts the binary into the container that
+    Docker spins up.
+
+```
+  -  ./rabbitmq_delayed_message_exchange-4.1.0.ez:/opt/rabbitmq/plugins/rabbitmq_delayed_message_exchange-4.1.0.ez
+```
+
+3.  Build/rebuild your RabbitMQ instance with this in place to enable the ability to use the delay
+    plugin.
+4.  If you have previously created the Integration exchange, you have to delete it and let the
+    server code recreate it (Rabbit will use the existing exchange without delay enabled if it
+    already exists).
+5.  Restart the servers and verify that the exchange was created successfully.
+6.  Turn on the `useDelayPlugin` flag in secrets and push that out to the servers (see below)
+
 #### Configuring the server to use RabbitMQ for events
 
 1.  Add the following to your `secrets.json` file, changing the defaults to match your `.env` file:
@@ -168,6 +171,7 @@ end
         "eventRepositoryQueueName": "events-write-queue",
         "slackQueueName": "events-slack-queue",
         "webhookQueueName": "events-webhook-queue",
+        "useDelayPlugin": false
       }
     }
     ```
@@ -200,28 +204,29 @@ instance of `AzureServiceBusEventListenerService` is then configured with the
 Similar to RabbitMQ above, the end result is the same (events are stored in Azure Table Storage),
 but the addition of the service bus topic allows for other integrations to subscribe.
 
-As with the RabbitMQ implementation above, a `SlackEventHandler` and `WebhookEventHandler` can be
-configured to publish events to Slack and/or a webhook.
+As with the RabbitMQ implementation above, handlers for available integrations will listen to the
+same event topic and republish to the integration topic when the event integration is configured.
+The same `SlackIntegrationHandler` and `WebhookIntegrationHandler` process messages to send to Slack
+and/or a webhook and the integration topic handles failures and retries.
 
 ```kroki type=mermaid
 graph TD
 	  subgraph With Service Bus
         B1[EventService]
         B2[AzureServiceBusEventWriteService]
-        B3[Azure Service Bus Topic]
+        B3[Azure Service Bus Event Topic]
         B4[AzureTableStorageEventHandler]
-        B5[WebhookEventHandler]
+        B5[WebhookIntegrationHandler]
         B6[Events in Azure Tables]
-        B7[HTTP Server]
-        B8[SlackEventHandler]
-        B9[Slack]
+        B7[Azure Service Bus Integration Topic]
+        B8[SlackIntegrationHandler]
 
         B1 -->|IEventWriteService| B2 --> B3
-        B3-->|AzureServiceBusEventListenerService| B4 --> B6
-        B3-->|AzureServiceBusEventListenerService| B5
-        B5 -->|HTTP POST| B7
-        B3-->|AzureServiceBusEventListenerService| B8
-        B8 -->|HTTP POST| B9
+        B3 -->|AzureServiceBusEventListenerService| B4 --> B6
+        B3 -->|AzureServiceBusEventListenerService| B7
+        B7 -->|AzureServiceBusIntegrationListenerService| B5
+        B3 -->|AzureServiceBusEventListenerService| B7
+        B7  -->|AzureServiceBusIntegrationListenerService| B8
     end
 
     subgraph With Storage Queue
