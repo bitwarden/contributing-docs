@@ -99,9 +99,42 @@ JavaScript -down[hidden]-> SDK
 
 ```
 
+## Security
+
+The IPC framework is designed with security in mind. Every message sent between processes is
+converted to a `Vec<u8>` representation and encrypted using a `CryptoProvider` before being sent
+over the communication channel. This ensures that messages are not sent in plain text and are
+protected from eavesdropping or tampering. For consumers of the framework the encryption is
+completely transparent, as the framework handles the encryption and decryption of messages
+automatically.
+
+The framework also supports session management, allowing clients to securely store and retrieve
+cryptographic sessions. This is useful to avoid having to re-establish shared secrets or keys
+between processes every time they communicate. The session management is handled by the
+`SessionRepository` trait, and is implemented by the platform-specific parts of the IPC framework.
+`CryptoProvider`s have full access to the `CommunicationBackend` which allows them to send and
+receive their own messages over the communication channel to establish and maintain sessions. These
+messages can be completely separate from the actual IPC data messages and might be completely
+transparent to the consumer of the framework.
+
 ## Usage
 
-- publish/subscribe
-- request/response
+The IPC framework provides a simple interface for sending and receiving messages between processes.
+It supports two main communication patterns:
+
+### Publish/Subscribe
+
+This pattern allows consumers to subscribe to specific topics and receive messages published to
+those topics. It is useful for scenarios where multiple consumers need to receive the same message,
+such as notifications or updates. Consumers can subscribe to the raw data or a specific type of
+message, and the framework will handle the serialization and deserialization of the messages, as
+long as the type supports conversion to and from a `Vec<u8>` representation.
+
+### Request/Response
+
+This pattern allows a consumer to send a request to a producer and receive a response. It is useful
+for scenarios where a consumer needs to request specific information or perform an action, such as
+authentication or data retrieval. The framework handles the serialization and deserialization of the
+messages, as long as the type supports conversion to and from a `Vec<u8>` representation.
 
 ## Message format
