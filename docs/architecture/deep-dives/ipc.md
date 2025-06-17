@@ -60,6 +60,8 @@ received.
 
 ```kroki type=plantuml
 @startuml
+skinparam BackgroundColor transparent
+skinparam componentStyle rectangle
 skinparam linetype ortho
 skinparam Padding 7
 hide members
