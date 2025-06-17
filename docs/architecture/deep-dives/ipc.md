@@ -140,3 +140,108 @@ authentication or data retrieval. The framework handles the serialization and de
 messages, as long as the type supports conversion to and from a `Vec<u8>` representation.
 
 ## Message format
+
+The IPC framework uses a simple message format that, while not formally defined, is designed to be
+flexible and extensible. Each message consists of a topic, a destination, and a payload. The topic
+is a string that identifies the message, the destination is an enum that specifies the target of the
+message, and the payload is a `Vec<u8>` that contains the serialized data. The topic allows messages
+to be categorized and filtered, while the destination allows messages to be sent to specific
+consumers or processes. The payload contains the actual data being sent, and can be any type that
+implements the `From<Vec<u8>>` and `Into<Vec<u8>>` traits, allowing for easy conversion between the
+raw byte representation and the desired data type.
+
+When the framework returns a message to the consumer it will also contain a source, which represents
+where the current process received the message from. This can be used to determine the origin of the
+message and is useful for determining trust. Since the field is added by the receiver you can assume
+that it is correct and trustworthy.
+
+The top-level encoding and decoding of messages is handled by the `CommunicationBackend` trait and
+is not formalized by the framework itself. Instead, it is left to the platform-specific
+implementations to define how messages are serialized and deserialized. This allows the framework to
+be flexible and adaptable to different platforms and use cases, while still providing a consistent
+interface for consumers.
+
+```kroki type=plantuml
+@startuml
+skinparam linetype ortho
+skinparam Padding 7
+skinparam componentStyle rectangle
+
+component OutgoingIpcMessage {
+    component "topic: Option<String>" as outgoing_topic
+    component "destination: Endpoint" as outgoing_destination
+    component "payload: Vec<u8>" as outgoing_payload
+
+    outgoing_topic -[hidden]-> outgoing_destination
+    outgoing_destination -[hidden]-> outgoing_payload
+}
+
+component IncomingIpcMessage {
+    component "topic: Option<String>" as incoming_topic
+    component "destination: Endpoint" as incoming_destination
+    component "source: Endpoint" as incoming_source
+    component "payload: Vec<u8>" as incoming_payload
+
+    incoming_topic -[hidden]-> incoming_destination
+    incoming_destination -[hidden]-> incoming_source
+    incoming_source -[hidden]-> incoming_payload
+}
+
+@enduml
+```
+
+### Request/Response
+
+The request/response functionality is built on top of the publish/subscribe message format by using
+a hard-coded topic reserved for RPC (Remote Procedure Call) messages. On receipt of a request
+message, the framework will automatically decode the payload as an `RpcRequestMessage` which
+contains additional metadata about the request, such as the request identifier, type, and payload.
+The type is used to determine which handler to call for the request, and the payload is the actual
+data being sent in the request. The framework will then serialize the response as an
+`RpcResponseMessage` and send it back to the consumer using the same topic. The response message
+will contain the request identifier, type, and payload, allowing the framework to match the response
+with the original request and handle it accordingly.
+
+```kroki type=plantuml
+@startuml
+skinparam linetype ortho
+skinparam Padding 7
+skinparam componentStyle rectangle
+
+component OutgoingIpcMessage {
+    component "topic: "RpcRequestMessage"" as outgoing_topic
+    component "destination: Endpoint" as outgoing_destination
+    component "RpcRequestMessage" <<payload>> as outgoing_payload {
+        component "request_id: String" as outgoing_rpc_id
+        component "request_type: String" as outgoing_rpc_type
+        component "request: Vec<u8>" as outgoing_rpc_data
+
+        outgoing_rpc_id -[hidden]-> outgoing_rpc_type
+        outgoing_rpc_type -[hidden]-> outgoing_rpc_data
+    }
+
+    outgoing_topic -[hidden]-> outgoing_destination
+    outgoing_destination -[hidden]-> outgoing_payload
+}
+
+component IncomingIpcMessage {
+    component "topic: "RpcResponseMessage"" as incoming_topic
+    component "destination: Endpoint" as incoming_destination
+    component "source: Endpoint" as incoming_source
+
+    component "RpcResponseMessage" <<payload>> as incoming_payload {
+        component "request_id: String" as incoming_rpc_id
+        component "request_type: String" as incoming_rpc_type
+        component "request: Vec<u8>" as incoming_rpc_data
+
+        incoming_rpc_id -[hidden]-> incoming_rpc_type
+        incoming_rpc_type -[hidden]-> incoming_rpc_data
+    }
+
+    incoming_topic -[hidden]-> incoming_destination
+    incoming_destination -[hidden]-> incoming_source
+    incoming_source -[hidden]-> incoming_payload
+}
+
+@enduml
+```
