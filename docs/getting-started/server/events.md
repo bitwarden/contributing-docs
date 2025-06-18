@@ -59,55 +59,10 @@ To use database storage for events:
 
 Events can be distributed via an AMQP messaging system. This messaging system enables new
 integrations to subscribe to the events. The system supports either RabbitMQ or Azure Service Bus.
+For a detailed look at the architecture and technical details, see
+[the documentation in the server repo](https://github.com/bitwarden/server/tree/6800bc57f3eb492222e128cffcd00e16b29cc155/src/Core/AdminConsole/Services/Implementations/EventIntegrations).
 
-### RabbitMQ implementation
-
-The RabbitMQ implementation adds a step that refactors the way events are handled when running
-locally or self-hosted. Instead of writing directly to the `Events` table via the
-`EventsRepository`, each event is broadcast to a RabbitMQ exchange. A new
-`RabbitMqEventListenerService` instance, configured with an `EventRepositoryHandler`, subscribes to
-the RabbitMQ exchange and writes to the `Events` table via the `EventsRepository`. The end result is
-the same (events are stored in the database), but the addition of the RabbitMQ exchange allows for
-other integrations to subscribe.
-
-Additional handlers - one for each integration and listening to their own queue - listen for events
-and publish messages to an additional tier if there is an active configuration that matches the
-event type, integration type, and organization. Once published to the integration tier, there are
-additional handlers that use the integration messages to perform the actual integration. In
-addition, the integration tier handles failures and retries for each specific integration.
-
-- `SlackIntegrationHandler` posts messages to Slack channels or DMs.
-- `WebhookIntegrationHandler` `POST`s each event to a configurable URL.
-
-```kroki type=mermaid
-graph TD
-	  subgraph With RabbitMQ
-        B1[EventService]
-        B2[RabbitMQEventWriteService]
-        B3[RabbitMQ event exchange]
-        B4[EventRepositoryHandler]
-        B5[WebhookIntegrationHandler]
-        B6[Events Database Table]
-        B7[RabbitMQ integration exchange]
-        B8[SlackIntegrationHandler]
-
-        B1 -->|IEventWriteService| B2 --> B3
-        B3 -->|RabbitMqEventListenerService| B4 --> B6
-        B3 -->|RabbitMqEventListenerService| B7
-        B7 -->|RabbitMqIntegrationListenerService| B5
-        B3 -->|RabbitMqEventListenerService| B7
-        B7 -->|RabbitMqIntegrationListenerService| B8
-    end
-
-    subgraph Without RabbitMQ
-        A1[EventService]
-        A2[RepositoryEventWriteService]
-        A3[Events Database Table]
-
-        A1 -->|IEventWriteService| A2 --> A3
-
-end
-```
+### RabbitMQ
 
 #### Running the RabbitMQ container (default using fixed-delay queues)
 
@@ -195,51 +150,7 @@ With these changes in place, you should see the database events written as befor
 see in the RabbitMQ management interface that the messages are flowing through the configured
 exchange/queues.
 
-### Azure Service Bus implementation
-
-The Azure Service Bus implementation is a configurable replacement for Azure Queue. Instead of
-writing Events to the queue to be picked up, they are sent to the configured service bus topic. An
-instance of `AzureServiceBusEventListenerService` is then configured with the
-`AzureTableStorageEventHandler` to subscribe to that topic and write Events to Azure Table Storage.
-Similar to RabbitMQ above, the end result is the same (events are stored in Azure Table Storage),
-but the addition of the service bus topic allows for other integrations to subscribe.
-
-As with the RabbitMQ implementation above, handlers for available integrations will listen to the
-same event topic and republish to the integration topic when the event integration is configured.
-The same `SlackIntegrationHandler` and `WebhookIntegrationHandler` process messages to send to Slack
-and/or a webhook and the integration topic handles failures and retries.
-
-```kroki type=mermaid
-graph TD
-	  subgraph With Service Bus
-        B1[EventService]
-        B2[AzureServiceBusEventWriteService]
-        B3[Azure Service Bus Event Topic]
-        B4[AzureTableStorageEventHandler]
-        B5[WebhookIntegrationHandler]
-        B6[Events in Azure Tables]
-        B7[Azure Service Bus Integration Topic]
-        B8[SlackIntegrationHandler]
-
-        B1 -->|IEventWriteService| B2 --> B3
-        B3 -->|AzureServiceBusEventListenerService| B4 --> B6
-        B3 -->|AzureServiceBusEventListenerService| B7
-        B7 -->|AzureServiceBusIntegrationListenerService| B5
-        B3 -->|AzureServiceBusEventListenerService| B7
-        B7  -->|AzureServiceBusIntegrationListenerService| B8
-    end
-
-    subgraph With Storage Queue
-        A1[EventService]
-        A2[AzureQueueHostedService]
-        A3[Azure Storage Queue]
-        A4[AzureQueueHostedService]
-        A5[Events in Azure Tables]
-
-        A1 -->|IEventWriteService| A2 --> A3 -->|RepositoryEventWriteService| A4 --> A5
-
-end
-```
+### Azure Service Bus
 
 #### Running the Azure Service Bus emulator
 
@@ -291,51 +202,3 @@ end
    ```
 
 3. Start or re-start all services, including `EventsProcessor`.
-
-### Integrations and integration configurations
-
-Organizations can configure integration configurations to send events to different endpoints -- each
-handler maps to a specific integration and checks for the configuration when it receives an event.
-Currently, there are integrations / handlers for Slack and webhooks (as mentioned above).
-
-**`OrganizationIntegration`**
-
-- The top level object that enables a specific integration for the organization.
-- Includes any properties that apply to the entire integration across all events.
-
-  - For Slack, it consists of the token:
-
-    ```json
-    { "token": "xoxb-token-from-slack" }
-    ```
-
-  - For webhooks, it is `null`. However, even though there is no configuration, an organization must
-    have a webhook `OrganizationIntegration` to enable configuration via
-    `OrganizationIntegrationConfiguration`.
-
-**`OrganizationIntegrationConfiguration`**
-
-- This contains the configurations specific to each `EventType` for the integration.
-- `Configuration` contains the event-specific configuration.
-
-  - For Slack, this would contain what channel to send the message to:
-
-    ```json
-    { "channelId": "C123456" }
-    ```
-
-  - For Webhook, this is the URL the request should be sent to:
-
-    ```json
-    { "url": "https://api.example.com" }
-    ```
-
-- `Template` contains a template string that is expected to be filled in with the contents of the
-  actual event.
-  - The tokens in the string are wrapped in `#` characters. For instance, the UserId would be
-    `#UserId#`
-  - The `IntegrationTemplateProcessor` does the actual work of replacing these tokens with
-    introspected values from the provided `EventMessage`.
-  - The template does not enforce any structure -- it could be a freeform text message to send via
-    Slack, or a JSON body to send via webhook; it is simply stored and used as a string for the most
-    flexibility.
