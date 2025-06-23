@@ -52,6 +52,17 @@ npm run build
 
 ### Cross compile
 
+#### Windows on ARM
+
+If you're building in Windows on ARM, you might need to run `build.js` with the `cross-platform`
+argument:
+
+```bash
+node desktop_native/build.js cross-platform
+```
+
+#### Linux & others
+
 In certain environments such as WSL (Windows Subsystem for Linux), it might be necessary to
 cross-compile the native module. To do this, first make sure you have installed the relevant rust
 target. See [`rustup` documentation](https://rust-lang.github.io/rustup/cross-compilation.html) for
