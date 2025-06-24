@@ -10,7 +10,7 @@ use [constant objects][constant-object-pattern] instead of introducing a new enu
 - Avoid asserting the type of an enum-like. Use explicit types instead.
 - Create utilities to convert and identify enums modelled as primitives.
 
-### Example
+### Numeric enum-likes
 
 Given the following enum:
 
@@ -58,21 +58,6 @@ type CipherContent =
   | { type: typeof CipherType.SecureNote, note: EncString, ... }
 ```
 
-The above pattern also works with string-typed enum members:
-
-```ts
-// freeze to prevent member injection
-export const CredentialType = Object.freeze({
-  Password: "password",
-  Username: "username",
-  Email: "email",
-  SshKey: "ssh-key",
-} as const);
-
-// derive the enum-like type from the raw data
-export type CredentialType = CredentialType[keyof typeof CredentialType];
-```
-
 :::warning
 
 Unlike an enum, TypeScript lifts the type of the members of `const CipherType` to `number`. Code
@@ -94,10 +79,43 @@ let value = CipherType.Login as CipherType; // this operation is unsafe
 
 :::
 
+### String enum-likes
+
+The above pattern also works with string-typed enum members:
+
+```ts
+// freeze to prevent member injection
+export const CredentialType = Object.freeze({
+  Password: "password",
+  Username: "username",
+  Email: "email",
+  SshKey: "ssh-key",
+} as const);
+
+// derive the enum-like type from the raw data
+export type CredentialType = CredentialType[keyof typeof CredentialType];
+```
+
+:::note[Enum-likes are structural types!]
+
+Unlike string-typed enums, enum-likes do not reify a type for each member. This means that you can
+use their string value or their enum member interchangeably.
+
+```ts
+let value: CredentialType = CredentialType.Username;
+
+// this is typesafe!
+value = "email";
+```
+
+However, the string-typed values are not always identified as enum members. Thus, when the const
+object is in scope, prefer it to the literal value.
+
+:::
+
 ## Utilities
 
-The following utilities can be used to maintain type safety after compilation. This code assumes
-`const CipherType` is frozen.
+The following utilities can be used to maintain type safety at runtime.
 
 ```ts
 import { CipherType } from "./cipher-type";
