@@ -33,7 +33,7 @@ export enum CipherType = {
 You can redefine it as an object like so:
 
 ```ts
-const _CipherType = {
+const CipherType = {
   Login: 1,
   SecureNote: 2,
   Card: 3,
@@ -41,11 +41,7 @@ const _CipherType = {
   SshKey: 5,
 } as const;
 
-type _CipherType = typeof _CipherType;
-
-export type CipherType = _CipherType[keyof _CipherType];
-export const CipherType: Readonly<{ [K in keyof typeof _CipherType]: CipherType }> =
-  Object.freeze(_CipherType);
+export type CipherType = CipherType[keyof typeof CipherType];
 ```
 
 And use it like so:
@@ -60,6 +56,23 @@ function doSomething(type: CipherType) {}
 // And used as a value (just like a regular `enum`)
 doSomething(CipherType.Card);
 ```
+
+:::warning
+
+Unlike an enum, typescript lifts the type of the members of `const CipherType` to `number`. Code
+like the following requires you explicitly type your variables:
+
+```ts
+// ✅ Do: strongly type enum-likes
+const subject = new Subject<CipherType>();
+let value: CipherType = CipherType.Login;
+
+// ❌ Do not: use type inference
+const array = [CipherType.Login]; // infers `number[]`
+let value = CipherType.Login; // infers `1`
+```
+
+:::
 
 The following utilities may assist introspection:
 
