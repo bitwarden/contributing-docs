@@ -1,7 +1,8 @@
 ---
 adr: "0025"
-status: Proposed
+status: Accepted
 date: 2025-05-30
+accepted: 2025-06-24
 tags: [clients, typescript]
 ---
 
