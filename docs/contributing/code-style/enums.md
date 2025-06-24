@@ -15,7 +15,7 @@ use [constant objects][constant-object-pattern] instead of introducing a new enu
 Given the following enum:
 
 ```ts
-export enum CipherType = {
+export enum CipherType {
   Login: 1,
   SecureNote: 2,
   Card: 3,
