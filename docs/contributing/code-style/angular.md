@@ -194,3 +194,56 @@ import { LogService } from "@bitwarden/common/platform/abstractions/log.service"
 
 export class DifferentPackageService {}
 ```
+
+## Enum-likes ([ADR-0025](../../architecture/adr/0025-ts-deprecate-enums.md))
+
+For general guidance on enum-likes, consult [Avoid TypeScript Enums](./enums.md).
+
+### String-backed Enum-likes
+
+String-typed enum likes can be used as inputs of a component directly. Simply expose the enum-like
+property from your component:
+
+```ts
+// given:
+const EnumLike = { Some = "some", Value: "value" };
+type EnumLike = EnumLike[keyof typeof EnumLike];
+
+// add the input:
+@Component({ ... })
+class YourComponent {
+   @Input() input: EnumLike = EnumLike.Some;
+
+   // ...
+}
+```
+
+Composers can use the enum's string values directly:
+
+```html
+<my-component input="value" />
+```
+
+### Numeric Enum-likes
+
+Using numeric enum-likes in components should be avoided. If it is necessary, follow the same
+pattern as a string-backed enum.
+
+Composers that need hard-coded enum-likes in their template should expose the data from their
+component:
+
+```ts
+import { EnumLike } from "...";
+
+// add the input to your component:
+@Component({ ... })
+class TheirComponent {
+   protected readonly EnumLike = EnumLike;
+}
+```
+
+And then bind the input in the template:
+
+```ts
+<my-component [input]='EnumLike.Value' />
+```
