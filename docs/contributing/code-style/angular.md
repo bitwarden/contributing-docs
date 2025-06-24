@@ -195,7 +195,11 @@ import { LogService } from "@bitwarden/common/platform/abstractions/log.service"
 export class DifferentPackageService {}
 ```
 
-### String-backed Enum-likes ([ADR-0025](../../architecture/adr/0025-ts-deprecate-enums.md))
+## Enum-likes ([ADR-0025](../../architecture/adr/0025-ts-deprecate-enums.md))
+
+For general guidance on enum-likes, consult [Avoid TypeScript Enums](./enums.md).
+
+### String-backed Enum-likes
 
 String-typed enum likes can be used as inputs of a component directly. Simply expose the enum-like
 property from your component:
@@ -220,7 +224,7 @@ Composers can use the enum's string values directly:
 <my-component input="value" />
 ```
 
-### Numeric Enum-likes ([ADR-0025](../../architecture/adr/0025-ts-deprecate-enums.md))
+### Numeric Enum-likes
 
 Using numeric enum-likes in components should be avoided. If it is necessary, follow the same
 pattern as a string-backed enum.
