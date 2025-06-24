@@ -36,12 +36,6 @@ export default function AdrTable({ frontMatter }): JSX.Element {
           <th>Published:</th>
           <td>{formatDate(frontMatter.date)}</td>
         </tr>
-        {frontMatter.accepted && (
-          <tr>
-            <th>Accepted:</th>
-            <td>{formatDate(frontMatter.accepted)}</td>
-          </tr>
-        )}
       </tbody>
     </table>
   );
