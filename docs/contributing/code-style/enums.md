@@ -60,7 +60,7 @@ type CipherContent =
 
 :::warning
 
-Unlike an enum, typescript lifts the type of the members of `const CipherType` to `number`. Code
+Unlike an enum, TypeScript lifts the type of the members of `const CipherType` to `number`. Code
 like the following requires you explicitly type your variables:
 
 ```ts
