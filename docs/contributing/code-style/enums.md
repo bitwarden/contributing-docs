@@ -58,6 +58,21 @@ type CipherContent =
   | { type: typeof CipherType.SecureNote, note: EncString, ... }
 ```
 
+The above pattern also works with string-typed enum members:
+
+```ts
+// freeze to prevent member injection
+export const CredentialType = Object.freeze({
+  Password: "password",
+  Username: "username",
+  Email: "email",
+  SshKey: "ssh-key",
+} as const);
+
+// derive the enum-like type from the raw data
+export type CredentialType = CredentialType[keyof typeof CredentialType];
+```
+
 :::warning
 
 Unlike an enum, TypeScript lifts the type of the members of `const CipherType` to `number`. Code
