@@ -43,7 +43,7 @@ const CipherType = Object.freeze({
   SshKey: 5,
 } as const);
 
-export type CipherType = _CipherType[keyof typeof CipherType];
+export type CipherType = (typeof CipherType)[keyof typeof CipherType];
 ```
 
 This code creates a `type CipherType` that allows arguments and variables to be typed similarly to
