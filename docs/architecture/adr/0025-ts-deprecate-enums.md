@@ -62,6 +62,9 @@ let value: CipherType = CipherType.Login;
 // ❌ Do not: use type inference
 const array = [CipherType.Login]; // infers `number[]`
 let value = CipherType.Login; // infers `1`
+
+// ❌ Do not: use type assertions
+let value = CipherType.Login as CipherType; // this operation is unsafe
 ```
 
 :::
