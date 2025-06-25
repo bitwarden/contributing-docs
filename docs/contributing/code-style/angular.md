@@ -206,7 +206,7 @@ property from your component:
 
 ```ts
 // given:
-const EnumLike = { Some = "some", Value: "value" };
+const EnumLike = { Some: "some", Value: "value" };
 type EnumLike = EnumLike[keyof typeof EnumLike];
 
 // add the input:

@@ -35,7 +35,7 @@ In most cases, enums are unnecessary. A readonly (`as const`) object coupled wit
 avoids both code generation and type inconsistencies.
 
 ```ts
-const CipherType = Object.freeze({
+export const CipherType = Object.freeze({
   Login: 1,
   SecureNote: 2,
   Card: 3,
