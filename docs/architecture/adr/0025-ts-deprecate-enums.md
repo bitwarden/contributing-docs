@@ -35,7 +35,7 @@ In most cases, enums are unnecessary. A readonly (`as const`) object coupled wit
 avoids both code generation and type inconsistencies.
 
 ```ts
-const CipherType = Object.freeze({
+export const CipherType = Object.freeze({
   Login: 1,
   SecureNote: 2,
   Card: 3,
@@ -43,7 +43,7 @@ const CipherType = Object.freeze({
   SshKey: 5,
 } as const);
 
-export type CipherType = _CipherType[keyof typeof CipherType];
+export type CipherType = (typeof CipherType)[keyof typeof CipherType];
 ```
 
 This code creates a `type CipherType` that allows arguments and variables to be typed similarly to
@@ -62,6 +62,9 @@ let value: CipherType = CipherType.Login;
 // ❌ Do not: use type inference
 const array = [CipherType.Login]; // infers `number[]`
 let value = CipherType.Login; // infers `1`
+
+// ❌ Do not: use type assertions
+let value = CipherType.Login as CipherType; // this operation is unsafe
 ```
 
 :::
