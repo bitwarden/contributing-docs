@@ -25,6 +25,15 @@ both the old and new schema during a rolling deployment. See
 
 ### Script best practices by database entity
 
+:::tip
+
+Migration scripts may not be something that you do often, and it is important that we follow our
+guidelines to protect against potential downtimes during release or data loss. **When writing a
+script, check each of the entities you're working with against the recommendations below before you
+introduce a pull request with your changes.**
+
+:::
+
 <details id="tables">
 <summary><h3>Tables</h3></summary>
 
