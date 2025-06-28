@@ -1,0 +1,194 @@
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
+# Database best practices
+
+For the general direction of all Bitwarden database development see
+[Evolutionary Database Design (EDD)](edd-wiki).
+
+This document is to act as a check-list for developers to ensure database changes are done in a way
+compatible with Bitwarden's database development approach. Hopefully, it will also help avoid common
+pitfalls during the pull request process.
+
+## General Principles
+
+**Migrations must be idempotent**: Always ensure a migration can be run multiple times without
+causing errors or duplicating data.
+
+**Backwards compatibility**: Code should be able to work with both the old and new schema during a
+rolling deployment.
+
+**Avoid breaking changes**: Migrations should never delete or rename columns that are still in use
+by deployed code.
+
+**Schema integrity**: The schema of the database defined in code should map exactly to the schema of
+the database in all deployed environments.
+
+:::note Whenever making changes to a table you must check if there are any views that have a
+dependency on the table. If there are dependencies, you will need to refresh the view in the same
+migration. Otherwise, the view will not reflect the changes made to the table which will cause
+issues in the application.
+
+```sql
+-- This way to refresh a view `sp_refreshview` works for almost all cases.
+EXECUTE sp_refreshview 'dbo.TheGrandCanyonView'
+GO
+```
+
+:::
+
+:::note Whenever there is a migration script the change needs to be reflected in the SQL project.
+This is the way we ensure the database schema defined in code not lost in the migration files. :::
+
+<Bitwarden>
+  **Tasking** Most of these will be split into multiple tasks to allow for smaller pieces of code to
+  review. 1. The first task will be the initial migration, and feature flagging if required. 2. The
+  second tasks will be the migration that cleans up the old column or table, and remove the
+  references in code. :::note Feature Flags can be used for most of these changes. Strongly consider
+  their usage to help control the implementation of database changes. :::
+</Bitwarden>
+
+## Checklists
+
+<details id="adding-columns">
+<summary>**Adding Columns**</summary>
+
+**Checklist**
+
+- [ ] The new column is at the end of the column order
+- [ ] The new column is nullable or has a default value
+- [ ] The migration script is idempotent
+- [ ] The migration refreshes any views that are dependent on the table
+
+---
+
+1. **Always add new columns to the end of the column order, even if it looks less clean in code.**
+
+   - Adding columns in between existing ones creates schema disparities between the schema defined
+     in code and the actual column order in our local, staging, and production environments.
+
+   - This can cause subtle and hard-to-debug issues, particularly when:
+
+     - Using non-parameterized SQL that relies on implicit column order.
+
+     - Performing bulk inserts/updates where tools assume column order consistency.
+
+   - While well-written code shouldn't depend on column order, some third-party tools and legacy
+     practices might.
+
+2. In order to ensure idempotence, when writing raw SQL migrations, always check for the existence
+   of a column or table before adding:
+
+   ```sql
+   -- This will check if the column already exists before altering the table.
+   IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS
+       WHERE TABLE_NAME = 'Users' AND COLUMN_NAME = 'NewColumn')
+   BEGIN
+   ALTER TABLE Users ADD NewColumn NVARCHAR(255) NULL;
+   END
+   ```
+
+</details>
+
+<details>
+<summary>**Renaming Columns/Tables**</summary>
+
+Do not rename columns directly. If you _must_ rename a column Architecture needs to be involved in
+the decisions.
+
+---
+
+**Checklist**
+
+- [ ] Create a new column as outlined above
+- [ ] If needed, create a migration script to create data to seed the new column
+
+---
+
+1. Copying data.
+   - This would be a migration script that will need to run after the new column is added. We want
+     to make sure all database changes can be done without manual intervention.
+   - There is a process for Entity Framework migrations that can call raw SQL scripts to accomplish
+     this task. Look for the Duo SDK migrations for an idea on how to approach.
+1. Update code to use new column.
+   - Remember to consider Mobile dependencies on these queries and models.
+1. Remove old column in a follow-up migration once all usages are updated.
+   - This is usually done after 3 releases to ensure that all code has been updated and deployed.
+
+## <Bitwarden>
+
+**Example**: [PM-8108] Duo SDK v2 to Duo SDK v4 configuration renaming
+
+This task is a little different because it involves JSON manipulation within a `NVARCHAR` column.
+But the idea is the same:
+
+1. We added the v4 params to exist at the same time as the v2 params within the JSON object.
+
+2. We waited 3 releases then removed all reference to the v2 params on the server.
+
+3. We removed Duo SDK v2 params from the Database.
+
+This is the same flow if the column had existed outside of the JSON object.
+
+</Bitwarden>
+
+</details>
+
+<details>
+<summary>**Dropping Columns/Tables**</summary>
+
+**Checklist**
+
+- [ ] Column/Table is marked as deprecated in the model
+- [ ] Remove all usages in code
+- [ ] Column/Table is removed in migration after three releases
+
+---
+
+Never drop the column/table in the same release where code could still depend on the column. We need
+backwards compatibility for at least 3 releases.
+
+Use a phased approach:
+
+1. Mark column as deprecated within the model with direction on which column/ entity to use instead.
+   - This needs to be done in both the the server, all web clients and mobile.
+2. After 3 releases the column/entity can be removed from code.
+3. Feature Flagging can be very helpful here to control the timing of when the code is removed.
+
+This process is well documented in the [EDD wiki](edd#migrations-1).
+
+</details>
+
+<details>
+<summary>**Modifying Stored Procedures**</summary>
+
+**Checklist**
+
+- [ ] Modified Stored Procedure uses `CREATE OR ALTER`
+- [ ] Stored Procedure synced with Entity Framework implementation
+- [ ] Integration Tests updated or pass for modification
+  - If tests don't exist consider creating them, even if it's just for the modification.
+
+---
+
+When modifying stored procedures, ensure that the changes are reflected in the Entity Framework
+model. This is crucial for maintaining consistency between the database and the application code.
+When creating/modifying stored procedures in a SQL migration, always use `CREATE OR ALTER` rather
+than just `CREATE` which you would find in our stored procedures reference directory.
+
+This will prevent failures if the procedure already exists.
+
+Example:
+
+```sql
+CREATE OR ALTER PROCEDURE dbo.DoSomething
+AS
+BEGIN
+    -- procedure logic here
+END
+```
+
+**Remember** Always ensure the changes made to the stored procedure match the entity framework
+implementation.
+
+</details>
