@@ -23,8 +23,8 @@ for Entity Framework. Follow the instructions below for each provider.
 :::tip
 
 We recommend reading [Evolutionary database design](./edd.mdx) and
-[Building deployment scripts](./scripts) first, since they have a major impact in how we write
-migrations.
+[Building deployment scripts](./building-deployment-scripts.md) first, since they have a major
+impact in how we write migrations.
 
 :::
 
