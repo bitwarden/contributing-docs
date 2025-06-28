@@ -3,7 +3,7 @@
 TypeScript enums are not fully type-safe and can [cause surprises][enum-surprises]. Your code should
 use [constant objects][constant-object-pattern] instead of introducing a new enum.
 
-## Our Recommended Approach ([ADR-0025](../../architecture/adr/0025-ts-deprecate-enums.md))
+## Our Recommended Approach ([ADR-0025](../../../architecture/adr/0025-ts-deprecate-enums.md))
 
 - Use the same name for your type- and value-declaration.
 - Use `type` to derive type information from the const object.

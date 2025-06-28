@@ -22,8 +22,9 @@ for Entity Framework. Follow the instructions below for each provider.
 
 :::tip
 
-We recommend reading [Evolutionary Database Design](./edd.mdx) and [T-SQL Code
-Style][code-style-sql] first, since they have a major impact in how we write migrations.
+We recommend reading [Evolutionary database design](./edd.mdx) and
+[Building deployment scripts](./scripts) first, since they have a major impact in how we write
+migrations.
 
 :::
 
@@ -100,5 +101,3 @@ migrations should be saved for very exceptional purposes. One such reason could 
 2. After it has been run against our Cloud environments and we are satisfied with the outcome,
    create a PR to move it to `DbScripts`. This will enable it to be run by our Migrator processes in
    self-host and clean installs of both cloud and self-host environments
-
-[code-style-sql]: ../code-style/sql.md
