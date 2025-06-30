@@ -6,6 +6,9 @@ on:
       - ".github/workflows/**"
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   lint:
     name: Build
