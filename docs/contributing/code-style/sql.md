@@ -6,9 +6,9 @@ We use the [Repository pattern][repository] with the MSSQL repositories being wr
 [Dapper][dapper]. Each repository method in turn calls a _Stored Procedure_, which primarily fetches
 data from _Views_.
 
-## Structuring T-SQL code
+## Structuring SQL code
 
-For writing our T-SQL code and segregating responsibility across the SQL entities, we follow a
+For writing our SQL code and segregating responsibility across the SQL entities, we follow a
 Separation of Concerns with a Layered Data Access Pattern [link?]. This informs us to use the
 following design guidelines:
 
