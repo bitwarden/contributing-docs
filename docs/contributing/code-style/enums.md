@@ -37,7 +37,7 @@ export const CipherType = Object.freeze({
 } as const);
 
 // derive the enum-like type from the raw data
-export type CipherType = CipherType[keyof typeof CipherType];
+export type CipherType = (typeof CipherType)[keyof typeof CipherType];
 ```
 
 And use it like so:
@@ -93,7 +93,7 @@ export const CredentialType = Object.freeze({
 } as const);
 
 // derive the enum-like type from the raw data
-export type CredentialType = CredentialType[keyof typeof CredentialType];
+export type CredentialType = (typeof CredentialType)[keyof typeof CredentialType];
 ```
 
 :::note[Enum-likes are structural types!]
