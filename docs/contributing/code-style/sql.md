@@ -1,4 +1,4 @@
-# T-SQL
+# SQL
 
 ## Repositories
 
