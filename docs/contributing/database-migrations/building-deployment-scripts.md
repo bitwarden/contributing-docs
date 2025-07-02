@@ -1,7 +1,3 @@
----
-toc_max_heading_level: 4
----
-
 import Tabs from "@theme/Tabs"; import TabItem from "@theme/TabItem";
 
 # Building deployment scripts
