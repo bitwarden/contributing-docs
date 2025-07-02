@@ -4,34 +4,54 @@ sidebar_position: 2
 
 # Database migrations
 
-## Applying migrations
+When changes are required to the schema of our relational database, we must write corresponding
+migrations to move the database from its current state to the new state. The migrations also ensure
+that any user can recreate the database in its current state by running the scripts in sequence.
 
-We use a `migrate.ps1` PowerShell script to apply migrations to the local development database. This
-script handles the different database providers that we support.
+:::info Applying migrations
 
-For instructions on how to use `migrate.ps1`, see the Getting Started section for
+This section focuses on how to build migrations. For instructions on how to apply them, see the
+Getting Started section for
 [MSSQL](../../getting-started/server/database/mssql/index.md#updating-the-database) and
-[Entity Framework](../../getting-started/server/database/ef/index.mdx#migrations)
+[Entity Framework](../../getting-started/server/database/ef/index.mdx#migrations).
 
-## Creating migrations for new changes
+:::
 
 Any database change must be scripted as a migration for both our primary DBMS - MSSQL - as well as
 for Entity Framework. Follow the instructions below for each provider.
 
-### MSSQL migrations
+## MSSQL migrations
 
-:::tip
+:::tip Recommended reading
 
-We recommend reading [Evolutionary database design](./edd.mdx) and
-[Building deployment scripts](./building-deployment-scripts.md) first, since they have a major
-impact in how we write migrations.
+Before continuing, be sure you understand:
+
+- The framework by which we manage database changes: [Evolutionary database design](./edd.mdx)
+- How to structure the individual migration scripts:
+  [Building deployment scripts](./building-deployment-scripts.md)
 
 :::
 
-:::info
+In accordance with the tenets of [Evolutionary Database Design](./edd.mdx), each change needs to be
+considered to be split into two parts:
 
-The separate database definitions in `src/Sql/.../dbo` serve as a "master" reference for the
-intended and final state of the database at that time. This is crucial because the state of database
+1. A backwards-compatible **transition migration**
+2. A non-backwards-compatible **final migration**
+
+It is possible that a change may not require a non-backwards-compatible end phase (i.e. all changes
+may be backwards-compatible in their final form). In that case, only one phase of changes is
+required.
+
+### Backwards-compatible transition migration
+
+1. Modify the schema definition `.sql` files in `src/Sql/dbo`.
+2. Write a [migration script](building-deployment-scripts.md), and place it in
+   `util/Migrator/DbScripts`. Each script must be prefixed with the current date.
+
+:::info Why do we change the schema?
+
+The separate database definitions in `src/Sql/dbo` serve as a "master" reference for the intended
+and final state of the database at that time. This is crucial because the state of database
 definitions at the current moment may differ from when a migration was added in the past. These
 definitions act as a lint and validation step to ensure that migrations work as expected, and the
 separation helps maintain clarity and accuracy in database schema management and synchronization
@@ -46,23 +66,7 @@ data loss, which is why we have both a `sqlproj` and standalone migrations.
 
 :::
 
-In accordance with the tenets of [Evolutionary Database Design](./edd.mdx), each change needs to be
-considered to be split into two parts:
-
-1. A backwards-compatible transition migration
-2. A non-backwards-compatible final migration
-
-It is possible that a change may not require a non-backwards-compatible end phase (i.e. all changes
-may be backwards-compatible in their final form). In that case, only one phase of changes is
-required.
-
-#### Backwards compatible migration
-
-1. Modify the source `.sql` files in `src/Sql/dbo`.
-2. Write a migration script, and place it in `util/Migrator/DbScripts`. Each script must be prefixed
-   with the current date.
-
-#### Non-backwards compatible migration
+### Non-backwards-compatible final migration
 
 1. Copy the relevant `.sql` files from `src/Sql/dbo` to `src/Sql/dbo_finalization`.
 2. Remove the backwards compatibility that is no longer needed.
@@ -73,7 +77,7 @@ required.
      compatible with the changes to DbScripts. In order to achieve this we only keep a single
      migration, which executes all backwards incompatible schema changes.
 
-### EF migrations
+## EF migrations
 
 If you alter the database schema, you must create an EF migration script to ensure that EF databases
 keep pace with these changes. Developers must do this and include the migrations with their PR.
@@ -91,7 +95,7 @@ pwsh ef_migrate.ps1 [NAME_OF_MIGRATION]
 
 This will generate the migrations, which should then be included in your PR.
 
-### [Not Yet Implemented] Manual MSSQL migrations
+## [Not Yet Implemented] Manual MSSQL migrations
 
 There may be a need for a migration to be run outside of our normal update process. These types of
 migrations should be saved for very exceptional purposes. One such reason could be an Index rebuild.

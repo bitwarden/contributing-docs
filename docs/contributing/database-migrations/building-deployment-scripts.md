@@ -19,7 +19,7 @@ in code should map exactly to the schema of the database in all deployed environ
 both the old and new schema during a rolling deployment. See
 [Database Migrations](../database-migrations/) for how we put this into practice.
 
-### Script best practices by database entity
+## Script best practices by database entity
 
 :::tip
 
@@ -33,7 +33,7 @@ introduce a pull request with your changes.**
 <details id="tables">
 <summary><h3>Tables</h3></summary>
 
-#### Creating a table
+### Creating a table
 
 When creating a table, you must first check if the table exists:
 
@@ -49,7 +49,7 @@ END
 GO
 ```
 
-#### Deleting a table
+### Deleting a table
 
 When deleting a table, use `IF EXISTS` to avoid an error if the table doesn't exist.
 
@@ -63,7 +63,7 @@ GO
 <details id="columns">
 <summary><h3>Columns</h3></summary>
 
-#### Adding a column to a table
+### Adding a column to a table
 
 You must first check to see if the column exists before adding it to the table.
 
@@ -76,7 +76,7 @@ END
 GO
 ```
 
-##### Nullability
+#### Nullability
 
 When adding a new `NOT NULL` column to an existing table, please re-evaluate the need for it to
 truly be required. Do not be afraid of using Nullable\<T\> primitives in C# and in the application
@@ -130,7 +130,7 @@ END
 GO
 ```
 
-##### Column order
+#### Column order
 
 When you make corresponding updates to the database schema in code, **always add new columns to the
 end of the column list**. Adding columns in between existing ones creates schema disparities between
@@ -144,7 +144,7 @@ consistency.
 While well-written code shouldn't depend on column order, some third-party tools and legacy
 practices might.
 
-#### Changing a column data type
+### Changing a column data type
 
 You must wrap the `ALTER TABLE` statement in a conditional block, so that subsequent runs of the
 script will not modify the data type again.
@@ -163,7 +163,7 @@ END
 GO
 ```
 
-#### Adjusting metadata
+### Adjusting metadata
 
 When adjusting a table, you should also check to see if that table is referenced in any views. If
 the underlying table in a view has been modified, you should run `sp_refreshview` to re-generate the
@@ -179,7 +179,7 @@ GO
 <details id="views">
 <summary><h3>Views</h3></summary>
 
-#### Creating or modifying a view
+### Creating or modifying a view
 
 We recommend using the `CREATE OR ALTER` syntax for adding or modifying a view.
 
@@ -193,7 +193,7 @@ FROM
 GO
 ```
 
-#### Deleting a view
+### Deleting a view
 
 When deleting a view, use `IF EXISTS` to avoid an error if the table doesn't exist.
 
@@ -202,7 +202,7 @@ DROP IF EXISTS [dbo].[{view_name}]
 GO
 ```
 
-#### Adjusting metadata
+### Adjusting metadata
 
 When altering views, you may also need to refresh modules (stored procedures or functions) that
 reference that view or function so that SQL Server to update its statistics and compiled references
@@ -221,7 +221,7 @@ GO
 <details id="functions-and-sps">
 <summary><h3>Functions and stored procedures</h3></summary>
 
-#### Creating or modifying a function or stored procedure
+### Creating or modifying a function or stored procedure
 
 We recommend using the `CREATE OR ALTER` syntax for adding or modifying a function or stored
 procedure.
@@ -232,7 +232,7 @@ CREATE OR ALTER {PROCEDURE|FUNCTION} [dbo].[{sproc_or_func_name}]
 GO
 ```
 
-#### Deleting a function or stored procedure
+### Deleting a function or stored procedure
 
 When deleting a function or stored procedure, use `IF EXISTS` to avoid an error if it doesn't exist.
 
