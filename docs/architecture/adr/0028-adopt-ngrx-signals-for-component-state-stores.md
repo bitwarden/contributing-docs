@@ -88,7 +88,7 @@ The benefits significantly outweigh the costs of learning curve and dependency a
 
 ## Further reading
 
-- [NgRx Signal Store POC by Banrion](https://github.com/bitwarden/clients/pull/15186)
+- [NgRx Signal Store POC](https://github.com/bitwarden/clients/pull/15186)
 - [The new NGRX Signal Store for Angular: 3+n Flavors - ANGULARarchitects](https://www.angulararchitects.io/en/blog/the-new-ngrx-signal-store-for-angular-2-1-flavors/)
 - [Rethinking Reactivity w/ Alex Rickabaugh | Dec '23 | AngularNation.net](https://www.youtube.com/watch?v=_yMrnSa2cTI)
 - [NgRx Signals Introduction Slides](https://docs.google.com/presentation/d/1vHVLlSmc51emZS6t_9MwEoH7FBp-yVovMgNPSOqaP_k/edit?usp=drive_link)
