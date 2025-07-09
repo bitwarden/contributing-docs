@@ -1,11 +1,11 @@
 ---
-adr: "0026"
+adr: "0028"
 status: "Proposed"
-date: 2025-05-30
+date: 2025-07-08
 tags: [client]
 ---
 
-# 0026 - Adopt `@ngrx/signals` for Component State Stores
+# 0028 - Adopt `@ngrx/signals` for Component State Stores
 
 <AdrTable frontMatter={frontMatter}></AdrTable>
 
