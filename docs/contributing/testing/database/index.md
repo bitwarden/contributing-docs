@@ -80,9 +80,13 @@ When you need to test a specific database migration, you can use the
 property of the `[DatabaseData]` attribute. This allows you to apply and verify the data migration
 across all configured database providers.
 
-> [!NOTE] This is meant for testing data migrations only. It assumes your database schema is already
-> fully up-to-date. After setting up your test data, it re-runs the specified migration to verify
-> how it transforms the data. It will not work for schema-only migrations.
+:::note
+
+This is meant for testing data migrations only. It assumes your database schema is already fully
+up-to-date. After setting up your test data, it re-runs the specified migration to verify how it
+transforms the data. It will not work for schema-only migrations.
+
+:::
 
 ### Using `MigrationName`
 
