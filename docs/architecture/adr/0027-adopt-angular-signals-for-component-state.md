@@ -1,7 +1,7 @@
 ---
 adr: "0027"
 status: "Draft"
-date: 
+date:
 tags: [client]
 ---
 

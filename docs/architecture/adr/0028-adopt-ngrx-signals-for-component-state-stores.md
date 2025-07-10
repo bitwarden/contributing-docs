@@ -15,29 +15,37 @@ tags: [client]
 - [Angular Signals](https://angular.dev/guide/signals)
 - [NgRx Docs](https://ngrx.io/guide/signals)
 
-
 ## Context and Problem Statement
 
-Building on [ADR Draft - Adopt Angular Signals for Component State](https://bitwarden.atlassian.net/wiki/spaces/EN/pages/1538326529) decision to adopt Angular signals for component state, this ADR addresses state management patterns across our application on the component level.
+Building on
+[ADR Draft - Adopt Angular Signals for Component State](https://bitwarden.atlassian.net/wiki/spaces/EN/pages/1538326529)
+decision to adopt Angular signals for component state, this ADR addresses state management patterns
+across our application on the component level.
 
-The DIRT team frequently interacts with multiple services on the domain layer and exposes this data to various components. Current implementation shows duplicate patterns for managing service data, transforming it for UI consumption, and sharing it between components.
+The DIRT team frequently interacts with multiple services on the domain layer and exposes this data
+to various components. Current implementation shows duplicate patterns for managing service data,
+transforming it for UI consumption, and sharing it between components.
 
 ### Problem
 
-We need a standardized approach to manage cross-component state that leverages Angular signals while reducing code duplication and improving developer experience.
+We need a standardized approach to manage cross-component state that leverages Angular signals while
+reducing code duplication and improving developer experience.
 
 ### Context
 
-@ngrx/signals provides a signal store that captures these repeating patterns and centralizes state management in a way that complements our existing signal adoption
+@ngrx/signals provides a signal store that captures these repeating patterns and centralizes state
+management in a way that complements our existing signal adoption
 
 ## Considered Options
 
 - **Continue with Angular Signals only**
   - Maintain current approach using signals within individual components
-  - Does not provide the state management features and cross-component patterns that @ngrx/signals offers through the signal store
+  - Does not provide the state management features and cross-component patterns that @ngrx/signals
+    offers through the signal store
 - **Alternative state management solutions**
   - Explore other state management libraries
-  - Existing options like the original NgRx store involve significant boilerplate, don’t leverage signals, and lack team support
+  - Existing options like the original NgRx store involve significant boilerplate, don’t leverage
+    signals, and lack team support
 - **Adopt @ngrx/signals package**
   - Implement the signal store to capture repeating patterns and manage state across components
   - Builds upon our existing signal adoption
@@ -46,7 +54,8 @@ We need a standardized approach to manage cross-component state that leverages A
 
 **Adopt @ngrx/signals for state management on the component level**
 
-The benefits significantly outweigh the costs of learning curve and dependency addition. The potential negatives can be addressed through phased implementation and clear documentation.
+The benefits significantly outweigh the costs of learning curve and dependency addition. The
+potential negatives can be addressed through phased implementation and clear documentation.
 
 ### Positive Consequences
 
@@ -66,23 +75,30 @@ The benefits significantly outweigh the costs of learning curve and dependency a
 
 ### Plan
 
-**Learning curve mitigation:** Presentation on the @ngrx/signals package for detailed tutorial/documentation (refinement if needed)
+**Learning curve mitigation:** Presentation on the @ngrx/signals package for detailed
+tutorial/documentation (refinement if needed)
 
-**Pattern standardization:** Establish guidelines for when to use different state management approaches and document existing state management patterns
+**Pattern standardization:** Establish guidelines for when to use different state management
+approaches and document existing state management patterns
 
-**Phased implementation:** Start with DIRT proof of concept, then expand to organization level with clear folder structure and guidelines
+**Phased implementation:** Start with DIRT proof of concept, then expand to organization level with
+clear folder structure and guidelines
 
 **Refactoring support:** Use current proof of concept as a template for migration patterns
 
-**Limited debugging:** Current NgRx DevTools don’t fully support signal stores; Expose manual debugging through a feature until NgRx team releases updated tooling
+**Limited debugging:** Current NgRx DevTools don’t fully support signal stores; Expose manual
+debugging through a feature until NgRx team releases updated tooling
 
 ## Guidelines
 
-**When to use a signal store:** Cross-component state management, service data aggregation, repeating UI patterns
+**When to use a signal store:** Cross-component state management, service data aggregation,
+repeating UI patterns
 
-**Security considerations:** Do not store decrypted sensitive data in signal stores; use for UI state, metadata, and non-sensitive application data only
+**Security considerations:** Do not store decrypted sensitive data in signal stores; use for UI
+state, metadata, and non-sensitive application data only
 
-**Data types:** Suitable for display preferences, loading state, filtered/sorted lists, navigation state - not for decrypted vault data
+**Data types:** Suitable for display preferences, loading state, filtered/sorted lists, navigation
+state - not for decrypted vault data
 
 **Team coordination:** Coordinate with security experts for any questions about data classification
 
