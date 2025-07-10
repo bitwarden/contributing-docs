@@ -137,9 +137,9 @@ Chosen option: **Enforce usage**.
 ### Plan
 
 Enforcing the usage through the `Microsoft.CodeAnalysis.BannedApiAnalyzers` NuGet package, we will
-tone down the diagnostic from the banned APIs to be warnings instead errors. We will
-have the warning include custom diagnostic text to point to a new section in the C# style guide with
-the instructions on how to migrate.
+tone down the diagnostic from the banned APIs to be warnings instead errors. We will have the
+warning include custom diagnostic text to point to a new section in the C# style guide with the
+instructions on how to migrate.
 
 A one-time recorded learning session will also be hosted; the session will go over the new docs,
 show off migrating existing service registrations to using the `TryAdd` overloads, and host a QnA.
