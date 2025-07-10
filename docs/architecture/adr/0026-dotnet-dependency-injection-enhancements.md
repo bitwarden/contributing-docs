@@ -136,8 +136,8 @@ Chosen option: **Enforce usage**.
 
 ### Plan
 
-Enforce the usage through the `Microsoft.CodeAnalysis.BannedApiAnalyzers` nuget package, we will
-tone down the diagnostic from the banned API's are warnings instead of treated as errors. We will
+Enforcing the usage through the `Microsoft.CodeAnalysis.BannedApiAnalyzers` NuGet package, we will
+tone down the diagnostic from the banned APIs to be warnings instead errors. We will
 have the warning include custom diagnostic text to point to a new section in the C# style guide with
 the instructions on how to migrate.
 

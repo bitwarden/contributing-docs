@@ -138,7 +138,7 @@ Use [`TryAdd*` overloads][tryadd-overloads] as opposed to the less clear version
 `AddSingleton` and `AddKeyedTransient`. If you want to use your service using multi-inject then you
 should use the `TryAddEnumerable` method along with the static factory methods on
 `ServiceDescriptor` to register your service. This has the benefit of allowing your services to be
-registered many times during startup but not polluting the collection with duplicates that either
+registered many times during startup and not polluting the collection with duplicates that either
 won't ever be used or might accidentally be used if someone wants to inject multiple of that service
 type.
 
@@ -160,7 +160,7 @@ services.AddKeyedTransient<IMyService, FirstMyService>("first");
 services.TryAddEnumerable(ServiceDescriptor.KeyedTransient<IMyService, FirstMyService>("first"));
 ```
 
-Especially in multi-inject scenarios you are in danger of adding the same implementation multiple
+In multi-inject scenarios you are especially in danger of adding the same implementation multiple
 times and having them all be used.
 
 ### Dependency Groups
