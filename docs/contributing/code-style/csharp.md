@@ -130,6 +130,46 @@ For example you might have an assertion like `Debug.Assert(user.IsVerified)` in 
 that only expects verified users. `Debug.Assert` works by using one of the aforementioned attributes
 `[DoesNotReturnIf(false)]` to make it work in case you want to implement your own assertion.
 
+## Dependency Injection
+
+### Use `TryAdd*` overloads on `IServiceCollection`
+
+Use [`TryAdd*` overloads][tryadd-overloads] as opposed to the less clear versions like
+`AddSingleton` and `AddKeyedTransient`. If you want to use your service using multi-inject then you
+should use the `TryAddEnumerable` method along with the static factory methods on
+`ServiceDescriptor` to register your service. This has the benefit of allowing your services to be
+registered many times during startup but not polluting the collection with duplicates that either
+won't ever be used or might accidentally be used if someone wants to inject multiple of that service
+type.
+
+Single inject scenario:
+
+```csharp
+// ❌ Don't do this
+services.AddSingleton<IMyService, DefaultMyService>();
+// ✅ Do this instead
+services.TryAddSingleton<IMyService, DefaultMyService>();
+```
+
+Multi-inject scenario:
+
+```csharp
+// ❌ Don't do this
+services.AddKeyedTransient<IMyService, FirstMyService>("first");
+// ✅ Do this instead
+services.TryAddEnumerable(ServiceDescriptor.KeyedTransient<IMyService, FirstMyService>("first"));
+```
+
+Especially in multi-inject scenarios you are in danger of adding the same implementation multiple
+times and having them all be used.
+
+### Dependency Groups
+
+Consider creating [dependency groups][dependency-groups]. This gives other teams a nice interface to
+register your group when they depend on it. If you've used
+[`TryAdd`](#use-tryadd-overloads-on-iservicecollection) overloads it won't matter how many times
+your group of services is added to the collection.
+
 [null-forgiving]:
   https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/operators/null-forgiving
 [null-state-attributes]:
@@ -138,3 +178,7 @@ that only expects verified users. `Debug.Assert` works by using one of the afore
   https://learn.microsoft.com/en-us/aspnet/core/mvc/models/validation?view=aspnetcore-9.0#non-nullable-reference-types-and-required-attribute
 [debug-assert]:
   https://learn.microsoft.com/en-us/dotnet/api/system.diagnostics.debug.assert?view=net-9.0
+[tryadd-overloads]:
+  https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.dependencyinjection.extensions.servicecollectiondescriptorextensions?view=net-9.0-pp
+[dependency-groups]:
+  https://learn.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection?view=aspnetcore-9.0#register-groups-of-services-with-extension-methods
