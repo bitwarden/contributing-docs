@@ -73,14 +73,15 @@ BW_TEST_DATABASES__0__TYPE: SqlServer
 BW_TEST_DATABASES__0__CONNECTIONSTRING: myConnectionString
 ```
 
-## Testing specific database migrations
+## Testing data migrations
 
 When you need to test a specific database migration, you can use the
 [`MigrationName`](https://github.com/bitwarden/server/blob/021e69bc5dfea8be3b74f7a046a1cd48a206a712/test/Infrastructure.IntegrationTest/DatabaseDataAttribute.cs#L21)
-property of the `[DatabaseData]` attribute. This allows you to apply and verify a migration across
+property of the `[DatabaseData]` attribute. This allows you to apply and verify the data migration across
 all configured database providers.
 
-> **Note**: This is meant for testing data migrations only. It assumes your database schema is
+> [!NOTE]
+> This is meant for testing data migrations only. It assumes your database schema is
 > already fully up-to-date. After setting up your test data, it re-runs the specified migration to
 > verify how it transforms the data. It will not work for schema-only migrations.
 
