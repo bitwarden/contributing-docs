@@ -194,63 +194,52 @@ in LaunchDarkly but also in code.
 ### Clients
 
 All clients retrieve their feature flags by querying the `/config` endpoint on the Bitwarden API.
-Clients do not directly reference the LaunchDarkly client-side SDK.
+Clients do not use the LaunchDarkly client SDK.
 
 In order to optimize the use of feature flags, they are not retrieved from the server on every
-request for the flag value. Rather, the flags are retrieved from the server on the following
-interval:
+request for the flag value. Rather, the flags are cached in client local state with a refresh
+interval of **one hour**. As flag values may be different based on context evaluation in
+LaunchDarkly, we cannot cache a single value on the clients. Instead, flags are cached at the
+following levels:
 
-- On application startup.
-- Every hour after application startup.
-- On sync (both automatic and manual).
-- On environment change.
+- Global, per environment
+- Per user account
 
-Requesting a flag value from the services defined below will provide the consuming component with
-the most recent value from one of these retrieval events.
+Each cache has its own one-hour refresh interval, which will not necessarily align, depending upon
+when accounts were added to the client.
 
-#### Web
+#### Overriding refresh interval
 
-The feature flag values are retrieved through the `fetchServerConfig()` method on the
-[`ConfigService`](https://github.com/bitwarden/clients/blob/main/libs/common/src/services/config/config.service.ts).
+During development, it may be desired to reduce the default refresh interval. This may be especially
+helpful when testing a feature with the flag enabled and disabled without re-installing the client
+or waiting for the default refresh.
 
-To use a feature flag, you should first define the new feature flag as an enum value in the
-[`FeatureFlags`](https://github.com/bitwarden/clients/blob/main/libs/common/src/enums/feature-flag.enum.ts)
-enum.
+:::warning
 
-Once that is defined, the value can be retrieved by injecting the `ConfigService` and using one of
-the retrieval methods:
+As with any developer-specific overrides, changing this behavior will introduce drift between the
+developer experience and the released client experience, so it should be used with caution.
 
-- `getFeatureFlagBool()`
-- `getFeatureFlagString()`
-- `getFeatureFlagNumber()`
+:::
 
-#### Mobile
+To override the default interval, you will need to define a new value for the
+`configRetrievalIntervalMs` setting. This defaults 3,600,00 (one hour in milliseconds). You can
+override this in your `local.json` configuration file, which should live in the
+`/app/{client}/config/` directory for each client.
 
-The feature flag values are retrieved through the `GetAsync()` method on the `ConfigService`.
+In that file, you should add `configRetrievalIntervalMs` in the `devFlags` section, with a value
+defining the number of milliseconds you want to wait before the cached value expires and is
+re-retrieved from the server. A value of `0` will effectively result in no cache. For example, for a
+one-second cache you would override as follows:
 
-To use a feature flag, you should first define the new feature flag as a string constant value in
-the `Constants` file.
-
-Once that is defined, the value can be retrieved by injecting the `IConfigService` and using one of
-the retrieval methods:
-
-- `GetFeatureFlagBoolAsync()`
-- `GetFeatureFlagStringAsync()`
-- `GetFeatureFlagNumberAsync()`
-
-### Server
-
-1. Inject `IFeatureService` where you need a feature flag. Note that you’ll also need
-   `ICurrentContext` when accessing the feature state.
-2. Find the constant in the
-   [`FeatureFlagKeys`](https://github.com/bitwarden/server/blob/main/src/Core/Constants.cs) list for
-   the key you plan on using. It should have been added when
-   [creating a new flag](#creating-a-new-flag).
-3. Utilize the above key constant with the appropriate method on the feature service:
-
-- `IsEnabled` for Booleans, with `false` an assumed default.
-- `GetIntVariation` for integers, with `0` an assumed default.
-- `GetStringVariation` for strings, with `null` an assumed default.
+```json
+{
+  "devFlags": {
+    ...
+    "configRetrievalIntervalMs": 1000,
+    ...
+  }
+}
+```
 
 ## Self-hosted considerations
 
