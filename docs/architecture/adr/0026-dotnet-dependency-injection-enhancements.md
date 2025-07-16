@@ -1,6 +1,6 @@
 ---
 adr: "0026"
-status: "Proposed"
+status: "Accepted"
 date: 2025-05-30
 tags: [server]
 ---
@@ -120,7 +120,7 @@ as they are expected to always be included in the host -- those services are `IL
 
 ## Decision Outcome
 
-Chosen option: **Encourage usage**.
+Chosen option: **Enforce usage**.
 
 ### Positive Consequences
 
@@ -136,10 +136,10 @@ Chosen option: **Encourage usage**.
 
 ### Plan
 
-The plan to encourage the usage will be to update our C# style guide with the recommendation to
-begin using the `TryAdd` overloads (the document should explain when you want to use each one). The
-coding guidelines can be part of a newly-added document about general dependency injection
-guidelines for .NET here at Bitwarden.
+Enforcing usage through the `Microsoft.CodeAnalysis.BannedApiAnalyzers` NuGet package, we will tone
+down the diagnostic from the banned APIs to be warnings instead of errors. We will have the warning
+include custom diagnostic text to point to a new section in the C# style guide with the instructions
+on how to migrate.
 
 A one-time recorded learning session will also be hosted; the session will go over the new docs,
 show off migrating existing service registrations to using the `TryAdd` overloads, and host a QnA.
