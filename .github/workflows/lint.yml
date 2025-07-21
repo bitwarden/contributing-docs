@@ -6,6 +6,9 @@ on:
       - ".github/workflows/**"
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   lint:
     name: Lint
@@ -20,6 +23,7 @@ jobs:
         with:
           cache: "npm"
           cache-dependency-path: "**/package-lock.json"
+          node-version-file: ".nvmrc"
 
       - name: Lint and spellcheck
         run: |

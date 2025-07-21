@@ -59,84 +59,12 @@ To use database storage for events:
 
 Events can be distributed via an AMQP messaging system. This messaging system enables new
 integrations to subscribe to the events. The system supports either RabbitMQ or Azure Service Bus.
+For a detailed look at the architecture and technical details, see
+[the documentation in the server repo](https://github.com/bitwarden/server/tree/6800bc57f3eb492222e128cffcd00e16b29cc155/src/Core/AdminConsole/Services/Implementations/EventIntegrations).
 
-### Listener / Handler pattern
+### RabbitMQ
 
-The goal of moving to distributed events is to build additional service integrations that consume
-events. To make it easy to support multiple AMQP services (RabbitMQ and Azure Service Bus), the act
-of listening to the stream of events is decoupled from the act of responding to an event.
-
-**Listeners**
-
-- One listener per communication platform (e.g. one for RabbitMQ, one for Azure Service Bus).
-- Multiple instances can be configured to run independently, each with its own handler and
-  subscription / queue.
-- Perform all the aspects of setup / teardown, subscription, etc. for the messaging platform, but do
-  not directly process any events themselves. Instead, they delegate to the handler with which they
-  are configured.
-
-**Handlers**
-
-- One handler per integration (e.g. HTTP post or event database repository).
-- Completely isolated from and know nothing of the messaging platform in use. This allows them to be
-  freely reused across different communication platforms.
-- Perform all aspects of handling an event.
-- Allows them to be highly testable as they are isolated and decoupled from the more complicated
-  aspects of messaging.
-
-This combination allows for a configuration inside of `Startup.cs` that pairs instances of the
-listener service for the currently running messaging platform with any number of handlers. It also
-allows for quick development of new handlers as they are focused only on the task of handling a
-specific event.
-
-### RabbitMQ implementation
-
-The RabbitMQ implementation adds a step that refactors the way events are handled when running
-locally or self-hosted. Instead of writing directly to the `Events` table via the
-`EventsRepository`, each event is broadcast to a RabbitMQ exchange. A new
-`RabbitMqEventListenerService` instance, configured with an `EventRepositoryHandler`, subscribes to
-the RabbitMQ exchange and writes to the `Events` table via the `EventsRepository`. The end result is
-the same (events are stored in the database), but the addition of the RabbitMQ exchange allows for
-other integrations to subscribe.
-
-Additional handlers - each paired with their own `RabbitMqEventListenerService` and listening to
-their own queue - are available to be configured as well.
-
-- `SlackEventHandler` posts messages to Slack channels or DMs.
-- `WebhookEventHandler` `POST`s each event to a configurable URL.
-
-```kroki type=mermaid
-graph TD
-	  subgraph With RabbitMQ
-        B1[EventService]
-        B2[RabbitMQEventWriteService]
-        B3[RabbitMQ exchange]
-        B4[EventRepositoryHandler]
-        B5[WebhookEventHandler]
-        B6[Events Database Table]
-        B7[HTTP Server]
-        B8[SlackEventHandler]
-        B9[Slack]
-
-        B1 -->|IEventWriteService| B2 --> B3
-        B3-->|RabbitMqEventListenerService| B4 --> B6
-        B3-->|RabbitMqEventListenerService| B5
-        B5 -->|HTTP POST| B7
-        B3-->|RabbitMqEventListenerService| B8
-        B8 -->|HTTP POST| B9
-    end
-
-    subgraph Without RabbitMQ
-        A1[EventService]
-        A2[RepositoryEventWriteService]
-        A3[Events Database Table]
-
-        A1 -->|IEventWriteService| A2 --> A3
-
-end
-```
-
-#### Running the RabbitMQ container
+#### Running the RabbitMQ container (default using fixed-delay queues)
 
 1.  Verify that you've set a username and password in the `.env` file (see `.env.example` for an
     example)
@@ -154,6 +82,36 @@ end
 3.  To verify this is running, open `http://localhost:15672` in a browser and login with the
     username and password in your `.env` file.
 
+#### Running the RabbitMQ container (with optional delay plugin)
+
+The standard installation of RabbitMQ does not support delaying message delivery. Our default option
+instead uses retry queues with a fixed amount of delay and checks the `DelayUntilDate` in each
+message to see if it is time for them to br processed. This provides the delay needed for retries
+(with backoff and jitter applied), but it does require more processing.
+
+As an alternate approach, we have support for RabbitMQ's optional delay plugin - which does support
+adding a precise delay to a message and handles publishing at the specified time. It does require
+the plugin to be installed and enabled before running and is therefore not the default setup. To
+enable the plugin:
+
+1.  Download the latest version of the
+    [RabbitMQ delay plugin GitHub repo](https://github.com/rabbitmq/rabbitmq-delayed-message-exchange).
+2.  Add the plugin to your RabbitMQ instance. The easiest way to do this is to add the following
+    line to Docker compose, under the `volumes:`. This puts the binary into the container that
+    Docker spins up.
+
+```
+  -  ./rabbitmq_delayed_message_exchange-4.1.0.ez:/opt/rabbitmq/plugins/rabbitmq_delayed_message_exchange-4.1.0.ez
+```
+
+3.  Build/rebuild your RabbitMQ instance with this in place to enable the ability to use the delay
+    plugin.
+4.  If you have previously created the Integration exchange, you have to delete it and let the
+    server code recreate it (Rabbit will use the existing exchange without delay enabled if it
+    already exists).
+5.  Restart the servers and verify that the exchange was created successfully.
+6.  Turn on the `useDelayPlugin` flag in secrets and push that out to the servers (see below)
+
 #### Configuring the server to use RabbitMQ for events
 
 1.  Add the following to your `secrets.json` file, changing the defaults to match your `.env` file:
@@ -168,6 +126,7 @@ end
         "eventRepositoryQueueName": "events-write-queue",
         "slackQueueName": "events-slack-queue",
         "webhookQueueName": "events-webhook-queue",
+        "useDelayPlugin": false
       }
     }
     ```
@@ -191,50 +150,7 @@ With these changes in place, you should see the database events written as befor
 see in the RabbitMQ management interface that the messages are flowing through the configured
 exchange/queues.
 
-### Azure Service Bus implementation
-
-The Azure Service Bus implementation is a configurable replacement for Azure Queue. Instead of
-writing Events to the queue to be picked up, they are sent to the configured service bus topic. An
-instance of `AzureServiceBusEventListenerService` is then configured with the
-`AzureTableStorageEventHandler` to subscribe to that topic and write Events to Azure Table Storage.
-Similar to RabbitMQ above, the end result is the same (events are stored in Azure Table Storage),
-but the addition of the service bus topic allows for other integrations to subscribe.
-
-As with the RabbitMQ implementation above, a `SlackEventHandler` and `WebhookEventHandler` can be
-configured to publish events to Slack and/or a webhook.
-
-```kroki type=mermaid
-graph TD
-	  subgraph With Service Bus
-        B1[EventService]
-        B2[AzureServiceBusEventWriteService]
-        B3[Azure Service Bus Topic]
-        B4[AzureTableStorageEventHandler]
-        B5[WebhookEventHandler]
-        B6[Events in Azure Tables]
-        B7[HTTP Server]
-        B8[SlackEventHandler]
-        B9[Slack]
-
-        B1 -->|IEventWriteService| B2 --> B3
-        B3-->|AzureServiceBusEventListenerService| B4 --> B6
-        B3-->|AzureServiceBusEventListenerService| B5
-        B5 -->|HTTP POST| B7
-        B3-->|AzureServiceBusEventListenerService| B8
-        B8 -->|HTTP POST| B9
-    end
-
-    subgraph With Storage Queue
-        A1[EventService]
-        A2[AzureQueueHostedService]
-        A3[Azure Storage Queue]
-        A4[AzureQueueHostedService]
-        A5[Events in Azure Tables]
-
-        A1 -->|IEventWriteService| A2 --> A3 -->|RepositoryEventWriteService| A4 --> A5
-
-end
-```
+### Azure Service Bus
 
 #### Running the Azure Service Bus emulator
 
@@ -286,51 +202,3 @@ end
    ```
 
 3. Start or re-start all services, including `EventsProcessor`.
-
-### Integrations and integration configurations
-
-Organizations can configure integration configurations to send events to different endpoints -- each
-handler maps to a specific integration and checks for the configuration when it receives an event.
-Currently, there are integrations / handlers for Slack and webhooks (as mentioned above).
-
-**`OrganizationIntegration`**
-
-- The top level object that enables a specific integration for the organization.
-- Includes any properties that apply to the entire integration across all events.
-
-  - For Slack, it consists of the token:
-
-    ```json
-    { "token": "xoxb-token-from-slack" }
-    ```
-
-  - For webhooks, it is `null`. However, even though there is no configuration, an organization must
-    have a webhook `OrganizationIntegration` to enable configuration via
-    `OrganizationIntegrationConfiguration`.
-
-**`OrganizationIntegrationConfiguration`**
-
-- This contains the configurations specific to each `EventType` for the integration.
-- `Configuration` contains the event-specific configuration.
-
-  - For Slack, this would contain what channel to send the message to:
-
-    ```json
-    { "channelId": "C123456" }
-    ```
-
-  - For Webhook, this is the URL the request should be sent to:
-
-    ```json
-    { "url": "https://api.example.com" }
-    ```
-
-- `Template` contains a template string that is expected to be filled in with the contents of the
-  actual event.
-  - The tokens in the string are wrapped in `#` characters. For instance, the UserId would be
-    `#UserId#`
-  - The `IntegrationTemplateProcessor` does the actual work of replacing these tokens with
-    introspected values from the provided `EventMessage`.
-  - The template does not enforce any structure -- it could be a freeform text message to send via
-    Slack, or a JSON body to send via webhook; it is simply stored and used as a string for the most
-    flexibility.
