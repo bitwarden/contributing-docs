@@ -1,3 +1,7 @@
+---
+sidebar_position: 3
+---
+
 import Tabs from "@theme/Tabs";
 import TabItem from "@theme/TabItem";
 
@@ -130,6 +134,8 @@ actions.
 <Tabs>
 <TabItem value="first" label="Initial Migration" default>
 
+Located in `util/Migrator/DbScripts`.
+
 ```sql
 -- Add Column
 IF COL_LENGTH('[dbo].[Customer]', 'FirstName') IS NULL
@@ -177,6 +183,8 @@ END
 </TabItem>
 <TabItem value="data" label="Transition Migration">
 
+Located in `util/Migrator/DbScripts_transition`.
+
 ```sql
 UPDATE [dbo].Customer SET
     FirstName=FName
@@ -185,6 +193,8 @@ WHERE FirstName IS NULL
 
 </TabItem>
 <TabItem value="second" label="Finalization Migration">
+
+Located in `util/Migrator/DbScripts_finalization`.
 
 ```sql
 -- Remove Column
