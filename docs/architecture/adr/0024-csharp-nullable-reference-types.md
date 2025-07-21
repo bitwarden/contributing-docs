@@ -1,6 +1,6 @@
 ---
 adr: "0024"
-status: Proposed
+status: Accepted
 date: 2025-05-27
 tags: [server]
 ---

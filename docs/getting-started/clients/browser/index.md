@@ -228,7 +228,7 @@ the extension for every change, which is slower.
 1.  Build the extension for Safari
 
     ```bash
-    npm run dist:safari:dmg
+    npm run dist:safari
     ```
 
 2.  Open Safari and check Settings to confirm that the extension is installed and enabled

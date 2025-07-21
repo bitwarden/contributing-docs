@@ -86,6 +86,7 @@ typechecks
 typesafe
 WCAG
 Xcodes.app
+xcworkspace
 xmldoc
 Yellowpages
 Yubico
