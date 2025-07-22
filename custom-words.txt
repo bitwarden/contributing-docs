@@ -61,6 +61,8 @@ refactorings
 Rickabaugh
 roadmap
 roadmaps
+rollout
+rollouts
 rustup
 sandboxed
 SARIF
