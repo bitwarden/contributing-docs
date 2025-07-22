@@ -17,8 +17,7 @@ tags: [client]
 
 ## Context and Problem Statement
 
-Building on
-[ADR 0027 - Adopt Angular Signals for Component State](./0027-angular-signals.md)
+Building on [ADR 0027 - Adopt Angular Signals for Component State](./0027-angular-signals.md)
 decision to adopt Angular signals for component state, this ADR addresses state management patterns
 across our application on the component level.
 
