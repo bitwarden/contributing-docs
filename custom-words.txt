@@ -58,6 +58,7 @@ precompiler
 proxied
 recompositions
 refactorings
+Rickabaugh
 roadmap
 roadmaps
 rustup
@@ -93,4 +94,3 @@ YubiKeys
 # Forbidden words
 !auto-fill
 !auto-filled
-Rickabaugh
