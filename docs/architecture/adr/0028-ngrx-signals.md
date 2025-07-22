@@ -11,14 +11,14 @@ tags: [client]
 
 ## Prior Reading
 
-- [ADR Draft - Adopt Angular Signals for Component State](https://bitwarden.atlassian.net/wiki/spaces/EN/pages/1538326529)
+- [ADR 0027 - Adopt Angular Signals for Component State](./0027-angular-signals.md)
 - [Angular Signals](https://angular.dev/guide/signals)
 - [NgRx Docs](https://ngrx.io/guide/signals)
 
 ## Context and Problem Statement
 
 Building on
-[ADR Draft - Adopt Angular Signals for Component State](https://bitwarden.atlassian.net/wiki/spaces/EN/pages/1538326529)
+[ADR 0027 - Adopt Angular Signals for Component State](./0027-angular-signals.md)
 decision to adopt Angular signals for component state, this ADR addresses state management patterns
 across our application on the component level.
 
@@ -52,7 +52,7 @@ management in a way that complements our existing signal adoption
 
 ## Decision Outcome
 
-**Adopt @ngrx/signals for state management on the component level**
+Chosen option: **Adopt @ngrx/signals for state management on the component level**
 
 The benefits significantly outweigh the costs of learning curve and dependency addition. The
 potential negatives can be addressed through phased implementation and clear documentation.
