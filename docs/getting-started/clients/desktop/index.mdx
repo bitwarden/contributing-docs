@@ -44,13 +44,24 @@ separately. This is baked in to the build process for `npm run electron`, but yo
 it manually.
 
 ```bash
-cd apps/desktop/desktop_native
+cd apps/desktop/desktop_native/napi
 npm run build
 ```
 
 **Note**: This module needs to be re-built if the native code has changed.
 
 ### Cross compile
+
+#### Windows on ARM
+
+If you're building in Windows on ARM, you might need to run `build.js` with the `cross-platform`
+argument:
+
+```bash
+node desktop_native/build.js cross-platform
+```
+
+#### Linux & others
 
 In certain environments such as WSL (Windows Subsystem for Linux), it might be necessary to
 cross-compile the native module. To do this, first make sure you have installed the relevant rust

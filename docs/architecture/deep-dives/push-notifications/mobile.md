@@ -24,7 +24,7 @@ The mobile client - whether iOS or Android - receives an opaque token that repre
 device to the platform-specific notification service. The client transmits this token to the server
 through a `POST` request to the `/devices/identifier/{deviceIdentifier}/token` endpoint on the
 Bitwarden API. On the mobile client this is done in the `OnRegisteredAsync()` method of the
-[`PushNotificationListenerService`](https://github.com/bitwarden/mobile/blob/master/src/App/Services/PushNotificationListenerService.cs).
+[`PushNotificationListenerService`](https://github.com/bitwarden/mobile/blob/main/src/App/Services/PushNotificationListenerService.cs).
 
 The Bitwarden API is then responsible for submitting this token to the Azure Notification Hub. On
 the server, the opaque push token is associated with a specific user via the user presented in the
@@ -61,7 +61,7 @@ end
 If we are running a Bitwarden cloud instance, the Bitwarden API is responsible for directly
 communicating with the Azure Notification Hub to register the push token. This is done in the
 `CreateOrUpdateRegistrationAsync()` method on the
-[`NotificationHubPushRegistrationService`](https://github.com/bitwarden/server/blob/master/src/Core/Services/Implementations/NotificationHubPushRegistrationService.cs).
+[`NotificationHubPushRegistrationService`](https://github.com/bitwarden/server/blob/main/src/Core/Services/Implementations/NotificationHubPushRegistrationService.cs).
 
 #### Self-hosted implementation
 
@@ -87,16 +87,16 @@ For self-hosted instances, the self-hosted instance cannot communicate directly 
 Azure Notification Hub. In order to provide push notifications for self-hosted instances, the
 self-hosted Bitwarden API must register with the Azure Notification Hub through the
 `CreateOrUpdateRegistrationAsync()` method on
-[`RelayPushRegistrationService`](https://github.com/bitwarden/server/blob/master/src/Core/Services/Implementations/RelayPushRegistrationService.cs).
+[`RelayPushRegistrationService`](https://github.com/bitwarden/server/blob/main/src/Core/Services/Implementations/RelayPushRegistrationService.cs).
 
 This implementation of
-[`IPushRegistrationService`](https://github.com/bitwarden/server/blob/master/src/Core/Services/IPushRegistrationService.cs)
+[`IPushRegistrationService`](https://github.com/bitwarden/server/blob/main/src/Core/Services/IPushRegistrationService.cs)
 allows the self-hosted Bitwarden API to register the push token by calling the `/push/register`
 endpoint on the
-[`PushController`](https://github.com/bitwarden/server/blob/master/src/Api/Controllers/PushController.cs)
+[`PushController`](https://github.com/bitwarden/server/blob/main/src/Api/Controllers/PushController.cs)
 in the Bitwarden Cloud API. This is exposed to the self-hosted instance as
 https://push.bitwarden.com. The
-[`PushController`](https://github.com/bitwarden/server/blob/master/src/Api/Controllers/PushController.cs)
+[`PushController`](https://github.com/bitwarden/server/blob/main/src/Api/Controllers/PushController.cs)
 on the Bitwarden Cloud API then registers the push token as if it were a cloud registration -
 sending it to Azure Notification Hub.
 
@@ -141,7 +141,7 @@ end
 ```
 
 For notifications to mobile devices, this is handled in the
-[`NotificationHubPushNotificationService`](https://github.com/bitwarden/server/blob/master/src/Core/Services/Implementations/NotificationHubPushNotificationService.cs).
+[`NotificationHubPushNotificationService`](https://github.com/bitwarden/server/blob/main/src/Core/Services/Implementations/NotificationHubPushNotificationService.cs).
 This service uses the `Microsoft.Azure.NotificationHubs` SDK to send notifications to the Azure
 Notification Hub.
 
@@ -180,13 +180,13 @@ device when the user _and_ device match.
 ```
 
 Just as with the registration of the push token, the self-hosted instance uses the
-[`PushController`](https://github.com/bitwarden/server/blob/master/src/Api/Controllers/PushController.cs)
+[`PushController`](https://github.com/bitwarden/server/blob/main/src/Api/Controllers/PushController.cs)
 on the Bitwarden Cloud API as a proxy to communicate with the Azure Notification Hub.
 
 The self-hosted Bitwarden API calls the `/send` endpoint on the `PushController` on the Bitwarden
 Cloud API to transmit the push payload to the Bitwarden Cloud API. The Cloud API then transmits the
 data to the Azure Notification Hub using the same
-[`NotificationHubPushNotificationService`](https://github.com/bitwarden/server/blob/master/src/Core/Services/Implementations/NotificationHubPushNotificationService.cs)
+[`NotificationHubPushNotificationService`](https://github.com/bitwarden/server/blob/main/src/Core/Services/Implementations/NotificationHubPushNotificationService.cs)
 as it would for a cloud-generated message.
 
 It is important to note that from the Cloud API's perspective, it handles a message received from
@@ -207,14 +207,14 @@ mobile OS.
 #### Android
 
 Android push tokens are received by the
-[`FirebaseMessagingService`](https://github.com/bitwarden/mobile/blob/master/src/Android/Push/FirebaseMessagingService.cs).
+[`FirebaseMessagingService`](https://github.com/bitwarden/mobile/blob/main/src/Android/Push/FirebaseMessagingService.cs).
 Firebase Cloud Messaging (FCM) is the Platform Notification Service used for push notifications to
 Android devices. When the Android OS initially obtains a token for the application, or the token is
 updated, the `OnNewToken()` method in this service is triggered.
 
 In the `OnNewToken()` method, we update the `PushRegisteredToken` in the device's state and trigger
 the `RegisterAsync()` method of the
-[`AndroidPushNotificationService`](https://github.com/bitwarden/mobile/blob/master/src/Android/Services/AndroidPushNotificationService.cs).
+[`AndroidPushNotificationService`](https://github.com/bitwarden/mobile/blob/main/src/Android/Services/AndroidPushNotificationService.cs).
 
 Here, we use `PushRegisteredToken` in state to represent the recent token received from FCM. It is
 scoped to exist once for a given device, because FCM assigns push tokens to a given device,
@@ -227,13 +227,13 @@ notifications appropriately. In order to capture this level of granularity, we s
 user's push token, which may or may not be out of date with the one assigned by FCM.
 
 It is the responsibility of `RegisterSync()` on the
-[`AndroidPushNotificationService`](https://github.com/bitwarden/mobile/blob/master/src/Android/Services/AndroidPushNotificationService.cs)
+[`AndroidPushNotificationService`](https://github.com/bitwarden/mobile/blob/main/src/Android/Services/AndroidPushNotificationService.cs)
 to determine if the `PushRegisteredToken` assigned to the device differs from the `PushCurrentToken`
 assigned to the current user.
 
 If the current token assigned to the device differs from the user's token, we call
 `OnRegisteredSync()` on the
-[`PushNotificationListenerService`](https://github.com/bitwarden/mobile/blob/master/src/App/Services/PushNotificationListenerService.cs)
+[`PushNotificationListenerService`](https://github.com/bitwarden/mobile/blob/main/src/App/Services/PushNotificationListenerService.cs)
 to:
 
 - Register the new `PushRegisteredToken` through the Bitwarden API for the active user
@@ -246,7 +246,7 @@ token will get the update through the process described thus far.
 For other users on the device, `RegisterSync()` is initiated when they next log in to the
 application or the application is switched to their account. This is done in the initialization of
 the
-[`GroupingsPage`](https://github.com/bitwarden/mobile/blob/master/src/App/Pages/Vault/GroupingsPage/GroupingsPage.xaml.cs).
+[`GroupingsPage`](https://github.com/bitwarden/mobile/blob/main/src/App/Pages/Vault/GroupingsPage/GroupingsPage.xaml.cs).
 The same comparison is done for this user, and in this case the `PushRegisteredToken` is still
 different than the `PushCurrentToken` for that user (as we've only updated the `PushCurrentToken`
 for the initial user thus far). It is at this point that the Bitwarden API is notified that the
@@ -257,9 +257,9 @@ subsequent users are registered for the new token.
 The Android Push Notification documentation applies to the Bitwarden application that is installed
 from the Google Play store. The FDroid release does not support push notifications. These builds use
 the
-[`NoopPushNotificationListenerService`](https://github.com/bitwarden/mobile/blob/master/src/App/Services/NoopPushNotificationListenerService.cs)
+[`NoopPushNotificationListenerService`](https://github.com/bitwarden/mobile/blob/main/src/App/Services/NoopPushNotificationListenerService.cs)
 and the
-[`NoopPushNotificationService`](https://github.com/bitwarden/mobile/blob/master/src/App/Services/NoopPushNotificationService.cs).
+[`NoopPushNotificationService`](https://github.com/bitwarden/mobile/blob/main/src/App/Services/NoopPushNotificationService.cs).
 
 :::
 
@@ -267,29 +267,29 @@ and the
 
 On iOS devices, push token registration occurs through the Apple Push Notification service (APNs).
 
-When a user logs in to the iOS application or switches accounts, the application loads the
-[`GroupingsPage`](https://github.com/bitwarden/mobile/blob/master/src/App/Pages/Vault/GroupingsPage/GroupingsPage.xaml.cs).
-In the
-[`GroupingsPage`](https://github.com/bitwarden/mobile/blob/master/src/App/Pages/Vault/GroupingsPage/GroupingsPage.xaml.cs)
-initialization, we first check to make sure the device has accepted push notifications. If not, the
-Bitwarden push notification prompt is shown. This prompt explains why iOS will be requesting push
-notifications for the Bitwarden mobile app.
+When a user logs in to the iOS application or switches accounts, the application loads the initial
+vault screen. The
+[`VaultListProcessor`](https://github.com/bitwarden/ios/blob/main/BitwardenShared/UI/Vault/Vault/VaultList/VaultListProcessor.swift)
+manages this screen, and as part of its processes checks to make sure the device has accepted push
+notifications. If not, the Bitwarden push notification prompt is shown. This prompt explains why iOS
+will be requesting push notifications for the Bitwarden mobile app.
 
 If the user accepts this prompt, or if they already have accepted it, the application checks to see
 if the _current user_ has registered for push notifications within the last day. If they have never
 registered before, or if more than one day has elapsed, the Bitwarden app registers with iOS for
-push notifications, requesting a push token. This is done in the `RegisterAsync()` method in
-[`iOSPushNotificationService`](https://github.com/bitwarden/mobile/blob/master/src/iOS/Services/iOSPushNotificationService.cs).
-`RegisterAsync()` executes the iOS platform-specific method required to begin the token request
-process from APNs.
+push notifications, requesting a push token.
 
-The response from APNs with the push token is received asynchronously. When a token is obtained for
-the device, the `OnRegisteredSuccess()` method in
-[`iOSPushNotificationHandler`](https://github.com/bitwarden/mobile/blob/master/src/iOS/Services/iOSPushNotificationHandler.cs)
-is triggered. This then calls the `OnRegisteredAsync()` method of the
-[`PushNotificationListenerService`](https://github.com/bitwarden/mobile/blob/master/src/App/Services/PushNotificationListenerService.cs),
-passing along the newly-acquired token. This method is responsible for sending the push token to the
-back-end API to register the device + user combination for push notifications.
+The registration for push notifications is handled by calling
+[`registerForRemoteNotifications()`](https://developer.apple.com/documentation/uikit/uiapplication/1623078-registerforremotenotifications)
+on `UIApplication`. The response from APNs with the push token is then received asynchronously. When
+the token is obtained, the delegate methods on
+[`AppDelegate`](https://github.com/bitwarden/ios/blob/main/Bitwarden/Application/AppDelegate.swift)
+are called, which acts as a passthrough for the
+[`AppProcessor`](https://github.com/bitwarden/ios/blob/main/BitwardenShared/UI/Platform/Application/AppProcessor.swift)
+which itself acts more or less as a passthrough for the
+[`NotificationService`](https://github.com/bitwarden/ios/blob/main/BitwardenShared/Core/Platform/Services/NotificationService.swift),
+which in its `didRegister()` method is responsible for sending the push token to the back-end API to
+register the device and user combination for push notifications.
 
 :::note
 
@@ -300,3 +300,10 @@ not usually the case, we check on a daily basis to ensure that the Bitwarden Azu
 is up to date.
 
 :::
+
+<Bitwarden>
+
+Further information on how to debug issues with push notifications on iOS can be found
+[in the mobile section](https://contributing.bitwarden.com/architecture/mobile-clients/ios/push-notification-troubleshooting).
+
+</Bitwarden>

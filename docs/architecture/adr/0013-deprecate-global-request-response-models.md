@@ -1,6 +1,6 @@
 ---
 adr: "0013"
-status: In progress
+status: Accepted
 date: 2022-09-16
 tags: [clients, angular]
 ---

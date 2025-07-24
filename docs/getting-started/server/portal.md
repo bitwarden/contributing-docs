@@ -38,7 +38,7 @@ To disambiguate this application from others in the Bitwarden landscape, we refe
 5.  Build out the `wwwroot` directory with the necessary stylesheets and libraries:
 
     ```bash
-    npx gulp build
+    npm run build
     ```
 
 6.  Start the server:
@@ -74,7 +74,7 @@ See [User Secrets](../../contributing/user-secrets.md) for how to configure your
 
 :::
 
-<bitwarden>
+<Bitwarden>
 
 ### Authorization
 
@@ -105,7 +105,7 @@ control on self-hosted deployments.
 
 :::
 
-</bitwarden>
+</Bitwarden>
 
 ## Logging in
 

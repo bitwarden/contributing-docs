@@ -17,8 +17,8 @@ Before you start: make sure you’ve installed the recommended
 - Docker Desktop
 - Visual Studio 2022
 - Powershell
-- [NET 6.0 SDK](https://dotnet.microsoft.com/download)
-- Azure Data Studio
+- [NET 8.0 SDK](https://dotnet.microsoft.com/download)
+- Your preferred database management tool
 
 :::
 
@@ -31,13 +31,12 @@ developing in a containerized environment.
 
 ## Clone the repository
 
-1.  Clone the Bitwarden Server project:
+Clone the Bitwarden Server project and navigate to the root of the cloned repository:
 
-    ```bash
-    git clone https://github.com/bitwarden/server.git
-    ```
-
-2.  Open a terminal and navigate to the root of the cloned repository.
+```bash
+git clone https://github.com/bitwarden/server.git
+cd server
+```
 
 ## Configure Git
 
@@ -61,7 +60,7 @@ developing in a containerized environment.
 
 We provide a [Docker Compose](https://docs.docker.com/compose/) configuration, which is used during
 development to provide the required dependencies. This is split up into multiple service profiles to
-facilitate easily customization.
+facilitate easy customization.
 
 1.  Some Docker settings are configured in the environment file, `dev/.env`. Copy the example
     environment file:
@@ -96,7 +95,7 @@ facilitate easily customization.
     Using PowerShell, navigate to the cloned server repo location, into the `dev` folder and run the
     docker command below.
 
-    <community>
+    <Community>
 
     ```bash
     docker compose --profile mssql --profile mail up -d
@@ -105,9 +104,9 @@ facilitate easily customization.
     Which starts the MSSQL and local mail server containers, which should be suitable for most
     community contributions.
 
-    </community>
+    </Community>
 
-    <bitwarden>
+    <Bitwarden>
 
     ```bash
     docker compose --profile cloud --profile mail up -d
@@ -116,7 +115,7 @@ facilitate easily customization.
     Which starts MSSQL, mail, and Azurite container. The additional Azurite container is required to
     emulate Azure used by the Bitwarden cloud environment.
 
-    </bitwarden>
+    </Bitwarden>
 
 After you’ve run the `docker compose` command, you can use the
 [Docker Dashboard](https://docs.docker.com/desktop/dashboard/) to manage your containers. You should
@@ -127,13 +126,13 @@ see your containers running under the `bitwardenserver` group.
 Changing `MSSQL_PASSWORD` variable after first running docker compose will require a re-creation of
 the storage volume.
 
-**Warning: this will delete your development database.**
+**Warning: this will delete your development database.**
 
 To do this, run
 
 ```bash
 docker compose --profile mssql down
-docker volume rm bitwardenserver_edgesql_dev_data
+docker volume rm bitwardenserver_mssql_dev_data
 ```
 
 After that, rerun the docker compose command from Step 5.
@@ -142,14 +141,11 @@ After that, rerun the docker compose command from Step 5.
 
 ### SQL Server
 
-In order to support ARM based development environments such as the M1 Macs, we use the
-[Azure SQL Edge](https://hub.docker.com/_/microsoft-azure-sql-edge) docker container instead of a
-normal [Microsoft SQL Server](https://hub.docker.com/_/microsoft-mssql-server) container. It behaves
-mostly identical to a regular SQL Server instance and runs on port 1433.
-
-You can connect to it using Azure Data Studio using the following credentials:
+You can connect to the Microsoft SQL Server using your preferred database management tool with the
+following credentials:
 
 - Server: localhost
+- Port: 1433
 - Username: sa
 - Password: (the password you set in `dev/.env`)
 
@@ -188,6 +184,67 @@ the following commands:
     pwsh setup_azurite.ps1
     ```
 
+## Configure User Secrets
+
+[User secrets](https://docs.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-6.0)
+are a method for managing application settings on a per-developer basis. They override the settings
+in `appSettings.json` of each project. Your user secrets file should match the structure of the
+`appSettings.json` file for the settings you intend to override.
+
+We provide a helper script which simplifies setting user secrets for all projects in the server
+repository.
+
+1.  Get a template `secrets.json`. We need to get an initial version of `secrets.json`, which you
+    will modify for your own secrets values.
+
+    <Community>
+
+    Navigate to the `dev` folder in your server repo and copy the example `secrets.json` file.
+
+    ```bash
+    cp secrets.json.example secrets.json
+    ```
+
+    </Community>
+
+    <Bitwarden>
+
+    - Copy the user secrets file from the shared Development collection (Your Bitwarden Vault) into
+      the `dev` folder.
+    - If you don't have access to the Development collection, contact our IT Manager to arrange
+      access. Make sure you have first set up a Bitwarden account using your company email address.
+    - This `secrets.json` is configured to use the dockerized Azurite and MailCatcher instances and
+      is recommended for this guide.
+
+    </Bitwarden>
+
+2.  Update `secrets.json` with your own values:
+
+    - `sqlServer` > `connectionString`: insert your password where indicated
+
+    <Community>
+
+    - `installation` > `id` and `key`:
+      [request a hosting installation Id and Key](https://bitwarden.com/host/) and insert them here
+    - `licenseDirectory`: set this to an empty directory, this is where uploaded license files will
+      be stored.
+
+    </Community>
+
+3.  Once you have your `secrets.json` complete, run the below command to add the secrets to each
+    Bitwarden server project.
+
+    ```bash
+    pwsh setup_secrets.ps1
+    ```
+
+The helper script also supports an optional `-clear` switch which removes all existing settings
+before re-applying them:
+
+```bash
+pwsh setup_secrets.ps1 -clear
+```
+
 ## Create database
 
 You now have the MSSQL server running in Docker. The next step is to create the database that will
@@ -204,17 +261,14 @@ Navigate to the `dev` folder in your server repo and perform the following steps
     pwsh migrate.ps1
     ```
 
-2.  You should receive confirmation that each migration script has run successfully:
+2.  You should receive confirmation that the migration scripts have run successfully:
 
     ```
-    Performing /mnt/migrator/DbScripts/2017-08-19_00_InitialSetup.sql
-    Performing /mnt/migrator/DbScripts/2017-08-22_00_LicenseCheckScripts.sql
-    Performing /mnt/migrator/DbScripts/2017-08-30_00_CollectionWriteOnly.sql
-    [...]
+    info: Bit.Migrator.DbMigrator[12482444]
+          Migrating database.
+    info: Bit.Migrator.DbMigrator[12482444]
+          Migration successful.
     ```
-
-If migrations are being skipped even though this is a new database, see
-[MSSQL Database Troubleshooting](./database/mssql/index.md#troubleshooting).
 
 :::note
 
@@ -223,13 +277,21 @@ up-to-date. See [MSSQL Database](./database/mssql/index.md) for more information
 
 :::
 
-<bitwarden>
+<Bitwarden>
 
 ## Install Licensing Certificate
 
 To run your local server environment as a licensed instance, you will need to download the
 `Licensing Certificate - Dev` from the shared Engineering collection and install it. This can be
 done by double-clicking on the downloaded certificate.
+
+:::note
+
+Mac users: When prompted to save the downloaded certificate and PFX file in Keychain Access be sure
+to select "Default Keychain > login" from the dropdown otherwise they will not be found when
+attempting to "Build and Run the Server".
+
+:::
 
 1. Log in to your company-issued Bitwarden account
 2. On the "Vaults" page, scroll down to the "Licensing Certificate - Dev" item
@@ -238,68 +300,7 @@ done by double-clicking on the downloaded certificate.
 5. The dev.pfx file will ask for a password. You can get this by clicking and opening the Licensing
    Certificate - Dev item in the vault
 
-</bitwarden>
-
-## Configure User Secrets
-
-[User secrets](https://docs.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-6.0)
-are a method for managing application settings on a per-developer basis. They override the settings
-in `appSettings.json` of each project. Your user secrets file should match the structure of the
-`appSettings.json` file for the settings you intend to override.
-
-We provide a helper script which simplifies setting user secrets for all projects in the server
-repository.
-
-1.  Get a template `secrets.json`. We need to get an initial version of `secrets.json`, which you
-    will modify for your own secrets values.
-
-    <community>
-
-    Navigate to the `dev` folder in your server repo and copy the example `secrets.json` file.
-
-    ```bash
-    cp secrets.json.example secrets.json
-    ```
-
-    </community>
-
-    <bitwarden>
-
-    - Copy the user secrets file from the shared Development collection (Your Bitwarden Vault) into
-      the `dev` folder.
-    - If you don't have access to the Development collection, contact our IT Manager to arrange
-      access. Make sure you have first set up a Bitwarden account using your company email address.
-    - This `secrets.json` is configured to use the dockerized Azurite and MailCatcher instances and
-      is recommended for this guide.
-
-    </bitwarden>
-
-2.  Update `secrets.json` with your own values:
-
-    - `sqlServer` > `connectionString`: insert your password where indicated
-
-    <community>
-
-    - `installation` > `id` and `key`:
-      [request a hosting installation Id and Key](https://bitwarden.com/host/) and insert them here
-    - `licenseDirectory`: set this to an empty directory, this is where uploaded license files will
-      be stored.
-
-    </community>
-
-3.  Once you have your `secrets.json` complete, run the below command to add the secrets to each
-    Bitwarden server project.
-
-    ```bash
-    pwsh setup_secrets.ps1
-    ```
-
-The helper script also supports an optional `-clear` switch which removes all existing settings
-before re-applying them:
-
-```bash
-pwsh setup_secrets.ps1 -clear
-```
+</Bitwarden>
 
 ## Build and Run the Server
 
@@ -369,7 +370,7 @@ debugger.
 To debug:
 
 - On Windows, right-click on each project > click **Debug** > click **Start New Instance**
-- On MacOS, right-click each project > click **Start Debugging Project**
+- On macOS, right-click each project > click **Start Debugging Project**
 
 ### Rider
 

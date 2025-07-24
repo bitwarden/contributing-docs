@@ -1,3 +1,7 @@
+---
+sidebar_position: 3
+---
+
 import Tabs from "@theme/Tabs";
 import TabItem from "@theme/TabItem";
 
@@ -17,7 +21,7 @@ Bitwarden also needs to support:
 To fulfill these additional requirements the database schema **must** support the previous release
 of the server.
 
-<bitwarden>
+<Bitwarden>
 
 :::note
 
@@ -25,7 +29,7 @@ For background on this decision please see the [Evolutionary Database Design RFD
 
 :::
 
-</bitwarden>
+</Bitwarden>
 
 ## Design
 
@@ -70,7 +74,7 @@ needs to be supported during which database phase.
 ### Migrations
 
 The three different migrations described in the diagram above are, _Initial migration_, _Transition
-migration_ and _ Finalization migration_.
+migration_ and _Finalization migration_.
 
 #### Initial migration
 
@@ -130,6 +134,8 @@ actions.
 <Tabs>
 <TabItem value="first" label="Initial Migration" default>
 
+Located in `util/Migrator/DbScripts`.
+
 ```sql
 -- Add Column
 IF COL_LENGTH('[dbo].[Customer]', 'FirstName') IS NULL
@@ -177,6 +183,8 @@ END
 </TabItem>
 <TabItem value="data" label="Transition Migration">
 
+Located in `util/Migrator/DbScripts_transition`.
+
 ```sql
 UPDATE [dbo].Customer SET
     FirstName=FName
@@ -185,6 +193,8 @@ WHERE FirstName IS NULL
 
 </TabItem>
 <TabItem value="second" label="Finalization Migration">
+
+Located in `util/Migrator/DbScripts_finalization`.
 
 ```sql
 -- Remove Column
@@ -239,7 +249,7 @@ There are some important constraints to the implementation of the process:
 
 The process to support all of these constraints is a complex one. Below is an image of a state
 machine that will hopefully help visualize the process and what it supports. It assumes that all
-database changes follow the standards that are laid out in [Migrations](./).
+database changes follow the standards that are laid out in [Migrations](./mssql.md).
 
 ---
 
@@ -265,7 +275,7 @@ will not be run until the start of the next deploy when they are moved into `DbS
 After this deploy, to prep for the next release, all migrations in `DbScripts_transition` are moved
 to `DbScripts` and then all migrations in `DbScripts_finalization` are moved to `DbScripts`,
 conserving their execution order for a clean install. For the current branching strategy, PRs will
-be open against `master` when `rc` is cut to prep for this release. This PR automation will also
+be open against `main` when `rc` is cut to prep for this release. This PR automation will also
 handle renaming the migration file and updating any reference of `[dbo_finalization]` to `[dbo]`.
 
 The next deploy will pick up the newly added migrations in `DbScripts` and set the previously

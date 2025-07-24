@@ -9,13 +9,16 @@ the codebase. The Page Details are an array of metadata about the page source of
 tab.
 
 Because it needs access to the DOM of the tab, the collection of the Page Details must be performed
-by a content script. The Bitwarden browser extension performs this in the `collect()` method in the
-`autofill.js` content script. This method is responsible for parsing the page DOM.
+by a content script. The Bitwarden browser extension performs this through the
+[`CollectAutofillContentService`](https://github.com/bitwarden/clients/blob/main/apps/browser/src/autofill/services/collect-autofill-content.service.ts)
+that is initialized in the `autofill-init.ts` content script. The logic in this class is responsible
+for parsing the page DOM and returning a data structure that represents the Page Details of the
+current tab.
 
 :::info Page Details
 
 For in-depth knowledge of what is contained in the Page Details, the
-[`AutofillPageDetails`](https://github.com/bitwarden/clients/blob/master/apps/browser/src/autofill/models/autofill-page-details.ts)
+[`AutofillPageDetails`](https://github.com/bitwarden/clients/blob/main/apps/browser/src/autofill/models/autofill-page-details.ts)
 TypeScript class is documented to explain the properties and their purposes.
 
 :::
@@ -38,8 +41,8 @@ In both of these cases, page detail collection is handled as follows:
 2. The `runtime.background.ts` page calls the `collectPageDetailsForContentScript` method on
    `main.background.ts`.
 3. The `collectPageDetailsForContentScript` method sends a message with command `collectPageDetails`
-   to the `autofill.js` content script.
-4. The `autofill.js` content script generates the page details and broadcasts a
+   to the `autofill-init.ts` content script.
+4. The `autofill-init.ts` content script generates the page details and broadcasts a
    `collectPageDetailsResponse` message with a sender of either `autofiller` or `notificationBar`.
 5. The `runtime.background.js` and `notification.background.js` are listening for these two
    messages, respectively, and will act upon them.
@@ -51,7 +54,7 @@ These flows are diagrammed below:
 ```kroki type=plantuml
 @startuml
 box "Content Scripts" #B8B8B8
-participant autofill.js as autofill
+participant "autofill-init.ts" as autofill
 participant autofiller.ts as autofiller
 end box
 
@@ -74,7 +77,7 @@ autofill -> runtime : collectPageDetailsResponse [sender: autofiller]
 ```kroki type=plantuml
 @startuml
 box "Content Scripts" #B8B8B8
-participant autofill.js as autofill
+participant "autofill-init.ts" as autofill
 participant notificationBar.ts as notificationBar
 end box
 
@@ -100,8 +103,8 @@ items matching the current page URI.
 
 When the user selects an item on the context menu, the browser `contextMenu.OnClicked()` event is
 fired. This event is handled by the `contextMenus.background.js` background page. The page issues a
-`collectPageDetails` command with a `contextMenus` sender. The `autofill.js` content script catches
-this request and issues a `collectPageDetailsResponse` with a sender of `contextMenus` when
+`collectPageDetails` command with a `contextMenus` sender. The `autofill-init.ts` content script
+catches this request and issues a `collectPageDetailsResponse` with a sender of `contextMenus` when
 complete, which is handled by the `runtime.background.js` background page.
 
 ```kroki type=plantuml
@@ -111,7 +114,7 @@ actor User
 participant "Autofill Context Menu" as autofillContext
 
 box "Content Scripts" #B8B8B8
-participant autofill.js as autofill
+participant "autofill-init.ts" as autofill
 end box
 
 box "Background Pages" #E5E8E8
@@ -140,9 +143,9 @@ command is broadcast to all listeners. This behavior is detailed
 In a browser extension running Manifest v2, the `commands.background.ts` background page is
 listening for the `autofill_login` command. This background page executes the
 `collectPageDetailsForContentScript()` method on `main.background.js`, which broadcasts the
-`collectPageDetails` message to the `autofill.js` content script.
+`collectPageDetails` message to the `autofill-init.ts` content script.
 
-After generating the page details, the `autofill.js` content script broadcasts a
+After generating the page details, the `autofill-init.ts` content script broadcasts a
 `collectPageDetailsResponse` message with an `autofill_cmd` sender. The `runtime.background.js`
 background page is listening for this message and receives it.
 
@@ -152,7 +155,7 @@ background page is listening for this message and receives it.
 actor User
 
 box "Content Scripts" #B8B8B8
-participant autofill.js as autofill
+participant "autofill-init.ts" as autofill
 end box
 
 box "Background Pages" #E5E8E8
@@ -177,7 +180,7 @@ responds by broadcasting the `collectPageDetailsImmediately` command.
 
 The `collectPageDetailsImmediately` is different from the `collectPageDetails` command, in that the
 response is **not** another message broadcast through the browser command API. Instead, the
-`autofill.js` content script performs the page details generation and returns the response
+`autofill-init.ts` content script performs the page details generation and returns the response
 asynchronously through a Promise.
 
 ```kroki type=plantuml
@@ -186,7 +189,7 @@ asynchronously through a Promise.
 actor User
 
 box "Content Scripts" #B8B8B8
-participant autofill.js as autofill
+participant "autofill-init.ts" as autofill
 end box
 
 
@@ -208,7 +211,7 @@ There are two ways that a user can request an autofill from the Bitwarden browse
 - Clicking on a vault item on the Current Tab view (`current-tab.component.ts`)
 
 In both of these cases, the component issues a `collectPageDetails` command with the extension
-instance's unique `BroadcasterSubscriptionId` as the `sender`. The `autofill.js` content script
+instance's unique `BroadcasterSubscriptionId` as the `sender`. The `autofill-init.ts` content script
 generates the page details and responds with a `collectPageDetailsResponse` message with the same
 `sender`, ensuring that the message is received properly by the correct sender.
 
@@ -217,7 +220,7 @@ generates the page details and responds with a `collectPageDetailsResponse` mess
 actor User
 
 box "Content Scripts" #B8B8B8
-participant autofill.js as autofill
+participant "autofill-init.ts" as autofill
 end box
 
 box "Extension UI" #7A7A7A
@@ -244,18 +247,18 @@ end group
 
 ## Performing the collection of the page details
 
-In all of the scenarios above, the `autofill.js` content script receives a request to collect page
-details. When this occurs, the collection of the page details takes place through the `collect()`
-method in the script.
+In all the scenarios above, the `autofill-init.ts` content script receives a request to collect page
+details. When this occurs, the collection of the page details takes place through the
+`getPageDetails()` method of the `CollectAutofillContentService`.
 
-The `collect()` method parses the page DOM and creates an instance of the
-[`AutofillPageDetails`](https://github.com/bitwarden/clients/blob/master/apps/browser/src/autofill/models/autofill-page-details.ts)
+The `getPageDetails()` method parses the page DOM and creates an instance of the
+[`AutofillPageDetails`](https://github.com/bitwarden/clients/blob/main/apps/browser/src/autofill/models/autofill-page-details.ts)
 class.
 
 This class contains arrays of
-[`AutofillField`](https://github.com/bitwarden/clients/blob/master/apps/browser/src/autofill/models/autofill-field.ts)
+[`AutofillField`](https://github.com/bitwarden/clients/blob/main/apps/browser/src/autofill/models/autofill-field.ts)
 and
-[`AutofillForm`](https://github.com/bitwarden/clients/blob/master/apps/browser/src/autofill/models/autofill-form.ts)
+[`AutofillForm`](https://github.com/bitwarden/clients/blob/main/apps/browser/src/autofill/models/autofill-form.ts)
 objects, each of which represents a potentially fillable field on the page source. The properties on
 the objects are used in the next step of the Autofill process,
 ['Generating the Fill Scripts'](./generating-fill-scripts.md).

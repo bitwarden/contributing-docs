@@ -20,6 +20,24 @@ npm start
 This command starts a local development server and opens up a browser window. Most changes are
 reflected live without having to restart the server.
 
+### SSL
+
+By default, `npm start` will attempt to start your local instance with SSL enabled using
+certificates referenced in your local dotfile (`.env`).
+
+- copy the provided `.env.example` to `.env` and update the values as needed
+- (requires [OpenSSL](https://www.openssl.org/)) Generate your self-signed certs with
+  `npm run setup:ssl` and follow the instructions.
+  - Alternatively use [mkcert](https://github.com/FiloSottile/mkcert) to
+    [generate and add certs to your trust store](https://docusaurus.io/docs/cli#enabling-https)
+- run `npm start`!
+
+If the script fails to find your `.env` or the required values within, docusaurus will start
+normally without SSL.
+
+If you need to explicitly develop without SSL, simply delete your `.env` file or use the command
+`npm start:insecure` instead.
+
 ## Build
 
 ```bash
@@ -64,21 +82,21 @@ across sessions.
 
 ![Context switcher](.github/dropdown.png)
 
-In order to write content that targets different context please use the `<community>` and
-`<bitwarden>` tags as demonstrated below.
+In order to write content that targets different context please use the `<Community>` and
+`<Bitwarden>` tags as demonstrated below.
 
 ```md
-<community>
+<Community>
 
 This content is shown only to community contributors.
 
-</community>
+</Community>
 
-<bitwarden>
+<Bitwarden>
 
 This content is shown only to bitwarden contributors.
 
-</bitwarden>
+</Bitwarden>
 ```
 
 The technical implementation uses a custom context called `devMode` which is persisted to local

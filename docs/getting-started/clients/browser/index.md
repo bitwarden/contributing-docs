@@ -17,6 +17,15 @@ Before you start, you must complete the [Clients repository setup instructions](
     npm run build:watch
     ```
 
+    :::note
+
+    The build commands use
+    [Manifest v3](https://developer.chrome.com/docs/extensions/develop/migrate/what-is-mv3) by
+    default. If you are building for a non-Chrome browser like Firefox or Safari, you should use the
+    command `npm run build:watch:<browser client name>` instead.
+
+    :::
+
 2.  Load the unpacked browser extension in your browser using the instructions in the next section.
 
 ## Environment Setup
@@ -28,12 +37,12 @@ this for local development and testing, there are several options.
 
 The browser extension has the concept of a "managed environment", which is JSON configuration stored
 in
-[`development.json`](https://github.com/bitwarden/clients/blob/master/apps/browser/config/development.json),
+[`development.json`](https://github.com/bitwarden/clients/blob/main/apps/browser/config/development.json),
 within the `devFlags` object.
 
 The `managedEnvironment` setting allows the contributor to override any or all of the URLs for the
 server. The `managedEnvironment` is read in the
-[`BrowserEnvironmentService`](https://github.com/bitwarden/clients/blob/master/apps/browser/src/services/browser-environment.service.ts)
+[`BrowserEnvironmentService`](https://github.com/bitwarden/clients/blob/main/apps/browser/src/services/browser-environment.service.ts)
 and overrides the default (production) settings for any supplied URLs.
 
 There are two ways to use `managedEnvironment`, depending upon whether you will also be running the
@@ -57,9 +66,9 @@ If you are also running the web vault, you only need to set the `base` URL in th
 ```
 
 This is because the web vault includes the `webpack-dev-server` package in its
-[`webpack.config.js`](https://github.com/bitwarden/clients/blob/master/apps/web/webpack.config.js).
+[`webpack.config.js`](https://github.com/bitwarden/clients/blob/main/apps/web/webpack.config.js).
 When it is running, it proxies each of the endpoints based on the settings configured in its _own_
-[`development.json`](https://github.com/bitwarden/clients/blob/master/apps/web/config/development.json)
+[`development.json`](https://github.com/bitwarden/clients/blob/main/apps/web/config/development.json)
 configuration file:
 
 ```json
@@ -116,10 +125,16 @@ Once configured, your local Custom Environment should look like this:
 
 To load the browser extension build:
 
-1.  Navigate to `chrome://extensions` in your address bar. This will open the extensions page
-2.  Enable “developer mode” (toggle switch)
-3.  Click the “Load unpacked” button
-4.  Open the `build` folder of your local repository and confirm your choice
+1. Build the extension for Chrome:
+
+   ```bash
+   npm run build:watch
+   ```
+
+2. Navigate to `chrome://extensions` in your address bar. This will open the extensions page
+3. Enable “developer mode” (toggle switch)
+4. Click the “Load unpacked” button
+5. Open the `build` folder of your local repository and confirm your choice
 
 You will now have your local build of the browser extension installed.
 
@@ -131,10 +146,16 @@ it is open and clicking “Inspect”.
 
 To load the browser extension build:
 
-1.  Navigate to `about:debugging` in your address bar. This will open the add-on debugging page
-2.  Click “This Firefox”
-3.  Click “Load Temporary Add-on”
-4.  Open the `build` folder of your local repository and open the `manifest.json` file
+1. Build the extension for Firefox:
+
+   ```bash
+   npm run build:watch:firefox
+   ```
+
+2. Navigate to `about:debugging` in your address bar. This will open the add-on debugging page
+3. Click “This Firefox”
+4. Click “Load Temporary Add-on”
+5. Open the `build` folder of your local repository and open the `manifest.json` file
 
 You will now have your local build of the browser extension installed.
 
@@ -185,14 +206,11 @@ The easiest way to develop the extension is to build and debug it using Xcode.
 1. Build the extension:
 
    ```bash
-   npm run build:watch
+   npm run build:watch:safari
    ```
 
-2. Edit `build/manifest.json`. Move the `nativeMessaging` permission from the `optional_permissions`
-   section into the `permissions` section
-3. Edit `build/index.html`, replace `<html class="__BROWSER__">` to `<html class="browser_safari">`.
-4. Open `src/safari/desktop.xcodeproj` in Xcode
-5. Run the "desktop" target.
+2. Open `src/safari/desktop.xcodeproj` in Xcode
+3. Run the "desktop" target.
 
 :::note
 
@@ -210,7 +228,7 @@ the extension for every change, which is slower.
 1.  Build the extension for Safari
 
     ```bash
-    npm run dist:safari:dmg
+    npm run dist:safari
     ```
 
 2.  Open Safari and check Settings to confirm that the extension is installed and enabled
@@ -233,14 +251,14 @@ right-clicking it while it is open and clicking "Inspect Element".
 
 This should be enough for most debugging and testing, unless you're working in native code.
 
-<bitwarden>
+<Bitwarden>
 
 :::info
 
 [Deploying](https://bitwarden.atlassian.net/wiki/spaces/EN/pages/166396366/Deploying) has more
-information about building, packing and signing the MacOS Desktop client, including the Browser
+information about building, packing and signing the macOS Desktop client, including the Browser
 extension. It may be useful for debugging if you’re having difficulty.
 
 :::
 
-</bitwarden>
+</Bitwarden>

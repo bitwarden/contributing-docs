@@ -108,28 +108,35 @@ transformed$ = observable$.pipe(map(transform));
 </div>
 ```
 
-### Unsubscribe using `takeUntil`
+### Unsubscribe using `takeUntilDestroyed`
 
 Dangling subscriptions are a common cause of memory leaks. To avoid this we use the
 [`prefer-takeUntil`](https://github.com/cartant/eslint-plugin-rxjs-angular/blob/main/docs/rules/prefer-takeuntil.md)
-rule. Which requires that any subscription is first piped through a `takeUntil` operator.
+rule. Which requires that any subscription is first piped through a
+[`takeUntilDestroyed`](https://angular.io/api/core/rxjs-interop/takeUntilDestroyed) operator.
 
 The main benefit of the `takeUntil` pattern is that reviewers can at a quick glance verify the
 subscription is cleaned up.
 
 ```ts
-private destroy = new Subject<void>();
+constructor() {
+  // takeUntilDestroyed must be called from an injector context
+  this.observable$
+    .pipe(takeUntilDestroyed())
+    .subscribe(value => console.log);
+}
+```
+
+When not called from an injector context, you can pass the `DestroyRef` as an argument.
+
+```ts
+constructor(private destroyRef: DestroyRef){}
 
 ngOnInit() {
   this.observable$
-    .pipe(takeUntil(this.destroy$))
-    // This subscription will automatically be cleaned up when `this.destroy$` emits.
+    .pipe(takeUntilDestroyed(this.destroyRef))
+    // This subscription will automatically be cleaned up when the component is destroyed
     .subscribe(value => console.log);
-}
-
-ngOnDestroy() {
-  this.destroy.next();
-  this.destroy.complete();
 }
 ```
 
@@ -151,3 +158,92 @@ Some appropriate operators are:
   consider carefully if this is the right operator for your use case. mergeMap will flatten
   observables but not care about the order. If ordering is important use `concatMap`. If you only
   care about the latest value use `switchMap`.
+
+## Import statements
+
+We have a couple of guidelines for import statements, which are enforced using the eslint rules
+[`no-restricted-imports`](https://eslint.org/docs/latest/rules/no-restricted-imports),
+[`import/order`](https://github.com/import-js/eslint-plugin-import/blob/main/docs/rules/order.md),
+and
+[`import/no-restricted-paths`](https://github.com/import-js/eslint-plugin-import/blob/main/docs/rules/no-restricted-paths.md).
+
+These rules aim to:
+
+- Prevent relative imports across package boundaries.
+- Restrict packages from importing application specific code.
+- Enforce a convention for the order of import statements.
+
+### Imports within the same package
+
+Use relative imports when importing within the same package. For example, `MyNewService` and
+`LogService` are both in the `@bitwarden/common` package.
+
+```typescript
+import { LogService } from "../../abstractions/log.service";
+
+export class MyNewService {}
+```
+
+### Imports from different packages
+
+For imports from different packages, use absolute imports. For example `DifferentPackageService` is
+not in `@bitwarden/common` and needs to import `LogService` from `@bitwarden/common`.
+
+```typescript
+import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
+
+export class DifferentPackageService {}
+```
+
+## Enum-likes ([ADR-0025](../../architecture/adr/0025-ts-deprecate-enums.md))
+
+For general guidance on enum-likes, consult [Avoid TypeScript Enums](./enums.md).
+
+### String-backed Enum-likes
+
+String-typed enum likes can be used as inputs of a component directly. Simply expose the enum-like
+property from your component:
+
+```ts
+// given:
+const EnumLike = { Some: "some", Value: "value" };
+type EnumLike = EnumLike[keyof typeof EnumLike];
+
+// add the input:
+@Component({ ... })
+class YourComponent {
+   @Input() input: EnumLike = EnumLike.Some;
+
+   // ...
+}
+```
+
+Composers can use the enum's string values directly:
+
+```html
+<my-component input="value" />
+```
+
+### Numeric Enum-likes
+
+Using numeric enum-likes in components should be avoided. If it is necessary, follow the same
+pattern as a string-backed enum.
+
+Composers that need hard-coded enum-likes in their template should expose the data from their
+component:
+
+```ts
+import { EnumLike } from "...";
+
+// add the input to your component:
+@Component({ ... })
+class TheirComponent {
+   protected readonly EnumLike = EnumLike;
+}
+```
+
+And then bind the input in the template:
+
+```ts
+<my-component [input]='EnumLike.Value' />
+```

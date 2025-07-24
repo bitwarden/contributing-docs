@@ -1,6 +1,6 @@
 ---
 adr: "0014"
-status: In progress
+status: Accepted
 date: 2022-09-02
 tags: [clients, typescript]
 ---
@@ -144,5 +144,24 @@ https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Null
 const foo = null ?? "default string";
 ```
 
+#### Use `!` on required `@Input` parameters
+
+Typescript's property initialization has no knowledge of Angular's guarantees. That means that
+
+```ts
+@Input({ required: true }) options: WebAuthnOptions;
+```
+
+will error as `options` is not initialized in the constructor. The suggested fix is to use the
+non-null assert operator, `!`.
+
+```ts
+@Input({ required: true }) options!: WebAuthnOptions;
+```
+
+Once [required input signals][requiredInputs] are out of dev preview for us (Angular 19), we can
+transition to using them and initialize these kinds of parameters in the class body or constructor.
+
 [null]: https://www.typescriptlang.org/tsconfig#strictNullChecks
 [plugin]: https://github.com/allegro/typescript-strict-plugin
+[requiredInputs]: https://angular.dev/guide/components/inputs#required-inputs

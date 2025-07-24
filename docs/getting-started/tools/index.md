@@ -7,7 +7,7 @@ sidebar_position: 1
 ## Operating System
 
 All Bitwarden developers are issued with a MacBook. The tooling recommendations and instructions in
-this documentation assume that you’re using MacOS. This may require some adaptation if you’re using
+this documentation assume that you’re using macOS. This may require some adaptation if you’re using
 a different operating system.
 
 ## Recommended tools
@@ -20,8 +20,8 @@ environment.
 
 - [Visual Studio Code](https://code.visualstudio.com/) - used for all Typescript projects.
   Suboptimal for C#. Be sure to install [extensions](#visual-studio-code-extensions)
-- [Visual Studio for Mac](https://visualstudio.microsoft.com/vs/mac/) - Pretty good at C# (Server
-  and Mobile)
+- [JetBrains Rider](https://www.jetbrains.com/rider/download/) - fully featured IDE for C#, .NET &
+  more. Bitwarden developers should contact IT for a license
 - [Xcode](https://developer.apple.com/xcode/) - required for iOS Mobile development and Safari web
   extension
 
@@ -33,11 +33,14 @@ environment.
   scenarios. You can also use multiple browsers to have different browser extension version
   installed to compare them.
 - [Docker](https://docs.docker.com/get-docker/) - required for server development only
+- [.NET SDK](https://dotnet.microsoft.com/download) - required for server and other backend
+  development environments
 - [PowerShell](https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell-core-on-macos)
   (available via Homebrew: `brew install powershell`)
-- [NodeJS](https://nodejs.org/) v18 (preferably using a [node version manager][nvm])
-- [NPM](https://www.npmjs.com/) v9 (included with Node)
-- [Rust](https://www.rust-lang.org/tools/install) - Used for native desktop components
+- [NodeJS](https://nodejs.org/) v20 (preferably using a [node version manager][nvm])
+- [NPM](https://www.npmjs.com/) v10 (included with Node)
+- [Rust](https://www.rust-lang.org/tools/install) latest stable version - (preferably installed via
+  [rustup](https://rustup.rs/))
 - [Git](https://git-scm.com)
   - [Commit signing](../../contributing/commit-signing.mdx) is strongly recommended
 
@@ -51,15 +54,13 @@ environment.
 
 ### Databases
 
-- [Azure Data Studio](https://docs.microsoft.com/en-us/sql/azure-data-studio/download-azure-data-studio)
-  for working with your local SQL Server
+- [MSSQL VSCode Extension](https://marketplace.visualstudio.com/items?itemName=ms-mssql.mssql) for
+  working with your local SQL Server
 - [PgAdmin4](https://www.pgadmin.org/) - Useful for fiddling with PostgreSQL db
 - [MySQLWorkbench](https://www.mysql.com/products/workbench/) - Useful for fiddling with MySQL db
 - [SQLiteStudio](https://www.sqlitestudio.pl/) - Useful for fiddling with SQLite db
 
 ### Visual Studio Code Extensions
-
-Visual Studio Code Extensions
 
 There are some vs code extensions that are life-savers in our line of work. A list of highly
 recommended ones include the following:
@@ -110,8 +111,6 @@ recommended ones include the following:
 
 The following tools may be useful depending on your preferences or what you’re developing.
 
-- [JetBrains Rider](https://www.jetbrains.com/rider/) ($) - an alternative to Visual Studio and/or
-  Visual Studio Code
 - [Microsoft Azure Storage Explorer](https://azure.microsoft.com/en-us/features/storage-explorer/) -
   for connecting to or working with local Azure table storage and queues
 - [Parallels](https://www.parallels.com/) - For running Windows VMs

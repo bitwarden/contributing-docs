@@ -1,6 +1,6 @@
 ---
 adr: "0019"
-status: In progress
+status: Accepted
 date: 2023-02-06
 tags: [server, clients, browser, notifications]
 ---
@@ -120,7 +120,7 @@ be considered while migrating compatible clients to the new provider to provide 
 potentially-sensitive payload contents.
 
 [signalr]: https://dotnet.microsoft.com/en-us/apps/aspnet/signalr
-[notifications]: https://github.com/bitwarden/server/tree/master/src/Notifications
+[notifications]: https://github.com/bitwarden/server/tree/main/src/Notifications
 [podlife]: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/
 [mv3]: https://developer.chrome.com/docs/extensions/mv3/intro/
 [hubspricing]: https://azure.microsoft.com/en-us/pricing/details/notification-hubs/

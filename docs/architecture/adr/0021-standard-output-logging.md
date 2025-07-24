@@ -1,6 +1,6 @@
 ---
 adr: "0021"
-status: In progress
+status: Accepted
 date: 2023-07-13
 tags: [server]
 ---
@@ -45,9 +45,17 @@ Chosen option: **Consolidate logging providers**.
 
 Given long-term plans to adopt a more flexible shared (hosting extensions) library that can be used
 across services either as a project (server monolith) reference or NuGet package (and as a reference
-architecture), using Serilog as a way to extend native logging capabilities is beneficial. Details
-around how Serilog is implemented along with its advanced inputs and outputs can be extracted away
-into the shared library and driven at consuming applications via configuration.
+architecture), using `Microsoft.Extensions.Logging` as the core way to do logging is beneficial. The
+out-of-the-box defaults are generally good enough for local and self-hosted usage. Our shared
+library will be able to have automatic defaults for our cloud usage though, namely using JSON
+logging along with including scopes. It also gives us a built-in way to be able to override any of
+these details through any of our configuration providers.
+
+We will continue to offer file based logging through Serilog but will be able to reduce our NuGet
+packages to only `Serilog.Extensions.Logging.File`. In an effort to reduce our own upkeep and allow
+maximal customization we will be deprecating the log settings in `GlobalSettings`; instead we will
+refer to [`Serilog` documentation][serilogconfig] to offer both more options and more standard
+naming.
 
 ### Positive Consequences
 
@@ -56,6 +64,9 @@ into the shared library and driven at consuming applications via configuration.
 - Elimination of several third-party dependencies and their maintenance, as well as global settings.
 - No new dependencies that are merely aligned with the Bitwarden-specific cloud and its service
   providers.
+- Allow self-host customers to configure the console log format.
+- Not require any new configuration for our cloud that is currently using
+  `Microsoft.Extensions.Logging`.
 
 ### Negative Consequences
 
@@ -72,13 +83,16 @@ be removed:
 - Sentry
 - Syslog
 
-The remaining sinks -- core functionality of Serilog -- will continue to be supported:
+The `File` sink will continue to be supported with the following configuration layout:
 
-- Console
-- File
-
-While the Serilog [console sink][serilogconsole] is currently an implicit dependency with what's
-provided for ASP.NET Core, it will be explicitly referenced.
+```json
+{
+  "Logging": {
+    "PathFormat": "logs/{Date}.txt",
+    "FileSizeLimitBytes": 4096
+  }
+}
+```
 
 Solutions exist for users to shift processing of logs for the removed sinks to standard output or
 file and retain their integration. Admin Portal users can similarly continue to use CosmosDb for log
@@ -87,34 +101,36 @@ should in essentially all cases be able to receive and process standard output l
 
 Cloud installations -- including Bitwarden's own -- will shift to configuration via environment
 variables or otherwise to utilize structured standard output logs for processing explicitly with
-[Serilog configuration][serilogconfig] e.g.:
+[`Microsoft.Extensions.Logging` configuration][melconfig] this will also allow online updates if the
+configuration is done through a provider that supports change detection e.g.:
 
 ```json
 {
-  "Serilog": {
-    "Using": ["Serilog.Sinks.Console"],
-    "MinimumLevel": "Verbose",
-    "WriteTo": [{ "Name": "Console" }],
-    "Enrich": ["FromLogContext"],
-    "Properties": {
-      "Project": "BitwardenProjectName"
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information"
+    },
+    "Console": {
+      "FormatterName": "json",
+      "FormatterOptions": {
+        "SingleLine": true,
+        "IncludeScopes": true,
+        "TimestampFormat": "HH:mm:ss ",
+        "UseUtcTimestamp": true,
+        "JsonWriterOptions": {
+          "Indented": true
+        }
+      }
     }
   }
 }
 ```
 
-This will allow better usage of `appsettings.json` and a richer developer experience. Existing
-built-in [.NET Core logging][netcorelogging] will continue to be available if desired, but the
-recommendation will be to move to a Serilog configuration.
-
 Code cleanup will be performed around Serilog usage, such as:
 
 - Removal of overuse of inclusion predicates that complicate (or sometimes block) effective log
   output, for example in the uses of `AddSerilog` in place today at each consuming application.
-- Alignment with .NET Core and Serilog best practices on [initialization][seriloginit] and usage of
-  Serilog itself.
-- Improvements in logging initialization reliability and working with configuration issues, as well
-  as more resilient tear-down when a component stops / ends.
+- Reading file sink config from the `Logging` configuration section.
 - Removal of the above-deprecated sinks, in the final release of the support window.
 
 Logging functionality will be moved to a new shared library -- separate from the core project -- as
@@ -125,7 +141,7 @@ benefits.
 [serilog]: https://serilog.net/
 [dd]: https://www.datadoghq.com/
 [ddsink]: https://www.nuget.org/packages/serilog.sinks.datadog.logs
-[serilogconsole]: https://www.nuget.org/packages/serilog.sinks.console
-[serilogconfig]: https://www.nuget.org/packages/Serilog.Settings.Configuration/
-[netcorelogging]: https://learn.microsoft.com/en-us/dotnet/core/extensions/logging
-[seriloginit]: https://github.com/serilog/serilog-aspnetcore#two-stage-initialization
+[serilogconfig]:
+  https://github.com/serilog/serilog-extensions-logging-file?tab=readme-ov-file#appsettingsjson-configuration
+[melconfig]:
+  https://learn.microsoft.com/en-us/dotnet/core/extensions/logging?tabs=command-line#configure-logging

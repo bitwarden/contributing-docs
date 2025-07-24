@@ -1,6 +1,6 @@
 ---
 adr: "0018"
-status: Done
+status: Accepted
 date: 2023-02-01
 tags: [server]
 ---
@@ -62,10 +62,11 @@ upon startup, login, when their local configuration is updated, and when sync ev
 
 Contexts will be established that communicate to the API using supported clients. Said contexts will
 be available within the service provider for specific targeting as desired. Contexts will be
-established for the user, organization, and service account, with unique IDs for the entity as a key
-and other details as needed. Context attributes when needed can be marked as private to avoid
-spillover to the service provider, and the provider will be added if needed to the [subprocessor
-list][subprocessors] with respective communication should PII be used.
+established for the user, organization, and machine account (previously known as service account),
+with unique IDs for the entity as a key and other details as needed. Context attributes when needed
+can be marked as private to avoid spillover to the service provider, and the provider will be added
+if needed to the [subprocessor list][subprocessors] with respective communication should PII be
+used.
 
 Compile-time configuration will be converted wherever possible to use the feature management service
 provider. SDK access to the service provider will be segmented by environment; some features may
