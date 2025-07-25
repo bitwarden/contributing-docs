@@ -148,12 +148,8 @@ own key definition.
 
 ### `StateProvider`
 
-`StateProvider` is an injectable service that includes 3 methods for getting state. These three
-methods are helpers for invoking their more modular siblings `SingleUserStateProvider.get`,
-`GlobalStateProvider.get`, and `DerivedStateProvider`. These siblings can all be injected into your
-service as well. If you prefer thin dependencies over the slightly larger changeset required, you
-can absolutely make use of the more targeted providers. `StateProvider` has the following type
-definition (aliasing the targeted providers):
+`StateProvider` is an injectable service that includes four methods for getting state, expressed in
+the type definition below:
 
 ```typescript
 interface StateProvider {
@@ -168,6 +164,18 @@ interface StateProvider {
   getActive<T>(keyDefinition: KeyDefinition<T>): ActiveUserState<T>;
 }
 ```
+
+These methods are helpers for invoking their more modular siblings `SingleUserStateProvider.get`,
+`GlobalStateProvider.get`, `DerivedStateProvider`, and `ActiveUserStateProvider.get`. These siblings
+can all be injected into your service as well. If you prefer thin dependencies over the slightly
+larger changeset required, you can absolutely make use of the more targeted providers.
+
+:::warning `ActiveUserState` is deprecated
+
+The `ActiveUserStateProvider.get` and its helper `getActive<T>` are deprecated. See
+[here](#should-i-use-activeuserstate) for details.
+
+:::
 
 You will most likely use `StateProvider` in a domain service that is responsible for managing the
 state, with the state values being scoped to a single user. The `StateProvider` should be injected
@@ -203,7 +211,7 @@ interface GlobalState<T> {
 }
 ```
 
-The `state$` property provides you with an `Observable<T>` that can be subscribed to.
+The `state$` property provides you with an `Observable<T | null>` that can be subscribed to.
 `GlobalState<T>.state$` will emit when the chosen storage location emits an update to the state
 defined by the corresponding `KeyDefinition`.
 
@@ -213,7 +221,7 @@ defined by the corresponding `KeyDefinition`.
 user-scoped with a `UserKeyDefinition`. The `UserId` for the state's user exposed as a `readonly`
 member.
 
-The `state$` property provides you with an `Observable<T>` that can be subscribed to.
+The `state$` property provides you with an `Observable<T | null>` that can be subscribed to.
 `SingleUserState<T>.state$` will emit when the chosen storage location emits an update to the state
 defined by the corresponding `UserKeyDefinition` for the requested `userId`.
 
@@ -229,8 +237,8 @@ to be active at the time of the update.
 
 :::warning
 
-`ActiveUserState` has race condition problems. Do not use it for updates and consider transitioning
-your code to SingleUserState instead. [Read more.](#should-i-use-activeuserstate)
+`ActiveUserState` has race condition problems. Do not add usages and consider transitioning your
+code to SingleUserState instead. [Read more.](#should-i-use-activeuserstate)
 
 :::
 
@@ -265,9 +273,9 @@ that the update has taken place before the `firstValueFrom()` executes, in which
 Use of `firstValueFrom()` should be avoided. If you find yourself trying to use `firstValueFrom()`,
 consider propagating the underlying observable instead of leaving reactivity.
 
-If you do need to obtain the result of an update in a non-reactive way, you should use the result
-returned from the `update()` method. This should be used instead of immediately re-requesting the
-value through `firstValueFrom()`. The `update()` will return the value that will be persisted to
+If you do need to obtain the result of an update in a non-reactive way, you should use the result  
+returned from the `update()` method. The `update()` will return the value that will be persisted
+to  
 state, after any `shouldUpdate()` filters are applied.
 
 :::
@@ -350,7 +358,7 @@ However, this implementation has a few subtle issues that the `combineLatestWith
 - The use of `firstValueFrom` with no `timeout`. Behind the scenes we enforce that the observable
   given to `combineLatestWith` will emit a value in a timely manner, in this case a `1000ms`
   timeout, but that number is configurable through the `msTimeout` option.
-- We don't guarantee that your `updateState` function is called the instant that the `update` method
+- We don't guarantee that your `updateState` callback is called the instant that the `update` method
   is called. We do, however, promise that it will be called before the returned promise resolves or
   rejects. This may be because we have a lock on the current storage key. No such locking mechanism
   exists today but it may be implemented in the future. As such, it is safer to use
@@ -380,6 +388,33 @@ await this.activeAccountIdState.update(
     },
   },
 );
+```
+
+`combineLatestWith` can also be used to handle updates where either the new value depends on `async`
+code or you prefer to handle generation of a new value in an observable transform flow:
+
+```typescript
+const state = this.stateProvider.get(userId, SavedFiltersStateDefinition);
+
+const transform: OperatorFunction<any, any> = pipe(
+  // perform some transforms
+  map((value) => value),
+);
+
+async function transformAsync<T>(value: T) {
+  return Promise.resolve(value);
+}
+
+await state.update((_, newState) => newState, {
+  // Actual processing to generate the new state is done here
+  combineLatestWith: state.state$.pipe(
+    mergeMap(async (old) => {
+      return await transformAsync(old);
+    }),
+    transform,
+  ),
+  shouldUpdate: (oldState, newState) => !areEqual(oldState, newState),
+});
 ```
 
 #### Conditions under which emission not guaranteed after `update()`
