@@ -468,3 +468,27 @@ or it cannot handle some closure types, specially in function's parameters. In s
 create the mock manually and remove the protocol's comment as `AutoMockable`.
 
 :::
+
+#### Custom annotations
+
+Sourcery allows us to annotate different parts of our code to guide code generation. On top of this
+custom annotations have been added in `AutoMockable.stencil` to handle special cases.
+
+- **useSelectorName**: Method annotation used to indicate that the generated mocked properties need
+  to use the selector name instead of the short method name. This is specially useful when using
+  function overloading where we need the mocked names to also have the parameters names to
+  differentiate between the different mocked functions.
+- **mockReceivedInvocations**: Method annotation used to indicate that we want to generate the
+  mocked property to store an array of the received invocations of the parameters passed each time
+  the function is called.
+
+For example:
+
+```swift
+protocol FooProtocol { // sourcery: AutoMockable
+    func bar(fooParameter: String) -> Bool
+    func bar(anotherParameter: Int) -> Bool // sourcery: useSelectorName
+    func saveNumber(theNumber: Int) -> Bool // sourcery: mockReceivedInvocations
+    func annotateMultiple(fooParameter: String) // sourcery: useSelectorName, mockReceivedInvocations
+}
+```
