@@ -72,3 +72,60 @@ The pipeline uses environment variables. An example entry you might add is:
 BW_TEST_DATABASES__0__TYPE: SqlServer
 BW_TEST_DATABASES__0__CONNECTIONSTRING: myConnectionString
 ```
+
+## Testing data migrations
+
+When you need to test a specific database migration, you can use the
+[`MigrationName`](https://github.com/bitwarden/server/blob/021e69bc5dfea8be3b74f7a046a1cd48a206a712/test/Infrastructure.IntegrationTest/DatabaseDataAttribute.cs#L21)
+property of the `[DatabaseData]` attribute. This allows you to apply and verify the data migration
+across all configured database providers.
+
+:::note
+
+This is meant for testing data migrations only. It assumes your database schema is already fully
+up-to-date. After setting up your test data, it re-runs the specified migration to verify how it
+transforms the data. It will not work for schema-only migrations.
+
+:::
+
+### Using `MigrationName`
+
+To test a migration, set the `MigrationName` property on the `[DatabaseData]` attribute and inject
+`IMigrationTesterService`:
+
+```csharp
+[DatabaseTheory, DatabaseData(MigrationName = "ExampleDataMigration")]
+public async Task TestExampleDataMigration(
+    IMigrationTesterService migrationTester,
+    IOrganizationRepository organizationRepository)
+{
+    // Arrange: Set up data before migration
+    var org = await organizationRepository.CreateAsync(new Organization
+    {
+        Name = "Test Org",
+        Plan = "Enterprise"
+    });
+
+    // Act: Apply the migration
+    migrationTester.ApplyMigration();
+
+    // Assert: Verify the results after migration
+    var updatedOrg = await organizationRepository.GetByIdAsync(org.Id);
+    // Add assertions here to verify migration effects
+}
+```
+
+### Migration naming conventions
+
+The `MigrationName` must correspond to migrations in all supported databases:
+
+- **SQL Server**: Must match a file in `util/Migrator/DbScripts/` ending in `<MigrationName>.sql`
+  Example: `MigrationName = "ExampleDataMigration"` for `2024-01-15_00_ExampleDataMigration.sql`
+- **Entity Framework**: Must match the EF migration class name
+
+### Best practices
+
+1. **Validate data migrations**: Ensure data is accurately transformed.
+2. **Use descriptive test names**: Make test names reflect the purpose and scope of the migration.
+3. **Remove after release**: These tests are short-lived and should be deleted after the migration
+   is deployed and verified in production (as part of EDD cleanup).

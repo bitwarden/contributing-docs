@@ -61,6 +61,8 @@ recompositions
 refactorings
 roadmap
 roadmaps
+rollout
+rollouts
 rustup
 sandboxed
 SARIF
@@ -85,6 +87,7 @@ typechecks
 typesafe
 WCAG
 Xcodes.app
+xcworkspace
 xmldoc
 Yellowpages
 Yubico
