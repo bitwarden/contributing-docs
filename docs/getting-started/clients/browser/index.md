@@ -125,10 +125,16 @@ Once configured, your local Custom Environment should look like this:
 
 To load the browser extension build:
 
-1.  Navigate to `chrome://extensions` in your address bar. This will open the extensions page
-2.  Enable “developer mode” (toggle switch)
-3.  Click the “Load unpacked” button
-4.  Open the `build` folder of your local repository and confirm your choice
+1. Build the extension for Chrome:
+
+   ```bash
+   npm run build:watch
+   ```
+
+2. Navigate to `chrome://extensions` in your address bar. This will open the extensions page
+3. Enable “developer mode” (toggle switch)
+4. Click the “Load unpacked” button
+5. Open the `build` folder of your local repository and confirm your choice
 
 You will now have your local build of the browser extension installed.
 
@@ -140,10 +146,16 @@ it is open and clicking “Inspect”.
 
 To load the browser extension build:
 
-1.  Navigate to `about:debugging` in your address bar. This will open the add-on debugging page
-2.  Click “This Firefox”
-3.  Click “Load Temporary Add-on”
-4.  Open the `build` folder of your local repository and open the `manifest.json` file
+1. Build the extension for Firefox:
+
+   ```bash
+   npm run build:watch:firefox
+   ```
+
+2. Navigate to `about:debugging` in your address bar. This will open the add-on debugging page
+3. Click “This Firefox”
+4. Click “Load Temporary Add-on”
+5. Open the `build` folder of your local repository and open the `manifest.json` file
 
 You will now have your local build of the browser extension installed.
 
@@ -216,7 +228,7 @@ the extension for every change, which is slower.
 1.  Build the extension for Safari
 
     ```bash
-    npm run dist:safari:dmg
+    npm run dist:safari
     ```
 
 2.  Open Safari and check Settings to confirm that the extension is installed and enabled

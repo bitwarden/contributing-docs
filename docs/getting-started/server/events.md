@@ -59,79 +59,12 @@ To use database storage for events:
 
 Events can be distributed via an AMQP messaging system. This messaging system enables new
 integrations to subscribe to the events. The system supports either RabbitMQ or Azure Service Bus.
+For a detailed look at the architecture and technical details, see
+[the documentation in the server repo](https://github.com/bitwarden/server/tree/6800bc57f3eb492222e128cffcd00e16b29cc155/src/Core/AdminConsole/Services/Implementations/EventIntegrations).
 
-### Listener / Handler pattern
+### RabbitMQ
 
-The goal of moving to distributed events is to build additional service integrations that consume
-events. To make it easy to support multiple AMQP services (RabbitMQ and Azure Service Bus), the act
-of listening to the stream of events is decoupled from the act of responding to an event.
-
-**Listeners**
-
-- One listener per communication platform (e.g. one for RabbitMQ, one for Azure Service Bus).
-- Multiple instances can be configured to run independently, each with its own handler and
-  subscription / queue.
-- Perform all the aspects of setup / teardown, subscription, etc. for the messaging platform, but do
-  not directly process any events themselves. Instead, they delegate to the handler with which they
-  are configured.
-
-**Handlers**
-
-- One handler per integration (e.g. HTTP post or event database repository).
-- Completely isolated from and know nothing of the messaging platform in use. This allows them to be
-  freely reused across different communication platforms.
-- Perform all aspects of handling an event.
-- Allows them to be highly testable as they are isolated and decoupled from the more complicated
-  aspects of messaging.
-
-This combination allows for a configuration inside of `Startup.cs` that pairs instances of the
-listener service for the currently running messaging platform with any number of handlers. It also
-allows for quick development of new handlers as they are focused only on the task of handling a
-specific event.
-
-### RabbitMQ implementation
-
-The RabbitMQ implementation adds a step that refactors the way events are handled when running
-locally or self-hosted. Instead of writing directly to the `Events` table via the
-`EventsRepository`, each event is broadcast to a RabbitMQ exchange. A new
-`RabbitMqEventListenerService` instance, configured with an `EventRepositoryHandler`, subscribes to
-the RabbitMQ exchange and writes to the `Events` table via the `EventsRepository`. The end result is
-the same (events are stored in the database), but the addition of the RabbitMQ exchange allows for
-other integrations to subscribe.
-
-To illustrate the ability to fan-out events, a `RabbitMqEventListenerService` instance, configured
-with a `WebhookEventHandler` subscribes to the RabbitMQ events exchange and `POST`s each event to a
-configurable URL. This is meant to be a simple, concrete example of how multiple integrations are
-enabled by moving to distributed events.
-
-```kroki type=mermaid
-graph TD
-	  subgraph With RabbitMQ
-        B1[EventService]
-        B2[RabbitMQEventWriteService]
-        B3[RabbitMQ exchange]
-        B4[EventRepositoryHandler]
-        B5[WebhookEventHandler]
-        B6[Events Database Table]
-        B7[HTTP Server]
-
-        B1 -->|IEventWriteService| B2 --> B3
-        B3-->|RabbitMqEventListenerService| B4 --> B6
-        B3-->|RabbitMqEventListenerService| B5
-        B5 -->|HTTP POST| B7
-    end
-
-    subgraph Without RabbitMQ
-        A1[EventService]
-        A2[RepositoryEventWriteService]
-        A3[Events Database Table]
-
-        A1 -->|IEventWriteService| A2 --> A3
-
-end
-```
-
-#### Running the RabbitMQ container
+#### Running the RabbitMQ container (default using fixed-delay queues)
 
 1.  Verify that you've set a username and password in the `.env` file (see `.env.example` for an
     example)
@@ -149,6 +82,36 @@ end
 3.  To verify this is running, open `http://localhost:15672` in a browser and login with the
     username and password in your `.env` file.
 
+#### Running the RabbitMQ container (with optional delay plugin)
+
+The standard installation of RabbitMQ does not support delaying message delivery. Our default option
+instead uses retry queues with a fixed amount of delay and checks the `DelayUntilDate` in each
+message to see if it is time for them to br processed. This provides the delay needed for retries
+(with backoff and jitter applied), but it does require more processing.
+
+As an alternate approach, we have support for RabbitMQ's optional delay plugin - which does support
+adding a precise delay to a message and handles publishing at the specified time. It does require
+the plugin to be installed and enabled before running and is therefore not the default setup. To
+enable the plugin:
+
+1.  Download the latest version of the
+    [RabbitMQ delay plugin GitHub repo](https://github.com/rabbitmq/rabbitmq-delayed-message-exchange).
+2.  Add the plugin to your RabbitMQ instance. The easiest way to do this is to add the following
+    line to Docker compose, under the `volumes:`. This puts the binary into the container that
+    Docker spins up.
+
+```
+  -  ./rabbitmq_delayed_message_exchange-4.1.0.ez:/opt/rabbitmq/plugins/rabbitmq_delayed_message_exchange-4.1.0.ez
+```
+
+3.  Build/rebuild your RabbitMQ instance with this in place to enable the ability to use the delay
+    plugin.
+4.  If you have previously created the Integration exchange, you have to delete it and let the
+    server code recreate it (Rabbit will use the existing exchange without delay enabled if it
+    already exists).
+5.  Restart the servers and verify that the exchange was created successfully.
+6.  Turn on the `useDelayPlugin` flag in secrets and push that out to the servers (see below)
+
 #### Configuring the server to use RabbitMQ for events
 
 1.  Add the following to your `secrets.json` file, changing the defaults to match your `.env` file:
@@ -161,75 +124,33 @@ end
         "password": "SET_A_PASSWORD_HERE_123",
         "exchangeName": "events-exchange",
         "eventRepositoryQueueName": "events-write-queue",
+        "slackQueueName": "events-slack-queue",
         "webhookQueueName": "events-webhook-queue",
+        "useDelayPlugin": false
       }
-      "webhookUrl": "<HTTP POST URL>",
     }
     ```
 
-2.  (optional) The `webhookQueueName` and `webhookUrl` specified above are optional. If they are
-    defined, a `WebhookEventHandler` will be added to a `RabbitMqEventListenerService` instance that
-    will `POST` the event to the configured URL.
-
     :::info
 
-    [RequestBin](http://requestbin.com/) provides an easy to set up server that will receive these
-    requests and let you inspect them.
+    The `slackQueueName` and `webhookQueueName` specified above are optional. If they are not
+    defined, the system will use the above default names.
 
     :::
 
-3.  Re-run the PowerShell script to add these secrets to each Bitwarden project:
+2.  Re-run the PowerShell script to add these secrets to each Bitwarden project:
 
     ```bash
     pwsh setup_secrets.ps1
     ```
 
-4.  Start (or restart) all of your projects to pick up the new settings
+3.  Start (or restart) all of your projects to pick up the new settings
 
 With these changes in place, you should see the database events written as before, but you'll also
 see in the RabbitMQ management interface that the messages are flowing through the configured
 exchange/queues.
 
-### Azure Service Bus implementation
-
-The Azure Service Bus implementation is a configurable replacement for Azure Queue. Instead of
-writing Events to the queue to be picked up, they are sent to the configured service bus topic. An
-instance of `AzureServiceBusEventListenerService` is then configured with the
-`AzureTableStorageEventHandler` to subscribe to that topic and write Events to Azure Table Storage.
-Similar to RabbitMQ above, the end result is the same (events are stored in Azure Table Storage),
-but the addition of the service bus topic allows for other integrations to subscribe.
-
-As with the RabbitMQ implementation above, a `WebhookEventHandler` can be configured to run and POST
-events to a URL via a separate subscription.
-
-```kroki type=mermaid
-graph TD
-	  subgraph With Service Bus
-        B1[EventService]
-        B2[AzureServiceBusEventWriteService]
-        B3[Azure Service Bus Topic]
-        B4[AzureTableStorageEventHandler]
-        B5[WebhookEventHandler]
-        B6[Events in Azure Tables]
-        B7[HTTP Server]
-
-        B1 -->|IEventWriteService| B2 --> B3
-        B3-->|AzureServiceBusEventListenerService| B4 --> B6
-        B3-->|AzureServiceBusEventListenerService| B5
-        B5 -->|HTTP POST| B7
-    end
-
-    subgraph With Storage Queue
-        A1[EventService]
-        A2[AzureQueueHostedService]
-        A3[Azure Storage Queue]
-        A4[AzureQueueHostedService]
-        A5[Events in Azure Tables]
-
-        A1 -->|IEventWriteService| A2 --> A3 -->|RepositoryEventWriteService| A4 --> A5
-
-end
-```
+### Azure Service Bus
 
 #### Running the Azure Service Bus emulator
 
@@ -240,70 +161,44 @@ end
 
 2. Run Docker Compose to add/start the local emulator:
 
-```bash
-docker compose --profile servicebus up -d
-```
+   ```bash
+   docker compose --profile servicebus up -d
+   ```
 
-:::info
+   :::info
 
-The service bus emulator waits 15 seconds before starting. You can check the console in Docker
-desktop or run `docker logs service-bus` to verify the service is up before launching the server.
+   The service bus emulator waits 15 seconds before starting. You can check the console in Docker
+   desktop or run `docker logs service-bus` to verify the service is up before launching the server.
 
-:::
+   :::
 
 #### Configuring the server to use Azure Service Bus for events
 
 1. Add the following to your `secrets.json` in `dev` to configure the service bus:
 
-```json
-	"eventLogging": {
-	  "azureServiceBus": {
-		"connectionString": "\"Endpoint=sb://localhost;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=SAS_KEY_VALUE;UseDevelopmentEmulator=true;\"",
-		"topicName": "event-logging",
-		"eventRepositorySubscriptionName": "events-write-subscription",
-	  }
-	},
-```
+   ```json
+       "eventLogging": {
+         "azureServiceBus": {
+           "connectionString": "\"Endpoint=sb://localhost;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=SAS_KEY_VALUE;UseDevelopmentEmulator=true;\"",
+           "topicName": "event-logging",
+           "eventRepositorySubscriptionName": "events-write-subscription",
+           "slackSubscriptionName": "events-slack-subscription",
+           "webhookSubscriptionName": "events-webhook-subscription",
+         }
+       },
+   ```
+
+   :::info
+
+   The `slackSubscriptionName` and `webhookSubscriptionName` specified above are optional. If they
+   are not defined, the system will use the above default names.
+
+   :::
 
 2. Re-run the secrets script to publish the new secrets
-
-```bash
-pwsh setup_secrets.ps1 -clear
-```
-
-3. Start or re-start all services, including `EventsProcessor`.
-
-### Configuring the webhook (optional)
-
-1. Edit the `servicebusemulator_config.json` file to add a subscription to the main `event-logging`
-   topic:
-
-```json
-{
-  "Name": "events-webhook-subscription"
-}
-```
-
-2. Restart the server-bus container to pick up these changes
-
-3. Add the webhook subscription name and URL configuration to `secrets.json`
-
-```json
-  "eventLogging": {
-    "azureServiceBus": {
-    "connectionString": "\"Endpoint=sb://localhost;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=SAS_KEY_VALUE;UseDevelopmentEmulator=true;\"",
-    "topicName": "event-logging",
-    "eventRepositorySubscriptionName": "events-write-subscription",
-    "webhookSubscriptionName": "events-webhook-subscription"
-    },
-    "webhookUrl": "<Optional URL here>"
-  },
-```
-
-4. Publish the new secrets to the apps:
 
    ```bash
    pwsh setup_secrets.ps1 -clear
    ```
 
-5. Restart all services, including `EventsProcessor`
+3. Start or re-start all services, including `EventsProcessor`.

@@ -79,6 +79,9 @@ subprocessor
 toolset
 TOTP
 typealias
+typecheck
+typechecks
+typesafe
 WCAG
 Xcodes.app
 xmldoc

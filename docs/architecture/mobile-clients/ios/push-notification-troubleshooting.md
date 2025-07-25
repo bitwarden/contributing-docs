@@ -1,10 +1,4 @@
----
-sidebar_custom_props:
-  access: bitwarden
-sidebar_position: 2
----
-
-# iOS Push Notification Troubleshooting Tips
+# Push Notification Troubleshooting Tips
 
 ## Overview
 

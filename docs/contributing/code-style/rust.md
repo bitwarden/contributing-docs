@@ -24,9 +24,11 @@ Some scenarios where `expect` are allowed are:
 - Calling libraries that guarantee that the allowed inputs never results in `Err` or `None`.
 - Operating on slices or arrays where the index is guaranteed to be within bounds.
 
-## Discourage match
+## Pattern matching
 
-Rust often provide good alternatives to doing match on `Option` and `Result`.
+Rust provides a powerful pattern matching system that can be used for a variety of tasks. However,
+care should be taken to not rely overly on `match` statements. In many cases there are more concise
+and readable alternatives especially when working with `Option` and `Result`.
 
 ### if let
 
