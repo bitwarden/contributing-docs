@@ -150,18 +150,29 @@ sent to real email addresses. You can open its web interface at
 
 ### Azurite
 
-:::note
-
-This section applies to Bitwarden developers only.
-
-:::
-
 [Azurite](https://github.com/Azure/Azurite) is an emulator for Azure Storage API and supports Blob,
 Queues and Table storage. We use it to minimize the online dependencies required for developing in a
 cloud environment.
 
+:::note
+
+    To simplify emulation with Azurite:
+        - Visual Studio has support for Azurite built-in
+        - Visual Studio Code has an
+        [extension](https://marketplace.visualstudio.com/items?itemName=Azurite.azurite) for Azurite.
+        - Jetbrains Rider also offers Azurite support in its
+        [Azure toolkit plugin](https://plugins.jetbrains.com/plugin/11220-azure-toolkit-for-rider).
+
+:::
+
 To bootstrap the local Azurite instance, navigate to the `dev` directory in your server repo and run
 the following commands:
+
+:::info
+
+    The setup script should be ran regardless of how the emulation is being run. It allows for easy setup of containers, queues, and tables.
+
+:::
 
 1.  Install the `Az` module. This may take a few minutes to complete without providing any user
     feedback (it may appear frozen).
@@ -170,8 +181,18 @@ the following commands:
     pwsh -Command "Install-Module -Name Az -Scope CurrentUser -Repository PSGallery -Force"
     ```
 
-2.  Run the setup script:
+2.  Install Azurite (if it is not already installed with Visual Studio or through an extension or
+    plugin)
 
+    ```bash
+    npm install -g azurite
+    ```
+
+3.  Start Azurite
+    ```
+    azurite --silent --location c:\azurite --debug c:\azurite\debug.log
+    ```
+4.  Run the setup script:
     ```bash
     pwsh setup_azurite.ps1
     ```
@@ -265,6 +286,24 @@ You’ll need to re-run the migration helper script regularly to keep your local
 up-to-date. See [MSSQL Database](./database/mssql/index.md) for more information.
 
 :::
+
+<Community>
+
+## Install Licensing Certificate
+
+To run your local server environment as a licensed instance, you will need to install the
+certificates in the `Core` folder of the `server` repository `src/Core`. Double-click on the
+`licensing_dev.cer` and `licensing.cer` to install them.
+
+:::note
+
+Mac users: When prompted to save the certificates in Keychain Access be sure to select "Default
+Keychain > login" from the dropdown otherwise they will not be found when attempting to "Build and
+Run the Server".
+
+:::
+
+</Community>
 
 <Bitwarden>
 
