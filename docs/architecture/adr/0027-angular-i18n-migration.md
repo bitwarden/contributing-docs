@@ -1,7 +1,7 @@
 ---
 adr: "0027"
 status: Proposed
-date: 2025-01-08
+date: 2025-08-01
 tags: [clients, angular, i18n]
 ---
 
@@ -182,4 +182,4 @@ parallel and ideally offer automated migrations wherever possible.
 6. **Plan phased rollout**
    - starting with new features
    - then migrating area by area
-   - tackle any remaining usage
+   - lastly tackle any remaining usage
