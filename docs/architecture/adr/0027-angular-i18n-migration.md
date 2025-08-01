@@ -174,6 +174,8 @@ parallel and ideally offer automated migrations wherever possible.
    - `i18nService.t` to `$localize`
    - `<p>{{ 'templateString' | i18n }}</p>` to `<p i18n="@@templateString">A template string.</p>`
 
+   PoC: https://github.com/bitwarden/clients/tree/arch/localization-migrators
+
 3. **Add support for Angular Localization in parallel**
 4. **Evaluate content script integration** with `intl-messageformat` for non-Angular environments
 5. **Create migration guidelines** and documentation for development teams
