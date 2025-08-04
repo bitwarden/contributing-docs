@@ -53,7 +53,9 @@ individual `package.json` files.
 
 ### 5. Code Generation
 
-Nx ships with powerful tools for automating the creation of things like libraries.
+Nx ships with powerful tools for automating the creation of things like libraries. Bitwarden has a
+custom nx plugin containing some generators. More information about these can be read in the
+[`@bitwarden/nx-plugin` library docs](https://github.com/bitwarden/clients/blob/main/libs/nx-plugin/README.md).
 
 ## Key Nx Terminology
 
