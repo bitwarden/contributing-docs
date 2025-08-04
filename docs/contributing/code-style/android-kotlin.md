@@ -72,7 +72,6 @@ We will adhere to this order, but there are a few additions / modifications :
   alphabetization is a valid choice (though not required).
 
   Also please note the following:
-
   - Methods with certain "special modifiers" (`override`, `operator`, `abstact`, etc.) should come
     first and methods with the same modifiers should be grouped together. Certain types of
     annotations may also qualify as a "special modifier" (refer to existing library code).
@@ -684,7 +683,6 @@ specified) that has not already been mentioned in their specific sections above.
 
 - Functions should not intentionally throw exceptions! Any function that needs to represent the
   possibility of both a success and an error should either:
-
   - Return the [Result](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-result/) type.
   - Return a custom sealed class to model the possibilities.
   - Return a nullable value and clearly indicate a `null` represents an empty/failure state of some
@@ -693,7 +691,6 @@ specified) that has not already been mentioned in their specific sections above.
 - When it is absolutely required (such as when dealing with external libraries that throw) exception
   handling should be done _properly_ and _only when necessary_. This means that (except for rare
   cases):
-
   - Never catch `Exception` generically. Always catch the specific errors that are _known to be
     possible_:
 
