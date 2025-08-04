@@ -48,7 +48,6 @@ Admin Console → User Authentication → LDAP → [your LDAP server].
 - **This server pages search results:** [unchecked]
 
 - **This server uses an encrypted connection:** [checked]
-
   - **Use SSL** [checked]
 
   - **Do not verify server certificates** [checked]

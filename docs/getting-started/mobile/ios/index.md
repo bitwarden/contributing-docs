@@ -70,7 +70,6 @@ Due to slight snapshot test variations between iOS versions, the test target req
 iPhone 16 Pro simulator (iOS 18.1).
 
 1. In Xcode's toolbar, select the project and a connected device or simulator.
-
    - The `Generic iOS Device` used for builds will not work for testing.
 
 2. In Xcode's menu bar, select `Product > Test`.
