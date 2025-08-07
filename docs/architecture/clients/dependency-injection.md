@@ -48,11 +48,12 @@ decorators and its dependencies must be manually configured.
 
 ## Interfaces
 
-A service should implement an interface defined by an abstract class if:
+You should have an abstraction for your services:
 
-1. The service will be used across multiple client apps, or
-2. You want to define multiple interfaces for your service to limit what functionality is available
-   to different consumers
+1. When you need to present a subset of your service's API to a consumer (i.e. the [facade
+   pattern][facade-pattern]).
+2. When your service is exported from a module. All services exported from a module must follow the
+   [bridge pattern][bridge-pattern].
 
 For example, you may want to use interfaces to prevent outside modules from calling your internal
 methods:
@@ -238,3 +239,6 @@ registered in the renderer process.
 ### CLI
 
 `bw.ts` contains all DI for the CLI client. It does not use any dependency injection framework.
+
+[facade-pattern]: https://en.wikipedia.org/wiki/Facade_pattern
+[bridge-pattern]: https://en.wikipedia.org/wiki/Bridge_pattern
