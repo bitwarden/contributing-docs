@@ -58,9 +58,7 @@ You should have an abstraction for your services:
 If neither of these apply to you, you probably don't need to define an abstract interface for your
 service.
 
-:::tip
-
-You can combine these patterns to create an internal module API:
+:::note[You can combine these patterns to create an internal module API]
 
 ```ts
 // Injected in other modules
