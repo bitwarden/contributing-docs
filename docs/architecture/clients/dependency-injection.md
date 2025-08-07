@@ -55,8 +55,12 @@ You should have an abstraction for your services:
 2. When your service is exported from a module. All services exported from a module must follow the
    [bridge pattern][bridge-pattern].
 
-For example, you may want to use interfaces to prevent outside modules from calling your internal
-methods:
+If neither of these apply to you, you probably don't need to define an abstract interface for your
+service.
+
+::: tip
+
+You can combine these patterns to create an internal module API:
 
 ```ts
 // Injected in other modules
@@ -75,8 +79,7 @@ class MyService implements InternalMyService {
 }
 ```
 
-If neither of these apply to you, you probably don't need to define an abstract interface for your
-service.
+:::
 
 ## Configuring DI
 
