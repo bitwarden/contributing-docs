@@ -58,7 +58,7 @@ You should have an abstraction for your services:
 If neither of these apply to you, you probably don't need to define an abstract interface for your
 service.
 
-::: tip
+:::tip
 
 You can combine these patterns to create an internal module API:
 
