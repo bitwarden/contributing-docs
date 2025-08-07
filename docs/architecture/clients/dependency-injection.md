@@ -58,7 +58,15 @@ You should have an abstraction for your services:
 If neither of these apply to you, you probably don't need to define an abstract interface for your
 service.
 
-:::note[You can combine these patterns to create an internal module API]
+### Why?
+
+The abstraction is the way the module presents the functionality to the broader world, but in
+TypeScript it's usually necessary to test units that are not intended to be exposed. You could reach
+for spies or index the class like a map, but those both subvert subvert TypeScript's banner
+feature--types!
+
+The way you do this cleanly is through exposing an interface which is a subset of the concrete
+implementation. Then test code tests concretes, and you expose only the intended methods.
 
 ```ts
 // Injected in other modules
@@ -66,18 +74,24 @@ abstract class MyService {
   abstract externalMethod(): void;
 }
 
-// Injected in the MyService feature module
-abstract class InternalMyService extends MyService {
-  abstract internalMethod(): void;
-}
-
-class MyService implements InternalMyService {
+class DefaultMyService implements MyService {
   abstract externalMethod(): void;
   abstract internalMethod(): void;
 }
 ```
 
-:::
+This technique is also useful when breaking changes are necessary and a migration cannot be
+automated. You can create a "v2" abstraction and implement it in the same service as the "v1"
+abstraction, simplifying access to shared data (such as a cache).
+
+The module rule creates programming overhead, but in practice the tradeoff is worth it. The main
+reason for this is that the regularity eases analysis across the codebase. For example, you can
+quickly locate everyone's injectable services with `find -name '*.abstraction.ts' -type f`!
+
+The regularity ends up being important for automated transformations, too. It creates a bounded
+scope for the transformations to act, and can be used to scope their instructions. Consider, for
+example, using a wildcard to scope a grep to just public interfaces. That could be useful to examine
+keyword usage, JSDoc structure, inheritance relationships, and a whole lot more!
 
 ## Configuring DI
 
