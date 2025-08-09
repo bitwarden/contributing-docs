@@ -37,7 +37,11 @@ mkcert -cert-file dev-server.local.pem -key-file dev-server.local.pem localhost 
   cd apps/web
   npm run build:oss:watch
   ```
+  :::info
 
+    If working on billing or more advanced organization settings, you may need to build the client with `npm run build:bit:watch` to access the correct views and functionality.
+
+  :::
   </Community>
 
   <Bitwarden>
