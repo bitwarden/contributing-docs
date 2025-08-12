@@ -80,7 +80,7 @@ fn do_something(arg1: i32, arg2: i32) -> i32 {
 #### Returns
 
 Similar to arguments, do not document returns, if you find the return value can be mistaken or
-misuse consider using the NewType pattern.
+misused consider using the NewType pattern.
 
 ## Avoid panics
 
