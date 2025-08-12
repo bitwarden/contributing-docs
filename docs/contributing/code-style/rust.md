@@ -12,6 +12,76 @@ the quality of our code.
 This document covers some additional guidelines that are not enforced by `rustfmt` or `clippy`. And
 will generally allow you to write more idiomatic Rust code.
 
+## Documentation
+
+We strictly enforce documentation of all public items using the `missing_docs` linting rule. This
+helps ensure that our code is well-documented and easy to understand. In rare cases where
+documentation is unhelpful or simply duplicates enum variants, it may be omitted using
+`#[allow(missing_docs)]` but you should have a valid reason.
+
+Rust is generally quite unopinionated in how you document your code. This can result in many
+different documentation styles which can negatively impact readability and maintainability. We
+therefore have some guidelines and suggestions for documenting your code. These should not be seen
+as strict rules but rather as best practices to follow in our codebases.
+
+### Modules
+
+We encourage you to document modules, including their purpose and any important details about their
+contents. This helps other developers understand the context and functionality of the module. When
+documenting modules use the `//!` syntax to write documentation comments at the top of the file.
+
+```rust
+// crates/bitwarden-crypto/src/aes.rs
+
+//! # AES operations
+//!
+//! Contains low level AES operations used by the rest of the library.
+//!
+//! In most cases you should use the [EncString][crate::EncString] with
+//! [KeyEncryptable][crate::KeyEncryptable] & [KeyDecryptable][crate::KeyDecryptable] instead.
+```
+
+### Functions
+
+Please ensure functions and their arguments have descriptive names.
+
+#### Arguments
+
+We avoid documenting function arguments since rust does not have a good convention for doing so.
+Instead focus on using well descriptive names of the arguments. In case you feel that a comment
+would be helpful because the variables can be confused with each other, in many cases extracting the
+arguments into a separate struct can improve clarity and enforce type safety.
+
+```rust
+// Good
+
+/// Sums two arguments.
+fn sum_arguments(arg1: i32, arg2: i32) -> i32 {
+    arg1 + arg2
+}
+
+// Bad
+
+/// Sums two arguments
+///
+/// # Arguments
+///
+/// * `x` - The first argument.
+/// * `y` - The second argument.
+///
+/// # Returns
+///
+/// Returns the sum of the arguments.
+fn do_something(arg1: i32, arg2: i32) -> i32 {
+    arg1 + arg2
+}
+```
+
+#### Returns
+
+Similar to arguments, do not document returns, if you find the return value can be mistaken or
+misuse consider using the NewType pattern.
+
 ## Avoid panics
 
 Panics are highly discouraged in the Bitwarden codebase outside of tests. Errors should be handled
