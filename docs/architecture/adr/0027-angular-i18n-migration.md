@@ -30,7 +30,7 @@ underlying localization engine.
 ## Considered Options
 
 - **Keep chrome.i18n** - Continue using our current homegrown localization system
-- **Build our own** - Create a custom localization framework from scratch
+- **Continue building our own** - Expand our custom localization framework
 - **Angular Localization (@angular/localize)** - Use Angular's built-in i18n framework
 - **ngx-translate** - Use the popular Angular translation library
 - **`Transloco`** - Use the modern Angular translation library
@@ -48,7 +48,7 @@ underlying localization engine.
 - Lacks native interpolation capabilities for HTML
 - No pluralization support
 
-### Build our own
+### Continue building our own
 
 **Pros:**
 
