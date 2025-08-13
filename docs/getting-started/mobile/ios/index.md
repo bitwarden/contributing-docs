@@ -6,7 +6,9 @@ sidebar_position: 1
 
 ## Requirements
 
-1. [Xcode](https://developer.apple.com/xcode/) (version 16.3)
+1. [Xcode](https://developer.apple.com/xcode/) (version
+   `remote:https://raw.githubusercontent.com/bitwarden/ios/HEAD/.xcode-version`)
+
 2. An iPhone 16 Pro simulator (iOS 18.1) set up
 
 ## Setup
