@@ -4,10 +4,19 @@ sidebar_position: 1
 
 # iOS
 
+import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
+
+From Docusaurus Context: {useDocusaurusContext().siteConfig.customFields.remoteValues.xcodeVersion}
+
+From Component: <Remote name="xcodeVersion" />
+
+From Remark Plugin: `remote:https://raw.githubusercontent.com/bitwarden/ios/HEAD/.xcode-version`
+
+<!-- {siteConfig.customFields.xcodeVersion} -->
+
 ## Requirements
 
-1. [Xcode](https://developer.apple.com/xcode/) (version
-   `remote:https://raw.githubusercontent.com/bitwarden/ios/HEAD/.xcode-version`)
+1. [Xcode](https://developer.apple.com/xcode/) (version 16.3)
 
 2. An iPhone 16 Pro simulator (iOS 18.1) set up
 

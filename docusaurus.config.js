@@ -6,6 +6,21 @@ import { themes } from "prism-react-renderer";
 async function createConfig() {
   const { remarkKroki } = await import("remark-kroki");
 
+  // Helper function to fetch text content from URLs
+  async function fetchTextContent(url) {
+    try {
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error(`Failed to fetch ${url}: ${response.status} ${response.statusText}`);
+      }
+      const text = await response.text();
+      return text.trim();
+    } catch (error) {
+      console.error(`Error fetching ${url}:`, error.message);
+      return "";
+    }
+  }
+
   /** @type {import('@docusaurus/types').Config} */
   const config = {
     title: "Bitwarden Contributing Documentation",
@@ -14,6 +29,14 @@ async function createConfig() {
     onBrokenLinks: "throw",
     onBrokenMarkdownLinks: "warn",
     favicon: "img/favicon.png",
+
+    customFields: {
+      remoteValues: {
+        xcodeVersion: await fetchTextContent(
+          "https://raw.githubusercontent.com/bitwarden/ios/HEAD/.xcode-version",
+        ),
+      },
+    },
 
     // Even if you don't use internalization, you can use this field to set useful
     // metadata like html lang. For example, if your site is Chinese, you may want
