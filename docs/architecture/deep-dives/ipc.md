@@ -207,9 +207,9 @@ message, the framework will automatically decode the payload as an `RpcRequestMe
 contains additional metadata about the request, such as the request identifier, type, and payload.
 The type is used to determine which handler to call for the request, and the payload is the actual
 data being sent in the request. The framework will then serialize the response as an
-`RpcResponseMessage` and send it back to the consumer using the same topic. The response message
-will contain the request identifier, type, and payload, allowing the framework to match the response
-with the original request and handle it accordingly.
+`RpcResponseMessage` and send it back to the consumer using a topic reserved for responses. The
+response message will contain the request identifier, type, and payload, allowing the framework to
+match the response with the original request and handle it accordingly.
 
 ```kroki type=plantuml
 @startuml
