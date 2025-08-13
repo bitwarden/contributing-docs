@@ -1,20 +1,23 @@
 # Inter-Process Communication (IPC)
 
-Bitwarden uses IPC to allow communication between and within certain parts of our clients. The
-oldest use-case is the communication between the Bitwarden browser extension and the Bitwarden
-desktop application to allow the extension to be unlocked using biometric authentication.
+Bitwarden uses IPC to allow communication between and within certain parts of our clients. Examples
+of IPC within a client include communication to and from the background script/service worker in the
+browser extension and the main and renderer processes in the desktop application. IPC is also used
+to allow communication between different clients, such as the browser extension and the desktop
+application to enable features like unlocking the extension using biometric authentication.
 
-Bitwarden now has a generic framework for IPC provided in the SDK. This framework is used to provide
-a common interface for IPC across all clients. The framework is designed to be cross-platform and
-can be used in any client that needs to communicate with another process.
+Bitwarden now has a generic framework for IPC provided in our
+[SDK](https://github.com/bitwarden/sdk-internal). This framework is used to provide a common
+interface for IPC across all clients. The framework is designed to be cross-platform and can be used
+in any client that needs to communicate with another process.
 
 ## Architecture
 
 The IPC framework is split into two main parts:
 
-### Platform agnostic
+### Platform-agnostic
 
-The platform agnostic parts of the IPC framework are written in Rust and are responsible for the
+The platform-agnostic parts of the IPC framework are written in Rust and are responsible for the
 high-level logic of the IPC communication. This includes the serialization and deserialization of
 messages, as well as the encryption and decryption of messages. They depend on the platform-specific
 parts to integrate with the underlying platform's IPC mechanisms.
@@ -49,14 +52,14 @@ package "Platform agnostic" <<frame>> {
 @enduml
 ```
 
-### Platform specific
+### Platform-specific
 
-The platform specific parts of the IPC framework are written in different languages and are
+The platform-specific parts of the IPC framework are written in different languages and are
 responsible for the low-level communication between the processes. This includes the actual sending
 and receiving of messages, persisting cryptographic sessions, as well as any other platform-specific
 details of the IPC communication. Below is an illustration of the platform-specific implementation
 for the WebAssembly (WASM) platform, which uses JavaScript to implement how messages are sent and
-received.
+received:
 
 ```kroki type=plantuml
 @startuml
@@ -121,23 +124,30 @@ transparent to the consumer of the framework.
 
 ## Usage
 
+An initialized `IpcClient` is available in the TypeScript clients and is provided by the
+`IpcService`. The same `IpcClient` will eventually be made available in the SDK `BitwardenClient` as
+well, to allow for easy access to the framework from both TypeScript and Rust.
+
+## Usage patterns
+
 The IPC framework provides a simple interface for sending and receiving messages between processes.
 It supports two main communication patterns:
 
-### Publish/Subscribe
+### Publish / Subscribe
 
-This pattern allows consumers to subscribe to specific topics and receive messages published to
-those topics. It is useful for scenarios where multiple consumers need to receive the same message,
-such as notifications or updates. Consumers can subscribe to the raw data or a specific type of
-message, and the framework will handle the serialization and deserialization of the messages, as
-long as the type supports conversion to and from a `Vec<u8>` representation.
+Allows consumers to subscribe to specific topics and receive messages published to those topics. It
+is useful for scenarios where multiple consumers need to receive the same message, such as
+notifications or updates, or for fire-and-forget scenarios where the sender does not need to receive
+a response. Consumers can subscribe to the raw data or a specific type of message, and the framework
+will handle the serialization and deserialization of the messages, as long as the type implements
+the appropriate `serde` traits.
 
-### Request/Response
+### Request / Response
 
-This pattern allows a consumer to send a request to a producer and receive a response. It is useful
-for scenarios where a consumer needs to request specific information or perform an action, such as
-authentication or data retrieval. The framework handles the serialization and deserialization of the
-messages, as long as the type supports conversion to and from a `Vec<u8>` representation.
+Allows a consumer to send a request to a producer and receive a response. It is useful for scenarios
+where a consumer needs to request specific information or perform an action, such as authentication
+or data retrieval. The framework handles the serialization and deserialization of the messages, as
+long as the type implements the appropriate `serde` traits.
 
 ## Message format
 
@@ -146,19 +156,18 @@ flexible and extensible. Each message consists of a topic, a destination, and a 
 is a string that identifies the message, the destination is an enum that specifies the target of the
 message, and the payload is a `Vec<u8>` that contains the serialized data. The topic allows messages
 to be categorized and filtered, while the destination allows messages to be sent to specific
-consumers or processes. The payload contains the actual data being sent, and can be any type that
-implements the `From<Vec<u8>>` and `Into<Vec<u8>>` traits, allowing for easy conversion between the
-raw byte representation and the desired data type.
+consumers or processes. The payload contains the actual data being sent, and can be manually
+assigned or automatically serialized by the framework.
 
 When the framework returns a message to the consumer it will also contain a source, which represents
 where the current process received the message from. This can be used to determine the origin of the
-message and is useful for determining trust. Since the field is added by the receiver you can assume
-that it is correct and trustworthy.
+message and can be useful for determining trust. Since the field is added by the receiver you can
+assume that it is correct and trustworthy.
 
 The top-level encoding and decoding of messages is handled by the `CommunicationBackend` trait and
 is not formalized by the framework itself. Instead, it is left to the platform-specific
-implementations to define how messages are serialized and deserialized. This allows the framework to
-be flexible and adaptable to different platforms and use cases, while still providing a consistent
+implementations to define how messages are sent across the wire. This allows the framework to be
+flexible and adaptable to different platforms and use cases, while still providing a consistent
 interface for consumers.
 
 ```kroki type=plantuml
@@ -190,10 +199,10 @@ component IncomingIpcMessage {
 @enduml
 ```
 
-### Request/Response
+### Request / Response
 
-The request/response functionality is built on top of the publish/subscribe message format by using
-a hard-coded topic reserved for RPC (Remote Procedure Call) messages. On receipt of a request
+The request / response functionality is built on top of the publish / subscribe message format by
+using a hard-coded topic reserved for RPC (Remote Procedure Call) messages. On receipt of a request
 message, the framework will automatically decode the payload as an `RpcRequestMessage` which
 contains additional metadata about the request, such as the request identifier, type, and payload.
 The type is used to determine which handler to call for the request, and the payload is the actual
