@@ -13,10 +13,12 @@ data from _Views_.
 ## File Organization
 
 ### Directory Structure
-- **Schema-based organization**: Files are organized by domain/schema (Auth, Billing, SecretsManager, Vault, etc.)
+
+- **Schema-based organization**: Files are organized by domain/schema (Auth, Billing,
+  SecretsManager, Vault, etc.)
 - **Object type grouping**: Within each domain, files are grouped by type:
   - `Tables/` - Table definitions
-  - `Views/` - View definitions  
+  - `Views/` - View definitions
   - `Stored Procedures/` - Stored procedure definitions
   - `Functions/` - User-defined functions
 - **Root-level objects**: Common objects are placed directly in `dbo/`:
@@ -26,9 +28,12 @@ data from _Views_.
   - `User Defined Types/` - Custom data types
 
 ### File Naming Conventions
-- **Stored Procedures**: `{EntityName}_{Action}.sql` (e.g., `User_Create.sql`, `Organization_ReadById.sql`)
+
+- **Stored Procedures**: `{EntityName}_{Action}.sql` (e.g., `User_Create.sql`,
+  `Organization_ReadById.sql`)
 - **Tables**: `{EntityName}.sql` (e.g., `User.sql`, `Organization.sql`)
-- **Views**: `{EntityName}View.sql` or `{EntityName}{Purpose}View.sql` (e.g., `UserView.sql`, `OrganizationUserUserDetailsView.sql`)
+- **Views**: `{EntityName}View.sql` or `{EntityName}{Purpose}View.sql` (e.g., `UserView.sql`,
+  `OrganizationUserUserDetailsView.sql`)
 - **Functions**: `{EntityName}{Purpose}.sql` (e.g., `UserCollectionDetails.sql`)
 - **User Defined Types**: `{TypeName}.sql` (e.g., `GuidIdArray.sql`)
 
@@ -41,12 +46,16 @@ environment, but the scripts should support it.
 ### Tables
 
 #### Naming Conventions
+
 - **Table Names**: PascalCase (e.g., `[dbo].[User]`, `[dbo].[AuthRequest]`)
 - **Column Names**: PascalCase (e.g., `[Id]`, `[CreationDate]`, `[MasterPasswordHash]`)
 - **Primary Keys**: `PK_{TableName}` (e.g., `[PK_User]`, `[PK_Organization]`)
-- **Foreign Keys**: `FK_{TableName}_{ReferencedTable}` or `FK_{TableName}_{ColumnName}` (e.g., `[FK_AuthRequest_User]`)
-- *PROPOSED: **Foreign Keys**: `FK_{TableName}_{ColumnName}__{ReferencedTable}_{ReferencedColumn}` (e.g., `FK_Device_UserId__User_Id`)
-  - **Note**: Constraint name limits: SQL Server (128 chars), PostgreSQL (63 chars), MySQL (64 chars), SQLite (unlimited)
+- **Foreign Keys**: `FK_{TableName}_{ReferencedTable}` or `FK_{TableName}_{ColumnName}` (e.g.,
+  `[FK_AuthRequest_User]`)
+- \*PROPOSED: **Foreign Keys**: `FK_{TableName}_{ColumnName}__{ReferencedTable}_{ReferencedColumn}`
+  (e.g., `FK_Device_UserId__User_Id`)
+  - **Note**: Constraint name limits: SQL Server (128 chars), PostgreSQL (63 chars), MySQL (64
+    chars), SQLite (unlimited)
 - **Default Constraints**: `DF_{TableName}_{ColumnName}` (e.g., `[DF_Organization_UseScim]`)
 
 #### Creating a table
@@ -70,10 +79,11 @@ GO
 ```
 
 ##### Column Definition Standards
+
 - **Alignment**: Column names, data types, and nullability vertically aligned using spaces
 - **Data Types**: Use consistent type patterns:
   - `UNIQUEIDENTIFIER` for IDs
-  - `DATETIME2(7)` for timestamps  
+  - `DATETIME2(7)` for timestamps
   - `NVARCHAR(n)` for Unicode text
   - `VARCHAR(n)` for ASCII text
   - `BIT` for boolean values
@@ -191,15 +201,19 @@ GO
 ### Views
 
 #### Naming Conventions
+
 - **View Names**:
   - `{EntityName}View`
-    - Used when the view maps closely to a single table, with little or no joins. (e.g., (e.g., `[dbo].[ApiKeyView]`) (from ApiKey))
-  -  `{EntityName}DetailsView` for complex views 
-     - Used for views that combine multiple tables or add logic beyond a basic table select. These usually serve a specific display or reporting use case and are named to reflect the context. (e.g., `[dbo].[OrganizationUserDetailsView]`)
+    - Used when the view maps closely to a single table, with little or no joins. (e.g., (e.g.,
+      `[dbo].[ApiKeyView]`) (from ApiKey))
+  - `{EntityName}DetailsView` for complex views
+    - Used for views that combine multiple tables or add logic beyond a basic table select. These
+      usually serve a specific display or reporting use case and are named to reflect the context.
+      (e.g., `[dbo].[OrganizationUserDetailsView]`)
 
 - For more complex reads that join multiple tables:
-  - Create a view with a clear name tied to the main entity:  
-  	- `[dbo].[OrganizationUser_MemberAccessDetailsView]`
+  - Create a view with a clear name tied to the main entity:
+    - `[dbo].[OrganizationUser_MemberAccessDetailsView]`
   - Create a stored procedure that reads from it:
     - `[dbo].[OrganizationUser_ReadMemberAccessDetails]`
 
@@ -243,6 +257,7 @@ GO
 ### Functions and stored procedures
 
 #### Naming Conventions
+
 - **Stored Procedures**: `{EntityName}_{Action}` format (e.g., `[dbo].[User_ReadById]`)
   - EntityName: The main table or concept (e.g. User, Organization, Cipher)
   - Action: What the procedure does (e.g. Create, ReadById, DeleteMany)
@@ -289,10 +304,12 @@ CREATE NONCLUSTERED INDEX [IX_OrganizationUser_UserIdOrganizationIdStatus]
 ```
 
 #### Naming Conventions
+
 - **Indexes**: `IX_{TableName}_{ColumnName(s)}` (e.g., `[IX_User_Email]`)
   - The name should clearly indicate the table and the columns being indexed.
 
 #### Index Best Practices
+
 - Create indexes after table definition with `GO` separator
 - Use descriptive names following `IX_{TableName}_{ColumnName}` pattern
 - Include `INCLUDE` clause when beneficial for covering indexes
@@ -302,25 +319,34 @@ CREATE NONCLUSTERED INDEX [IX_OrganizationUser_UserIdOrganizationIdStatus]
 ## General Naming Conventions
 
 ### Schema and Object Prefixes
+
 - **Schema**: Use `[dbo]` prefix for all objects
 - **Object names**: Always use square brackets `[dbo].[TableName]`
 
 ### User Defined Types
+
 - **User Defined Types**: `{TypeName}.sql` (e.g., `GuidIdArray.sql`)
 
 ## Code Formatting Standards
 
 ### General Formatting
 
-The adage **`code is written once and read many times`** is one reason that creating easily readable code is very important. Once a developer has acclimated to the conventions and style in this document, they will be able to efficiently read any similarly written code by other developers.
+The adage **`code is written once and read many times`** is one reason that creating easily readable
+code is very important. Once a developer has acclimated to the conventions and style in this
+document, they will be able to efficiently read any similarly written code by other developers.
 
 - **Indentation**: Use 4 spaces (not tabs) for all code files, including SQL
-- **Keywords**: Use UPPERCASE for all SQL keywords (`CREATE`, `SELECT`, `FROM`, `WHERE`, `GROUP BY`, `ORDER BY`, `JOIN`, `ON`, `INTO`, `TOP`, etc.)
+- **Keywords**: Use UPPERCASE for all SQL keywords (`CREATE`, `SELECT`, `FROM`, `WHERE`, `GROUP BY`,
+  `ORDER BY`, `JOIN`, `ON`, `INTO`, `TOP`, etc.)
 - **Object names**: Always use square brackets `[dbo].[TableName]`
 - **Line endings**: Use consistent line breaks with proper indentation
-- **Trailing spaces**: Should be trimmed from the end of lines. Use `[ \t]+$` as a regex find/replace
-- **Vertical lists**: Vertically list items as much as feasibly possible, and use consistent indentation to make vertical listing quick and easy. A vertical list is much easier to compare and makes code changes easily detectable
-- **Whitespace**: Place one space, unless more are needed for good alignment, after each separating character, such as `+ - * / = & | %` and commas
+- **Trailing spaces**: Should be trimmed from the end of lines. Use `[ \t]+$` as a regex
+  find/replace
+- **Vertical lists**: Vertically list items as much as feasibly possible, and use consistent
+  indentation to make vertical listing quick and easy. A vertical list is much easier to compare and
+  makes code changes easily detectable
+- **Whitespace**: Place one space, unless more are needed for good alignment, after each separating
+  character, such as `+ - * / = & | %` and commas
 - **Blank lines**: Separate sections of code with at least one blank line
 - **Commas**: Commas should be placed at the right end of the line
 - **Join clauses and logical operators**: Should be placed at the right end of the line
@@ -328,6 +354,7 @@ The adage **`code is written once and read many times`** is one reason that crea
 ### Stored Procedures
 
 #### Basic Structure
+
 ```sql
 CREATE PROCEDURE [dbo].[EntityName_Action]
     @Parameter1 DATATYPE,
@@ -343,12 +370,14 @@ END
 ```
 
 #### Parameter Declaration
+
 - One parameter per line
 - Align parameters with consistent indentation (4 spaces after procedure name)
 - Default values on same line as parameter
 - OUTPUT parameters clearly marked
 
 #### SELECT Statements
+
 - `SELECT` keyword on its own line
 - Column names indented (4 spaces)
 - One column per line for multi-column selects
@@ -371,6 +400,7 @@ WHERE
 ```
 
 #### INSERT Statements
+
 - Column list in parentheses, one column per line
 - VALUES clause with parameters aligned
 - Proper indentation for readability
@@ -391,6 +421,7 @@ VALUES
 ```
 
 #### UPDATE Statements
+
 - `UPDATE` and table name on same line
 - `SET` clause with each column assignment on separate line
 - `WHERE` clause clearly separated
@@ -409,6 +440,7 @@ WHERE
 ### Views
 
 #### Simple Views
+
 ```sql
 CREATE VIEW [dbo].[ViewName]
 AS
@@ -419,6 +451,7 @@ FROM
 ```
 
 #### Complex Views
+
 ```sql
 CREATE VIEW [dbo].[ComplexViewName]
 AS
@@ -442,10 +475,12 @@ WHERE
 ### Functions
 
 #### Naming Conventions
+
 - **Function Names**: `[Schema].[FunctionName]` (e.g., `[dbo].[UserCollectionDetails]`).
-  - The name should describe what the function returns 
+  - The name should describe what the function returns
 
 #### Table-Valued Functions
+
 ```sql
 CREATE FUNCTION [dbo].[FunctionName](@Parameter DATATYPE)
 RETURNS TABLE
@@ -465,8 +500,9 @@ WHERE
 ```
 
 ### User Defined Types
+
 - **Naming**: `[Schema].[TypeName]` (e.g., `[dbo].[GuidIdArray]`).
-  - The name should describe the type. 
+  - The name should describe the type.
 
 ```sql
 CREATE TYPE [dbo].[TypeName] AS TABLE (
@@ -478,18 +514,21 @@ CREATE TYPE [dbo].[TypeName] AS TABLE (
 ## Common Patterns
 
 ### CRUD Operations
+
 - **Create**: `{EntityName}_Create` procedures
-- **Read**: `{EntityName}_ReadById`, `{EntityName}_ReadBy{Criteria}` procedures  
+- **Read**: `{EntityName}_ReadById`, `{EntityName}_ReadBy{Criteria}` procedures
 - **Update**: `{EntityName}_Update` procedures
 - **Delete**: `{EntityName}_DeleteById`, `{EntityName}_Delete` procedures
 
 ### Parameter Patterns
+
 - `@Id UNIQUEIDENTIFIER` for entity identifiers
 - `@UserId UNIQUEIDENTIFIER` for user references
 - `@OrganizationId UNIQUEIDENTIFIER` for organization references
 - `@CreationDate DATETIME2(7)` and `@RevisionDate DATETIME2(7)` for timestamps
 
 ### Error Handling
+
 - Use `SET NOCOUNT ON` in stored procedures
 - Implement appropriate transaction handling where needed
 - Follow consistent error reporting patterns
@@ -505,7 +544,7 @@ CREATE TYPE [dbo].[TypeName] AS TABLE (
 ## Best Practices
 
 1. **Consistency**: Follow established patterns throughout the codebase
-2. **Readability**: Prioritize code readability and maintainability  
+2. **Readability**: Prioritize code readability and maintainability
 3. **Performance**: Consider index usage and query optimization
 4. **Security**: Use parameterized queries and proper data type validation
 5. **Modularity**: Break complex operations into smaller, reusable procedures
