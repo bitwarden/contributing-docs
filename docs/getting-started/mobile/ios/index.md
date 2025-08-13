@@ -4,6 +4,12 @@ sidebar_position: 1
 
 # iOS
 
+import config from "@generated/docusaurus.config"
+
+export const remoteValues = config.customFields.remoteValues;
+
+From build time variable: {remoteValues.xcodeVersion}
+
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 
 From Docusaurus Context: {useDocusaurusContext().siteConfig.customFields.remoteValues.xcodeVersion}
