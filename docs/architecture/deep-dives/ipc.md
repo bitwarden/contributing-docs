@@ -11,6 +11,23 @@ Bitwarden now has a generic framework for IPC provided in our
 interface for IPC across all clients. The framework is designed to be cross-platform and can be used
 in any client that needs to communicate with another process.
 
+## Usage
+
+Please refer to the code documentation for more information on how to use the IPC framework:
+
+- [IpcClient in the SDK](https://sdk-api-docs.bitwarden.com/bitwarden_ipc/struct.IpcClient.html)
+- [IpcService in the TypeScript clients](https://github.com/bitwarden/clients/blob/main/libs/common/src/platform/ipc/ipc.service.ts)
+
+## Availability
+
+When fully rolled out, an initialized `IpcClient` will be available in all TypeScript clients
+through the `IpcService`, and in the SDK through the `BitwardenClient`. At the time of writing, the
+framework is available in the background script/service worker of the browser extension and the web
+vault. Due to the complex infrastructure required to run the framework, it is not recommended for
+use in smaller processes like content scripts or macOS extensions.
+
+For more up-to-date information on the availability of the IPC please refer to the source code.
+
 ## Architecture
 
 The IPC framework is split into two main parts:
@@ -121,12 +138,6 @@ between processes every time they communicate. The session management is handled
 receive their own messages over the communication channel to establish and maintain sessions. These
 messages can be completely separate from the actual IPC data messages and might be completely
 transparent to the consumer of the framework.
-
-## Usage
-
-An initialized `IpcClient` is available in the TypeScript clients and is provided by the
-`IpcService`. The same `IpcClient` will eventually be made available in the SDK `BitwardenClient` as
-well, to allow for easy access to the framework from both TypeScript and Rust.
 
 ## Usage patterns
 
