@@ -42,29 +42,32 @@ underlying implementation to be internal to the crate with only the public API e
 `Client` struct. Below is an example of a generator extension for the `Client` struct.
 
 ```rust
-pub struct ClientGenerator<'a> {
-    client: &'a Client,
+/// Generator extension for the Client struct
+#[cfg_attr(feature = "wasm", wasm_bindgen)]
+pub struct GeneratorClient {
+    client: Client,
 }
 
-impl<'a> ClientGenerator<'a> {
+#[cfg_attr(feature = "wasm", wasm_bindgen)]
+impl GeneratorClient {
     fn new(client: &'a Client) -> Self {
         Self { client }
     }
 
+    /// Generates a password based on the provided request.
     pub fn password(&self, input: PasswordGeneratorRequest) -> Result<String, PasswordError> {
         password(input)
     }
-
 }
 
-// Extension which exposes `generator` method on the `Client` struct.
+/// Extension which exposes `generator` method on the `Client` struct.
 pub trait ClientGeneratorExt<'a> {
     fn generator(&'a self) -> ClientGenerator<'a>;
 }
 
-impl<'a> ClientGeneratorExt<'a> for Client {
-    fn generator(&'a self) -> ClientGenerator<'a> {
-        ClientGenerator::new(self)
+impl GeneratorClientExt for Client {
+    fn generator(self) -> GeneratorClient {
+        GeneratorClient::new(self)
     }
 }
 ```
