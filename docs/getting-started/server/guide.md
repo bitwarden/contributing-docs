@@ -71,6 +71,7 @@ facilitate easy customization.
 
     Your MSSQL password must comply with the following
     [password complexity guidelines](https://docs.microsoft.com/en-us/sql/relational-databases/security/password-policy?view=sql-server-ver15#password-complexity)
+
     - It must be at least eight characters long.
     - It must contain characters from three of the following four categories:
     - Latin uppercase letters (A through Z)
@@ -150,12 +151,6 @@ sent to real email addresses. You can open its web interface at
 
 ### Azurite
 
-:::note
-
-This section applies to Bitwarden developers only.
-
-:::
-
 [Azurite](https://github.com/Azure/Azurite) is an emulator for Azure Storage API and supports Blob,
 Queues and Table storage. We use it to minimize the online dependencies required for developing in a
 cloud environment.
@@ -210,6 +205,7 @@ repository.
     </Bitwarden>
 
 2.  Update `secrets.json` with your own values:
+
     - `sqlServer` > `connectionString`: insert your password where indicated
 
     <Community>
@@ -265,6 +261,24 @@ You’ll need to re-run the migration helper script regularly to keep your local
 up-to-date. See [MSSQL Database](./database/mssql/index.md) for more information.
 
 :::
+
+<Community>
+
+## Install Licensing Certificate
+
+To run your local server environment as a licensed instance, you will need to install the
+certificates in the `Core` folder of the `server` repository `src/Core`. Double-click on the
+`licensing_dev.cer` and `licensing.cer` to install them.
+
+:::note
+
+Mac users: When prompted to save the certificates in Keychain Access be sure to select "Default
+Keychain > login" from the dropdown otherwise they will not be found when attempting to "Build and
+Run the Server".
+
+:::
+
+</Community>
 
 <Bitwarden>
 
