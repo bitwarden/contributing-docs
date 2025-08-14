@@ -12,17 +12,16 @@ tags: [clients, angular, i18n]
 ## Context and Problem Statement
 
 We currently use a homegrown localization system based on the
-https://developer.chrome.com/docs/extensions/reference/api/i18n api. This has served us reasonably
-well but comes with many limitations which we've had to workaround over the years.
-
-Most notable it lacks any native capability for interpolation which is useful for adding markdown
-such as marking words as italic or bold or inserting links into strings. In most scenarios we've
-handled this by splitting the sentence into multiple localized strings but that is not always
+[`chrome.i18n`](https://developer.chrome.com/docs/extensions/reference/api/i18n) api. This has
+served us reasonably well but comes with many limitations which we've had to work around over the
+years. Most notably it lacks any native capability for interpolation which is useful for adding
+markup such as marking words as italic or bold or inserting links into strings. In most scenarios
+we've handled this by splitting the sentence into multiple localized strings but that is not always
 optimal in all locales.
 
 Another limitation is pluralization where we currently can't distinguish phrases that are singular
 or plural which we've often mitigated by adding (s) at the end which again provides a sub-optimal
-experience as different languages handles names, numbers and dates differently.
+experience as different languages handles names, numbers, and dates differently.
 
 In order to better handle more complex localization scenarios we'd like to explore changing the
 underlying localization engine.
@@ -68,7 +67,7 @@ underlying localization engine.
 - Expected to be supported for the lifetime of Angular
 - Seamless integration in Angular environments
 - Advanced capabilities like pluralization and interpolation
-- Uses standardized ICU MessageFormat
+- Uses standardized ICU `MessageFormat`
 - Provides a command for extracting localized strings from source
 
 **Cons:**
@@ -168,18 +167,17 @@ Replacing a localization system is difficult since it's used in virtually every 
 several background services and content scripts. We therefore need to maintain both systems in
 parallel and ideally offer automated migrations wherever possible.
 
-1. **Proof of concept evaluation**: https://github.com/bitwarden/clients/pull/13737
-2. **Automatic migrations**: Build robust automated migrations that coverts existing:
-
+1. Proof of concept evaluation: https://github.com/bitwarden/clients/pull/13737
+2. Automatic migrations: Build robust automated migrations that coverts existing:
    - `i18nService.t` to `$localize`
    - `<p>{{ 'templateString' | i18n }}</p>` to `<p i18n="@@templateString">A template string.</p>`
 
    PoC: https://github.com/bitwarden/clients/tree/arch/localization-migrators
 
-3. **Add support for Angular Localization in parallel**
-4. **Evaluate content script integration** with `intl-messageformat` for non-Angular environments
-5. **Create migration guidelines** and documentation for development teams
-6. **Plan phased rollout**
+3. Add support for Angular Localization in parallel
+4. Evaluate content script integration with `intl-messageformat` for non-Angular environments
+5. Create migration guidelines and documentation for development teams
+6. Plan phased rollout:
    - starting with new features
    - then migrating area by area
    - lastly tackle any remaining usage
