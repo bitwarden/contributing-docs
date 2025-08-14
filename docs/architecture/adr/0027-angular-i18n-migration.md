@@ -167,13 +167,12 @@ Replacing a localization system is difficult since it's used in virtually every 
 several background services and content scripts. We therefore need to maintain both systems in
 parallel and ideally offer automated migrations wherever possible.
 
-1. Proof of concept evaluation: https://github.com/bitwarden/clients/pull/13737
-2. Automatic migrations: Build robust automated migrations that coverts existing:
+1. [Proof of concept evaluation](https://github.com/bitwarden/clients/pull/13737)
+2. [Automatic migrations](https://github.com/bitwarden/clients/tree/arch/localization-migrators),
+   build robust automated migrations that coverts existing:
 
    - `i18nService.t` to `$localize`
    - `<p>{{ 'templateString' | i18n }}</p>` to `<p i18n="@@templateString">A template string.</p>`
-
-   PoC: https://github.com/bitwarden/clients/tree/arch/localization-migrators
 
 3. Add support for Angular Localization in parallel
 4. Evaluate content script integration with `intl-messageformat` for non-Angular environments
