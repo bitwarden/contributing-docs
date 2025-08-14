@@ -24,6 +24,10 @@ different documentation styles which can negatively impact readability and maint
 therefore have some guidelines and suggestions for documenting your code. These should not be seen
 as strict rules but rather as best practices to follow in our codebases.
 
+Avoid starting documentation with `This module`, `This function`, `This field` or similar phrases.
+The context will be inferred implicitly by the reader. Instead, focus on describing the purpose and
+behavior of the item directly.
+
 ### Modules
 
 We encourage you to document modules, including their purpose and any important details about their
@@ -43,14 +47,15 @@ documenting modules use the `//!` syntax to write documentation comments at the 
 
 ### Functions
 
-Please ensure functions and their arguments have descriptive names.
+Please ensure functions and their arguments have descriptive names. It's often better to use longer
+names that convey more meaning if it improves clarity.
 
 #### Arguments
 
 We avoid documenting function arguments since rust does not have a good convention for doing so.
 Instead focus on using well descriptive names of the arguments. In case you feel that a comment
-would be helpful because the variables can be confused with each other, in many cases extracting the
-arguments into a separate struct can improve clarity and enforce type safety.
+would be helpful because the variables can be confused with each other, another technique is to
+extract the arguments into a separate struct to improve clarity and enforce type safety.
 
 ```rust
 // Good
@@ -80,7 +85,7 @@ fn do_something(arg1: i32, arg2: i32) -> i32 {
 #### Returns
 
 Similar to arguments, do not document returns, if you find the return value can be mistaken or
-misused consider using the NewType pattern.
+misused consider using the _NewType_ pattern.
 
 ## Avoid panics
 
