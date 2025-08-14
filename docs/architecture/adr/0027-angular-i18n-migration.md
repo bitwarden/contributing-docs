@@ -29,7 +29,7 @@ underlying localization engine.
 ## Considered Options
 
 - **Keep chrome.i18n** - Continue using our current homegrown localization system
-- **Continue building our own** - Expand our custom localization framework
+- **Continue building our own** - Expand our existing framework with missing functionality
 - **Angular Localization (@angular/localize)** - Use Angular's built-in i18n framework
 - **ngx-translate** - Use the popular Angular translation library
 - **`Transloco`** - Use the modern Angular translation library
@@ -37,31 +37,31 @@ underlying localization engine.
 
 ### Keep `chrome.i18n`
 
-**Pros:**
+**Pros**
 
 - We already use it and have existing infrastructure
 - No migration effort required
 
-**Cons:**
+**Cons**
 
 - Lacks native interpolation capabilities for HTML
 - No pluralization support
 
 ### Continue building our own
 
-**Pros:**
+**Pros**
 
 - Complete control over features and implementation
 - Can be tailored exactly to our needs
 
-**Cons:**
+**Cons**
 
 - Development and maintenance overhead
 - Localization is a solved problem with standardized formats
 
 ### Angular Localization (`@angular/localize`)
 
-**Pros:**
+**Pros**
 
 - Built-in framework for Angular with long-term support
 - Expected to be supported for the lifetime of Angular
@@ -70,7 +70,7 @@ underlying localization engine.
 - Uses standardized ICU `MessageFormat`
 - Provides a command for extracting localized strings from source
 
-**Cons:**
+**Cons**
 
 - Supports dynamic localization but documentation is limited
 - Locale must be initialized before bootstrapping Angular (though this shouldn't negatively affect
@@ -81,26 +81,26 @@ underlying localization engine.
 
 ### `ngx-translate`
 
-**Cons:**
+**Cons**
 
 - Angular specific, requires Angular to run
 - Not suitable for content scripts
 
 ### `Transloco`
 
-**Cons:**
+**Cons**
 
 - Angular specific, requires Angular to run
 - Not suitable for content scripts
 
 ### `angular-i18next`
 
-**Pros:**
+**Pros**
 
 - Integrates with the i18next ecosystem
 - Easy to run in background processes
 
-**Cons:**
+**Cons**
 
 - Angular integration is not widely adopted
 - No extract command - difficult to identify which client uses which keys
