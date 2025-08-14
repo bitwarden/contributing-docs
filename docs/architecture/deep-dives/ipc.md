@@ -15,16 +15,16 @@ in any client that needs to communicate with another process.
 
 Please refer to the code documentation for more information on how to use the IPC framework:
 
-- [IpcClient in the SDK](https://sdk-api-docs.bitwarden.com/bitwarden_ipc/struct.IpcClient.html)
-- [IpcService in the TypeScript clients](https://github.com/bitwarden/clients/blob/main/libs/common/src/platform/ipc/ipc.service.ts)
+- [`IpcClient` in the SDK](https://sdk-api-docs.bitwarden.com/bitwarden_ipc/struct.IpcClient.html)
+- [`IpcService` in the TypeScript clients](https://github.com/bitwarden/clients/blob/main/libs/common/src/platform/ipc/ipc.service.ts)
 
 ## Availability
 
 When fully rolled out, an initialized `IpcClient` will be available in all TypeScript clients
-through the `IpcService`, and in the SDK through the `BitwardenClient`. At the time of writing, the
-framework is available in the background script/service worker of the browser extension and the web
-vault. Due to the complex infrastructure required to run the framework, it is not recommended for
-use in smaller processes like content scripts or macOS extensions.
+through the `IpcService`, and in the SDK through the `BitwardenClient`. The framework is available
+in the background script/service worker of the browser extension and the web vault. Due to the
+complex infrastructure required to run the framework, it is not recommended for use in smaller
+processes like content scripts or macOS extensions.
 
 For more up-to-date information on the availability of the IPC please refer to the source code.
 
