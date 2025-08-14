@@ -90,7 +90,7 @@ fn do_something(arg1: i32, arg2: i32) -> i32 {
 #### Returns
 
 Similar to arguments, do not document returns, if you find the return value can be mistaken or
-misused consider using the _NewType_ pattern.
+misused consider using the [NewType](#newtype) pattern.
 
 ## Avoid panics
 
@@ -220,3 +220,33 @@ match result {
 // Good
 do_something().map_err(|e| "Another error")?
 ```
+
+## NewType
+
+The _NewType_ pattern is a way to create a distinct type that wraps a value of another type. This is
+useful for providing additional type safety and clarity in your code. For an in-depth introduction
+to the NewType pattern please read the
+[Rust Book](https://doc.rust-lang.org/book/ch20-03-advanced-types.html#using-the-newtype-pattern-for-type-safety-and-abstraction).
+
+We use _NewType_ extensively throughout the Bitwarden codebase. Some good examples are IDs, which
+uses the `uuid!` macro to NewType `UUID` which ensure you can't mix up different types of IDs.
+
+```rust
+use bitwarden_uuid::uuid;
+
+uuid!(pub CipherId);
+uuid!(pub FolderId);
+
+fn test(folder_id: FolderId) {
+  // Use the folder_id here
+}
+
+// This is fine
+test(FolderId::new())
+
+// Compile error.
+test(CipherId::new())
+```
+
+The `bitwarden-crypto` crate contains a bunch of other examples, such as `UserKey` which is a
+NewType wrapper around `SymmetricCryptoKey`. Which also exposes some additional functionality.
