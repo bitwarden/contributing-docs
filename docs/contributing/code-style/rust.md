@@ -24,9 +24,14 @@ different documentation styles which can negatively impact readability and maint
 therefore have some guidelines and suggestions for documenting your code. These should not be seen
 as strict rules but rather as best practices to follow in our codebases.
 
+### General guidelines
+
 Avoid starting documentation with `This module`, `This function`, `This field` or similar phrases.
 The context will be inferred implicitly by the reader. Instead, focus on describing the purpose and
 behavior of the item directly.
+
+When possible document from the consumer's perspective. This helps ensure that the documentation is
+relevant and useful to those who will be using the code.
 
 ### Modules
 
