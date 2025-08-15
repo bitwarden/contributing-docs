@@ -4,7 +4,7 @@ Bitwarden uses IPC to allow communication between and within certain parts of ou
 of IPC within a client include communication to and from the background script/service worker in the
 browser extension and the main and renderer processes in the desktop application. IPC is also used
 to allow communication between different clients, such as the browser extension and the desktop
-application to enable features like unlocking the extension using biometric authentication.
+application, to enable features like unlocking the extension using biometric authentication.
 
 Bitwarden now has a generic framework for IPC provided in our
 [SDK](https://github.com/bitwarden/sdk-internal). This framework is used to provide a common
