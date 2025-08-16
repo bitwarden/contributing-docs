@@ -201,7 +201,6 @@ repository.
     </Community>
 
     <Bitwarden>
-
     - Copy the user secrets file from the shared Development collection (Your Bitwarden Vault) into
       the `dev` folder.
     - If you don't have access to the Development collection, contact our IT Manager to arrange
@@ -216,7 +215,6 @@ repository.
     - `sqlServer` > `connectionString`: insert your password where indicated
 
     <Community>
-
     - `installation` > `id` and `key`:
       [request a hosting installation Id and Key](https://bitwarden.com/host/) and insert them here
     - `licenseDirectory`: set this to an empty directory, this is where uploaded license files will

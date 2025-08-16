@@ -7,21 +7,15 @@ use [constant objects][constant-object-pattern] instead of introducing a new enu
 
 - Use the same name for your type- and value-declaration.
 - Use `type` to derive type information from the const object.
+- Avoid asserting the type of an enum-like. Use explicit types instead.
 - Create utilities to convert and identify enums modelled as primitives.
 
-:::tip
-
-This pattern should simplify the usage of your new objects, improve type safety in files that have
-adopted TS-strict, and make transitioning an enum to a const object much easier.
-
-:::
-
-### Example
+### Numeric enum-likes
 
 Given the following enum:
 
 ```ts
-export enum CipherType = {
+export enum CipherType {
   Login: 1,
   SecureNote: 2,
   Card: 3,
@@ -33,19 +27,17 @@ export enum CipherType = {
 You can redefine it as an object like so:
 
 ```ts
-const _CipherType = {
+// freeze to prevent member injection
+export const CipherType = Object.freeze({
   Login: 1,
   SecureNote: 2,
   Card: 3,
   Identity: 4,
   SshKey: 5,
-} as const;
+} as const);
 
-type _CipherType = typeof _CipherType;
-
-export type CipherType = _CipherType[keyof _CipherType];
-export const CipherType: Readonly<{ [K in keyof typeof _CipherType]: CipherType }> =
-  Object.freeze(_CipherType);
+// derive the enum-like type from the raw data
+export type CipherType = (typeof CipherType)[keyof typeof CipherType];
 ```
 
 And use it like so:
@@ -59,9 +51,71 @@ function doSomething(type: CipherType) {}
 
 // And used as a value (just like a regular `enum`)
 doSomething(CipherType.Card);
+
+// advanced use-case: discriminated union definition
+type CipherContent =
+  | { type: typeof CipherType.Login, username: EncString, ... }
+  | { type: typeof CipherType.SecureNote, note: EncString, ... }
 ```
 
-The following utilities may assist introspection:
+:::warning
+
+Unlike an enum, TypeScript lifts the type of the members of `const CipherType` to `number`. Code
+like the following requires you explicitly type your variables:
+
+```ts
+// ✅ Do: strongly type enum-likes
+let value: CipherType = CipherType.Login;
+const array: CipherType[] = [CipherType.Login];
+const subject = new Subject<CipherType>();
+
+// ❌ Do not: use type inference
+let value = CipherType.Login; // infers `1`
+const array = [CipherType.Login]; // infers `number[]`
+
+// ❌ Do not: use type assertions
+let value = CipherType.Login as CipherType; // this operation is unsafe
+```
+
+:::
+
+### String enum-likes
+
+The above pattern also works with string-typed enum members:
+
+```ts
+// freeze to prevent member injection
+export const CredentialType = Object.freeze({
+  Password: "password",
+  Username: "username",
+  Email: "email",
+  SshKey: "ssh-key",
+} as const);
+
+// derive the enum-like type from the raw data
+export type CredentialType = (typeof CredentialType)[keyof typeof CredentialType];
+```
+
+:::note[Enum-likes are structural types!]
+
+Unlike string-typed enums, enum-likes do not reify a type for each member. This means that you can
+use their string value or their enum member interchangeably.
+
+```ts
+let value: CredentialType = CredentialType.Username;
+
+// this is typesafe!
+value = "email";
+```
+
+However, the string-typed values are not always identified as enum members. Thus, when the const
+object is in scope, prefer it to the literal value.
+
+:::
+
+## Utilities
+
+The following utilities can be used to maintain type safety at runtime.
 
 ```ts
 import { CipherType } from "./cipher-type";
