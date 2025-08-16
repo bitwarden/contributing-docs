@@ -70,7 +70,7 @@ Tips to ensure backwards compatibility:
 
 :::tip
 
-We recommend reading [Building Migration Scripts](building-migration-scripts.md) before writing you
+We recommend reading [Building Migration Scripts](building-migration-scripts) before writing you
 first migration script, to ensure that you follow best practices for each database entity.
 
 :::

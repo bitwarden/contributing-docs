@@ -16,7 +16,7 @@ rename columns that are still in use by deployed code.
 in code should map exactly to the schema of the database in all deployed environments.
 
 :white_check_mark: **The script must be backwards compatible**: Code should be able to work with
-both the old and new schema during a rolling deployment. See [our MSSQL docs](../MSSQL/)) for how we
+both the old and new schema during a rolling deployment. See [our MSSQL docs](../MSSQL/) for how we
 put this into practice.
 
 ## Script best practices by database entity
@@ -244,7 +244,7 @@ GO
 :::warning
 
 When changing a stored procedure, ensure that the corresponding
-[Entity Framework](../../getting-started/server/database/ef/) model is updated.
+[Entity Framework](../../../getting-started/server/database/ef/) model is updated.
 
 :::
 
