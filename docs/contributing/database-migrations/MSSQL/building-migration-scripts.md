@@ -16,8 +16,8 @@ rename columns that are still in use by deployed code.
 in code should map exactly to the schema of the database in all deployed environments.
 
 :white_check_mark: **The script must be backwards compatible**: Code should be able to work with
-both the old and new schema during a rolling deployment. See
-[our MSSQL docs](../../database-migrations/mssql.md) for how we put this into practice.
+both the old and new schema during a rolling deployment. See [our MSSQL docs](index.md)) for how we
+put this into practice.
 
 ## Script best practices by database entity
 
