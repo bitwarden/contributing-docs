@@ -7,15 +7,8 @@ sidebar_position: 1
 :::info
 
 For instructions on how to apply database migrations, please refer to the
-[Getting Started](../../getting-started/server/database/mssql/index.md#updating-the-database)
+[Getting Started](../../../getting-started/server/database/mssql/index.md#updating-the-database)
 documentation.
-
-:::
-
-:::tip
-
-We recommend reading [T-SQL Code Style](../code-style/sql.md) since it has a major impact in how we
-write migrations.
 
 :::
 
@@ -48,7 +41,7 @@ processes.
 
 ## Modifying the database
 
-In accordance with the tenets of [Evolutionary Database Design](./edd.mdx) every change must be
+In accordance with the tenets of [Evolutionary Database Design](../edd.mdx)) every change must be
 considered as split into two parts:
 
 1. A backwards-compatible transition migration
@@ -56,7 +49,7 @@ considered as split into two parts:
 
 Most changes are entirely backwards-compatible in their final form. If this is the case, only one
 phase of changes is required. With the use of beta testing, partial roll-outs,
-[feature flags](../feature-flags.md), etc. the often-chosen path is to spread a change across
+[feature flags](../../feature-flags.md), etc. the often-chosen path is to spread a change across
 several major releases with a calculated future state that can perform a "cleanup" migration that is
 backwards-compatible but still represents an overall-_incompatible_ change beyond the boundaries of
 what we need for individual release safety.
@@ -74,6 +67,13 @@ Tips to ensure backwards compatibility:
 - when a column is renamed the existing stored procedures first check (coalesce) the new location
   before falling back to the old location
 - continued updating of the old data columns since in case of a rollback no data should be lost
+
+:::tip
+
+We recommend reading [Building Migration Scripts](building-migration-scripts.md) before writing you
+first migration script, to ensure that you follow best practices for each database entity.
+
+:::
 
 ### Non-backwards compatible migration
 
@@ -94,5 +94,5 @@ will call `dbo_finalization`.
      compatible with the changes to `DbScripts`. In order to achieve this we only keep a single
      migration, which executes all backwards incompatible schema changes.
 
-Upon execution any finalization scripts will be [automatically moved](./edd.mdx#online-environments)
-for proper history.
+Upon execution any finalization scripts will be
+[automatically moved](../edd.mdx#online-environments) for proper history.

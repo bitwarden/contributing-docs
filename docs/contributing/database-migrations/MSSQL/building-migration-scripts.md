@@ -1,8 +1,8 @@
 import Tabs from "@theme/Tabs"; import TabItem from "@theme/TabItem";
 
-# Building deployment scripts
+# Building migration scripts
 
-There are specific ways deployment scripts should be structured. We do so to adhere to the following
+There are specific ways migration scripts should be structured. We do so to adhere to the following
 guiding principles:
 
 :white_check_mark: **The script must be idempotent**: Always ensure a migration can be run multiple
@@ -17,7 +17,7 @@ in code should map exactly to the schema of the database in all deployed environ
 
 :white_check_mark: **The script must be backwards compatible**: Code should be able to work with
 both the old and new schema during a rolling deployment. See
-[Database Migrations](../database-migrations/) for how we put this into practice.
+[our MSSQL docs](../../database-migrations/mssql.md) for how we put this into practice.
 
 ## Script best practices by database entity
 
@@ -79,7 +79,7 @@ GO
 #### Nullability
 
 When adding a new `NOT NULL` column to an existing table, please re-evaluate the need for it to
-truly be required. Do not be afraid of using Nullable\<T\> primitives in C# and in the application
+truly be required. Do not be afraid of using `Nullable\<T\>` primitives in C# and in the application
 layer, which is almost always going to be better than taking up unnecessary space in the DB per row
 with a default value, especially for new functionality or features where it will take a very long
 time to be useful for most row-level data, if at all.
