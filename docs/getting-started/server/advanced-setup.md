@@ -63,7 +63,6 @@ integration.
 File uploads are stored using one of two methods.
 
 - Azure Storage is used by our production cloud instance.
-
   - Docker will create a local [Azurite](https://github.com/Azure/Azurite) instance which emulates
     the Azure Storage API. And is used for the primary testing.
   - We also have a test Azure Storage account for development use. The user secrets for this are
@@ -169,7 +168,6 @@ services).
 
 5. Spin up the required services locally, using a unique port for each running instance. **The ports
    must match the ports in the `reverse-proxy.conf` in the `upstream` configuration blocks.**
-
    - **Command line** _(in separate terminals)_
      ```bash
      # 1st instance

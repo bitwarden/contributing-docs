@@ -8,7 +8,6 @@ This uses
 ## Prerequisites
 
 1.  Bitwarden server set up and configured with the following server projects running:
-
     - Identity
     - API
     - SSO (located at `server/bitwarden_license/src/Sso`)
@@ -96,7 +95,6 @@ This uses
 
 1.  Go back to your window with the SSO configuration page open.
 2.  Complete the following values in the SAML Identity Provider Configuration section:
-
     1.  Entity ID:
         ```
         http://localhost:8090/simplesaml/saml2/idp/metadata.php
