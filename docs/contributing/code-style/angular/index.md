@@ -195,7 +195,7 @@ import { LogService } from "@bitwarden/common/platform/abstractions/log.service"
 export class DifferentPackageService {}
 ```
 
-## Enum-likes ([ADR-0025](../../architecture/adr/0025-ts-deprecate-enums.md))
+## Enum-likes ([ADR-0025](../../../architecture/adr/0025-ts-deprecate-enums.md))
 
 For general guidance on enum-likes, consult [Avoid TypeScript Enums](./enums.md).
 
