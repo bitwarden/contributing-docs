@@ -170,7 +170,6 @@ parallel and ideally offer automated migrations wherever possible.
 1. [Proof of concept evaluation](https://github.com/bitwarden/clients/pull/13737)
 2. [Automatic migrations](https://github.com/bitwarden/clients/tree/arch/localization-migrators),
    build robust automated migrations that coverts existing:
-
    - `i18nService.t` to `$localize`
    - `<p>{{ 'templateString' | i18n }}</p>` to `<p i18n="@@templateString">A template string.</p>`
 
