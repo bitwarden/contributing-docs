@@ -10,7 +10,7 @@
     },
     {
       "matchFileNames": ["package.json"],
-      "description": "Autofill owns general dependencies in contributing docs",
+      "description": "Tech Leads own dependencies in Contributing Docs",
       "reviewers": ["team:tech-leads"]
     }
   ]
