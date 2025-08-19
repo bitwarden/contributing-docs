@@ -11,7 +11,7 @@
     {
       "matchFileNames": ["package.json"],
       "description": "Autofill owns general dependencies in contributing docs",
-      "reviewers": ["team:team-autofill-dev"]
+      "reviewers": ["team:tech-leads"]
     }
   ]
 }
