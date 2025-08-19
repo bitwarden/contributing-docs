@@ -33,6 +33,14 @@ behavior of the item directly.
 When possible document from the consumer's perspective. This helps ensure that the documentation is
 relevant and useful to those who will be using the code.
 
+### Documenting Examples
+
+Rust has built in support for including
+[code blocks in documentation](https://doc.rust-lang.org/rustdoc/write-documentation/what-to-include.html#examples).
+This can be useful when you want to include suggested usage examples or other relevant code
+snippets. As a bonus rust generally executes the code blocks in the documentation to ensure they are
+correct.
+
 ### Modules
 
 We encourage you to document modules, including their purpose and any important details about their
@@ -58,9 +66,13 @@ names that convey more meaning if it improves clarity.
 #### Arguments
 
 We avoid documenting function arguments since rust does not have a good convention for doing so.
-Instead focus on using well descriptive names of the arguments. In case you feel that a comment
-would be helpful because the variables can be confused with each other, another technique is to
-extract the arguments into a separate struct to improve clarity and enforce type safety.
+Instead focus on using well descriptive names and appropriate types for the arguments. For example
+rather than using `i32` for a positive integer, use `u32`. If the value should never be 0 use
+`NonZeroU32`. The [NewType](#newtype) pattern can be useful here in case there is no built in
+representation of the type.
+
+If you still feel that a comment would be helpful, another technique is to extract the arguments
+into a separate struct to improve clarity and enforce type safety.
 
 ```rust
 // Good
@@ -89,7 +101,7 @@ fn do_something(arg1: i32, arg2: i32) -> i32 {
 
 #### Returns
 
-Similar to arguments, do not document returns, if you find the return value can be mistaken or
+Similar to arguments, do not document returns. If you find the return value can be mistaken or
 misused consider using the [NewType](#newtype) pattern.
 
 ## Avoid panics
