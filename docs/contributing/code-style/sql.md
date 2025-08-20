@@ -37,6 +37,27 @@ data from _Views_.
 - **Functions**: `{EntityName}{Purpose}.sql` (e.g., `UserCollectionDetails.sql`)
 - **User Defined Types**: `{TypeName}.sql` (e.g., `GuidIdArray.sql`)
 
+## Code Formatting Standards
+
+### General Formatting
+
+The adage **`Code is read much more often than it is written`** is one reason that creating easily readable
+code is very important.
+
+- **Indentation**: Use 4 spaces (not tabs) for all SQL code files.
+- **Keywords**: Use UPPERCASE for all SQL keywords (`CREATE`, `SELECT`, `FROM`, `WHERE`, `GROUP BY`,
+  `ORDER BY`, `JOIN`, `ON`, `INTO`, `TOP`, etc.)
+- **Object names**: Always use square brackets `[dbo].[TableName]`
+- **Line endings**: Use consistent line breaks with proper indentation
+- **Trailing spaces**: Should be trimmed from the end of lines. Use `[ \t]+$` as a regex
+  find/replace
+- **Vertical lists**: Vertically list items as much as feasibly possible, and use consistent
+  indentation to make vertical listing quick and easy. A vertical list is much easier to compare and
+  makes code changes easily detectable
+- **Blank lines**: Separate sections of code with at least one blank line
+- **Commas**: Commas should be placed at the right end of the line
+- **Parentheses**: Parentheses should be vertically aligned with spanning multiple lines
+
 ## Deployment Scripts
 
 There are specific ways deployment scripts should be structured. The goal for these standards is to
@@ -50,12 +71,9 @@ environment, but the scripts should support it.
 - **Table Names**: PascalCase (e.g., `[dbo].[User]`, `[dbo].[AuthRequest]`)
 - **Column Names**: PascalCase (e.g., `[Id]`, `[CreationDate]`, `[MasterPasswordHash]`)
 - **Primary Keys**: `PK_{TableName}` (e.g., `[PK_User]`, `[PK_Organization]`)
-- **Foreign Keys**: `FK_{TableName}_{ReferencedTable}` or `FK_{TableName}_{ColumnName}` (e.g.,
-  `[FK_AuthRequest_User]`)
-- \*PROPOSED: **Foreign Keys**: `FK_{TableName}_{ColumnName}__{ReferencedTable}_{ReferencedColumn}`
+- **Foreign Keys**: `FK_{TableName}_{ColumnName}__{ReferencedTable}_{ReferencedColumn}`
   (e.g., `FK_Device_UserId__User_Id`)
-  - **Note**: Constraint name limits: SQL Server (128 chars), PostgreSQL (63 chars), MySQL (64
-    chars), SQLite (unlimited)
+  - **Note**: SQL SErver limits constraint names to 128 characters. 
 - **Default Constraints**: `DF_{TableName}_{ColumnName}` (e.g., `[DF_Organization_UseScim]`)
 
 #### Creating a table
@@ -65,8 +83,8 @@ When creating a table, you must first check if the table exists:
 ```sql
 IF OBJECT_ID('[dbo].[{table_name}]') IS NULL
 BEGIN
-    CREATE TABLE [dbo].[{table_name}] (
-        [Id]                UNIQUEIDENTIFIER NOT NULL,
+    CREATE TABLE [dbo].[{table_name}] 
+    (   [Id]                UNIQUEIDENTIFIER NOT NULL,
         [Column1]           DATATYPE         NOT NULL,
         [Column2]           DATATYPE         NULL,
         [CreationDate]      DATETIME2(7)     NOT NULL,
@@ -163,7 +181,7 @@ BEGIN
     ALTER TABLE
         [dbo].[Column]
     ADD
-        [Column] INT NOT NULL CONSTRAINT D_Table_Column DEFAULT 0
+        [Column] INT NOT NULL CONSTRAINT DF_Table_Column DEFAULT 0
 END
 GO
 ```
@@ -287,10 +305,12 @@ GO
 ### Creating or modifying an index
 
 When creating indexes, especially on heavily used tables, our production database can easily become
-offline, unusable, hit 100% CPU and many other bad behaviors. It is often best to do this using
-online index builds so as not to lock the underlying table. This may cause the index operation to
-take longer, but you will not create an underlying schema table lock which prevents all reads and
-connections to the table and instead only locks the table of updates during the operation.
+offline, unusable, hit 100% CPU and many other bad behaviors. Our production database is configured to
+do online index builds by default, (so as not to lock the underlying table), so you should **_not_** specify
+ `ONLINE = ON`, as this may cause failures on self-hosted SQL Server editions that do not support online 
+ index rebuilds. Online index creation may cause the index operation to take longer, but it will not
+ create an underlying schema table lock which prevents all reads and connections to the table and
+ instead only locks the table of updates during the operation.
 
 A good example is when creating an index on `dbo.Cipher` or `dbo.OrganizationUser`, those are
 heavy-read tables and the locks can cause exceptionally high CPU, wait times and worker exhaustion
@@ -300,7 +320,6 @@ in Azure SQL.
 CREATE NONCLUSTERED INDEX [IX_OrganizationUser_UserIdOrganizationIdStatus]
    ON [dbo].[OrganizationUser]([UserId] ASC, [OrganizationId] ASC, [Status] ASC)
    INCLUDE ([AccessAll])
-   WITH (ONLINE = ON); -- ** THIS ENSURES ONLINE **
 ```
 
 #### Naming Conventions
@@ -310,11 +329,10 @@ CREATE NONCLUSTERED INDEX [IX_OrganizationUser_UserIdOrganizationIdStatus]
 
 #### Index Best Practices
 
-- Create indexes after table definition with `GO` separator
-- Use descriptive names following `IX_{TableName}_{ColumnName}` pattern
-- Include `INCLUDE` clause when beneficial for covering indexes
-- Use filtered indexes with `WHERE` clause when appropriate
-- Consider `ONLINE = ON` for production deployments on heavily used tables
+- Create indexes after table definition with `GO` separator.
+- Use descriptive names following `IX_{TableName}_{ColumnName}` pattern.
+- Include `INCLUDE` clause when beneficial for covering indexes.
+- Use filtered indexes with `WHERE` clause when appropriate.
 
 ## General Naming Conventions
 
@@ -325,31 +343,37 @@ CREATE NONCLUSTERED INDEX [IX_OrganizationUser_UserIdOrganizationIdStatus]
 
 ### User Defined Types
 
-- **User Defined Types**: `{TypeName}.sql` (e.g., `GuidIdArray.sql`)
+- **User Defined Types**: Filenames should be `{TypeName}.sql` (e.g., `GuidIdArray.sql`)
 
-## Code Formatting Standards
+### SELECT Statements
 
-### General Formatting
+- `SELECT` keyword on its own line
+- Column names indented (4 spaces)
+- One column per line for multi-column selects
+- Callout the specific table/alias for where a column is from when joining to other tables
+- `FROM` keyword on separate line, aligned with `SELECT`
+- `FROM` clause indented (4 spaces)
+    - Use aliases for table names when joining to other tables
+- `JOIN` keywords on separate line, aligned with `FROM`
+    - Use full join specfications (`INNER JOIN` vs `JOIN`, `LEFT OUTER JOIN` vs `LEFT JOIN`, etc)
+- `JOIN` clauses indented to align with table/column name(s)
+- `WHERE` keyword on separate line, aligned with `FROM`/`JOIN`
+- `WHERE` clause on separate lines, indented to align with table/column name(s)
 
-The adage **`code is written once and read many times`** is one reason that creating easily readable
-code is very important. Once a developer has acclimated to the conventions and style in this
-document, they will be able to efficiently read any similarly written code by other developers.
+```sql
+SELECT
+    U.[Id],
+    U.[Name],
+    U.[Email],
+    OU.[OrganizationId]
+FROM
+    [dbo].[User] U
+INNER JOIN
+    [dbo].[OrganizationUser] OU ON U.[Id] = OU.[UserId]
+WHERE
+    U.[Enabled] = 1
+```
 
-- **Indentation**: Use 4 spaces (not tabs) for all code files, including SQL
-- **Keywords**: Use UPPERCASE for all SQL keywords (`CREATE`, `SELECT`, `FROM`, `WHERE`, `GROUP BY`,
-  `ORDER BY`, `JOIN`, `ON`, `INTO`, `TOP`, etc.)
-- **Object names**: Always use square brackets `[dbo].[TableName]`
-- **Line endings**: Use consistent line breaks with proper indentation
-- **Trailing spaces**: Should be trimmed from the end of lines. Use `[ \t]+$` as a regex
-  find/replace
-- **Vertical lists**: Vertically list items as much as feasibly possible, and use consistent
-  indentation to make vertical listing quick and easy. A vertical list is much easier to compare and
-  makes code changes easily detectable
-- **Whitespace**: Place one space, unless more are needed for good alignment, after each separating
-  character, such as `+ - * / = & | %` and commas
-- **Blank lines**: Separate sections of code with at least one blank line
-- **Commas**: Commas should be placed at the right end of the line
-- **Join clauses and logical operators**: Should be placed at the right end of the line
 
 ### Stored Procedures
 
@@ -376,29 +400,6 @@ END
 - Default values on same line as parameter
 - OUTPUT parameters clearly marked
 
-#### SELECT Statements
-
-- `SELECT` keyword on its own line
-- Column names indented (4 spaces)
-- One column per line for multi-column selects
-- `FROM` clause on separate line, aligned with `SELECT`
-- `JOIN` clauses indented to align with table names
-- `WHERE` clause on separate line, aligned with `FROM`
-
-```sql
-SELECT
-    U.[Id],
-    U.[Name],
-    U.[Email],
-    OU.[OrganizationId]
-FROM
-    [dbo].[User] U
-INNER JOIN
-    [dbo].[OrganizationUser] OU ON U.[Id] = OU.[UserId]
-WHERE
-    U.[Enabled] = 1
-```
-
 #### INSERT Statements
 
 - Column list in parentheses, one column per line
@@ -407,14 +408,12 @@ WHERE
 
 ```sql
 INSERT INTO [dbo].[TableName]
-(
-    [Column1],
+(   [Column1],
     [Column2],
     [Column3]
 )
 VALUES
-(
-    @Parameter1,
+(   @Parameter1,
     @Parameter2,
     @Parameter3
 )
@@ -422,7 +421,7 @@ VALUES
 
 #### UPDATE Statements
 
-- `UPDATE` and table name on same line
+- `UPDATE` and table name on different lines
 - `SET` clause with each column assignment on separate line
 - `WHERE` clause clearly separated
 
@@ -505,8 +504,8 @@ WHERE
   - The name should describe the type.
 
 ```sql
-CREATE TYPE [dbo].[TypeName] AS TABLE (
-    [Column1] DATATYPE NOT NULL,
+CREATE TYPE [dbo].[TypeName] AS TABLE
+(   [Column1] DATATYPE NOT NULL,
     [Column2] DATATYPE NOT NULL
 );
 ```
