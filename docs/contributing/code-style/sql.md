@@ -355,7 +355,7 @@ CREATE NONCLUSTERED INDEX [IX_OrganizationUser_UserIdOrganizationIdStatus]
 - `FROM` clause indented (4 spaces)
   - Use aliases for table names when joining to other tables
 - `JOIN` keywords on separate line, aligned with `FROM`
-  - Use full join specfications (`INNER JOIN` vs `JOIN`, `LEFT OUTER JOIN` vs `LEFT JOIN`, etc)
+  - Use full join specifications (`INNER JOIN` vs `JOIN`, `LEFT OUTER JOIN` vs `LEFT JOIN`, etc)
 - `JOIN` clauses indented to align with table/column name(s)
 - `WHERE` keyword on separate line, aligned with `FROM`/`JOIN`
 - `WHERE` clause on separate lines, indented to align with table/column name(s)
