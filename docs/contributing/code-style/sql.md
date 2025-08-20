@@ -41,8 +41,8 @@ data from _Views_.
 
 ### General Formatting
 
-The adage **`Code is read much more often than it is written`** is one reason that creating easily readable
-code is very important.
+The adage **`Code is read much more often than it is written`** is one reason that creating easily
+readable code is very important.
 
 - **Indentation**: Use 4 spaces (not tabs) for all SQL code files.
 - **Keywords**: Use UPPERCASE for all SQL keywords (`CREATE`, `SELECT`, `FROM`, `WHERE`, `GROUP BY`,
@@ -71,9 +71,9 @@ environment, but the scripts should support it.
 - **Table Names**: PascalCase (e.g., `[dbo].[User]`, `[dbo].[AuthRequest]`)
 - **Column Names**: PascalCase (e.g., `[Id]`, `[CreationDate]`, `[MasterPasswordHash]`)
 - **Primary Keys**: `PK_{TableName}` (e.g., `[PK_User]`, `[PK_Organization]`)
-- **Foreign Keys**: `FK_{TableName}_{ColumnName}__{ReferencedTable}_{ReferencedColumn}`
-  (e.g., `FK_Device_UserId__User_Id`)
-  - **Note**: SQL SErver limits constraint names to 128 characters. 
+- **Foreign Keys**: `FK_{TableName}_{ColumnName}__{ReferencedTable}_{ReferencedColumn}` (e.g.,
+  `FK_Device_UserId__User_Id`)
+  - **Note**: SQL SErver limits constraint names to 128 characters.
 - **Default Constraints**: `DF_{TableName}_{ColumnName}` (e.g., `[DF_Organization_UseScim]`)
 
 #### Creating a table
@@ -83,7 +83,7 @@ When creating a table, you must first check if the table exists:
 ```sql
 IF OBJECT_ID('[dbo].[{table_name}]') IS NULL
 BEGIN
-    CREATE TABLE [dbo].[{table_name}] 
+    CREATE TABLE [dbo].[{table_name}]
     (   [Id]                UNIQUEIDENTIFIER NOT NULL,
         [Column1]           DATATYPE         NOT NULL,
         [Column2]           DATATYPE         NULL,
@@ -305,12 +305,12 @@ GO
 ### Creating or modifying an index
 
 When creating indexes, especially on heavily used tables, our production database can easily become
-offline, unusable, hit 100% CPU and many other bad behaviors. Our production database is configured to
-do online index builds by default, (so as not to lock the underlying table), so you should **_not_** specify
- `ONLINE = ON`, as this may cause failures on self-hosted SQL Server editions that do not support online 
- index rebuilds. Online index creation may cause the index operation to take longer, but it will not
- create an underlying schema table lock which prevents all reads and connections to the table and
- instead only locks the table of updates during the operation.
+offline, unusable, hit 100% CPU and many other bad behaviors. Our production database is configured
+to do online index builds by default, (so as not to lock the underlying table), so you should
+**_not_** specify `ONLINE = ON`, as this may cause failures on self-hosted SQL Server editions that
+do not support online index rebuilds. Online index creation may cause the index operation to take
+longer, but it will not create an underlying schema table lock which prevents all reads and
+connections to the table and instead only locks the table of updates during the operation.
 
 A good example is when creating an index on `dbo.Cipher` or `dbo.OrganizationUser`, those are
 heavy-read tables and the locks can cause exceptionally high CPU, wait times and worker exhaustion
@@ -353,9 +353,9 @@ CREATE NONCLUSTERED INDEX [IX_OrganizationUser_UserIdOrganizationIdStatus]
 - Callout the specific table/alias for where a column is from when joining to other tables
 - `FROM` keyword on separate line, aligned with `SELECT`
 - `FROM` clause indented (4 spaces)
-    - Use aliases for table names when joining to other tables
+  - Use aliases for table names when joining to other tables
 - `JOIN` keywords on separate line, aligned with `FROM`
-    - Use full join specfications (`INNER JOIN` vs `JOIN`, `LEFT OUTER JOIN` vs `LEFT JOIN`, etc)
+  - Use full join specfications (`INNER JOIN` vs `JOIN`, `LEFT OUTER JOIN` vs `LEFT JOIN`, etc)
 - `JOIN` clauses indented to align with table/column name(s)
 - `WHERE` keyword on separate line, aligned with `FROM`/`JOIN`
 - `WHERE` clause on separate lines, indented to align with table/column name(s)
@@ -373,7 +373,6 @@ INNER JOIN
 WHERE
     U.[Enabled] = 1
 ```
-
 
 ### Stored Procedures
 
