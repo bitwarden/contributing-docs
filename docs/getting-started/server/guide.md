@@ -326,10 +326,6 @@ You are now ready to build and run your development server.
 
 7.  Test that the Api service is alive by navigating to
     [http://localhost:4000/alive](http://localhost:4000/alive)
-8.  Connect a client to your local server by configuring the client’s Api and Identity endpoints.
-    Refer to
-    [https://bitwarden.com/help/article/change-client-environment/](https://bitwarden.com/help/article/change-client-environment/)
-    and the instructions for each client in the Contributing Documentation.
 
 :::info
 
@@ -344,6 +340,16 @@ We recommend continuing with the [Web Vault](../clients/web-vault/index.mdx) aft
 administrative operations can only be performed in it.
 
 :::
+
+## Client connection
+
+Connect a client to your local server by configuring the client’s Api and Identity endpoints. Refer
+to
+[https://bitwarden.com/help/article/change-client-environment/](https://bitwarden.com/help/article/change-client-environment/)
+and the instructions for each client in the Contributing Documentation.
+
+Now that the client is configured to use your local development server, you can proceed to use the
+client to create an account and validate your local server changes.
 
 ## Debugging
 
