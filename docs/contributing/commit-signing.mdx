@@ -86,6 +86,21 @@ extracted or copied.
 
 #### Setting up sk-ed25519 Keys
 
+:::note macOS Users
+
+On macOS, you'll need to install OpenSSH via Homebrew as the system's built-in OpenSSH lacks proper
+FIDO2 support:
+
+```bash
+brew install openssh
+```
+
+After installation, restart your terminal to ensure the Homebrew version is used. If it's not then
+fully qualify the path to the homebrew version of ssh-keygen in the example, like
+`/opt/homebrew/bin/ssh-keygen [everything else]`.
+
+:::
+
 1. Generate an sk-ed25519 key for commit signing:
 
    ```bash
@@ -115,7 +130,7 @@ extracted or copied.
 #### Hardware Key Requirements
 
 - **FIDO2/U2F compatible security key** (YubiKey 5 series, SoloKeys, etc.)
-- **OpenSSH 8.2+** with FIDO2 support
+- **OpenSSH 8.2+** with FIDO2 support (on macOS, install via Homebrew: `brew install openssh`)
 - **Physical access** to the security key for each signing operation
 
 #### Fallback Strategy
