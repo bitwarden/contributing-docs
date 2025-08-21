@@ -125,7 +125,8 @@ database up-to-date with any migrations.
 
 You need to manually add the Installation key to your cloud-configured instance, so that it knows
 about your self-hosted instance and will allow access when API calls need to be made between the
-two. Feel free to do this with any database management tool or the below script:
+two. Feel free to do this with any database management tool or the below script, which can be
+executed from within the mssql container:
 
 ```bash
 /opt/mssql-tools/bin/sqlcmd -S mssql -d vault_dev -U sa -P <<SA_PASSWORD>> -I -i <<SCRIPT_FILE>>
