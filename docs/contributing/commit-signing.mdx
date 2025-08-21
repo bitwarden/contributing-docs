@@ -26,7 +26,8 @@ Github supports commit signing with GPG, SSH and S/MIME.
 :::tip
 
 If you're unsure what to use, we recommend you create a commit signing key using SSH. Remember to
-protect the key with a [strong passphrase or password][password-generation].
+protect the key with a [strong passphrase or password][password-generation]. Alternatively set up
+your [yubikey as your signing key](#hardware-backed-ssh-keys).
 
 ```bash
 # path to save your private signing key
@@ -68,6 +69,64 @@ ssh-keygen -f $KEY_FILE -C "$(git config --global --get user.email)" -t ed25519
   git config --global commit.gpgSign true
   git config --global tag.gpgSign true
   ```
+
+### Hardware-backed SSH Keys
+
+For contributors who want maximum security, hardware-backed SSH keys using FIDO2/U2F security keys
+(like YubiKeys) provide superior protection by storing private keys on hardware that cannot be
+extracted or copied.
+
+#### Benefits of Hardware-backed Keys
+
+- **Physical presence required**: Each signing operation requires touching the hardware key
+- **Locked private keys**: Private keys are generated on and never leave the hardware
+- **Tamper-resistant**: Hardware provides protection against physical and software attacks
+- **Multi-factor authentication**: Combines something you have (the key) with something you know
+  (PIN)
+
+#### Setting up sk-ed25519 Keys
+
+1. Generate an sk-ed25519 key for commit signing:
+
+   ```bash
+   # Generate hardware-backed signing key
+   ssh-keygen -t ed25519-sk -f ~/.ssh/bw-signing-sk -C "$(git config --global --get user.email)"
+   ```
+
+   :::note
+
+   You'll need to touch your security key when prompted during key generation and each time you sign
+   a commit.
+
+   :::
+
+2. Configure git to use your hardware-backed key:
+
+   ```bash
+   git config --global gpg.format ssh
+   git config --global user.signingkey ~/.ssh/bw-signing-sk.pub
+   git config --global commit.gpgSign true
+   git config --global tag.gpgSign true
+   ```
+
+3. Add the public key to your GitHub account following the [GitHub
+   documentation][github-verification]
+
+#### Hardware Key Requirements
+
+- **FIDO2/U2F compatible security key** (YubiKey 5 series, SoloKeys, etc.)
+- **OpenSSH 8.2+** with FIDO2 support
+- **Physical access** to the security key for each signing operation
+
+#### Fallback Strategy
+
+When going the yubikey route it is important to make sure you have the infrastructure set up to
+recover from the lose of a yubikey. At least one backup plan should be set up. Some ideas:
+
+- Create and configure multiple yubikeys
+- Generate both a hardware-backed key and a traditional SSH key:
+  - Use the hardware-backed key for day-to-day development
+  - Keep a traditional SSH key as a secure backup for emergency situations
 
 ### Visual Studio Code
 
