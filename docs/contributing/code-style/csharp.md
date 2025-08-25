@@ -170,19 +170,6 @@ register your group when they depend on it. If you've used
 [`TryAdd`](#use-tryadd-overloads-on-iservicecollection) overloads it won't matter how many times
 your group of services is added to the collection.
 
-[null-forgiving]:
-  https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/operators/null-forgiving
-[null-state-attributes]:
-  https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/attributes/nullable-analysis
-[required-attribute]:
-  https://learn.microsoft.com/en-us/aspnet/core/mvc/models/validation?view=aspnetcore-9.0#non-nullable-reference-types-and-required-attribute
-[debug-assert]:
-  https://learn.microsoft.com/en-us/dotnet/api/system.diagnostics.debug.assert?view=net-9.0
-[tryadd-overloads]:
-  https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.dependencyinjection.extensions.servicecollectiondescriptorextensions?view=net-9.0-pp
-[dependency-groups]:
-  https://learn.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection?view=aspnetcore-9.0#register-groups-of-services-with-extension-methods
-
 ## Controller action guidelines
 
 To provide clear and descriptive OpenAPI specifications, we have some guidelines to follow when
@@ -247,3 +234,16 @@ the OpenAPI schema.
 [SwaggerExclude("POST")]
 public async Task Delete(Guid id) {}
 ```
+
+[null-forgiving]:
+  https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/operators/null-forgiving
+[null-state-attributes]:
+  https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/attributes/nullable-analysis
+[required-attribute]:
+  https://learn.microsoft.com/en-us/aspnet/core/mvc/models/validation?view=aspnetcore-9.0#non-nullable-reference-types-and-required-attribute
+[debug-assert]:
+  https://learn.microsoft.com/en-us/dotnet/api/system.diagnostics.debug.assert?view=net-9.0
+[tryadd-overloads]:
+  https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.dependencyinjection.extensions.servicecollectiondescriptorextensions?view=net-9.0-pp
+[dependency-groups]:
+  https://learn.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection?view=aspnetcore-9.0#register-groups-of-services-with-extension-methods
