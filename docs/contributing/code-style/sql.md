@@ -10,9 +10,9 @@ We use the [Repository pattern][repository] with the MSSQL repositories being wr
 [Dapper][dapper]. Each repository method in turn calls a _Stored Procedure_, which primarily fetches
 data from _Views_.
 
-## File Organization
+## File organization
 
-### Directory Structure
+### Directory structure
 
 - **Schema-based organization**: Files are organized by domain/schema (Auth, Billing,
   SecretsManager, Vault, etc.)
@@ -27,7 +27,7 @@ data from _Views_.
   - `Views/` - General views
   - `User Defined Types/` - Custom data types
 
-### File Naming Conventions
+### File naming conventions
 
 - **Stored Procedures**: `{EntityName}_{Action}.sql` (e.g., `User_Create.sql`,
   `Organization_ReadById.sql`)
@@ -37,9 +37,9 @@ data from _Views_.
 - **Functions**: `{EntityName}{Purpose}.sql` (e.g., `UserCollectionDetails.sql`)
 - **User Defined Types**: `{TypeName}.sql` (e.g., `GuidIdArray.sql`)
 
-## Code Formatting Standards
+## Code formatting standards
 
-### General Formatting
+### General formatting
 
 - **Indentation**: Use 4 spaces (not tabs) for all SQL code files
 - **Keywords**: Use UPPERCASE for all SQL keywords (`CREATE`, `SELECT`, `FROM`, `WHERE`, `GROUP BY`,
@@ -55,7 +55,7 @@ data from _Views_.
 - **Commas**: Commas should be placed at the right end of the line
 - **Parentheses**: Parentheses should be vertically aligned with spanning multiple lines
 
-## Deployment Scripts
+## Deployment scripts
 
 There are specific ways deployment scripts should be structured. The goal for these standards is to
 ensure that the scripts should be re-runnable. We never intend to run scripts multiple times on an
@@ -63,7 +63,7 @@ environment, but the scripts should support it.
 
 ### Tables
 
-#### Naming Conventions
+#### Naming conventions
 
 - **Table Names**: PascalCase (e.g., `[dbo].[User]`, `[dbo].[AuthRequest]`)
 - **Column Names**: PascalCase (e.g., `[Id]`, `[CreationDate]`, `[MasterPasswordHash]`)
@@ -91,7 +91,7 @@ END
 GO
 ```
 
-##### Column Definition Standards
+#### Column definition standards
 
 - **Alignment**: Column names, data types, and nullability vertically aligned using spaces
 - **Data Types**: Use consistent type patterns:
@@ -213,7 +213,7 @@ GO
 
 ### Views
 
-#### Naming Conventions
+#### Naming conventions
 
 - **View Names**:
   - `{EntityName}View`
@@ -269,9 +269,9 @@ GO
 
 ### Functions and stored procedures
 
-#### Naming Conventions
+#### Naming conventions
 
-- **Stored Procedures**: `{EntityName}_{Action}` format (e.g., `[dbo].[User_ReadById]`)
+- **Stored procedures**: `{EntityName}_{Action}` format (e.g., `[dbo].[User_ReadById]`)
   - EntityName: The main table or concept (e.g. User, Organization, Cipher)
   - Action: What the procedure does (e.g. Create, ReadById, DeleteMany)
 - **Parameters**: Start with `@` and use PascalCase (e.g., `@UserId`, `@OrganizationId`)
@@ -317,31 +317,31 @@ CREATE NONCLUSTERED INDEX [IX_OrganizationUser_UserIdOrganizationIdStatus]
    INCLUDE ([AccessAll])
 ```
 
-#### Naming Conventions
+#### Naming conventions
 
 - **Indexes**: `IX_{TableName}_{ColumnName(s)}` (e.g., `[IX_User_Email]`)
   - The name should clearly indicate the table and the columns being indexed
 
-#### Index Best Practices
+#### Index best practices
 
 - Create indexes after table definition with `GO` separator
 - Use descriptive names following `IX_{TableName}_{ColumnName}` pattern
 - Include `INCLUDE` clause when beneficial for covering indexes
 - Use filtered indexes with `WHERE` clause when appropriate
 
-## General Naming Conventions
+## General naming conventions
 
-### Schema and Object Prefixes
+### Schema and object prefixes
 
 - **Schema**: Use `[dbo]` prefix for all objects
 - **Object names**: Always use square brackets `[dbo].[TableName]`
 
-### User Defined Types
+### User defined types
 
 - **User Defined Types**: Filenames should be `{TypeName}.sql` (e.g., `GuidIdArray.sql`)
   - Note: Use sparingly as they cause downstream maintenance and performance problems
 
-### SELECT Statements
+### Select statements
 
 - `SELECT` keyword on its own line
 - Column names indented (4 spaces)
@@ -370,9 +370,9 @@ WHERE
     U.[Enabled] = 1
 ```
 
-### Stored Procedures
+### Stored procedures
 
-#### Basic Structure
+#### Basic structure
 
 ```sql
 CREATE PROCEDURE [dbo].[EntityName_Action]
@@ -388,7 +388,7 @@ BEGIN
 END
 ```
 
-#### Parameter Declaration
+#### Parameter declaration
 
 - One parameter per line
 - Align parameters with consistent indentation (4 spaces)
@@ -402,7 +402,7 @@ Also use `SET NOCOUNT ON` to prevent the automatic return of row count messages,
 performance and ensures consistent behavior across different client applications that might handle
 these messages differently.
 
-#### INSERT Statements
+#### Insert statements
 
 - Column list in parentheses, one column per line
 - VALUES clause with parameters aligned
@@ -421,7 +421,7 @@ VALUES
 )
 ```
 
-#### UPDATE Statements
+#### Update statements
 
 - `UPDATE` and table name on different lines
 - `SET` clause with each column assignment on separate line
@@ -440,7 +440,7 @@ WHERE
 
 ### Views
 
-#### Simple Views
+#### Simple views
 
 ```sql
 CREATE VIEW [dbo].[ViewName]
@@ -451,7 +451,7 @@ FROM
     [dbo].[TableName]
 ```
 
-#### Complex Views
+#### Complex views
 
 ```sql
 CREATE VIEW [dbo].[ComplexViewName]
@@ -475,12 +475,12 @@ WHERE
 
 ### Functions
 
-#### Naming Conventions
+#### Naming conventions
 
-- **Function Names**: `[Schema].[FunctionName]` (e.g., `[dbo].[UserCollectionDetails]`)
+- **Function names**: `[Schema].[FunctionName]` (e.g., `[dbo].[UserCollectionDetails]`)
   - The name should describe what the function returns
 
-#### Table-Valued Functions
+#### Table-valued functions
 
 ```sql
 CREATE FUNCTION [dbo].[FunctionName](@Parameter DATATYPE)
@@ -500,7 +500,7 @@ WHERE
     [FilterColumn] = @Parameter
 ```
 
-### User Defined Types
+### User defined types
 
 - **Naming**: `[Schema].[TypeName]` (e.g., `[dbo].[GuidIdArray]`)
   - The name should describe the type
@@ -512,9 +512,9 @@ CREATE TYPE [dbo].[TypeName] AS TABLE
 );
 ```
 
-## Common Patterns
+## Common patterns
 
-### CRUD Operations
+### CRUD operations
 
 - **Create**: `{EntityName}_Create` procedures
 - **Read**: `{EntityName}_ReadById`, `{EntityName}_ReadBy{Criteria}` procedures
@@ -522,7 +522,7 @@ CREATE TYPE [dbo].[TypeName] AS TABLE
 - **Update**: `{EntityName}_Update` procedures
 - **Delete**: `{EntityName}_DeleteById`, `{EntityName}_Delete` procedures
 
-### Error Handling
+### Error handling
 
 - Use `SET NOCOUNT ON` in stored procedures
 - Implement appropriate transaction handling where needed
@@ -562,7 +562,7 @@ BEGIN CATCH
 END CATCH;
 ```
 
-## Comments and Documentation
+## Comments and documentation
 
 - Use `--` for single-line comments
 - Add comments for complex business logic and the reason for a command or block of code
@@ -570,7 +570,7 @@ END CATCH;
 - Provide brief explanations for complex CASE statements or calculations
 - Don't comment unnecessarily, such as commenting that an insert statement is about to be executed
 
-## Best Practices
+## Best practices
 
 1. **Consistency**: Follow established patterns throughout the codebase
 2. **Readability**: Prioritize code readability and maintainability
