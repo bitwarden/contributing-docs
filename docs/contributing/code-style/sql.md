@@ -33,7 +33,7 @@ data from _Views_.
   `Organization_ReadById.sql`)
 - **Tables**: `{EntityName}.sql` (e.g., `User.sql`, `Organization.sql`)
 - **Views**: `{EntityName}View.sql` or `{EntityName}{Purpose}View.sql` (e.g., `UserView.sql`,
-  `OrganizationUserUserDetailsView.sql`)
+  `ApiKeyDetailsView.sql`)
 - **Functions**: `{EntityName}{Purpose}.sql` (e.g., `UserCollectionDetails.sql`)
 - **User Defined Types**: `{TypeName}.sql` (e.g., `GuidIdArray.sql`)
 
@@ -41,10 +41,7 @@ data from _Views_.
 
 ### General Formatting
 
-The adage **`Code is read much more often than it is written`** is one reason that creating easily
-readable code is very important.
-
-- **Indentation**: Use 4 spaces (not tabs) for all SQL code files.
+- **Indentation**: Use 4 spaces (not tabs) for all SQL code files
 - **Keywords**: Use UPPERCASE for all SQL keywords (`CREATE`, `SELECT`, `FROM`, `WHERE`, `GROUP BY`,
   `ORDER BY`, `JOIN`, `ON`, `INTO`, `TOP`, etc.)
 - **Object names**: Always use square brackets `[dbo].[TableName]`
@@ -71,9 +68,7 @@ environment, but the scripts should support it.
 - **Table Names**: PascalCase (e.g., `[dbo].[User]`, `[dbo].[AuthRequest]`)
 - **Column Names**: PascalCase (e.g., `[Id]`, `[CreationDate]`, `[MasterPasswordHash]`)
 - **Primary Keys**: `PK_{TableName}` (e.g., `[PK_User]`, `[PK_Organization]`)
-- **Foreign Keys**: `FK_{TableName}_{ColumnName}__{ReferencedTable}_{ReferencedColumn}` (e.g.,
-  `FK_Device_UserId__User_Id`)
-  - **Note**: SQL SErver limits constraint names to 128 characters.
+- **Foreign Keys**: `FK_{TableName}_{ReferencedTable}` (e.g., `FK_Device_User`)
 - **Default Constraints**: `DF_{TableName}_{ColumnName}` (e.g., `[DF_Organization_UseScim]`)
 
 #### Creating a table
@@ -226,14 +221,14 @@ GO
       `[dbo].[ApiKeyView]`) (from ApiKey))
   - `{EntityName}DetailsView` for complex views
     - Used for views that combine multiple tables or add logic beyond a basic table select. These
-      usually serve a specific display or reporting use case and are named to reflect the context.
+      usually serve a specific display or reporting use case and are named to reflect the context
       (e.g., `[dbo].[OrganizationUserDetailsView]`)
 
 - For more complex reads that join multiple tables:
   - Create a view with a clear name tied to the main entity:
     - `[dbo].[OrganizationUser_MemberAccessDetailsView]`
   - Create a stored procedure that reads from it:
-    - `[dbo].[OrganizationUser_ReadMemberAccessDetails]`
+    - `[dbo].[MemberAccessDetails_ReadByUserId]`
 
 #### Creating or modifying a view
 
@@ -307,10 +302,10 @@ GO
 When creating indexes, especially on heavily used tables, our production database can easily become
 offline, unusable, hit 100% CPU and many other bad behaviors. Our production database is configured
 to do online index builds by default, (so as not to lock the underlying table), so you should
-**_not_** specify `ONLINE = ON`, as this may cause failures on self-hosted SQL Server editions that
-do not support online index rebuilds. Online index creation may cause the index operation to take
-longer, but it will not create an underlying schema table lock which prevents all reads and
-connections to the table and instead only locks the table of updates during the operation.
+**_not_** specify `ONLINE = ON`, as this may cause failures on some SQL Server editions that do not
+support online index rebuilds. Online index creation may cause the index operation to take longer,
+but it will not create an underlying schema table lock which prevents all reads and connections to
+the table and instead only locks the table of updates during the operation.
 
 A good example is when creating an index on `dbo.Cipher` or `dbo.OrganizationUser`, those are
 heavy-read tables and the locks can cause exceptionally high CPU, wait times and worker exhaustion
@@ -325,14 +320,14 @@ CREATE NONCLUSTERED INDEX [IX_OrganizationUser_UserIdOrganizationIdStatus]
 #### Naming Conventions
 
 - **Indexes**: `IX_{TableName}_{ColumnName(s)}` (e.g., `[IX_User_Email]`)
-  - The name should clearly indicate the table and the columns being indexed.
+  - The name should clearly indicate the table and the columns being indexed
 
 #### Index Best Practices
 
-- Create indexes after table definition with `GO` separator.
-- Use descriptive names following `IX_{TableName}_{ColumnName}` pattern.
-- Include `INCLUDE` clause when beneficial for covering indexes.
-- Use filtered indexes with `WHERE` clause when appropriate.
+- Create indexes after table definition with `GO` separator
+- Use descriptive names following `IX_{TableName}_{ColumnName}` pattern
+- Include `INCLUDE` clause when beneficial for covering indexes
+- Use filtered indexes with `WHERE` clause when appropriate
 
 ## General Naming Conventions
 
@@ -344,6 +339,7 @@ CREATE NONCLUSTERED INDEX [IX_OrganizationUser_UserIdOrganizationIdStatus]
 ### User Defined Types
 
 - **User Defined Types**: Filenames should be `{TypeName}.sql` (e.g., `GuidIdArray.sql`)
+  - Note: Use sparingly as they cause downstream maintenance and performance problems
 
 ### SELECT Statements
 
@@ -395,9 +391,16 @@ END
 #### Parameter Declaration
 
 - One parameter per line
-- Align parameters with consistent indentation (4 spaces after procedure name)
+- Align parameters with consistent indentation (4 spaces)
 - Default values on same line as parameter
 - OUTPUT parameters clearly marked
+
+Note: When adding parameters to an existing stored procedure, a default value must be specified to
+ensure backward compatibility and ensure existing code can be called without modification.
+
+Also use `SET NOCOUNT ON` to prevent the automatic return of row count messages, which improves
+performance and ensures consistent behavior across different client applications that might handle
+these messages differently.
 
 #### INSERT Statements
 
@@ -458,10 +461,10 @@ SELECT
     T1.[Column2],
     T2.[Column3],
     CASE
-        WHEN T1.[Status] = 1
-        THEN 'Active'
-        ELSE 'Inactive'
-    END [StatusText]
+        WHEN T2.[Column4] IS NOT NULL
+        THEN 1
+        ELSE 0
+    END AS ColumnAlias
 FROM
     [dbo].[Table1] T1
 LEFT JOIN
@@ -474,7 +477,7 @@ WHERE
 
 #### Naming Conventions
 
-- **Function Names**: `[Schema].[FunctionName]` (e.g., `[dbo].[UserCollectionDetails]`).
+- **Function Names**: `[Schema].[FunctionName]` (e.g., `[dbo].[UserCollectionDetails]`)
   - The name should describe what the function returns
 
 #### Table-Valued Functions
@@ -499,8 +502,8 @@ WHERE
 
 ### User Defined Types
 
-- **Naming**: `[Schema].[TypeName]` (e.g., `[dbo].[GuidIdArray]`).
-  - The name should describe the type.
+- **Naming**: `[Schema].[TypeName]` (e.g., `[dbo].[GuidIdArray]`)
+  - The name should describe the type
 
 ```sql
 CREATE TYPE [dbo].[TypeName] AS TABLE
@@ -515,21 +518,49 @@ CREATE TYPE [dbo].[TypeName] AS TABLE
 
 - **Create**: `{EntityName}_Create` procedures
 - **Read**: `{EntityName}_ReadById`, `{EntityName}_ReadBy{Criteria}` procedures
+- **Read Many**: `{EntityName}_ReadManyByIds`, `{EntityName}_ReadManyBy{Criteria}` procedures
 - **Update**: `{EntityName}_Update` procedures
 - **Delete**: `{EntityName}_DeleteById`, `{EntityName}_Delete` procedures
-
-### Parameter Patterns
-
-- `@Id UNIQUEIDENTIFIER` for entity identifiers
-- `@UserId UNIQUEIDENTIFIER` for user references
-- `@OrganizationId UNIQUEIDENTIFIER` for organization references
-- `@CreationDate DATETIME2(7)` and `@RevisionDate DATETIME2(7)` for timestamps
 
 ### Error Handling
 
 - Use `SET NOCOUNT ON` in stored procedures
 - Implement appropriate transaction handling where needed
 - Follow consistent error reporting patterns
+  - Business logic should not be in stored procedures, but there may be times when it makes sense to
+    do error handling in other scripts (migrations, one-off data scrubs)
+
+```sql
+BEGIN TRY
+    BEGIN TRANSACTION;
+
+    UPDATE
+        [dbo].[TableName]
+    SET
+        [Column1] = 'NewValue'
+    WHERE
+        [Id] = 'IdValue'
+
+
+    UPDATE
+        [dbo].[TableName2]
+    SET
+        [Column1] = 'NewValue'
+    WHERE
+        [Id] = 'IdValue'
+
+    COMMIT TRANSACTION;
+
+END TRY
+BEGIN CATCH
+
+    IF @@TRANCOUNT > 0
+        ROLLBACK TRANSACTION;
+
+    THROW;
+
+END CATCH;
+```
 
 ## Comments and Documentation
 
