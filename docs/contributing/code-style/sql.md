@@ -336,11 +336,6 @@ CREATE NONCLUSTERED INDEX [IX_OrganizationUser_UserIdOrganizationIdStatus]
 - **Schema**: Use `[dbo]` prefix for all objects
 - **Object names**: Always use square brackets `[dbo].[TableName]`
 
-### User defined types
-
-- **User Defined Types**: Filenames should be `{TypeName}.sql` (e.g., `GuidIdArray.sql`)
-  - Note: Use sparingly as they cause downstream maintenance and performance problems
-
 ### Select statements
 
 - `SELECT` keyword on its own line
@@ -398,7 +393,7 @@ END
 Note: When adding parameters to an existing stored procedure, a default value must be specified to
 ensure backward compatibility and ensure existing code can be called without modification.
 
-Also use `SET NOCOUNT ON` to prevent the automatic return of row count messages, which improves
+Use `SET NOCOUNT ON` to prevent the automatic return of row count messages, which improves
 performance and ensures consistent behavior across different client applications that might handle
 these messages differently.
 
