@@ -182,3 +182,68 @@ your group of services is added to the collection.
   https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.dependencyinjection.extensions.servicecollectiondescriptorextensions?view=net-9.0-pp
 [dependency-groups]:
   https://learn.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection?view=aspnetcore-9.0#register-groups-of-services-with-extension-methods
+
+## Controller action guidelines
+
+To provide clear and descriptive OpenAPI specifications, we have some guidelines to follow when
+creating and naming actions in controllers.
+
+### Naming
+
+Avoid function overloads, and instead use different names for the functions.
+
+```csharp
+// ❌ Don't do this
+[HttpGet("{id}")]
+public async Task<ThingResponseModel> Get(string id) {}
+[HttpGet("")]
+public async Task<ListResponseModel<ThingResponseModel>> Get() {}
+
+// ✅ Do this instead
+[HttpGet("{id}")]
+public async Task<ThingResponseModel> Get(string id) {}
+[HttpGet("")]
+public async Task<ListResponseModel<ThingResponseModel>> GetAll() {}
+```
+
+Avoid naming functions after the HTTP method when another verb would be more clear. The names should
+make sense from the perspective of an API client that wants to call this action.
+
+```csharp
+// ❌ Don't do this
+[HttpPost("")]
+public async Task<ThingResponseModel> PostThing(string id, ThingModel model) {}
+[HttpPut("{id}")]
+public async Task<ThingResponseModel> PutThing(string id, ThingModel model) {}
+
+// ✅ Do this instead
+[HttpPost("")]
+public async Task<ThingResponseModel> CreateThing(string id, ThingModel model) {}
+[HttpPut("{id}")]
+public async Task<ThingResponseModel> UpdateThing(string id, ThingModel model) {}
+```
+
+### Routing
+
+Avoid exposing the same function under two different HTTP routes.
+
+```csharp
+// ❌ Don't do this
+[HttpDelete("{id}")]
+[HttpPost("{id}/delete")]
+public async Task Delete(Guid id) {}
+
+// ✅ Do this instead
+[HttpDelete("{id}")]
+public async Task Delete(Guid id) {}
+```
+
+If support for two routes for the same function is required, make sure one of them is excluded from
+the OpenAPI schema.
+
+```csharp
+[HttpDelete("{id}")]
+[HttpPost("{id}/delete")]
+[SwaggerExclude("POST")]
+public async Task Delete(Guid id) {}
+```
