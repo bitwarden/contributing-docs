@@ -219,5 +219,4 @@ var organization = new Organization
 [dependency-groups]:
   https://learn.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection?view=aspnetcore-9.0#register-groups-of-services-with-extension-methods
 [guid-newguid]: https://learn.microsoft.com/en-us/dotnet/api/system.guid.newguid
-[corehelpers-generatecomb]:
-  https://github.com/bitwarden/server/blob/7a63ae6315f46f08e9a34618281bcfd27cbab6ed/src/Core/Utilities/CoreHelpers.cs#L48
+[corehelpers-generatecomb]: https://fastuuid.com/learn-about-uuids/comb-guids
