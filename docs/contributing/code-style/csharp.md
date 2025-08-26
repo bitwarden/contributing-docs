@@ -172,9 +172,9 @@ your group of services is added to the collection.
 
 ## GUID generation
 
-Always use `CoreHelpers.GenerateComb()` for entity IDs instead of `Guid.NewGuid()`. COMB GUIDs
-prevent SQL Server index fragmentation by incorporating timestamp information for sequential
-ordering.
+Always use [`CoreHelpers.GenerateComb()`][corehelpers-generatecomb] for entity IDs instead of
+[`Guid.NewGuid()`][guid-newguid]. COMB GUIDs prevent SQL Server index fragmentation by incorporating
+timestamp information for sequential ordering.
 
 ```csharp
 // Good
@@ -184,7 +184,7 @@ var id = CoreHelpers.GenerateComb();
 var id = Guid.NewGuid();
 ```
 
-Entities should implement SetNewId():
+Entities should implement `SetNewId()`:
 
 ```csharp
 public void SetNewId()
@@ -218,3 +218,6 @@ var organization = new Organization
   https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.dependencyinjection.extensions.servicecollectiondescriptorextensions?view=net-9.0-pp
 [dependency-groups]:
   https://learn.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection?view=aspnetcore-9.0#register-groups-of-services-with-extension-methods
+[guid-newguid]: https://learn.microsoft.com/en-us/dotnet/api/system.guid.newguid
+[corehelpers-generatecomb]:
+  https://github.com/bitwarden/server/blob/7a63ae6315f46f08e9a34618281bcfd27cbab6ed/src/Core/Utilities/CoreHelpers.cs#L48
