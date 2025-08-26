@@ -20,6 +20,65 @@ highlights:
 - Environments (production, QA, and development for now) exist to segment flag states further. This
   will be automatic based on where code is running.
 
+## When to use flags
+
+Feature flags are a powerful tool for controlling the rollout and lifecycle of features, and there
+are several scenarios when you should consider using them:
+
+### Progressive rollouts
+
+Use feature flags when you need to gradually release a feature to users. This allows you to:
+
+- Start with a small percentage of users to validate stability
+- Monitor performance and user feedback before full deployment
+- Quickly disable the feature if issues arise without requiring a code rollback
+
+### A / B testing and experimentation
+
+Feature flags enable controlled experiments by:
+
+- Serving different variations of a feature to different user segments
+- Collecting metrics to determine which variation performs better
+- Making data-driven decisions about feature implementation
+
+### High-risk or complex features
+
+For features that significantly change system behavior or affect critical paths:
+
+- Deploy code behind a flag to production without immediate activation
+- Test in production environments with internal users first
+- Maintain a kill switch to instantly disable problematic features
+
+### Cross-platform coordination
+
+When features span multiple clients (web, mobile, desktop) and server components:
+
+- Ensure all components are deployed before enabling the feature
+- Coordinate releases across different deployment schedules
+- Maintain backward compatibility during the transition period
+
+### Development and testing
+
+Feature flags facilitate better development workflows by:
+
+- Allowing incomplete features to be merged into mainline branches without affecting production
+- Enabling QA teams to test features in isolation
+- Supporting parallel development of multiple features
+
+### When _not_ to use flags
+
+Avoid feature flags for:
+
+- Simple or minor updates that don't change functionality
+- Dependency updates that are build-time
+- Permanent architectural changes that cannot be toggled
+- Database logic -- utilize flags in the _application_ logic to select / execute independent
+  database changes
+- Features that would create technical debt if maintained long-term behind a flag
+
+Remember that feature flags add complexity and should be treated as temporary constructs. Plan for
+flag retirement as part of the development lifecycle.
+
 ## Flag data sources
 
 When consuming feature flags in either the client or server code, it is important to understand
