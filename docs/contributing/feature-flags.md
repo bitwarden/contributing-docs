@@ -324,5 +324,5 @@ follows:
 3. Release cloud and self-hosted with the feature flag removed, therefore enabling the feature for
    self-hosted instances
 
-A self-hosted installation may choose to configure alternative [data sources](#flag-data-sources) to
-more quickly adopt a feature.
+Local and development self-hosted installations may choose to configure alternative
+[data sources](#flag-data-sources) to more quickly adopt a feature.
