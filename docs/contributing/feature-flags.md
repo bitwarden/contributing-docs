@@ -22,8 +22,9 @@ highlights:
 
 ## When to use flags
 
-Feature flags are a powerful tool for controlling the rollout and lifecycle of features, and there
-are several scenarios when you should consider using them:
+Feature flags are a [powerful tool](https://launchdarkly.com/blog/what-are-feature-flags/) for
+controlling the rollout and lifecycle of changes and should in general **always** be used for new
+work. There are several scenarios where you should consider using them:
 
 ### Progressive rollouts
 
@@ -59,11 +60,11 @@ When features span multiple clients (web, mobile, desktop) and server components
 
 ### Development and testing
 
-Feature flags facilitate better development workflows by:
+Feature flags facilitate better development workflows and can:
 
-- Allowing incomplete features to be merged into mainline branches without affecting production
-- Enabling QA teams to test features in isolation
-- Supporting parallel development of multiple features
+- Allow incomplete features to be merged into mainline branches without affecting production
+- Enable QA teams to test features in isolation
+- Support parallel development of multiple features
 
 ### When _not_ to use flags
 
