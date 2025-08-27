@@ -216,7 +216,6 @@ GO
 #### Naming conventions
 
 - **View Names**:
-
   - `{EntityName}View`
     - Used when the view maps closely to a single table, with little or no joins. (e.g., (e.g.,
       `[dbo].[ApiKeyView]`) (from ApiKey))
