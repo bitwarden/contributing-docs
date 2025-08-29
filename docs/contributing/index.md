@@ -15,18 +15,23 @@ Here is how you can get involved:
 
 - **Request a new feature:** Go to the
   [Feature Requests category](https://community.bitwarden.com/c/feature-requests/) of the Community
-  Forums. Please search existing feature requests before making a new one
-- **Write code for a new feature:** Make a new post in the
+  Forums. Please search existing feature requests before making a new one.
+- **Write code for a new feature or bug fix:** By submitting a pull request.
+
+  :::note _Before_ writing code for either a new feature or a bug fix that has significant UX
+  changes, make a new post in the
   [Password Manager](https://github.com/orgs/bitwarden/discussions/categories/password-manager) or
   [Secrets Manager](https://github.com/orgs/bitwarden/discussions/categories/secrets-manager) GitHub
   Discussions category. Include a description of your proposed contribution, screenshots, and links
-  to any relevant feature requests. This helps get feedback from the community and Bitwarden team
-  members before you start writing code
-- **Report a bug or submit a bugfix:** Use Github issues and pull requests
+  to any relevant feature requests or issues. This helps get feedback from the community and
+  Bitwarden team members before you start writing code and facilitates a smoother PR review process.
+  :::
+
+- **Report a bug:** Using Github issues.
 - **Help other users:** Go to the
   [Ask the Bitwarden Community category](https://community.bitwarden.com/c/support/) on the
-  Community Forums
-- **Translate:** See the localization (i10n) section below
+  Community Forums.
+- **Translate:** See the localization (i10n) section below.
 - **Report a security concern or vulnerability:** Security audits and feedback are welcome. If the
   issue is sensitive, please [contact us privately](https://bitwarden.com/contact) or submit a
   report through our [HackerOne Program](https://hackerone.com/bitwarden/). You can read our
