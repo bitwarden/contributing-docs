@@ -206,6 +206,73 @@ var organization = new Organization
 };
 ```
 
+## Controller action guidelines
+
+To provide clear and descriptive OpenAPI specifications, we have some guidelines to follow when
+creating and naming actions in controllers.
+
+### Naming
+
+Avoid function overloads, and instead use different names for the functions.
+
+```csharp
+// ❌ Don't do this
+[HttpGet("{id}")]
+public async Task<ThingResponseModel> Get(string id) {}
+[HttpGet("")]
+public async Task<ListResponseModel<ThingResponseModel>> Get() {}
+
+// ✅ Do this instead
+[HttpGet("{id}")]
+public async Task<ThingResponseModel> Get(string id) {}
+[HttpGet("")]
+public async Task<ListResponseModel<ThingResponseModel>> GetAll() {}
+```
+
+Avoid naming functions after the HTTP method when another verb would be more clear. The names should
+make sense from the perspective of an API client that wants to call this action.
+
+```csharp
+// ❌ Don't do this
+[HttpPost("")]
+public async Task<ThingResponseModel> PostThing(string id, ThingModel model) {}
+[HttpPut("{id}")]
+public async Task<ThingResponseModel> PutThing(string id, ThingModel model) {}
+
+// ✅ Do this instead
+[HttpPost("")]
+public async Task<ThingResponseModel> CreateThing(string id, ThingModel model) {}
+[HttpPut("{id}")]
+public async Task<ThingResponseModel> UpdateThing(string id, ThingModel model) {}
+```
+
+### Routing
+
+Avoid exposing the same function under two different HTTP routes.
+
+```csharp
+// ❌ Don't do this
+[HttpDelete("{id}")]
+[HttpPost("{id}/delete")]
+public async Task Delete(Guid id) {}
+
+// ✅ Do this instead
+[HttpDelete("{id}")]
+public async Task Delete(Guid id) {}
+```
+
+If support for the two routes is required for compatibility reasons, split the routes into two
+functions and mark one of them as obsolete.
+
+```csharp
+[HttpDelete("{id}")]
+public async Task Delete(Guid id) {}
+
+[HttpPost("{id}/delete")]
+[Obsolete("This endpoint is deprecated. Use DELETE /{id} instead.")]
+public async Task PostDelete(Guid id) {}
+```
+
 [null-forgiving]:
   https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/operators/null-forgiving
 [null-state-attributes]:
