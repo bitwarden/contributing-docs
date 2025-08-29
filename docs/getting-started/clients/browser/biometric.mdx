@@ -52,14 +52,54 @@ instead.
 
 ### Build and Run the Browser Extension
 
-- In the local Browser project, run `npm ci`.
-- To use the local browser extension on Safari, use this command: `npm run dist:safari`. Once this
-  has built, you should see the Bitwarden Extension in Safari's Settings under Extensions menu. If
-  not, open and build the related Xcode project (usually found in
-  `$HOME/browser/dist/Safari/dmg/desktop.xcodeproj`). It should then show up in the Settings
-  Extensions menu, and you can enable it.
-- For other browsers, use `npm run build:watch` and then load the locally built extension using the
-  method described [here](./index.md#testing-and-debugging).
+1. In the local Browser project, run `npm ci`.
+2. Build the extension:
+
+   ```bash
+   npm run build:watch
+   ```
+
+3. Load the locally built extension using the method described
+   [here](./index.md#testing-and-debugging).
+
+### Safari
+
+Safari requires a different build process compared to other browsers. The extension must be packaged
+as a desktop application, which is then installed in Safari.
+
+#### Through Xcode
+
+1. In the local Browser project, run `npm ci`.
+2. Build the extension:
+
+   ```bash
+   npm run dist:safari
+   ```
+
+3. Open `src/safari/desktop.xcodeproj` in Xcode
+4. Run the "desktop" target.
+5. You should see the Bitwarden Extension in Safari's Settings under Extensions menu.
+
+:::note
+
+Please remember to re-run through Xcode whenever any changes are made to the source files. It will
+not automatically reload.
+
+:::
+
+#### Production build
+
+1. In the local Browser project, run `npm ci`.
+2. Build the extension:
+
+   ```bash
+   npm run build:watch:safari
+   ```
+
+3. You should see the Bitwarden Extension in Safari's Settings under Extensions menu. If not, open
+   and build the related Xcode project (usually found in
+   `browser/dist/Safari/dmg/desktop.xcodeproj`). It should then show up in the Settings Extensions
+   menu, and you can enable it.
 
 ### Build and Run the Desktop App
 
