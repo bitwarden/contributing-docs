@@ -1,6 +1,6 @@
 ---
 adr: "0027"
-status: Proposed
+status: Accepted
 date: 2025-08-01
 tags: [clients, angular, i18n]
 ---
