@@ -12,8 +12,6 @@ data from _Views_.
 
 ## Best practices
 
-When writing T-SQL code, you should adhere to these general best practices as a guide. More detailed
-
 1. **Consistency**: Follow established patterns throughout the codebase
 2. **Readability**: Prioritize code readability and maintainability
 3. **Performance**: Consider index usage and query optimization
@@ -58,14 +56,17 @@ clear - e.g. `_V2` suffix.
 
 :::
 
-## Code naming and formatting standards
+## Code style
 
 ### General standards
+
+These standards should be applied across any T-SQL scripts that you write.
 
 - **Indentation**: Use 4 spaces (not tabs) for all SQL code files
 - **Keywords**: Use UPPERCASE for all SQL keywords (`CREATE`, `SELECT`, `FROM`, `WHERE`, `GROUP BY`,
   `ORDER BY`, `JOIN`, `ON`, `INTO`, `TOP`, etc.)
 - **Object names**: Always use square brackets `[dbo].[TableName]`
+- **Schema**: Use `[dbo]` prefix for all objects
 - **Line endings**: Use consistent line breaks with proper indentation
 - **Trailing spaces**: Should be trimmed from the end of lines. Use `[ \t]+$` as a regex
   find/replace
@@ -74,19 +75,14 @@ clear - e.g. `_V2` suffix.
   makes code changes easily detectable
 - **Blank lines**: Separate sections of code with at least one blank line
 - **Commas**: Commas should be placed at the right end of the line
-- **Parentheses**: Parentheses should be vertically aligned with spanning multiple lines
+- **Parentheses**: Parentheses should be vertically aligned with spanning multiple line
 
-### Schema and object prefixes
-
-- **Schema**: Use `[dbo]` prefix for all objects
-- **Object names**: Always use square brackets `[dbo].[TableName]`
-
-### Select statements
+### `SELECT` statements
 
 - `SELECT` keyword on its own line
 - Column names indented (4 spaces)
 - One column per line for multi-column selects
-- Callout the specific table/alias for where a column is from when joining to other tables
+- Call out the specific table/alias for where a column is from when joining to other tables
 - `FROM` keyword on separate line, aligned with `SELECT`
 - `FROM` clause indented (4 spaces)
   - Use aliases for table names when joining to other tables
@@ -149,7 +145,7 @@ END
 - One parameter per line
 - Align parameters with consistent indentation (4 spaces)
 - Default values on same line as parameter
-- OUTPUT parameters clearly marked
+- `OUTPUT` parameters clearly marked
 
 :::warning Default parameter values
 
@@ -162,10 +158,10 @@ Use `SET NOCOUNT ON` to prevent the automatic return of row count messages, whic
 performance and ensures consistent behavior across different client applications that might handle
 these messages differently.
 
-#### Insert statements
+#### `INSERT` statements
 
 - Column list in parentheses, one column per line
-- VALUES clause with parameters aligned
+- `VALUES` clause with parameters aligned
 - Proper indentation for readability
 
 ```sql
@@ -181,7 +177,7 @@ VALUES
 )
 ```
 
-#### Update statements
+#### `UPDATE` statements
 
 - `UPDATE` and table name on different lines
 - `SET` clause with each column assignment on separate line
@@ -206,7 +202,7 @@ WHERE
 - **Foreign Keys**: `FK_{TableName}_{ReferencedTable}` (e.g., FK_Device_User)
 - **Default Constraints**: `DF_{TableName}_{ColumnName}` (e.g., [DF_Organization_UseScim])
 
-#### Column definition standards
+#### Column definitions
 
 - **Alignment**: Column names, data types, and nullability vertically aligned using spaces
 - **Data Types**: Use consistent type patterns:
@@ -236,20 +232,17 @@ CREATE TABLE [dbo].[TableName]
 
 ### Views
 
-- **View Names**:
+- **View Name**:
   - `{EntityName}View`
-    - Used when the view maps closely to a single table, with little or no joins. (e.g., (e.g.,
-      `[dbo].[ApiKeyView]`) (from ApiKey))
+    - Used when the view maps closely to a single table, with little or no joins. (e.g.,
+      `[dbo].[ApiKeyView]` from `ApiKey`)
   - `{EntityName}DetailsView` for complex views
     - Used for views that combine multiple tables or add logic beyond a basic table select. These
       usually serve a specific display or reporting use case and are named to reflect the context
       (e.g., `[dbo].[OrganizationUserDetailsView]`)
-
-- For more complex reads that join multiple tables:
-  - Create a view with a clear name tied to the main entity:
-    - `[dbo].[OrganizationUser_MemberAccessDetailsView]`
-  - Create a stored procedure that reads from it:
-    - `[dbo].[MemberAccessDetails_ReadByUserId]`
+  - For views that combine entities, create a view with a clear name tied to the main entity (e.g.,
+    `[dbo].[OrganizationUser_MemberAccessDetailsView]`) and a stored procedure that reads from it
+    (e.g., `[dbo].[MemberAccessDetails_ReadByUserId]`).
 
 #### Simple views
 
@@ -583,7 +576,7 @@ DROP IF EXISTS [dbo].[{sproc_or_func_name}]
 GO
 ```
 
-### Indices
+### Indexes
 
 When creating indexes, especially on heavily used tables, our production database can easily become
 offline, unusable, hit 100% CPU and many other bad behaviors. Our production database is configured
