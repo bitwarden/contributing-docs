@@ -10,12 +10,22 @@ We use the [Repository pattern][repository] with the MSSQL repositories being wr
 [Dapper][dapper]. Each repository method in turn calls a _Stored Procedure_, which primarily fetches
 data from _Views_.
 
+## Best practices
+
+When writing T-SQL code, you should adhere to these general best practices as a guide. More detailed
+
+1. **Consistency**: Follow established patterns throughout the codebase
+2. **Readability**: Prioritize code readability and maintainability
+3. **Performance**: Consider index usage and query optimization
+4. **Security**: Use parameterized queries and proper data type validation
+5. **Modularity**: Break complex operations into smaller, reusable procedures
+
 ## File organization
 
 ### Directory structure
 
-- **Schema-based organization**: Files are organized by domain/schema (Auth, Billing,
-  SecretsManager, Vault, etc.)
+- **Schema-based organization**: Files are organized by domain/schema (Auth, Billing, Secrets
+  Manager, Vault, etc.)
 - **Object type grouping**: Within each domain, files are grouped by type:
   - `Tables/` - Table definitions
   - `Views/` - View definitions
@@ -29,17 +39,28 @@ data from _Views_.
 
 ### File naming conventions
 
-- **Stored Procedures**: `{EntityName}_{Action}.sql` (e.g., `User_Create.sql`,
-  `Organization_ReadById.sql`)
-- **Tables**: `{EntityName}.sql` (e.g., `User.sql`, `Organization.sql`)
-- **Views**: `{EntityName}View.sql` or `{EntityName}{Purpose}View.sql` (e.g., `UserView.sql`,
-  `ApiKeyDetailsView.sql`)
-- **Functions**: `{EntityName}{Purpose}.sql` (e.g., `UserCollectionDetails.sql`)
-- **User Defined Types**: `{TypeName}.sql` (e.g., `GuidIdArray.sql`)
+- **Stored Procedures**: `{EntityName}_{Action}.sql`
+  - e.g. `User_Create.sql`, `Organization_ReadById.sql`
+- **Tables**: `{EntityName}.sql`
+  - e.g. `User.sql`, `Organization.sql`
+- **Views**: `{EntityName}View.sql` or `{EntityName}{Purpose}View.sql`
+  - e.g. `UserView.sql`, `ApiKeyDetailsView.sql`
+- **Functions**: `{EntityName}{Purpose}.sql`
+  - e.g. `UserCollectionDetails.sql`
+- **User Defined Types**: `{TypeName}.sql`
+  - e.g. `GuidIdArray.sql`
 
-## Code formatting standards
+:::tip Versioning
 
-### General formatting
+When a new version of an entity is introduced and needs to be maintained next to the existing one
+during deployment, use versioned names for the different scripts, so that the relationship is
+clear - e.g. `_V2` suffix.
+
+:::
+
+## Code naming and formatting standards
+
+### General standards
 
 - **Indentation**: Use 4 spaces (not tabs) for all SQL code files
 - **Keywords**: Use UPPERCASE for all SQL keywords (`CREATE`, `SELECT`, `FROM`, `WHERE`, `GROUP BY`,
@@ -55,21 +76,327 @@ data from _Views_.
 - **Commas**: Commas should be placed at the right end of the line
 - **Parentheses**: Parentheses should be vertically aligned with spanning multiple lines
 
-## Deployment scripts
+### Schema and object prefixes
 
-There are specific ways deployment scripts should be structured. The goal for these standards is to
-ensure that the scripts should be re-runnable. We never intend to run scripts multiple times on an
-environment, but the scripts should support it.
+- **Schema**: Use `[dbo]` prefix for all objects
+- **Object names**: Always use square brackets `[dbo].[TableName]`
+
+### Select statements
+
+- `SELECT` keyword on its own line
+- Column names indented (4 spaces)
+- One column per line for multi-column selects
+- Callout the specific table/alias for where a column is from when joining to other tables
+- `FROM` keyword on separate line, aligned with `SELECT`
+- `FROM` clause indented (4 spaces)
+  - Use aliases for table names when joining to other tables
+- `JOIN` keywords on separate line, aligned with `FROM`
+  - Use full join specifications (`INNER JOIN` vs `JOIN`, `LEFT OUTER JOIN` vs `LEFT JOIN`, etc)
+- `JOIN` clauses indented to align with table/column name(s)
+- `WHERE` keyword on separate line, aligned with `FROM`/`JOIN`
+- `WHERE` clause on separate lines, indented to align with table/column name(s)
+
+```sql
+SELECT
+    U.[Id],
+    U.[Name],
+    U.[Email],
+    OU.[OrganizationId]
+FROM
+    [dbo].[User] U
+INNER JOIN
+    [dbo].[OrganizationUser] OU ON U.[Id] = OU.[UserId]
+WHERE
+    U.[Enabled] = 1
+```
+
+### Stored procedures
+
+- **Stored Procedure Name**: `{EntityName}_{Action}` format (e.g., `[dbo].[User_ReadById]`)
+  - EntityName: The main table or concept (e.g. User, Organization, Cipher)
+  - Action: What the procedure does (e.g. Create, ReadById, DeleteMany)
+- **Parameters**: Start with `@` and use PascalCase (e.g., `@UserId`, `@OrganizationId`)
+- **OUTPUT parameters**: Explicitly declare with `OUTPUT` keyword
+
+:::tip Example of common CRUD operations
+
+- **Create**: `{EntityName}_Create` procedures
+- **Read**: `{EntityName}_ReadById`, `{EntityName}_ReadBy{Criteria}` procedures
+- **Read Many**: `{EntityName}_ReadManyByIds`, `{EntityName}_ReadManyBy{Criteria}` procedures
+- **Update**: `{EntityName}_Update` procedures
+- **Delete**: `{EntityName}_DeleteById`, `{EntityName}_Delete` procedures
+
+:::
+
+#### Basic structure
+
+```sql
+CREATE PROCEDURE [dbo].[EntityName_Action]
+    @Parameter1 DATATYPE,
+    @Parameter2 DATATYPE = NULL,
+    @Parameter3 DATATYPE OUTPUT
+AS
+BEGIN
+    SET NOCOUNT ON
+
+    -- Procedure logic here
+
+END
+```
+
+#### Parameter declaration
+
+- One parameter per line
+- Align parameters with consistent indentation (4 spaces)
+- Default values on same line as parameter
+- OUTPUT parameters clearly marked
+
+:::warning Default parameter values
+
+When adding parameters to an existing stored procedure, a default value must be specified to ensure
+backward compatibility and ensure existing code can be called without modification.
+
+:::
+
+Use `SET NOCOUNT ON` to prevent the automatic return of row count messages, which improves
+performance and ensures consistent behavior across different client applications that might handle
+these messages differently.
+
+#### Insert statements
+
+- Column list in parentheses, one column per line
+- VALUES clause with parameters aligned
+- Proper indentation for readability
+
+```sql
+INSERT INTO [dbo].[TableName]
+(   [Column1],
+    [Column2],
+    [Column3]
+)
+VALUES
+(   @Parameter1,
+    @Parameter2,
+    @Parameter3
+)
+```
+
+#### Update statements
+
+- `UPDATE` and table name on different lines
+- `SET` clause with each column assignment on separate line
+- `WHERE` clause clearly separated
+
+```sql
+UPDATE
+    [dbo].[TableName]
+SET
+    [Column1] = @Parameter1,
+    [Column2] = @Parameter2,
+    [Column3] = @Parameter3
+WHERE
+    [Id] = @Id
+```
 
 ### Tables
 
-#### Naming conventions
+- **Table Name**: PascalCase (e.g., [dbo].[User], [dbo].[AuthRequest])
+- **Column Names**: PascalCase (e.g., [Id], [CreationDate], [MasterPasswordHash])
+- **Primary Key**: `PK_{TableName}` (e.g., [PK_User], [PK_Organization])
+- **Foreign Keys**: `FK_{TableName}_{ReferencedTable}` (e.g., FK_Device_User)
+- **Default Constraints**: `DF_{TableName}_{ColumnName}` (e.g., [DF_Organization_UseScim])
 
-- **Table Names**: PascalCase (e.g., `[dbo].[User]`, `[dbo].[AuthRequest]`)
-- **Column Names**: PascalCase (e.g., `[Id]`, `[CreationDate]`, `[MasterPasswordHash]`)
-- **Primary Keys**: `PK_{TableName}` (e.g., `[PK_User]`, `[PK_Organization]`)
-- **Foreign Keys**: `FK_{TableName}_{ReferencedTable}` (e.g., `FK_Device_User`)
-- **Default Constraints**: `DF_{TableName}_{ColumnName}` (e.g., `[DF_Organization_UseScim]`)
+#### Column definition standards
+
+- **Alignment**: Column names, data types, and nullability vertically aligned using spaces
+- **Data Types**: Use consistent type patterns:
+  - `UNIQUEIDENTIFIER` for IDs
+  - `DATETIME2(7)` for timestamps
+  - `NVARCHAR(n)` for Unicode text
+  - `VARCHAR(n)` for ASCII text
+  - `BIT` for boolean values
+  - `TINYINT`, `SMALLINT`, `INT`, `BIGINT` for integers
+- **Nullability**: Explicitly specify `NOT NULL` or `NULL`
+- **Standard Columns**: Most tables include:
+  - `[Id] UNIQUEIDENTIFIER NOT NULL` - Primary key
+  - `[CreationDate] DATETIME2(7) NOT NULL` - Record creation timestamp
+  - `[RevisionDate] DATETIME2(7) NOT NULL` - Last modification timestamp
+
+```sql
+CREATE TABLE [dbo].[TableName]
+(
+    [Column1] INT IDENTITY(1,1) NOT NULL,
+    [Column2] NVARCHAR(100) NOT NULL,
+    [Column3] NVARCHAR(255) NULL,
+    [Column4] BIT NOT NULL CONSTRAINT [DF_TableName_Column4] DEFAULT (1),
+
+    CONSTRAINT [PK_TableName] PRIMARY KEY CLUSTERED ([Column1] ASC)
+);
+```
+
+### Views
+
+- **View Names**:
+  - `{EntityName}View`
+    - Used when the view maps closely to a single table, with little or no joins. (e.g., (e.g.,
+      `[dbo].[ApiKeyView]`) (from ApiKey))
+  - `{EntityName}DetailsView` for complex views
+    - Used for views that combine multiple tables or add logic beyond a basic table select. These
+      usually serve a specific display or reporting use case and are named to reflect the context
+      (e.g., `[dbo].[OrganizationUserDetailsView]`)
+
+- For more complex reads that join multiple tables:
+  - Create a view with a clear name tied to the main entity:
+    - `[dbo].[OrganizationUser_MemberAccessDetailsView]`
+  - Create a stored procedure that reads from it:
+    - `[dbo].[MemberAccessDetails_ReadByUserId]`
+
+#### Simple views
+
+```sql
+CREATE VIEW [dbo].[ViewName]
+AS
+SELECT
+    *
+FROM
+    [dbo].[TableName]
+```
+
+#### Complex views
+
+```sql
+CREATE VIEW [dbo].[ComplexViewName]
+AS
+SELECT
+    T1.[Column1],
+    T1.[Column2],
+    T2.[Column3],
+    CASE
+        WHEN T2.[Column4] IS NOT NULL
+        THEN 1
+        ELSE 0
+    END AS ColumnAlias
+FROM
+    [dbo].[Table1] T1
+LEFT JOIN
+    [dbo].[Table2] T2 ON T1.[Id] = T2.[ForeignId]
+WHERE
+    T1.[Enabled] = 1
+```
+
+### Functions
+
+- **Function Name**: `[Schema].[FunctionName]` (e.g., `[dbo].[UserCollectionDetails]`)
+  - The name should describe what the function returns
+
+```sql
+CREATE FUNCTION [dbo].[FunctionName](@Parameter DATATYPE)
+RETURNS TABLE
+AS RETURN
+SELECT
+    Column1,
+    Column2,
+    CASE
+        WHEN Condition
+        THEN Value1
+        ELSE Value2
+    END [ComputedColumn]
+FROM
+    [dbo].[TableName]
+WHERE
+    [FilterColumn] = @Parameter
+```
+
+### User defined types
+
+- **User Defined Type Name**: `[Schema].[TypeName]` (e.g., `[dbo].[GuidIdArray]`)
+  - The name should describe the type
+
+```sql
+CREATE TYPE [dbo].[TypeName] AS TABLE
+(   [Column1] DATATYPE NOT NULL,
+    [Column2] DATATYPE NOT NULL
+);
+```
+
+### Indexes
+
+- **Index Name**: `IX_{TableName}_{ColumnName(s)}` (e.g., `[IX_User_Email]`)
+  - The name should clearly indicate the table and the columns being indexed
+
+```sql
+CREATE NONCLUSTERED INDEX [IX_OrganizationUser_UserIdOrganizationIdStatus]
+   ON [dbo].[OrganizationUser]([UserId] ASC, [OrganizationId] ASC, [Status] ASC)
+   INCLUDE ([AccessAll])
+```
+
+## Error handling
+
+- Use `SET NOCOUNT ON` in stored procedures
+- Implement appropriate transaction handling where needed
+- Follow consistent error reporting patterns
+  - Business logic should not be in stored procedures, but there may be times when it makes sense to
+    do error handling in other scripts (migrations, one-off data scrubs)
+
+```sql
+BEGIN TRY
+    BEGIN TRANSACTION;
+
+    UPDATE
+        [dbo].[TableName]
+    SET
+        [Column1] = 'NewValue'
+    WHERE
+        [Id] = 'IdValue'
+
+
+    UPDATE
+        [dbo].[TableName2]
+    SET
+        [Column1] = 'NewValue'
+    WHERE
+        [Id] = 'IdValue'
+
+    COMMIT TRANSACTION;
+
+END TRY
+BEGIN CATCH
+
+    IF @@TRANCOUNT > 0
+        ROLLBACK TRANSACTION;
+
+    THROW;
+
+END CATCH;
+```
+
+## Comments and documentation
+
+- Use `--` for single-line comments
+- Add comments for complex business logic and the reason for a command or block of code
+- Document magic numbers and status codes (e.g., `-- 2 = Confirmed`)
+- Provide brief explanations for complex CASE statements or calculations
+- Don't comment unnecessarily, such as commenting that an insert statement is about to be executed
+
+## Deployment scripts
+
+There are specific ways migration scripts should be structured. We do so to adhere to the following
+guiding principles:
+
+✅ **The script must be idempotent**: Always ensure a migration can be run multiple times without
+causing errors or duplicating data. We never intend to run scripts multiple times on an environment,
+but the scripts must support it.
+
+✅ **The script must avoid breaking changes**: Migrations should never delete or rename columns that
+are still in use by deployed code.
+
+✅ **The script must maintain schema integrity**: The schema of the database defined in code should
+map exactly to the schema of the database in all deployed environments.
+
+✅ **The script must be backwards compatible**: Code should be able to work with both the old and
+new schema during a rolling deployment. See our MSSQL docs for how we put this into practice.
+
+### Tables
 
 #### Creating a table
 
@@ -90,22 +417,6 @@ BEGIN
 END
 GO
 ```
-
-#### Column definition standards
-
-- **Alignment**: Column names, data types, and nullability vertically aligned using spaces
-- **Data Types**: Use consistent type patterns:
-  - `UNIQUEIDENTIFIER` for IDs
-  - `DATETIME2(7)` for timestamps
-  - `NVARCHAR(n)` for Unicode text
-  - `VARCHAR(n)` for ASCII text
-  - `BIT` for boolean values
-  - `TINYINT`, `SMALLINT`, `INT`, `BIGINT` for integers
-- **Nullability**: Explicitly specify `NOT NULL` or `NULL`
-- **Standard Columns**: Most tables include:
-  - `[Id] UNIQUEIDENTIFIER NOT NULL` - Primary key
-  - `[CreationDate] DATETIME2(7) NOT NULL` - Record creation timestamp
-  - `[RevisionDate] DATETIME2(7) NOT NULL` - Last modification timestamp
 
 #### Deleting a table
 
@@ -213,23 +524,6 @@ GO
 
 ### Views
 
-#### Naming conventions
-
-- **View Names**:
-  - `{EntityName}View`
-    - Used when the view maps closely to a single table, with little or no joins. (e.g., (e.g.,
-      `[dbo].[ApiKeyView]`) (from ApiKey))
-  - `{EntityName}DetailsView` for complex views
-    - Used for views that combine multiple tables or add logic beyond a basic table select. These
-      usually serve a specific display or reporting use case and are named to reflect the context
-      (e.g., `[dbo].[OrganizationUserDetailsView]`)
-
-- For more complex reads that join multiple tables:
-  - Create a view with a clear name tied to the main entity:
-    - `[dbo].[OrganizationUser_MemberAccessDetailsView]`
-  - Create a stored procedure that reads from it:
-    - `[dbo].[MemberAccessDetails_ReadByUserId]`
-
 #### Creating or modifying a view
 
 We recommend using the `CREATE OR ALTER` syntax for adding or modifying a view.
@@ -269,14 +563,6 @@ GO
 
 ### Functions and stored procedures
 
-#### Naming conventions
-
-- **Stored procedures**: `{EntityName}_{Action}` format (e.g., `[dbo].[User_ReadById]`)
-  - EntityName: The main table or concept (e.g. User, Organization, Cipher)
-  - Action: What the procedure does (e.g. Create, ReadById, DeleteMany)
-- **Parameters**: Start with `@` and use PascalCase (e.g., `@UserId`, `@OrganizationId`)
-- **OUTPUT parameters**: Explicitly declare with `OUTPUT` keyword
-
 #### Creating or modifying a function or stored procedure
 
 We recommend using the `CREATE OR ALTER` syntax for adding or modifying a function or stored
@@ -297,7 +583,7 @@ DROP IF EXISTS [dbo].[{sproc_or_func_name}]
 GO
 ```
 
-### Creating or modifying an index
+### Indices
 
 When creating indexes, especially on heavily used tables, our production database can easily become
 offline, unusable, hit 100% CPU and many other bad behaviors. Our production database is configured
@@ -317,263 +603,11 @@ CREATE NONCLUSTERED INDEX [IX_OrganizationUser_UserIdOrganizationIdStatus]
    INCLUDE ([AccessAll])
 ```
 
-#### Naming conventions
-
-- **Indexes**: `IX_{TableName}_{ColumnName(s)}` (e.g., `[IX_User_Email]`)
-  - The name should clearly indicate the table and the columns being indexed
-
 #### Index best practices
 
 - Create indexes after table definition with `GO` separator
-- Use descriptive names following `IX_{TableName}_{ColumnName}` pattern
 - Include `INCLUDE` clause when beneficial for covering indexes
 - Use filtered indexes with `WHERE` clause when appropriate
-
-## General naming conventions
-
-### Schema and object prefixes
-
-- **Schema**: Use `[dbo]` prefix for all objects
-- **Object names**: Always use square brackets `[dbo].[TableName]`
-
-### Select statements
-
-- `SELECT` keyword on its own line
-- Column names indented (4 spaces)
-- One column per line for multi-column selects
-- Callout the specific table/alias for where a column is from when joining to other tables
-- `FROM` keyword on separate line, aligned with `SELECT`
-- `FROM` clause indented (4 spaces)
-  - Use aliases for table names when joining to other tables
-- `JOIN` keywords on separate line, aligned with `FROM`
-  - Use full join specifications (`INNER JOIN` vs `JOIN`, `LEFT OUTER JOIN` vs `LEFT JOIN`, etc)
-- `JOIN` clauses indented to align with table/column name(s)
-- `WHERE` keyword on separate line, aligned with `FROM`/`JOIN`
-- `WHERE` clause on separate lines, indented to align with table/column name(s)
-
-```sql
-SELECT
-    U.[Id],
-    U.[Name],
-    U.[Email],
-    OU.[OrganizationId]
-FROM
-    [dbo].[User] U
-INNER JOIN
-    [dbo].[OrganizationUser] OU ON U.[Id] = OU.[UserId]
-WHERE
-    U.[Enabled] = 1
-```
-
-### Stored procedures
-
-#### Basic structure
-
-```sql
-CREATE PROCEDURE [dbo].[EntityName_Action]
-    @Parameter1 DATATYPE,
-    @Parameter2 DATATYPE = NULL,
-    @Parameter3 DATATYPE OUTPUT
-AS
-BEGIN
-    SET NOCOUNT ON
-
-    -- Procedure logic here
-
-END
-```
-
-#### Parameter declaration
-
-- One parameter per line
-- Align parameters with consistent indentation (4 spaces)
-- Default values on same line as parameter
-- OUTPUT parameters clearly marked
-
-Note: When adding parameters to an existing stored procedure, a default value must be specified to
-ensure backward compatibility and ensure existing code can be called without modification.
-
-Use `SET NOCOUNT ON` to prevent the automatic return of row count messages, which improves
-performance and ensures consistent behavior across different client applications that might handle
-these messages differently.
-
-#### Insert statements
-
-- Column list in parentheses, one column per line
-- VALUES clause with parameters aligned
-- Proper indentation for readability
-
-```sql
-INSERT INTO [dbo].[TableName]
-(   [Column1],
-    [Column2],
-    [Column3]
-)
-VALUES
-(   @Parameter1,
-    @Parameter2,
-    @Parameter3
-)
-```
-
-#### Update statements
-
-- `UPDATE` and table name on different lines
-- `SET` clause with each column assignment on separate line
-- `WHERE` clause clearly separated
-
-```sql
-UPDATE
-    [dbo].[TableName]
-SET
-    [Column1] = @Parameter1,
-    [Column2] = @Parameter2,
-    [Column3] = @Parameter3
-WHERE
-    [Id] = @Id
-```
-
-### Views
-
-#### Simple views
-
-```sql
-CREATE VIEW [dbo].[ViewName]
-AS
-SELECT
-    *
-FROM
-    [dbo].[TableName]
-```
-
-#### Complex views
-
-```sql
-CREATE VIEW [dbo].[ComplexViewName]
-AS
-SELECT
-    T1.[Column1],
-    T1.[Column2],
-    T2.[Column3],
-    CASE
-        WHEN T2.[Column4] IS NOT NULL
-        THEN 1
-        ELSE 0
-    END AS ColumnAlias
-FROM
-    [dbo].[Table1] T1
-LEFT JOIN
-    [dbo].[Table2] T2 ON T1.[Id] = T2.[ForeignId]
-WHERE
-    T1.[Enabled] = 1
-```
-
-### Functions
-
-#### Naming conventions
-
-- **Function names**: `[Schema].[FunctionName]` (e.g., `[dbo].[UserCollectionDetails]`)
-  - The name should describe what the function returns
-
-#### Table-valued functions
-
-```sql
-CREATE FUNCTION [dbo].[FunctionName](@Parameter DATATYPE)
-RETURNS TABLE
-AS RETURN
-SELECT
-    Column1,
-    Column2,
-    CASE
-        WHEN Condition
-        THEN Value1
-        ELSE Value2
-    END [ComputedColumn]
-FROM
-    [dbo].[TableName]
-WHERE
-    [FilterColumn] = @Parameter
-```
-
-### User defined types
-
-- **Naming**: `[Schema].[TypeName]` (e.g., `[dbo].[GuidIdArray]`)
-  - The name should describe the type
-
-```sql
-CREATE TYPE [dbo].[TypeName] AS TABLE
-(   [Column1] DATATYPE NOT NULL,
-    [Column2] DATATYPE NOT NULL
-);
-```
-
-## Common patterns
-
-### CRUD operations
-
-- **Create**: `{EntityName}_Create` procedures
-- **Read**: `{EntityName}_ReadById`, `{EntityName}_ReadBy{Criteria}` procedures
-- **Read Many**: `{EntityName}_ReadManyByIds`, `{EntityName}_ReadManyBy{Criteria}` procedures
-- **Update**: `{EntityName}_Update` procedures
-- **Delete**: `{EntityName}_DeleteById`, `{EntityName}_Delete` procedures
-
-### Error handling
-
-- Use `SET NOCOUNT ON` in stored procedures
-- Implement appropriate transaction handling where needed
-- Follow consistent error reporting patterns
-  - Business logic should not be in stored procedures, but there may be times when it makes sense to
-    do error handling in other scripts (migrations, one-off data scrubs)
-
-```sql
-BEGIN TRY
-    BEGIN TRANSACTION;
-
-    UPDATE
-        [dbo].[TableName]
-    SET
-        [Column1] = 'NewValue'
-    WHERE
-        [Id] = 'IdValue'
-
-
-    UPDATE
-        [dbo].[TableName2]
-    SET
-        [Column1] = 'NewValue'
-    WHERE
-        [Id] = 'IdValue'
-
-    COMMIT TRANSACTION;
-
-END TRY
-BEGIN CATCH
-
-    IF @@TRANCOUNT > 0
-        ROLLBACK TRANSACTION;
-
-    THROW;
-
-END CATCH;
-```
-
-## Comments and documentation
-
-- Use `--` for single-line comments
-- Add comments for complex business logic and the reason for a command or block of code
-- Document magic numbers and status codes (e.g., `-- 2 = Confirmed`)
-- Provide brief explanations for complex CASE statements or calculations
-- Don't comment unnecessarily, such as commenting that an insert statement is about to be executed
-
-## Best practices
-
-1. **Consistency**: Follow established patterns throughout the codebase
-2. **Readability**: Prioritize code readability and maintainability
-3. **Performance**: Consider index usage and query optimization
-4. **Security**: Use parameterized queries and proper data type validation
-5. **Modularity**: Break complex operations into smaller, reusable procedures
-6. **Standards**: Always use qualified object names with schema prefix
-7. **Versioning**: Use descriptive procedure names for different versions (e.g., `_V2` suffix)
 
 [repository]:
   https://docs.microsoft.com/en-us/dotnet/architecture/microservices/microservice-ddd-cqrs-patterns/infrastructure-persistence-layer-design
