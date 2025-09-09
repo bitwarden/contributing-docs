@@ -52,7 +52,7 @@ data from _Views_.
 
 When a new version of an entity is introduced and needs to be maintained next to the existing one
 during deployment, use versioned names for the different scripts, so that the relationship is
-clear - e.g. `_V2` suffix.
+clear - e.g. a `_V2` suffix.
 
 :::
 
@@ -68,14 +68,12 @@ These standards should be applied across any T-SQL scripts that you write.
 - **Object names**: Always use square brackets `[dbo].[TableName]`
 - **Schema**: Use `[dbo]` prefix for all objects
 - **Line endings**: Use consistent line breaks with proper indentation
-- **Trailing spaces**: Should be trimmed from the end of lines. Use `[ \t]+$` as a regex
-  find/replace
 - **Vertical lists**: Vertically list items as much as feasibly possible, and use consistent
   indentation to make vertical listing quick and easy. A vertical list is much easier to compare and
   makes code changes easily detectable
 - **Blank lines**: Separate sections of code with at least one blank line
 - **Commas**: Commas should be placed at the right end of the line
-- **Parentheses**: Parentheses should be vertically aligned with spanning multiple line
+- **Parentheses**: Parentheses should be vertically aligned with spanning multiple lines
 
 ### `SELECT` statements
 
@@ -376,18 +374,17 @@ END CATCH;
 There are specific ways migration scripts should be structured. We do so to adhere to the following
 guiding principles:
 
-✅ **The script must be idempotent**: Always ensure a migration can be run multiple times without
-causing errors or duplicating data. We never intend to run scripts multiple times on an environment,
-but the scripts must support it.
+- **It must be idempotent**: Always ensure a migration can be run multiple times without causing
+  errors or duplicating data.
 
-✅ **The script must avoid breaking changes**: Migrations should never delete or rename columns that
-are still in use by deployed code.
+- **It must avoid breaking changes**: Migrations should never delete or rename columns that are
+  still in use by deployed code.
 
-✅ **The script must maintain schema integrity**: The schema of the database defined in code should
-map exactly to the schema of the database in all deployed environments.
+- **It must maintain schema integrity**: The schema of the database defined in code should map
+  exactly to the schema of the database in all deployed environments.
 
-✅ **The script must be backwards compatible**: Code should be able to work with both the old and
-new schema during a rolling deployment. See our MSSQL docs for how we put this into practice.
+- **It must be backwards compatible**: Code should be able to work with both the old and new schema
+  during a rolling deployment.
 
 ### Tables
 
