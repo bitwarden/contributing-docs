@@ -52,6 +52,55 @@ sidebar_position: 1
    $ cp Scripts/post-checkout .git/hooks/
    ```
 
+4. Install [fastlane](https://docs.fastlane.tools/) for automated package deployments:
+
+   > **Note** We manage non-system Ruby installations with `rbenv` as homebrew tends to break the
+   > required Ruby dependencies
+
+   ```
+   $ brew install rbenv
+   $ rbenv init
+   ```
+
+   From the root directory of the `ios` repo do the following:
+
+   ```
+   $ rbenv install -s
+   $ bundle install
+   ```
+
+   > **Note** If `bundle install` fails you may need to restart your shell or `source` your
+   > appropriate profile to recognize the newly installed non-system Ruby, e.g. `source ~/.zprofile`
+   > then `bundle install` again
+
+   Once complete you can test fastlane with:
+
+   ```
+   $ bundle exec fastlane --version
+   ```
+
+   When necessary, update the Ruby version with:
+
+   ```
+   $ rbenv install 3.4.4
+   ```
+
+   Update dependencies with:
+
+   ```
+   $ bundle update
+   ```
+
+   If you're still having issues, here are some helpful commands for troubleshooting:
+
+   ```
+   $ which -a ruby
+   $ which -a rbenv
+   $ which -a fastlane
+   $ rbenv which fastlane
+   $ echo $PATH
+   ```
+
 ### Run the app
 
 1. Open the project in Xcode 16.3+.
