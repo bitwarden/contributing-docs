@@ -18,13 +18,16 @@ Here is how you can get involved:
   Forums. Please search existing feature requests before making a new one.
 - **Write code for a new feature or bug fix:** By submitting a pull request.
 
-  :::note _Before_ writing code for either a new feature or a bug fix that has significant UX
-  changes, make a new post in the
+  :::note
+
+  _Before_ writing code for either a new feature or a bug fix that has significant UX changes,
+  please make a new post in the
   [Password Manager](https://github.com/orgs/bitwarden/discussions/categories/password-manager) or
   [Secrets Manager](https://github.com/orgs/bitwarden/discussions/categories/secrets-manager) GitHub
   Discussions category. Include a description of your proposed contribution, screenshots, and links
   to any relevant feature requests or issues. This helps get feedback from the community and
   Bitwarden team members before you start writing code and facilitates a smoother PR review process.
+
   :::
 
 - **Report a bug:** Using Github issues.
