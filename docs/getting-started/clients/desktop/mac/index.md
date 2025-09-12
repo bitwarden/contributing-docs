@@ -63,7 +63,7 @@ security add-generic-password -a "<apple_id>" -w "<app_specific_password>" -s "A
 3. Install the provisioning profile to your device, and place it the `clients/apps/desktop`
    repository root.
 
-## Testing
+### Building
 
 1. Identify the name of your personal development certificate by running:
    ```zsh
@@ -74,14 +74,25 @@ security add-generic-password -a "<apple_id>" -w "<app_specific_password>" -s "A
 
 3. Run `npm run dist:mac:masdev`.
 
-:::info
+   :::info
 
-If this is your first time running desktop locally, be sure to run `npm ci` before
-`npm run dist:mac:masdev`.
+   If this is your first time running desktop locally, be sure to run `npm ci` before
+   `npm run dist:mac:masdev`.
 
-:::
+   :::
 
-### Troubleshoot
+### Troubleshooting
 
 If you receive an error stating `You do not have permission to open the application "Bitwarden".`
 ensure the correct provisioning profile is placed in the desktop repository root.
+
+## Testing in QA
+
+Per the SDLC, QA verifies changes before they are merged into main. Currently the github CI
+workflows for building mac desktop do not create a build artifact as part of the workflow run. QA
+can obtain a build through following these steps:
+
+1. Navigate to the `Build Desktop` workflow in GHA
+2. Click the `Run workflow` dropbox
+   - select the branch in question
+   - ensure "Force distribute to TestFlight" is checked.
