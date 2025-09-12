@@ -94,5 +94,5 @@ can obtain a build through following these steps:
 
 1. Navigate to the `Build Desktop` workflow in GHA
 2. Click the `Run workflow` dropbox
-   - select the branch in question
-   - ensure "Force distribute to TestFlight" is checked.
+   - Select the branch in question
+   - Ensure "Force distribute to TestFlight" is checked
