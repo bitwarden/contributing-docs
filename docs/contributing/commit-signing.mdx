@@ -43,7 +43,7 @@ ssh-keygen -f $KEY_FILE -C "$(git config --global --get user.email)" -t ed25519
 
    ```bash
    git config --global gpg.format ssh
-   git config --global user.signingkey "${KEY_FILE}.pub"
+   git config --global user.signingkey "${KEY_FILE}.pub" blah
    ```
 
 2. Follow the [Github documentation][github-verification] to configure commit signing
