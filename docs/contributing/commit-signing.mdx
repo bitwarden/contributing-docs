@@ -32,7 +32,7 @@ your [yubikey as your signing key](#hardware-backed-ssh-keys).
 ```bash
 # path to save your private signing key
 KEY_FILE=~/.ssh/bw-signing
-ssh-keygen -f $KEY_FILE -C "$(git config --global --get user.email)" -t ed25519
+ssh-keygen -f $KEY_FILE -C "$(git config --global --get user.email)" -t ed25519 test
 ```
 
 :::
