@@ -89,8 +89,8 @@ ensure the correct provisioning profile is placed in the desktop repository root
 ## Testing in QA
 
 Per the SDLC, QA verifies changes before they are merged into main. Currently the GitHub CI
-workflows for building the Mac desktop client do not create a build artifact for the Mac App Store as
-part of the workflow run. QA can obtain a build through these steps:
+workflows for building the Mac desktop client do not create a build artifact for the Mac App Store
+as part of the workflow run. QA can obtain a build through these steps:
 
 1. Navigate to the `Build Desktop` workflow under the `GitHub Actions` tab.
 2. Click the `Run workflow` dropbox.
