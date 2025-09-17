@@ -16,61 +16,65 @@ For example, on 3 August 2022, Stephen Lacy
 massive malware attack on GitHub by noticing unverified commits (i.e. commits that were not
 digitally signed).
 
-To protect against commit spoofing, all Bitwarden contributors are encouraged to digitally sign
-their commits.
+To protect against commit spoofing, <strong>all Bitwarden contributors are encouraged to digitally
+sign their commits</strong>.
 
 ## Setting up commit signing
 
-Github supports commit signing with GPG, SSH and S/MIME.
+GitHub supports [commit signing][github-verification] with GPG, SSH and S/MIME.
 
 :::tip
 
-If you're unsure what to use, we recommend you create a commit signing key using SSH. Remember to
-protect the key with a [strong passphrase or password][password-generation]. Alternatively set up
-your [yubikey as your signing key](#hardware-backed-ssh-keys).
-
-```bash
-# path to save your private signing key
-KEY_FILE=~/.ssh/bw-signing
-ssh-keygen -f $KEY_FILE -C "$(git config --global --get user.email)" -t ed25519
-```
+If you're unsure what to use, <strong>we recommend you create a commit signing key using SSH per
+latest security best practices </strong> (see the
+[PGP problem](https://www.latacora.com/blog/2019/07/16/the-pgp-problem/) for more details).
 
 :::
 
-### Configuration
+### Standard SSH Key Configuration
 
-1. Configure git to sign using SSH.
+1. Ensure you have globally configured your git email address:
+
+   ```bash
+   git config --global user.email "you@example.com"
+   ```
+
+2. Generate an SSH key for commit signing:
+
+   ```bash
+   # path to save your private signing key
+   KEY_FILE=~/.ssh/bw-signing
+   ssh-keygen -f $KEY_FILE -C "$(git config --global --get user.email)" -t ed25519
+   ```
+
+   :::tip
+
+   Remember to protect the key with a [strong passphrase or password][password-generation].
+   Alternatively set up your [yubikey as your signing key](#hardware-backed-ssh-key-configuration).
+
+   :::
+
+3. Configure git to sign using SSH.
 
    ```bash
    git config --global gpg.format ssh
    git config --global user.signingkey "${KEY_FILE}.pub"
    ```
 
-2. Follow the [Github documentation][github-verification] to configure commit signing
+4. Follow the
+   [SSH GitHub documentation](https://docs.github.com/en/authentication/managing-commit-signature-verification/about-commit-signature-verification#ssh-commit-signature-verification)
+   to configure commit signing
 
-3. Configure your preferred git tool below
+5. Configure your preferred git tool below ([CLI](#commit-signing-with-git-cli),
+   [VS Code](#commit-signing-with-visual-studio-code),
+   [SourceTree](#commit-signing-with-sourcetree))
 
-4. Push a test commit to Github and ensure that the "Verified" badge appears next to the commit
+6. Push a test commit to GitHub and ensure that the "Verified" badge appears next to the commit
    description:
 
-   ![Image showing the Verified badge in Github](./commit-signing.png)
+   ![Image showing the Verified badge in GitHub](./commit-signing.png)
 
-### Command Line
-
-- After configuring commit signing, you can sign a commit by using the `-S` flag:
-
-  ```bash
-  git commit -S
-  ```
-
-- To avoid using the `-S` flag every time, you can sign all commits and tags by default:
-
-  ```bash
-  git config --global commit.gpgSign true
-  git config --global tag.gpgSign true
-  ```
-
-### Hardware-backed SSH Keys
+### Hardware-backed SSH Key Configuration
 
 For contributors who want maximum security, hardware-backed SSH keys using FIDO2/U2F security keys
 (like YubiKeys) provide superior protection by storing private keys on hardware that cannot be
@@ -135,19 +139,43 @@ fully qualify the path to the homebrew version of ssh-keygen in the example, lik
 
 #### Fallback Strategy
 
-When going the yubikey route it is important to make sure you have the infrastructure set up to
-recover from the lose of a yubikey. At least one backup plan should be set up. Some ideas:
+:::caution
 
-- Create and configure multiple yubikeys
+When going the YubiKey route it is important to make sure you have the infrastructure set up to
+recover from the lose of a YubiKey. At least one backup plan should be set up. Some ideas:
+
+- Create and configure multiple YubiKeys
 - Generate both a hardware-backed key and a traditional SSH key:
   - Use the hardware-backed key for day-to-day development
   - Keep a traditional SSH key as a secure backup for emergency situations
 
-### Visual Studio Code
+:::
 
-Enable commit signing in Preferences -> Settings -> search "commit signing".
+### Commit Signing with git CLI
 
-#### macOS: GPG Key Passphrase Prompt Issue
+- After configuring commit signing, you can sign a commit by using the `-S` flag:
+
+  ```bash
+  git commit -S
+  ```
+
+- To avoid using the `-S` flag every time, you can sign all commits and tags by default:
+
+  ```bash
+  git config --global commit.gpgSign true
+  git config --global tag.gpgSign true
+  ```
+
+### Commit Signing with Visual Studio Code
+
+1. Open **Preferences** → **Settings**
+2. Search for **“commit signing”**
+3. Enable commit signing
+
+   ![Image showing the settings in VS Code](./vscode-preferences-settings-commit-signing.png)
+
+<details>
+  <summary>macOS: GPG Key Passphrase Prompt Issue</summary>
 
 Some macOS users have had issues with VS Code and the gpg-agent not prompting for the GPG Key
 Passphrase in order to sign commits when using the VS Code git GUI. This is illustrated by VS Code
@@ -158,26 +186,61 @@ issue is to configure your gpg-agent to use
 [pinentry](https://www.gnupg.org/related_software/pinentry/index.html) for macOS in order to force a
 secure prompt. Run the following in a terminal of your choice:
 
-1. `brew install pinentry-mac`
-2. `echo "pinentry-program $(which pinentry-mac)" >> ~/.gnupg/gpg-agent.conf`
-3. `killall gpg-agent`
+1. Install pinentry-mac:
+
+   ```bash
+   brew install pinentry-mac
+   ```
+
+2. Configure gpg-agent to use pinentry-mac:
+
+   ```bash
+   echo "pinentry-program $(which pinentry-mac)" >> ~/.gnupg/gpg-agent.conf
+   ```
+
+3. Restart gpg-agent:
+
+   ```bash
+   killall gpg-agent
+   ```
 
 **Note**: Note: you might have to restart VS Code for this to take effect, but you should now be
 prompted for your GPG Key Passphrase as needed. If this does not solve your issue, please follow the
-[Troubleshooting](#troubleshooting) guide below.
+[GPG Key Troubleshooting](#gpg-key-troubleshooting) guide below.
 
-### SourceTree
+</details>
+
+### Commit Signing with SourceTree
 
 Refer to
 [Setup GPG to sign commits within SourceTree](https://confluence.atlassian.com/sourcetreekb/setup-gpg-to-sign-commits-within-sourcetree-765397791.html).
 
-## Troubleshooting
+## GPG Key Troubleshooting
 
-- If you receive the error message "error: gpg failed to sign the data", make sure you added
-  `export GPG_TTY=$(tty)` to your `~/.zshrc` (or `~/.bashrc` if you're using bash) and restarted
-  your terminal. Refer to
-  [this troubleshooting document](https://gist.github.com/paolocarrasco/18ca8fe6e63490ae1be23e84a7039374)
-  for more help with this error
+If you see the following error:
+
+```text
+error: gpg failed to sign the data
+```
+
+Make sure you’ve added the following to your shell config:
+
+```bash
+export GPG_TTY=$(tty)
+```
+
+- For **zsh**, add it to `~/.zshrc`
+- For **bash**, add it to `~/.bashrc`
+
+After updating the file, restart your terminal for the change to take effect.
+
+<details>
+  <summary>More help with this error</summary>
+
+See this
+[troubleshooting guide](https://gist.github.com/paolocarrasco/18ca8fe6e63490ae1be23e84a7039374).
+
+</details>
 
 [password-generation]: https://bitwarden.com/help/generator/#password-types
 [github-verification]:
