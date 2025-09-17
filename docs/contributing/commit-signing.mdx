@@ -81,26 +81,26 @@ latest security best practices </strong> (see the
 
 #### macOS
 
-    On macOS, you can use the built-in Keychain to store your SSH key passphrase so you don't have to
-    enter it every time you sign a commit.
+On macOS, you can use the built-in Keychain to store your SSH key passphrase so you don't have to
+enter it every time you sign a commit.
 
-    1. Add your SSH key to the ssh-agent and store your passphrase in the Keychain:
+1.  Add your SSH key to the ssh-agent and store your passphrase in the Keychain:
 
-       ```bash
-       ssh-add --apple-use-keychain ~/.ssh/bw-signing
-       ssh-add -l # verify the key was added
-       ```
+    ```bash
+    ssh-add --apple-use-keychain ~/.ssh/bw-signing
+    ssh-add -l # verify the key was added
+    ```
 
-    2. The above command will need to be ran each time you restart your computer.
-    If you would like to automate this process, then you can leverage LaunchAgents to run the command on startup.
+2.  The above command will need to be ran each time you restart your computer. If you would like to
+    automate this process, then you can leverage LaunchAgents to run the command on startup.
 
-       a. Ensure the LaunchAgents directory exists:
+        a. Ensure the LaunchAgents directory exists:
 
-       ```bash
-       mkdir -p ~/Library/LaunchAgents
-       ```
+        ```bash
+        mkdir -p ~/Library/LaunchAgents
+        ```
 
-       b. Create a new plist file for the LaunchAgent:
+        b. Create a new plist file for the LaunchAgent:
 
         ```bash
         USER_NAME=$(whoami)
@@ -129,28 +129,28 @@ latest security best practices </strong> (see the
         ```
 
 
-       c. Validate that your plist is valid:
+        c. Validate that your plist is valid:
 
-       ```bash
-       plutil -lint ~/Library/LaunchAgents/com.ssh-add-bw-signing.plist
-       # you should see: "OK"
-       ```
+        ```bash
+        plutil -lint ~/Library/LaunchAgents/com.ssh-add-bw-signing.plist
+        # you should see: "OK"
+        ```
 
-       d. Configure launchctl to enable the new LaunchAgent for your next restart:
+        d. Configure launchctl to enable the new LaunchAgent for your next restart:
 
-       ```bash
-       launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.ssh-add-bw-signing.plist
-       launchctl enable gui/$(id -u)/com.ssh-add-bw-signing
-       ```
+        ```bash
+        launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.ssh-add-bw-signing.plist
+        launchctl enable gui/$(id -u)/com.ssh-add-bw-signing
+        ```
 
-       e. You can kickstart the LaunchAgent and confirm it will work by running (only works if you haven't loaded your key yet):
+        e. You can kickstart the LaunchAgent and confirm it will work by running (only works if you haven't loaded your key yet):
 
-       ```bash
+        ```bash
         launchctl kickstart -k gui/$(id -u)/com.ssh-add-bw-signing
         ssh-add -l # verify the key was added
         ```
 
-       f. Restart your computer to verify that the LaunchAgent works as expected. After restarting, run `ssh-add -l` to verify that your key was added to the ssh-agent
+        f. Restart your computer to verify that the LaunchAgent works as expected. After restarting, run `ssh-add -l` to verify that your key was added to the ssh-agent
         automatically.
 
 ### Hardware-backed SSH Key Configuration
