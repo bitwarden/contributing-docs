@@ -125,10 +125,16 @@ Once configured, your local Custom Environment should look like this:
 
 To load the browser extension build:
 
-1.  Navigate to `chrome://extensions` in your address bar. This will open the extensions page
-2.  Enable “developer mode” (toggle switch)
-3.  Click the “Load unpacked” button
-4.  Open the `build` folder of your local repository and confirm your choice
+1. Build the extension for Chrome:
+
+   ```bash
+   npm run build:watch
+   ```
+
+2. Navigate to `chrome://extensions` in your address bar. This will open the extensions page
+3. Enable “developer mode” (toggle switch)
+4. Click the “Load unpacked” button
+5. Open the `build` folder of your local repository and confirm your choice
 
 You will now have your local build of the browser extension installed.
 
@@ -140,10 +146,16 @@ it is open and clicking “Inspect”.
 
 To load the browser extension build:
 
-1.  Navigate to `about:debugging` in your address bar. This will open the add-on debugging page
-2.  Click “This Firefox”
-3.  Click “Load Temporary Add-on”
-4.  Open the `build` folder of your local repository and open the `manifest.json` file
+1. Build the extension for Firefox:
+
+   ```bash
+   npm run build:watch:firefox
+   ```
+
+2. Navigate to `about:debugging` in your address bar. This will open the add-on debugging page
+3. Click “This Firefox”
+4. Click “Load Temporary Add-on”
+5. Open the `build` folder of your local repository and open the `manifest.json` file
 
 You will now have your local build of the browser extension installed.
 
@@ -164,48 +176,27 @@ the Bitwarden heading in the Temporary Extensions page. To debug the popup:
 
 ### Safari
 
-Safari WebExtensions must be distributed through the Mac App Store, bundled with a regular Mac App
-Store application. Due to this the build and debug process is slightly different compared to the
-other browsers.
+To load the browser extension build:
 
-#### Uninstall previous versions
-
-If you’ve built, installed or ran the Desktop client before (including the official release), Safari
-will most likely continue to load the official Browser extension and not the version you’ve built
-from source.
-
-To avoid this, follow the instructions below to uninstall the Safari extension:
-
-1.  Open Safari
-2.  Click “Settings” and then click the “Extensions” tab
-3.  Click uninstall next to the Bitwarden extension
-4.  Delete the Application with the extension.
-5.  Reopen Safari and check Settings to confirm that there is no Bitwarden Browser extension
-    installed. In case there still is a Bitwarden Extension please repeat step 3-4.
-6.  Quit and completely close Safari
-
-You may need to do this periodically if you are loading the Browser extension from different sources
-(for example, switching between a local build and the official release).
-
-#### Developing in Xcode
-
-The easiest way to develop the extension is to build and debug it using Xcode.
-
-1. Build the extension:
+1. Build the extension for Safari:
 
    ```bash
    npm run build:watch:safari
    ```
 
-2. Open `src/safari/desktop.xcodeproj` in Xcode
-3. Run the "desktop" target.
+2. Open Safari and navigate to `Safari -> Settings -> Developer`
+3. Click “Allow unsigned extensions”
+4. Click “Add Temporary Extension...”
+5. Open the `build` folder of your local repository
 
-:::note
+You will now have your local build of the browser extension installed.
 
-Please remember to re-run through Xcode whenever any changes are made to the source files. It will
-not automatically reload.
+The temporary extension will only be installed for the current session. If you close and re-open
+Safari, you will have to load the temporary extension again.
 
-:::
+You can debug the background page of the browser extension by clicking
+`Develop -> Web Extension Background Pages` and then selecting Bitwarden. You can debug the popup by
+right-clicking it while it is open and clicking "Inspect Element".
 
 #### Production build
 
@@ -216,7 +207,7 @@ the extension for every change, which is slower.
 1.  Build the extension for Safari
 
     ```bash
-    npm run dist:safari:dmg
+    npm run dist:safari
     ```
 
 2.  Open Safari and check Settings to confirm that the extension is installed and enabled

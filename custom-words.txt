@@ -13,6 +13,8 @@ codebases
 CODEOWNERS
 CQRS
 CTAP2
+deinitializer
+deinitializers
 dockerized
 dotfile
 F-Droid
@@ -24,6 +26,7 @@ hotfixes
 Hyperscale
 iframes
 inet
+initialisms
 IntelliJ
 Iterm
 Jetpack
@@ -58,6 +61,8 @@ recompositions
 refactorings
 roadmap
 roadmaps
+rollout
+rollouts
 rustup
 sandboxed
 SARIF
@@ -76,8 +81,12 @@ subprocessor
 toolset
 TOTP
 typealias
+typecheck
+typechecks
+typesafe
 WCAG
 Xcodes.app
+xcworkspace
 xmldoc
 Yellowpages
 Yubico

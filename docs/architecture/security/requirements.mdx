@@ -19,7 +19,6 @@ This section is still in its early stages and does not yet reflect current or fu
 :::
 
 1. Vault data **MUST** be protected _at rest_.
-
    - a. The Client **MUST** encrypt vault data stored on disk.
    - b. The Client **MUST** use the UserKey to encrypt vault data stored on the Server.
    - c. The Client **SHOULD** ensure that no mechanisms exist such that vault data may be stored to
@@ -35,7 +34,6 @@ This section is still in its early stages and does not yet reflect current or fu
      can be decrypted by the Server, regardless of consent.
 
 2. Vault data **MAY** be unprotected while _in use_.
-
    - a. The Client **MAY** decrypt all vault data during vault unlock.
      - i. The Client **SHOULD** minimize the quantity of decrypted vault data.
    - b. The Client **MAY** leave vault data encrypted after unlock.
@@ -43,7 +41,6 @@ This section is still in its early stages and does not yet reflect current or fu
      _in use_.
 
 3. Vault data **SHOULD** be protected while _in transit_.
-
    - 1. The Client **MAY** use unprotected transmissions to the display/monitor.
    - 2. The Client **SHOULD** use a trusted channel when the transmission crosses process
         boundaries.
@@ -53,7 +50,6 @@ This section is still in its early stages and does not yet reflect current or fu
    - 5. The Client **MUST** use a trusted channel when the transmission crosses device boundaries.
 
 4. Vault data **MUST NOT** be exported without an _informed and explicit consent_ by the User.
-
    - 1. The Client **MAY** trust the OS to gather consent.
    - 2. The Client **MAY** augment the OS when the consent process is not sufficiently clear or
         explicit.

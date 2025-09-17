@@ -6,8 +6,8 @@ sidebar_position: 1
 
 ## Requirements
 
-1. [Xcode](https://developer.apple.com/xcode/) (version 15.4)
-2. An iPhone 15 Pro simulator (iOS 17.0.1) set up
+1. [Xcode](https://developer.apple.com/xcode/) (version 16.3)
+2. An iPhone 16 Pro simulator (iOS 18.1) set up
 
 ## Setup
 
@@ -52,18 +52,73 @@ sidebar_position: 1
    $ cp Scripts/post-checkout .git/hooks/
    ```
 
+4. Install [fastlane](https://docs.fastlane.tools/) for automated package deployments:
+
+   > **Note** We manage non-system Ruby installations with `rbenv` as homebrew tends to break the
+   > required Ruby dependencies
+
+   ```
+   $ brew install rbenv
+   $ rbenv init
+   ```
+
+   From the root directory of the `ios` repo do the following:
+
+   ```
+   $ rbenv install -s
+   $ bundle install
+   ```
+
+   > **Note** If `bundle install` fails you may need to restart your shell or `source` your
+   > appropriate profile to recognize the newly installed non-system Ruby, e.g. `source ~/.zprofile`
+   > then `bundle install` again
+
+   Once complete you can test fastlane with:
+
+   ```
+   $ bundle exec fastlane --version
+   ```
+
+   When necessary, update the Ruby version with:
+
+   ```
+   $ rbenv install 3.4.4
+   ```
+
+   Update dependencies with:
+
+   ```
+   $ bundle update
+   ```
+
+   If you're still having issues, here are some helpful commands for troubleshooting:
+
+   ```
+   $ which -a ruby
+   $ which -a rbenv
+   $ which -a fastlane
+   $ rbenv which fastlane
+   $ echo $PATH
+   ```
+
 ### Run the app
 
-1. Open the project in Xcode 15.4+.
-2. Run the app in the Simulator with the `Bitwarden` target.
+1. Open the project in Xcode 16.3+.
+2. Run the app in the Simulator with the `Bitwarden` target for the Password Manager app or
+   `Authenticator` for the Authenticator app.
+
+> [!TIP] To open the workspace in Xcode, just go to the root folder with the CLI and run:
+>
+> ```sh
+> open Bitwarden.xcworkspace
+> ```
 
 ### Running tests
 
 Due to slight snapshot test variations between iOS versions, the test target requires running in an
-iPhone 15 Pro simulator (iOS 17.0.1).
+iPhone 16 Pro simulator (iOS 18.1).
 
 1. In Xcode's toolbar, select the project and a connected device or simulator.
-
    - The `Generic iOS Device` used for builds will not work for testing.
 
 2. In Xcode's menu bar, select `Product > Test`.

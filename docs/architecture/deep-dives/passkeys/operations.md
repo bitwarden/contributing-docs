@@ -20,7 +20,6 @@ Registration requests are invoked using the `navigator.credentials.create()` met
    options object, usually with the help of a code library (e.g.
    [`fido2-net-lib`](https://github.com/passwordless-lib/fido2-net-lib)). This object includes the
    following parameters:
-
    - **attestation**: The attestation statement format to use during the registration process. This
      can be set to `none` if the server does not require attestation.
    - **authenticatorSelection**: An object that specifies the authenticator attachment modality and
@@ -88,7 +87,6 @@ Authentication requests are invoked using the `navigator.credentials.get()` meth
 
 1. **Client-Side Request**: The application initiates the registration process by making a request
    to the server. This request is typically triggered by a user action, such as:
-
    - Clicking on a "Log in with Passkey" button
    - Entering a username and clicking on a "Log in" button
 

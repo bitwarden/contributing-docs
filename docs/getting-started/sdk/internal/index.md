@@ -35,9 +35,12 @@ See the [Tools and Libraries](../../tools/index.md) page for more information.
 The SDK is built for different platforms, all of which have their own build instructions. For more
 information on how to build for a specific platform, refer to the readmes for the different crates:
 
-- **Web**: `crates/bitwarden-wasm-internal`
-- **iOS**: `crates/bitwarden-uniffi/swift`
-- **Android**: `crates/bitwarden-uniffi/kotlin`
+- **Web**:
+  [`crates/bitwarden-wasm-internal`](https://github.com/bitwarden/sdk-internal/tree/main/crates/bitwarden-wasm-internal)
+- **iOS**:
+  [`crates/bitwarden-uniffi/swift`](https://github.com/bitwarden/sdk-internal/tree/main/crates/bitwarden-uniffi/swift)
+- **Android**:
+  [`crates/bitwarden-uniffi/kotlin`](https://github.com/bitwarden/sdk-internal/tree/main/crates/bitwarden-uniffi/kotlin)
 
 Please be aware that each platform has its own set of dependencies that need to be installed before
 building. Make sure to double check the readme if you encounter any issues.
@@ -50,7 +53,7 @@ so you will need to update the SDK reference in the client applications.
 These instructions assumes you have a directory structure similar to:
 
 ```text
-sdk/
+sdk-internal/
 clients/
 ios/
 android/

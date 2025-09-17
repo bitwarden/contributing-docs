@@ -18,7 +18,7 @@ Before you start: make sure you’ve installed the recommended
 - Visual Studio 2022
 - Powershell
 - [NET 8.0 SDK](https://dotnet.microsoft.com/download)
-- Azure Data Studio
+- Your preferred database management tool
 
 :::
 
@@ -71,7 +71,6 @@ facilitate easy customization.
 
     Your MSSQL password must comply with the following
     [password complexity guidelines](https://docs.microsoft.com/en-us/sql/relational-databases/security/password-policy?view=sql-server-ver15#password-complexity)
-
     - It must be at least eight characters long.
     - It must contain characters from three of the following four categories:
     - Latin uppercase letters (A through Z)
@@ -134,7 +133,8 @@ After that, rerun the docker compose command from Step 5.
 
 ### SQL Server
 
-You can connect to the Microsoft SQL Server using Azure Data Studio with the following credentials:
+You can connect to the Microsoft SQL Server using your preferred database management tool with the
+following credentials:
 
 - Server: localhost
 - Port: 1433
@@ -200,7 +200,6 @@ repository.
     </Community>
 
     <Bitwarden>
-
     - Copy the user secrets file from the shared Development collection (Your Bitwarden Vault) into
       the `dev` folder.
     - If you don't have access to the Development collection, contact our IT Manager to arrange
@@ -211,11 +210,9 @@ repository.
     </Bitwarden>
 
 2.  Update `secrets.json` with your own values:
-
     - `sqlServer` > `connectionString`: insert your password where indicated
 
     <Community>
-
     - `installation` > `id` and `key`:
       [request a hosting installation Id and Key](https://bitwarden.com/host/) and insert them here
     - `licenseDirectory`: set this to an empty directory, this is where uploaded license files will
@@ -329,10 +326,16 @@ You are now ready to build and run your development server.
 
 7.  Test that the Api service is alive by navigating to
     [http://localhost:4000/alive](http://localhost:4000/alive)
-8.  Connect a client to your local server by configuring the client’s Api and Identity endpoints.
-    Refer to
-    [https://bitwarden.com/help/article/change-client-environment/](https://bitwarden.com/help/article/change-client-environment/)
-    and the instructions for each client in the Contributing Documentation.
+
+## Client connection
+
+Connect a client to your local server by configuring the client’s Api and Identity endpoints. Refer
+to
+[https://bitwarden.com/help/article/change-client-environment/](https://bitwarden.com/help/article/change-client-environment/)
+and the instructions for each client in the Contributing Documentation.
+
+Now that the client is configured to use your local development server, you can proceed to use the
+client to create an account and validate your local server changes.
 
 :::info
 

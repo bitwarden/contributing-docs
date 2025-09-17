@@ -43,32 +43,27 @@ native messaging command for testing.
 
 1. **`handshake`** Sends a `bw-handshake` command and establishes communication with the native
    messaging service in the desktop app
-
    - **Parameters:** none
    - **Example Usage:** `npm run handshake`
 
 2. **`status`** Sends a `bw-status` command and returns an array of the accounts configured in the
    desktop app.
-
    - **Parameters:** none
    - **Example Usage:** `npm run status`
 
 3. **`create`** Sends a `bw-credential-create` command and creates a new login with the provided
    name and test data for the other fields.
-
    - **Parameters:** `--name`
    - **Example Usage:** `npm run create -- --name NewLoginFromTestRunner`
 
 4. **`update`** Sends a `bw-credential-update` command and updates a credential with the provided
    fields.
-
    - **Parameters:** `--name`, `--username`, `--password`, `--uri`, `--credentialId`
    - **Example Usage:**
      `npm run update -- --name UpdateLoginFromTestRunner --username rmaccallum --password dolphin123 --uri google.com --credentialId 8fdd5921-4b10-4c47-9f92-af2b0106d63a`
 
 5. **`retrieve`** Sends a `bw-credential-retrieval` command and returns a list of credentials
    matching the uri provided
-
    - **Parameters:** `--uri`
    - **Example Usage:** `npm run retrieve -- --uri google.com`
 
