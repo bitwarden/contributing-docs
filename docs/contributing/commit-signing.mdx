@@ -143,7 +143,7 @@ latest security best practices </strong> (see the
        launchctl enable gui/$(id -u)/com.ssh-add-bw-signing
        ```
 
-       e. You can kickstart the LaunchAgent and confirm it will work by running:
+       e. You can kickstart the LaunchAgent and confirm it will work by running (only works if you haven't loaded your key yet):
 
        ```bash
         launchctl kickstart -k gui/$(id -u)/com.ssh-add-bw-signing
