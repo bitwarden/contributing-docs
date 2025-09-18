@@ -5,7 +5,7 @@ sidebar_position: 3
 import Tabs from "@theme/Tabs";
 import TabItem from "@theme/TabItem";
 
-# Commit Signing
+# Commit signing
 
 It's possible to configure git with any name and email, enabling bad actors to spoof commits and
 impersonate whomever they want. GitHub supports several ways to digitally sign git commits,
@@ -31,7 +31,7 @@ latest security best practices </strong> (see the
 
 :::
 
-### Standard SSH Key Configuration
+### Standard SSH key configuration
 
 1. Ensure you have globally configured your git email address:
 
@@ -75,10 +75,10 @@ latest security best practices </strong> (see the
    ![Image showing the Verified badge in GitHub](./commit-signing.png)
 
 7. (Optional) See
-   [Avoiding SSH Key Passphrase Prompts Per Commit](#avoiding-ssh-key-passphrase-prompts-per-commit)
+   [Avoiding SSH key passphrase prompts per commit](#avoiding-ssh-key-passphrase-prompts-per-commit)
    below to avoid being prompted for your SSH key passphrase every time you sign a commit.
 
-### Avoiding SSH Key Passphrase Prompts Per Commit
+### Avoiding SSH key passphrase prompts per commit
 
 #### macOS
 
@@ -156,13 +156,13 @@ enter it every time you sign a commit.
         f. Restart your computer to verify that the LaunchAgent works as expected. After restarting, run `ssh-add -l` to verify that your key was added to the ssh-agent
         automatically.
 
-### Hardware-backed SSH Key Configuration
+### Hardware-backed SSH key configuration
 
 For contributors who want maximum security, hardware-backed SSH keys using FIDO2/U2F security keys
 (like YubiKeys) provide superior protection by storing private keys on hardware that cannot be
 extracted or copied.
 
-#### Benefits of Hardware-backed Keys
+#### Benefits of hardware-backed keys
 
 - **Physical presence required**: Each signing operation requires touching the hardware key
 - **Locked private keys**: Private keys are generated on and never leave the hardware
@@ -170,7 +170,7 @@ extracted or copied.
 - **Multi-factor authentication**: Combines something you have (the key) with something you know
   (PIN)
 
-#### Setting up sk-ed25519 Keys
+#### Setting up sk-ed25519 keys
 
 :::note macOS Users
 
@@ -213,13 +213,13 @@ fully qualify the path to the homebrew version of ssh-keygen in the example, lik
 3. Add the public key to your GitHub account following the [GitHub
    documentation][github-verification]
 
-#### Hardware Key Requirements
+#### Hardware key requirements
 
 - **FIDO2/U2F compatible security key** (YubiKey 5 series, SoloKeys, etc.)
 - **OpenSSH 8.2+** with FIDO2 support (on macOS, install via Homebrew: `brew install openssh`)
 - **Physical access** to the security key for each signing operation
 
-#### Fallback Strategy
+#### Fallback strategy
 
 :::caution
 
@@ -233,7 +233,7 @@ recover from the loss of a YubiKey. At least one backup plan should be set up. S
 
 :::
 
-### Commit Signing with git CLI
+### Commit signing with git CLI
 
 - After configuring commit signing, you can sign a commit by using the `-S` flag:
 
@@ -248,7 +248,7 @@ recover from the loss of a YubiKey. At least one backup plan should be set up. S
   git config --global tag.gpgSign true
   ```
 
-### Commit Signing with Visual Studio Code
+### Commit signing with Visual Studio Code
 
 1. Open **Preferences** → **Settings**
 2. Search for **“commit signing”**
@@ -292,7 +292,7 @@ prompted for your GPG Key Passphrase as needed. If this does not solve your issu
 
 </details>
 
-### Commit Signing with SourceTree
+### Commit signing with SourceTree
 
 Refer to
 [Setup GPG to sign commits within SourceTree](https://confluence.atlassian.com/sourcetreekb/setup-gpg-to-sign-commits-within-sourcetree-765397791.html).
