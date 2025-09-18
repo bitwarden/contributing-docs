@@ -9,6 +9,33 @@ This document aims to cover the best practices we follow. Many of them are origi
 different ADRs, however while ADRs are good at describing the why, they provide a suboptimal reading
 experience.
 
+## Best practices
+
+Always strive to write idiomatic up to date Angular code. Since Angular is a living framework, the
+best practices and recommendations may evolve over time. Stay informed about the latest changes and
+adapt your code accordingly.
+
+### Change Detection
+
+Use the `OnPush` change detection strategy. We will eventually enforce this project wide for
+performance reasons.
+
+### Control flow
+
+Only use the new Angular Control Flow syntax (`@if`), do **not** use the older structural directives
+(`*ngIf`).
+
+### Dependency injection
+
+Use the `inject` function to retrieve dependencies instead of constructor injection. Do note that
+this only works in Angular contexts and you should still use constructor injection when writing code
+that is shared with non Angular clients.
+
+### Standalone
+
+Use standalone components, directives and pipes. `NgModules` can still be used for grouping multiple
+components but the inner components **should** be standalone.
+
 ## Naming ([ADR-0012](../../adr/0012-angular-filename-convention.md))
 
 We follow the [Naming](https://angular.io/guide/styleguide#naming) section from the Angular Style
@@ -101,15 +128,44 @@ apps/web/src/app/
 ├─ app.module.ts
 ```
 
-## Observables ([ADR-0003](../../adr/0003-observable-data-services.md))
+## Reactivity ([ADR-0003](../../adr/0003-observable-data-services.md) & ADR-0028)
 
-We are currently in the middle of a migration towards reactive data layer using [RxJS][rxjs]. What
-this essentially means is that a component subscribes to a state service, e.g. `FolderService` and
-will continually get updates should the data ever change. This ensures that the components always
-stay up to date.
+We make heavy use of reactive programming using [Angular Signals][signals] [RxJS][rxjs]. Generally
+components should always derive their state reactively from services whenever possible.
 
-Previously we manually implemented an event system for sending basic messages which told other
-components to reload their state. This was error prone, and hard to maintain.
+### Signals
+
+Angular Signals is a new reactivity model introduced in Angular 16 and made stable in Angular 17.
+Signals provides a simple and intuitive way to manage state and reactivity in Angular applications.
+
+However Signals are limited to Angular contexts only, and cannot be used in non Angular clients.
+Therefore we mostly limit our usage of Signals to components and presentational services only.
+Everywhere else we use RxJS.
+
+```ts
+// Example component which uses signals for a local state
+@Component(
+  selector: "app-counter",
+  template: `
+    <h1>Current value of the counter {{counter()}}</h1>
+
+    <button (click)="increment()">Increment</button>
+  `,
+})
+export class Countcomponent {
+  protected counter = signal(0);
+
+  increment() {
+    this.counter.set(this.counter() + 1);
+  }
+}
+```
+
+### RxJS
+
+RxJS is a powerful library for reactive programming using Observables. We use RxJS whenever we need
+interoperability with non Angular clients, or when we need more advanced operators not available in
+Signals.
 
 ```ts
 // Example component which displays a list of folders
@@ -124,17 +180,13 @@ components to reload their state. This was error prone, and hard to maintain.
   `,
 })
 export class FoldersListComponent {
-  folders$: Observable<FolderView[]>;
+  private folderService = inject(FolderService);
 
-  constructor(private folderService: FolderService) {}
-
-  ngOnInit() {
-    this.folders$ = this.folderService.folderViews$;
-  }
+  protected folders$: Observable<FolderView[]> = this.folderService.folderViews$;
 }
 ```
 
-## Reactive Forms ([ADR-0001](../../adr/0001-reactive-forms.md))
+### Reactive Forms ([ADR-0001](../../adr/0001-reactive-forms.md))
 
 We almost exclusively use [Angular Reactive forms](https://angular.io/guide/reactive-forms) instead
 of Template Driven forms. And the Bitwarden Component library is designed to integrate with Reactive
@@ -236,3 +288,4 @@ component "Organization Reports Module" {
 [style-02-01]: https://angular.io/guide/styleguide#general-naming-guidelines
 [rxjs]: https://angular.io/guide/rx-library
 [style-structure]: https://angular.io/guide/styleguide#application-structure-and-ngmodules
+[signals]: https://angular.dev/guide/signals
