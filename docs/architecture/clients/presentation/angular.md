@@ -27,9 +27,9 @@ Only use the new Angular Control Flow syntax (`@if`), do **not** use the older s
 
 ### Dependency injection
 
-Use the `inject` function to retrieve dependencies instead of constructor injection. Do note that
-this only works in Angular contexts and you should still use constructor injection when writing code
-that is shared with non Angular clients.
+Use the `inject` function to retrieve dependencies instead of constructor injection in Angular
+primitives (Components, Pipes, etc.). Do note that this only works in Angular contexts and you
+should still use constructor injection when writing code that is shared with non Angular clients.
 
 ### Standalone
 
