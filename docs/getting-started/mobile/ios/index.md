@@ -44,7 +44,7 @@ sidebar_position: 1
    > `bootstrap.sh` any time you switch branches or pull down changes.
    >
    > If you're on macOS Tahoe with Xcode 26 (Swift 6.2) as the default toolchain and use
-   > [swiftly](https://github.com/swiftlang/swiftly) to manage Swift versions. Some packages require
+   > [swiftly](https://github.com/swiftlang/swiftly) to manage Swift versions, some packages require
    > a different Swift version than the default one, which can cause conflicts with MacOSX26.0.sdk.
    > If you see related errors, try **`swiftly run Scripts/bootstrap.sh +xcode`**.
 
