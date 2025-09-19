@@ -139,7 +139,7 @@ enter it every time you sign a commit.
         # you should see: "OK"
         ```
 
-        d. Configure launchctl to enable the new LaunchAgent for your next restart:
+        d. Configure `launchctl` to enable the new LaunchAgent for your next restart:
 
         ```bash
         launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.ssh-add-bw-signing.plist
