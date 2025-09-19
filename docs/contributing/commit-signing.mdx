@@ -50,7 +50,8 @@ latest security best practices </strong> (see the
    :::tip
 
    Remember to protect the key with a [strong passphrase or password][password-generation].
-   Alternatively set up your [yubikey as your signing key](#hardware-backed-ssh-key-configuration).
+   Alternatively set up
+   [a hardware key as your signing key](#hardware-backed-ssh-key-configuration).
 
    :::
 
@@ -223,10 +224,10 @@ fully qualify the path to the homebrew version of ssh-keygen in the example, lik
 
 :::caution
 
-When going the YubiKey route it is important to make sure you have the infrastructure set up to
-recover from the loss of a YubiKey. At least one backup plan should be set up. Some ideas:
+When going the hardware key route it is important to make sure you have the infrastructure set up to
+recover from the loss of a hardware key. At least one backup plan should be set up. Some ideas:
 
-- Create and configure multiple YubiKeys
+- Create and configure multiple hardware keys
 - Generate both a hardware-backed key and a traditional SSH key:
   - Use the hardware-backed key for day-to-day development
   - Keep a traditional SSH key as a secure backup for emergency situations
