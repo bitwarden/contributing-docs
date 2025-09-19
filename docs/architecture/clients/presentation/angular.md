@@ -31,6 +31,13 @@ Use the `inject` function to retrieve dependencies instead of constructor inject
 primitives (Components, Pipes, etc.). Do note that this only works in Angular contexts and you
 should still use constructor injection when writing code that is shared with non Angular clients.
 
+### Host bindings
+
+> Always prefer using the `host` property over `@HostBinding` and `@HostListener`. These decorators
+> exist exclusively for backwards compatibility.
+>
+> <cite>https://angular.dev/guide/components/host-elements#the-hostbinding-and-hostlistener-decorators</cite>
+
 ### Standalone
 
 Use standalone components, directives and pipes. `NgModules` can still be used for grouping multiple
