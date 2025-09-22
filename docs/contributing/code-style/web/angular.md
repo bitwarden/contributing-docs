@@ -42,7 +42,7 @@ should still use constructor injection when writing code that is shared with non
 Use standalone components, directives and pipes. `NgModules` can still be used for grouping multiple
 components but the inner components **should** be standalone.
 
-## Organize by Feature ([ADR-0011](../../adr/0011-angular-folder-structure.md))
+## Organize by Feature ([ADR-0011](../../../architecture/adr/0011-angular-folder-structure.md))
 
 We strive to follow the [Application structure and NgModules][style-structure] section from the
 Angular Style Guide.
@@ -86,7 +86,7 @@ apps/web/src/app/
 ├─ app.module.ts
 ```
 
-## Naming conventions ([ADR-0012](../../adr/0012-angular-filename-convention.md))
+## Naming conventions ([ADR-0012](../../../architecture/adr/0012-angular-filename-convention.md))
 
 We follow the [Naming](https://angular.dev/style-guide#naming) section from the Angular Style Guide.
 More specifically use dashes to septate words in the descriptive name, and dots to separate name
@@ -141,7 +141,7 @@ belongs to services. This way components that behave almost identical but looks 
 visually can avoid code duplication by sharing the same service. Services tends to be much easier to
 test than components as well.
 
-### Composition over Inheritance ([ADR-0009](../../adr/0009-angular-composition-over-inheritance.md))
+### Composition over Inheritance ([ADR-0009](../../../architecture/adr/0009-angular-composition-over-inheritance.md))
 
 Due to the multi client nature of Bitwarden, we have a lot of shared components with slightly
 different behavior client to client. Traditionally this was implemented using inheritance, however
@@ -217,7 +217,7 @@ component "Organization Reports Module" {
 @enduml
 ```
 
-## Reactivity ([ADR-0003](../../adr/0003-observable-data-services.md) & ADR-0028)
+## Reactivity ([ADR-0003](../../../architecture/adr/0003-observable-data-services.md) & ADR-0028)
 
 We make heavy use of reactive programming using [Angular Signals][signals] & [RxJS][rxjs]. Generally
 components should always derive their state reactively from services whenever possible.
@@ -376,7 +376,7 @@ Some appropriate operators are:
   observables but not care about the order. If ordering is important use `concatMap`. If you only
   care about the latest value use `switchMap`.
 
-### Reactive Forms ([ADR-0001](../../adr/0001-reactive-forms.md))
+### Reactive Forms ([ADR-0001](../../../architecture/adr/0001-reactive-forms.md))
 
 We almost exclusively use [Angular Reactive forms](https://angular.dev/guide/forms/reactive-forms)
 instead of Template Driven forms. And the Bitwarden Component library is designed to integrate with
@@ -389,7 +389,7 @@ Reactive forms.
 >
 > <cite>https://angular.dev/guide/forms#choosing-an-approach</cite>
 
-## Enum-likes ([ADR-0025](../../architecture/adr/0025-ts-deprecate-enums.md))
+## Enum-likes ([ADR-0025](../../../architecture/adr/0025-ts-deprecate-enums.md))
 
 For general guidance on enum-likes, consult
 [Avoid TypeScript Enums](./typescript.md#avoid-typescript-enums).
