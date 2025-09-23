@@ -181,11 +181,6 @@ component "Angular" {
 @enduml
 ```
 
-Understandably this is difficulty to properly implement when the different clients use different css
-frameworks, which until everything is properly migrated to Bootstrap means there will be a _Login
-Component_ for each client that extends the generic _Login Component_. However it should only expose
-a client specific template.
-
 The diagram below showcases how the reports share logic by extracting the list into a shared
 component. Instead of the organization component directly extending the base report page component.
 For more details, read [the PR for the refactor](https://github.com/bitwarden/clients/pull/3204).
@@ -262,9 +257,11 @@ Signals.
   selector: "app-folders-list",
   template: `
     <ul>
-      <li *ngFor="let folder of folders$ | async">
-        {{ folder.name }}
-      </li>
+      @for (folder of folders$ | async; track folder) {
+        <li>
+          {{ folder.name }}
+        </li>
+      }
     </ul>
   `,
 })
@@ -309,9 +306,9 @@ ngOnDestroy() {
 }
 
 // Template
-<div *ngFor="let t of transformed">
-  {{t}}
-</div>
+@for (t of transformed) {
+  {{ t }}
+}
 ```
 
 Now instead consider the following example, in which we replaced the subscribe with `| async`.
@@ -320,9 +317,9 @@ Now instead consider the following example, in which we replaced the subscribe w
 transformed$ = observable$.pipe(map(transform));
 
 // Template
-<div *ngFor="let t of transformed$ | async">
-  {{t}}
-</div>
+@for (t of transformed$ | async; track t) {
+  {{ t }}
+}
 ```
 
 #### Unsubscribe using `takeUntilDestroyed`
@@ -379,7 +376,7 @@ Some appropriate operators are:
 ### Reactive Forms ([ADR-0001](../../../architecture/adr/0001-reactive-forms.md))
 
 We almost exclusively use [Angular Reactive forms](https://angular.dev/guide/forms/reactive-forms)
-instead of Template Driven forms. And the Bitwarden Component library is designed to integrate with
+instead of Template Driven forms. And the Bitwarden Component Library is designed to integrate with
 Reactive forms.
 
 > Provide direct, explicit access to the underlying form's object model. Compared to template-driven
