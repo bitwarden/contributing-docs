@@ -106,7 +106,7 @@ structured, step-by-step reasoning for complex tasks.
 
 #### For Claude Code
 
-1. **Install the server globally**:
+1. **Install the server**:
 
    ```bash
    npm install -g @anthropic-ai/mcp-server-sequential-thinking
