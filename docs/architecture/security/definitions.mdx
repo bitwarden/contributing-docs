@@ -4,6 +4,85 @@ sidebar_position: 2
 
 # Definitions
 
+As a security product features can often be tweaked or adjusted in the name of "security". This is a
+very broad term, with unclear meaning, sometimes leading to constantly shifting goals. Further, when
+communicating to another engineer, or to product about an intended feature, its implementation and
+constraints, the communicating parties may have a different view of what they assume an attacker to
+be able to do, and what they want to achieve, possibly even not having anything they want to
+achieve, just the notion of "I want a secure product".
+
+A formal approach here is needed: to aid in communication and to also provide a clear set of goals
+to achieve. This applies both to ad-hoc conversations in which the participants don't yet share a
+common understanding of security goals and the assumed attacker, but it also applies to
+long-standing assumed security we want to achieve for our clients, communication protocols, and
+cryptography. This is not limited to cryptographic topics.
+
+The security definitions introduced here are based on those in the book
+[Introduction to Modern Cryptography](https://www.taylorfrancis.com/books/mono/10.1201/9781003398134/introduction-modern-cryptography-yehuda-lindell-jonathan-katz);
+it aims to establish what attacker model is considered and what security goals are hoped to achieve.
+The security definitions therefore are made up of two parts:
+
+## Threat model
+
+Describes the capabilities of an attacker; that is, "what can they do", but not "how can they do
+it". It should communicate the capabilities we assume an attacker to have for that specific
+scenario. As appropriate, justifying this threat model helps all parties understand why it is
+reasonable to assume this. By default, an attacker is assumed to be able to do nothing, and the
+threat model adds capabilities. However, sometimes it can be helpful to add restrictive capabilities
+e.g. "attacker does not control the client's code", if participants otherwise take this for granted.
+
+| ✅ Good                                                                      | ❌ Bad                                                                                         |
+| ---------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| Attacker has full control over the API server and database                   | Attacker cannot use AES timing side-channel attack to infer client secret on unlock (CVE-ABCD) |
+| Attacker does not control the client's code                                  | Attacker cannot try the 4 digit PIN 10000 times                                                |
+| Attacker has read-only control to the traffic to the API server after time T | Attacker cannot inspect TLS payloads with a MITM proxy                                         |
+
+## Security goals
+
+:::note
+
+"If you don't know what you want to achieve, how can you hope to achieve it"
+
+:::
+
+To get from a vague notion of security to a set of goals we can measure, and possibly provably
+achieve, we need to define a clear set of security guarantees. These should describe -- based on the
+threat model -- goals we want to provide for a protocol / feature / application component; in other
+words, things we don't want an attacker to be able to do.
+
+| ✅ Good                                                                                                               | ❌ Bad                                                   |
+| --------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------- |
+| An attacker should not be able to gain access to plaintext passwords\*                                                | It should be secure                                      |
+| An attacker should not be able to set a client-side key into a state, where they know at least 1 bit of key material  | It should be impossible for an attacker to break the PIN |
+| An attacker should not be able to distinguish between a randomly encrypted blob string and a "Credit Card" login item | It should use military grade encryption                  |
+
+_\*There is one underlying assumption always made when talking about security definitions in the
+context of Bitwarden's encryption. It is always true that an attacker can gain access to plaintext
+passwords if they have the same knowledge and possessions as a user. For instance, an attacker that
+guessed a users badly chosen password. We cannot protect against that, therefore we do not consider
+it breaking our security definition._
+
+Compared to cryptographic proofs we make some simplifications. We generally omit "with
+non-negligible probability" which would usually occur in cryptographic proofs.
+
+## Communication
+
+Instead of a vague notion of security the above two concepts allow formalizing and clearly
+communicating the security definitions. Introducing formality and review lets us distinguish
+security issues from subjective opinions. Security issues are proven when -- given a threat model --
+one can show that a security goal fails.
+
+Updates and additions to security definitions are continuous:
+
+- You come up with a baseline during initial development (shifting left wherever you can).
+- You evaluate and revise it when there’s new work on the feature.
+- You evaluate and revise it when evaluating each security issue against it.
+
+The definition will change as the system changes. Making this a routine part of vetting those
+changes increases the chance that it’ll remain useful.
+
+## Terms
+
 <dl>
   <dt>Vault data</dt>
   <dd>
