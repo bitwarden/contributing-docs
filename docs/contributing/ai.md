@@ -7,8 +7,6 @@ sidebar_custom_props:
 
 ## Background
 
-### How and Why We Use AI Tools
-
 At Bitwarden we leverage AI tools to enhance developer productivity, improve code quality, and
 accelerate our development cycles. Our adoption of AI tooling is driven by several key objectives:
 
@@ -221,7 +219,7 @@ context across sessions and maintain a knowledge graph of your projects.
 
 4. **Restart Claude Desktop** to activate the server
 
-### Verifying MCP Server Installation
+### Verifying Installations
 
 #### Claude Code Verification
 
@@ -241,9 +239,9 @@ claude-code mcp test memory
 3. Type: "Can you list your available MCP servers?"
 4. Claude should respond with the configured servers
 
-### Troubleshooting MCP Servers
+### Troubleshooting
 
-**Common Issues and Solutions**:
+Common issues and solutions:
 
 1. **Server not starting**:
 
@@ -265,7 +263,7 @@ claude-code mcp test memory
    - Verify `MEMORY_DATA_DIR` path exists and is writable
    - Check disk space availability
 
-### Best Practices for MCP Servers
+### Best Practices
 
 1. **Security Considerations**:
 
