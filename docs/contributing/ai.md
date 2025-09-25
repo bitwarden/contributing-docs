@@ -135,7 +135,6 @@ structured, step-by-step reasoning for complex tasks.
    ```
 
 2. **Configure in Claude Desktop**:
-
    - Open Claude Desktop
    - Navigate to Settings → Developer → MCP Servers
    - Click "Add Server"
@@ -206,7 +205,6 @@ context across sessions and maintain a knowledge graph of your projects.
    ```
 
 3. **Configure in Claude Desktop**:
-
    - Open Settings → Developer → MCP Servers
    - Click "Add Server"
    - Enter the following configuration:
@@ -245,18 +243,15 @@ claude-code mcp test memory
 Common issues and solutions:
 
 1. **Server not starting**:
-
    - Verify NPM packages are installed globally
    - Check Node version (must be 18+)
    - Review server logs in `~/.claude-code/logs/` or Claude Desktop's developer console
 
 2. **Permission errors**:
-
    - Ensure data directories have proper permissions
    - On macOS/Linux: `chmod 755 ~/.claude-memory`
 
 3. **Configuration not loading**:
-
    - Validate JSON syntax in configuration files
    - Restart Claude Code or Claude Desktop after configuration changes
 
@@ -267,19 +262,16 @@ Common issues and solutions:
 ### Best Practices
 
 1. **Security Considerations**:
-
    - Only install MCP servers from trusted sources
    - Review server permissions and capabilities before installation
    - Regularly update servers to get security patches
 
 2. **Performance Optimization**:
-
    - Limit the number of active servers to those you actively use
    - Monitor resource usage, especially for memory-intensive servers
    - Configure appropriate timeouts for long-running operations
 
 3. **Data Management**:
-
    - Regularly backup memory server data directories
    - Clear old session data periodically to maintain performance
    - Use project-specific memory contexts when appropriate
