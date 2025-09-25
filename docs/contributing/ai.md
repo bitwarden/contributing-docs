@@ -247,8 +247,8 @@ claude-code mcp test memory
 
 1. **Server not starting**:
 
-   - Verify npm packages are installed globally
-   - Check Node.js version (must be 18.0+)
+   - Verify NPM packages are installed globally
+   - Check Node version (must be 18+)
    - Review server logs in `~/.claude-code/logs/` or Claude Desktop's developer console
 
 2. **Permission errors**:
