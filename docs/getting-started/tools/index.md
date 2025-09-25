@@ -43,9 +43,7 @@ environment.
   [rustup](https://rustup.rs/))
 - [Git](https://git-scm.com)
   - [Commit signing](../../contributing/commit-signing.mdx) is strongly recommended
-- [Claude Code](https://claude.com/product/claude-code) for AI-assisted development
-  - [Sequential thinking](https://github.com/modelcontextprotocol/servers/tree/main/src/sequentialthinking)
-    and [memory](https://github.com/modelcontextprotocol/servers/tree/main/src/memory) MCP servers
+- [AI tools](../../contributing/ai.md)
 
 ### Mobile
 
