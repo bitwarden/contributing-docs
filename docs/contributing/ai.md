@@ -3,12 +3,13 @@ sidebar_custom_props:
   access: bitwarden
 ---
 
-# Artificial Intelligence Tooling
+# AI
 
 ## Background
 
-At Bitwarden we leverage AI tools to enhance developer productivity, improve code quality, and
-accelerate our development cycles. Our adoption of AI tooling is driven by several key objectives:
+At Bitwarden we leverage artificial intelligence tools to enhance developer productivity, improve
+code quality, and accelerate our development cycles. Our adoption of AI tooling is driven by several
+key objectives:
 
 **Enhanced Developer Productivity**: AI assistants help automate repetitive tasks, generate
 boilerplate code, and provide intelligent code completions, allowing developers to focus on complex
