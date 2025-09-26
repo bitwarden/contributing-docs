@@ -9,18 +9,6 @@ Bitwarden uses [Renovate](https://www.mend.io/renovate/) for automating dependen
 will automatically create pull requests for dependencies on a weekly cadence. Security updates will
 generate pull requests immediately.
 
-:::note
-
-As of September 25, 2025, the Renovate bot will be renamed Mend bot. From
-[the announcement](https://github.com/renovatebot/renovate/discussions/37842):
-
-> Coming soon, the much used and well loved [Renovate GitHub app](https://github.com/apps/renovate)
-> (a.k.a. "Renovate Bot") will be getting renamed to "Mend". Commits, PRs, Issues and Comments
-> authored by the Renovate app will reflect the new name and you will see "Mend [bot]" where you
-> used to see "Renovate [bot]".
-
-:::
-
 ## Renovate configuration
 
 Renovate is configured by a `.github/renovate.json` (or `.github/renovate.json5`) file in each
