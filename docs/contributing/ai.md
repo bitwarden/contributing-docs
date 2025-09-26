@@ -106,45 +106,26 @@ structured, step-by-step reasoning for complex tasks.
 
 #### For Claude Code
 
-1. **Install the server**:
-
-   ```bash
-   npm install -g @anthropic-ai/mcp-server-sequential-thinking
-   ```
-
-2. **Configure in Claude Code**: Create or edit `~/.claude-code/mcp.json`:
-
-   ```json
-   {
-     "servers": {
-       "sequential-thinking": {
-         "command": "npx",
-         "args": ["@anthropic-ai/mcp-server-sequential-thinking"],
-         "env": {}
-       }
-     }
-   }
-   ```
+```bash
+claude mcp add --scope user memory -- npx -y @modelcontextprotocol/server-memory
+```
 
 #### For Claude Desktop
 
-1. **Install the server**:
+Edit your `~/.claude.json`, go to the `mcpServers` section and add:
 
-   ```bash
-   npm install -g @anthropic-ai/mcp-server-sequential-thinking
-   ```
+```json
+"anthropic-sequential": {
+   "type": "stdio",
+   "command": "npx",
+   "args": [
+      "-y",
+      "@modelcontextprotocol/server-sequential-thinking"
+   ]
+   }
+```
 
-2. **Configure in Claude Desktop**:
-   - Open Claude Desktop
-   - Navigate to Settings → Developer → MCP Servers
-   - Click "Add Server"
-   - Enter the following configuration:
-     - Name: `sequential-thinking`
-     - Command: `npx`
-     - Arguments: `@anthropic-ai/mcp-server-sequential-thinking`
-   - Click "Save"
-
-3. **Restart Claude Desktop** to activate the server
+Restart Claude Desktop to activate the server.
 
 ### Installing Memory MCP Server
 
@@ -153,70 +134,26 @@ context across sessions and maintain a knowledge graph of your projects.
 
 #### For Claude Code
 
-1. **Install the server**:
-
-   ```bash
-   npm install -g @anthropic-ai/mcp-server-memory
-   ```
-
-2. **Create a data directory**:
-
-   ```bash
-   mkdir -p ~/.claude-memory
-   ```
-
-3. **Configure in Claude Code**: Create or edit `~/.claude-code/mcp.json`:
-
-   ```json
-   {
-     "servers": {
-       "sequential-thinking": {
-         "command": "npx",
-         "args": ["@anthropic-ai/mcp-server-sequential-thinking"],
-         "env": {}
-       },
-       "memory": {
-         "command": "npx",
-         "args": ["@anthropic-ai/mcp-server-memory"],
-         "env": {
-           "MEMORY_DATA_DIR": "~/.claude-memory"
-         }
-       }
-     }
-   }
-   ```
+```bash
+claude mcp add --scope user memory -- npx -y @modelcontextprotocol/server-memory
+```
 
 #### For Claude Desktop
 
-1. **Install the server**:
+Edit your `~/.claude.json`, go to the `mcpServers` section and add:
 
-   ```bash
-   npm install -g @anthropic-ai/mcp-server-memory
-   ```
+```json
+"memory": {
+   "type": "stdio",
+   "command": "npx",
+   "args": [
+      "-y",
+      "@modelcontextprotocol/server-memory"
+   ]
+   }
+```
 
-2. **Create a data directory**:
-
-   ```bash
-   # macOS/Linux
-   mkdir -p ~/.claude-memory
-
-   # Windows
-   mkdir %USERPROFILE%\.claude-memory
-   ```
-
-3. **Configure in Claude Desktop**:
-   - Open Settings → Developer → MCP Servers
-   - Click "Add Server"
-   - Enter the following configuration:
-     - Name: `memory`
-     - Command: `npx`
-     - Arguments: `@anthropic-ai/mcp-server-memory`
-     - Environment Variables:
-       - Key: `MEMORY_DATA_DIR`
-       - Value: `~/.claude-memory` (or `%USERPROFILE%\.claude-memory` on Windows)
-   - Click "Save"
-
-4. **Restart Claude Desktop** to activate the server
+Restart Claude Desktop to activate the server.
 
 ### Verifying Installations
 
@@ -224,11 +161,11 @@ context across sessions and maintain a knowledge graph of your projects.
 
 ```bash
 # List all configured servers
-claude-code mcp list
+claude mcp list
 
 # Test a specific server
-claude-code mcp test sequential-thinking
-claude-code mcp test memory
+claude mcp test sequential-thinking
+claude mcp test memory
 ```
 
 #### Claude Desktop Verification
@@ -242,41 +179,44 @@ claude-code mcp test memory
 
 Common issues and solutions:
 
-1. **Server not starting**:
-   - Verify NPM packages are installed globally
-   - Check Node version (must be 18+)
-   - Review server logs in `~/.claude-code/logs/` or Claude Desktop's developer console
+**Server not starting**:
 
-2. **Permission errors**:
-   - Ensure data directories have proper permissions
-   - On macOS/Linux: `chmod 755 ~/.claude-memory`
+- Verify NPM packages are installed globally
+- Check Node version (must be 18+)
+- Review server logs in `~/.claude-code/logs/` or Claude Desktop's developer console
 
-3. **Configuration not loading**:
-   - Validate JSON syntax in configuration files
-   - Restart Claude Code or Claude Desktop after configuration changes
+**Permission errors**:
 
-4. **Memory server not persisting data**:
-   - Verify `MEMORY_DATA_DIR` path exists and is writable
-   - Check disk space availability
+- Ensure data directories have proper permissions
+- On macOS/Linux: `chmod 755 ~/.claude-memory`
+
+**Configuration not loading**:
+
+- Validate JSON syntax in configuration files
+- Restart Claude Code or Claude Desktop after configuration changes
 
 ### Best Practices
 
-1. **Security Considerations**:
-   - Only install MCP servers from trusted sources
-   - Review server permissions and capabilities before installation
-   - Regularly update servers to get security patches
+**Security Considerations**:
 
-2. **Performance Optimization**:
-   - Limit the number of active servers to those you actively use
-   - Monitor resource usage, especially for memory-intensive servers
-   - Configure appropriate timeouts for long-running operations
+- Only install MCP servers from trusted sources
+- Review server permissions and capabilities before installation
+- Regularly update servers to get security patches
 
-3. **Data Management**:
-   - Regularly backup memory server data directories
-   - Clear old session data periodically to maintain performance
-   - Use project-specific memory contexts when appropriate
+**Performance Optimization**:
 
-4. **Integration with Development Workflow**:
-   - Configure project-specific MCP servers in repository `.claude/` directories
-   - Document custom MCP server requirements in project README files
-   - Share MCP configurations with team members for consistency
+- Limit the number of active servers to those you actively use
+- Monitor resource usage, especially for memory-intensive servers
+- Configure appropriate timeouts for long-running operations
+
+**Data Management**:
+
+- Regularly backup memory server data directories
+- Clear old session data periodically to maintain performance
+- Use project-specific memory contexts when appropriate
+
+**Integration with Development Workflow**:
+
+- Configure project-specific MCP servers in repository `.claude/` directories
+- Document custom MCP server requirements in project README files
+- Share MCP configurations with team members for consistency
