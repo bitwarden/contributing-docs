@@ -4,7 +4,20 @@ Clients must ensure that highly sensitive vault data cannot be accessed in plain
 has been locked, even if the device becomes compromised after the lock occurs. Protections are not
 guaranteed if the device is compromised before the vault is locked.
 
-## Technical Considerations
+## Threat model
+
+A device has been compromised while the Bitwarden vault is locked (protections are not guaranteed if
+device is compromised before the vault is locked). Attacker has full access to userspace, but not
+kernel space.
+
+## Security goals
+
+- Attackers cannot retrieve decrypted vault data
+- Attackers cannot retrieve user encryption keys
+- Attackers cannot inject arbitrary items as vault data
+- Attackers cannot edit encrypted vault data without alerting user or breaking items.
+
+## Technical considerations
 
 Achieving this principle depends on the limitations of the platform and environment. For instance,
 in environments like JavaScript, where memory management is not fully under the control of the
