@@ -15,7 +15,25 @@ data as belonging in the set of the user's encrypted data. The total sum of a us
 is fully isolated from the server and infrastructure; it cannot be read nor expanded outside of the
 user's client context.
 
-This is what we mean when we sometimes refer to "End-to-end encrypted" or "Zero Knowledge."
+This is what we mean when we sometimes refer to "end-to-end encrypted" or "zero knowledge".
+
+## Threat model
+
+- An attacker able to view and/or edit database data belonging to a user they do not own
+- An attacker able to create, edit, and fully control network responses to a client
+
+Some examples of attackers included in this list could be Bitwarden employees, network
+administrators, CDNs, and any MITM that can circumvent TLS protection.
+
+## Security goals
+
+- Attackers cannot retrieve decrypted vault data
+- Attackers cannot retrieve user encryption keys
+- Attackers cannot inject arbitrary items as vault data
+- Attackers cannot edit vault data\*
+
+_\* Availability of vault data is not a security goal as attackers have full control over the
+database._
 
 ## Account key sharing as a feature
 
