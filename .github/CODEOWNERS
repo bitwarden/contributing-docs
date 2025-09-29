@@ -19,3 +19,9 @@ docs/architecture/security @bitwarden/team-appsec @bitwarden/dept-architecture
 
 # Shared workflows ownership
 .github/workflows/build.yml @bitwarden/dept-bre @bitwarden/tech-leads
+
+# Docker-related files
+**/Dockerfile @bitwarden/team-appsec @bitwarden/dept-bre
+**/*.dockerignore @bitwarden/team-appsec @bitwarden/dept-bre
+**/entrypoint.sh @bitwarden/team-appsec @bitwarden/dept-bre
+**/docker-compose.yml @bitwarden/team-appsec @bitwarden/dept-bre
