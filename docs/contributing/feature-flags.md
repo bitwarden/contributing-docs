@@ -327,3 +327,75 @@ follows:
 
 Local and development self-hosted installations may choose to configure alternative
 [data sources](#flag-data-sources) to more quickly adopt a feature.
+
+## Removing a feature flag
+
+Once the flag has been enabled in all environments and the feature is verified to be functioning as
+expected, the final steps are to remove the flagged conditional logic from our codebase, then the
+flag itself. When defining the tasks for feature-flagged code, be sure to include a cleanup task for
+removing this logic. You may want to consider multiple tasks - one for each of the steps in the
+removal process.
+
+Due to the complexity of the different client deployments and how we expose feature flags through
+our API, it is important that each feature flag be removed in the appropriate sequence, with the
+appropriate timing considerations.
+
+### Step 1: Remove business logic and client references
+
+:::tip Timing
+
+**Step 1** can take place immediately after the feature is released.
+
+:::
+
+In this step, teams should remove all business logic that relies on the flag from both client and
+server code. This includes all references in the client codebase, and also any business logic on the
+server that checks the flag value.
+
+:exclamation: This does **not** include removing the flag from the FeatureFlagKeys on the server --
+we must leave this here for backward compatibility, so that existing clients who have not updated
+continue to be served the correct "on" value when querying for the flag, even after the new server
+release.
+
+This code should then be deployed to all clients and to the server.
+
+### Step 2: Remove flag from server
+
+:::tip Timing
+
+**Step 2** can take place either:
+
+- Three major releases after the feature flag was removed from the clients in **Step 1**, if the
+  flag is used in non-web clients, or
+- At the same time as the feature flag was removed from the clients in **Step 1**, if the flag is
+  only used on the web client.
+
+:::
+
+Once we have satisfied the backward compatibility
+[requirements](https://bitwarden.com/help/bitwarden-software-release-support/) for our clients, we
+can completely remove the feature flag from the server codebase. This can be done by removing the
+flag value from the `FeatureFlagKeys`.
+
+:::info Determining when it's safe to remove
+
+To assess when a flag was removed from the TypeScript clients, you can check the
+[history](https://github.com/bitwarden/clients/commits/main/libs/common/src/enums/feature-flag.enum.ts)
+of the `FeatureFlagKeys` enum.
+
+:::
+
+### Step 3: Remove flag from LaunchDarkly
+
+:::tip Timing
+
+**Step 3** can take place immediately after the changes have been deployed the cloud servers for
+Step 2. Appropriate time should be taken to ensure a rollback of the release will not be required.
+
+:::
+
+Once the server codebase has been deployed to all environments without any references to the flag,
+the flag should be archived in LaunchDarkly.
+
+Feature flags not accessed for a long period of time will automatically move to an "inactive" state
+that can also help with identifying technical debt to clean up.
