@@ -107,7 +107,7 @@ structured, step-by-step reasoning for complex tasks.
 #### For Claude Code
 
 ```bash
-claude mcp add --scope user memory -- npx -y @modelcontextprotocol/server-memory
+claude mcp add --scope user memory -- npx -y @modelcontextprotocol/server-sequential-thinking
 ```
 
 #### For Claude Desktop
@@ -200,7 +200,29 @@ Common issues and solutions:
 **Security Considerations**:
 
 - Only install MCP servers from trusted sources
-- Review server permissions and capabilities before installation
+- Review server permissions and capabilities before installation:
+  - Examine the server's source code or documentation to understand what file system access it
+    requires
+  - Verify what external APIs or services the server connects to
+  - Check if the server executes system commands and understand which ones
+  - Confirm whether the server stores persistent data and where it's stored
+  - Review network permissions and ensure the server only communicates with expected endpoints
+  - Validate that the server follows principle of least privilege
+- Use trusted LLM providers and models:
+  - Prefer established providers with strong security track records (e.g., Anthropic)
+  - Verify the provider's data handling policies and ensure they align with Bitwarden's security
+    requirements
+  - Confirm that your API keys and credentials are stored securely
+  - Understand whether your prompts and code are used for model training (opt out if possible)
+  - Use enterprise or business tier services when available for enhanced security guarantees
+- Core model usage guidelines:
+  - Use the latest stable model versions to benefit from security improvements and bug fixes
+  - Avoid deprecated or experimental models in production workflows
+  - Be aware of model capabilities and limitations - not all models are suitable for code generation
+  - Consider model context windows and token limits when designing workflows
+  - Use model-specific features (like Claude's extended thinking) appropriately for complex tasks
+  - Monitor model output for hallucinations or incorrect information, especially in
+    security-critical code
 - Regularly update servers to get security patches
 
 **Performance Optimization**:
