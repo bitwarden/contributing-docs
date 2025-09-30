@@ -107,7 +107,7 @@ structured, step-by-step reasoning for complex tasks.
 #### For Claude Code
 
 ```bash
-claude mcp add --scope user memory -- npx -y @modelcontextprotocol/server-sequential-thinking
+claude mcp add --scope user sequential-thinking -- npx -y @modelcontextprotocol/server-sequential-thinking
 ```
 
 #### For Claude Desktop
@@ -115,7 +115,7 @@ claude mcp add --scope user memory -- npx -y @modelcontextprotocol/server-sequen
 Edit your `~/.claude.json`, go to the `mcpServers` section and add:
 
 ```json
-"anthropic-sequential": {
+"sequential-thinking": {
    "type": "stdio",
    "command": "npx",
    "args": [
