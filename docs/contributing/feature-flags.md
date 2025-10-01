@@ -332,9 +332,8 @@ Local and development self-hosted installations may choose to configure alternat
 
 Once the flag has been enabled in all environments and the feature is verified to be functioning as
 expected, the final steps are to remove the flagged conditional logic from our codebase, then the
-flag itself. When defining the tasks for feature-flagged code, be sure to include a cleanup task for
-removing this logic. You may want to consider multiple tasks - one for each of the steps in the
-removal process.
+flag itself. When defining the tasks for feature-flagged code, we also include cleanup tasks that
+capture each step in the process of removing the feature flag.
 
 Due to the complexity of the different client deployments and how we expose feature flags through
 our API, it is important that each feature flag be removed in the appropriate sequence, with the
