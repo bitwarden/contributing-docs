@@ -3,10 +3,17 @@
 The Bitwarden Splunk app fetches event log data from the Bitwarden Public API and makes it available
 in Splunk.
 
+While the app is available for all platforms, the splunk docker image is limited to version 9.3 on
+macOS because of a dependency on the AVX instruction set.
+
+If you are using a different platform (Windows/Linux), you should be able to run up to version 10.0
+locally. To do this, change the `image` in `dev/docker-compose.yml` to `splunk/splunk:10.0`.
+
 ## Requirements
 
-- Docker. If you're using an Apple Silicon Mac, enable _Docker Desktop_ -> _Settings_ -> _General_
-  -> _Use Rosetta for x86_64/amd64 emulation on Apple Silicon_
+- Docker
+  - If you're using an Apple Silicon Mac, enable _Docker Desktop_ -> _Settings_ -> _General_ -> _Use
+    Rosetta for x86_64/amd64 emulation on Apple Silicon_
 - Python 3.7 - 3.10
 - [Poetry][poetry]
   - Also install Poetry export plugin with `poetry self add poetry-plugin-export`
