@@ -104,13 +104,13 @@ We recommend at least two be installed by everyone:
 The Sequential Thinking server enhances Claude's problem-solving capabilities by providing
 structured, step-by-step reasoning for complex tasks.
 
-#### For Claude Code
+#### Claude Code
 
 ```bash
 claude mcp add --scope user sequential-thinking -- npx -y @modelcontextprotocol/server-sequential-thinking
 ```
 
-#### For Claude Desktop
+#### Claude Desktop
 
 Edit your `~/.claude.json`, go to the `mcpServers` section and add:
 
@@ -132,13 +132,13 @@ Restart Claude Desktop to activate the server.
 The Memory server provides Claude with persistent memory capabilities, allowing it to remember
 context across sessions and maintain a knowledge graph of your projects.
 
-#### For Claude Code
+#### Claude Code
 
 ```bash
 claude mcp add --scope user memory -- npx -y @modelcontextprotocol/server-memory
 ```
 
-#### For Claude Desktop
+#### Claude Desktop
 
 Edit your `~/.claude.json`, go to the `mcpServers` section and add:
 
@@ -157,18 +157,13 @@ Restart Claude Desktop to activate the server.
 
 ### Verifying Installations
 
-#### Claude Code Verification
+#### Claude Code
 
 ```bash
-# List all configured servers
 claude mcp list
-
-# Test a specific server
-claude mcp test sequential-thinking
-claude mcp test memory
 ```
 
-#### Claude Desktop Verification
+#### Claude Desktop
 
 1. Open Claude Desktop
 2. Start a new conversation
