@@ -17,7 +17,7 @@ This uses
 3.  An enterprise account created with the testing credit card located here:
     [Advanced Server Setup](../advanced-setup.md).
 
-## Configure
+## Configure the IdP
 
 1.  Open your local web client and navigate to your organization → Settings → Single Sign-On.
 
@@ -91,7 +91,7 @@ This uses
     configured authentication sources → `example-userpass`. You should be able to log in with the
     users you’ve configured.
 
-## Configure
+## Configure Bitwarden
 
 1.  Go back to your window with the SSO configuration page open.
 2.  Complete the following values in the SAML Identity Provider Configuration section:

@@ -31,7 +31,7 @@ git clone https://github.com/bitwarden/server.git
 cd server
 ```
 
-## Configure
+## Configure Git
 
 1. Configure Git to ignore the Prettier revision:
 
@@ -49,7 +49,7 @@ cd server
    you can run `dotnet format` from the command line when convenient (e.g. before requesting a PR
    review).
 
-## Configure
+## Configure Docker
 
 We provide a [Docker Compose](https://docs.docker.com/compose/) configuration, which is used during
 development to provide the required dependencies. This is split up into multiple service profiles to
@@ -176,7 +176,7 @@ the following commands:
     pwsh setup_azurite.ps1
     ```
 
-## Configure
+## Configure user secrets
 
 [User secrets](https://docs.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-6.0)
 are a method for managing application settings on a per-developer basis. They override the settings

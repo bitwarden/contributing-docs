@@ -835,7 +835,7 @@ specified) that has not already been mentioned in their specific sections above.
     }
     ```
 
-### Jetpack Compose
+### Jetpack Compose {#best-practices--jetpack-compose}
 
 When writing UI layer code using Jetpack Compose, the
 [Compose API guidelines](https://android.googlesource.com/platform/frameworks/support/+/androidx-main/compose/docs/compose-api-guidelines.md)
