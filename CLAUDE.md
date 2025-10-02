@@ -2,6 +2,7 @@
 
 - **OFTEN** prefer editing existing files over creating new ones
 - **ALWAYS** follow the established patterns for frontmatter, conditional content, and structure
+- **ALWAYS** validate code and diagram syntax
 
 ## Repository structure
 
@@ -49,6 +50,8 @@ npm run typecheck      # Run TypeScript type checking
 - Include trailing commas for multi-line lists
 - Do not use code regions
 - Follow language-specific guidelines for code examples in `docs/contributing/code-style/`
+- Diagrams should use [Mermaid](https://mermaid.js.org/)
+- Large code examples should be in `<details>` blocks
 
 ### Conditional content
 
