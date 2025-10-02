@@ -22,7 +22,7 @@ run the SQL Server tests along with one EF implementation; SQLite is often the e
 regard. The other supported EF database providers will still run in the pipeline to catch any
 differences between them.
 
-## Configure the tests
+## Configure
 
 The tests are configured through
 [.NET Configuration](https://learn.microsoft.com/en-us/dotnet/core/extensions/configuration). They

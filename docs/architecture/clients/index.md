@@ -23,7 +23,7 @@ The mono-repository root directory contains three main folders.
 - `Node` - Used to be shared code for CLI and Directory Connector CLI, but since directory connector
   no longer uses the same version of libs this module is deprecated.
 
-## Package Diagram
+## Package diagram
 
 Below is a simplified package diagram of the clients repository.
 

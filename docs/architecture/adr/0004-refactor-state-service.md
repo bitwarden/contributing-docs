@@ -9,7 +9,7 @@ tags: [clients, angular]
 
 <AdrTable frontMatter={frontMatter}></AdrTable>
 
-## Context and Problem Statement
+## Context and problem statement
 
 This ADR builds upon [Adopt Observable Data Services for Angular][observable].
 
@@ -21,7 +21,7 @@ Additionally any service or component can directly access any state using the st
 makes it difficult to follow the state lifecycle of each data type, and introduces uncertainty in
 how the data is accessed.
 
-## Decision Outcome
+## Decision outcome
 
 We should refactor the state service to be a generic storage container.
 

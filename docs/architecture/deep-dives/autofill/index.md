@@ -1,6 +1,6 @@
 # Browser Autofill
 
-## Core Concepts
+## Core concepts
 
 ### Content Scripts
 

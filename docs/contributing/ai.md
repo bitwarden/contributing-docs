@@ -57,7 +57,7 @@ assistance into their terminal-based workflows.
    Walk through the process to sign into the Anthropic Console via SSO and authenticate your local
    client.
 
-#### Basic Usage
+#### Basic usage
 
 ```bash
 # Start an interactive session
@@ -81,13 +81,13 @@ Install via [claude.ai/download](https://claude.ai/download) or Homebrew `brew i
 - Configure your workspace preferences
 - Enable MCP server connections in Settings → Developer → MCP Servers
 
-## MCP Servers
+## MCP servers
 
 Model Context Protocol (MCP) servers extend Claude's capabilities by providing access to external
 tools, APIs, and data sources. They enable Claude to interact with your development environment,
 databases, and other services while maintaining security boundaries.
 
-### Understanding MCP Servers
+### Understanding MCP servers
 
 MCP servers are separate processes that communicate with Claude through a standardized protocol.
 They can:
@@ -99,7 +99,7 @@ They can:
 
 We recommend at least two be installed by everyone:
 
-### Installing Sequential Thinking MCP Server
+### Installing Sequential Thinking MCP server
 
 The Sequential Thinking server enhances Claude's problem-solving capabilities by providing
 structured, step-by-step reasoning for complex tasks.
@@ -127,7 +127,7 @@ Edit your `~/.claude.json`, go to the `mcpServers` section and add:
 
 Restart Claude Desktop to activate the server.
 
-### Installing Memory MCP Server
+### Installing Memory MCP server
 
 The Memory server provides Claude with persistent memory capabilities, allowing it to remember
 context across sessions and maintain a knowledge graph of your projects.
@@ -155,7 +155,7 @@ Edit your `~/.claude.json`, go to the `mcpServers` section and add:
 
 Restart Claude Desktop to activate the server.
 
-### Verifying Installations
+### Verifying installations
 
 #### Claude Code
 
@@ -190,9 +190,9 @@ Common issues and solutions:
 - Validate JSON syntax in configuration files
 - Restart Claude Code or Claude Desktop after configuration changes
 
-### Best Practices
+### Best practices
 
-**Security Considerations**:
+**Security considerations**:
 
 - Only install MCP servers from trusted sources
 - Review server permissions and capabilities before installation:
@@ -220,19 +220,19 @@ Common issues and solutions:
     security-critical code
 - Regularly update servers to get security patches
 
-**Performance Optimization**:
+**Performance optimization**:
 
 - Limit the number of active servers to those you actively use
 - Monitor resource usage, especially for memory-intensive servers
 - Configure appropriate timeouts for long-running operations
 
-**Data Management**:
+**Data management**:
 
 - Regularly backup memory server data directories
 - Clear old session data periodically to maintain performance
 - Use project-specific memory contexts when appropriate
 
-**Integration with Development Workflow**:
+**Integration with development workflow**:
 
 - Configure project-specific MCP servers in repository `.claude/` directories
 - Document custom MCP server requirements in project README files

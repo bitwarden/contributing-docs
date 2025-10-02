@@ -8,7 +8,7 @@ is located
 [here](https://github.com/bitwarden/clients/tree/main/apps/desktop/native-messaging-test-runner) at
 the root of the `desktop` app in `bitwarden/clients` repo.
 
-## Getting Started
+## Getting started
 
 1.  Clone the [bitwarden/clients](https://github.com/bitwarden/clients) repo
 2.  Run the desktop app locally following [these](../desktop/index.mdx) instructions
@@ -34,7 +34,7 @@ there. You will need to set up your accounts and vaults beforehand to test these
 
 :::
 
-## Architecture and Structure
+## Architecture and structure
 
 ### Commands
 

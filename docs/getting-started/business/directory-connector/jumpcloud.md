@@ -22,7 +22,7 @@ with the [OpenLDAP](./open-ldap.md) setup.
 3. Create an Administrator user and bind that user to the same directory. You'll use this user to
    authenticate Directory Connector with JumpCloud
 
-## Configure Directory Connector
+## Configure
 
 1. Run the Directory Connector Electron app (see the [build instructions](./index.mdx))
 

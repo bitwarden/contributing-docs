@@ -18,7 +18,7 @@ sidebar_position: 1
 - **State**: The state is how something is; its configuration, attributes, condition or information
   content.
 
-## Where We Are and How We Got Here
+## Where we are and how we got here
 
 ### `StorageService`
 

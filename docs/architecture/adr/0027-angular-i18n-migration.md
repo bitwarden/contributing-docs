@@ -9,7 +9,7 @@ tags: [clients, angular, i18n]
 
 <AdrTable frontMatter={frontMatter}></AdrTable>
 
-## Context and Problem Statement
+## Context and problem statement
 
 We currently use a homegrown localization system based on the
 [`chrome.i18n`](https://developer.chrome.com/docs/extensions/reference/api/i18n) api. This has
@@ -26,7 +26,7 @@ experience as different languages handles names, numbers, and dates differently.
 In order to better handle more complex localization scenarios we'd like to explore changing the
 underlying localization engine.
 
-## Considered Options
+## Considered options
 
 - **Keep chrome.i18n** - Continue using our current homegrown localization system
 - **Continue building our own** - Expand our existing framework with missing functionality
@@ -106,7 +106,7 @@ underlying localization engine.
 - No extract command - difficult to identify which client uses which keys
 - Lacks advanced capabilities like safe HTML tag substitution
 
-## Decision Outcome
+## Decision outcome
 
 Chosen option: **Angular Localization (@angular/localize)**, because it provides the best balance of
 features, long-term support, and integration with our Angular-based architecture.
@@ -147,14 +147,14 @@ with post-processing libraries like `intl-messageformat`:
 formatIcu($localize`{count, plural, =0 {none} =1 {one} other {more}}`);
 ```
 
-### Positive Consequences
+### Positive consequences
 
 - Native support for pluralization and interpolation
 - Better localization experience across all languages
 - Long-term support as part of Angular core
 - Reduced need for workarounds and string splitting
 
-### Negative Consequences
+### Negative consequences
 
 - Migration effort required from current system
 - Limited functionality in non-Angular environments

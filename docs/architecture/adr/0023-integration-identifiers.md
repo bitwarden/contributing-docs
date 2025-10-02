@@ -9,7 +9,7 @@ tags: [server]
 
 <AdrTable frontMatter={frontMatter}></AdrTable>
 
-## Context and Problem Statement
+## Context and problem statement
 
 Traffic on the Bitwarden platform continues to grow. As that load increases on our systems it
 becomes imperative to understand how and when our various clients are connecting to our API and
@@ -28,7 +28,7 @@ utilize common sense constraints to keep the overall platform more resilient and
 shape changes. Furthermore, a number of Bitwarden-developed integrations are largely external such
 as our [Splunk][splunk] and [Sentinel][sentinel] apps that should also be registered.
 
-## Considered Options
+## Considered options
 
 - **Maintain current integration method** - Make no changes to validation or registration of traffic
   and expect self-regulation of integrations.
@@ -42,7 +42,7 @@ as our [Splunk][splunk] and [Sentinel][sentinel] apps that should also be regist
   integrations so that they are enumerated and known to Bitwarden, whether internally or externally
   developed. Associate validation with registered integrations for enhanced developer feedback.
 
-## Decision Outcome
+## Decision outcome
 
 Chosen option: **Register integrations along with validation**.
 
@@ -50,7 +50,7 @@ While this is more effort for Bitwarden to develop than just adding validation, 
 expect more from integrations' request data with also providing a registration identifier is a
 simple addition.
 
-### Positive Consequences
+### Positive consequences
 
 - Integrations are registered and known to the platform for sensible traffic identification.
 - Bitwarden's operations group receives data to aid in maintainability of the platform, especially
@@ -58,7 +58,7 @@ simple addition.
 - Feedback to Bitwarden support teams on version usage is available.
 - Bitwarden's support policy of a certain number of major versions can be more actively enforced.
 
-### Negative Consequences
+### Negative consequences
 
 - Integrations will need to make the effort to register with Bitwarden and adjust their requests,
   potentially with brief disruptions for them.

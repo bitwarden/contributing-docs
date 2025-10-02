@@ -31,7 +31,7 @@ git clone https://github.com/bitwarden/server.git
 cd server
 ```
 
-## Configure Git
+## Configure
 
 1. Configure Git to ignore the Prettier revision:
 
@@ -49,7 +49,7 @@ cd server
    you can run `dotnet format` from the command line when convenient (e.g. before requesting a PR
    review).
 
-## Configure Docker
+## Configure
 
 We provide a [Docker Compose](https://docs.docker.com/compose/) configuration, which is used during
 development to provide the required dependencies. This is split up into multiple service profiles to
@@ -176,7 +176,7 @@ the following commands:
     pwsh setup_azurite.ps1
     ```
 
-## Configure User Secrets
+## Configure
 
 [User secrets](https://docs.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-6.0)
 are a method for managing application settings on a per-developer basis. They override the settings
@@ -268,7 +268,7 @@ up-to-date. See [MSSQL Database](./database/mssql/index.md) for more information
 
 <Bitwarden>
 
-## Install Licensing Certificate
+## Install licensing certificate
 
 To run your local server environment as a licensed instance, you will need to download the
 `Licensing Certificate - Dev` from the shared Engineering collection and install it. This can be
@@ -291,7 +291,7 @@ attempting to "Build and Run the Server".
 
 </Bitwarden>
 
-## Build and Run the Server
+## Build and run the server
 
 You are now ready to build and run your development server.
 

@@ -165,12 +165,12 @@ If a PR affects multiple teams, approval will be required by all teams impacted.
 the team that produced the PR[^1] is responsible for approving the change as a whole, while impacted
 teams are responsible only for their portion of the codebase.
 
-## Reviewing Techniques
+## Reviewing techniques
 
 There are no one-size-fits-all technique for reviewing code. However there are techniques, tools,
 and other resources that can help you review code more efficiently.
 
-### Multiple Focus Areas
+### Multiple focus areas
 
 It can be helpful to split the code review into multiple focus areas. And focus on a single view at
 a time.
@@ -206,9 +206,9 @@ following articles.
   - displaying the old code and the new code separately (so you can read the new code without all
     the noise) - or combining them (so you can see exactly what’s changed)
 
-### Running Locally
+### Running locally
 
-Many changes can be reviewed online on GitHub. However, sometimes it’s useful to run the code
+Many changes can be reviewed online on GitHub. However, sometimes it's useful to run the code
 locally to improve your understanding - for example:
 
 - To use IDE features (like jumping to definitions or finding references)

@@ -8,7 +8,7 @@ sidebar_position: 3
 
 Before you start, you must complete the [Clients repository setup instructions](../index.md).
 
-## Build Instructions
+## Build instructions
 
 1.  Build and run the extension:
 
@@ -28,7 +28,7 @@ Before you start, you must complete the [Clients repository setup instructions](
 
 2.  Load the unpacked browser extension in your browser using the instructions in the next section.
 
-## Environment Setup
+## Environment setup
 
 By default, the browser extension will run pointing to the production server endpoints. To override
 this for local development and testing, there are several options.
@@ -119,7 +119,7 @@ Once configured, your local Custom Environment should look like this:
 
 ![Screenshot of Custom Environments](custom-local-environment.png)
 
-## Testing and Debugging
+## Testing and debugging
 
 ### Chrome and Chromium-based browsers
 

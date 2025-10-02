@@ -9,7 +9,7 @@ tags: [server]
 
 <AdrTable frontMatter={frontMatter}></AdrTable>
 
-## Context and Problem Statement
+## Context and problem statement
 
 C# 8 introduced nullable reference types (NRT) that allow for enhanced compiler tracking of null
 references. This enables nullability problems to be caught sooner during the compilation phase vs.
@@ -37,7 +37,7 @@ NRT can be enabled project-wide with `<Nullable>enable</Nullable>` in the projec
 the default for all files in that project. Each file can also choose to opt in or out through a
 compiler directive `#nullable enable` or `#nullable disable` respectively.
 
-## Considered Options
+## Considered options
 
 - **Do not enable NRT** - We've already started enabling NRT and it would be akin to disallowing
   code comments. It can be pretty easy for just one team to adopt if they want to do so.
@@ -50,16 +50,16 @@ compiler directive `#nullable enable` or `#nullable disable` respectively.
 - **Enable repo-wide, have one engineer resolve issues** - Enabling NRT on the `Core` project alone
   results in 1497 warnings.
 
-## Decision Outcome
+## Decision outcome
 
 Chosen option: **Enabled project-wide, disable at the file level**.
 
-### Positive Consequences
+### Positive consequences
 
 - New files will get null warnings.
 - Easier "checklist" for what is left to migrate `Ctrl+F` for `#nullable disable`.
 
-### Negative Consequences
+### Negative consequences
 
 - Slower migration to 100% NRT annotated than having a single engineer do it.
 - We will continue to have parts of the code with null issues.

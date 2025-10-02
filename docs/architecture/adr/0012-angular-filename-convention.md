@@ -10,13 +10,13 @@ tags: [clients, angular]
 
 <AdrTable frontMatter={frontMatter}></AdrTable>
 
-## Context and Problem Statement
+## Context and problem statement
 
 We currently use a mixed filename convention where some files follows the Angular style guide, and
 other files use camelCase. This causes some confusion as to which convention to follow, and we
 should standardize on one convention to avoid confusion.
 
-## Considered Options
+## Considered options
 
 - **Angular coding style guide** - The Angular coding style guide specifies "Separate file names
   with dots and dashes".
@@ -49,12 +49,12 @@ At Bitwarden we also use a couple of more types:
 The class names are expected to use the suffix as part of their class name as well. I.e. a service
 implementation will be named `FolderService`, a request model will be named `FolderRequest`.
 
-### Positive Consequences
+### Positive consequences
 
 - Since most of our code is written in Angular, we should use the Angular coding style guide.
 - Not using camelCase will avoid issues with case-sensitive file systems.
 
-### Negative Consequences
+### Negative consequences
 
 - We need to update a lot of files to be consistent.
 
