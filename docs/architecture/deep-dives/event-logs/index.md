@@ -18,7 +18,7 @@ triggered.
 Whenever possible we prefer to use server-side events since they incur less network traffic and
 cannot be circumvented by modifying the client.
 
-## Writing Events
+## Writing events
 
 Events are handled on our clients through the
 [`EventCollectionService`](https://github.com/bitwarden/clients/blob/main/libs/common/src/services/event/event-collection.service.ts)
@@ -58,7 +58,7 @@ On self-hosted instances, the
 [`RepositoryEventWriteService`](https://github.com/bitwarden/server/blob/main/src/Core/Services/Implementations/RepositoryEventWriteService.cs)
 writes the event logs to the `Events` database table directly using the `EventRepository`.
 
-## Querying Events
+## Querying events
 
 Event logs are queried through the
 [`EventsController`](https://github.com/bitwarden/server/blob/main/src/Api/Public/Controllers/EventsController.cs)

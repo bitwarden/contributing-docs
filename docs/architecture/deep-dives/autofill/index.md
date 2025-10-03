@@ -1,8 +1,8 @@
 # Browser Autofill
 
-## Core Concepts
+## Core concepts
 
-### Content Scripts
+### Content scripts
 
 A
 [content script](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Content_scripts)
@@ -32,7 +32,7 @@ Autofill functionality.
 
 :::
 
-### Background Pages and Listeners
+### Background pages and listeners
 
 The Bitwarden browser extension uses
 [background pages](https://developer.chrome.com/docs/extensions/mv2/background_pages/) in order to

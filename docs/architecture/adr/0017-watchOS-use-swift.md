@@ -9,23 +9,23 @@ tags: [mobile, watchOS]
 
 <AdrTable frontMatter={frontMatter}></AdrTable>
 
-## Context and Problem Statement
+## Context and problem statement
 
 We would like to ship a watchOS application bundled together with the regular iOS application. The
 watchOS application will act as a companion application and initially offer a way to view TOTP codes
 from the watch which were previously synchronized from the iPhone.
 
-## Considered Options
+## Considered options
 
 - [.Net using Xamarin](https://learn.microsoft.com/en-us/xamarin/ios/watchos/)
 - [Swift using WatchKit](https://developer.apple.com/documentation/watchkit/)
 - [Swift using SwiftUI](https://developer.apple.com/xcode/swiftui/)
 
-## Decision Outcome
+## Decision outcome
 
 Chosen option: **Swift using SwiftUI**.
 
-### Positive Consequences
+### Positive consequences
 
 - Supports watchOS fully
 - We can build and debug the app properly
@@ -34,7 +34,7 @@ Chosen option: **Swift using SwiftUI**.
 - Updates to the framework and the SDKs are available as soon as Apple ships them
 - A lot more documentation, examples and public repositories to check
 
-### Negative Consequences
+### Negative consequences
 
 - New tech stack to learn for the team
 - Even though we can debug the app properly we can't debug the iOS and the watchOS app at the same

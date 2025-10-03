@@ -9,7 +9,7 @@ tags: [server]
 
 <AdrTable frontMatter={frontMatter}></AdrTable>
 
-## Context and Problem Statement
+## Context and problem statement
 
 Along with the maturation of the codebase over the years, the number of users on the platform has
 also grown significantly and more insight is needed into how services are performing at a
@@ -18,7 +18,7 @@ platform itself needs to offer internal metrics not just to support self-hosted 
 the product but to enable engineers to improve it and tackle performance issues with solid data and
 evidence as to what and why something should change.
 
-## Considered Options
+## Considered options
 
 :::note
 
@@ -38,7 +38,7 @@ engineers across the board to improve what we deliver.
 - **Use open observability standards** - Utilize [OpenTelemetry][otel] and emit signals on the
   console as well as utilize its own eventing approach for instrumentation and metrics data.
 
-## Decision Outcome
+## Decision outcome
 
 Chosen option: **Use open observability standards**.
 
@@ -51,7 +51,7 @@ the availability of metrics via other means such as collection by an agent.
 Accessibility to metrics via configuration wins out over the expectation to set up and manage a
 profiler.
 
-### Positive Consequences
+### Positive consequences
 
 - Console logging of metrics, if desired for use, fits well into container and orchestration tools,
   and said environments can install agents for their collection.
@@ -62,7 +62,7 @@ profiler.
   observability to grow with the expansion of that ecosystem, examples being the OTLP export vs.
   just console logging.
 
-### Negative Consequences
+### Negative consequences
 
 - Addition of the OpenTelemetry dependency across all services.
 - Proprietary profiler implementations may offer signal information that OpenTelemetry can't,

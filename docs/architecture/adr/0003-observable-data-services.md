@@ -9,7 +9,7 @@ tags: [clients, angular]
 
 <AdrTable frontMatter={frontMatter}></AdrTable>
 
-## Context and Problem Statement
+## Context and problem statement
 
 Many of our components and services are tightly coupled towards the state of different domains. This
 results in tight coupling and difficulty in modifying the different areas. This has lead to
@@ -17,12 +17,12 @@ results in tight coupling and difficulty in modifying the different areas. This 
 sourcing is a perfectly valid way of developing software, our current events are empty, which
 results in the components re-fetching their state manually.
 
-## Considered Options
+## Considered options
 
 - [Observable/Reactive Data Services][observable]
 - [NGRX](https://ngrx.io/) - Reactive State for Angular (Redux implementation)
 
-## Decision Outcome
+## Decision outcome
 
 Chosen option: **Observable data services**, because
 

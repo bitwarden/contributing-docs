@@ -16,7 +16,7 @@ iOS. This is because each operating system handles acquiring and refreshing push
 We will first look at the server-side implementations, then look at acquiring push tokens on the
 clients.
 
-## Server Implementations
+## Server implementations
 
 ### Sending the push token to Azure Notification Hub
 
@@ -197,7 +197,7 @@ No decrypted data is ever sent in push notification payloads, and the data is ne
 Bitwarden Cloud database when being proxied by the push relay. This allows our self-hosted instances
 to keep their data segregated from the Bitwarden Cloud and still use push notifications.
 
-## Client Registration
+## Client registration
 
 ### Obtaining push tokens on the mobile clients
 

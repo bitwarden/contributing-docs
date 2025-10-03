@@ -77,7 +77,7 @@ addition before merging the PR. Please check
 [Renovate configuration](#assigning-reviewers-through-renovate) for more information on how to
 assign ownership.
 
-## Example PR
+## Example pull request
 
 <figure>
 
