@@ -78,7 +78,7 @@ export PKG_CONFIG_ALLOW_CROSS=1
 npm run build -- --target x86_64-unknown-linux-musl # Replace with relevant target
 ```
 
-## Build Instructions
+## Build instructions
 
 Build and run:
 
@@ -87,7 +87,7 @@ cd apps/desktop
 npm run electron
 ```
 
-## Debugging and Testing
+## Debugging and testing
 
 Electron apps have a renderer process, which runs in the Electron window, and the main process,
 which runs in the background.
@@ -99,7 +99,7 @@ The main process can be debugged by running the app from a
 [Javascript Debug Terminal](https://code.visualstudio.com/docs/nodejs/nodejs-debugging#_javascript-debug-terminal)
 in Visual Studio Code and then placing breakpoints in `build/main.js`.
 
-## Biometric Unlock (Native Messaging)
+## Biometric unlock (Native Messaging)
 
 Instructions for configuring native messaging (communication between the desktop application and
 browser extension) are located [in the Browser section](../browser/biometric.mdx).

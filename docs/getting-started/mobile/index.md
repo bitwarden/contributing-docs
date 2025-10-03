@@ -4,7 +4,7 @@ sidebar_position: 4
 
 # Mobile
 
-## Android Development
+## Android development
 
 See the [Android Mobile app](./android/index.md) page to set up a Kotlin development environment.
 

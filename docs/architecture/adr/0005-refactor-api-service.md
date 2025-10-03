@@ -9,7 +9,7 @@ tags: [clients, angular]
 
 <AdrTable frontMatter={frontMatter}></AdrTable>
 
-## Context and Problem Statement
+## Context and problem statement
 
 The `ApiService` currently handles _all_ API requests. This has resulted in the class evolving into
 a Bloater, and as of right now consists of **2021** lines of code, and has **268** methods.
@@ -17,7 +17,7 @@ Additionally, since it knows everything related to the servers it also needs to 
 and response which necessitates that the `ApiService` and request/responses are put in the same npm
 package.
 
-## Considered Options
+## Considered options
 
 - **Extract Class** - We should break up the class using the _Extract Class_ refactor, where each
   domain context should have its own _API_ service. The `ApiService` should be converted into a
@@ -25,7 +25,7 @@ package.
   other API services.
 - **Do nothing** - Leave it as is.
 
-## Decision Outcome
+## Decision outcome
 
 Chosen option: **Extract Class**
 

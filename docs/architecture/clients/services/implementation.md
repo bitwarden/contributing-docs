@@ -8,7 +8,7 @@ We have defined our [vision](vision.md) for the Bitwarden client-side services. 
 below is our attempt to satisfy these goals within the context of our codebase. We are currently in
 the process of migrating our services to reflect this ideal.
 
-## Different Types of Services
+## Different types of services
 
 The Bitwarden clients have a service architecture that is comprised of primarily three different
 types of services, for a given domain in our [Data Model](../data-model.md):
@@ -59,9 +59,9 @@ The classes and their responsibilities are detailed below:
 | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------- |
 | `[Domain]Service`         | Provides read access to the domain through an Observable, which is updated when the local state changes via an RxJS `BehaviorSubject`. This service also provides helper methods related to that domain.                                   | `PolicyService`         |
 | `Internal[Domain]Service` | Provides public update methods on the service's Observable properties _without_ updating the `[Domain]` on the server. It is implemented as an abstract class which extends `[Domain]Service`, but generally not shared with most classes. | `InternalPolicyService` |
-| `[Domain]ApiService`      | Provides synced-with-server write capabilities. In general, if you’re editing a `[Domain]`, you want `[Domain]ApiService`. See [Domain Updates](#domain-updates) for more details.                                                         | `PolicyApiService`      |
+| `[Domain]ApiService`      | Provides synced-with-server write capabilities. In general, if you're editing a `[Domain]`, you want `[Domain]ApiService`. See [Domain updates](#domain-updates) for more details.                                                         | `PolicyApiService`      |
 
-## Domain Updates
+## Domain updates
 
 The Bitwarden product contains multiple clients. At any given time, a user could be logged in to
 multiple clients, viewing data and making updates. This influences the architecture for our client
@@ -154,7 +154,7 @@ The `Internal[Domain]Service` may use `BehaviorSubject`s in the `[Domain]Service
 mechanism, but that implementation is abstracted from the `SyncService` and any other consumers of
 `Internal[Domain]Service`.
 
-## Domain Reads
+## Domain reads
 
 ```kroki type=plantuml
 @startuml
