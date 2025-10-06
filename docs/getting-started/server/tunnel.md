@@ -10,7 +10,7 @@ Sometimes it can be beneficial to allow other team members access to your locall
 instance. Usually this involves opening ports in firewalls, and even then you can usually only
 connect through the IP address.
 
-## Configure Web
+## Configure web vault
 
 If the goal is to expose the local web vault (which includes access to most services) then the web
 vault needs to be configured to not use `https` and instead serve it’s content unencrypted.

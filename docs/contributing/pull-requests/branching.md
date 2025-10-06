@@ -6,7 +6,7 @@ sidebar_custom_props:
 
 # Branching
 
-## Naming Convention
+## Naming convention
 
 To keep branches organized we adhere to a naming convention for branches.
 
@@ -47,9 +47,9 @@ If the branch will contain work from multiple Jira issues (most likely due to it
 the feature, separated by dashes (e.g. `my-long-lived-feature`). Consider brevity when possible, as
 our QA team may need to use this branch name when performing QA testing on the feature.
 
-## Branching for Development
+## Branching for development
 
-### Which Branching Model to Choose?
+### Which branching model to choose?
 
 The main point of consideration in choosing a branching model is whether the changes can be
 introduced directly into `main` with every pull request or whether they need to be merged into a
@@ -144,7 +144,7 @@ and only show the changes made. If reviewing from the command line or through a 
 please use the command `git show <hash>`. For some background and more information please read
 [How to review a merge commit](https://haacked.com/archive/2014/02/21/reviewing-merge-commits/).
 
-## Branching for Release
+## Branching for release
 
 On the first business day after the Development Complete date for a given release, an `rc` branch is
 created off of `main`. This is a snapshot of the ongoing work in `main` that will represent the code
@@ -157,7 +157,7 @@ point.
 
 When the release is complete, the `rc` branch is deleted.
 
-### Hotfix Releases
+### Hotfix releases
 
 For a hotfix release, a hotfix branch is created off of the release tag for the release upon which
 the hotfix should be applied. The branch naming depends upon the repository. For all repositories

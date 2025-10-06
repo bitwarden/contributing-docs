@@ -53,7 +53,7 @@ so you will need to update the SDK reference in the client applications.
 These instructions assumes you have a directory structure similar to:
 
 ```text
-sdk/
+sdk-internal/
 clients/
 ios/
 android/

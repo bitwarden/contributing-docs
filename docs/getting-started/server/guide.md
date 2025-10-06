@@ -176,7 +176,7 @@ the following commands:
     pwsh setup_azurite.ps1
     ```
 
-## Configure User Secrets
+## Configure user secrets
 
 [User secrets](https://docs.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-6.0)
 are a method for managing application settings on a per-developer basis. They override the settings
@@ -268,7 +268,7 @@ up-to-date. See [MSSQL Database](./database/mssql/index.md) for more information
 
 <Bitwarden>
 
-## Install Licensing Certificate
+## Install licensing certificate
 
 To run your local server environment as a licensed instance, you will need to download the
 `Licensing Certificate - Dev` from the shared Engineering collection and install it. This can be
@@ -291,7 +291,7 @@ attempting to "Build and Run the Server".
 
 </Bitwarden>
 
-## Build and Run the Server
+## Build and run the server
 
 You are now ready to build and run your development server.
 
@@ -326,10 +326,16 @@ You are now ready to build and run your development server.
 
 7.  Test that the Api service is alive by navigating to
     [http://localhost:4000/alive](http://localhost:4000/alive)
-8.  Connect a client to your local server by configuring the client’s Api and Identity endpoints.
-    Refer to
-    [https://bitwarden.com/help/article/change-client-environment/](https://bitwarden.com/help/article/change-client-environment/)
-    and the instructions for each client in the Contributing Documentation.
+
+## Client connection
+
+Connect a client to your local server by configuring the client’s Api and Identity endpoints. Refer
+to
+[https://bitwarden.com/help/article/change-client-environment/](https://bitwarden.com/help/article/change-client-environment/)
+and the instructions for each client in the Contributing Documentation.
+
+Now that the client is configured to use your local development server, you can proceed to use the
+client to create an account and validate your local server changes.
 
 :::info
 
