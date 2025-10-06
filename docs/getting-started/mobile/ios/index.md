@@ -43,9 +43,8 @@ sidebar_position: 1
    > when files have been added, removed or moved). It is typically best practice to run
    > `bootstrap.sh` any time you switch branches or pull down changes.
    >
-   > If you're on macOS Tahoe with Xcode 26 (Swift 6.2) as the default toolchain and use
-   > [swiftly](https://github.com/swiftlang/swiftly) to manage Swift versions, some packages require
-   > a different Swift version than the default one, which can cause conflicts with MacOSX26.0.sdk.
+   > If you're using [swiftly](https://github.com/swiftlang/swiftly) to manage Swift versions, some packages require
+   > a different Swift version than the default one, which can cause conflicts.
    > If you see related errors, try **`swiftly run Scripts/bootstrap.sh +xcode`**.
 
    Alternatively, you can create git hooks to automatically execute the `bootstrap.sh` script every
