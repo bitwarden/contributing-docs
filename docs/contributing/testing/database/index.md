@@ -93,7 +93,7 @@ To test a migration, set the `MigrationName` property on the `[DatabaseData]` at
 `IMigrationTesterService`:
 
 ```csharp
-[DatabaseTheory, DatabaseData(MigrationName = "ExampleDataMigration")]
+[Theory, DatabaseData(MigrationName = "ExampleDataMigration")]
 public async Task TestExampleDataMigration(
     IMigrationTesterService migrationTester,
     IOrganizationRepository organizationRepository)
