@@ -273,6 +273,12 @@ Database integration tests run for each database provider for both Dapper (MSSQL
 Framework. Developers are not expected to manually test each database provider. Instead, use
 integration tests to ensure correctness across all supported databases.
 
+Integration tests have their own connection strings, so that you can use separate databases to the
+one used by your local development server. This is recommended because integration tests produce a
+lot of test data over time.
+
+### Configuring test databases
+
 1. In your user secrets, find or add this block of secrets in the root of the json structure
    (**not** in `GlobalSettings`):
 
@@ -294,6 +300,12 @@ integration tests to ensure correctness across all supported databases.
 "databases:4:enabled": "true",
 ```
 
+:::note
+
+The second MySql entry refers to MariaDB.
+
+:::
+
 :::info
 
 The example database index + type combinations are required for the tooling to work, and to support
@@ -302,9 +314,7 @@ multiple versions of the same database running tests at the same time.
 :::
 
 This block is used for test databases for each supported provider type. These are what integration
-tests will connect to. Make sure that you fill in the password for each connection string. It is
-recommended that you use a different database for your integration tests as they will produce a lot
-of test data.
+tests will connect to. Make sure that you fill in the password for each connection string.
 
 2. Run `pwsh setup_secrets.ps1 -clear` to apply the updated user secrets to your local projects.
 
@@ -312,19 +322,25 @@ of test data.
    only migrate the integration test databases, or `-all` to migrate everything.
 
    ```
-   # Migrate integration test databases only
-   pwsh migrate.ps1 -test
-
-   # Migrate a specific integration test database
+   # Migrate a specific integration test database (used by tests)
    pwsh migrate.ps1 -postgres -test
 
-   # Migrate a specific development database
+   # Migrate a specific development database (used by your local server)
    pwsh migrate.ps1 -postgres
+
+   # Migrate all local databases
+   pwsh migrate.ps1 -all
    ```
 
 4. Run integration tests from the `test/Infrastructure.IntegrationTest` folder using `dotnet test`.
 
-# Modifying the database
+### Writing integration tests
+
+See
+[Contributing - Database Integration Testing](../../../../contributing/testing/database/index.md)
+for more information on testing utilities and patterns.
+
+## Modifying the database
 
 The process for modifying the database is described in
 [Migrations](./../../../../contributing/database-migrations/ef.md).
