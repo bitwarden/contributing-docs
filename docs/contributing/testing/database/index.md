@@ -7,20 +7,21 @@ pipeline.
 
 ## Creating a new test
 
-To create a new database test, add the `[DatabaseTheory]` and `[DatabaseData]` attributes to test.
-Then, use the parameters of the test to inject any repository layer services you need. The test will
-run for every database that is [configured in the current environment](#configure-the-tests). Since
-you inject the interface of the service, some runs of the test will use the Dapper-based repository
+To create a new database test, add the `[Theory]` and `[DatabaseData]` attributes to test. Then, use
+the parameters of the test to inject any repository layer services you need. The test will run for
+every database that is [configured in the current environment](#configure-the-tests). Since you
+inject the interface of the service, some runs of the test will use the Dapper-based repository
 implementation targeting Microsoft SQL Server and others will use the Entity Framework Core based
-implementations (which we use for MySql, Postgres, and SQLite).
+implementations (which we use for all other supported databases).
 
 The goal of database tests is to test the business logic that is encapsulated in a given method. For
-example, if a stored procedure in SQL Server calls another procedure to update the
-`User.AccountRevisionDate` then the corresponding EF implementation should do that as well. By
-running the test against all variants, we are ensuring all the variants are feature-equal. to only
-run the SQL Server tests along with one EF implementation; SQLite is often the easiest in that
-regard. The other supported EF database providers will still run in the pipeline to catch any
-differences between them.
+example, if a stored procedure in SQL Server updates the `User.AccountRevisionDate` then the
+corresponding EF implementation should do that as well. By running the test against all variants, we
+are ensuring all the variants are feature-equal.
+
+During development, you may choose to only run the SQL Server tests along with one EF
+implementation; SQLite is often the easiest in that regard. The other supported EF database
+providers will still run in the pipeline to catch any differences between them.
 
 ## Configure the tests
 
@@ -51,14 +52,11 @@ will be configured with the Entity Framework Core repositories. `Enabled` allows
 disable one database but not delete the entry; it can be helpful if you are encountering a problem
 with just a single database type and want to run the tests just for it instead of for all of them.
 
-### Locally
+## Locally
 
-To set the tests up locally you may want to add the configuration to your `server/dev/secrets.json`
-file. You may have already done this during setup and can just run the tests with `dotnet test`. If
-not, please refer to
-[the getting started guide](/getting-started/server/database/ef/#testing-ef-changes).
-
-You can also configure the tests just like the pipeline.
+To run the tests locally during development (highly recommended), see
+[Getting Started - Entity Framework](../../../getting-started/server/database/ef/index.mdx). Once
+configured, you can run the tests with `dotnet test` or using your IDE.
 
 ### Pipeline
 
@@ -82,9 +80,10 @@ across all configured database providers.
 
 :::note
 
-This is meant for testing data migrations only. It assumes your database schema is already fully
-up-to-date. After setting up your test data, it re-runs the specified migration to verify how it
-transforms the data. It will not work for schema-only migrations.
+This is meant for testing data migrations only (i.e. migrations that transform data already present
+in the database). It assumes your database schema is already fully up-to-date. After setting up your
+test data, it re-runs the specified migration to verify how it transforms the data. It will not work
+and is not required for schema-only migrations.
 
 :::
 
