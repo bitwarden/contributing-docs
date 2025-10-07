@@ -275,7 +275,8 @@ integration tests to ensure correctness across all supported databases.
 
 Integration tests have their own connection strings, so that you can use separate databases to the
 one used by your local development server. This is recommended because integration tests produce a
-lot of test data over time.
+lot of test data over time. In the example below, this is done by using `vault_test` as the database
+name.
 
 ### Configuring test databases
 
@@ -284,19 +285,19 @@ lot of test data over time.
 
 ```
 "databases:0:type": "Postgres",
-"databases:0:connectionString": "Host=localhost;Username=postgres;Password=_________;Database=ef_test",
+"databases:0:connectionString": "Host=localhost;Username=postgres;Password=_________;Database=vault_test",
 "databases:0:enabled": "true",
 "databases:1:type": "Sqlite",
 "databases:1:enabled": "true",
 "databases:1:connectionString": "Data Source=_________",
 "databases:2:type": "MySql",
-"databases:2:connectionString": "server=localhost;uid=root;pwd=_________;database=ef_test",
+"databases:2:connectionString": "server=localhost;uid=root;pwd=_________;database=vault_test",
 "databases:2:enabled": "true",
 "databases:3:type": "SqlServer",
-"databases:3:connectionString": "Server=localhost;Database=ef_test;User Id=SA;Password=_________;Encrypt=True;TrustServerCertificate=True;",
+"databases:3:connectionString": "Server=localhost;Database=vault_test;User Id=SA;Password=_________;Encrypt=True;TrustServerCertificate=True;",
 "databases:3:enabled": "true"
 "databases:4:type": "MySql",
-"databases:4:connectionString": "server=localhost;port=4306;uid=maria;pwd=_________;database=ef_test;AllowUserVariables=true",
+"databases:4:connectionString": "server=localhost;port=4306;uid=maria;pwd=_________;database=vault_test;AllowUserVariables=true",
 "databases:4:enabled": "true",
 ```
 
