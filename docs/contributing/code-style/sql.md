@@ -490,7 +490,7 @@ table stores data, potentially adding LOB pointers to every row, and SQL Server 
 physically modify every data page in the table to accommodate the new column structure. Even with a
 small default value, the metadata reserves space for potential maximum-length data.
 
-Instead, use appropriately-sized `VARCHAR(MAX)`/`NVARCHAR(MAX)` columns based on the expected data
+Instead, use appropriately-sized `VARCHAR(n)`/`NVARCHAR(n)` columns based on the expected data
 length. If you genuinely need unlimited length, carefully consider whether the column truly needs to
 be `NOT NULL` with a default, as this combination is particularly wasteful.
 
