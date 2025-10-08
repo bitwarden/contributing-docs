@@ -13,6 +13,10 @@ export const providers = [
     value: "mysql",
   },
   {
+    label: "MariaDB",
+    value: "mariadb",
+  },
+  {
     label: "SQLite",
     value: "sqlite",
   },
@@ -80,7 +84,20 @@ sure you update the existing values instead of creating new ones
 <TabItem value="mysql">
 
 Be sure to change information like root password as needed. If you already have these secrets, make
-sure you update the existing values instead of creating new ones
+sure you update the existing values instead of creating new ones.
+
+```json
+"globalSettings:databaseProvider": "mysql",
+"globalSettings:mySql:connectionString": "server=localhost;uid=root;pwd=example;database=vault_dev",
+```
+
+</TabItem>
+<TabItem value="mariadb">
+
+MariaDB is generally a drop-in alternative to MySQL, so it shares the `mysql` configuration keys.
+
+Be sure to change information like root password as needed. If you already have these secrets, make
+sure you update the existing values instead of creating new ones.
 
 ```json
 "globalSettings:databaseProvider": "mysql",
@@ -109,7 +126,7 @@ that the changes take effect.
 
 :::
 
-### Updating the database
+### Start the database server
 
 <Tabs
     groupId="provider"
@@ -137,7 +154,7 @@ Docker storage volume and initialize the database from scratch.
 
 1. Confirm that `MYSQL_ROOT_PASSWORD` in `dev/.env` matches the password in `dev/secrets.json`.
 
-2. In the `dev` folder of your server repository, run
+2. In the `dev` folder of your server repository, start your database container:
 
 ```bash
 docker compose --profile mysql up
@@ -152,55 +169,84 @@ Docker storage volume and initialize the database from scratch.
 :::
 
 </TabItem>
+<TabItem value="mariadb">
+
+1. Confirm that `MYSQL_ROOT_PASSWORD` in `dev/.env` matches the password in `dev/secrets.json`.
+
+2. In the `dev` folder of your server repository, run
+
+```bash
+docker compose --profile mariadb up
+```
+
+:::tip[Confirm your database connection!]
+
+If you run into connection errors, double check that your `.env` and `secrets.json` files have
+matching passwords. If they do, you may have initialized your database incorrectly. Delete the
+Docker storage volume and initialize the database from scratch.
+
+:::
+
+</TabItem>
 <TabItem value="sqlite">
+
+No additional step is required for SQLite. The migrator will create the database file if it doesn't
+exist.
 
 :::tip[Confirm your database path!]
 
-The migrator creates the database file if it doesn't exist, but it does not create folders. If you
-get an error that the path doesn't exist, double check that the path exists and that the folder
-containing the sqlite database has write and/or create permissions.
+The migrator does not create folders. If you get an error that the path doesn't exist, double check
+that the path exists and that the folder containing the sqlite database has write and/or create
+permissions.
 
 :::
 
 </TabItem>
 </Tabs>
 
-### Migrations
+:::tip[Start all containers at once]
+
+Use the `ef` profile to start all EntityFramework database containers at once:
+
+```bash
+docker compose --profile ef up
+```
+
+:::
+
+### Run migrations
+
+In the `dev` folder, run the following command to update the database to the latest migration:
 
 <Tabs
     groupId="provider"
     values={providers}>
 <TabItem value="postgres">
 
-In the `dev` folder run the following to update the database to the latest migration
-
 ```bash
 pwsh migrate.ps1 -postgres
 ```
 
-The `-postgres` flag on `migrate.ps1` runs `dotnet ef` commands to perform the migrations.
-
 </TabItem>
 <TabItem value="mysql">
-
-In the `dev` folder run the following to update the database to the latest migration
 
 ```bash
 pwsh migrate.ps1 -mysql
 ```
 
-The `-mysql` flag on `migrate.ps1` runs `dotnet ef` commands to perform the migrations.
+</TabItem>
+<TabItem value="mariadb">
+
+```bash
+pwsh migrate.ps1 -mariadb
+```
 
 </TabItem>
 <TabItem value="sqlite">
 
-In the `dev` folder run the following to update the database to the latest migration
-
 ```bash
 pwsh migrate.ps1 -sqlite
 ```
-
-The `-sqlite` flag on `migrate.ps1` runs `dotnet ef` commands to perform the migrations.
 
 :::note
 
@@ -212,13 +258,7 @@ get an error that the path doesn't exist, it's referring to missing folders.
 </TabItem>
 </Tabs>
 
-You can also run migrations for all database providers at once using
-
-```bash
-pwsh migrate.ps1 -all
-```
-
-### Verifying changes
+### Verify changes
 
 If you would like to verify that everything worked correctly:
 
@@ -227,25 +267,45 @@ If you would like to verify that everything worked correctly:
   - Note: this requires a configured MSSQL database. You may also need to set up other EF providers
     for tests to pass.
 
-## Testing changes
+## Database integration tests
 
-In your `server/dev/secrets.json` file find or add this block of secrets in the root of the json
-structure:
+Database integration tests run for each database provider for both Dapper (MSSQL) and Entity
+Framework. Developers are not expected to manually test each database provider. Instead, use
+integration tests to ensure correctness across all supported databases.
+
+Integration tests have their own connection strings, so that you can use separate databases to the
+one used by your local development server. This is recommended because integration tests produce a
+lot of test data over time. In the example below, this is done by using `vault_test` as the database
+name.
+
+### Configuring test databases
+
+1. In your user secrets, find or add this block of secrets in the root of the json structure
+   (**not** in `GlobalSettings`):
 
 ```
 "databases:0:type": "Postgres",
-"databases:0:connectionString": "Host=localhost;Username=postgres;Password=_________;Database=ef_test",
+"databases:0:connectionString": "Host=localhost;Username=postgres;Password=_________;Database=vault_test",
 "databases:0:enabled": "true",
 "databases:1:type": "Sqlite",
 "databases:1:enabled": "true",
 "databases:1:connectionString": "Data Source=_________",
 "databases:2:type": "MySql",
-"databases:2:connectionString": "server=localhost;uid=root;pwd=_________;database=ef_test",
+"databases:2:connectionString": "server=localhost;uid=root;pwd=_________;database=vault_test",
 "databases:2:enabled": "true",
 "databases:3:type": "SqlServer",
-"databases:3:connectionString": "Server=localhost;Database=ef_test;User Id=SA;Password=_________;Encrypt=True;TrustServerCertificate=True;",
+"databases:3:connectionString": "Server=localhost;Database=vault_test;User Id=SA;Password=_________;Encrypt=True;TrustServerCertificate=True;",
 "databases:3:enabled": "true"
+"databases:4:type": "MySql",
+"databases:4:connectionString": "server=localhost;port=4306;uid=maria;pwd=_________;database=vault_test;AllowUserVariables=true",
+"databases:4:enabled": "true",
 ```
+
+:::note
+
+The second MySql entry refers to MariaDB.
+
+:::
 
 :::info
 
@@ -255,16 +315,33 @@ multiple versions of the same database running tests at the same time.
 :::
 
 This block is used for test databases for each supported provider type. These are what integration
-tests will connect to. You should update the password for these connection strings to match your
-existing databases if you have not already. If these settings are not present at all in your
-`server/dev/secrets.json` file just add them to the bottom. These settings _do not_ go in
-`globalSettings`. Then run `pwsh setup_secrets.ps1 -clear` to apply them to your local projects.
+tests will connect to. Make sure that you fill in the password for each connection string.
 
-With connection strings applied to your projects: ensure your databases are all migrated using
-`pwsh server/dev/migrate.ps1 --all`. Then you can run EF tests from the
-`test/Infrastructure.IntegrationTest` folder using `dotnet test`.
+2. Run `pwsh setup_secrets.ps1 -clear` to apply the updated user secrets to your local projects.
 
-# Modifying the database
+3. Ensure your databases are all migrated (see instructions above). You can use the `-test` flag to
+   only migrate the integration test databases, or `-all` to migrate everything.
+
+   ```
+   # Migrate a specific integration test database (used by tests)
+   pwsh migrate.ps1 -postgres -test
+
+   # Migrate a specific development database (used by your local server)
+   pwsh migrate.ps1 -postgres
+
+   # Migrate all local databases
+   pwsh migrate.ps1 -all
+   ```
+
+4. Run integration tests from the `test/Infrastructure.IntegrationTest` folder using `dotnet test`.
+
+### Writing integration tests
+
+See
+[Contributing - Database Integration Testing](../../../../contributing/testing/database/index.md)
+for more information on testing utilities and patterns.
+
+## Modifying the database
 
 The process for modifying the database is described in
 [Migrations](./../../../../contributing/database-migrations/ef.md).
