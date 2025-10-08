@@ -482,6 +482,20 @@ END
 GO
 ```
 
+:::warning Avoid `VARCHAR(MAX)`/`NVARCHAR(MAX)` with NOT NULL defaults
+
+Avoid creating new columns as `VARCHAR(MAX)`/`NVARCHAR(MAX)`, especially when combined with
+`NOT NULL` and a default value. `VARCHAR(MAX)`/`NVARCHAR(MAX)` require structural changes to how the
+table stores data, potentially adding LOB pointers to every row, and SQL Server may need to
+physically modify every data page in the table to accommodate the new column structure. Even with a
+small default value, the metadata reserves space for potential maximum-length data.
+
+Instead, use appropriately-sized `VARCHAR(MAX)`/`NVARCHAR(MAX)` columns based on the expected data
+length. If you genuinely need unlimited length, carefully consider whether the column truly needs to
+be `NOT NULL` with a default, as this combination is particularly wasteful.
+
+:::
+
 #### Changing a column data type
 
 You must wrap the `ALTER TABLE` statement in a conditional block, so that subsequent runs of the
