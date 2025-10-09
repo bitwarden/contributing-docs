@@ -462,10 +462,8 @@ WHERE
     [Column] IS NULL
 GO
 
-ALTER TABLE
-    [dbo].[Column]
-ALTER COLUMN
-    [Column] INT NOT NULL
+ALTER TABLE [dbo].[Table]
+    ALTER COLUMN [Column] INT NOT NULL
 GO
 ```
 
@@ -474,34 +472,19 @@ This is better:
 ```sql
 IF COL_LENGTH('[dbo].[Table]', 'Column' IS NULL
 BEGIN
-    ALTER TABLE
-        [dbo].[Column]
-    ADD
-        [Column] INT NOT NULL CONSTRAINT DF_Table_Column DEFAULT 0
+    ALTER TABLE [dbo].[Table]
+        ADD [Column] INT NOT NULL CONSTRAINT DF_Table_Column DEFAULT 0
 END
 GO
 ```
 
-:::warning Avoid `VARCHAR(MAX)`/`NVARCHAR(MAX)` with NOT NULL defaults
+:::warning Do not use defaults for string columns
 
-`VARCHAR(MAX)`/`NVARCHAR(MAX)` columns can cause significant performance overhead, especially when
-combined with `NOT NULL` and a default value. SQL Server treats these as large object (LOB) columns,
-which require additional storage overhead and can impact query performance, even when storing small
-values.
-
-Instead, use fixed-size `VARCHAR(n)`/`NVARCHAR(n)` columns (e.g., `VARCHAR(255)`) based on the
-expected maximum data length. If you genuinely need unlimited length, carefully consider whether the
-column truly needs to be `NOT NULL` with a default, as this combination is particularly wasteful.
+Default values should only be used for integral types (`BIT`, `TINYINT`, `SMALLINT`, `INT`,
+`BIGINT`). Do not provide default values for string columns (`VARCHAR`, `NVARCHAR`, or their `MAX`
+variants), as this can lead to unnecessary storage overhead and performance issues.
 
 :::
-
-```sql
--- Avoid this
-ALTER TABLE [User] ADD [Notes] NVARCHAR(MAX) NOT NULL DEFAULT '';
-
--- Prefer this
-ALTER TABLE [User] ADD [Notes] NVARCHAR(500) NOT NULL DEFAULT '';
-```
 
 #### Changing a column data type
 
