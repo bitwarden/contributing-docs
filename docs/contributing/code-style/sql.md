@@ -462,10 +462,8 @@ WHERE
     [Column] IS NULL
 GO
 
-ALTER TABLE
-    [dbo].[Column]
-ALTER COLUMN
-    [Column] INT NOT NULL
+ALTER TABLE [dbo].[Table]
+    ALTER COLUMN [Column] INT NOT NULL
 GO
 ```
 
@@ -474,13 +472,19 @@ This is better:
 ```sql
 IF COL_LENGTH('[dbo].[Table]', 'Column' IS NULL
 BEGIN
-    ALTER TABLE
-        [dbo].[Column]
-    ADD
-        [Column] INT NOT NULL CONSTRAINT DF_Table_Column DEFAULT 0
+    ALTER TABLE [dbo].[Table]
+        ADD [Column] INT NOT NULL CONSTRAINT DF_Table_Column DEFAULT 0
 END
 GO
 ```
+
+:::warning Do not use defaults for string columns
+
+Default values should only be used for integral types (`BIT`, `TINYINT`, `SMALLINT`, `INT`,
+`BIGINT`). Do not provide default values for string columns (`VARCHAR`, `NVARCHAR`, or their `MAX`
+variants), as this can lead to unnecessary storage overhead and performance issues.
+
+:::
 
 #### Changing a column data type
 
