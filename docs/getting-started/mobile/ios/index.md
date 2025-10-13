@@ -42,6 +42,10 @@ sidebar_position: 1
    > need to be run every time the project configuration or file structure has changed (for example,
    > when files have been added, removed or moved). It is typically best practice to run
    > `bootstrap.sh` any time you switch branches or pull down changes.
+   >
+   > If you're using [swiftly](https://github.com/swiftlang/swiftly) to manage Swift versions, some packages require
+   > a different Swift version than the default one, which can cause conflicts.
+   > If you see related errors, try **`swiftly run Scripts/bootstrap.sh +xcode`**.
 
    Alternatively, you can create git hooks to automatically execute the `bootstrap.sh` script every
    time a git hook occurs. To use the git hook scripts already defined in the `Scripts` directory,
