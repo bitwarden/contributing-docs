@@ -17,8 +17,9 @@ Before you start, you must complete the [Clients repository setup instructions](
 
 ## Build instructions
 
-:::tip Nx commands are preferred We now recommend using Nx commands for building projects. For the
-cli:
+:::tip Nx commands are preferred.
+
+We now recommend using Nx commands for building projects. For the cli:
 
 ```bash
 # Build and watch (GPL)
