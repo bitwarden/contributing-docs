@@ -28,6 +28,19 @@ mkcert -cert-file dev-server.local.pem -key-file dev-server.local.pem localhost 
 
 ## Build instructions
 
+:::tip Nx commands are preferred We now recommend using Nx commands for building projects. For web:
+
+```bash
+# Build and watch (GPL)
+npx nx serve web --configuration=oss-dev
+# Build and watch (Bitwarden)
+npx nx serve web --configuration=commercial-dev
+```
+
+For complete Nx documentation and all available commands, see
+[Using Nx to Build Projects](https://github.com/bitwarden/clients/blob/main/docs/using-nx-to-build-projects.md).
+:::
+
 <!-- prettier-ignore-start -->
 
 1.  Build and run the Web Vault.

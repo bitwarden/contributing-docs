@@ -10,6 +10,21 @@ Before you start, you must complete the [Clients repository setup instructions](
 
 ## Build instructions
 
+:::tip Nx commands are preferred We now recommend using Nx commands for building projects. For the
+browser extension:
+
+```bash
+# Build and watch (chrome is the default)
+npx nx serve browser
+# Build and watch for specific browsers
+npx nx serve browser --configuration=firefox-dev
+npx nx serve browser --configuration=safari-dev
+```
+
+For complete Nx documentation and all available commands, see
+[Using Nx to Build Projects](https://github.com/bitwarden/clients/blob/main/docs/using-nx-to-build-projects.md).
+:::
+
 1.  Build and run the extension:
 
     ```bash

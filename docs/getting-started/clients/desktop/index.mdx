@@ -37,6 +37,18 @@ These are available as additional dependencies in the Visual Studio Installer.
 </TabItem>
 </Tabs>
 
+:::tip Nx commands are preferred We now recommend using Nx commands for building projects. For
+desktop:
+
+```bash
+# Build and serve (including the native module)
+npx nx serve desktop
+```
+
+For complete Nx documentation and all available commands, see
+[Using Nx to Build Projects](https://github.com/bitwarden/clients/blob/main/docs/using-nx-to-build-projects.md).
+:::
+
 ## Build native module
 
 The desktop application relies on a native module written in rust, which needs to be compiled
