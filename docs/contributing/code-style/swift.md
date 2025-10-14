@@ -114,8 +114,9 @@ class ClassName {
 
 ### Exceptions
 
-- In UI objects, properties that are displayed should be in the order in which they are displayed,
-  following the top-left-bottom-right pattern that Apple uses in components such as
+- In UI objects—such as views and view modifiers—properties that are displayed should be in the
+  order in which they are displayed, following the top-left-bottom-right pattern that Apple uses in
+  components such as
   [`UIEdgeInsets`](<https://developer.apple.com/documentation/uikit/uiedgeinsets/init(top:left:bottom:right:)-1s1t9>).
   For example, if a `title` is displayed above a `subtitle`, then it should be ordered `title` then
   `subtitle` in the properties list and therefore initializer and function parameter lists as
