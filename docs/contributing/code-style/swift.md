@@ -114,6 +114,11 @@ class ClassName {
 
 ### Exceptions
 
+- In UI objects, properties that are displayed should be in the order in which they are displayed,
+  following the top-left-bottom-right pattern that Apple uses in components such as `UIEdgeInsets`.
+  For example, if a `title` is displayed above a `subtitle`, then it should be ordered `title` then
+  `subtitle` in the properties list and therefore initializer parameter list. Properties that are
+  not displayed then go after the displayed properties, in alphabetical order.
 - Closure parameters should be placed last in the method parameter list, to allow for
   [trailing closure syntax](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/closures/#Trailing-Closures).
   As well,
