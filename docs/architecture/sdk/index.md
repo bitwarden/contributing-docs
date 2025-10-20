@@ -124,7 +124,7 @@ The `bitwarden-core` crate contains the underlying functionality of the SDK. Thi
 `Client` struct. Other crates in the SDK depend on `bitwarden-core` and provide extensions to the
 `Client` struct to implement specific domains.
 
-## Client struct
+## Client Struct
 
 The `Client` struct is the main entry point for the SDK and represents a single account instance.
 Any action that needs to be performed on the account is generally done through the `Client` struct.
