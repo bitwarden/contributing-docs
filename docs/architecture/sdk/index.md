@@ -42,8 +42,8 @@ skinparam componentStyle rectangle
 component "Bindings (WASM & UniFFI)" as bindings #e1f5ff
 
 package "Aggregators" #fff3e0 {
-    component "PasswordMgr" as passwordMgr
-    component "SecretsMgr" as secretsMgr
+    component "Password Manager" as passwordMgr
+    component "Secrets Manager" as secretsMgr
 }
 
 package "Features" #f3e5f5 {
