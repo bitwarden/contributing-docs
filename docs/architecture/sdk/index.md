@@ -163,7 +163,7 @@ pub struct GeneratorClient {
 
 #[cfg_attr(feature = "wasm", wasm_bindgen)]
 impl GeneratorClient {
-    fn new(client: & Client) -> Self {
+    fn new(client: &Client) -> Self {
         Self { client }
     }
 
@@ -179,8 +179,8 @@ pub trait GeneratorClientExt {
 }
 
 impl GeneratorClientExt for Client {
-    fn generator(self) -> GeneratorClient {
-        GeneratorClient::new(self)
+    fn generator(&self) -> GeneratorClient {
+        GeneratorClient::new(self.clone())
     }
 }
 ```
