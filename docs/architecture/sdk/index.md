@@ -18,12 +18,105 @@ internal private items.
 ## Architecture
 
 The Bitwarden SDK is structured as a single
-[Git repository](https://github.com/bitwarden/sdk-internal) with multiple internal crates. Please
-review the `README` in the repository for up to date information about the different crates.
+[Git repository](https://github.com/bitwarden/sdk-internal) with multiple internal crates. This
+document describes the general structure of the project. Please review the `README` in the
+repository for information about the specific crates or implementation details.
+
+Crates in the project fall into one of these categories.
+
+- Application Interfaces
+- Client Aggregators
+- Features
+- Core or Utility
 
 We generally strive towards extracting features into separate crates to keep the `bitwarden-core`
 crate as lean as possible. This has multiple benefits such as faster compile-time and clear
 ownership of features.
+
+This hierarchy winds up producing a structure that looks like:
+
+```kroki type=plantuml
+@startuml
+skinparam componentStyle rectangle
+
+component "Bindings (WASM & UniFFI)" as bindings #e1f5ff
+
+package "Aggregators" #fff3e0 {
+    component "PasswordMgr" as passwordMgr
+    component "SecretsMgr" as secretsMgr
+}
+
+package "Features" #f3e5f5 {
+    component "Auth" as auth
+    component "Vault" as vault
+    component "Send" as send
+    component "Generators" as generators
+    component "Exporters" as export
+}
+
+component "Core" as core #e8f5e9
+
+bindings --> passwordMgr
+bindings --> secretsMgr
+bindings --> core
+
+passwordMgr --> auth
+passwordMgr --> vault
+passwordMgr --> send
+passwordMgr --> generators
+passwordMgr --> export
+passwordMgr --> core
+
+secretsMgr --> core
+
+auth --> core
+vault --> core
+send --> core
+generators --> core
+export --> core
+
+@enduml
+```
+
+<details>
+<summary>Prior to [bitwarden/sdk-internal#468][sdk-internal-468], the dependency graph of the project was fairly redundant.</summary>
+
+```kroki type=plantuml
+@startuml
+skinparam componentStyle rectangle
+skinparam defaultTextAlignment center
+
+component "Bindings (WASM & UniFFI)" as bindings #lightblue
+
+component "Core" as core #lightgreen
+
+package "Features" {
+    component "Auth" as auth #lavender
+    component "Vault" as vault #lavender
+    component "Exporters" as export #lavender
+    component "Generators" as generators #lavender
+    component "Send" as send #lavender
+    component "Crypto" as crypto #lavender
+}
+
+bindings --> core
+bindings --> auth
+bindings --> vault
+bindings --> export
+bindings --> generators
+bindings --> send
+
+core --> auth
+core --> vault
+core --> export
+core --> generators
+core --> send
+core --> crypto
+
+@enduml
+```
+
+</details>
 
 ### `bitwarden-core` crate
 
@@ -107,3 +200,4 @@ which allows the language bindings to just contain three FFI functions, `init`, 
 
 [sm]: https://bitwarden.com/products/secrets-manager/
 [pm]: https://bitwarden.com/
+[sdk-internal-468]: https://github.com/bitwarden/sdk-internal/pull/468
