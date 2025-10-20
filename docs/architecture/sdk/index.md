@@ -143,7 +143,7 @@ pub struct GeneratorClient {
 
 #[cfg_attr(feature = "wasm", wasm_bindgen)]
 impl GeneratorClient {
-    fn new(client: &'a Client) -> Self {
+    fn new(client: & Client) -> Self {
         Self { client }
     }
 
@@ -154,8 +154,8 @@ impl GeneratorClient {
 }
 
 /// Extension which exposes `generator` method on the `Client` struct.
-pub trait ClientGeneratorExt<'a> {
-    fn generator(&'a self) -> ClientGenerator<'a>;
+pub trait GeneratorClientExt {
+    fn generator(&self) -> GeneratorClient;
 }
 
 impl GeneratorClientExt for Client {
