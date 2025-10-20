@@ -27,7 +27,7 @@ Crates in the project fall into one of these categories.
 - Application Interfaces
 - Client Aggregators
 - Features
-- Core or Utility
+- Core and Utility
 
 We generally strive towards extracting features into separate crates to keep the `bitwarden-core`
 crate as lean as possible. This has multiple benefits such as faster compile-time and clear
@@ -118,11 +118,31 @@ core --> crypto
 
 </details>
 
-### `bitwarden-core` crate
+### Application Interfaces
+
+Application interfaces are those crates whose purpose is to provide bindings for other projects by
+targeting `wasm`, iOS, and Android. The two mobile targets are built using UniFFI. See
+[below](#language-bindings) for more information.
+
+### Client Aggregators
+
+A client aggregator collects the various features relevant for a given Bitwarden product, e.g.
+Password Manager, or Secrets Manager, into a single easy-to-use crate for that particular product.
+
+### Features and Domains
+
+Feature and domain crates constitute the application business logic. <Bitwarden>These crates are
+usually owned and maintained by individual teams.</Bitwarden>
+
+### Core and Utility
 
 The `bitwarden-core` crate contains the underlying functionality of the SDK. This includes a
 `Client` struct. Other crates in the SDK depend on `bitwarden-core` and provide extensions to the
 `Client` struct to implement specific domains.
+
+There are a number of utility crates that provide a very narrow scope of functionality and do not
+necessarily correspond to a single domain, or may be shared across multiple domains. Examples
+include UUID handling and cryptographic primitives.
 
 ## Client Struct
 
