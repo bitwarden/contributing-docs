@@ -70,4 +70,4 @@ bitwarden-core = { version = "1.0", path = "../bitwarden-core" }
 bitwarden-core = { workspace = true }
 ```
 
-dep-res: https://doc.rust-lang.org/cargo/reference/resolver.html
+[dep-res]: https://doc.rust-lang.org/cargo/reference/resolver.html
