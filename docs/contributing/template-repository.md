@@ -105,7 +105,39 @@ Actions workflows for code scanning. Targets two domains:
   push events.
 - Quality: Additional language-specific findings and improvements not strictly related to security.
 
+Each above domain-specific scanner calls a reusable workflow in the `gh-actions` repository.
+
 SAST results are exported as
 [SARIF](https://docs.oasis-open.org/sarif/sarif/v2.1.0/sarif-v2.1.0.html) (Static Analysis Results
 Interchange Format) and uploaded to the GitHub Advanced Security interface for internal review.
 Quality results are also made available in the interface when security-related.
+
+## AI
+
+Initial content placeholders exist to get AI assistance and automated code reviews:
+
+```
+.claude/
+├── CLAUDE.md             # General project context, guidelines, and instructions
+├── commands/             # Custom slash commands
+└── prompts/
+    └── review-code.md    # Code review prompt
+```
+
+### Automated reviews
+
+Actions workflows for review of issues and pull requests. Targets two use cases:
+
+- Review of non-draft pull requests: The above `review-code.md` Markdown file is used as a gate to
+  execute the workflow. Repositories without this file will not have automated code reviews
+  performed. Reviews are posted via a sticky comment and new commits are processed automatically.
+- Response: By mentioning `@claude` in issue or pull request (including inline) comments. Specific
+  responses to the mention will be generated.
+
+Each above domain-specific scanner calls a reusable workflow in the `gh-actions` repository.
+
+### Best practices
+
+- Commands (`.claude/commands/`): For interactive Claude Code sessions.
+- Prompts (`.claude/prompts/`): For automated GitHub Actions workflows.
+- `CLAUDE.md`: General project context available in all Claude interactions.
