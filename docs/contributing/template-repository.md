@@ -114,7 +114,7 @@ Quality results are also made available in the interface when security-related.
 
 ## AI
 
-Initial content placeholders exist to get AI assistance and automated code reviews:
+Initial content placeholders provide AI assistance and automated code reviews:
 
 ```
 .claude/
@@ -130,11 +130,11 @@ Actions workflows for review of issues and pull requests. Targets two use cases:
 
 - Review of non-draft pull requests: The above `review-code.md` Markdown file is used as a gate to
   execute the workflow. Repositories without this file will not have automated code reviews
-  performed. Reviews are posted via a sticky comment and new commits are processed automatically.
+  performed. Reviews are posted via a persistent comment that updates with new commits.
 - Response: By mentioning `@claude` in issue or pull request (including inline) comments. Specific
   responses to the mention will be generated.
 
-Each above domain-specific scanner calls a reusable workflow in the `gh-actions` repository.
+Each above use case calls a reusable workflow in the `gh-actions` repository.
 
 ### Best practices
 
