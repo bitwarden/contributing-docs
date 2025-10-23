@@ -18,20 +18,133 @@ internal private items.
 ## Architecture
 
 The Bitwarden SDK is structured as a single
-[Git repository](https://github.com/bitwarden/sdk-internal) with multiple internal crates. Please
-review the `README` in the repository for up to date information about the different crates.
+[Git repository](https://github.com/bitwarden/sdk-internal) with multiple internal crates. This
+document describes the general structure of the project. Please review the `README` in the
+repository for information about the specific crates or implementation details.
+
+Crates in the project fall into one of these categories.
+
+- Application Interfaces
+- Client Aggregators
+- Features
+- Core and Utility
 
 We generally strive towards extracting features into separate crates to keep the `bitwarden-core`
 crate as lean as possible. This has multiple benefits such as faster compile-time and clear
 ownership of features.
 
-### `bitwarden-core` crate
+This hierarchy winds up producing a structure that looks like:
+
+```kroki type=plantuml
+@startuml
+skinparam componentStyle rectangle
+
+component "Bindings (WASM & UniFFI)" as bindings #e1f5ff
+
+package "Aggregators" #fff3e0 {
+    component "Password Manager" as passwordMgr
+    component "Secrets Manager" as secretsMgr
+}
+
+package "Features" #f3e5f5 {
+    component "Auth" as auth
+    component "Vault" as vault
+    component "Send" as send
+    component "Generators" as generators
+    component "Exporters" as export
+}
+
+component "Core" as core #e8f5e9
+
+bindings --> passwordMgr
+bindings --> secretsMgr
+bindings --> core
+
+passwordMgr --> auth
+passwordMgr --> vault
+passwordMgr --> send
+passwordMgr --> generators
+passwordMgr --> export
+passwordMgr --> core
+
+secretsMgr --> core
+
+auth --> core
+vault --> core
+send --> core
+generators --> core
+export --> core
+
+@enduml
+```
+
+<details>
+<summary>Prior to [bitwarden/sdk-internal#468][sdk-internal-468], the dependency graph of the project was fairly redundant.</summary>
+
+```kroki type=plantuml
+@startuml
+skinparam componentStyle rectangle
+skinparam defaultTextAlignment center
+
+component "Bindings (WASM & UniFFI)" as bindings #lightblue
+
+component "Core" as core #lightgreen
+
+package "Features" {
+    component "Auth" as auth #lavender
+    component "Vault" as vault #lavender
+    component "Exporters" as export #lavender
+    component "Generators" as generators #lavender
+    component "Send" as send #lavender
+    component "Crypto" as crypto #lavender
+}
+
+bindings --> core
+bindings --> auth
+bindings --> vault
+bindings --> export
+bindings --> generators
+bindings --> send
+
+core --> auth
+core --> vault
+core --> export
+core --> generators
+core --> send
+core --> crypto
+
+@enduml
+```
+
+</details>
+
+### Application Interfaces
+
+Application interfaces are those crates whose purpose is to provide bindings for other projects by
+targeting `wasm`, iOS, and Android. The two mobile targets are built using UniFFI. See
+[below](#language-bindings) for more information.
+
+### Client Aggregators
+
+A client aggregator collects the various features relevant for a given Bitwarden product, e.g.
+Password Manager, or Secrets Manager, into a single easy-to-use crate for that particular product.
+
+### Features and Domains
+
+Feature and domain crates constitute the application business logic. <Bitwarden>These crates are
+usually owned and maintained by individual teams.</Bitwarden>
+
+### Core and Utility
 
 The `bitwarden-core` crate contains the underlying functionality of the SDK. This includes a
 `Client` struct. Other crates in the SDK depend on `bitwarden-core` and provide extensions to the
 `Client` struct to implement specific domains.
 
-## Client struct
+There are a number of utility crates that provide a very narrow scope of functionality and do not
+necessarily correspond to a single domain, or may be shared across multiple domains. Examples
+include UUID handling and cryptographic primitives.
+
+## Client Struct
 
 The `Client` struct is the main entry point for the SDK and represents a single account instance.
 Any action that needs to be performed on the account is generally done through the `Client` struct.
@@ -50,7 +163,7 @@ pub struct GeneratorClient {
 
 #[cfg_attr(feature = "wasm", wasm_bindgen)]
 impl GeneratorClient {
-    fn new(client: &'a Client) -> Self {
+    fn new(client: &Client) -> Self {
         Self { client }
     }
 
@@ -61,13 +174,13 @@ impl GeneratorClient {
 }
 
 /// Extension which exposes `generator` method on the `Client` struct.
-pub trait ClientGeneratorExt<'a> {
-    fn generator(&'a self) -> ClientGenerator<'a>;
+pub trait GeneratorClientExt {
+    fn generator(&self) -> GeneratorClient;
 }
 
 impl GeneratorClientExt for Client {
-    fn generator(self) -> GeneratorClient {
-        GeneratorClient::new(self)
+    fn generator(&self) -> GeneratorClient {
+        GeneratorClient::new(self.clone())
     }
 }
 ```
@@ -105,5 +218,29 @@ consuming and difficult we generally provide a JSON based API through the `bitwa
 which allows the language bindings to just contain three FFI functions, `init`, `run_command` and
 `free_memory`.
 
+## Adding New Functionality
+
+Considering adding to or moving code into the SDK? Review these questions to help come to a
+decision.
+
+- Does the functionality or service depend on other functionality that is not currently part of the
+  SDK?
+  - Moving that functionality to the SDK is not recommended at this time.
+- Does the functionality require authenticated requests?
+  - The autogenerated bindings can help with that. See [`bitwarden-vault`][vault-crate] as an
+    example.
+- Does this functionality require persistent state?
+  - Review the docs for [`bitwarden-state`][state-crate] and see [`bitwarden-vault`][vault-crate] as
+    an example.
+- Is the functionality only relevant for a single client?
+  - There is likely not much chance of reusing that functionality, but it may still be added to the
+    SDK.
+- Does the functionality require obtaining an observable or reactive value from the SDK?
+  - Unfortunately, that's not currently supported, but this can be worked around by using
+    client-managed state.
+
 [sm]: https://bitwarden.com/products/secrets-manager/
 [pm]: https://bitwarden.com/
+[sdk-internal-468]: https://github.com/bitwarden/sdk-internal/pull/468
+[state-crate]: https://github.com/bitwarden/sdk-internal/tree/main/crates/bitwarden-state
+[vault-crate]: https://github.com/bitwarden/sdk-internal/tree/main/crates/bitwarden-vault
