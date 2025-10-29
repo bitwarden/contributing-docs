@@ -1,7 +1,6 @@
 # Custom dictionary for spellchecking. Before adding a word here, consider whether you can put
 # it in a single (`) or multiline (```) code snippet instead, as they are automatically ignored
 # by the spellchecker. Please keep the list sorted alphabetically.
-
 AndroidX
 AOSP
 Bitwarden
@@ -17,8 +16,8 @@ deinitializer
 deinitializers
 dockerized
 dotfile
-frontmatter
 F-Droid
+frontmatter
 Gitter
 HKDF
 hotfix
@@ -97,3 +96,14 @@ YubiKeys
 # Forbidden words
 !auto-fill
 !auto-filled
+CBOR
+ciphertext
+Cose
+CTXT
+HMAC
+kibibytes
+namespacing
+PKCS
+plaintexts
+unpadded
+unsynchronized
