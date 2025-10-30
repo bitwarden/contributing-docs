@@ -79,7 +79,7 @@ export --> core
 ```
 
 <details>
-<summary>Prior to [bitwarden/sdk-internal#468][sdk-internal-468], the dependency graph of the project was fairly redundant.</summary>
+<summary>Prior to [bitwarden/sdk-internal#468][sdk-internal-468], the application interfaces had not been explicitly created.</summary>
 
 ```kroki type=plantuml
 @startuml
