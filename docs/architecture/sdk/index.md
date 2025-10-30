@@ -24,8 +24,8 @@ repository for information about the specific crates or implementation details.
 
 Crates in the project fall into one of these categories.
 
+- Bindings
 - Application Interfaces
-- Client Aggregators
 - Features
 - Core and Utility
 
@@ -41,7 +41,7 @@ skinparam componentStyle rectangle
 
 component "Bindings (WASM & UniFFI)" as bindings #e1f5ff
 
-package "Aggregators" #fff3e0 {
+package "Application Interfaces" #fff3e0 {
     component "Password Manager" as passwordMgr
     component "Secrets Manager" as secretsMgr
 }
@@ -118,13 +118,13 @@ core --> crypto
 
 </details>
 
-### Application Interfaces
+### Bindings
 
 Application interfaces are those crates whose purpose is to provide bindings for other projects by
 targeting `wasm`, iOS, and Android. The two mobile targets are built using UniFFI. See
 [below](#language-bindings) for more information.
 
-### Client Aggregators
+### Application Interfaces
 
 A client aggregator collects the various features relevant for a given Bitwarden product, e.g.
 Password Manager, or Secrets Manager, into a single easy-to-use crate for that particular product.
