@@ -129,16 +129,16 @@ targeting `wasm`, iOS, and Android. The two mobile targets are built using UniFF
 A client aggregator collects the various features relevant for a given Bitwarden product, e.g.
 Password Manager, or Secrets Manager, into a single easy-to-use crate for that particular product.
 
-### Features and Domains
-
-Feature and domain crates constitute the application business logic. <Bitwarden>These crates are
-usually owned and maintained by individual teams.</Bitwarden>
-
 ### Core and Utility
 
 The `bitwarden-core` crate contains the underlying functionality of the SDK. This includes a
-`Client` struct. Other crates in the SDK depend on `bitwarden-core` and provide extensions to the
-`Client` struct to implement specific domains.
+[`Client` struct](#client-struct).
+
+### Features and Domains
+
+Feature and domain crates constitute the application business logic. Feature crates depend on
+`bitwarden-core` and provide extensions to the Client struct to implement specific domains.
+<Bitwarden>These crates are usually owned and maintained by individual teams.</Bitwarden>
 
 There are a number of utility crates that provide a very narrow scope of functionality and do not
 necessarily correspond to a single domain, or may be shared across multiple domains. Examples
