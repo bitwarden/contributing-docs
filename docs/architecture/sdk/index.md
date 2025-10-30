@@ -106,12 +106,12 @@ bindings --> export
 bindings --> generators
 bindings --> send
 
-core --> auth
-core --> vault
-core --> export
-core --> generators
-core --> send
-core --> crypto
+auth --> core
+vault --> core
+export --> core
+generators --> core
+send --> core
+crypto --> core
 
 @enduml
 ```
