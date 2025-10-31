@@ -235,9 +235,9 @@ decision.
 - Is the functionality only relevant for a single client?
   - There is likely not much chance of reusing that functionality, but it may still be added to the
     SDK.
-- Does the functionality require obtaining an observable or reactive value from the SDK?
-  - Unfortunately, that's not currently supported, but this can be worked around by using
-    client-managed state.
+- Does the functionality need the SDK to produce an observable or reactive value?
+  - The SDK does not support reactivity at this time. However we still encourage migrating the
+    relevant business logic to the SDK and then building reactivity with that logic in TypeScript.
 
 [sm]: https://bitwarden.com/products/secrets-manager/
 [pm]: https://bitwarden.com/
