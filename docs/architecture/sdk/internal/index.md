@@ -81,18 +81,18 @@ export --> core
 skinparam componentStyle rectangle
 skinparam defaultTextAlignment center
 
-component "Bindings (WASM & UniFFI)" as bindings #lightblue
+component "Bindings (WASM & UniFFI)" as bindings #e1f5ff
 
-component "Core" as core #lightgreen
-
-package "Features" {
-    component "Auth" as auth #lavender
-    component "Vault" as vault #lavender
-    component "Exporters" as export #lavender
-    component "Generators" as generators #lavender
-    component "Send" as send #lavender
-    component "Crypto" as crypto #lavender
+package "Features" #f3e5f5 {
+    component "Auth" as auth
+    component "Vault" as vault
+    component "Exporters" as export
+    component "Generators" as generators
+    component "Send" as send
+    component "Crypto" as crypto
 }
+
+component "Core" as core #e8f5e9
 
 bindings --> core
 bindings --> auth
