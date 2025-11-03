@@ -115,13 +115,13 @@ crypto --> core
 
 ### Bindings
 
-Application interfaces are those crates whose purpose is to provide bindings for other projects by
-targeting `wasm`, iOS, and Android. The two mobile targets are built using UniFFI. See
+Bindings are those crates whose purpose is to provide bindings for other projects by targeting
+`wasm`, iOS, and Android. The two mobile targets are built using UniFFI. See
 [below](#language-bindings) for more information.
 
 ### Application Interfaces
 
-A client aggregator collects the various features relevant for a given Bitwarden product, e.g.
+An application interface collects the various features relevant for a given Bitwarden product, e.g.
 Password Manager, or Secrets Manager, into a single easy-to-use crate for that particular product.
 
 ### Core and Utility
