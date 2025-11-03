@@ -129,15 +129,15 @@ Password Manager, or Secrets Manager, into a single easy-to-use crate for that p
 The `bitwarden-core` crate contains the underlying functionality of the SDK. This includes a
 [`Client` struct](#client-struct).
 
+There are a number of utility crates that provide a very narrow scope of functionality and do not
+necessarily correspond to a single domain, or may be shared across multiple domains. Examples
+include UUID handling and cryptographic primitives.
+
 ### Features and Domains
 
 Feature and domain crates constitute the application business logic. Feature crates depend on
 `bitwarden-core` and provide extensions to the Client struct to implement specific domains.
 <Bitwarden>These crates are usually owned and maintained by individual teams.</Bitwarden>
-
-There are a number of utility crates that provide a very narrow scope of functionality and do not
-necessarily correspond to a single domain, or may be shared across multiple domains. Examples
-include UUID handling and cryptographic primitives.
 
 ## Client Struct
 
