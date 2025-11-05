@@ -36,9 +36,11 @@ constructed out of a combination of these, please reach out!
 
 ### I want to protect a document / struct
 
-Use [DataEnvelope](https://github.com/bitwarden/sdk-internal/pull/336). This handles encryption and
-versioning, and hides exact sizes of the encrypted contents. You can follow the existing
-[example](https://github.com/bitwarden/sdk-internal/blob/cbc84a33f3cbb59806a472459226150b86cc06e7/crates/bitwarden-crypto/examples/seal_struct.rs)
+Use
+[DataEnvelope](https://github.com/bitwarden/sdk-internal/blob/main/crates/bitwarden-crypto/src/safe/data_envelope.rs).
+This handles encryption and versioning, and hides exact sizes of the encrypted contents. You can
+follow the existing
+[example](https://github.com/bitwarden/sdk-internal/blob/main/crates/bitwarden-crypto/examples/seal_struct.rs)
 as a reference. Using the data envelope API, you obtain an encrypted blob and, depending on which
 public function you choose to use, a key or a wrapped key. This key is a content-encryption-key,
 which you can protect using other mechanisms noted down below. To unseal, you again need the
@@ -75,7 +77,7 @@ reach out.
 
 Currently, you have to use EncStrings for this. The SDK contains high-level functions for doing this
 as shown in this
-[example](https://github.com/bitwarden/sdk-internal/blob/03646591c366a5568b0f8062a0cb3b4745bcbd93/crates/bitwarden-crypto/src/store/context.rs#L154).
+[example](https://github.com/bitwarden/sdk-internal/blob/95e329ada87369bb984040b03024ef298f95e5e2/crates/bitwarden-crypto/src/store/context.rs#L210).
 
 :::note
 
