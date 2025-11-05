@@ -1,53 +1,44 @@
 ---
-title: User encryption (legacy ➜ V2)
-sidebar_label: User encryption
-description: Overview of legacy (V0/V1) and the 2025 V2 user encryption schemes in Bitwarden.
+title: User account encryption
+sidebar_label: User account encryption
+description: Overview of the various encrypted versions of user accounts.
+sidebar_position: 1
 ---
 
-# User encryption (legacy ➜ V2)
+# User account encryption
 
-This page describes previously existing user encryption schemes and the 2025 V2 redesign.
+There are three versions of user account encryption, Version 0 (legacy) accounts used until ~2018,
+Version 1 accounts, used between 2018 and 2025, Version 2 accounts used from 2026 forwards.
 
-## V0: Master-key users (legacy)
+## Version 1
 
-These users have no user key. Encryption is performed directly with the 256-bit master key, and is
-thus tightly coupled to master password or Key Connector encryption. Encryption used AES-CBC without
-HMAC. Support for these users was discontinued in 2025 for technical-debt reasons and because these
-users introduced vulnerabilities that could affect other users.
+The user has a central, account-wide symmetric key - "user key" - that protects everything
+downstream from it. It was first added in 2017
+[[1]](https://github.com/bitwarden/server/commit/a01d5d9a51d0175e9c3e39fa8271a469df07a105#diff-4ca29d3671adb5899fda48584f1107536495573ad37151297ee7599bd8424e98).
+The user key encrypts with AES256-CBC with HMAC authentication
+[[2]](https://github.com/bitwarden/clients/commit/3845c55155bd928bae6fb8b58822f49b21afc071#diff-0e526b2c7acdbb0c577346cd6ce9d251aea8880900e11ed361cd580e04712e90R240).
 
-Optionally, these users had a public-key encryption key pair.
+### Stretched master-password wrapping
 
-## V1: User-key users
-
-The user key is a central, account-wide symmetric key that protects everything downstream from it.
-It was first added in 2017
-([server introduction](https://github.com/bitwarden/server/commit/a01d5d9a51d0175e9c3e39fa8271a469df07a105#diff-4ca29d3671adb5899fda48584f1107536495573ad37151297ee7599bd8424e98)).
-The user key has only ever been AES-CBC with HMAC
-([clients change](https://github.com/bitwarden/clients/commit/3845c55155bd928bae6fb8b58822f49b21afc071#diff-0e526b2c7acdbb0c577346cd6ce9d251aea8880900e11ed361cd580e04712e90R240)).
+The current approach to storing the user key for authentication and unlock with a master password
+for most users is using a stretched master key. Here, the user key is wrapped with (encrypted with)
+the stretched master key. These users have a public-key encryption key pair, but no signature key
+pair.
 
 ### Legacy master-password wrapping
 
 For a brief period of time, the master key was not stretched when saving the master-key-wrapped user
-key. This allowed unauthenticated user-key material to be stored in the database.
+key. This lead to a subset of users having AES256-CBC-HMAC user keys stored, wrapped in AES-256-CBC
+without authentication.
 
-### Stretched master-password wrapping
+## Version 2
 
-The current (2017–2025) approach to storing the user key for authentication and unlock with a master
-password for most users is using a stretched master key. Here, the user key is wrapped with
-(encrypted with) the stretched master key.
-
-Optionally (for most users), these users had a public-key encryption key pair.
-
-## V2: 2025 user-encryption scheme
-
-In 2025, a new user-encryption scheme is introduced, aimed to provide a clean break to V1 and to
-introduce several security and stability enhancements.
+Version 2 aims to provide several security and stability enhancements.
 
 ### COSE
 
 Encodings for keys, encrypted messages, and signatures now all happen in COSE instead of custom
-Bitwarden EncString encodings. This is more flexible, standardized, and security tested. COSE has
-support or at least RFCs for all relevant cryptographic algorithms, and is also extensible.
+Bitwarden EncString encodings. This is more flexible, standardized, and security tested.
 
 ### Main cryptographic changes
 
@@ -59,14 +50,9 @@ means that the client must reject the unlock / login process.
 
 ### Stability improvements
 
-Each COSE key (signing, XChaCha20-Poly1305 user key) has a key ID. This key ID is unique to the key
-(locally generated). It is written onto every encrypted object. Thus the server can now validate the
-key ID of a specific object against the keys the user owns.
-
-For instance, we can introduce a user key ID column that tracks the ID of the user key. This can be
-used on the server side to validate the key ID of a modified or newly uploaded cipher against the
-key ID of the user to verify that the key is correct. This is not a security feature, but a
-stability feature.
+Each COSE key (signature keypair, XChaCha20-Poly1305 user key) has a key ID. This key ID is unique
+to the key. It is written onto every encrypted object. Thus the server can now validate the key ID
+of a specific object against the keys the user owns.
 
 ### User signature key pair
 
@@ -81,12 +67,14 @@ user when sharing secrets with them.
 
 ### Signed security state
 
-The security state aims to solve a systematic problem with the V1 account format. There is no
-cryptographically attested versioning. This means that a class of vulnerabilities are hard to solve.
-This makes it hard to solve issues where new data must be introduced to fix an issue (such as with
-the not yet rolled out icon URL fixes that add an encrypted and authenticated checksum of the item
-URL).
+The signed security state solves cryptographic format downgrades. If a part of a vault's format's
+features becomes insecure, the security state version can be bumped during a migration. The clients
+can then reject synchronized vault data containing the old vault format, since the signed security
+state version is newer.
 
-In case a format or feature becomes insecure, a user’s account can be migrated, and the signed
-security states version can be bumped. Then, clients no longer accept migrations of the feature, so
-that a server cannot create downgraded / insecure versions.
+## Version 0
+
+These users have no user key. Encryption is performed directly with the 256-bit master key, and is
+thus tightly coupled to master password or Key Connector encryption. Encryption used AES-CBC without
+HMAC. Support for these users was discontinued in 2025 for technical-debt reasons and because
+support for these users introduced vulnerabilities that could affect other users.

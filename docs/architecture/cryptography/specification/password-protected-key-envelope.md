@@ -13,7 +13,7 @@ keys at rest using user-memorable passwords, while defending against brute-force
 use of a memory-hard key derivation function.
 
 The Password-Protected Key Envelope is used when a symmetric encryption key needs to be stored
-securely using only a user-provided password, or other low-entropy secret
+securely using only a user-provided password, or other low-entropy secret.
 
 Common applications can include:
 
@@ -50,8 +50,7 @@ The envelope uses the following cryptographic primitives:
 
 - **Key Derivation Function (KDF)**: Argon2id version 0x13
 - **Authenticated Encryption**: XChaCha20-Poly1305
-- **Random Number Generation**: Cryptographically secure random number generator for salt and nonce
-  generation
+- **CSPRNG**: Cryptographically secure random number generator for salt and nonce generation
 
 ## Specification
 
@@ -82,7 +81,7 @@ The Password-Protected Key Envelope is encoded as a COSE_Encrypt object.
 COSE_Encrypt = [
     protected: bstr,           // Serialized protected headers
     unprotected: {             // Unprotected headers
-        5: bstr                // IV/nonce (24 bytes for XChaCha20)
+        IV: bstr               // IV/nonce (24 bytes for XChaCha20)
     },
     ciphertext: bstr,          // Encrypted key material
     recipients: [              // Array with exactly one recipient
@@ -92,13 +91,13 @@ COSE_Encrypt = [
 
 COSE_Recipient = [
     protected: {
-        1: -70007              // Algorithm: Argon2id (private use)
+        Alg: -70007              // Algorithm: Argon2id (private use)
     },
-    unprotected: {             // Argon2id parameters
-        70023: int,            // Iterations
-        70024: int,            // Memory in KiB
-        70025: int,            // Parallelism
-        70026: bstr            // Salt (16 bytes)
+    unprotected: {               // Argon2id parameters
+        KdfIterations: int,      // Iterations
+        KdfMemory: int,          // Memory in KiB
+        KdfParallelism: int,     // Parallelism
+        KdfSalt: bstr            // Salt (16 bytes)
     },
     ciphertext: null
 ]
@@ -133,11 +132,11 @@ The single recipient's unprotected headers contain Argon2id parameters:
 
 ### Serialization
 
-The COSE_Encrypt structure is serialized using CBOR (Concise Binary Object Representation) and then
-encoded using Base64 for text-based storage and transmission.
+The COSE_Encrypt structure is serialized using CBOR and then encoded using Base64 for text-based
+storage and transmission.
 
 #### Wire format
 
 ```text
-Base64(CBOR(COSE_Encrypt))
+Base64(Cbor(COSE_Encrypt))
 ```

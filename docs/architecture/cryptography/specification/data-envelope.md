@@ -38,24 +38,31 @@ model per P01 - Servers are zero knowledge). The attacker can:
 2. Modify or replace encrypted data
 3. Replay old versions of encrypted data
 
+### Cryptographic primitives
+
+The envelope uses the following cryptographic primitives:
+
+- **Authenticated Encryption**: XChaCha20-Poly1305
+- **CSPRNG** Cryptographically secure random number generator for nonce generation
+
 ## Format specification
 
 A data envelope is a COSE_Encrypt0 structure with the following components:
 
-### Protected header
-
-The protected header contains:
-
-1. **Algorithm (alg)**: Set to XChaCha20-Poly1305 (`-70000`)
-2. **Key ID (kid)**: Identifier of the content encryption key used
-3. **Content type**: Set to `"application/x.bitwarden.cbor-padded"`
-4. **Namespace**: Custom header field containing an integer identifying the document type
-
-### Unprotected header
-
-The unprotected header contains:
-
-1. **Initialization vector (iv)**: The nonce used for XChaCha20-Poly1305 encryption
+```text
+COSE_Encrypt0 = [
+    protected: {
+        Alg: int,              // xchacha-poly1305
+        KeyId: bstr,           // Id of the content-encryption-key
+        ContentType: bstr      // "application/x.bitwarden.cbor-padded"
+        Namespace: int         // Namespace
+    },
+    unprotected: {
+        IV: bstr               // IV/nonce (24 bytes for XChaCha20)
+    },
+    ciphertext: bstr,          // Encrypted key material
+]
+```
 
 ### Serialization format
 
@@ -86,4 +93,15 @@ Documents support internal versioning. The direct inner contents of the unpadded
     version: "1",
     content: {...}
 }
+```
+
+### Serialization
+
+The COSE_Encrypt structure is serialized using CBOR and then encoded using Base64 for text-based
+storage and transmission.
+
+#### Wire format
+
+```text
+Base64(Cbor(COSE_Encrypt))
 ```

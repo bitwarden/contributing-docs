@@ -99,6 +99,7 @@ YubiKeys
 CBOR
 ciphertext
 Cose
+CSPRNG
 CTXT
 HMAC
 kibibytes
@@ -107,3 +108,4 @@ PKCS
 plaintexts
 unpadded
 unsynchronized
+xchacha
