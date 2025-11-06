@@ -13,12 +13,15 @@ build features that need end-to-end encryption. With this guide, you should be a
 tools you have available to compose your feature that needs cryptographic protection.
 
 Currently, there is a set of low-level APIs (EncString, UnsignedSharedKey, MasterKey) that have been
-historically used to build most features, with each team owning the cryptographic constructions
-created. Recently, high-level safe primitives are introduced that move the complexity out of each
-teams ownership. These are not yet complete, and if your use-case is not covered by them, please
-reach out! The goal of these is to have most teams never have to think about cryptography, or having
-to do safety analysis. These abstract away all complex details and give teams a low-complexity, easy
-to use and hard to mis-use interface to work with.
+used to build most features, with each team owning the cryptographic constructions created.
+Recently, high-level safe primitives are introduced that move the complexity out of each teams
+ownership. These are not yet complete, and if your use-case is not covered by them, please reach
+out! The goal of these is to have most teams never have to think about cryptography, or having to do
+safety analysis. These abstract away all complex details and give teams a low-complexity, easy to
+use and hard to mis-use interface to work with.
+
+Primarily, this is aimed for consumption for end-to-end encrypted storage of long-term data, in
+products such as the password manager or secrets manager.
 
 ## Rules
 
@@ -83,8 +86,8 @@ reach out.
 
 ### I want to protect a key with another key
 
-Currently, you have to use EncStrings for this. The SDK contains high-level functions for doing this
-as shown in this
+Currently EncStrings are used to protect keys with other symmetric keys. The SDK contains high-level
+functions for doing this as shown in this
 [example](https://github.com/bitwarden/sdk-internal/blob/95e329ada87369bb984040b03024ef298f95e5e2/crates/bitwarden-crypto/src/store/context.rs#L210).
 
 :::note
@@ -121,7 +124,8 @@ HKDF into a 512-bit stretched master key, 256-bit of which are used as an aes256
 256-bit of which are used as an HMAC key. The stretched master key is used to encrypt the user's
 symmetric key.
 
-New usage of MasterKey is not supported.
+New usage of MasterKey is not supported. When interacting with it, please be aware that a
+synchronization issues of the email (salt) or kdf settings will lead to a failure of decryption.
 
 ### I want to authenticate with a password
 
@@ -143,10 +147,10 @@ salt and 1 iteration applied. This hash is then sent to the server for authentic
 ### Content encryption keys
 
 A content encryption key is a per-item key that encrypts a single piece of data. It is created with
-said data, and re-created (randomly sampled) when the data changes. The purpose here is to decouple
-the data from any upstream keys used to protect or share it.
+said data, and re-created (randomly sampled) when the data changes. The purpose is to decouple the
+data from any upstream keys used to protect or share it.
 
-For instance, consider that you have a large file to protect. If you want to rotate your account's
+For instance consider a large file that should be protected. If you want to rotate your account's
 symmetric key, supposing the account symmetric key was used to encrypt the file, then you would have
 to re-upload the re-encrypted file. With a content encryption key, you only need to re-upload the
 re-encrypted content encryption key.
