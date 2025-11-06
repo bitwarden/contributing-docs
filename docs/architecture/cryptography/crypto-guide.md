@@ -12,6 +12,14 @@ This guide is aimed at non-cryptography teams that want to consume cryptographic
 build features that need end-to-end encryption. With this guide, you should be able to know which
 tools you have available to compose your feature that needs cryptographic protection.
 
+Currently, there is a set of low-level APIs (EncString, UnsignedSharedKey, MasterKey) that have been
+historically used to build most features, with each team owning the cryptographic constructions
+created. Recently, high-level safe primitives are introduced that move the complexity out of each
+teams ownership. These are not yet complete, and if your use-case is not covered by them, please
+reach out! The goal of these is to have most teams never have to think about cryptography, or having
+to do safety analysis. These abstract away all complex details and give teams a low-complexity, easy
+to use and hard to mis-use interface to work with.
+
 ## Rules
 
 The primary rule here is: don't roll your own crypto. Where possible, high level safe, tested and
