@@ -91,7 +91,7 @@ as shown in this
 
 In the future, a CoseEncrypt0 message with more context will be provided that supports advertising
 the contained key id, so that the server can validate key relationships, along with an abstraction
-around this. Further, strong context binding / namespacing will be provided.
+around this. Further, strong context binding / separation into namespaces will be provided.
 
 :::
 
