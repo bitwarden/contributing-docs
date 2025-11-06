@@ -59,10 +59,15 @@ the content-encryption-key and the encrypted blob are required.
 
 :::note
 
-EncStrings have been used for this process. These are no longer recommended for new use-cases. With
-EncStrings, in general each field of a struct would be encrypted individually, which both is bad for
-performance, maintainability, and carries security issues. If there is still a need to maintain
-EncStrings and help is needed figuring out a path to migrate, teams should reach out.
+EncStrings have been used for this process. Instead of protecting the document as a whole, they
+protected individual fields on the document. These are no longer recommended for new use-cases.
+There is a few reasons, such as performance impact of many small decrypt operations, overhead of mac
+/ IV of many small encrypted items, certain kinds of tampering attacks on the document as a whole.
+Further, maintainability is harder, requiring a lot more work both on the client side as well as the
+server side, if the structs are passed along in this representation.
+
+If there is still a need to maintain EncStrings and help is needed figuring out a path to migrate,
+teams should reach out.
 
 The vast majority of existing encrypted data still uses EncStrings.
 
