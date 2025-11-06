@@ -110,10 +110,9 @@ protection.
 #### MasterPasswordUnlockData
 
 MasterPasswordUnlockData is a struct that encapsulates the data needed to unlock a vault using a
-master password. It contains the protected symmetric key that is encrypted with the stretched master
-key, along with the KDF settings and salt used. The cryptography used is the same as for using the
-master key directly, but the abstraction is safer and prevents decryption issues resulting from
-unsynchronized state.
+master password. It is currently backwards compatible to master-key based unlock, but this is not
+the case in the future. Features relating to master-password based unlock should use this
+abstraction.
 
 #### MasterKey
 
