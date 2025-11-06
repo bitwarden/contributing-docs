@@ -9,16 +9,16 @@ description:
 # How to use cryptography in Bitwarden
 
 This guide is aimed at non-cryptography teams that want to consume cryptographic APIs in order to
-build features that need end-to-end encryption. With this guide, you should be able to know which
-tools you have available to compose your feature that needs cryptographic protection.
+build features that need end-to-end encryption. This guide provides an overview of available tools
+for composing features that need cryptographic protection.
 
 Currently, there is a set of low-level APIs (EncString, UnsignedSharedKey, MasterKey) that have been
 used to build most features, with each team owning the cryptographic constructions created.
 Recently, high-level safe primitives are introduced that move the complexity out of each teams
-ownership. These are not yet complete, and if your use-case is not covered by them, please reach
-out! The goal of these is to have most teams never have to think about cryptography, or having to do
-safety analysis. These abstract away all complex details and give teams a low-complexity, easy to
-use and hard to mis-use interface to work with.
+ownership. These are not yet complete, and if a particular use-case is not covered by them, teams
+should reach out! The goal of these is to have most teams never have to think about cryptography, or
+having to do safety analysis. These abstract away all complex details and give teams a
+low-complexity, easy to use and hard to mis-use interface to work with.
 
 Primarily, this is aimed for consumption for end-to-end encrypted storage of long-term data, in
 products such as the password manager or secrets manager.
@@ -27,9 +27,9 @@ products such as the password manager or secrets manager.
 
 The primary rule here is: don't roll your own crypto. Where possible, high level safe, tested and
 analyzed protocols and primitives need to be used. The higher level the primitive, the less likely
-that security bugs get introduced, and the less complexity for you to maintain and keep track of.
-Only where not otherwise possible low level primitives shall be used, and this should be done with
-extreme caution and oversight.
+that security bugs get introduced, and the less complexity to maintain and keep track of. Only where
+not otherwise possible should low level primitives be used, and this should be done with extreme
+caution and oversight.
 
 Encryption in the typescript clients for new cases is deprecated. Any new cryptographic code must be
 written in the SDK if possible. Existing use-cases can be continued in the typescript clients for
@@ -37,54 +37,54 @@ now, but eventually will have to be migrated too. There are several reasons behi
 hand the SDK has better memory safety guarantees and prevents key material from being left behind in
 memory. On the other hand, newer, safer APIs are not exposed outside of the SDK.
 
-## How do I use cryptography to build my feature?
+## How to use cryptography to build features
 
-To use cryptographic primitives, you can decompose your feature into a chain of simpler use-cases.
-Which cryptographic primitive you use depends on what you want to do. The following, is a list of
-use-cases, and the corresponding construction that is currently supported for use. Most features can
-be built out of a combination of the below constructs. If you believe your feature cannot be
-constructed out of a combination of these, please reach out!
+To use cryptographic primitives, features can be decomposed into a chain of simpler use-cases. The
+cryptographic primitive to use depends on the specific requirement. The following is a list of
+use-cases and the corresponding constructions that are currently supported for use. Most features
+can be built out of a combination of the below constructs. If a feature cannot be constructed out of
+a combination of these, teams should reach out!
 
-### I want to protect a document / struct
+### Protecting a document / struct
 
 Use
 [DataEnvelope](https://github.com/bitwarden/sdk-internal/blob/main/crates/bitwarden-crypto/src/safe/data_envelope.rs).
-This handles encryption and versioning, and hides exact sizes of the encrypted contents. You can
-follow the existing
+This handles encryption and versioning, and hides exact sizes of the encrypted contents. The
+existing
 [example](https://github.com/bitwarden/sdk-internal/blob/main/crates/bitwarden-crypto/examples/seal_struct.rs)
-as a reference. Using the data envelope API, you obtain an encrypted blob and, depending on which
-public function you choose to use, a key or a wrapped key. This key is a content-encryption-key,
-which you can protect using other mechanisms noted down below. To unseal, you again need the
-content-encryption-key and the encrypted blob.
+can be used as a reference. Using the data envelope API, an encrypted blob is obtained and,
+depending on which public function is chosen, a key or a wrapped key. This key is a
+content-encryption-key, which can be protected using other mechanisms noted down below. To unseal,
+the content-encryption-key and the encrypted blob are required.
 
 :::note
 
 EncStrings have been used for this process. These are no longer recommended for new use-cases. With
 EncStrings, in general each field of a struct would be encrypted individually, which both is bad for
-performance, maintainability, and carries security issues. If you still have to maintain EncStrings
-and want help figuring out a path to migrate, please reach out.
+performance, maintainability, and carries security issues. If there is still a need to maintain
+EncStrings and help is needed figuring out a path to migrate, teams should reach out.
 
 The vast majority of existing encrypted data still uses EncStrings.
 
 :::
 
-### I want to protect a file
+### Protecting a file
 
 Existing attachments are protected using an EncArrayBuffer. This is just an EncString, but encoded
-slightly differently. Again, a content encryption key is usually used, but not enforced. If you want
-to encrypt files for new purposes, you **MUST** use a content encryption key. Consider that with the
+slightly differently. Again, a content encryption key is usually used, but not enforced. When
+encrypting files for new purposes, a content encryption key **MUST** be used. Consider that with the
 current encryption scheme, the entire file must be downloaded and loaded into ram for decryption.
 
 :::note
 
 In the future, a higher-level abstraction will be provided that supports streaming / random access
 decryption securely. This will allow using decrypted parts of the file without downloading and
-decrypting the entire file first. This is yet to be designed / specified. If you need this, please
-reach out.
+decrypting the entire file first. This is yet to be designed / specified. If this functionality is
+needed, teams should reach out.
 
 :::
 
-### I want to protect a key with another key
+### Protecting a key with another key
 
 Currently EncStrings are used to protect keys with other symmetric keys. The SDK contains high-level
 functions for doing this as shown in this
@@ -98,13 +98,13 @@ around this. Further, strong context binding / separation into namespaces will b
 
 :::
 
-### I want to protect a key with a password
+### Protecting a key with a password
 
 Use
 [PasswordProtectedKeyEnvelope](https://github.com/bitwarden/sdk-internal/blob/main/crates/bitwarden-crypto/src/safe/password_protected_key_envelope.rs)
-as described in
+as described in the
 [example](https://github.com/bitwarden/sdk-internal/blob/main/crates/bitwarden-crypto/examples/protect_key_with_password.rs).
-This allows you to store a key with a low-entropy password or PIN. The envelope handles brute-force
+This allows storing a key with a low-entropy password or PIN. The envelope handles brute-force
 protection.
 
 #### MasterPasswordUnlockData
@@ -127,7 +127,7 @@ symmetric key.
 New usage of MasterKey is not supported. When interacting with it, please be aware that a
 synchronization issues of the email (salt) or kdf settings will lead to a failure of decryption.
 
-### I want to authenticate with a password
+### Authenticating with a password
 
 Use MasterPasswordAuthenticationData. It encapsulates the data needed to unlock a vault using a
 master password. It contains the serverAuthorizationMasterKeyHash, the KDF settings and salt used.
@@ -150,10 +150,10 @@ A content encryption key is a per-item key that encrypts a single piece of data.
 said data, and re-created (randomly sampled) when the data changes. The purpose is to decouple the
 data from any upstream keys used to protect or share it.
 
-For instance consider a large file that should be protected. If you want to rotate your account's
-symmetric key, supposing the account symmetric key was used to encrypt the file, then you would have
-to re-upload the re-encrypted file. With a content encryption key, you only need to re-upload the
-re-encrypted content encryption key.
+For instance consider a large file that should be protected. If the account's symmetric key needs to
+be rotated, and supposing the account symmetric key was used to encrypt the file, then the
+re-encrypted file would have to be re-uploaded. With a content encryption key, only the re-encrypted
+content encryption key needs to be re-uploaded.
 
 Content encryption keys are currently used for file attachments, and for vault items ("cipher
 keys").
@@ -162,7 +162,7 @@ keys").
 
 Key wrapping describes encrypting one key with another key. There are various reasons for doing
 this. One of them is decoupling of keys, as in the content encryption key example above. Another is
-implementing sharing mechanisms. If you have a set of encrypted items you want to share, such as a
-vault item consisting of the content, and a set of individually encrypted file attachments, then you
-can wrap each content-encryption-key so that you only need to share a single key instead of sharing
-a set of keys.
+implementing sharing mechanisms. When a set of encrypted items needs to be shared, such as a vault
+item consisting of the content and a set of individually encrypted file attachments, each
+content-encryption-key can be wrapped so that only a single key needs to be shared instead of
+sharing a set of keys.
