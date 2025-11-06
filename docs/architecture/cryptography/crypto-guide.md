@@ -17,8 +17,9 @@ used to build most features, with each team owning the cryptographic constructio
 Recently, high-level safe primitives are introduced that move the complexity out of each teams
 ownership. These are not yet complete, and if a particular use-case is not covered by them, teams
 should reach out! The goal of these is to have most teams never have to think about cryptography, or
-having to do safety analysis. These abstract away all complex details and give teams a
-low-complexity, easy to use and hard to mis-use interface to work with.
+having to do safety analysis, or to own any cryptographic construct or protocol. These abstract away
+all complex details and give teams a low-complexity, easy to use and hard to mis-use interface to
+work with.
 
 Primarily, this is aimed for consumption for end-to-end encrypted storage of long-term data, in
 products such as the password manager or secrets manager.
