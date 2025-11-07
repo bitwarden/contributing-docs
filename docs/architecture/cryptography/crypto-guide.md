@@ -38,6 +38,40 @@ now, but eventually will have to be migrated too. There are several reasons behi
 hand the SDK has better memory safety guarantees and prevents key material from being left behind in
 memory. On the other hand, newer, safer APIs are not exposed outside of the SDK.
 
+## Background reading
+
+### Symmetric encryption
+
+Symmetric encryption (also secret key cryptography) describes cryptographic algorithms that have a
+single key that is used both for encryption and decryption. As a rule-of-thumb, most things
+non-cryptography developers build should be built with symmetric encryption. Symmetric encryption is
+very fast and has small keys. To build complex sharing mechanisms, the data should be encrypted with
+a symmetric key, and only the symmetric key is shared. This sharing can then be done via asymmetric
+cryptography, not described here.
+
+### Content encryption keys
+
+A content encryption key is a per-item key that encrypts a single piece of data. It is created with
+said data, and re-created (randomly sampled) when the data changes. The purpose is to decouple the
+data from any upstream keys used to protect or share it.
+
+For instance consider a large file that should be protected. If the account's symmetric key needs to
+be rotated, and supposing the account symmetric key was used to encrypt the file, then the
+re-encrypted file would have to be re-uploaded. With a content encryption key, only the re-encrypted
+content encryption key needs to be re-uploaded.
+
+Content encryption keys are currently used for file attachments, and for vault items ("cipher
+keys").
+
+### Key wrap
+
+Key wrapping describes encrypting one key with another key. There are various reasons for doing
+this. One of them is decoupling of keys, as in the content encryption key example above. Another is
+implementing sharing mechanisms. When a set of encrypted items needs to be shared, such as a vault
+item consisting of the content and a set of individually encrypted file attachments, each
+content-encryption-key can be wrapped so that only a single key needs to be shared instead of
+sharing a set of keys.
+
 ## How to use cryptography to build features
 
 To use cryptographic primitives, features can be decomposed into a chain of simpler use-cases. The
@@ -146,28 +180,3 @@ severAuthorizationMasterKeyHash is derived from the master-key using pbkdf2, wit
 salt and 1 iteration applied. This hash is then sent to the server for authentication.
 
 :::
-
-## Background reading
-
-### Content encryption keys
-
-A content encryption key is a per-item key that encrypts a single piece of data. It is created with
-said data, and re-created (randomly sampled) when the data changes. The purpose is to decouple the
-data from any upstream keys used to protect or share it.
-
-For instance consider a large file that should be protected. If the account's symmetric key needs to
-be rotated, and supposing the account symmetric key was used to encrypt the file, then the
-re-encrypted file would have to be re-uploaded. With a content encryption key, only the re-encrypted
-content encryption key needs to be re-uploaded.
-
-Content encryption keys are currently used for file attachments, and for vault items ("cipher
-keys").
-
-### Key wrap
-
-Key wrapping describes encrypting one key with another key. There are various reasons for doing
-this. One of them is decoupling of keys, as in the content encryption key example above. Another is
-implementing sharing mechanisms. When a set of encrypted items needs to be shared, such as a vault
-item consisting of the content and a set of individually encrypted file attachments, each
-content-encryption-key can be wrapped so that only a single key needs to be shared instead of
-sharing a set of keys.
