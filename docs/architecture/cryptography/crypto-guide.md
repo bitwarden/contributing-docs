@@ -41,7 +41,7 @@ now, but eventually will have to be migrated too. There are several reasons behi
 hand the SDK has better memory safety guarantees and prevents key material from being left behind in
 memory. On the other hand, newer, safer APIs are not exposed outside of the SDK.
 
-## Background reading
+## Terminology
 
 ### Symmetric encryption
 
