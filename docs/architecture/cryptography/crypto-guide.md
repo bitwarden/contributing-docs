@@ -12,14 +12,17 @@ This guide is aimed at non-cryptography teams that want to consume cryptographic
 build features that need end-to-end encryption. This guide provides an overview of available tools
 for composing features that need cryptographic protection.
 
-Currently, there is a set of low-level APIs (EncString, UnsignedSharedKey, MasterKey) that have been
-used to build most features, with each team owning the cryptographic constructions created.
-Recently, high-level safe primitives are introduced that move the complexity out of each teams
-ownership. These are not yet complete, and if a particular use-case is not covered by them, teams
-should reach out! The goal of these is to have most teams never have to think about cryptography, or
-having to do safety analysis, or to own any cryptographic construct or protocol. These abstract away
-all complex details and give teams a low-complexity, easy to use and hard to mis-use interface to
-work with.
+Currently, there is a set of low-level APIs
+([EncString](https://github.com/bitwarden/sdk-internal/blob/c60a5d794732d2c0fc203feb21ce5851d5325fe1/crates/bitwarden-crypto/src/enc_string/symmetric.rs#L59),
+[UnsignedSharedKey](https://github.com/bitwarden/sdk-internal/blob/c60a5d794732d2c0fc203feb21ce5851d5325fe1/crates/bitwarden-crypto/src/enc_string/asymmetric.rs#L58),
+[MasterKey](https://github.com/bitwarden/sdk-internal/blob/c60a5d794732d2c0fc203feb21ce5851d5325fe1/crates/bitwarden-crypto/src/keys/master_key.rs#L32))
+that have been used to build most features, with each team owning the cryptographic constructions
+created. Recently, high-level safe primitives are introduced that move the complexity out of each
+teams ownership. These are not yet complete, and if a particular use-case is not covered by them,
+teams should reach out! The goal of these is to have most teams never have to think about
+cryptography, or having to do safety analysis, or to own any cryptographic construct or protocol.
+These abstract away all complex details and give teams a low-complexity, easy to use and hard to
+mis-use interface to work with.
 
 Primarily, this is aimed for consumption for end-to-end encrypted storage of long-term data, in
 products such as the password manager or secrets manager.
@@ -83,10 +86,10 @@ a combination of these, teams should reach out!
 ### Protecting a document / struct
 
 Use
-[DataEnvelope](https://github.com/bitwarden/sdk-internal/blob/main/crates/bitwarden-crypto/src/safe/data_envelope.rs).
+[DataEnvelope](https://github.com/bitwarden/sdk-internal/c60a5d794732d2c0fc203feb21ce5851d5325fe1/main/crates/bitwarden-crypto/src/safe/data_envelope.rs).
 This handles encryption and versioning, and hides exact sizes of the encrypted contents. The
 existing
-[example](https://github.com/bitwarden/sdk-internal/blob/main/crates/bitwarden-crypto/examples/seal_struct.rs)
+[example](https://github.com/bitwarden/sdk-internal/c60a5d794732d2c0fc203feb21ce5851d5325fe1/main/crates/bitwarden-crypto/examples/seal_struct.rs)
 can be used as a reference. Using the data envelope API, an encrypted blob is obtained and,
 depending on which public function is chosen, a key or a wrapped key. This key is a
 content-encryption-key, which can be protected using other mechanisms noted down below. To unseal,
@@ -141,18 +144,18 @@ around this. Further, strong context binding / separation into namespaces will b
 ### Protecting a key with a password
 
 Use
-[PasswordProtectedKeyEnvelope](https://github.com/bitwarden/sdk-internal/blob/main/crates/bitwarden-crypto/src/safe/password_protected_key_envelope.rs)
+[PasswordProtectedKeyEnvelope](https://github.com/bitwarden/sdk-internal/blob/c60a5d794732d2c0fc203feb21ce5851d5325fe1/crates/bitwarden-crypto/src/safe/password_protected_key_envelope.rs)
 as described in the
-[example](https://github.com/bitwarden/sdk-internal/blob/main/crates/bitwarden-crypto/examples/protect_key_with_password.rs).
+[example](https://github.com/bitwarden/sdk-internal/blob/c60a5d794732d2c0fc203feb21ce5851d5325fe1/crates/bitwarden-crypto/examples/protect_key_with_password.rs).
 This allows storing a key with a low-entropy password or PIN. The envelope handles brute-force
 protection.
 
 #### MasterPasswordUnlockData
 
-MasterPasswordUnlockData is a struct that encapsulates the data needed to unlock a vault using a
-master password. It is currently backwards compatible to master-key based unlock, but this is not
-the case in the future. Features relating to master-password based unlock should use this
-abstraction.
+[MasterPasswordUnlockData](https://github.com/bitwarden/sdk-internal/blob/c60a5d794732d2c0fc203feb21ce5851d5325fe1/crates/bitwarden-core/src/key_management/master_password.rs#L46)
+is a struct that encapsulates the data needed to unlock a vault using a master password. It is
+currently backwards compatible to master-key based unlock, but this is not the case in the future.
+Features relating to master-password based unlock should use this abstraction.
 
 #### MasterKey
 
@@ -168,10 +171,12 @@ synchronization issues of the email (salt) or kdf settings will lead to a failur
 
 ### Authenticating with a password
 
-Use MasterPasswordAuthenticationData. It encapsulates the data needed to unlock a vault using a
-master password. It contains the serverAuthorizationMasterKeyHash, the KDF settings and salt used.
-The cryptography is the same as for MasterKey based authentication, but the abstraction prevents
-authentication issues resulting from unsynchronized state.
+Use
+[MasterPasswordAuthenticationData](https://github.com/bitwarden/sdk-internal/blob/c60a5d794732d2c0fc203feb21ce5851d5325fe1/crates/bitwarden-core/src/key_management/master_password.rs#L122).
+It encapsulates the data needed to unlock a vault using a master password. It contains the
+serverAuthorizationMasterKeyHash, the KDF settings and salt used. The cryptography is the same as
+for MasterKey based authentication, but the abstraction prevents authentication issues resulting
+from unsynchronized state.
 
 :::note
 
