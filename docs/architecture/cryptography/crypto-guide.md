@@ -87,7 +87,7 @@ a combination of these, teams should reach out!
 
 Use
 [DataEnvelope](https://github.com/bitwarden/sdk-internal/c60a5d794732d2c0fc203feb21ce5851d5325fe1/main/crates/bitwarden-crypto/src/safe/data_envelope.rs).
-This handles encryption and versioning, and hides exact sizes of the encrypted contents. The
+This handles encryption versioning, and hides exact sizes of the encrypted contents. The
 existing
 [example](https://github.com/bitwarden/sdk-internal/c60a5d794732d2c0fc203feb21ce5851d5325fe1/main/crates/bitwarden-crypto/examples/seal_struct.rs)
 can be used as a reference. Using the data envelope API, an encrypted blob is obtained and,
