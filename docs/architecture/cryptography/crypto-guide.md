@@ -29,7 +29,7 @@ products such as the password manager or secrets manager.
 
 ## Rules
 
-The primary rule here is: don't roll your own crypto. Where possible, high level safe, tested and
+The primary rule here is: don't roll your own cryptography. Where possible, high level, safe tested and
 analyzed protocols and primitives need to be used. The higher level the primitive, the less likely
 that security bugs get introduced, and the less complexity to maintain and keep track of. Only where
 not otherwise possible should low level primitives be used, and this should be done with extreme
