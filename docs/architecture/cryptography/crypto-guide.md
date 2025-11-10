@@ -17,7 +17,7 @@ Currently, there is a set of low-level APIs
 [UnsignedSharedKey](https://github.com/bitwarden/sdk-internal/blob/c60a5d794732d2c0fc203feb21ce5851d5325fe1/crates/bitwarden-crypto/src/enc_string/asymmetric.rs#L58),
 [MasterKey](https://github.com/bitwarden/sdk-internal/blob/c60a5d794732d2c0fc203feb21ce5851d5325fe1/crates/bitwarden-crypto/src/keys/master_key.rs#L32))
 that have been used to build most features, with each team owning the cryptographic constructions
-created. Recently, high-level safe primitives are introduced that move the complexity out of each
+created. Recently, high-level safe primitives were introduced that will move the complexity out of each
 teams ownership. These are not yet complete, and if a particular use-case is not covered by them,
 teams should reach out! The goal of these is to have most teams never have to think about
 cryptography, or having to do safety analysis, or to own any cryptographic construct or protocol.
