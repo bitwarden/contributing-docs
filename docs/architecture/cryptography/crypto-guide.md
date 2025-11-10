@@ -36,8 +36,8 @@ not otherwise possible should low level primitives be used, and this should be d
 caution and oversight.
 
 Encryption in the TypeScript clients for new cases is deprecated. Any new cryptographic code must be
-written in the SDK if possible. Existing use-cases can be continued in the typescript clients for
-now, but eventually will have to be migrated too. There are several reasons behind this. On the one
+written in the SDK if possible. Existing use-cases can be continued in the TypeScript clients for
+now, but eventually will be migrated too. There are several reasons behind this. On the one
 hand the SDK has better memory safety guarantees and prevents key material from being left behind in
 memory. On the other hand, newer, safer APIs are not exposed outside of the SDK.
 
