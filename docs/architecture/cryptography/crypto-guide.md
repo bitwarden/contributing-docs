@@ -17,38 +17,39 @@ Currently, there is a set of low-level APIs
 [UnsignedSharedKey](https://github.com/bitwarden/sdk-internal/blob/c60a5d794732d2c0fc203feb21ce5851d5325fe1/crates/bitwarden-crypto/src/enc_string/asymmetric.rs#L58),
 [MasterKey](https://github.com/bitwarden/sdk-internal/blob/c60a5d794732d2c0fc203feb21ce5851d5325fe1/crates/bitwarden-crypto/src/keys/master_key.rs#L32))
 that have been used to build most features, with each team owning the cryptographic constructions
-created. Recently, high-level safe primitives were introduced that will move the complexity out of each
-teams ownership. These are not yet complete, and if a particular use-case is not covered by them,
-teams should reach out! The goal of these is to have most teams never have to think about
+created. Recently, high-level safe primitives were introduced that will move the complexity out of
+each teams ownership. These are not yet complete, and if a particular use-case is not covered by
+them, teams should reach out! The goal of these is to have most teams never have to think about
 cryptography, or having to do safety analysis, or to own any cryptographic construct or protocol.
-These high-level primitives abstract away all complex details and give teams a low-complexity, easy to use and hard to
-mis-use interface to work with.
+These high-level primitives abstract away all complex details and give teams a low-complexity, easy
+to use and hard to mis-use interface to work with.
 
 Primarily, this is aimed for consumption for end-to-end encrypted storage of long-term data, in
 products such as the password manager or secrets manager.
 
 ## Rules
 
-The primary rule here is: don't roll your own cryptography. Where possible, high level, safe tested and
-analyzed protocols and primitives need to be used. The higher level the primitive, the less likely
-that security bugs get introduced, and the less complexity to maintain and keep track of. Only where
-not otherwise possible should low level primitives be used, and this should be done with extreme
-caution and oversight.
+The primary rule here is: don't roll your own cryptography. Where possible, high level, safe tested
+and analyzed protocols and primitives need to be used. The higher level the primitive, the less
+likely that security bugs get introduced, and the less complexity to maintain and keep track of.
+Only where not otherwise possible should low level primitives be used, and this should be done with
+extreme caution and oversight.
 
 Encryption in the TypeScript clients for new cases is deprecated. Any new cryptographic code must be
 written in the SDK if possible. Existing use-cases can be continued in the TypeScript clients for
-now, but eventually will be migrated too. There are several reasons behind this. On the one
-hand the SDK has better memory safety guarantees and prevents key material from being left behind in
-memory. On the other hand, newer, safer APIs are not exposed outside of the SDK.
+now, but eventually will be migrated too. There are several reasons behind this. On the one hand the
+SDK has better memory safety guarantees and prevents key material from being left behind in memory.
+On the other hand, newer, safer APIs are not exposed outside of the SDK.
 
 ## Terminology
 
 ### Symmetric encryption
 
 Symmetric encryption (also secret key cryptography) describes cryptographic algorithms that have a
-single key that is used both for encryption and decryption. As a rule of thumb, non-cryptography developers should build most functionality with symmetric encryption. Symmetric encryption is
-very fast and has small keys. To build complex sharing mechanisms, the data should be encrypted with
-a symmetric key, and only the symmetric key is shared. This sharing can then be done via asymmetric
+single key that is used both for encryption and decryption. As a rule of thumb, non-cryptography
+developers should build most functionality with symmetric encryption. Symmetric encryption is very
+fast and has small keys. To build complex sharing mechanisms, the data should be encrypted with a
+symmetric key, and only the symmetric key is shared. This sharing can then be done via asymmetric
 cryptography, not described here.
 
 ### Content encryption keys
@@ -85,10 +86,9 @@ a combination of these, teams should reach out!
 ### Protecting a document / struct
 
 Use
-[DataEnvelope](https://github.com/bitwarden/sdk-internal/c60a5d794732d2c0fc203feb21ce5851d5325fe1/main/crates/bitwarden-crypto/src/safe/data_envelope.rs).
-This handles encryption versioning, and hides exact sizes of the encrypted contents. The
-existing
-[example](https://github.com/bitwarden/sdk-internal/c60a5d794732d2c0fc203feb21ce5851d5325fe1/main/crates/bitwarden-crypto/examples/seal_struct.rs)
+[DataEnvelope](https://github.com/bitwarden/sdk-internal/blob/c60a5d794732d2c0fc203feb21ce5851d5325fe1/crates/bitwarden-crypto/src/safe/data_envelope.rs).
+This handles encryption versioning, and hides exact sizes of the encrypted contents. The existing
+[example](https://github.com/bitwarden/sdk-internal/blob/c60a5d794732d2c0fc203feb21ce5851d5325fe1/crates/bitwarden-crypto/examples/seal_struct.rs)
 can be used as a reference. Using the data envelope API, an encrypted blob is obtained and,
 depending on which public function is chosen, a key or a wrapped key. This key is a
 content-encryption-key, which can be protected using other mechanisms noted down below. To unseal,
@@ -98,10 +98,10 @@ the content-encryption-key and the encrypted blob are required.
 
 EncStrings have been used for this process. Instead of protecting the document as a whole, they
 protected individual fields on the document. These are no longer recommended for new use-cases.
-There are a few reasons, such as performance impact of many small decrypt operations, overhead of mac
-/ IV of many small encrypted items, certain kinds of tampering attacks on the document as a whole.
-Further, maintainability is harder, requiring a lot more work both on the client side as well as the
-server side, if the structs are passed along in this representation.
+There are a few reasons, such as performance impact of many small decrypt operations, overhead of
+mac / IV of many small encrypted items, certain kinds of tampering attacks on the document as a
+whole. Further, maintainability is harder, requiring a lot more work both on the client side as well
+as the server side, if the structs are passed along in this representation.
 
 If there is still a need to maintain EncStrings and help is needed figuring out a path to migrate,
 teams should reach out.
