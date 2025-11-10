@@ -46,8 +46,7 @@ memory. On the other hand, newer, safer APIs are not exposed outside of the SDK.
 ### Symmetric encryption
 
 Symmetric encryption (also secret key cryptography) describes cryptographic algorithms that have a
-single key that is used both for encryption and decryption. As a rule-of-thumb, most things
-non-cryptography developers build should be built with symmetric encryption. Symmetric encryption is
+single key that is used both for encryption and decryption. As a rule of thumb, non-cryptography developers should build most functionality with symmetric encryption. Symmetric encryption is
 very fast and has small keys. To build complex sharing mechanisms, the data should be encrypted with
 a symmetric key, and only the symmetric key is shared. This sharing can then be done via asymmetric
 cryptography, not described here.
