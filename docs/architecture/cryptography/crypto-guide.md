@@ -99,7 +99,7 @@ the content-encryption-key and the encrypted blob are required.
 
 EncStrings have been used for this process. Instead of protecting the document as a whole, they
 protected individual fields on the document. These are no longer recommended for new use-cases.
-There is a few reasons, such as performance impact of many small decrypt operations, overhead of mac
+There are a few reasons, such as performance impact of many small decrypt operations, overhead of mac
 / IV of many small encrypted items, certain kinds of tampering attacks on the document as a whole.
 Further, maintainability is harder, requiring a lot more work both on the client side as well as the
 server side, if the structs are passed along in this representation.
