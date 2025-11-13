@@ -281,10 +281,10 @@ A typical dependency workflow involves the following steps:
 3. Review the release notes of each dependency, for each released version between the current and
    the proposed upgrade. Identify if there are any deprecations or breaking changes affecting our
    code.
-   1. For **breaking changes**, either resolve them yourself, or for major changes, coordinate with
-      the other teams.
-   2. For **deprecations**, create high priority Jira tickets on the affected teams' backlogs with a
-      due date at least one sprint before the next scheduled major release of the dependency.
+   - For **breaking changes**, either resolve them yourself, or for major changes, coordinate with
+     the other teams.
+   - For **deprecations**, create high priority Jira tickets on the affected teams' backlogs with a
+     due date at least one sprint before the next scheduled major release of the dependency.
 4. Verify CI status.
    - This may also include re-running any failed workflows due to insufficient permissions when
      Renovate created the pull request.
