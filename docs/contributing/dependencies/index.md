@@ -286,10 +286,8 @@ A typical dependency workflow involves the following steps:
    2. For **deprecations**, create high priority Jira tickets on the affected teams' backlogs with a
       due date at least one sprint before the next scheduled major release of the dependency.
 4. Verify CI status.
-
-- This may also include re-running any failed workflows due to insufficient permissions when
-  Renovate created the pull request.
-
+   - This may also include re-running any failed workflows due to insufficient permissions when
+     Renovate created the pull request.
 5. If test coverage is lacking, check out locally and manually confirm a few key areas.
 6. Review the proposed code changes and approve the PR.
 7. Update the ticket to include testing notes for QA.
