@@ -61,7 +61,7 @@ android/
 
 ### Web clients
 
-The web clients uses NPM to install the SDK as a dependency. NPM offers a dedicated command
+The web clients use NPM to install the SDK as a dependency. NPM offers a dedicated command
 [`link`][npm-link] which can be used to temporarily replace the packages with a local version. The
 web SDK has two targets (OSS and Bitwarden License) and the linking command is different for each.
 The one to use depends on which version of the client you are building.
