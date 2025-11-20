@@ -453,7 +453,7 @@ This makes it convenient to switch between these files or open them side-by-side
   [ios version](https://github.com/bitwarden/ios/blob/main/.test-simulator-ios-version)), otherwise
   tests may fail because of subtle differences between iOS versions.
 
-### Mocks generation
+### Mock generation
 
 We use [Sourcery](https://github.com/krzysztofzablocki/Sourcery) for automatic mock generation.
 
@@ -472,18 +472,18 @@ protocol FooProtocol { // sourcery: AutoMockable
 :::info Manual generation
 
 There are some cases where the automatically generated mock does not cover the mock scenario we want
-or it cannot handle some closure types, specially in function's parameters. In such cases prefer
+or it cannot handle some closure types, especially in function's parameters. In such cases prefer to
 create the mock manually and remove the protocol's comment as `AutoMockable`.
 
 :::
 
 #### Custom annotations
 
-Sourcery allows us to annotate different parts of our code to guide code generation. On top of this
-custom annotations have been added in `AutoMockable.stencil` to handle special cases.
+Sourcery allows us to annotate different parts of our code to guide code generation. Custom
+annotations have been added in `AutoMockable.stencil` to handle special cases.
 
 - **useSelectorName**: Method annotation used to indicate that the generated mocked properties need
-  to use the selector name instead of the short method name. This is specially useful when using
+  to use the selector name instead of the short method name. This is especially useful when using
   function overloading where we need the mocked names to also have the parameters names to
   differentiate between the different mocked functions.
 - **mockReceivedInvocations**: Method annotation used to indicate that we want to generate the
