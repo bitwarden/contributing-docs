@@ -9,7 +9,7 @@ tags: [clients, tests]
 
 <AdrTable frontMatter={frontMatter}></AdrTable>
 
-## Context and Problem Statement
+## Context and problem statement
 
 We currently use [Substitute](https://www.npmjs.com/package/@fluffy-spoon/substitute) to create
 mocks in our tests. This includes matching arguments, mocking return values, and spying on calls.
@@ -28,7 +28,7 @@ This is undesirable because:
 
 We should just pick one.
 
-## Considered Options
+## Considered options
 
 - **Use Substitute and ban developers from using Jest mocks** - we keep both libraries and continue
   to use them both in tandem. In this case, we should provide clear guidance and training to
@@ -44,21 +44,21 @@ We should just pick one.
   This is not really on the table here, but it is an option. Jest is working well so far, so I don't
   propose we change it.
 
-## Decision Outcome
+## Decision outcome
 
 Chosen option: **Deprecate Substitute and use Jest with jest-mock-extended instead**
 
 We should also host a training/learning session to encourage and empower developers to unit test
 their code.
 
-### Positive Consequences
+### Positive consequences
 
 - Front-end developers are more likely to be familiar with Jest than Substitute
 - Jest has more documentation and resources (Medium articles, StackOverflow answers, etc)
 - It's an integrated part of Jest
 - No mixing different libraries or syntax
 
-### Negative Consequences
+### Negative consequences
 
 - Backend developers will have more of a learning curve compared to Substitute, which is a port of
   NSubstitute for .NET. However, this is still not a particularly steep learning curve, and it makes

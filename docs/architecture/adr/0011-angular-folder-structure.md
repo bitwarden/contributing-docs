@@ -10,7 +10,7 @@ tags: [clients, angular]
 
 <AdrTable frontMatter={frontMatter}></AdrTable>
 
-## Context and Problem Statement
+## Context and problem statement
 
 We currently have a very fractured folder structure in the Angular clients with multiple competing
 folder structures. We need to standardize on a single folder structure which will allow us to
@@ -26,7 +26,7 @@ This is heavily based on the following resources.
 - [Angular - Lazy-loading feature modules](https://angular.io/guide/lazy-loading-ngmodules)
 - [Using Nx at Enterprises](https://nx.dev/guides/monorepo-nx-enterprise)
 
-## Considered Options
+## Considered options
 
 - **Nx folder structure** - Seems like a well thought out structure but it essentially requires that
   we use nx since it relies heavily on npm packages. We're not yet at a stage where we feel

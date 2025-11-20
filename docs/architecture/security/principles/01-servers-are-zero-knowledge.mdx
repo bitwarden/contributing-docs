@@ -1,0 +1,66 @@
+# P01 - Servers are zero knowledge
+
+There is no possibility for an attacker or Bitwarden employee to access your unencrypted data by
+compromising Bitwarden's infrastructure. Bitwarden has no ability to decrypt or add to your data.
+Your key, which Bitwarden cannot access, is the only thing that can be used to decrypt your data or
+create new encrypted data.
+
+More precisely, the special status of providing a network sync for client data does not grant the
+server, or any intermediary between the server and client, the ability to reduce the effective
+security of the protections that guard a user's data. If a user chooses a weaker form of protection
+(e.g., a password instead of a passkey), that is an intentional user decision, but the server must
+not be able to manipulate or coerce a client into reducing security beyond what the user knowingly
+configures. Additionally, the server or it's infrastructure cannot masquerade it's own plaintext
+data as belonging in the set of the user's encrypted data. The total sum of a user's encrypted data
+is fully isolated from the server and infrastructure; it cannot be read nor expanded outside of the
+user's client context.
+
+This is what we mean when we sometimes refer to "end-to-end encrypted" or "zero knowledge".
+
+## Threat model
+
+- An attacker able to view and/or edit database data belonging to a user they do not own
+- An attacker able to create, edit, and fully control network responses to a client
+
+Some examples of attackers included in this list could be Bitwarden employees, network
+administrators, CDNs, and any MITM that can circumvent TLS protection.
+
+## Security goals
+
+- Attackers cannot retrieve decrypted vault data
+- Attackers cannot retrieve user encryption keys
+- Attackers cannot inject arbitrary items as vault data
+- Attackers cannot edit vault data\*
+
+_\* Availability of vault data is not a security goal as attackers have full control over the
+database._
+
+## Account key sharing as a feature
+
+This principle does not mean that plaintext data is never shared, but rather that any such exposure
+requires informed and explicit consent from the user and is exclusively between accounts, never to
+the server or infrastructure.
+
+## Exceptions
+
+On occasion, product features require breaking this principle in a controlled manner. These
+exceptions are always a last resort, tightly limited scope, and we are always looking for
+improvements to remove them. All exceptions are outlined here.
+
+### Key Connector
+
+Key connector is a self-host only feature that allows an organization user to log in and unlock with
+SSO and no password input. This feature is specifically limited to self-hosted instances due to this
+principle. It is possible for a Bitwarden server to create an authentication token, contact the Key
+Connector server, and retrieve key material that will allow decryption of a user's encrypted data.
+For these reasons we encourage strict isolation of key connector servers to private networks and
+only to be used by advanced self-hosted users.
+
+### Icons service
+
+The Bitwarden icons service provides site favicons to decorate vault items in the Bitwarden clients.
+To enable this functionality, clients need to send plaintext domain name information to the service.
+Communicated information is limited to vault item URIs. These URIs are part of a user's encrypted
+content, but we do this to speed up loading of vaults, ensure favicons accurately represent the
+associated URI, and avoid leaking vault contents to local network administrators. This feature is
+easily disabled in client settings.

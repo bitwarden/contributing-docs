@@ -11,7 +11,7 @@ documentation is available at https://contributing.bitwarden.com/.
 npm ci
 ```
 
-## Local Development
+## Local development
 
 ```bash
 npm start
@@ -71,7 +71,7 @@ We use `cspell` for spellchecking. It will run as a pre-commit hook and in the C
 Spellchecking ignores single and multi-line code snippets. If required, you can add custom words
 (e.g. proper nouns and technical terms) to `custom-words.txt`.
 
-### Conditional Content
+### Conditional content
 
 The Contributing Docs site is used both for internal and external contributors. To this end we've
 facilitated a mean to conditionally show content for either group. This is primarily to keep the

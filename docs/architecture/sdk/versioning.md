@@ -1,4 +1,4 @@
-# Versioning & Breaking Changes
+# Versioning and breaking changes
 
 The SDK strives towards maintaining backward compatibility for a reasonable time. This ensures that
 client applications can safely upgrade to newer versions of the SDK without resolving a large number

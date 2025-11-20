@@ -9,7 +9,7 @@ tags: [server]
 
 <AdrTable frontMatter={frontMatter}></AdrTable>
 
-## Context and Problem Statement
+## Context and problem statement
 
 As the server platform has matured so have the various logging extensions to support additional use
 cases and customer requests. [Serilog][serilog] is in place via shared "core" logic for all
@@ -23,7 +23,7 @@ There is a growing list of conditions on how and when to use certain types of st
 Service-specific configuration, predicates, and filters are in place making it difficult to know
 what will be logged and when.
 
-## Considered Options
+## Considered options
 
 :::note
 
@@ -39,7 +39,7 @@ engineers across the board to improve what we deliver.
 - **Consolidate logging providers** - Announce deprecation and migration plans for sinks not aligned
   with core needs and center on standard output for logs.
 
-## Decision Outcome
+## Decision outcome
 
 Chosen option: **Consolidate logging providers**.
 
@@ -57,7 +57,7 @@ maximal customization we will be deprecating the log settings in `GlobalSettings
 refer to [`Serilog` documentation][serilogconfig] to offer both more options and more standard
 naming.
 
-### Positive Consequences
+### Positive consequences
 
 - Streamlined logging experience across components.
 - Standard output logging fits well into container and orchestration tools.
@@ -68,7 +68,7 @@ naming.
 - Not require any new configuration for our cloud that is currently using
   `Microsoft.Extensions.Logging`.
 
-### Negative Consequences
+### Negative consequences
 
 - A small number of users will need to migrate to standard output or similar ingestion of logs.
 - The Admin Portal log browsing function will leave (if configured) in favor of using whatever is

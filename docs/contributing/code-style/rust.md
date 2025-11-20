@@ -12,6 +12,98 @@ the quality of our code.
 This document covers some additional guidelines that are not enforced by `rustfmt` or `clippy`. And
 will generally allow you to write more idiomatic Rust code.
 
+## Documentation
+
+We strictly enforce documentation of all public items using the `missing_docs` linting rule. This
+helps ensure that our code is well-documented and easy to understand. In rare cases where
+documentation is unhelpful or simply duplicates enum variants, it may be omitted using
+`#[allow(missing_docs)]` but you should have a valid reason.
+
+Rust is generally quite unopinionated in how you document your code. This can result in many
+different documentation styles which can negatively impact readability and maintainability. We
+therefore have some guidelines and suggestions for documenting your code. These should not be seen
+as strict rules but rather as best practices to follow in our codebases.
+
+### General guidelines
+
+Avoid starting documentation with `This module`, `This function`, `This field` or similar phrases.
+The context will be inferred implicitly by the reader. Instead, focus on describing the purpose and
+behavior of the item directly.
+
+When possible document from the consumer's perspective. This helps ensure that the documentation is
+relevant and useful to those who will be using the code.
+
+### Documenting Examples
+
+Rust has built in support for including
+[code blocks in documentation](https://doc.rust-lang.org/rustdoc/write-documentation/what-to-include.html#examples).
+This can be useful when you want to include suggested usage examples or other relevant code
+snippets. As a bonus rust generally executes the code blocks in the documentation to ensure they are
+correct.
+
+### Modules
+
+We encourage you to document modules, including their purpose and any important details about their
+contents. This helps other developers understand the context and functionality of the module. When
+documenting modules use the `//!` syntax to write documentation comments at the top of the file.
+
+```rust
+// crates/bitwarden-crypto/src/aes.rs
+
+//! # AES operations
+//!
+//! Contains low level AES operations used by the rest of the library.
+//!
+//! In most cases you should use the [EncString][crate::EncString] with
+//! [KeyEncryptable][crate::KeyEncryptable] & [KeyDecryptable][crate::KeyDecryptable] instead.
+```
+
+### Functions
+
+Please ensure functions and their arguments have descriptive names. It's often better to use longer
+names that convey more meaning if it improves clarity.
+
+#### Arguments
+
+We avoid documenting function arguments since rust does not have a good convention for doing so.
+Instead focus on using well descriptive names and appropriate types for the arguments. For example
+rather than using `i32` for a positive integer, use `u32`. If the value should never be 0 use
+`NonZeroU32`. The [NewType](#newtype) pattern can be useful here in case there is no built in
+representation of the type.
+
+If you still feel that a comment would be helpful, another technique is to extract the arguments
+into a separate struct to improve clarity and enforce type safety.
+
+```rust
+// Good
+
+/// Sums two arguments.
+fn sum_arguments(arg1: i32, arg2: i32) -> i32 {
+    arg1 + arg2
+}
+
+// Bad
+
+/// Sums two arguments
+///
+/// # Arguments
+///
+/// * `x` - The first argument.
+/// * `y` - The second argument.
+///
+/// # Returns
+///
+/// Returns the sum of the arguments.
+fn do_something(arg1: i32, arg2: i32) -> i32 {
+    arg1 + arg2
+}
+```
+
+#### Returns
+
+Similar to arguments, do not document returns. If you find the return value can be mistaken or
+misused consider using the [NewType](#newtype) pattern.
+
 ## Avoid panics
 
 Panics are highly discouraged in the Bitwarden codebase outside of tests. Errors should be handled
@@ -140,3 +232,33 @@ match result {
 // Good
 do_something().map_err(|e| "Another error")?
 ```
+
+## NewType
+
+The _NewType_ pattern is a way to create a distinct type that wraps a value of another type. This is
+useful for providing additional type safety and clarity in your code. For an in-depth introduction
+to the NewType pattern please read the
+[Rust Book](https://doc.rust-lang.org/book/ch20-03-advanced-types.html#using-the-newtype-pattern-for-type-safety-and-abstraction).
+
+We use _NewType_ extensively throughout the Bitwarden codebase. Some good examples are IDs, which
+uses the `uuid!` macro to NewType `UUID` which ensure you can't mix up different types of IDs.
+
+```rust
+use bitwarden_uuid::uuid;
+
+uuid!(pub CipherId);
+uuid!(pub FolderId);
+
+fn test(folder_id: FolderId) {
+  // Use the folder_id here
+}
+
+// This is fine
+test(FolderId::new())
+
+// Compile error.
+test(CipherId::new())
+```
+
+The `bitwarden-crypto` crate contains a bunch of other examples, such as `UserKey` which is a
+NewType wrapper around `SymmetricCryptoKey`. Which also exposes some additional functionality.

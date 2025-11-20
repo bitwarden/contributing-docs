@@ -10,7 +10,7 @@ this feature can be managed through the autofill settings within the Bitwarden e
 active, the extension injects the Autofill Menu into the webpage's DOM via the content script
 responsible for enabling the autofill functionality.
 
-## Project Structure
+## Project structure
 
 The core scripts for the Autofill Menu feature are located within the
 [`/apps/browser/autofill`](https://github.com/bitwarden/clients/tree/main/apps/browser/src/autofill)
@@ -29,7 +29,7 @@ backbone of the feature's functionality.
 | [`autofill-overlay-button.ts`](https://github.com/bitwarden/clients/blob/main/apps/browser/src/autofill/overlay/pages/button/autofill-overlay-button.ts)                   | Utilized within [`button.html`](https://github.com/bitwarden/clients/blob/main/apps/browser/src/autofill/overlay/pages/button/button.html) to facilitate the Autofill Menu button extension page within a sandboxed iframe. It inherits from the [`AutofillOverlayPageElement`](https://github.com/bitwarden/clients/blob/main/apps/browser/src/autofill/overlay/pages/shared/autofill-overlay-page-element.ts) class and is specifically tasked with managing the behavior of the Autofill Menu button injected into webpages.                                                                                            |
 | [`autofill-overlay-list.ts`](https://github.com/bitwarden/clients/blob/main/apps/browser/src/autofill/overlay/pages/list/autofill-overlay-list.ts)                         | Utilized within [`list.html`](https://github.com/bitwarden/clients/blob/main/apps/browser/src/autofill/overlay/pages/list/list.html) to facilitate the Autofill Menu list extension page within a sandboxed iframe. It inherits from the [`AutofillOverlayPageElement`](https://github.com/bitwarden/clients/blob/main/apps/browser/src/autofill/overlay/pages/shared/autofill-overlay-page-element.ts) class and is specifically tasked with managing the behavior of the Autofill Menu list injected into webpages.                                                                                                      |
 
-## Implementation Details
+## Implementation details
 
 The development of the Autofill Menu necessitated a focus on security to mitigate risks associated
 with content script injection into unknown webpages. Ensuring the security of user data was a
@@ -197,7 +197,7 @@ ciphers in the Autofill Menu UI. This enables the identification and autofill of
 from the background. This approach ensures consistency in the autofill process across the extension
 and prevents the introduction of new vulnerabilities through the Autofill Menu.
 
-## Security Considerations
+## Security considerations
 
 The Autofill Menu heavily relies on content scripts to inject its UI into webpages. This process,
 which entails injecting code and DOM elements into unfamiliar websites, required the implementation

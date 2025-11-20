@@ -54,7 +54,7 @@ this naming convention:
 - Constructors with multiple arguments should have 1 argument listed per line
 - Empty constructors, when necessary, should be all 1-line, i.e., `public ClassName() { }`
 
-## Control Blocks
+## Control blocks
 
 - Control blocks should always use curly braces (even 1-line braces)
 - `using` and `foreach` blocks should declare contextual variables with `var`
@@ -84,7 +84,7 @@ if (someBooleanExpression && someVariable != null && someVariable.IsTrue)
 }
 ```
 
-## Nullable Reference Types
+## Nullable reference types
 
 Nullable reference types can be used to make safer code.
 
@@ -130,7 +130,7 @@ For example you might have an assertion like `Debug.Assert(user.IsVerified)` in 
 that only expects verified users. `Debug.Assert` works by using one of the aforementioned attributes
 `[DoesNotReturnIf(false)]` to make it work in case you want to implement your own assertion.
 
-## Dependency Injection
+## Dependency injection
 
 ### Use `TryAdd*` overloads on `IServiceCollection`
 
@@ -163,12 +163,115 @@ services.TryAddEnumerable(ServiceDescriptor.KeyedTransient<IMyService, FirstMySe
 In multi-inject scenarios you are especially in danger of adding the same implementation multiple
 times and having them all be used.
 
-### Dependency Groups
+### Dependency groups
 
 Consider creating [dependency groups][dependency-groups]. This gives other teams a nice interface to
 register your group when they depend on it. If you've used
 [`TryAdd`](#use-tryadd-overloads-on-iservicecollection) overloads it won't matter how many times
 your group of services is added to the collection.
+
+## GUID generation
+
+Always use [`CoreHelpers.GenerateComb()`][corehelpers-generatecomb] for entity IDs instead of
+[`Guid.NewGuid()`][guid-newguid]. COMB GUIDs prevent SQL Server index fragmentation by incorporating
+timestamp information for sequential ordering.
+
+```csharp
+// Good
+var id = CoreHelpers.GenerateComb();
+
+// Bad
+var id = Guid.NewGuid();
+```
+
+Entities should implement `SetNewId()`:
+
+```csharp
+public void SetNewId()
+{
+    if (Id == default)
+    {
+        Id = CoreHelpers.GenerateComb();
+    }
+}
+```
+
+Services can assign IDs directly:
+
+```csharp
+var organization = new Organization
+{
+    Id = CoreHelpers.GenerateComb(),
+    Name = name
+};
+```
+
+## Controller action guidelines
+
+To provide clear and descriptive OpenAPI specifications, we have some guidelines to follow when
+creating and naming actions in controllers.
+
+### Naming
+
+Avoid function overloads, and instead use different names for the functions.
+
+```csharp
+// ❌ Don't do this
+[HttpGet("{id}")]
+public async Task<ThingResponseModel> Get(string id) {}
+[HttpGet("")]
+public async Task<ListResponseModel<ThingResponseModel>> Get() {}
+
+// ✅ Do this instead
+[HttpGet("{id}")]
+public async Task<ThingResponseModel> Get(string id) {}
+[HttpGet("")]
+public async Task<ListResponseModel<ThingResponseModel>> GetAll() {}
+```
+
+Avoid naming functions after the HTTP method when another verb would be more clear. The names should
+make sense from the perspective of an API client that wants to call this action.
+
+```csharp
+// ❌ Don't do this
+[HttpPost("")]
+public async Task<ThingResponseModel> PostThing(string id, ThingModel model) {}
+[HttpPut("{id}")]
+public async Task<ThingResponseModel> PutThing(string id, ThingModel model) {}
+
+// ✅ Do this instead
+[HttpPost("")]
+public async Task<ThingResponseModel> CreateThing(string id, ThingModel model) {}
+[HttpPut("{id}")]
+public async Task<ThingResponseModel> UpdateThing(string id, ThingModel model) {}
+```
+
+### Routing
+
+Avoid exposing the same function under two different HTTP routes.
+
+```csharp
+// ❌ Don't do this
+[HttpDelete("{id}")]
+[HttpPost("{id}/delete")]
+public async Task Delete(Guid id) {}
+
+// ✅ Do this instead
+[HttpDelete("{id}")]
+public async Task Delete(Guid id) {}
+```
+
+If support for the two routes is required for compatibility reasons, split the routes into two
+functions and mark one of them as obsolete.
+
+```csharp
+[HttpDelete("{id}")]
+public async Task Delete(Guid id) {}
+
+[HttpPost("{id}/delete")]
+[Obsolete("This endpoint is deprecated. Use DELETE /{id} instead.")]
+public async Task PostDelete(Guid id) {}
+```
 
 [null-forgiving]:
   https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/operators/null-forgiving
@@ -182,3 +285,5 @@ your group of services is added to the collection.
   https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.dependencyinjection.extensions.servicecollectiondescriptorextensions?view=net-9.0-pp
 [dependency-groups]:
   https://learn.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection?view=aspnetcore-9.0#register-groups-of-services-with-extension-methods
+[guid-newguid]: https://learn.microsoft.com/en-us/dotnet/api/system.guid.newguid
+[corehelpers-generatecomb]: https://fastuuid.com/learn-about-uuids/comb-guids

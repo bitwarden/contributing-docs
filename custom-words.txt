@@ -17,6 +17,7 @@ deinitializer
 deinitializers
 dockerized
 dotfile
+frontmatter
 F-Droid
 Gitter
 HKDF

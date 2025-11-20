@@ -9,30 +9,30 @@ tags: [clients, angular]
 
 <AdrTable frontMatter={frontMatter}></AdrTable>
 
-## Context and Problem Statement
+## Context and problem statement
 
 We currently rely heavily on inheritance for our Angular applications. While this seemed like a
 natural decision at the time since it allowed us to quickly share code between different areas. It
 has also lead to tight coupling and therefore difficulty in understanding the impact a change will
 have. It also encourages large page-level components.
 
-## Considered Options
+## Considered options
 
 - **Do nothing** - Maintain the status quo, not really an option.
 - **Prefer composition over inheritance** - Split up components into small components that do one
   thing and one thing only. Keep components thin, and share functionality primarily using
   _Services_.
 
-## Decision Outcome
+## Decision outcome
 
 Chosen option: **Prefer composition over inheritance**
 
-### Positive Consequences
+### Positive consequences
 
 - Thinner components
 - Better understanding of the impact a change has since it will now be isolated to a single
   component only.
 
-### Negative Consequences
+### Negative consequences
 
 - Inheritance tends to be well understood.

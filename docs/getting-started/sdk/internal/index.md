@@ -53,7 +53,7 @@ so you will need to update the SDK reference in the client applications.
 These instructions assumes you have a directory structure similar to:
 
 ```text
-sdk/
+sdk-internal/
 clients/
 ios/
 android/
@@ -61,12 +61,17 @@ android/
 
 ### Web clients
 
-The web clients uses NPM to install the SDK as a dependency. NPM offers a dedicated command
-[`link`][npm-link] which can be used to temporarily replace the packages with a local version.
+The web clients use NPM to install the SDK as a dependency. NPM offers a dedicated command
+[`link`][npm-link] which can be used to temporarily replace the packages with a local version. The
+web SDK has two targets (OSS and Bitwarden License) and the following command links both of them:
 
 ```bash
-npm link ../sdk-internal/crates/bitwarden-wasm-internal/npm
+npm link ../sdk-internal/crates/bitwarden-wasm-internal/npm ../sdk-internal/crates/bitwarden-wasm-internal/bitwarden_license/npm
 ```
+
+If you only want to link one of the versions, you can run the command with only one of the paths.
+Keep in mind that running `npm link` will restore any previously linked packages, so only the paths
+in the last run command will be linked.
 
 :::warning
 

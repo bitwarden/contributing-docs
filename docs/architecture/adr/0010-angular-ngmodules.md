@@ -9,7 +9,7 @@ tags: [clients, angular]
 
 <AdrTable frontMatter={frontMatter}></AdrTable>
 
-## Context and Problem Statement
+## Context and problem statement
 
 > NgModules are containers for a cohesive block of code dedicated to an application domain, a
 > workflow, or a closely related set of capabilities. They can contain components, service
@@ -28,7 +28,7 @@ Angular encourages creating many small NgModules, with people advocating for eit
 feature, or going so far as defining one module per component. In Angular v14 this was made easier
 with the introduction of [standalone components](https://angular.io/guide/standalone-components).
 
-## Considered Options
+## Considered options
 
 - **Do nothing** - Maintain the status quo and define most components in a single module. This would
   mean that each component is still essentially global.
@@ -38,18 +38,18 @@ with the introduction of [standalone components](https://angular.io/guide/standa
   benefits of NgModules without most of the additional boilerplate. Is still in preview and is
   therefore risky to rely on.
 
-## Decision Outcome
+## Decision outcome
 
 Chosen option: **Angular Modules**
 
-### Positive Consequences
+### Positive consequences
 
 - Internal components cannot be re-used outside of the feature.
 - Modules are required for supporting lazy loading.
 - Similar structure as _Standalone Components_ which will allow for easy migration in the future
   should this be deemed necessary.
 
-### Negative Consequences
+### Negative consequences
 
 - Angular error handling for NgModules is awful and provides cryptic errors that are hard to debug.
 - Additional boilerplate.

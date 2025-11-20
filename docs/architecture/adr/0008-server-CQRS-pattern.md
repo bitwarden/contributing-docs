@@ -9,7 +9,7 @@ tags: [server]
 
 <AdrTable frontMatter={frontMatter}></AdrTable>
 
-## Context and Problem Statement
+## Context and problem statement
 
 In Bitwarden Server, we currently use an `<<Entity>>Service` pattern to act on our entities. These
 classes end up being dumping grounds for all actions involving the entity; leading
@@ -25,7 +25,7 @@ guide us to the current design:
 The two above facts mean that our Entities cannot act without receiving all necessary state as
 method parameters, which goes against our typical DI pattern.
 
-## Considered Options
+## Considered options
 
 - **`<<Entity>>Services`** -- Discussed above
 - **Queries and Commands** -- Fundamentally our problem is that the `<<Entity>>Service` name
@@ -38,7 +38,7 @@ method parameters, which goes against our typical DI pattern.
   `<<Feature>>Service`, but ultimately runs into the same problems. As a feature grows, this service
   would become bloated and tightly coupled to other services.
 
-## Decision Outcome
+## Decision outcome
 
 Chosen option: **Queries and Commands**
 

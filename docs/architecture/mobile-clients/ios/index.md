@@ -419,7 +419,13 @@ struct ExampleView: View {
 
 ### Overview
 
-Every type containing logic should be tested. Test files should be named `<TypeToTest>Tests.swift`.
+Every type containing logic should be tested. Test files should be named according to the type of
+test:
+
+- **Unit tests**: `<TypeToTest>Tests.swift`
+- **Snapshot tests**: `<TypeToTest>+SnapshotTests.swift`
+- **View Inspector tests**: `<TypeToTest>+ViewInspectorTests.swift`
+
 A test file should exist in the same folder as the type being tested. For example,
 [AppProcessorTests](https://github.com/bitwarden/ios/blob/main/BitwardenShared/UI/Platform/Application/AppProcessorTests.swift)
 is in the same folder as
@@ -431,19 +437,21 @@ This makes it convenient to switch between these files or open them side-by-side
 - **Unit**: Unit tests compose the majority of tests in the suite. These are written using
   [XCTest](https://developer.apple.com/documentation/xctest) assertions and should be used to test
   all logic portions within a type.
-- **View**: In a SwiftUI view test, [ViewInspector](https://github.com/nalexn/ViewInspector) is used
-  to test any user interactions within the view. This is commonly used to assert that tapping a
-  button sends an action or effect to the processor, but it can also be used to test other view
-  interactions.
+- **ViewInspector**: In a SwiftUI view inspector test,
+  [ViewInspector](https://github.com/nalexn/ViewInspector) is used to test any user interactions
+  within the view. This is commonly used to assert that tapping a button sends an action or effect
+  to the processor, but it can also be used to test other view interactions.
 - **Snapshot**: In addition to using [ViewInspector](https://github.com/nalexn/ViewInspector) to
   interact with a view under test,
   [SnapshotTesting](https://github.com/pointfreeco/swift-snapshot-testing) is used to take snapshots
   of the view to test for visual changes from one test run to another. The resulting snapshot images
   are stored in the repository and are compared against on future test runs. Any visual differences
   on future test runs will result in a failing test. Snapshot tests are usually recorded in light
-  mode, dark mode, and with a large dynamic type size. ⚠️ These tests are done using an **iPhone 15
-  Pro (17.0.1)** simulator, otherwise tests may fail because of subtle differences between iOS
-  versions.
+  mode, dark mode, and with a large dynamic type size. ⚠️ These tests are done using a specific
+  simulator that can be found in the repo
+  ([device name](https://github.com/bitwarden/ios/blob/main/.test-simulator-device-name),
+  [ios version](https://github.com/bitwarden/ios/blob/main/.test-simulator-ios-version)), otherwise
+  tests may fail because of subtle differences between iOS versions.
 
 ### Mocks generation
 
@@ -492,3 +500,27 @@ protocol FooProtocol { // sourcery: AutoMockable
     func annotateMultiple(fooParameter: String) // sourcery: useSelectorName, mockReceivedInvocations
 }
 ```
+
+### Test plans
+
+Test plans are organized in the `TestPlans` folder of the iOS repository. Each project has multiple
+test plans to allow running specific subsets of tests:
+
+- `{ProjectName}-Default.xctestplan`: Includes all tests (unit, snapshot, and view inspector tests)
+- `{ProjectName}-Unit.xctestplan`: Includes only unit tests (excludes snapshot and view inspector
+  tests)
+- `{ProjectName}-Snapshot.xctestplan`: Includes only snapshot tests
+- `{ProjectName}-ViewInspector.xctestplan`: Includes only view inspector tests
+
+The `{ProjectName}` can be one of the following:
+
+- `Bitwarden`: The main iOS app
+- `Authenticator`: The authenticator app
+- `BitwardenKit`: The shared framework
+
+These test plans enable efficient testing workflows by allowing developers to run only the relevant
+subset of tests for their changes.
+
+Additionally, a new environment variable has been added called `SKIP_SIMULATOR_CHECK_FOR_TESTS`
+which is enabled in all Unit test plans so any simulator can be chosen to run such tests instead of
+the specific one for the Snapshots to pass.

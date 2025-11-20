@@ -169,7 +169,7 @@ Some examples:
 "YouAreAllSet" = "You're all set!";
 ```
 
-## File Names
+## File names
 
 - Swift files are named per Swift convention of CamelCase of the primary class name in the file.
 - Unless there is an overriding convention—such as with a `Fastfile`—supporting files such a YAML
