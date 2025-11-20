@@ -472,8 +472,8 @@ protocol FooProtocol { // sourcery: AutoMockable
 :::info Manual generation
 
 There are some cases where the automatically generated mock does not cover the mock scenario we want
-or it cannot handle some closure types, especially in function's parameters. In such cases prefer to
-create the mock manually and remove the protocol's comment as `AutoMockable`.
+or it cannot handle some closure types, especially in function parameters. In such cases prefer to
+create the mock manually and remove the protocol's `AutoMockable` comment.
 
 :::
 
@@ -484,7 +484,7 @@ annotations have been added in `AutoMockable.stencil` to handle special cases.
 
 - **useSelectorName**: Method annotation used to indicate that the generated mocked properties need
   to use the selector name instead of the short method name. This is especially useful when using
-  function overloading where we need the mocked names to also have the parameters names to
+  function overloading where we need the mocked names to also have the parameter names to
   differentiate between the different mocked functions.
 - **mockReceivedInvocations**: Method annotation used to indicate that we want to generate the
   mocked property to store an array of the received invocations of the parameters passed each time
