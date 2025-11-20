@@ -63,31 +63,19 @@ android/
 
 The web clients use NPM to install the SDK as a dependency. NPM offers a dedicated command
 [`link`][npm-link] which can be used to temporarily replace the packages with a local version. The
-web SDK has two targets (OSS and Bitwarden License) and the linking command is different for each.
-The one to use depends on which version of the client you are building.
-
-#### OSS
+web SDK has two targets (OSS and Bitwarden License) and the following command links both of them:
 
 ```bash
-npm link ../sdk-internal/crates/bitwarden-wasm-internal/npm
+npm link ../sdk-internal/crates/bitwarden-wasm-internal/npm ../sdk-internal/crates/bitwarden-wasm-internal/bitwarden_license/npm
 ```
 
-#### Bitwarden License
-
-```bash
-npm link ../sdk-internal/crates/bitwarden-wasm-internal/bitwarden_license/npm
-```
+If you only want to link one of the versions, you can run the command with only one of the paths.
+Keep in mind that running `npm link` will restore any previously linked packages, so only the paths
+in the last run command will be linked.
 
 :::warning
 
 Running `npm ci` or `npm install` will replace the linked packages with the published version.
-
-:::
-
-:::warning
-
-`npm link` can only be used to link one package at a time. If you link the OSS version, the
-Bitwarden License version will be automatically unlinked and restored to the published version.
 
 :::
 
