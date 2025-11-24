@@ -99,7 +99,7 @@ the content-encryption-key and the encrypted blob are required.
 EncStrings have been used for this process. Instead of protecting the document as a whole, they
 protected individual fields on the document. These are no longer recommended for new use-cases.
 There are a few reasons, such as performance impact of many small decrypt operations, overhead of
-mac / IV of many small encrypted items, certain kinds of tampering attacks on the document as a
+MAC / IV of many small encrypted items, certain kinds of tampering attacks on the document as a
 whole. Further, maintainability is harder, requiring a lot more work both on the client side as well
 as the server side, if the structs are passed along in this representation.
 
@@ -159,11 +159,11 @@ Features relating to master-password based unlock should use this abstraction.
 #### MasterKey
 
 Historically, the master-key was used to protect keys with passwords. The master key is derived from
-the user's master password using PBKDF2 or Argon2id user's email address as salt and the
-synchronized account KDF parameters, producing a 256-bit key. This master key is then expanded using
-HKDF into a 512-bit stretched master key, 256-bit of which are used as an aes256-cbc key, and
-256-bit of which are used as an HMAC key. The stretched master key is used to encrypt the user's
-symmetric key.
+the user's master password using PBKDF2 or Argon2id. The user's email address as salt and the
+synchronized account KDF parameters are used as input producing a 256-bit key. This master key is
+then expanded using HKDF into a 512-bit stretched master key, 256-bit of which are used as an
+aes256-cbc key, and 256-bit of which are used as an HMAC key. The stretched master key is used to
+encrypt the user's symmetric key.
 
 New usage of MasterKey is not supported. When interacting with it, please be aware that a
 synchronization issues of the email (salt) or kdf settings will lead to a failure of decryption.
@@ -180,7 +180,7 @@ from unsynchronized state.
 :::note
 
 The master-key used for unlock is also re-used for authentication. The
-severAuthorizationMasterKeyHash is derived from the master-key using pbkdf2, with the password as a
+serverAuthorizationMasterKeyHash is derived from the master-key using pbkdf2, with the password as a
 salt and 1 iteration applied. This hash is then sent to the server for authentication.
 
 :::
