@@ -159,8 +159,8 @@ Features relating to master-password based unlock should use this abstraction.
 #### MasterKey
 
 Historically, the master-key was used to protect keys with passwords. The master key is derived from
-the user's master password using PBKDF2 or Argon2id. The user's email address is used as the salt
-and the synchronized account KDF parameters are used as input producing a 256-bit key. This master
+the user's master password using PBKDF2 or Argon2id with the user's email address is used as the
+salt and the synchronized account KDF parameters used as input, producing a 256-bit key. This master
 key is then expanded using HKDF into a 512-bit stretched master key, 256-bit of which are used as an
 aes256-cbc key, and 256-bit of which are used as an HMAC key. The stretched master key is used to
 encrypt the user's symmetric key.
