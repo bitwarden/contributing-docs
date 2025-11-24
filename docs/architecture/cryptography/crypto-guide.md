@@ -52,18 +52,18 @@ fast and has small keys. To build complex sharing mechanisms, the data should be
 symmetric key, and only the symmetric key is shared. This sharing can then be done via asymmetric
 cryptography, not described here.
 
-### Content encryption keys
+### Content-encryption-keys
 
-A content encryption key is a per-item key that encrypts a single piece of data. It is created with
+A content-encryption-key is a per-item key that encrypts a single piece of data. It is created with
 said data, and re-created (randomly sampled) when the data changes. The purpose is to decouple the
 data from any upstream keys used to protect or share it.
 
 For instance consider a large file that should be protected. If the account's symmetric key needs to
 be rotated, and supposing the account symmetric key was used to encrypt the file, then the
-re-encrypted file would have to be re-uploaded. With a content encryption key, only the re-encrypted
-content encryption key needs to be re-uploaded.
+re-encrypted file would have to be re-uploaded. With a content-encryption-key, only the re-encrypted
+content-encryption-key needs to be re-uploaded.
 
-Content encryption keys are currently used for file attachments, and for vault items ("cipher
+Content-encryption-keys are currently used for file attachments, and for vault items ("cipher
 keys").
 
 ### Key wrap
@@ -113,8 +113,8 @@ The vast majority of existing encrypted data still uses EncStrings.
 ### Protecting a file
 
 Existing attachments are protected using an EncArrayBuffer. This is just an EncString, but encoded
-slightly differently. Again, a content encryption key is usually used, but not enforced. When
-encrypting files for new purposes, a content encryption key **MUST** be used. Consider that with the
+slightly differently. Again, a content-encryption-key is usually used, but not enforced. When
+encrypting files for new purposes, a content-encryption-key **MUST** be used. Consider that with the
 current encryption scheme, the entire file must be downloaded and loaded into ram for decryption.
 
 :::note
