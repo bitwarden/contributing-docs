@@ -32,7 +32,7 @@ the following when evaluating a new dependency:
 If we only ever need a small fraction of the functionality we should consider implementing it
 ourselves.
 
-## Ranges
+## Dependency ranges
 
 For any library we always use ranges for dependencies. This allows other crates to depend on the the
 SDK without requiring the exact same versions. The Cargo lockfile ensures dependencies are
@@ -70,4 +70,4 @@ bitwarden-core = { version = "1.0", path = "../bitwarden-core" }
 bitwarden-core = { workspace = true }
 ```
 
-dep-res: https://doc.rust-lang.org/cargo/reference/resolver.html
+[dep-res]: https://doc.rust-lang.org/cargo/reference/resolver.html

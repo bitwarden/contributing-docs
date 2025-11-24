@@ -4,17 +4,387 @@ toc_max_heading_level: 4
 
 # T-SQL
 
-## Repositories
+## Overview
 
 We use the [Repository pattern][repository] with the MSSQL repositories being written using
 [Dapper][dapper]. Each repository method in turn calls a _Stored Procedure_, which primarily fetches
 data from _Views_.
 
+## Best practices
+
+1. **Consistency**: Follow established patterns throughout the codebase
+2. **Readability**: Prioritize code readability and maintainability
+3. **Performance**: Consider index usage and query optimization
+4. **Security**: Use parameterized queries and proper data type validation
+5. **Modularity**: Break complex operations into smaller, reusable procedures
+
+## File organization
+
+### Directory structure
+
+- **Schema-based organization**: Files are organized by domain/schema (Auth, Billing, Secrets
+  Manager, Vault, etc.)
+- **Object type grouping**: Within each domain, files are grouped by type:
+  - `Tables/` - Table definitions
+  - `Views/` - View definitions
+  - `Stored Procedures/` - Stored procedure definitions
+  - `Functions/` - User-defined functions
+- **Root-level objects**: Common objects are placed directly in `dbo/`:
+  - `Stored Procedures/` - General stored procedures
+  - `Tables/` - Core tables
+  - `Views/` - General views
+  - `User Defined Types/` - Custom data types
+
+### File naming conventions
+
+- **Stored Procedures**: `{EntityName}_{Action}.sql`
+  - e.g. `User_Create.sql`, `Organization_ReadById.sql`
+- **Tables**: `{EntityName}.sql`
+  - e.g. `User.sql`, `Organization.sql`
+- **Views**: `{EntityName}View.sql` or `{EntityName}{Purpose}View.sql`
+  - e.g. `UserView.sql`, `ApiKeyDetailsView.sql`
+- **Functions**: `{EntityName}{Purpose}.sql`
+  - e.g. `UserCollectionDetails.sql`
+- **User Defined Types**: `{TypeName}.sql`
+  - e.g. `GuidIdArray.sql`
+
+:::tip Versioning
+
+When a new version of an entity is introduced and needs to be maintained next to the existing one
+during deployment, use versioned names for the different scripts, so that the relationship is
+clear - e.g. a `_V2` suffix.
+
+:::
+
+## Code style
+
+### General standards
+
+These standards should be applied across any T-SQL scripts that you write.
+
+- **Indentation**: Use 4 spaces (not tabs) for all SQL code files
+- **Keywords**: Use UPPERCASE for all SQL keywords (`CREATE`, `SELECT`, `FROM`, `WHERE`, `GROUP BY`,
+  `ORDER BY`, `JOIN`, `ON`, `INTO`, `TOP`, etc.)
+- **Object names**: Always use square brackets `[dbo].[TableName]`
+- **Schema**: Use `[dbo]` prefix for all objects
+- **Line endings**: Use consistent line breaks with proper indentation
+- **Vertical lists**: Vertically list items as much as feasibly possible, and use consistent
+  indentation to make vertical listing quick and easy. A vertical list is much easier to compare and
+  makes code changes easily detectable
+- **Blank lines**: Separate sections of code with at least one blank line
+- **Commas**: Commas should be placed at the right end of the line
+- **Parentheses**: Parentheses should be vertically aligned with spanning multiple lines
+
+### `SELECT` statements
+
+- `SELECT` keyword on its own line
+- Column names indented (4 spaces)
+- One column per line for multi-column selects
+- Call out the specific table/alias for where a column is from when joining to other tables
+- `FROM` keyword on separate line, aligned with `SELECT`
+- `FROM` clause indented (4 spaces)
+  - Use aliases for table names when joining to other tables
+- `JOIN` keywords on separate line, aligned with `FROM`
+  - Use full join specifications (`INNER JOIN` vs `JOIN`, `LEFT OUTER JOIN` vs `LEFT JOIN`, etc)
+- `JOIN` clauses indented to align with table/column name(s)
+- `WHERE` keyword on separate line, aligned with `FROM`/`JOIN`
+- `WHERE` clause on separate lines, indented to align with table/column name(s)
+
+```sql
+SELECT
+    U.[Id],
+    U.[Name],
+    U.[Email],
+    OU.[OrganizationId]
+FROM
+    [dbo].[User] U
+INNER JOIN
+    [dbo].[OrganizationUser] OU ON U.[Id] = OU.[UserId]
+WHERE
+    U.[Enabled] = 1
+```
+
+### Stored procedures
+
+- **Stored Procedure Name**: `{EntityName}_{Action}` format (e.g., `[dbo].[User_ReadById]`)
+  - EntityName: The main table or concept (e.g. User, Organization, Cipher)
+  - Action: What the procedure does (e.g. Create, ReadById, DeleteMany)
+- **Parameters**: Start with `@` and use PascalCase (e.g., `@UserId`, `@OrganizationId`)
+- **OUTPUT parameters**: Explicitly declare with `OUTPUT` keyword
+
+:::tip Example of common CRUD operations
+
+- **Create**: `{EntityName}_Create` procedures
+- **Read**: `{EntityName}_ReadById`, `{EntityName}_ReadBy{Criteria}` procedures
+- **Read Many**: `{EntityName}_ReadManyByIds`, `{EntityName}_ReadManyBy{Criteria}` procedures
+- **Update**: `{EntityName}_Update` procedures
+- **Delete**: `{EntityName}_DeleteById`, `{EntityName}_Delete` procedures
+
+:::
+
+#### Basic structure
+
+```sql
+CREATE PROCEDURE [dbo].[EntityName_Action]
+    @Parameter1 DATATYPE,
+    @Parameter2 DATATYPE = NULL,
+    @Parameter3 DATATYPE OUTPUT
+AS
+BEGIN
+    SET NOCOUNT ON
+
+    -- Procedure logic here
+
+END
+```
+
+#### Parameter declaration
+
+- One parameter per line
+- Align parameters with consistent indentation (4 spaces)
+- Default values on same line as parameter
+- `OUTPUT` parameters clearly marked
+
+:::warning Default parameter values
+
+When adding parameters to an existing stored procedure, a default value must be specified to ensure
+backward compatibility and ensure existing code can be called without modification.
+
+:::
+
+Use `SET NOCOUNT ON` to prevent the automatic return of row count messages, which improves
+performance and ensures consistent behavior across different client applications that might handle
+these messages differently.
+
+#### `INSERT` statements
+
+- Column list in parentheses, one column per line
+- `VALUES` clause with parameters aligned
+- Proper indentation for readability
+
+```sql
+INSERT INTO [dbo].[TableName]
+(   [Column1],
+    [Column2],
+    [Column3]
+)
+VALUES
+(   @Parameter1,
+    @Parameter2,
+    @Parameter3
+)
+```
+
+#### `UPDATE` statements
+
+- `UPDATE` and table name on different lines
+- `SET` clause with each column assignment on separate line
+- `WHERE` clause clearly separated
+
+```sql
+UPDATE
+    [dbo].[TableName]
+SET
+    [Column1] = @Parameter1,
+    [Column2] = @Parameter2,
+    [Column3] = @Parameter3
+WHERE
+    [Id] = @Id
+```
+
+### Tables
+
+- **Table Name**: PascalCase (e.g., [dbo].[User], [dbo].[AuthRequest])
+- **Column Names**: PascalCase (e.g., [Id], [CreationDate], [MasterPasswordHash])
+- **Primary Key**: `PK_{TableName}` (e.g., [PK_User], [PK_Organization])
+- **Foreign Keys**: `FK_{TableName}_{ReferencedTable}` (e.g., FK_Device_User)
+- **Default Constraints**: `DF_{TableName}_{ColumnName}` (e.g., [DF_Organization_UseScim])
+
+#### Column definitions
+
+- **Alignment**: Column names, data types, and nullability vertically aligned using spaces
+- **Data Types**: Use consistent type patterns:
+  - `UNIQUEIDENTIFIER` for IDs
+  - `DATETIME2(7)` for timestamps
+  - `NVARCHAR(n)` for Unicode text
+  - `VARCHAR(n)` for ASCII text
+  - `BIT` for boolean values
+  - `TINYINT`, `SMALLINT`, `INT`, `BIGINT` for integers
+- **Nullability**: Explicitly specify `NOT NULL` or `NULL`
+- **Standard Columns**: Most tables include:
+  - `[Id] UNIQUEIDENTIFIER NOT NULL` - Primary key
+  - `[CreationDate] DATETIME2(7) NOT NULL` - Record creation timestamp
+  - `[RevisionDate] DATETIME2(7) NOT NULL` - Last modification timestamp
+
+```sql
+CREATE TABLE [dbo].[TableName]
+(
+    [Column1] INT IDENTITY(1,1) NOT NULL,
+    [Column2] NVARCHAR(100) NOT NULL,
+    [Column3] NVARCHAR(255) NULL,
+    [Column4] BIT NOT NULL CONSTRAINT [DF_TableName_Column4] DEFAULT (1),
+
+    CONSTRAINT [PK_TableName] PRIMARY KEY CLUSTERED ([Column1] ASC)
+);
+```
+
+### Views
+
+- **View Name**:
+  - `{EntityName}View`
+    - Used when the view maps closely to a single table, with little or no joins. (e.g.,
+      `[dbo].[ApiKeyView]` from `ApiKey`)
+  - `{EntityName}DetailsView` for complex views
+    - Used for views that combine multiple tables or add logic beyond a basic table select. These
+      usually serve a specific display or reporting use case and are named to reflect the context
+      (e.g., `[dbo].[OrganizationUserDetailsView]`)
+  - For views that combine entities, create a view with a clear name tied to the main entity (e.g.,
+    `[dbo].[OrganizationUser_MemberAccessDetailsView]`) and a stored procedure that reads from it
+    (e.g., `[dbo].[MemberAccessDetails_ReadByUserId]`).
+
+#### Simple views
+
+```sql
+CREATE VIEW [dbo].[ViewName]
+AS
+SELECT
+    *
+FROM
+    [dbo].[TableName]
+```
+
+#### Complex views
+
+```sql
+CREATE VIEW [dbo].[ComplexViewName]
+AS
+SELECT
+    T1.[Column1],
+    T1.[Column2],
+    T2.[Column3],
+    CASE
+        WHEN T2.[Column4] IS NOT NULL
+        THEN 1
+        ELSE 0
+    END AS ColumnAlias
+FROM
+    [dbo].[Table1] T1
+LEFT JOIN
+    [dbo].[Table2] T2 ON T1.[Id] = T2.[ForeignId]
+WHERE
+    T1.[Enabled] = 1
+```
+
+### Functions
+
+- **Function Name**: `[Schema].[FunctionName]` (e.g., `[dbo].[UserCollectionDetails]`)
+  - The name should describe what the function returns
+
+```sql
+CREATE FUNCTION [dbo].[FunctionName](@Parameter DATATYPE)
+RETURNS TABLE
+AS RETURN
+SELECT
+    Column1,
+    Column2,
+    CASE
+        WHEN Condition
+        THEN Value1
+        ELSE Value2
+    END [ComputedColumn]
+FROM
+    [dbo].[TableName]
+WHERE
+    [FilterColumn] = @Parameter
+```
+
+### User defined types
+
+- **User Defined Type Name**: `[Schema].[TypeName]` (e.g., `[dbo].[GuidIdArray]`)
+  - The name should describe the type
+
+```sql
+CREATE TYPE [dbo].[TypeName] AS TABLE
+(   [Column1] DATATYPE NOT NULL,
+    [Column2] DATATYPE NOT NULL
+);
+```
+
+### Indexes
+
+- **Index Name**: `IX_{TableName}_{ColumnName(s)}` (e.g., `[IX_User_Email]`)
+  - The name should clearly indicate the table and the columns being indexed
+
+```sql
+CREATE NONCLUSTERED INDEX [IX_OrganizationUser_UserIdOrganizationIdStatus]
+   ON [dbo].[OrganizationUser]([UserId] ASC, [OrganizationId] ASC, [Status] ASC)
+   INCLUDE ([AccessAll])
+```
+
+## Error handling
+
+- Use `SET NOCOUNT ON` in stored procedures
+- Implement appropriate transaction handling where needed
+- Follow consistent error reporting patterns
+  - Business logic should not be in stored procedures, but there may be times when it makes sense to
+    do error handling in other scripts (migrations, one-off data scrubs)
+
+```sql
+BEGIN TRY
+    BEGIN TRANSACTION;
+
+    UPDATE
+        [dbo].[TableName]
+    SET
+        [Column1] = 'NewValue'
+    WHERE
+        [Id] = 'IdValue'
+
+
+    UPDATE
+        [dbo].[TableName2]
+    SET
+        [Column1] = 'NewValue'
+    WHERE
+        [Id] = 'IdValue'
+
+    COMMIT TRANSACTION;
+
+END TRY
+BEGIN CATCH
+
+    IF @@TRANCOUNT > 0
+        ROLLBACK TRANSACTION;
+
+    THROW;
+
+END CATCH;
+```
+
+## Comments and documentation
+
+- Use `--` for single-line comments
+- Add comments for complex business logic and the reason for a command or block of code
+- Document magic numbers and status codes (e.g., `-- 2 = Confirmed`)
+- Provide brief explanations for complex CASE statements or calculations
+- Don't comment unnecessarily, such as commenting that an insert statement is about to be executed
+
 ## Deployment scripts
 
-There are specific ways deployment scripts should be structured. The goal for these standards is to
-ensure that the scripts should be re-runnable. We never intend to run scripts multiple times on an
-environment, but the scripts should support it.
+There are specific ways migration scripts should be structured. We do so to adhere to the following
+guiding principles:
+
+- **It must be idempotent**: Always ensure a migration can be run multiple times without causing
+  errors or duplicating data.
+
+- **It must avoid breaking changes**: Migrations should never delete or rename columns that are
+  still in use by deployed code.
+
+- **It must maintain schema integrity**: The schema of the database defined in code should map
+  exactly to the schema of the database in all deployed environments.
+
+- **It must be backwards compatible**: Code should be able to work with both the old and new schema
+  during a rolling deployment.
 
 ### Tables
 
@@ -25,10 +395,14 @@ When creating a table, you must first check if the table exists:
 ```sql
 IF OBJECT_ID('[dbo].[{table_name}]') IS NULL
 BEGIN
-    CREATE TABLE [dbo].[{table_name}] (
-        [Id]                UNIQUEIDENTIFIER NOT NULL,
-        ...
-        CONSTRAINT [PK_{table_name}] PRIMARY KEY CLUSTERED ([Id] ASC)
+    CREATE TABLE [dbo].[{table_name}]
+    (   [Id]                UNIQUEIDENTIFIER NOT NULL,
+        [Column1]           DATATYPE         NOT NULL,
+        [Column2]           DATATYPE         NULL,
+        [CreationDate]      DATETIME2(7)     NOT NULL,
+        [RevisionDate]      DATETIME2(7)     NOT NULL,
+        CONSTRAINT [PK_{table_name}] PRIMARY KEY CLUSTERED ([Id] ASC),
+        CONSTRAINT [FK_{table_name}_{referenced_table}] FOREIGN KEY ([ForeignKeyColumn]) REFERENCES [dbo].[ReferencedTable] ([Id])
     );
 END
 GO
@@ -88,10 +462,8 @@ WHERE
     [Column] IS NULL
 GO
 
-ALTER TABLE
-    [dbo].[Column]
-ALTER COLUMN
-    [Column] INT NOT NULL
+ALTER TABLE [dbo].[Table]
+    ALTER COLUMN [Column] INT NOT NULL
 GO
 ```
 
@@ -100,13 +472,19 @@ This is better:
 ```sql
 IF COL_LENGTH('[dbo].[Table]', 'Column' IS NULL
 BEGIN
-    ALTER TABLE
-        [dbo].[Column]
-    ADD
-        [Column] INT NOT NULL CONSTRAINT D_Table_Column DEFAULT 0
+    ALTER TABLE [dbo].[Table]
+        ADD [Column] INT NOT NULL CONSTRAINT DF_Table_Column DEFAULT 0
 END
 GO
 ```
+
+:::warning Do not use defaults for string columns
+
+Default values should only be used for integral types (`BIT`, `TINYINT`, `SMALLINT`, `INT`,
+`BIGINT`). Do not provide default values for string columns (`VARCHAR`, `NVARCHAR`, or their `MAX`
+variants), as this can lead to unnecessary storage overhead and performance issues.
+
+:::
 
 #### Changing a column data type
 
@@ -199,13 +577,15 @@ DROP IF EXISTS [dbo].[{sproc_or_func_name}]
 GO
 ```
 
-### Creating or modifying an index
+### Indexes
 
 When creating indexes, especially on heavily used tables, our production database can easily become
-offline, unusable, hit 100% CPU and many other bad behaviors. It is often best to do this using
-online index builds so as not to lock the underlying table. This may cause the index operation to
-take longer, but you will not create an underlying schema table lock which prevents all reads and
-connections to the table and instead only locks the table of updates during the operation.
+offline, unusable, hit 100% CPU and many other bad behaviors. Our production database is configured
+to do online index builds by default, (so as not to lock the underlying table), so you should
+**_not_** specify `ONLINE = ON`, as this may cause failures on some SQL Server editions that do not
+support online index rebuilds. Online index creation may cause the index operation to take longer,
+but it will not create an underlying schema table lock which prevents all reads and connections to
+the table and instead only locks the table of updates during the operation.
 
 A good example is when creating an index on `dbo.Cipher` or `dbo.OrganizationUser`, those are
 heavy-read tables and the locks can cause exceptionally high CPU, wait times and worker exhaustion
@@ -215,8 +595,13 @@ in Azure SQL.
 CREATE NONCLUSTERED INDEX [IX_OrganizationUser_UserIdOrganizationIdStatus]
    ON [dbo].[OrganizationUser]([UserId] ASC, [OrganizationId] ASC, [Status] ASC)
    INCLUDE ([AccessAll])
-   WITH (ONLINE = ON); -- ** THIS ENSURES ONLINE **
 ```
+
+#### Index best practices
+
+- Create indexes after table definition with `GO` separator
+- Include `INCLUDE` clause when beneficial for covering indexes
+- Use filtered indexes with `WHERE` clause when appropriate
 
 [repository]:
   https://docs.microsoft.com/en-us/dotnet/architecture/microservices/microservice-ddd-cqrs-patterns/infrastructure-persistence-layer-design

@@ -1,10 +1,5 @@
 # Tailwind
 
-We are currently in the middle of migrating our web based clients over to
-[Tailwind](https://tailwindcss.com/). Currently on the
-[web vault](../../getting-started/clients/web-vault/index.mdx) project is affected but the long term
-plan is to migrate desktop and browser as well.
-
 Before starting working with Tailwind we recommend that you get familiar with
 [Utility-First Fundamentals](https://tailwindcss.com/docs/utility-first). The blog article
 [_CSS Utility Classes and "Separation of Concerns"_](https://adamwathan.me/css-utility-classes-and-separation-of-concerns/)

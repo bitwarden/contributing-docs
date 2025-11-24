@@ -11,7 +11,6 @@ below.
 
 1.  Install Firefox Developer Edition
 2.  Configure Firefox Developer Edition:
-
     1.  Open Firefox Developer Edition
     2.  Navigate to `about:config`
     3.  Set the `xpinstall.signatures.required` setting to `false` (add the setting if it’s not in

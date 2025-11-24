@@ -9,7 +9,7 @@ tags: [server]
 
 <AdrTable frontMatter={frontMatter}></AdrTable>
 
-## Context and Problem Statement
+## Context and problem statement
 
 Authorization logic decides whether a user is permitted to carry out an action. Our current
 authorization logic is dispersed throughout different layers of our server codebase and follows
@@ -67,7 +67,7 @@ A solution to this problem should:
 - Be reusable between endpoints that access the same resource.
 - Support a range of authorization logic (e.g. based on role, resource, relationships, etc.).
 
-## Considered Options
+## Considered options
 
 ### ASP.NET Core resource-based authorization
 
@@ -142,17 +142,17 @@ users' roles and relationships in Bitwarden.
 We could develop our own custom solution from scratch, however we have not identified any clear
 advantage over choosing an existing solution above.
 
-## Decision Outcome
+## Decision outcome
 
 Chosen option: **ASP.NET Core resource-based authorization**.
 
-### Positive Consequences
+### Positive consequences
 
 - Lowest cost/effort implementation.
 - Fits team structure.
 - Existing code can be refactored incrementally.
 
-### Negative Consequences
+### Negative consequences
 
 - Some duplication of read logic between discrete reads and bulk reads.
 

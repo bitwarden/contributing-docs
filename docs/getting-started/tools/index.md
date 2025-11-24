@@ -4,7 +4,7 @@ sidebar_position: 1
 
 # Tools
 
-## Operating System
+## Operating system
 
 All Bitwarden developers are issued with a MacBook. The tooling recommendations and instructions in
 this documentation assume that you’re using macOS. This may require some adaptation if you’re using
@@ -37,12 +37,13 @@ environment.
   development environments
 - [PowerShell](https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell-core-on-macos)
   (available via Homebrew: `brew install powershell`)
-- [NodeJS](https://nodejs.org/) v20 (preferably using a [node version manager][nvm])
+- [NodeJS](https://nodejs.org/) v22 (preferably using a [node version manager][nvm])
 - [NPM](https://www.npmjs.com/) v10 (included with Node)
 - [Rust](https://www.rust-lang.org/tools/install) latest stable version - (preferably installed via
   [rustup](https://rustup.rs/))
 - [Git](https://git-scm.com)
   - [Commit signing](../../contributing/commit-signing.mdx) is strongly recommended
+- [AI tools](../../contributing/ai.md)
 
 ### Mobile
 

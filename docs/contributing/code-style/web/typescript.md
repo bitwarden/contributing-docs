@@ -1,16 +1,70 @@
-# Avoid TypeScript Enums
+# TypeScript
+
+We use [Prettier](https://prettier.io/) and [ESLint](https://eslint.org/) to automatically format
+and lint the code base. `npm ci` will automatically install pre-commit hooks to run Prettier and
+ESLint on your changes each time you create a commit.
+
+Alternatively, you can run them manually:
+
+```bash
+npm run prettier
+npm run lint:fix
+```
+
+## Naming
+
+- For `boolean` variables, use base word, do **not** include prefixes such as `is`, `has`, etc.
+  unless meaning cannot be conveyed without it, such as to avoid confusion with another property.
+
+## Import statements
+
+We have a couple of guidelines for import statements, which are enforced using the eslint rules
+[`no-restricted-imports`](https://eslint.org/docs/latest/rules/no-restricted-imports),
+[`import/order`](https://github.com/import-js/eslint-plugin-import/blob/main/docs/rules/order.md),
+and
+[`import/no-restricted-paths`](https://github.com/import-js/eslint-plugin-import/blob/main/docs/rules/no-restricted-paths.md).
+
+These rules aim to:
+
+- Prevent relative imports across package boundaries.
+- Restrict packages from importing application specific code.
+- Enforce a convention for the order of import statements.
+
+### Imports within the same package
+
+Use relative imports when importing within the same package. For example, `MyNewService` and
+`LogService` are both in the `@bitwarden/common` package.
+
+```typescript
+import { LogService } from "../../abstractions/log.service";
+
+export class MyNewService {}
+```
+
+### Imports from different packages
+
+For imports from different packages, use absolute imports. For example `DifferentPackageService` is
+not in `@bitwarden/common` and needs to import `LogService` from `@bitwarden/common`.
+
+```typescript
+import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
+
+export class DifferentPackageService {}
+```
+
+## Avoid TypeScript enums
 
 TypeScript enums are not fully type-safe and can [cause surprises][enum-surprises]. Your code should
 use [constant objects][constant-object-pattern] instead of introducing a new enum.
 
-## Our Recommended Approach ([ADR-0025](../../architecture/adr/0025-ts-deprecate-enums.md))
+### Our recommended approach ([ADR-0025](../../../architecture/adr/0025-ts-deprecate-enums.md))
 
 - Use the same name for your type- and value-declaration.
 - Use `type` to derive type information from the const object.
 - Avoid asserting the type of an enum-like. Use explicit types instead.
 - Create utilities to convert and identify enums modelled as primitives.
 
-### Numeric enum-likes
+#### Numeric enum-likes
 
 Given the following enum:
 
@@ -79,7 +133,7 @@ let value = CipherType.Login as CipherType; // this operation is unsafe
 
 :::
 
-### String enum-likes
+#### String enum-likes
 
 The above pattern also works with string-typed enum members:
 
@@ -113,7 +167,7 @@ object is in scope, prefer it to the literal value.
 
 :::
 
-## Utilities
+### Utilities
 
 The following utilities can be used to maintain type safety at runtime.
 
