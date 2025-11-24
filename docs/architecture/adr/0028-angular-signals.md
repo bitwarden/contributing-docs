@@ -1,11 +1,11 @@
 ---
 adr: "0028"
 status: "Accepted"
-date: 2025-07-21
+date: 2025-11-24
 tags: [clients, angular]
 ---
 
-# 0027 - Adopt Angular Signals for Component State
+# 0028 - Adopt Angular Signals for Component State
 
 <AdrTable frontMatter={frontMatter}></AdrTable>
 
@@ -25,7 +25,7 @@ SDK).
 
 ## Outcome
 
-Signal-based APIs (inputs, outputs, child queries) will be required via linting:
+Signal-based APIs (inputs, outputs, child queries) will be required in components via linting:
 
 - `@Input()` → `input()`,
 - `@Output()` → `output()`
@@ -39,3 +39,7 @@ Signal-based APIs (inputs, outputs, child queries) will be required via linting:
   - Having multiple ways to do the same thing leads to analysis paralysis and complicated code.
   - Signals + OnPush change detection provide a clear path to removing Zone.js. With that comes
     notable performance and debugging improvements.
+
+## Further reading
+
+- [Angular docs](https://angular.dev/guide/signals)
