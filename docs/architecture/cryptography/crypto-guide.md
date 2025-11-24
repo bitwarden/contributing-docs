@@ -165,7 +165,7 @@ then expanded using HKDF into a 512-bit stretched master key, 256-bit of which a
 aes256-cbc key, and 256-bit of which are used as an HMAC key. The stretched master key is used to
 encrypt the user's symmetric key.
 
-New usage of MasterKey is not supported. When interacting with it, please be aware that a
+New usage of MasterKey is not supported. When interacting with it, please be aware that
 synchronization issues of the email (salt) or kdf settings will lead to a failure of decryption.
 
 ### Authenticating with a password
