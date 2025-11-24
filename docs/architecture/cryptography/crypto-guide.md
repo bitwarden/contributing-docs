@@ -91,8 +91,8 @@ This handles encryption versioning, and hides exact sizes of the encrypted conte
 [example](https://github.com/bitwarden/sdk-internal/blob/c60a5d794732d2c0fc203feb21ce5851d5325fe1/crates/bitwarden-crypto/examples/seal_struct.rs)
 can be used as a reference. Using the data envelope API, an encrypted blob is obtained and,
 depending on which public function is chosen, a key or a wrapped key. This key is a
-content-encryption-key, which can be protected using other mechanisms noted down below. To unseal,
-the content-encryption-key and the encrypted blob are required.
+content-encryption-key, which can be protected using other mechanisms noted below. To unseal, the
+content-encryption-key and the encrypted blob are required.
 
 :::note
 
