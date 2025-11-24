@@ -79,6 +79,13 @@ latest security best practices </strong> (see the
    [Store your passphrase in your OS keychain](#store-your-passphrase-in-your-os-keychain) below to
    avoid being prompted for your SSH key passphrase every time you sign a commit.
 
+### Use Bitwarden SSH agent
+
+Import your SSH key into Bitwarden desktop. Then, follow our
+[guide](https://bitwarden.com/help/ssh-agent/#configure-git-for-ssh-signing) on configuring the
+desktop app for SSH authentication and Git commit signing. This ensures your SSH keys are available
+while your vault is unlocked.
+
 ### Store your passphrase in your OS keychain
 
 #### macOS

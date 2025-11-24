@@ -172,7 +172,7 @@ synchronization issues of the email (salt) or kdf settings will lead to a failur
 
 Use
 [MasterPasswordAuthenticationData](https://github.com/bitwarden/sdk-internal/blob/c60a5d794732d2c0fc203feb21ce5851d5325fe1/crates/bitwarden-core/src/key_management/master_password.rs#L122).
-It encapsulates the data needed to unlock a vault using a master password. It contains the
+It encapsulates the data needed to authenticate using a master password. It contains the
 serverAuthorizationMasterKeyHash, the KDF settings and salt used. The cryptography is the same as
 for MasterKey based authentication, but the abstraction prevents authentication issues resulting
 from unsynchronized state.
