@@ -22,7 +22,7 @@ each teams ownership. These are not yet complete, and if a particular use-case i
 them, teams should reach out to the key-management team! The goal of these is to have most teams
 never have to think about cryptography, or having to do safety analysis, or to own any cryptographic
 construct or protocol. These high-level primitives abstract away all complex details and give teams
-a low-complexity, easy to use and hard to mis-use interface to work with.
+a low-complexity, easy to use and hard to misuse interface to work with.
 
 Primarily, this is aimed for consumption for end-to-end encrypted storage of long-term data, in
 products such as the password manager or secrets manager.
