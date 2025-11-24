@@ -14,22 +14,44 @@ tags: [clients, angular]
 Angular has adopted a new reactive primitive, signals. Signals have various improvements over RxJS:
 performance, simplicity, and deeper integrations into the rest of the framework.
 
-RxJS will become an optional dependency of Angular instead of a required. Certain asynchronous
-workflows will still benefit from RxJS--signals are synchronous. Furthermore, being a part of the
-core Angular library, Angular signals cannot readily be used in non-Angular environments.
+RxJS will become an optional dependency of Angular. Certain asynchronous workflows will still
+benefit from RxJS--signals are synchronous. Furthermore, being a part of the core Angular library,
+Angular signals cannot readily be used in non-Angular environments.
 
 As such, Signals should be the default when operating _in the view layer_: components, directives,
 pipes, and services that are tightly coupled to the UI/Angular. Services that primarily deal with
 business logic should prefer RxJS to maximize portability (or, even better, be moved to the Rust
 SDK).
 
-## Outcome
+## Decision
 
-Signal-based APIs (inputs, outputs, child queries) will be required in components via linting:
+Signal-based APIs (inputs, outputs, child queries) will be required in components and directives via
+linting:
 
-- `@Input()` → `input()`,
+- `@Input()` → `input()`
 - `@Output()` → `output()`
 - `@ViewChild`/`@ContentChild` → `viewChild()`/`contentChild()`
+
+Services tightly coupled to Angular should use signals. Services with business logic should prefer
+RxJS for portability. Use `toSignal()` and `toObservable()` to bridge between the two when needed.
+
+Existing code will be migrated gradually. New code must use signal-based APIs.
+
+## Consequences
+
+**Positive:**
+
+- Improved performance and simpler change detection
+- Clear path to removing Zone.js dependency
+- Better debugging experience
+- Aligned with Angular's direction
+- Simpler than RxJS for many common use cases
+
+**Negative:**
+
+- Temporary complexity during migration with mixed RxJS/Signals patterns
+- Learning curve for team members unfamiliar with signals
+- Migration effort required for existing codebase
 
 ## Reasons against other options
 
