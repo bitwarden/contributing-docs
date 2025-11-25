@@ -9,7 +9,7 @@ tags: [clients, angular, forms]
 
 <AdrTable frontMatter={frontMatter}></AdrTable>
 
-## Context and Problem Statement
+## Context and problem statement
 
 Most of the forms in our Angular applications use the template driven forms. Lately we have been
 noticing issues scaling and maintaining these forms. And have begun mixing the use of
@@ -18,7 +18,7 @@ template-driven with reactive forms.
 Maintaining two ways of handling forms are complex and moving full into a single approach will
 ensure a more consistent experience for developers and users.
 
-## Considered Options
+## Considered options
 
 - **Reactive forms** - Provide direct, explicit access to the underlying forms object model.
   Compared to template-driven forms, they are more robust: they're more scalable, reusable, and
@@ -32,15 +32,15 @@ ensure a more consistent experience for developers and users.
 
 Source: https://angular.io/guide/forms-overview#choosing-an-approach
 
-## Decision Outcome
+## Decision outcome
 
 Chosen option: **Reactive forms**, because our needs exceed what template-driven forms are
 recommended for.
 
-### Positive Consequences
+### Positive consequences
 
 - You never need to think which form method to use.
 
-### Negative Consequences
+### Negative consequences
 
 - Using only reactive form means we might have some additional boilerplate.

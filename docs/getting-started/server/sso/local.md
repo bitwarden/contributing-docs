@@ -8,14 +8,16 @@ This uses
 ## Prerequisites
 
 1.  Bitwarden server set up and configured with the following server projects running:
-
     - Identity
     - API
     - SSO (located at `server/bitwarden_license/src/Sso`)
 
 2.  Local web client running.
 
-## Configure IdP
+3.  An enterprise account created with the testing credit card located here:
+    [Advanced Server Setup](../advanced-setup.md).
+
+## Configure the IdP
 
 1.  Open your local web client and navigate to your organization → Settings → Single Sign-On.
 
@@ -81,7 +83,7 @@ This uses
 9.  Start the docker container:
 
     ```bash
-    docker-compose --profile idp up -d
+    docker compose --profile idp up -d
     ```
 
 10. You can test your user configuration by navigating to
@@ -93,7 +95,6 @@ This uses
 
 1.  Go back to your window with the SSO configuration page open.
 2.  Complete the following values in the SAML Identity Provider Configuration section:
-
     1.  Entity ID:
         ```
         http://localhost:8090/simplesaml/saml2/idp/metadata.php
@@ -127,7 +128,7 @@ and click Logout. Alternatively, you can use a private browsing session.
 To change the Entity ID or ACS URL, edit the `.env` file and then restart the Docker container:
 
 ```bash
-docker-compose --profile idp up -d
+docker compose --profile idp up -d
 ```
 
 ## Troubleshooting
@@ -135,3 +136,12 @@ docker-compose --profile idp up -d
 ### Bitwarden server throws “unknown userId” error
 
 You’re missing the `uid` claim for the user in `authsources.php`.
+
+### IdP displays a "Metadata not found" error
+
+Your Entity ID and/or ACS URL in `.env` are incorrect. Make sure they match the values shown in the
+SSO configuration page of the Admin Console. If you change the values in `.env`, run the
+`docker compose` command above to restart the container with the updated variables.
+
+Note that the URL shown on the error page is not sourced from your `.env` file, so do not be
+confused if the URL on the error page is correct.

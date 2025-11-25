@@ -4,7 +4,7 @@ For non-mobile clients, push notifications are handled with
 [SignalR](https://learn.microsoft.com/en-us/aspnet/core/signalr/introduction), Microsoft's library
 for real-time client communication over WebSockets.
 
-## Server Implementations
+## Server implementations
 
 When real-time changes must be communicated to the registered non-mobile clients, it is the
 responsibility of the Bitwarden API for their configured server instance to distribute the
@@ -81,7 +81,7 @@ resources like Azure Queues. The overall flow is still the same as the cloud-hos
 with the exception that instead of buffering the notifications using a Azure Queue, the self-hosted
 Bitwarden API submits the notifications directly to the self-hosted Notifications API.
 
-## Client Registration
+## Client registration
 
 When a non-mobile client starts and the user is authenticated, it initiates a WebSocket connection
 to the Notification service (`/notifications/hub`) for their configured server instance. This

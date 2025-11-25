@@ -9,7 +9,7 @@ sidebar_position: 2
 Once you have your server up and running, there may be some additional configuration required to
 activate all of Bitwarden's features.
 
-## Premium Features
+## Premium features
 
 The user secrets file includes a test Stripe key, which will allow you to "buy" premium features
 without actually being charged.
@@ -46,8 +46,11 @@ subscription.
 
 ## Emails
 
-Docker compose will spin up a local smtp server that can be used, but it’s also possible to use
-other services such as Mailtrap, or Amazon to debug the amazon integration.
+Docker compose will spin up a local smtp server, Mailcatcher, that can be used. See the
+[Setup Guide](./guide.md#mailcatcher) for more information about Mailcatcher.
+
+It’s also possible to use other services such as Mailtrap, or Amazon to debug the amazon
+integration.
 
 - Amazon Simple Email Service - the user secrets vault item includes a separate attachment called
   `additional-keys-for-cloud-services.json`. Add the `amazon` key to your user secrets to use
@@ -55,12 +58,11 @@ other services such as Mailtrap, or Amazon to debug the amazon integration.
 - [bytemark/docker-smtp](https://github.com/BytemarkHosting/docker-smtp) - a local SMTP server
   running on Docker.
 
-## File Uploads (File Sends and Attachments)
+## File uploads (File Sends and Attachments)
 
 File uploads are stored using one of two methods.
 
 - Azure Storage is used by our production cloud instance.
-
   - Docker will create a local [Azurite](https://github.com/Azure/Azurite) instance which emulates
     the Azure Storage API. And is used for the primary testing.
   - We also have a test Azure Storage account for development use. The user secrets for this are
@@ -82,12 +84,12 @@ File uploads are stored using one of two methods.
   }
   ```
 
-  :::note
+:::note
 
-  To properly test uploading and downloading files using direct upload, you need to set up a local
-  file server. Please add instructions here if you do this :)
+To properly test uploading and downloading files using direct upload, you need to set up a local
+file server.
 
-  :::
+:::
 
 ## PayPal
 
@@ -135,7 +137,7 @@ The steps for setting up your local server for YubiKey validation are:
       dotnet user-secrets set globalSettings:yubico:clientid [ClientId]
    ```
 
-## Reverse Proxy Setup
+## Reverse proxy setup
 
 Running a reverse proxy can be used to simulate running multiple server services in a distributed
 manner. The [Docker Compose](https://docs.docker.com/compose/) configuration in the `/dev` folder
@@ -166,7 +168,6 @@ services).
 
 5. Spin up the required services locally, using a unique port for each running instance. **The ports
    must match the ports in the `reverse-proxy.conf` in the `upstream` configuration blocks.**
-
    - **Command line** _(in separate terminals)_
      ```bash
      # 1st instance
@@ -192,6 +193,34 @@ services).
    - **Api** - `http://localhost:4100`
    - **Identity** - `http://localhost:33756`
 
-> If you need to add additional services (besides Api and Identity), add them to the
-> `dev/reverse-proxy.conf` and make sure the necessary ports are exposed in the
-> `dev/docker-compose.yml` file for the `reverse-proxy` container.
+If you need to add additional services (besides Api and Identity), add them to the
+`dev/reverse-proxy.conf` and make sure the necessary ports are exposed in the
+`dev/docker-compose.yml` file for the `reverse-proxy` container.
+
+## NuGet with GitHub Packages
+
+Server-side projects and solutions may use
+[Bitwarden-shared .NET extension libraries](https://github.com/orgs/bitwarden/packages?repo_name=dotnet-extensions)
+and _prerelease_ packages offered via
+[GitHub Packages](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-nuget-registry)
+require authentication for access.
+
+First, [generate](https://github.com/settings/tokens/new) a GitHub personal access token (classic)
+with the `packages:read` scope only. You can set an expiration date but it may be easier to leave it
+without one considering the scope. Copy the token value and run:
+
+```bash
+IFS= read -rs GITHUB_PAT < /dev/tty
+```
+
+along with pasting the value and pressing Enter. Next, run:
+
+```bash
+dotnet nuget add source --username bitwarden --password $GITHUB_PAT --store-password-in-clear-text --name github --configfile ~/.nuget/NuGet/NuGet.Config "https://nuget.pkg.github.com/bitwarden/index.json"
+```
+
+that will set up the necessary global source and credentials. Any NuGet restores will now also
+utilize our GitHub Packages setup for NuGet.
+
+Full releases of shared libraries will go to our
+[NuGet.org presence](https://www.nuget.org/profiles/Bitwarden).

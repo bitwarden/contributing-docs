@@ -20,6 +20,66 @@ highlights:
 - Environments (production, QA, and development for now) exist to segment flag states further. This
   will be automatic based on where code is running.
 
+## When to use flags
+
+Feature flags are a [powerful tool](https://launchdarkly.com/blog/what-are-feature-flags/) for
+controlling the rollout and lifecycle of changes and should in general **always** be used for new
+work. There are several scenarios where you should consider using them:
+
+### Progressive rollouts
+
+Use feature flags when you need to gradually release a feature to users. This allows you to:
+
+- Start with a small percentage of users to validate stability
+- Monitor performance and user feedback before full deployment
+- Quickly disable the feature if issues arise without requiring a code rollback
+
+### A / B testing and experimentation
+
+Feature flags enable controlled experiments by:
+
+- Serving different variations of a feature to different user segments
+- Collecting metrics to determine which variation performs better
+- Making data-driven decisions about feature implementation
+
+### High-risk or complex features
+
+For features that significantly change system behavior or affect critical paths:
+
+- Deploy code behind a flag to production without immediate activation
+- Test in production environments with internal users first
+- Maintain a kill switch to instantly disable problematic features
+
+### Cross-platform coordination
+
+When features span multiple clients (web, mobile, desktop) and server components:
+
+- Ensure all components are deployed before enabling the feature
+- Coordinate releases across different deployment schedules
+- Maintain backward compatibility during the transition period
+
+### Development and testing
+
+Feature flags facilitate better development workflows and can:
+
+- Allow incomplete features to be merged into mainline branches without affecting production
+- Enable QA teams to test features in isolation
+- Support parallel development of multiple features
+
+### When _not_ to use flags
+
+Avoid feature flags for:
+
+- Simple or minor updates that don't change functionality
+- Dependency updates that are build-time
+- Permanent architectural changes that cannot be toggled
+- Database logic -- utilize flags in the _application_ logic to select / execute independent
+  database changes
+- Features that would create technical debt if maintained long-term behind a flag
+
+Remember that feature flags add complexity and should be treated as temporary constructs. Plan for
+flag retirement as part of the development lifecycle.
+
 ## Flag data sources
 
 When consuming feature flags in either the client or server code, it is important to understand
@@ -252,50 +312,6 @@ the retrieval methods:
 - `GetIntVariation` for integers, with `0` an assumed default.
 - `GetStringVariation` for strings, with `null` an assumed default.
 
-## Feature flag lifecycle
-
-Let your management know when you need to change something about a feature online inside
-LaunchDarkly. Only a small number of users have accounts with LaunchDarkly to save on licensing
-costs.
-
-Feature flags don’t necessarily have to ever be deleted from LaunchDarkly, just unused. Linking them
-to Jira helps create a history of the feature and there are copious logs and audit records online
-that can be kept. Feature flags not accessed for a long period of time will automatically move to an
-"inactive" state that can also help with identifying technical debt to clean up.
-
-While feature flags can be left indefinitely in LaunchDarkly without accumulating technical debt, it
-is essential that any logic based on these flags be removed from code as soon as the feature
-launches successfully. When defining the tasks for feature-flagged code, be sure to include a
-cleanup task for removing this logic. You may want to consider multiple tasks - one for each of the
-steps in the removal process.
-
-### Unwinding a feature flag
-
-Due to the complexity of the different client deployments and how we expose feature flags through
-our API, it is important that each feature flag be removed in the appropriate sequence.
-
-First, remove all business logic that relies on the flag from both client and server code. This
-includes _all_ references in the client codebase, and also any business logic on the server that
-checks the flag value. This does _not_ include removing the flag from the `FeatureFlagKeys` on the
-server -- we must leave this here so that old clients who have not updated continue to be served the
-correct "on" value when querying for the flag.
-
-This code should then be deployed to all clients and to the server.
-
-:::tip Self-hosted customers
-
-Once the code referencing the flag has been removed and clients have updated, self-hosted customers
-can update to the latest version to begin using the feature. See
-[Self-hosted considerations](#self-hosted-considerations) below for more detail.
-
-:::
-
-Once we have satisfied the requirements of
-[backward compatibility](https://bitwarden.com/help/bitwarden-software-release-support/#release-support-at-bitwarden)
-for our clients, we can completely remove the feature flag from the server codebase. This can be
-done by removing the flag value from the `FeatureFlagKeys`. This should then be deployed to the
-server to complete the removal process.
-
 ## Self-hosted considerations
 
 Self-hosted instances will not have access to LaunchDarkly, so the server configuration retrieved
@@ -309,5 +325,5 @@ follows:
 3. Release cloud and self-hosted with the feature flag removed, therefore enabling the feature for
    self-hosted instances
 
-A self-hosted installation may choose to configure alternative [data sources](#flag-data-sources) to
-more quickly adopt a feature.
+Local and development self-hosted installations may choose to configure alternative
+[data sources](#flag-data-sources) to more quickly adopt a feature.

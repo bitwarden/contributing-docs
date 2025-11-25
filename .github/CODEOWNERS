@@ -4,15 +4,29 @@
 #
 # https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
 
-# Leads for all reviews of documentation.
+# Leads for all reviews of documentation
 * @bitwarden/tech-leads
 
 # Unowned files
 package.json
 package-lock.json
 
-# DevOps for Actions and other workflow changes.
-.github/workflows @bitwarden/dept-devops
-
-# Architecture department for architecture content.
+# Architecture department for architecture content
 docs/architecture @bitwarden/dept-architecture
+
+# Architecture and AppSec for security concepts
+docs/architecture/security @bitwarden/team-appsec @bitwarden/dept-architecture
+
+# Shared workflows ownership
+.github/workflows/build.yml @bitwarden/dept-bre @bitwarden/tech-leads
+
+# Docker-related files
+**/Dockerfile @bitwarden/team-appsec @bitwarden/dept-bre
+**/*.dockerignore @bitwarden/team-appsec @bitwarden/dept-bre
+**/entrypoint.sh @bitwarden/team-appsec @bitwarden/dept-bre
+**/docker-compose.yml @bitwarden/team-appsec @bitwarden/dept-bre
+
+# Claude related files
+.claude/ @bitwarden/team-ai-sme
+.github/workflows/respond.yml @bitwarden/team-ai-sme
+.github/workflows/review-code.yml @bitwarden/team-ai-sme

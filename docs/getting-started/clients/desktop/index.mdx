@@ -37,6 +37,19 @@ These are available as additional dependencies in the Visual Studio Installer.
 </TabItem>
 </Tabs>
 
+:::tip Nx commands are preferred.
+
+We now recommend using Nx commands for building projects. For desktop:
+
+```bash
+# Build and serve (including the native module)
+npx nx serve desktop
+```
+
+For complete Nx documentation and all available commands, see
+[Using Nx to Build Projects](https://github.com/bitwarden/clients/blob/main/docs/using-nx-to-build-projects.md).
+:::
+
 ## Build native module
 
 The desktop application relies on a native module written in rust, which needs to be compiled
@@ -44,13 +57,24 @@ separately. This is baked in to the build process for `npm run electron`, but yo
 it manually.
 
 ```bash
-cd apps/desktop/desktop_native
+cd apps/desktop/desktop_native/napi
 npm run build
 ```
 
 **Note**: This module needs to be re-built if the native code has changed.
 
 ### Cross compile
+
+#### Windows on ARM
+
+If you're building in Windows on ARM, you might need to run `build.js` with the `cross-platform`
+argument:
+
+```bash
+node desktop_native/build.js cross-platform
+```
+
+#### Linux & others
 
 In certain environments such as WSL (Windows Subsystem for Linux), it might be necessary to
 cross-compile the native module. To do this, first make sure you have installed the relevant rust
@@ -67,7 +91,7 @@ export PKG_CONFIG_ALLOW_CROSS=1
 npm run build -- --target x86_64-unknown-linux-musl # Replace with relevant target
 ```
 
-## Build Instructions
+## Build instructions
 
 Build and run:
 
@@ -76,7 +100,7 @@ cd apps/desktop
 npm run electron
 ```
 
-## Debugging and Testing
+## Debugging and testing
 
 Electron apps have a renderer process, which runs in the Electron window, and the main process,
 which runs in the background.
@@ -88,7 +112,7 @@ The main process can be debugged by running the app from a
 [Javascript Debug Terminal](https://code.visualstudio.com/docs/nodejs/nodejs-debugging#_javascript-debug-terminal)
 in Visual Studio Code and then placing breakpoints in `build/main.js`.
 
-## Biometric Unlock (Native Messaging)
+## Biometric unlock (Native Messaging)
 
 Instructions for configuring native messaging (communication between the desktop application and
 browser extension) are located [in the Browser section](../browser/biometric.mdx).

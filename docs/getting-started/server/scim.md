@@ -71,7 +71,6 @@ if required.
 
 5. In the "Identity Management" tab, scroll down to the "Configuration Settings" section and
    complete it as follows:
-
    - **API Type**: SCIM API
    - **SCIM Version**: SCIM 2.0
    - **Base URL**: use the SCIM URL from your web vault, but replace `localhost` with your ngrok

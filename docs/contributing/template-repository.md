@@ -70,32 +70,13 @@ The editor configuration used above is accessed by many linters to drive results
 
 ## Dependency management
 
-[Renovate](https://github.com/renovatebot/renovate)
+The template includes [Renovate](https://github.com/renovatebot/renovate)
 [configuration](https://github.com/bitwarden/template/blob/main/.github/renovate.json) for managing
 dependencies that is derived from a
-[shared configuration repository](https://github.com/bitwarden/renovate-config). It:
+[shared configuration repository](https://github.com/bitwarden/renovate-config).
 
-- Combines minor and patch changes into one rollup pull request, per package manager.
-- Uses a dependency dashboard so we can see what pull requests are not yet created but still manage
-  the workload.
-- Manages updates with semantic versioning and lock file updates. Rebases are disabled.
-- Allows an unlimited number of pull requests to be created.
-- Includes major updates (the latest) as individual pull requests. Monorepo updates are also
-  grouped.
-- Schedules runs to happen on the weekend when more Actions workers are likely available for the
-  organization, but also on a two-week basis to better align with the release schedule.
-- Certain build pipeline dependencies are pinned to specific versions.
-
-All package managers are recommended to be left enabled should a repository expand over time to
-include new ones, within reason for what might be in the scope of the repository. Update schedules
-and how many pull requests are up to the individual repository. Exceptions, other package manager,
-and dependency-specific configuration may be needed.
-
-Consider [best practices](https://docs.renovatebot.com/dependency-pinning/#so-whats-best) with
-pinning dependencies (especially at the root), like those used for local linting above. Development
-dependencies such as formatters and linters deserve communication and coordinated rollout across all
-teams so that code style is consistent per our standards and the editor configurations seen in the
-template repository itself.
+See [Dependency Management](./dependencies/index.md) for more information on our Renovate
+configuration.
 
 ## Issue templates
 
@@ -124,7 +105,39 @@ Actions workflows for code scanning. Targets two domains:
   push events.
 - Quality: Additional language-specific findings and improvements not strictly related to security.
 
+Each above domain-specific scanner calls a reusable workflow in the `gh-actions` repository.
+
 SAST results are exported as
 [SARIF](https://docs.oasis-open.org/sarif/sarif/v2.1.0/sarif-v2.1.0.html) (Static Analysis Results
 Interchange Format) and uploaded to the GitHub Advanced Security interface for internal review.
 Quality results are also made available in the interface when security-related.
+
+## AI
+
+Initial content placeholders provide AI assistance and automated code reviews:
+
+```
+.claude/
+├── CLAUDE.md             # General project context, guidelines, and instructions
+├── commands/             # Custom slash commands
+└── prompts/
+    └── review-code.md    # Code review prompt
+```
+
+### Automated reviews
+
+Actions workflows for review of issues and pull requests. Targets two use cases:
+
+- Review of non-draft pull requests: The above `review-code.md` Markdown file is used as a gate to
+  execute the workflow. Repositories without this file will not have automated code reviews
+  performed. Reviews are posted via a persistent comment that updates with new commits.
+- Response: By mentioning `@claude` in issue or pull request (including inline) comments. Specific
+  responses to the mention will be generated.
+
+Each above use case calls a reusable workflow in the `gh-actions` repository.
+
+### Best practices
+
+- Commands (`.claude/commands/`): For interactive Claude Code sessions.
+- Prompts (`.claude/prompts/`): For automated GitHub Actions workflows.
+- `CLAUDE.md`: General project context available in all Claude interactions.

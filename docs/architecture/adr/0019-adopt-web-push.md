@@ -9,7 +9,7 @@ tags: [server, clients, browser, notifications]
 
 <AdrTable frontMatter={frontMatter}></AdrTable>
 
-## Context and Problem Statement
+## Context and problem statement
 
 Millions of users now utilize push notifications for background vault syncs and passwordless login
 requests. As the platform has grown, so has the need to maintain the current
@@ -48,7 +48,7 @@ or lack service level guarantees. Furthermore, some clients (e.g. [F-Droid][fdro
 well-established (albeit proprietary) push backends. A single service provider is desired for as
 much functionality as possible, while still offering flexibility for self-host.
 
-## Considered Options
+## Considered options
 
 With respect to mobile notifications:
 
@@ -72,7 +72,7 @@ With respect to protocol modernization:
   mobile notification protocols. Additionally implement a Web Push backend for self-host as
   described above.
 
-## Decision Outcome
+## Decision outcome
 
 Chosen options: **Work around Azure Notification Hubs limits** and **utilize a new approach for
 non-mobile push notifications**.
@@ -83,7 +83,7 @@ Notification Hubs a significant technology investment can continue to be leverag
 need to be migrated, and the focus can instead be on scale and support for new device types that can
 benefit from Web Push.
 
-### Positive Consequences
+### Positive consequences
 
 - Web Push is [well-supported][caniuse] in most places we need it and is a valuable technology
   upgrade with ease of maintenance in the future.
@@ -94,7 +94,7 @@ benefit from Web Push.
 - Infrastructure maintenance burdens and cost for the notification service should significantly
   decrease.
 
-### Negative Consequences
+### Negative consequences
 
 - Need to watch Safari support for Web Push which was somewhat recently released at time of writing.
 - Potential cost increases for utilizing multiple Azure Notification Hubs.

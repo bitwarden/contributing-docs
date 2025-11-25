@@ -22,10 +22,26 @@ support WebAuthn which is blocked on websites with certificate errors. Please fo
 mkcert --install
 
 # Generate cert valid for localhost, 127.0.0.1 and bitwarden.test
+cd apps/web
 mkcert -cert-file dev-server.local.pem -key-file dev-server.local.pem localhost 127.0.0.1 bitwarden.test
 ```
 
-## Build Instructions
+## Build instructions
+
+:::tip Nx commands are preferred.
+
+We now recommend using Nx commands for building projects. For web:
+
+```bash
+# Build and watch (GPL)
+npx nx serve web --configuration=oss-dev
+# Build and watch (Bitwarden)
+npx nx serve web --configuration=commercial-dev
+```
+
+For complete Nx documentation and all available commands, see
+[Using Nx to Build Projects](https://github.com/bitwarden/clients/blob/main/docs/using-nx-to-build-projects.md).
+:::
 
 <!-- prettier-ignore-start -->
 
@@ -122,4 +138,4 @@ following structure:
 
 [^1]:
     `urls` adhere to the
-    [type definition in `EnvironmentService`](https://github.com/bitwarden/clients/blob/main/libs/common/src/abstractions/environment.service.ts).
+    [type definition in `EnvironmentService`](https://github.com/bitwarden/clients/blob/main/libs/common/src/platform/abstractions/environment.service.ts).

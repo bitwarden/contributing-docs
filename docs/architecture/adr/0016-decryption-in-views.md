@@ -1,6 +1,6 @@
 ---
 adr: "0016"
-status: Accepted
+status: Deprecated
 date: 2022-11-28
 tags: [clients, typescript]
 ---
@@ -9,7 +9,13 @@ tags: [clients, typescript]
 
 <AdrTable frontMatter={frontMatter}></AdrTable>
 
-## Context and Problem Statement
+:::warning Deprecated
+
+Deprecated as of 2025-11-25: Encryption and decryption logic has moved into the SDK.
+
+:::
+
+## Context and problem statement
 
 Bitwarden has a couple of different models for representing data described in detail in
 [Data Model](../clients/data-model.md). In this ADR we will focus on the following two models:
@@ -55,25 +61,25 @@ Currently this encryption and decryption logic is handled by the `<Domain>Servic
 violates the single responsibility principle. It also makes our services difficult to follow since
 it now needs to be aware of requests, responses, encryption and decryption.
 
-## Considered Options
+## Considered options
 
 - **Move decrypt to `<Domain>Service`** - We already have services for the different domains which
   also currently handle encryption, so it would make sense to move the logic there.
 - **Move logic to `<Domain>View`** - Move the logic to the `View` models themselves, combined with a
   generic service to encrypt and decrypt views.
 
-## Decision Outcome
+## Decision outcome
 
 Chosen option: **Move logic to `<Domain>View`**.
 
-### Positive Consequences
+### Positive consequences
 
 - Domain services no longer need to implement customized encryption and decryption logic. Which
   follows the single responsibility principle.
 - Domain models are no longer tightly coupled to views.
 - We can now have multiple views per domain.
 
-### Negative Consequences
+### Negative consequences
 
 - Since encryption and decryption is now done on the generic `EncryptService` this makes it possible
   to bypass expected flows. One example of this is `Cipher`, `CipherService` has a
