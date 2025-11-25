@@ -11,7 +11,7 @@ tags: [clients, typescript]
 
 :::warning Deprecated
 
-Deprecated as of 2025-12-25: Encryption and decryption logic has moved into the SDK.
+Deprecated as of 2025-11-25: Encryption and decryption logic has moved into the SDK.
 
 :::
 

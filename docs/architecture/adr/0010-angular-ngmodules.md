@@ -11,7 +11,7 @@ tags: [clients, angular]
 
 :::warning Deprecated
 
-Deprecated as of 2025-12-25: Angular has stabilized Standalone Components and has deprecated
+Deprecated as of 2025-11-25: Angular has stabilized Standalone Components and has deprecated
 NgModules. Standalone is the preferred way of organizing components going forward.
 
 :::
