@@ -1,6 +1,6 @@
 ---
 adr: "0010"
-status: Accepted
+status: Deprecated
 date: 2022-07-25
 tags: [clients, angular]
 ---
@@ -8,6 +8,13 @@ tags: [clients, angular]
 # 0010 - Angular Modules
 
 <AdrTable frontMatter={frontMatter}></AdrTable>
+
+:::warning Deprecated
+
+Deprecated as of 2025-12-25: Angular has stabilized Standalone Components and has deprecated
+NgModules. Standalone is the preferred way of organizing components going forward.
+
+:::
 
 ## Context and problem statement
 
