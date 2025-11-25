@@ -1,10 +1,4 @@
----
-sidebar_custom_props:
-  access: bitwarden
-sidebar_position: 2
----
-
-# iOS Push Notification Troubleshooting Tips
+# Push Notification Troubleshooting Tips
 
 ## Overview
 
@@ -43,7 +37,7 @@ filters are:
 - `process:Bitwarden subsystem:com.8bit`
 - `message:com.apple.pushLaunch any:bitwarden`
 
-## Checking Device Registration
+## Checking device registration
 
 The first step in the push notification flow is the device registering its device token for push
 notifications. In particular, when it tries to register, the system will call either
@@ -71,12 +65,12 @@ push token and its revision date to make sure the registration is correct server
 You can check the configuration of the Push Notification Hub in the
 [Azure Portal](https://portal.azure.com/#home).
 
-## Azure Push Logs
+## Azure push logs
 
 Looking into the push notification hub for device registrations or a log of pushes made requires a
 Windows machine.
 
-## To Device
+## To device
 
 If a push notification gets to the device, the `com.apple.pushLaunch` process logs the notification.
 You can filter the console to see these come through:
@@ -85,7 +79,7 @@ You can filter the console to see these come through:
 
 This will let you know that the device is receiving push notifications.
 
-## In App
+## In app
 
 There are three methods that logging can be added to:
 
@@ -96,6 +90,6 @@ There are three methods that logging can be added to:
 The logs around these can help ascertain how push notifications are getting into the application,
 and therefore the flow from there in the application.
 
-## See Also
+## See also
 
 [Technical Note TN2265: Troubleshooting Push Notifications](https://developer.apple.com/library/archive/technotes/tn2265/_index.html)

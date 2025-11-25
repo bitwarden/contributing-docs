@@ -9,7 +9,7 @@ tags: [browser, clients, typescript]
 
 <AdrTable frontMatter={frontMatter}></AdrTable>
 
-## Context and Problem Statement
+## Context and problem statement
 
 [ADR-003](./0003-observable-data-services.md) introduced the usage of Observables into our
 TypeScript codebase. That same ADR describes using `ngDestroy` to trigger unsubscribing from all
@@ -24,7 +24,7 @@ belonging to a DOM object that no longer exists with a `DeadObject`. When `next(
 `Subject`, the `DeadObject` is treated like and Observer and throws an error, preventing any further
 notification to subsequent Observers and causes catastrophic breaks in the extension.
 
-## Considered Options
+## Considered options
 
 - **Revert ADR 003 and remove Observables** - We remove Observables from the codebase and revert to
   the previous state.
@@ -34,7 +34,7 @@ notification to subsequent Observers and causes catastrophic breaks in the exten
 - **Short Lived Subjects** - We ensure that subscriptions created in components do not reference
   long-lives subscriptions.
 
-## Decision Outcome
+## Decision outcome
 
 Chosen option: **Short Lived Subjects**.
 
@@ -45,13 +45,13 @@ These short lived subject will be accomplished by creating visualization-level s
 same lifetime as the components they serve. Data will be synced between these short-lived services
 and the long-lived extensions living in the background.
 
-### Positive Consequences
+### Positive consequences
 
 - No impact to writing component-level code
 - Takes us in a direction needed for Manifest V3 anyway
 - Bypasses potential memory leaks due to dangling subscriptions
 
-### Negative Consequences
+### Negative consequences
 
 - Increases memory footprint of the browser extension since service's observables need to be created
   per visualization and background context.

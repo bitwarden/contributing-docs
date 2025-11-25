@@ -4,7 +4,7 @@ sidebar_position: 0
 
 # Contributing
 
-## How to Contribute
+## How to contribute
 
 Contributions of all kinds are welcome!
 
@@ -15,30 +15,38 @@ Here is how you can get involved:
 
 - **Request a new feature:** Go to the
   [Feature Requests category](https://community.bitwarden.com/c/feature-requests/) of the Community
-  Forums. Please search existing feature requests before making a new one
-- **Write code for a new feature:** Make a new post in the
+  Forums. Please search existing feature requests before making a new one.
+- **Write code for a new feature or bug fix:** By submitting a pull request.
+
+  :::note
+
+  _Before_ writing code for either a new feature or a bug fix that has significant UX changes,
+  please make a new post in the
   [Password Manager](https://github.com/orgs/bitwarden/discussions/categories/password-manager) or
   [Secrets Manager](https://github.com/orgs/bitwarden/discussions/categories/secrets-manager) GitHub
   Discussions category. Include a description of your proposed contribution, screenshots, and links
-  to any relevant feature requests. This helps get feedback from the community and Bitwarden team
-  members before you start writing code
-- **Report a bug or submit a bugfix:** Use Github issues and pull requests
+  to any relevant feature requests or issues. This helps get feedback from the community and
+  Bitwarden team members before you start writing code and facilitates a smoother PR review process.
+
+  :::
+
+- **Report a bug:** Using Github issues.
 - **Help other users:** Go to the
   [Ask the Bitwarden Community category](https://community.bitwarden.com/c/support/) on the
-  Community Forums
-- **Translate:** See the localization (i10n) section below
+  Community Forums.
+- **Translate:** See the localization (i10n) section below.
 - **Report a security concern or vulnerability:** Security audits and feedback are welcome. If the
   issue is sensitive, please [contact us privately](https://bitwarden.com/contact) or submit a
   report through our [HackerOne Program](https://hackerone.com/bitwarden/). You can read our
   security policy below.
 
-### Contributor Agreement
+### Contributor agreement
 
 Please sign the [Contributor Agreement](https://cla-assistant.io/bitwarden/clients) if you intend on
 contributing to any Github repository. Pull requests cannot be accepted and merged unless the author
 has signed the Contributor Agreement.
 
-### Pull Request Guidelines
+### Pull request guidelines
 
 - use `npm run lint` and fix any linting suggestions before submitting a pull request
 - commit any pull requests against the `main` branch
@@ -62,7 +70,7 @@ a translation correction), please register an account at Crowdin and join our pr
 - [https://crowdin.com/project/bitwarden-web](https://crowdin.com/project/bitwarden-web)
 
 If the language that you are interested in translating is not already listed, create a new account
-on Crowdin, join the project, and [contact the project owner](https://crowdin.com/profile/dwbit).
+on Crowdin, join the project, and [contact the project owner](https://crowdin.com/profile/wsalmon).
 
 You can read Crowdin's getting started guide for translators here:
 [https://support.crowdin.com/crowdin-intro/](https://support.crowdin.com/crowdin-intro/).
@@ -74,7 +82,7 @@ users safe. If you believe you've found a security issue in our product or servi
 to please submit a report through our [HackerOne Program](https://hackerone.com/bitwarden/). We
 welcome working with you to resolve the issue promptly. Thanks in advance!
 
-### Disclosure Policy
+### Disclosure policy
 
 - Let us know as soon as possible upon discovery of a potential security issue, and we'll make every
   effort to quickly resolve the issue.
