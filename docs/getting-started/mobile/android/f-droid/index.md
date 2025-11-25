@@ -47,7 +47,7 @@ android update sdk --no-ui --all --filter tools,platform-tools,build-tools-25.0.
 Alternate instructions for downloading and installing the required Android SDK tools can be found
 [here](https://developer.android.com/studio/releases/platform-tools).
 
-## File Structure
+## File structure
 
 The repository is organized into the following structure:
 

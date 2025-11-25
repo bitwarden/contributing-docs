@@ -19,17 +19,17 @@ on using the Pull Request feature.
 
 ## Fork
 
-In order to contribute to Bitwarden you will need to fork the relevant repository. For details on
-how to do this see this
+In order to contribute to Bitwarden, you will need to fork the relevant repository. For details on
+how to do this, see this
 [help article from GitHub](https://docs.github.com/en/get-started/quickstart/fork-a-repo). After
-forking the repository you will need to clone it locally.
+forking the repository, you will need to clone it locally.
 
 ```bash
 # Example for the clients repository
 git clone git@github.com:username/clients.git
 ```
 
-It's also useful to add a `upstream` remote pointing to the official Bitwarden repository.
+It's also useful to add an `upstream` remote pointing to the official Bitwarden repository.
 
 ```bash
 # Example for the clients repository, from the repository directory
@@ -48,14 +48,14 @@ git fetch upstream
 ## Branch
 
 Each new feature or bug fix should be developed on a separate branch. Branches allow you to work on
-multiple features concurrently. In most cases you should branch from `main`. However, if you are
-working with other contributors we typically branch off a long-lived feature branch. Long-lived
+multiple features concurrently. In most cases, you should branch from `main`. However, if you are
+working with other contributors, we typically branch off a long-lived feature branch. Long-lived
 feature branches allow us to break up a single feature into multiple PRs, which can be reviewed
 individually but tested and released together.
 
 <Community>
 
-As a community contributor you can use the following command to branch directly from the _upstream_
+As a community contributor, you can use the following command to branch directly from the _upstream_
 `main` branch.
 
 ```bash
@@ -66,8 +66,8 @@ git checkout -b feature/example
 
 <Bitwarden>
 
-As a Bitwarden contributor you should branch of `origin/main`, this ensures that the branch is
-always based of the latest upstream `main` even if the local `main` is out of date.
+As a Bitwarden contributor, you should branch from `origin/main`. This ensures that the branch is
+always based on the latest upstream `main` even if the local `main` is out of date.
 
 ```bash
 git checkout -b <team>/<issue-number>/<brief-description> -t origin/main
@@ -80,12 +80,12 @@ Our branching strategy is described in detail [here](branching.md).
 ## Commit
 
 We recommend grouping related changes together into a single commit. This can make it easier for
-reviewers to understand and assess the changes that are being proposed, while also giving the
+reviewers to understand and assess the changes that are being proposed while also giving the
 contributor checkpoints to revert to if something should go wrong.
 
 We do not have a standard for how to structure commit messages (e.g. semantic commit messages). We
 encourage that commit messages should be within the 50-character limit so that `git log` can be used
-easily. If a commit message would take more than 50 characters it is best to break it up into
+easily. If a commit message would take more than 50 characters, it is best to break it up into
 smaller atomic changes for readability and malleability of the git history (reversion,
 cherry-picking, etc.).
 
@@ -99,7 +99,7 @@ is squashing multiple half-working commits.
 **Avoid force push** once a PR has been reviewed.
 
 Git operations that affect the existing git commits prevent GitHub from correctly identifying “new
-changes” to a PR forcing the reviewer to start over again.
+changes” to a PR, forcing the reviewer to start over again.
 
 :::
 
@@ -109,7 +109,7 @@ The Bitwarden repositories have a _Pull Request template_ which should be follow
 the PR review goes smoothly since it will provide context to the reviewer.<Community> Once a
 community PR has been created, it will be automatically be linked to an internal Jira ticket. The
 internal ticket is used for prioritization and tracking purposes.</Community><Bitwarden> When
-creating the PR include a Jira ticket reference so the reviewer can gain all context on the work as
+creating the PR, include a Jira ticket reference so the reviewer can gain all context on the work as
 well as links to any associated PRs in other repositories.</Bitwarden>
 
 <Bitwarden>

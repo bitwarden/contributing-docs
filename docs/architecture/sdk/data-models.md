@@ -1,4 +1,4 @@
-# Data Models
+# Data models
 
 The SDK is expected to be used in a variety of projects, and to that end it defines a stable public
 interface. Care must be taken to avoid exposing the inner workings on the SDK including its data

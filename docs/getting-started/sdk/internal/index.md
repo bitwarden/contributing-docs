@@ -35,9 +35,12 @@ See the [Tools and Libraries](../../tools/index.md) page for more information.
 The SDK is built for different platforms, all of which have their own build instructions. For more
 information on how to build for a specific platform, refer to the readmes for the different crates:
 
-- **Web**: `crates/bitwarden-wasm-internal`
-- **iOS**: `crates/bitwarden-uniffi/swift`
-- **Android**: `crates/bitwarden-uniffi/kotlin`
+- **Web**:
+  [`crates/bitwarden-wasm-internal`](https://github.com/bitwarden/sdk-internal/tree/main/crates/bitwarden-wasm-internal)
+- **iOS**:
+  [`crates/bitwarden-uniffi/swift`](https://github.com/bitwarden/sdk-internal/tree/main/crates/bitwarden-uniffi/swift)
+- **Android**:
+  [`crates/bitwarden-uniffi/kotlin`](https://github.com/bitwarden/sdk-internal/tree/main/crates/bitwarden-uniffi/kotlin)
 
 Please be aware that each platform has its own set of dependencies that need to be installed before
 building. Make sure to double check the readme if you encounter any issues.
@@ -50,7 +53,7 @@ so you will need to update the SDK reference in the client applications.
 These instructions assumes you have a directory structure similar to:
 
 ```text
-sdk/
+sdk-internal/
 clients/
 ios/
 android/
@@ -58,12 +61,17 @@ android/
 
 ### Web clients
 
-The web clients uses NPM to install the SDK as a dependency. NPM offers a dedicated command
-[`link`][npm-link] which can be used to temporarily replace the packages with a local version.
+The web clients use NPM to install the SDK as a dependency. NPM offers a dedicated command
+[`link`][npm-link] which can be used to temporarily replace the packages with a local version. The
+web SDK has two targets (OSS and Bitwarden License) and the following command links both of them:
 
 ```bash
-npm link ../sdk-internal/crates/bitwarden-wasm-internal/npm
+npm link ../sdk-internal/crates/bitwarden-wasm-internal/npm ../sdk-internal/crates/bitwarden-wasm-internal/bitwarden_license/npm
 ```
+
+If you only want to link one of the versions, you can run the command with only one of the paths.
+Keep in mind that running `npm link` will restore any previously linked packages, so only the paths
+in the last run command will be linked.
 
 :::warning
 

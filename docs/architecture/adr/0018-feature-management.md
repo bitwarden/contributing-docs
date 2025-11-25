@@ -9,7 +9,7 @@ tags: [server]
 
 <AdrTable frontMatter={frontMatter}></AdrTable>
 
-## Context and Problem Statement
+## Context and problem statement
 
 New functionality continues to be added to the platform while pressures exist to deploy more
 frequently with less development in isolation. Quality assurance teams desire to keep said quality
@@ -18,7 +18,7 @@ Features can often be delivered in small chunks over time in parallel and there 
 their impact on systems by limiting their release to specific audiences and enabling
 experimentation.
 
-## Considered Options
+## Considered options
 
 - **Add / change functionality directly** - Make changes via the SDLC and code review and merge into
   the mainline release branch once approved. Work through issues and hotfixes as needed, alongside
@@ -31,11 +31,11 @@ experimentation.
   context targeting. Support a local configuration for self-hosted installations that may want to
   test or adopt a feature that isn't fully supported yet.
 
-## Decision Outcome
+## Decision outcome
 
 Chosen option: **Adopt a feature management system with local fallback**.
 
-### Positive Consequences
+### Positive consequences
 
 - Robust feature set for flags and their variations.
 - Protection from changes and targeted impact, along with a speed in overall delivery (with managed
@@ -43,7 +43,7 @@ Chosen option: **Adopt a feature management system with local fallback**.
 - Context-sensitive application of features.
 - Logging and traceability of who can experience or experiment with a feature.
 
-### Negative Consequences
+### Negative consequences
 
 - Costs for selecting a service provider.
 

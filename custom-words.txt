@@ -17,6 +17,7 @@ deinitializer
 deinitializers
 dockerized
 dotfile
+frontmatter
 F-Droid
 Gitter
 HKDF
@@ -61,6 +62,8 @@ recompositions
 refactorings
 roadmap
 roadmaps
+rollout
+rollouts
 rustup
 sandboxed
 SARIF
@@ -79,8 +82,12 @@ subprocessor
 toolset
 TOTP
 typealias
+typecheck
+typechecks
+typesafe
 WCAG
 Xcodes.app
+xcworkspace
 xmldoc
 Yellowpages
 Yubico

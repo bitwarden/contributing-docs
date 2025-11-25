@@ -15,7 +15,22 @@ If you’re not familiar with the CLI client, the Bitwarden Help Center has lots
 
 Before you start, you must complete the [Clients repository setup instructions](../index.md).
 
-## Build Instructions
+## Build instructions
+
+:::tip Nx commands are preferred.
+
+We now recommend using Nx commands for building projects. For the cli:
+
+```bash
+# Build and watch (GPL)
+npx nx serve cli --configuration=oss-dev
+# Build and watch (Bitwarden)
+npx nx serve cli --configuration=commercial-dev
+```
+
+For complete Nx documentation and all available commands, see
+[Using Nx to Build Projects](https://github.com/bitwarden/clients/blob/main/docs/using-nx-to-build-projects.md).
+:::
 
 Build and run:
 
