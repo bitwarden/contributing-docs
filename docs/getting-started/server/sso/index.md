@@ -165,7 +165,7 @@ You can work around this as follows:
 
 ![](./devtools.png)
 
-1.  Go back to your desktop client and open the developer tools.
-2.  Paste the following command into the console and press enter:
+6.  Go back to your desktop client and open the developer tools.
+7.  Paste the following command into the console and press enter:
     `window.location.href = '<paste the URI here>'`
-3.  Your desktop client should now complete the SSO login
+8.  Your desktop client should now complete the SSO login
