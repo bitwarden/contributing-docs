@@ -1,7 +1,0 @@
-{
-  "permissions": {
-    "allow": ["Bash(tr:*)", "Bash(fold:*)", "Bash(awk:*)", "Bash(cat:*)"],
-    "deny": [],
-    "ask": []
-  }
-}
