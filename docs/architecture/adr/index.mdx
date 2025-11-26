@@ -13,28 +13,162 @@ technology choice (e.g., Java vs. JavaScript), a choice of the IDE (e.g., Intell
 a choice between a library (e.g., [SLF4J][slf4j] vs [java.util.logging][java.util.logging]), or a
 decision on features (e.g., infinite undo vs. limited undo).
 
-## @Bitwarden
+An **Architectural Decision Record (ADR)** is a document that captures an important architectural
+decision made along with its context and consequences. ADRs serve as a decision log that helps teams
+understand not just _what_ decisions were made, but _why_ they were made, what alternatives were
+considered, and what trade-offs were accepted.
 
-The goal of introducing Architectural Decisions (AD) in the engineering team at Bitwarden is to
-steer development towards a maintainable and expandable code base. While at the same time striving
-for uniformity across all teams.
+At Bitwarden, ADRs help steer development towards a maintainable and expandable codebase while
+striving for uniformity across all teams. They also serve as a base for proposing and planning
+technical debt.
 
-The AD will also serve as a base for proposing and planning technical debt.
+## Why write ADRs?
 
-### Status definition
+ADRs serve multiple critical purposes in software development:
 
-ADRs are:
+### Knowledge sharing and education
 
-- **Proposed:** In the process of being written and reviewed. Expected to change before merging to
-  one of the statuses below.
-- **Accepted:** Ratified and expected to be utilized going forward, or already complete depending on
-  context and time of reading.
-- **Rejected:** Not accepted but recorded to preserve history and the decision-making process; for
-  reference. Likely seldom used as many ADs will transform during review.
-- **Deprecated:** No longer expected to be in place, or abandoned.
-- **Superseded:** Replaced by a future ADR, with appropriate annotation to the successor(s).
+ADRs document the reasoning behind architectural choices, making implicit knowledge explicit. When
+new team members join or when revisiting old code ADRs provide crucial context about why certain
+approaches were chosen. They answer the question "Why did we build it this way?" before it needs to
+be asked.
 
-### Tags
+### Decision transparency
+
+By documenting multiple options and the rationale for selecting one over others, ADRs show the
+thought process behind decisions. This transparency helps build consensus and allows team members to
+understand trade-offs even if they weren't part of the original discussion.
+
+### Facilitating debate and consensus
+
+When facing significant architectural choices, ADRs provide a structured format for evaluating
+options. Writing down alternatives forces teams to consider multiple approaches systematically
+rather than defaulting to the first solution or relying solely on intuition. This structured debate
+leads to better decisions.
+
+### Historical record and decision log
+
+ADRs create a permanent record of architectural decisions, including those that were rejected. This
+prevents revisiting the same debates repeatedly and helps teams understand why certain paths weren't
+taken. When circumstances change, teams can revisit old ADRs with full context.
+
+### Avoiding architecture by accident
+
+Without documentation architectures evolve organically through accumulated individual decisions.
+ADRs make architectural evolution intentional and coordinated, ensuring that significant decisions
+are made deliberately rather than by default.
+
+## When to write an ADR
+
+While there's subjectivity in determining when to create an ADR, consider writing one when:
+
+- The decision will be difficult or expensive to reverse
+- Multiple reasonable approaches exist with meaningful trade-offs
+- The decision affects multiple teams or large portions of the codebase
+- Future developers will benefit from understanding the context and reasoning
+- There's significant disagreement or debate about the right approach
+- The decision sets a precedent or pattern for future work
+- You find yourself explaining the same architectural decision repeatedly
+
+Remember, **the goal is not perfection but communication**. ADRs are more valuable when they capture
+the thinking process and alternatives considered rather than simply stating what was decided. Even
+if an ADR doesn't cover every edge case or alternative it provides valuable context and can be
+refined through discussion.
+
+## Status definition
+
+ADRs progress through different statuses throughout their lifecycle. Understanding these statuses
+helps teams track which decisions are active, which are historical, and how architectural choices
+have evolved over time.
+
+### Proposed
+
+The ADR is actively being written, discussed, and reviewed. This is the collaborative phase where
+the team evaluates options, debates trade-offs, and refines the proposal. Documents in this state
+are anticipated to change before reaching a final decision.
+
+**When to use:** When drafting a new ADR or when revisiting an existing decision that requires
+substantial changes. Keep ADRs in this state during active discussion and iteration.
+
+**Example scenarios:**
+
+- A new architectural decision is being debated across teams
+- Multiple alternatives are still being evaluated
+- Technical spikes or proof-of-concepts are underway to inform the decision
+
+It is expected to merge a proposed ADR into the documentation to keep the history of the decision,
+even if it is rejected.
+
+### Accepted
+
+The ADR has been ratified by relevant stakeholders and represents the current architectural
+direction. Teams should follow this decision going forward. Depending on when you're reading it, an
+accepted ADR might describe something actively being implemented or already in place across the
+codebase.
+
+**When to use:** When consensus has been reached and the decision should guide current and future
+work.
+
+**Example scenarios:**
+
+- A technology choice has been agreed upon (e.g., "Use Jest for testing")
+- A pattern has been established as the standard approach (e.g., "Use CQRS for server architecture")
+- A decision is complete and being followed across teams
+
+### Rejected
+
+The proposal was evaluated but ultimately not adopted. While the decision wasn't accepted, the ADR
+is preserved to document why this option was considered and why it wasn't chosen. This prevents
+future teams from repeating discussion of the same decision without understanding prior context.
+
+**When to use:** When a proposal goes through review but the team decides not to proceed with it.
+This status is relatively rare since most ADRs evolve during the "Proposed" phase rather than being
+fully rejected.
+
+**Example scenarios:**
+
+- An alternative approach was proposed but after debate, a different solution was chosen
+- A technology evaluation concluded the option wasn't suitable for current needs
+- A proposed change was deemed too costly relative to its benefits
+
+**Note:** Many ADRs that might become "Rejected" instead transform during the proposal phase as new
+information emerges or alternatives are explored.
+
+### Deprecated
+
+The decision is no longer valid or recommended. The architectural choice has been abandoned, either
+because it didn't work out as planned, requirements changed, or the team learned better approaches.
+Unlike "Superseded," there may not be a direct replacement ADR.
+
+**When to use:** When a previously accepted decision is no longer followed but hasn't been formally
+replaced by another specific ADR.
+
+**Example scenarios:**
+
+- A practice was adopted but proved problematic in production
+- Technology constraints changed, making the original decision obsolete
+- The codebase has evolved in a different direction organically
+
+### Superseded
+
+The decision has been replaced by a newer ADR that addresses the same problem space. The superseded
+ADR should reference its successor(s) to maintain traceability through the evolution of
+architectural thinking.
+
+**When to use:** When a new ADR explicitly replaces or updates an existing one.
+
+**Example scenarios:**
+
+- A framework version upgrade requires new patterns (e.g., Angular 15 migration superseding Angular
+  12 patterns)
+- A refined approach replaces an earlier decision (e.g., a new state management pattern supersedes
+  an older one)
+- Lessons learned from implementing the original decision lead to a revised approach
+
+**Best practice:** Always annotate both the superseded ADR (pointing forward to its replacement) and
+the new ADR (pointing back to what it supersedes) to maintain clear lineage.
+
+## Tags
 
 Please ensure each ADR contains a tag marking which projects they apply to (_clients_, _mobile_
 and/or _server_). Feel free to create more tags should the need arise.
