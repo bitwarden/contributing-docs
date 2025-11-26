@@ -1,7 +1,6 @@
 # Custom dictionary for spellchecking. Before adding a word here, consider whether you can put
 # it in a single (`) or multiline (```) code snippet instead, as they are automatically ignored
 # by the spellchecker. Please keep the list sorted alphabetically.
-
 AndroidX
 AOSP
 Bitwarden
@@ -60,6 +59,7 @@ precompiler
 proxied
 recompositions
 refactorings
+Rickabaugh
 roadmap
 roadmaps
 rollout
