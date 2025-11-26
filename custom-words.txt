@@ -45,7 +45,6 @@ minio
 MVVM
 NGRX
 OIDCS
-oktapreview
 Omnisharp
 onboarded
 opid
