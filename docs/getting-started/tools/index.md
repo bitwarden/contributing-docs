@@ -95,8 +95,8 @@ recommended ones include the following:
     integrate with prettier code formatting
   - [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) -
     Integrations for ESLint
-  - [Nx Console](https://marketplace.visualstudio.com/items?itemName=nrwl.angular-console) UI over
-    the Nx CLI including detailed Nx project graphs
+  - [Nx Console](https://marketplace.visualstudio.com/items?itemName=nrwl.angular-console) - UI over
+    the Nx CLI
 - Rust
   - [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=matklad.rust-analyzer) -
     Great rust language server
