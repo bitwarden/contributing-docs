@@ -18,6 +18,7 @@ Before you start: make sure you’ve installed the recommended
 - Visual Studio 2022
 - Powershell
 - [NET 8.0 SDK](https://dotnet.microsoft.com/download)
+- Rust
 - Your preferred database management tool
 
 :::
