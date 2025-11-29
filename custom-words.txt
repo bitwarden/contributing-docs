@@ -12,6 +12,7 @@ clickjacking
 codebases
 CODEOWNERS
 CQRS
+CQS
 CTAP2
 deinitializer
 deinitializers

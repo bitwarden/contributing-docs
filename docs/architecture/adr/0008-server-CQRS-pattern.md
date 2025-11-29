@@ -1,13 +1,26 @@
 ---
 adr: "0008"
-status: Accepted
+status: Superseded
 date: 2022-07-15
 tags: [server]
+superseded_by: "0028"
 ---
 
 # 0008 - Server: Adopt CQRS
 
 <AdrTable frontMatter={frontMatter}></AdrTable>
+
+:::note Superseded by ADR-0028
+
+This ADR originally established "CQRS" as the terminology for our pattern. However,
+[ADR-0028](./0028-server-adopt-cqs-terminology.md) clarifies that our implementation actually
+follows the simpler CQS (Command Query Separation) pattern rather than full CQRS. While the
+architectural decision to use commands and queries remains valid and in effect, the terminology has
+been updated to more accurately reflect our implementation.
+
+The guidance in this ADR is still relevant, but it should be read in conjunction with ADR-0028.
+
+:::
 
 ## Context and problem statement
 
