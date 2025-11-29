@@ -57,8 +57,8 @@ This creates an unnecessary learning curve and misaligned expectations.
 Chosen option: **Adopt CQS terminology**.
 
 The terminology change better reflects our implementation and reduces confusion. It also
-acknowledges that what we've built what we needed: a pragmatic solution to break up large service
-classes without the additional complexity of full CQRS.
+acknowledges that we built what we needed: a pragmatic solution to break up large service classes
+without the additional complexity of full CQRS.
 
 ### Positive consequences
 

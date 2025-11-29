@@ -6,13 +6,12 @@ sidebar_position: 6
 
 ## Command Query Separation (CQS)
 
-Our server architecture uses the Command and Query Separation (CQS) pattern.
+Our server architecture uses the Command Query Separation (CQS) pattern.
 
 The main goal of this pattern is to break up large services focused on a single entity (e.g.
 `CipherService`, which handles everything to do with a cipher) and move towards smaller classes
-based on discrete actions or user flows (e.g. `CreateCipherCommand`, which handles only creating a
-cipher). This results in smaller classes with fewer interdependencies that are easier to change and
-test.
+based on discrete actions (e.g. `CreateCipherCommand`, which handles only creating a cipher). This
+results in smaller classes with fewer interdependencies that are easier to change and test.
 
 :::note
 
@@ -27,8 +26,8 @@ practice and therefore refers only to CQS.
 ### Commands vs. queries
 
 **Commands** are write operations, e.g. `RotateOrganizationApiKeyCommand`. They change the state of
-the system. They may return data about the operation (e.g. the updated object or an error message),
-but otherwise should not be used to return data to its caller.
+the system. They may return data about the operation result (e.g. the updated object or an error
+message), but otherwise should not be used to return data to its caller.
 
 **Queries** are read operations, e.g. `GetOrganizationApiKeyQuery`. They should only return a value
 and should never change the state of the system.
