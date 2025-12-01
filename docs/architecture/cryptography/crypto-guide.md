@@ -55,7 +55,7 @@ cryptography, not described here.
 ### Content-encryption-keys
 
 A content-encryption-key is a per-item key that encrypts a single piece of data. It is created with
-said data, and re-created (randomly sampled) when the data changes. The purpose is to decouple the
+said data, and re-created (a new, randomly sampled key is created) when the data changes. The purpose is to decouple the
 data from any upstream keys used to protect or share it.
 
 For instance consider a large file that should be protected. If the account's symmetric key needs to
