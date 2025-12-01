@@ -5,6 +5,18 @@ described under [Angular](./angular.md). This guide provides a step-by-step appr
 migrate existing Angular components and directives to align with these practices. New code
 **should** strive to follow these guidelines from the start.
 
+:::warning
+
+As usual when refactoring existing code, it's generally advisable to first put the code under tests.
+This provides a basic safety net against regressions during the migration. If the component has
+significant amount of business logic extracting it to a separate service first might make it easier
+to test.
+
+After migrating we recommend performing a full regression sweep of the components to catch anything
+missed any unit tests.
+
+:::
+
 :::info
 
 We provide a Bitwarden specific
