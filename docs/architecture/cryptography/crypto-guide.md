@@ -37,9 +37,9 @@ extreme caution and oversight.
 
 Encryption in the TypeScript clients for new cases is deprecated. Any new cryptographic code should be
 written in the SDK, if possible. Existing use-cases can be continued in the TypeScript clients for
-now, but eventually will be migrated too. There are several reasons behind this. On the one hand the
+now, but eventually will be migrated too. First, the
 SDK has better memory safety guarantees and prevents key material from being left behind in memory.
-On the other hand, newer, safer APIs are not exposed outside of the SDK.
+Second, newer, safer APIs are not exposed outside of the SDK.
 
 ## Terminology
 
