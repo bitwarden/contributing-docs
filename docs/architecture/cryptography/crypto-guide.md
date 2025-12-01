@@ -68,7 +68,7 @@ keys").
 
 ### Key wrap
 
-Key wrapping describes encrypting a symmetric key, a signature key or private key with a symmetric
+Key wrapping describes encrypting a symmetric key, a signature key or private key with a **symmetric**
 key. There are various reasons for doing this. One of them is decoupling of keys, as in the content
 encryption key example above. Another is implementing sharing mechanisms. When a set of encrypted
 items needs to be shared, such as a vault item consisting of the content and a set of individually
