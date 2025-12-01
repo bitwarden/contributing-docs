@@ -35,8 +35,8 @@ likely that security bugs get introduced, and the less complexity to maintain an
 Only where not otherwise possible should low level primitives be used, and this should be done with
 extreme caution and oversight.
 
-Encryption in the TypeScript clients for new cases is deprecated. Any new cryptographic code must be
-written in the SDK if possible. Existing use-cases can be continued in the TypeScript clients for
+Encryption in the TypeScript clients for new cases is deprecated. Any new cryptographic code should be
+written in the SDK, if possible. Existing use-cases can be continued in the TypeScript clients for
 now, but eventually will be migrated too. There are several reasons behind this. On the one hand the
 SDK has better memory safety guarantees and prevents key material from being left behind in memory.
 On the other hand, newer, safer APIs are not exposed outside of the SDK.
