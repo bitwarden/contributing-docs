@@ -1,9 +1,9 @@
 # Angular Modernization Guide
 
-Bitwarden desires to update our Angular codebase to leverage modern Angular best practices, describe
-under [Angular](./angular.md). This guide provides a step-by-step approach on how to migrate
-existing Angular components and directives to align with these practices. New code **should** strive
-to follow these guidelines from the start.
+Bitwarden desires to update our Angular codebase to leverage modern Angular best practices,
+described under [Angular](./angular.md). This guide provides a step-by-step approach on how to
+migrate existing Angular components and directives to align with these practices. New code
+**should** strive to follow these guidelines from the start.
 
 :::info
 
@@ -92,16 +92,16 @@ safety. Use
 
 **Reference:** [Built-in control flow](https://angular.dev/guide/templates/control-flow)
 
-```typescript
-// Before: structural directives
+<!-- prettier-ignore -->
+```html
+<!-- Before: structural directives -->
 <div *ngIf="isVisible()">Content</div>
 <div *ngFor="let item of items(); trackBy: trackById">{{ item.name }}</div>
 
-// After: built-in control flow
+<!-- After: built-in control flow -->
 @if (isVisible()) {
   <div>Content</div>
-}
-@for (item of items(); track item.id) {
+} @for (item of items(); track item.id) {
   <div>{{ item.name }}</div>
 }
 ```
@@ -260,15 +260,15 @@ Prefer native `[class]` and `[style]` bindings over `ngClass` and `ngStyle` dire
 
 ### Class Bindings
 
-```typescript
-// Avoid: ngClass directive
-<div [ngClass]="{ 'active': isActive(), 'disabled': isDisabled() }">
+```html
+<!-- Avoid: ngClass directive -->
+<div [ngClass]="{ 'active': isActive(), 'disabled': isDisabled() }"></div>
 
-// Prefer: class binding for single class
-<div [class.active]="isActive()" [class.disabled]="isDisabled()">
+<!-- Prefer: class binding for single class -->
+<div [class.active]="isActive()" [class.disabled]="isDisabled()"></div>
 
-// Prefer: class binding for multiple classes from a signal/computed
-<div [class]="containerClasses()">
+<!-- Prefer: class binding for multiple classes from a signal/computed -->
+<div [class]="containerClasses()"></div>
 ```
 
 With signals:
@@ -288,15 +288,15 @@ protected containerClasses = computed(() => {
 
 ### Style Bindings
 
-```typescript
-// Avoid: ngStyle directive
-<div [ngStyle]="{ 'width.px': width(), 'color': textColor() }">
+```html
+<!-- Avoid: ngStyle directive -->
+<div [ngStyle]="{ 'width.px': width(), 'color': textColor() }"></div>
 
-// Prefer: style binding for individual properties
-<div [style.width.px]="width()" [style.color]="textColor()">
+<!-- Prefer: style binding for individual properties -->
+<div [style.width.px]="width()" [style.color]="textColor()"></div>
 
-// Prefer: style binding for multiple styles from a signal/computed
-<div [style]="containerStyles()">
+<!-- Prefer: style binding for multiple styles from a signal/computed -->
+<div [style]="containerStyles()"></div>
 ```
 
 With signals:
