@@ -10,7 +10,7 @@ Casbin
 clickjacking
 codebases
 CODEOWNERS
-Cose
+COSE
 CQRS
 CTAP2
 deinitializer
