@@ -63,6 +63,7 @@ integration.
 File uploads are stored using one of two methods.
 
 - Azure Storage is used by our production cloud instance.
+
   - Docker will create a local [Azurite](https://github.com/Azure/Azurite) instance which emulates
     the Azure Storage API. And is used for the primary testing.
   - We also have a test Azure Storage account for development use. The user secrets for this are
@@ -168,6 +169,7 @@ services).
 
 5. Spin up the required services locally, using a unique port for each running instance. **The ports
    must match the ports in the `reverse-proxy.conf` in the `upstream` configuration blocks.**
+
    - **Command line** _(in separate terminals)_
      ```bash
      # 1st instance
@@ -224,3 +226,22 @@ utilize our GitHub Packages setup for NuGet.
 
 Full releases of shared libraries will go to our
 [NuGet.org presence](https://www.nuget.org/profiles/Bitwarden).
+
+## Redis
+
+For features that support Redis caching, you may want to verify locally that Redis is being used as
+opposed to an application's in-memory cache, database, or other backing store. Note that all
+available caching and persistence methods should have another backing store available, which will be
+automatically used if Redis is not configured.
+
+1. You may use a standard [Redis docker image](https://hub.docker.com/_/redis) such as
+   `redis:alpine` for latest. Pull it locally and start the container.
+1. Update `globalSettings:distributedCache:redis:connectionString` to point to the `localhost` port
+   on which your Redis instance is reachable. You may do this in an individual project/application
+   (e.g., to test just one), or in the `secrets.json`, and run the
+   [update script](./secrets/index.md).
+1. You may
+   [connect to the Redis CLI via Docker](https://redis.io/docs/latest/operate/oss_and_stack/install/install-stack/docker/#connect-with-redis-cli)
+   if you wish to monitor activity, for example with
+   [MONITOR](https://redis.io/docs/latest/commands/monitor/).
+1. Start or restart your server application to connect to the Redis cache.
