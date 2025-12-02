@@ -108,7 +108,5 @@ method overloading to provide different entry points into your command or query.
 
 ## Further reading
 
-- [ADR-0028: Server CQS Terminology](../adr/0028-server-adopt-cqs-terminology.md) - Clarifies why we
-  use CQS instead of CQRS terminology
-- [ADR-0008: Server CQRS Pattern](../adr/0008-server-CQRS-pattern.md) - Original architectural
-  decision (superseded by ADR-0028)
+- [ADR-0008: Server CQS Pattern](../adr/0008-server-CQRS-pattern.md) - Architectural decision to
+  adopt CQS for breaking up large service classes

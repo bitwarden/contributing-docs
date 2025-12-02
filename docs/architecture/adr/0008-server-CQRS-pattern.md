@@ -1,24 +1,20 @@
 ---
 adr: "0008"
-status: Superseded
+status: Accepted
 date: 2022-07-15
 tags: [server]
-superseded_by: "0028"
 ---
 
-# 0008 - Server: Adopt CQRS
+# 0008 - Server: Adopt CQS
 
 <AdrTable frontMatter={frontMatter}></AdrTable>
 
-:::note Superseded by ADR-0028
+:::note Terminology clarification
 
-This ADR originally established "CQRS" as the terminology for our pattern. However,
-[ADR-0028](./0028-server-adopt-cqs-terminology.md) clarifies that our implementation actually
-follows the simpler CQS (Command Query Separation) pattern rather than full CQRS. While the
-architectural decision to use commands and queries remains valid and in effect, the terminology has
-been updated to more accurately reflect our implementation.
-
-The guidance in this ADR is still relevant, but it should be read in conjunction with ADR-0028.
+This ADR originally used "CQRS" (Command Query Responsibility Segregation) terminology. However, our
+implementation more accurately reflects CQS (Command Query Separation), which is a simpler pattern
+focused on breaking up large service classes rather than separating read/write data models. The
+content has been updated to use the more accurate CQS terminology.
 
 :::
 
@@ -43,27 +39,26 @@ method parameters, which goes against our typical DI pattern.
 - **`<<Entity>>Services`** -- Discussed above
 - **Queries and Commands** -- Fundamentally our problem is that the `<<Entity>>Service` name
   encapsulates absolutely anything you can do with that entity and excludes any code reuse across
-  different entities. The CQRS pattern creates classes based on the action being taken on the
-  entity. This naturally limits the classes scope and allows for reuse should two entities need to
-  implement the same command behavior.
-  https://docs.microsoft.com/en-us/azure/architecture/patterns/cqrs
+  different entities. The CQS pattern creates classes based on the action being taken on the entity.
+  This naturally limits the classes scope and allows for reuse should two entities need to implement
+  the same command behavior.
 - **Small Feature-based services** -- This design would break `<<Entity>>Service` into
   `<<Feature>>Service`, but ultimately runs into the same problems. As a feature grows, this service
   would become bloated and tightly coupled to other services.
 
 ## Decision outcome
 
-Chosen option: **Queries and Commands**
+Chosen option: **Queries and Commands (CQS pattern)**
 
-Commands seem all-around the better decision to the incumbent. We gain code reuse and limit class
-scope. In addition, we have an iterative path to a full-blown CQRS pipeline, with queued work.
+Commands seem all-around the better decision to the incumbent, primarily because it limits class
+scope.
 
 Queries are already basically done through repositories and/or services, but would require some
 restructuring to be obvious.
 
 ## Transition plan
 
-We will gradually transition to a CQRS pattern over time. If a developer is making changes that use
+We will gradually transition to a CQS pattern over time. If a developer is making changes that use
 or affect a service method, they should consider whether it can be extracted to a query/command, and
 include it in their work as tech debt.
 
@@ -72,3 +67,10 @@ up all at once. It's acceptable to refactor "one level deep" and then leave othe
 are. This may result in the new query/command still being somewhat coupled with other service
 methods. This is acceptable during the transition phase, but these interdependencies should be
 removed over time.
+
+## Further reading
+
+- [Server Architecture](../server/index.md) - Practical guide on implementing CQS in the server
+  codebase
+- [Martin Fowler on CQS](https://martinfowler.com/bliki/CommandQuerySeparation.html) - High-level
+  summary of the CQS principle
