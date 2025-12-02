@@ -5,7 +5,7 @@ date: 2025-12-01
 tags: [server, server-sdk]
 ---
 
-# 0028 - Adopt Fusion Cache
+# 0028 - Adopt FusionCache
 
 <AdrTable frontMatter={frontMatter}></AdrTable>
 
@@ -57,14 +57,14 @@ Adopt out-of-box library from Microsoft: [HybridCache][hybrid-cache].
 **Pros**
 
 - Great support and docs
-- L1 and L2 cache
-- Cache stampede protection
-- Serialization configured through DI
+- L1 (in-memory, fast) and L2 (distributed, persistent) cache
+- Cache stampede protection (multiple requests simultaneously computing the same value)
+- Serialization configured through dependency injection (DI)
 
 **Cons**
 
 - Key prefixing is still manual
-- No memory cache synchronization of nodes
+- No memory cache synchronization of nodes, often called a backplane
 
 ### Adopt FusionCache
 
@@ -80,7 +80,7 @@ Adopt third party package: [FusionCache][fusion-cache].
 
 **Cons**
 
-- 3rd party package
+- Third-party package introduces potential support/maintenance risks
 
 ### Adopt FusionCache as HybridCache
 
@@ -112,8 +112,10 @@ is missing that we want is built in metrics.
 
 ## Decision outcome
 
-Chosen option: **Adopt `FusionCache`**, because the fusion cache library contains all the features
+Chosen option: **Adopt `FusionCache`**, because the `FusionCache` library contains all the features
 we need for our most complex scenarios and has enough customizability for our simpler scenarios.
+While `HybridCache` is impressive and would have the support of Microsoft it lacks the backplane
+extensibility so that we can synchronize the L1 cache of all our nodes.
 
 ### Implementation details
 
@@ -170,7 +172,7 @@ configuration like such:
   https://learn.microsoft.com/en-us/aspnet/core/performance/caching/hybrid?view=aspnetcore-10.0
 [fusion-cache]: https://github.com/ZiggyCreatures/FusionCache
 [add-extended-cache]:
-  https://github.com/bitwarden/server/blob/main/src/Core/Utilities/ExtendedCacheServiceCollectionExtensions.cs#L25C38-L25C54
+  https://github.com/bitwarden/server/blob/de5a81bdc4beea752de72539627521d840dd1976/src/Core/Utilities/ExtendedCacheServiceCollectionExtensions.cs#L25
 [cache-manager]: https://github.com/MichaCo/CacheManager
 [lazy-cache]: https://github.com/alastairtree/LazyCache
 [cache-tower]: https://github.com/TurnerSoftware/CacheTower
