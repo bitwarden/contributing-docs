@@ -115,7 +115,7 @@ is missing that we want is built in metrics.
 Chosen option: **Adopt `FusionCache`**, because the fusion cache library contains all the features
 we need for our most complex scenarios and has enough customizability for our simpler scenarios.
 
-### Implementation Details
+### Implementation details
 
 #### Today
 
@@ -160,9 +160,9 @@ configuration like such:
 ### Implementation plan
 
 - New features desiring cache should use `IFusionCache`
-- Finish up Caching package in server SDK
+- Finish up Caching package in server SDK (Target: Q1 2026)
 - Individual migration plans for existing cache uses
-  - If only `IDistrubutedCache` is needed memory cache and backplane can be turned off
+  - If only `IDistributedCache` is needed memory cache and backplane can be turned off
   - If no `IDistributedCache` is needed it can be turned off and only memory and the backplane will
     be used.
 
