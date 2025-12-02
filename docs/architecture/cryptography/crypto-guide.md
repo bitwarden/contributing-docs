@@ -35,11 +35,11 @@ likely that security bugs get introduced, and the less complexity to maintain an
 Only where not otherwise possible should low level primitives be used, and this should be done with
 extreme caution and oversight.
 
-Encryption in the TypeScript clients for new cases is deprecated. Any new cryptographic code should be
-written in the SDK, if possible. Existing use-cases can be continued in the TypeScript clients for
-now, but eventually will be migrated too. First, the
-SDK has better memory safety guarantees and prevents key material from being left behind in memory.
-Second, newer, safer APIs are not exposed outside of the SDK.
+Encryption in the TypeScript clients for new cases is deprecated. Any new cryptographic code should
+be written in the SDK, if possible. Existing use-cases can be continued in the TypeScript clients
+for now, but eventually will be migrated too. First, the SDK has better memory safety guarantees and
+prevents key material from being left behind in memory. Second, newer, safer APIs are not exposed
+outside of the SDK.
 
 ## Terminology
 
@@ -55,8 +55,8 @@ cryptography, not described here.
 ### Content-encryption-keys
 
 A content-encryption-key is a per-item key that encrypts a single piece of data. It is created with
-said data, and re-created (a new, randomly sampled key is created) when the data changes. The purpose is to decouple the
-data from any upstream keys used to protect or share it.
+said data, and re-created (a new, randomly sampled key is created) when the data changes. The
+purpose is to decouple the data from any upstream keys used to protect or share it.
 
 For instance consider a large file that should be protected. If the account's symmetric key needs to
 be rotated, and supposing the account symmetric key was used to encrypt the file, then the
@@ -68,12 +68,12 @@ keys").
 
 ### Key wrap
 
-Key wrapping describes encrypting a symmetric key, a signature key or private key with a **symmetric**
-key. There are various reasons for doing this. One of them is decoupling of keys, as in the content
-encryption key example above. Another is implementing sharing mechanisms. When a set of encrypted
-items needs to be shared, such as a vault item consisting of the content and a set of individually
-encrypted file attachments, each content-encryption-key can be wrapped so that only a single key
-needs to be shared instead of sharing a set of keys.
+Key wrapping describes encrypting a symmetric key, a signature key or private key with a
+**symmetric** key. There are various reasons for doing this. One of them is decoupling of keys, as
+in the content encryption key example above. Another is implementing sharing mechanisms. When a set
+of encrypted items needs to be shared, such as a vault item consisting of the content and a set of
+individually encrypted file attachments, each content-encryption-key can be wrapped so that only a
+single key needs to be shared instead of sharing a set of keys.
 
 ## How to use cryptography to build features
 
