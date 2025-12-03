@@ -28,15 +28,19 @@ productive contributors.
 
 **Security-First Approach**: We carefully select and configure AI tools that align with our security
 requirements, ensuring that sensitive code and data remain protected while still benefiting from AI
-assistance.
+assistance. However, AI tools complement—rather than replace—human oversight and decision-making.
 
 While AI tools enhance developer productivity and help identify potential issues, all code
 contributions to Bitwarden undergo thorough human review and approval by the Bitwarden engineering
-team. Every contribution, whether created with or without AI assistance, must meet strict security
-and quality standards, align with Bitwarden's core architecture, and be thoroughly tested before
-being merged. This ensures that the final decision-making and quality assurance remain firmly in the
-hands of our security-conscious development team. Contributors can be confident that all merged code
-has been carefully vetted by Bitwarden engineers, regardless of the tools used to create it.
+team.
+
+Every contribution, whether created with or without AI assistance, must meet strict security and
+quality standards, align with Bitwarden's core architecture, and be thoroughly tested before being
+merged.
+
+This ensures that the final decision-making and quality assurance remain firmly in the hands of our
+security-conscious development team. Contributors can be confident that all merged code has been
+carefully vetted by the Bitwarden team, regardless of the tools used to create it.
 
 Our primary AI tooling stack centers around Anthropic's Claude, which offers both a powerful
 language model and flexible integration capabilities through the Model Context Protocol (MCP). This
