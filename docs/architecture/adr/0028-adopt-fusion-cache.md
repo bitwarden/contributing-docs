@@ -11,12 +11,12 @@ tags: [server, server-sdk]
 
 ## Context and problem statement
 
-We have quite a few custom caching patterns here. They generally entail setting up an instance of
+Numerous caching approaches currently exist in the `server` codebase, generally entailing the setup of an instance of
 `IDistributedCache` through keyed services. That cache is then injected into some service and some
 of the following things are done:
 
 - A hard-coded prefix is added to every `Get` or `Set` style call
-- Entry options are hard-coded, or have minimal customization from GlobalSettings
+- Entry options are hard-coded, or have minimal customization from `GlobalSettings`
 - The value is serialized, often in JSON format
 - If a value isn't found in the cache, a hard-coded value is used instead
 - If a value isn't found in the cache, a value from the database is retrieved and used instead
@@ -26,22 +26,22 @@ of the following things are done:
   - Messages from other nodes are subscribed to in order to keep the memory copy in lockstep
 
 One of the key things that is missing from that list is that no metrics are ever recorded on if the
-cache was useful, the most important metric being: Was the value stored in the cache ever retrieved
-before it expired?
+cache was useful, the most important metric being _"Was the value stored in the cache ever retrieved
+before it expired?"_
 
 ## Considered options
 
 - Continue hand rolling each use case
-- Adopt HybridCache
-- Adopt FusionCache
-- Adopt FusionCache as HybridCache
-- Other 3rd party packages
+- Adopt `HybridCache`
+- Adopt `FusionCache`
+- Adopt `FusionCache` as `HybridCache`
+- Implement other third-party libraries
 
 ### Continue hand rolling each use case
 
 **Pros**
 
-- Maximum customizability - by building everything yourself
+- Maximum customizability by building everything yourself
 
 **Cons**
 
@@ -68,7 +68,7 @@ Adopt out-of-box library from Microsoft: [HybridCache][hybrid-cache].
 
 ### Adopt FusionCache
 
-Adopt third party package: [FusionCache][fusion-cache].
+Adopt third-party package: [FusionCache][fusion-cache].
 
 **Pros**
 
@@ -80,7 +80,7 @@ Adopt third party package: [FusionCache][fusion-cache].
 
 **Cons**
 
-- Third-party package introduces potential support/maintenance risks
+- Third-party package introduces potential support / maintenance risks
 
 ### Adopt FusionCache as HybridCache
 
@@ -97,9 +97,9 @@ It's possible to use FusionCache under the hood but inject and interact with `Hy
 - Abstraction overhead
 - Hides the true implementation
 
-### Other 3rd party packages
+### Implement other third-party libraries
 
-[`CacheManager`][cache-manager] is not as popular or active as of recently compared to FusionCache.
+[`CacheManager`][cache-manager] is not as popular or active compared to FusionCache.
 It does have built in serialization but it relies on `Newtonsoft.Json` and therefore would not be
 AOT friendly. We'd likely want to implement our own using `System.Text.Json`. It isn't clear if it
 has cache stampede protection. It also doesn't have built in metrics.
