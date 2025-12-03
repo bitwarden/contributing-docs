@@ -8,26 +8,15 @@ sidebar_position: 6
 
 Our server architecture uses the Command Query Separation (CQS) pattern.
 
-The main goal of this pattern is to break up large services focused on a single entity (e.g.
-`CipherService`, which handles everything to do with a cipher) and move towards smaller classes
-based on discrete actions (e.g. `CreateCipherCommand`, which handles only creating a cipher). This
+We adopted this pattern in order to break up large services focused on a single entity (e.g.
+`CipherService`) into smaller classes based on discrete actions (e.g. `CreateCipherCommand`). This
 results in smaller classes with fewer interdependencies that are easier to change and test.
-
-:::note
-
-Previously this pattern was referred to as Command Query Responsibility Segregation (CQRS). However,
-CQRS is a far more complex architecture with larger impacts than we wanted or needed. Our
-implementation in practice more closely resembled CQS, which has a more modest (but still effective)
-aim of simply breaking up large classes. This documentation has been rewritten to better reflect our
-practice and therefore refers only to CQS.
-
-:::
 
 ### Commands vs. queries
 
 **Commands** are write operations, e.g. `RotateOrganizationApiKeyCommand`. They change the state of
-the system. They may return data about the operation result (e.g. the updated object or an error
-message), but otherwise should not be used to return data to its caller.
+the system. They may have no return value, or may return the operation result only (e.g. the updated
+object or an error message).
 
 **Queries** are read operations, e.g. `GetOrganizationApiKeyQuery`. They should only return a value
 and should never change the state of the system.
@@ -41,8 +30,6 @@ file, rotate an API key. They are designed around verbs or actions (e.g.
 
 Which you use will often follow the HTTP verb: a POST operation will generally call a command,
 whereas a GET operation will generally call a query.
-
-Teams have wide discretion in how they structure their commands and queries.
 
 ### Structure of a command
 
@@ -65,10 +52,10 @@ public helper methods.
 A command will usually follow these steps:
 
 1. Fetch additional data required to process the request (if required)
-1. Validate the request
-1. Perform the action (state change)
-1. Perform any side effects (e.g. sending emails or push notifications)
-1. Return information about the outcome to the user (e.g. an error message or the successfully
+2. Validate the request
+3. Perform the action (state change)
+4. Perform any side effects (e.g. sending emails or push notifications)
+5. Return information about the outcome to the user (e.g. an error message or the successfully
    created or updated object)
 
 If you have complex validation logic, it can be useful to move it to a separate validator class.
