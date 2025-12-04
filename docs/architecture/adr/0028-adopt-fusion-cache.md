@@ -31,13 +31,13 @@ before it expired?"_
 
 ## Considered options
 
-- Continue hand rolling each use case
+- Continue implementing custom caching solutions
 - Adopt `HybridCache`
 - Adopt `FusionCache`
 - Adopt `FusionCache` as `HybridCache`
 - Implement other third-party libraries
 
-### Continue hand rolling each use case
+### Continue implementing custom caching solutions
 
 **Pros**
 
@@ -50,7 +50,7 @@ before it expired?"_
 - Have to manually configure connection strings and TTL
 - No standard on key prefixes
 
-### Adopt HybridCache
+### Adopt `HybridCache`
 
 Adopt out-of-box library from Microsoft: [HybridCache][hybrid-cache].
 
@@ -66,7 +66,7 @@ Adopt out-of-box library from Microsoft: [HybridCache][hybrid-cache].
 - Key prefixing is still manual
 - No memory cache synchronization of nodes, often called a backplane
 
-### Adopt FusionCache
+### Adopt `FusionCache`
 
 Adopt third-party package: [FusionCache][fusion-cache].
 
@@ -82,18 +82,18 @@ Adopt third-party package: [FusionCache][fusion-cache].
 
 - Third-party package introduces potential support / maintenance risks
 
-### Adopt FusionCache as HybridCache
+### Adopt `FusionCache` as `HybridCache`
 
 It's possible to use FusionCache under the hood but inject and interact with `HybridCache`.
 
 **Pros**
 
-- All pros from [Adopt FusionCache](#adopt-fusioncache)
+- All pros from [Adopt `FusionCache`](#adopt-fusioncache)
 - If we ever switched to `HybridCache`, it would be a DI-only change
 
 **Cons**
 
-- All cons from [Adopt FusionCache](#adopt-fusioncache)
+- All cons from [Adopt `FusionCache`](#adopt-fusioncache)
 - Abstraction overhead
 - Hides the true implementation
 
@@ -136,6 +136,7 @@ extensibility so that we can synchronize the L1 cache of all our nodes.
   - If only `IDistributedCache` is needed memory cache and backplane can be turned off
   - If no `IDistributedCache` is needed it can be turned off and only memory and the backplane will
     be used.
+- Configure and document how to view caches hits and misses for your fusion cache uses
 
 #### Today
 
@@ -165,13 +166,6 @@ configuration like such:
   }
 }
 ```
-
-Once our services are using our server SDK, it will automatically light up with metrics, we will be
-able to use a set to miss ratio metric for a given fusion cache instance. Ex:
-`fusioncache.distributed.set`:`fusioncache.distibuted.miss` filtered on
-`fusioncache.cache.name == "MyFeature"`. There will be no right ratio here but baselines should be
-set and when that baseline ever becomes no longer accurate we should evaluate what has changed and
-if caching is still the right solution.
 
 [hybrid-cache]:
   https://learn.microsoft.com/en-us/aspnet/core/performance/caching/hybrid?view=aspnetcore-10.0
