@@ -1,6 +1,6 @@
 ---
 adr: "0028"
-status: Proposed
+status: Accepted
 date: 2025-12-01
 tags: [server, server-sdk]
 ---
@@ -131,12 +131,12 @@ extensibility so that we can synchronize the L1 cache of all our nodes.
 ### Plan
 
 - New features desiring cache should use `IFusionCache`
-- Finish up Caching package in server SDK (Target: Q1 2026)
+- Finish up Caching package in server SDK
 - Individual migration plans for existing cache uses
   - If only `IDistributedCache` is needed memory cache and backplane can be turned off
   - If no `IDistributedCache` is needed it can be turned off and only memory and the backplane will
     be used.
-- Configure and document how to view caches hits and misses for your fusion cache uses
+- Configure and document how to view caches hits and misses for your `FusionCache` usages
 
 #### Today
 
