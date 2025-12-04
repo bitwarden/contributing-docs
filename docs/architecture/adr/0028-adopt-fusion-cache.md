@@ -11,9 +11,9 @@ tags: [server, server-sdk]
 
 ## Context and problem statement
 
-Numerous caching approaches currently exist in the `server` codebase, generally entailing the setup of an instance of
-`IDistributedCache` through keyed services. That cache is then injected into some service and some
-of the following things are done:
+Numerous caching approaches currently exist in the `server` codebase, generally entailing the setup
+of an instance of `IDistributedCache` through keyed services. That cache is then injected into some
+service and some of the following things are done:
 
 - A hard-coded prefix is added to every `Get` or `Set` style call
 - Entry options are hard-coded, or have minimal customization from `GlobalSettings`
@@ -99,10 +99,10 @@ It's possible to use FusionCache under the hood but inject and interact with `Hy
 
 ### Implement other third-party libraries
 
-[`CacheManager`][cache-manager] is not as popular or active compared to FusionCache.
-It does have built in serialization but it relies on `Newtonsoft.Json` and therefore would not be
-AOT friendly. We'd likely want to implement our own using `System.Text.Json`. It isn't clear if it
-has cache stampede protection. It also doesn't have built in metrics.
+[`CacheManager`][cache-manager] is not as popular or active compared to FusionCache. It does have
+built in serialization but it relies on `Newtonsoft.Json` and therefore would not be AOT friendly.
+We'd likely want to implement our own using `System.Text.Json`. It isn't clear if it has cache
+stampede protection. It also doesn't have built in metrics.
 
 [`LazyCache`][lazy-cache] does not fit our needs in a few ways, most importantly it is only a memory
 cache. It has also not released a new version since September 2021.
@@ -117,7 +117,25 @@ we need for our most complex scenarios and has enough customizability for our si
 While `HybridCache` is impressive and would have the support of Microsoft it lacks the backplane
 extensibility so that we can synchronize the L1 cache of all our nodes.
 
-### Implementation details
+### Positive consequences
+
+- Able to get started quickly; nothing but injecting `IFusionCache` is needed for most cases
+- Consolidated documentation, guidance, and metrics by consuming it from a package
+- Usable outside of the `server` monorepo
+- Customizable without any code changes needed
+
+### Negative consequences
+
+- Could make caching too easy to use when caching isn't the right solution all the time
+
+### Plan
+
+- New features desiring cache should use `IFusionCache`
+- Finish up Caching package in server SDK (Target: Q1 2026)
+- Individual migration plans for existing cache uses
+  - If only `IDistributedCache` is needed memory cache and backplane can be turned off
+  - If no `IDistributedCache` is needed it can be turned off and only memory and the backplane will
+    be used.
 
 #### Today
 
@@ -148,25 +166,12 @@ configuration like such:
 }
 ```
 
-### Positive consequences
-
-- Able to get started quickly; nothing but injecting `IFusionCache` is needed for most cases
-- Consolidated documentation, guidance, and metrics by consuming it from a package
-- Usable outside of the `server` monorepo
-- Customizable without any code changes needed
-
-### Negative consequences
-
-- Could make caching too easy to use when caching isn't the right solution all the time
-
-### Implementation plan
-
-- New features desiring cache should use `IFusionCache`
-- Finish up Caching package in server SDK (Target: Q1 2026)
-- Individual migration plans for existing cache uses
-  - If only `IDistributedCache` is needed memory cache and backplane can be turned off
-  - If no `IDistributedCache` is needed it can be turned off and only memory and the backplane will
-    be used.
+Once our services are using our server SDK, it will automatically light up with metrics, we will be
+able to use a set to miss ratio metric for a given fusion cache instance. Ex:
+`fusioncache.distributed.set`:`fusioncache.distibuted.miss` filtered on
+`fusioncache.cache.name == "MyFeature"`. There will be no right ratio here but baselines should be
+set and when that baseline ever becomes no longer accurate we should evaluate what has changed and
+if caching is still the right solution.
 
 [hybrid-cache]:
   https://learn.microsoft.com/en-us/aspnet/core/performance/caching/hybrid?view=aspnetcore-10.0
