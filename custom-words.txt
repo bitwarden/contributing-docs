@@ -3,6 +3,7 @@
 # by the spellchecker. Please keep the list sorted alphabetically.
 AndroidX
 AOSP
+backplane
 Bitwarden
 bitwardensecret
 bytemark
