@@ -76,6 +76,7 @@ SDLC
 Serilog
 signtool
 signup
+Sourcery
 sqlcmd
 struct
 structs
