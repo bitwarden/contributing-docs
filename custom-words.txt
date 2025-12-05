@@ -13,6 +13,7 @@ codebases
 CODEOWNERS
 COSE
 CQRS
+CQS
 CTAP2
 deinitializer
 deinitializers
