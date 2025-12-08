@@ -265,9 +265,6 @@ For details on which features can take advantage of Redis and available configur
 
 3. (Optional) [Monitor](https://redis.io/docs/latest/commands/monitor/) Redis activity using the
    Redis CLI:
-
-   ```
-   docker exec -it bitwardenserver-redis-1 redis-cli
-
-   127.0.0.1:6379> MONITOR
+   ```bash
+   docker compose exec redis redis-cli
    ```
