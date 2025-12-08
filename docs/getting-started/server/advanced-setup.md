@@ -225,21 +225,49 @@ utilize our GitHub Packages setup for NuGet.
 Full releases of shared libraries will go to our
 [NuGet.org presence](https://www.nuget.org/profiles/Bitwarden).
 
-## Redis
+## Redis Cache
 
-For features that support Redis caching, you may want to verify locally that Redis is being used as
-opposed to an application's in-memory cache, database, or other backing store. Note that all
-available caching and persistence methods should have another backing store available, which will be
-automatically used if Redis is not configured.
+Redis provides distributed caching capabilities. Redis is optional, and available caching
+configurations have specific fallbacks including database store or in-memory caching.
 
-1. You may use a standard [Redis docker image](https://hub.docker.com/_/redis) such as
-   `redis:alpine` for latest. Pull it locally and start the container.
-1. Update `globalSettings:distributedCache:redis:connectionString` to point to the `localhost` port
-   on which your Redis instance is reachable. You may do this in an individual project/application
-   (e.g., to test just one), or in the `secrets.json`, and run the
-   [update script](./secrets/index.md).
-1. You may
-   [connect to the Redis CLI via Docker](https://redis.io/docs/latest/operate/oss_and_stack/install/install-stack/docker/#connect-with-redis-cli)
-   if you wish to monitor activity, for example with
-   [MONITOR](https://redis.io/docs/latest/commands/monitor/).
-1. Start or restart your server application to connect to the Redis cache.
+:::info
+
+For details on which features can take advantage of Redis and how caching works on the server, see
+[CACHING.md](https://github.com/bitwarden/server/blob/b1390c9dfe1ebf72d37204ec8fbdf3ddb3966b88/src/Core/Utilities/CACHING.md).
+
+:::
+
+1. Launch the Redis container using Docker Compose:
+
+   ```bash
+   docker compose --profile redis up -d
+   ```
+
+   This starts a Redis instance on port `6379` with data persistence via append-only file.
+
+2. Configure your server to use Redis by configuring
+   [user secrets](./guide.md#configure-user-secrets) and starting or restarting your server
+   application:
+
+   ```json
+   {
+      ...
+      "globalSettings": {
+         "distributedCache": {
+            "redis": {
+               "connectionString": "localhost:6379"
+            }
+         }
+      }
+      ...
+   }
+   ```
+
+3. (Optional) [Monitor](https://redis.io/docs/latest/commands/monitor/) Redis activity using the
+   Redis CLI:
+
+   ```
+   docker exec -it bitwardenserver-redis-1 redis-cli
+
+   127.0.0.1:6379> MONITOR
+   ```
