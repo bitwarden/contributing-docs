@@ -233,7 +233,7 @@ configurations have specific fallbacks including database store or in-memory cac
 :::info
 
 For details on which features can take advantage of Redis and available configurations, see
-[CACHING.md](https://github.com/bitwarden/server/blob/b1390c9dfe1ebf72d37204ec8fbdf3ddb3966b88/src/Core/Utilities/CACHING.md).
+[CACHING.md](https://github.com/bitwarden/server/blob/main/src/Core/Utilities/CACHING.md).
 
 :::
 
