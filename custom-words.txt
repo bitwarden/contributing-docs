@@ -1,9 +1,9 @@
 # Custom dictionary for spellchecking. Before adding a word here, consider whether you can put
 # it in a single (`) or multiline (```) code snippet instead, as they are automatically ignored
 # by the spellchecker. Please keep the list sorted alphabetically.
-
 AndroidX
 AOSP
+backplane
 Bitwarden
 bitwardensecret
 bytemark
@@ -11,16 +11,19 @@ Casbin
 clickjacking
 codebases
 CODEOWNERS
+COSE
 CQRS
+CQS
 CTAP2
 deinitializer
 deinitializers
 dockerized
 dotfile
-frontmatter
 F-Droid
+frontmatter
 Gitter
 HKDF
+HMAC
 hotfix
 hotfixed
 hotfixes
@@ -84,6 +87,7 @@ typealias
 typecheck
 typechecks
 typesafe
+unsynchronized
 WCAG
 Xcodes.app
 xcworkspace
