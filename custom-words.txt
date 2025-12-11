@@ -61,6 +61,7 @@ POSIX
 precompiler
 proxied
 recompositions
+Redis
 refactorings
 roadmap
 roadmaps
