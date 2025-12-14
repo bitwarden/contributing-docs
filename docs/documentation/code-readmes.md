@@ -9,7 +9,7 @@ repositories.
 
 ## Clients Repository
 
-README files from [bitwarden/clients](https://github.com/bitwarden/clients).
+`README` files from [bitwarden/clients](https://github.com/bitwarden/clients).
 
 ### apps
 
@@ -71,7 +71,7 @@ README files from [bitwarden/clients](https://github.com/bitwarden/clients).
 
 ## Server Repository
 
-README files from [bitwarden/server](https://github.com/bitwarden/server).
+`README` files from [bitwarden/server](https://github.com/bitwarden/server).
 
 ### bitwarden_license
 
@@ -101,7 +101,7 @@ README files from [bitwarden/server](https://github.com/bitwarden/server).
 
 ## SDK Internal Repository
 
-README files from [bitwarden/sdk-internal](https://github.com/bitwarden/sdk-internal).
+`README` files from [bitwarden/sdk-internal](https://github.com/bitwarden/sdk-internal).
 
 ### bitwarden_license
 
