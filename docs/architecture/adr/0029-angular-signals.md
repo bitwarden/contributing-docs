@@ -15,7 +15,7 @@ Angular has adopted a new reactive primitive, signals. Signals have various impr
 performance, simplicity, and deeper integrations into the rest of the framework.
 
 RxJS will become an optional dependency of Angular. Certain asynchronous workflows will still
-benefit from RxJS--signals are synchronous. Furthermore, being a part of the core Angular library,
+benefit from RxJS (signals are synchronous). Furthermore, being a part of the core Angular library,
 Angular signals cannot readily be used in non-Angular environments.
 
 As such, Signals should be the default when operating _in the view layer_: components, directives,
@@ -33,9 +33,18 @@ linting:
 - `@ViewChild`/`@ContentChild` → `viewChild()`/`contentChild()`
 
 Services tightly coupled to Angular should use signals. Services with business logic should prefer
-RxJS for portability. Use `toSignal()` and `toObservable()` to bridge between the two when needed.
+RxJS for portability. Use `toSignal()` and `toObservable()` to bridge between RxJS and signals when
+necessary.
 
-Existing code will be migrated gradually. New code must use signal-based APIs.
+## Implementation Plan
+
+New code must use signal-based APIs; existing code will be migrated gradually. Angular provides
+automatic code migrations for signal
+[inputs](https://angular.dev/reference/migrations/signal-inputs) and
+[queries](https://angular.dev/reference/migrations/signal-queries).
+
+Much of `libs/components` was updated using these migrators:
+https://github.com/bitwarden/clients/pull/15340
 
 ## Consequences
 
@@ -57,7 +66,7 @@ Existing code will be migrated gradually. New code must use signal-based APIs.
 
 - Disallow usage of signals and only use RxJS for reactivity.
   - This is a non-starter. Signals are being built into Angular.
-- Continue the status quo of adhoc usage.
+- Continue the status quo of ad hoc usage.
   - Having multiple ways to do the same thing leads to analysis paralysis and complicated code.
   - Signals + OnPush change detection provide a clear path to removing Zone.js. With that comes
     notable performance and debugging improvements.
