@@ -73,7 +73,6 @@ facilitate easy customization.
 
     Your MSSQL password must comply with the following
     [password complexity guidelines](https://docs.microsoft.com/en-us/sql/relational-databases/security/password-policy?view=sql-server-ver15#password-complexity)
-
     - It must be at least eight characters long.
     - It must contain characters from three of the following four categories:
     - Latin uppercase letters (A through Z)
@@ -213,7 +212,6 @@ repository.
     </Bitwarden>
 
 2.  Update `secrets.json` with your own values:
-
     - `sqlServer` > `connectionString`: insert your password where indicated
 
     <Community>
