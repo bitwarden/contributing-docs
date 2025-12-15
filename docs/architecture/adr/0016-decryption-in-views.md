@@ -1,6 +1,6 @@
 ---
 adr: "0016"
-status: Accepted
+status: Deprecated
 date: 2022-11-28
 tags: [clients, typescript]
 ---
@@ -8,6 +8,12 @@ tags: [clients, typescript]
 # 0016 - Move Decryption and Encryption to Views
 
 <AdrTable frontMatter={frontMatter}></AdrTable>
+
+:::warning Deprecated
+
+Deprecated as of 2025-11-25: Encryption and decryption logic has moved into the SDK.
+
+:::
 
 ## Context and problem statement
 

@@ -63,6 +63,7 @@ integration.
 File uploads are stored using one of two methods.
 
 - Azure Storage is used by our production cloud instance.
+
   - Docker will create a local [Azurite](https://github.com/Azure/Azurite) instance which emulates
     the Azure Storage API. And is used for the primary testing.
   - We also have a test Azure Storage account for development use. The user secrets for this are
@@ -168,6 +169,7 @@ services).
 
 5. Spin up the required services locally, using a unique port for each running instance. **The ports
    must match the ports in the `reverse-proxy.conf` in the `upstream` configuration blocks.**
+
    - **Command line** _(in separate terminals)_
      ```bash
      # 1st instance
@@ -224,3 +226,47 @@ utilize our GitHub Packages setup for NuGet.
 
 Full releases of shared libraries will go to our
 [NuGet.org presence](https://www.nuget.org/profiles/Bitwarden).
+
+## Redis Cache
+
+Redis provides distributed caching capabilities. Redis is optional, and available caching
+configurations have specific fallbacks including database store or in-memory caching.
+
+:::info
+
+For details on which features can take advantage of Redis and available configurations, see
+[CACHING.md](https://github.com/bitwarden/server/blob/main/src/Core/Utilities/CACHING.md).
+
+:::
+
+1. Launch the Redis container using Docker Compose:
+
+   ```bash
+   docker compose --profile redis up -d
+   ```
+
+   This starts a Redis instance on port `6379` with data persistence via append-only file.
+
+2. Configure your server to use Redis by configuring
+   [user secrets](./guide.md#configure-user-secrets) and starting or restarting your server
+   application:
+
+   ```json
+   {
+      ...
+      "globalSettings": {
+         "distributedCache": {
+            "redis": {
+               "connectionString": "localhost:6379"
+            }
+         }
+      }
+      ...
+   }
+   ```
+
+3. (Optional) [Monitor](https://redis.io/docs/latest/commands/monitor/) Redis activity using the
+   Redis CLI:
+   ```bash
+   docker compose exec redis redis-cli
+   ```
