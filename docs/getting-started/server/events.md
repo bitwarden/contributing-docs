@@ -186,7 +186,7 @@ exchange/queues.
            "integrationTopicName": "event-integrations",
            "eventRepositorySubscriptionName": "events-write-subscription",
            "slackSubscriptionName": "events-slack-subscription",
-           "webhookSubscriptionName": "events-webhook-subscription",
+           "webhookSubscriptionName": "events-webhook-subscription"
          }
        },
    ```
