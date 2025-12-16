@@ -597,6 +597,33 @@ CREATE NONCLUSTERED INDEX [IX_OrganizationUser_UserIdOrganizationIdStatus]
    INCLUDE ([AccessAll])
 ```
 
+#### Modifying Existing Indexes
+
+To add columns to an existing index, recreate the index with the same name using
+`DROP_EXISTING = ON`. SQL Server will build the new index from the existing one while keeping the
+old index available for queries during the rebuild.
+
+```sql
+IF EXISTS (
+    SELECT * FROM sys.indexes
+    WHERE name = 'IX_Organization_Enabled'
+    AND object_id = OBJECT_ID('[dbo].[Organization]')
+)
+BEGIN
+    CREATE NONCLUSTERED INDEX [IX_Organization_Enabled]
+    ON [dbo].[Organization]([Id] ASC, [Enabled] ASC)
+    INCLUDE ([UseTotp], [UsersGetPremium])
+    WITH (DROP_EXISTING = ON);
+END
+ELSE
+BEGIN
+    CREATE NONCLUSTERED INDEX [IX_Organization_Enabled]
+    ON [dbo].[Organization]([Id] ASC, [Enabled] ASC)
+    INCLUDE ([UseTotp], [UsersGetPremium]);
+END
+GO
+```
+
 #### Index best practices
 
 - Create indexes after table definition with `GO` separator
