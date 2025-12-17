@@ -122,7 +122,8 @@ enable the plugin:
         "hostName": "localhost",
         "username": "bitwarden",
         "password": "SET_A_PASSWORD_HERE_123",
-        "exchangeName": "events-exchange",
+        "eventExchangeName": "events-exchange",
+        "integrationExchangeName": "integration-exchange",
         "eventRepositoryQueueName": "events-write-queue",
         "slackQueueName": "events-slack-queue",
         "webhookQueueName": "events-webhook-queue",
@@ -133,8 +134,9 @@ enable the plugin:
 
     :::info
 
-    The `slackQueueName` and `webhookQueueName` specified above are optional. If they are not
-    defined, the system will use the above default names.
+    The `slackQueueName` and `webhookQueueName` specified above (as well as other integration queue
+    names not shown here) are optional. If they are not defined, the system will use the default
+    names.
 
     :::
 
@@ -180,18 +182,20 @@ exchange/queues.
        "eventLogging": {
          "azureServiceBus": {
            "connectionString": "\"Endpoint=sb://localhost;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=SAS_KEY_VALUE;UseDevelopmentEmulator=true;\"",
-           "topicName": "event-logging",
+           "eventTopicName": "event-logging",
+           "integrationTopicName": "event-integrations",
            "eventRepositorySubscriptionName": "events-write-subscription",
            "slackSubscriptionName": "events-slack-subscription",
-           "webhookSubscriptionName": "events-webhook-subscription",
+           "webhookSubscriptionName": "events-webhook-subscription"
          }
        },
    ```
 
    :::info
 
-   The `slackSubscriptionName` and `webhookSubscriptionName` specified above are optional. If they
-   are not defined, the system will use the above default names.
+   The `slackSubscriptionName` and `webhookSubscriptionName` specified above (as well as other
+   integration subscription names not shown here) are optional. If they are not defined, the system
+   will use the default names.
 
    :::
 
