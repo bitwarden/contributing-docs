@@ -126,59 +126,15 @@ Password Manager, or Secrets Manager, into a single easy-to-use crate for that p
 
 ### Core and Utility
 
-The `bitwarden-core` crate contains the underlying functionality of the SDK. This includes a
-[`Client` struct](#client-struct).
-
-There are a number of utility crates that provide a very narrow scope of functionality and do not
-necessarily correspond to a single domain, or may be shared across multiple domains. Examples
-include UUID handling and cryptographic primitives.
+The `bitwarden-core` crate contains the core runtime of the SDK. See the
+[crate documentation](https://github.com/bitwarden/sdk-internal/tree/main/crates/bitwarden-core) for
+more details.
 
 ### Features and Domains
 
 Feature and domain crates constitute the application business logic. Feature crates depend on
 `bitwarden-core` and provide extensions to the Client struct to implement specific domains.
 <Bitwarden>These crates are usually owned and maintained by individual teams.</Bitwarden>
-
-## Client Struct
-
-The `Client` struct is the main entry point for the SDK and represents a single account instance.
-Any action that needs to be performed on the account is generally done through the `Client` struct.
-This allows the internals to be hidden from the consumer and provides a clear API.
-
-We can extend the `Client` struct using extension traits in feature crates. This allow the
-underlying implementation to be internal to the crate with only the public API exposed through the
-`Client` struct. Below is an example of a generator extension for the `Client` struct.
-
-```rust
-/// Generator extension for the Client struct
-#[cfg_attr(feature = "wasm", wasm_bindgen)]
-pub struct GeneratorClient {
-    client: Client,
-}
-
-#[cfg_attr(feature = "wasm", wasm_bindgen)]
-impl GeneratorClient {
-    fn new(client: Client) -> Self {
-        Self { client }
-    }
-
-    /// Generates a password based on the provided request.
-    pub fn password(&self, input: PasswordGeneratorRequest) -> Result<String, PasswordError> {
-        password(input)
-    }
-}
-
-/// Extension which exposes `generator` method on the `Client` struct.
-pub trait GeneratorClientExt {
-    fn generator(&self) -> GeneratorClient;
-}
-
-impl GeneratorClientExt for Client {
-    fn generator(&self) -> GeneratorClient {
-        GeneratorClient::new(self.clone())
-    }
-}
-```
 
 ## Language bindings
 
