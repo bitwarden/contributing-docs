@@ -32,9 +32,9 @@ linting:
 - `@Output()` → `output()`
 - `@ViewChild`/`@ContentChild` → `viewChild()`/`contentChild()`
 
-Services tightly coupled to Angular should use signals. Services with business logic should prefer
-RxJS for portability. Use `toSignal()` and `toObservable()` to bridge between RxJS and signals when
-necessary.
+Services tightly coupled to Angular should use signals. Services with non-presentational business
+logic should prefer RxJS for portability. Use `toSignal()` and `toObservable()` to bridge between
+RxJS and signals when necessary.
 
 ## Implementation Plan
 
@@ -45,6 +45,10 @@ automatic code migrations for signal
 
 Much of `libs/components` was updated using these migrators:
 https://github.com/bitwarden/clients/pull/15340
+
+See the
+[Angular Modernization Guide](https://contributing.bitwarden.com/contributing/code-style/web/angular-migration-guide/#signals)
+for more information.
 
 ## Consequences
 

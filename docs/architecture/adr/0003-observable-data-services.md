@@ -33,6 +33,14 @@ Chosen option: **Observable data services**, because
 - The work towards a reactive data model will allow us to adopt patterns like NGRX in the future
   should it be needed.
 
+:::info Updated Guidance
+
+This ADR remains valid for business logic services, but
+[ADR 0029](/architecture/adr/0029-angular-signals) introduces Angular Signals as the preferred
+approach over RxJS for view layer code (components, directives, pipes, and UI-coupled services).
+
+:::
+
 ### Example
 
 #### Organizations
