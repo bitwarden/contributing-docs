@@ -61,7 +61,7 @@ For a detailed look at the architecture and technical details, see
 
 The standard installation of RabbitMQ does not support delaying message delivery. Our default option
 instead uses retry queues with a fixed amount of delay and checks the `DelayUntilDate` in each
-message to see if it is time for them to br processed. This provides the delay needed for retries
+message to see if it is time for them to be processed. This provides the delay needed for retries
 (with backoff and jitter applied), but it does require more processing.
 
 As an alternate approach, we have support for RabbitMQ's optional delay plugin - which does support
