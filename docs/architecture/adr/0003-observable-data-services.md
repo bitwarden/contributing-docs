@@ -35,9 +35,9 @@ Chosen option: **Observable data services**, because
 
 :::info Updated Guidance
 
-This ADR remains valid for business logic services, but
-[ADR 0029](/architecture/adr/0029-angular-signals) introduces Angular Signals as the preferred
-approach over RxJS for view layer code (components, directives, pipes, and UI-coupled services).
+This ADR remains valid for business logic services, but [ADR 0029][signals] introduces Angular
+Signals as the preferred approach over RxJS for view layer code (components, directives, pipes, and
+UI-coupled services).
 
 :::
 
@@ -103,3 +103,4 @@ NGRX is the most popular Redux implementation for Angular. For more details, rea
 [observable]:
   https://blog.angular-university.io/how-to-build-angular2-apps-using-rxjs-observable-data-services-pitfalls-to-avoid/
 [redux-motivation]: https://redux.js.org/understanding/thinking-in-redux/motivation
+[signals]: ./0029-angular-signals.md
