@@ -142,3 +142,23 @@ versions to these solved this issue:
 
 - Node: `16.18.1`
 - npm: `8.19.2`
+
+### Windows build installation fails
+
+When installing standard/beta builds (not portable) for the Windows platform from build artifacts,
+there are additional steps required. Without following the steps, the following failure occurs:
+
+![`nsis` error](./nsis-error.png)
+
+Steps:
+
+1. Download the standard / beta Windows build (the `.exe` from figure below)
+2. Download the corresponding `.nsis.7z` file (also seen in figure below)
+3. Place the `.nsis.7z` file in the same directory as the installer (this might require
+   decompressing the download)
+
+![`nsis` build files](./nsis-build-files.png)
+
+The final directory state before starting the install should look like this:
+
+![`nsis` and exe  directory](./nsis-exe-dir.png)
