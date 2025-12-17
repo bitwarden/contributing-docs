@@ -212,7 +212,7 @@ component "Organization Reports Module" {
 @enduml
 ```
 
-## Reactivity ([ADR-0003](../../../architecture/adr/0003-observable-data-services.md))
+## Reactivity ([ADR-0003](../../../architecture/adr/0003-observable-data-services.md) & [ADR-0029](../../../architecture/adr/0029-angular-signals.md))
 
 We make heavy use of reactive programming using [Angular Signals][signals] & [RxJS][rxjs]. Generally
 components should always derive their state reactively from services whenever possible.

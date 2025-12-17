@@ -107,7 +107,7 @@ as they are expected to always be included in the host -- those services are `IL
 
 ## Considered options
 
-- **Ad-hoc usage** - Where we are today, the `TryAdd` overloads are allowed to be used and are used
+- **Ad hoc usage** - Where we are today, the `TryAdd` overloads are allowed to be used and are used
   occasionally throughout the codebase but they is no outside encouragement to use them.
 - **Encourage usage** - Start encouraging usage through team training and encouragement to use them
   in code reviews but don't make any automatic check to enforce usage.
