@@ -93,11 +93,25 @@ Install via [claude.ai/download](https://claude.ai/download) or Homebrew `brew i
 - Configure your workspace preferences
 - Enable MCP server connections in Settings → Developer → MCP Servers
 
-## MCP servers
+## MCP servers and extensions
 
 Model Context Protocol (MCP) servers extend Claude's capabilities by providing access to external
 tools, APIs, and data sources. They enable Claude to interact with your development environment,
 databases, and other services while maintaining security boundaries.
+
+### Bitwarden AI plugin marketplace
+
+Bitwarden maintains a curated [marketplace of AI plugins](https://github.com/bitwarden/ai-plugins)
+specifically designed for our development workflows. This marketplace was created to provide
+quality-controlled, security-reviewed plugins that follow Bitwarden's coding standards and security
+requirements. All marketplace plugins are maintained by the Bitwarden team and include comprehensive
+documentation, testing, and security validation.
+
+To use the marketplace with Claude Code:
+
+```bash
+/plugin marketplace add bitwarden/ai-plugins
+```
 
 ### Understanding MCP servers
 
