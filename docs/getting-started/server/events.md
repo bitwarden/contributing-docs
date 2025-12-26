@@ -10,57 +10,88 @@ sidebar_position: 4
 - An
   [enterprise organization](https://bitwarden.com/help/about-organizations/#types-of-organizations)
 
-## Azure Queue (Cloud)
+## `EventService`
 
-The cloud instance of Bitwarden uses Azure Queue and Table Storage to handle events. Here's how this
-works:
+The `EventService` controls how events are stored and routed. Here's how this works:
 
 1. A user carries out an action which needs to be logged
 2. If the event is client-side (e.g. viewing a password), the client sends details of the event to
    the Events server project, which then calls `EventService`. If the event is server-side, the
    relevant project calls `EventService` itself.
-3. The event is temporarily stored in Azure Queue Storage (which is designed for handling large
-   numbers of messages)
-4. The EventsProcessor server project runs a regular batch job to retrieve events from Queue Storage
-   and save them to Table Storage
-5. Events are retrieved from Table Storage for viewing
+3. The `EventService` then delegates to an implementation of `IEventWriteService` for the Event to
+   be stored and/or broadcast.
 
-To emulate this locally:
+There are three main implementations that are supported. Dependency injection will decide which
+implementation to use based on the configuration provided. If multiple systems are configured, it
+picks the first in priority order:
 
-1.  Make sure you've installed and setup Azurite, as described in the
-    [Server Setup Guide](./guide.md#azurite)
+1. Distributed events (over Azure Service Bus)
+2. Distributed events (over RabbitMQ)
+3. Azure Queue
+4. Database Storage
 
-2.  Make sure that the `globalSettings:events:connectionString` user secret is not set, or has the
-    default value of `UseDevelopmentStorage=true`
-
-3.  Start the Events and EventsProcessor projects using `dotnet run` or your IDE. (Also ensure you
-    have Api, Identity and your web vault running.)
-
-You should now observe that your enterprise organization is logging events (e.g. when creating an
-item or inviting a user). These should appear in the Event Logs section of the organization vault.
-
-[Azure Storage Explorer](https://learn.microsoft.com/en-us/azure/vs-azure-tools-storage-manage-with-storage-explorer)
-lets you inspect the contents of your local Queue and Table Storage and is extremely useful for
-debugging.
-
-## Database storage (Self-hosted)
-
-Self-hosted instances of Bitwarden use an alternative `EventService` implementation to write event
-logs directly to the `Event` table in their database.
-
-To use database storage for events:
-
-1. Run your local development server in a [self-hosted configuration](./self-hosted/index.mdx) (Api,
-   Identity and web vault)
-2. Start the Events project using `dotnet run` or your IDE (note: EventsProcessor is not required
-   for self-hosted)
-
-## Distributed events (optional)
+## Distributed events
 
 Events can be distributed via an AMQP messaging system. This messaging system enables new
 integrations to subscribe to the events. The system supports either RabbitMQ or Azure Service Bus.
 For a detailed look at the architecture and technical details, see
 [the documentation in the server repo](https://github.com/bitwarden/server/tree/6800bc57f3eb492222e128cffcd00e16b29cc155/src/Core/AdminConsole/Services/Implementations/EventIntegrations).
+
+### Azure Service Bus
+
+#### Running the Azure Service Bus emulator
+
+1. Make sure you have Azurite set up locally (as
+   [per the normal instructions](https://contributing.bitwarden.com/getting-started/server/guide#azurite)
+   for writing events to Azure Table Storage). In addition, this assumes you're using the `mssql`
+   default profile and have the `${MSSQL_PASSWORD}` set via `.env`.
+
+2. Run Docker Compose to add/start the local emulator:
+
+   ```bash
+   docker compose --profile servicebus up -d
+   ```
+
+   :::info
+
+   The service bus emulator waits 15 seconds before starting. You can check the console in Docker
+   desktop or run `docker logs service-bus` to verify the service is up before launching the server.
+
+   :::
+
+#### Configuring the server to use Azure Service Bus for events
+
+1. Add the following to your `secrets.json` in `dev` to configure the service bus:
+
+   ```json
+       "eventLogging": {
+         "azureServiceBus": {
+           "connectionString": "\"Endpoint=sb://localhost;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=SAS_KEY_VALUE;UseDevelopmentEmulator=true;\"",
+           "eventTopicName": "event-logging",
+           "integrationTopicName": "event-integrations",
+           "eventRepositorySubscriptionName": "events-write-subscription",
+           "slackSubscriptionName": "events-slack-subscription",
+           "webhookSubscriptionName": "events-webhook-subscription"
+         }
+       },
+   ```
+
+   :::info
+
+   The `slackSubscriptionName` and `webhookSubscriptionName` specified above (as well as other
+   integration subscription names not shown here) are optional. If they are not defined, the system
+   will use the default names.
+
+   :::
+
+2. Re-run the secrets script to publish the new secrets
+
+   ```bash
+   pwsh setup_secrets.ps1 -clear
+   ```
+
+3. Start or re-start all services, including `EventsProcessor` (which is where the Azure Service Bus
+   listeners run)
 
 ### RabbitMQ
 
@@ -75,9 +106,9 @@ For a detailed look at the architecture and technical details, see
     docker compose --profile rabbitmq up -d
     ```
 
-    - The compose configuration uses the username and password from the `env` file.
-    - It is configured to run on localhost with RabbitMQ's standard ports, but this can be
-      customized in the Docker configuration.
+- The compose configuration uses the username and password from the `env` file.
+- It is configured to run on localhost with RabbitMQ's standard ports, but this can be customized in
+  the Docker configuration.
 
 3.  To verify this is running, open `http://localhost:15672` in a browser and login with the
     username and password in your `.env` file.
@@ -86,7 +117,7 @@ For a detailed look at the architecture and technical details, see
 
 The standard installation of RabbitMQ does not support delaying message delivery. Our default option
 instead uses retry queues with a fixed amount of delay and checks the `DelayUntilDate` in each
-message to see if it is time for them to br processed. This provides the delay needed for retries
+message to see if it is time for them to be processed. This provides the delay needed for retries
 (with backoff and jitter applied), but it does require more processing.
 
 As an alternate approach, we have support for RabbitMQ's optional delay plugin - which does support
@@ -146,63 +177,45 @@ enable the plugin:
     pwsh setup_secrets.ps1
     ```
 
-3.  Start (or restart) all of your projects to pick up the new settings
+3.  Start (or restart) all of your projects to pick up the new settings. The `Events` project is
+    where the RabbitMQ listeners run (it is not necessary to run `EventsProcessor`)
 
 With these changes in place, you should see the database events written as before, but you'll also
 see in the RabbitMQ management interface that the messages are flowing through the configured
 exchange/queues.
 
-### Azure Service Bus
+## Azure Queue
 
-#### Running the Azure Service Bus emulator
+The `AzureQueueEventWriteService` implementation uses a configured Azure Queue to store events. The
+`AzureQueueHostedService` (running in `EventsProcessor`) retrieves and processes the events to
+storage.
 
-1. Make sure you have Azurite set up locally (as
-   [per the normal instructions](https://contributing.bitwarden.com/getting-started/server/guide#azurite)
-   for writing events to Azure Table Storage). In addition, this assumes you're using the `mssql`
-   default profile and have the `${MSSQL_PASSWORD}` set via `.env`.
+To emulate this locally:
 
-2. Run Docker Compose to add/start the local emulator:
+1.  Make sure you've installed and setup Azurite, as described in the
+    [Server Setup Guide](./guide.md#azurite)
 
-   ```bash
-   docker compose --profile servicebus up -d
-   ```
+2.  Make sure that the `globalSettings:events:connectionString` user secret is not set, or has the
+    default value of `UseDevelopmentStorage=true`
 
-   :::info
+3.  Start the Events and EventsProcessor projects using `dotnet run` or your IDE. (Also ensure you
+    have Api, Identity and your web vault running.)
 
-   The service bus emulator waits 15 seconds before starting. You can check the console in Docker
-   desktop or run `docker logs service-bus` to verify the service is up before launching the server.
+You should now observe that your enterprise organization is logging events (e.g. when creating an
+item or inviting a user). These should appear in the Event Logs section of the organization vault.
 
-   :::
+[Azure Storage Explorer](https://learn.microsoft.com/en-us/azure/vs-azure-tools-storage-manage-with-storage-explorer)
+lets you inspect the contents of your local Queue and Table Storage and is extremely useful for
+debugging.
 
-#### Configuring the server to use Azure Service Bus for events
+## Database storage (Self-hosted)
 
-1. Add the following to your `secrets.json` in `dev` to configure the service bus:
+Self-hosted instances of Bitwarden use an `IEventWriteService` implementation to write event logs
+directly to the `Event` table in their database.
 
-   ```json
-       "eventLogging": {
-         "azureServiceBus": {
-           "connectionString": "\"Endpoint=sb://localhost;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=SAS_KEY_VALUE;UseDevelopmentEmulator=true;\"",
-           "eventTopicName": "event-logging",
-           "integrationTopicName": "event-integrations",
-           "eventRepositorySubscriptionName": "events-write-subscription",
-           "slackSubscriptionName": "events-slack-subscription",
-           "webhookSubscriptionName": "events-webhook-subscription"
-         }
-       },
-   ```
+To use database storage for events:
 
-   :::info
-
-   The `slackSubscriptionName` and `webhookSubscriptionName` specified above (as well as other
-   integration subscription names not shown here) are optional. If they are not defined, the system
-   will use the default names.
-
-   :::
-
-2. Re-run the secrets script to publish the new secrets
-
-   ```bash
-   pwsh setup_secrets.ps1 -clear
-   ```
-
-3. Start or re-start all services, including `EventsProcessor`.
+1. Run your local development server in a [self-hosted configuration](./self-hosted/index.mdx) (Api,
+   Identity and web vault)
+2. Start the Events project using `dotnet run` or your IDE (note: EventsProcessor is not required
+   for self-hosted)
