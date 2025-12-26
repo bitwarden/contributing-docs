@@ -22,8 +22,7 @@ We can generally group the public models into the following categories:
 
 The SDK also maintains internal models:
 
-- **API models**: [Auto-generated models](./server-bindings.md) that are used to interact with the
-  server.
+- **API models**: Auto-generated models that are used to interact with the server.
 - **Domain models**: General data models used to represent a specific concern in the SDK. For
   example, `Cipher`, `Folder`, etc.
 - **DTO**: Data Transfer Objects are used to transfer data between layers of the SDK. They are
