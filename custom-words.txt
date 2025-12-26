@@ -22,6 +22,8 @@ dotfile
 F-Droid
 frontmatter
 Gitter
+heisenbug
+heisenbugs
 HKDF
 HMAC
 hotfix
