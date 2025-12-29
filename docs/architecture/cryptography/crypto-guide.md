@@ -159,7 +159,7 @@ currently backwards compatible to master-key based unlock, but this is not the c
 Features relating to master-password based unlock should use this abstraction.
 
 In order to separate concerns between API contracts and data models, request or response models
-should be used when transmitting `MasterPasswordUnlockData` between a server and client. For
+should be used when transmitting `MasterPasswordUnlockData` between the server and client. For
 example,
 [`MasterPasswordUnlockResponseModel`](https://github.com/bitwarden/server/blob/d6528d2b89a160fd8d4a15756df6bbb4e8f58e4e/src/Core/KeyManagement/Models/Api/Response/MasterPasswordUnlockResponseModel.cs#L7-L8)
 is provided and should be used when the `MasterPasswordUnlockData` is sent in an API response.
@@ -186,8 +186,8 @@ for MasterKey based authentication, but the abstraction prevents authentication 
 from unsynchronized state.
 
 In order to separate concerns between API contracts and data models, request or response models
-should be used when transmitting `MasterPasswordAuthenticationData` between a server and client. For
-example,
+should be used when transmitting `MasterPasswordAuthenticationData` between the server and client.
+For example,
 [`MasterPasswordAuthenticationDataResponseModel`](https://github.com/bitwarden/server/blob/d6528d2b89a160fd8d4a15756df6bbb4e8f58e4e/src/Api/KeyManagement/Models/Requests/MasterPasswordAuthenticationDataRequestModel.cs#L6)
 is provided and should be used when the `MasterPasswordAuthenticationData` is sent in an API
 response.
