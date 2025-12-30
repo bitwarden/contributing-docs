@@ -192,7 +192,7 @@ from unsynchronized state.
 In order to separate concerns between API contracts and data models, request or response models
 should be used when transmitting `MasterPasswordAuthenticationData` between the server and client.
 For example,
-[`MasterPasswordAuthenticationDataResponseModel`](https://github.com/bitwarden/server/blob/d6528d2b89a160fd8d4a15756df6bbb4e8f58e4e/src/Api/KeyManagement/Models/Requests/MasterPasswordAuthenticationDataRequestModel.cs#L6)
+[`MasterPasswordAuthenticationDataRequestModel`](https://github.com/bitwarden/server/blob/d6528d2b89a160fd8d4a15756df6bbb4e8f58e4e/src/Api/KeyManagement/Models/Requests/MasterPasswordAuthenticationDataRequestModel.cs#L6)
 is provided and should be used when the `MasterPasswordAuthenticationData` is sent in an API
 response.
 
