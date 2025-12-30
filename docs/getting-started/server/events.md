@@ -35,7 +35,8 @@ picks the first in priority order:
 Events can be distributed via an AMQP messaging system. This messaging system enables new
 integrations to subscribe to the events. The system supports either RabbitMQ or Azure Service Bus.
 For a detailed look at the architecture and technical details, see
-[the documentation in the server repo](https://github.com/bitwarden/server/tree/6800bc57f3eb492222e128cffcd00e16b29cc155/src/Core/AdminConsole/Services/Implementations/EventIntegrations).
+[the documentation in the server repo](https://github.com/bitwarden/server/blob/f82552fba93a9a68f7cf71f2d54f72d6bfce4ad1/src/Core/Dirt/EventIntegrations/README.md)
+(`src/Core/Dirt/EventIntegrations/README.md`).
 
 ### Azure Service Bus
 
