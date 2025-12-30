@@ -173,8 +173,12 @@ key is then expanded using HKDF into a 512-bit stretched master key, 256-bit of 
 aes256-cbc key, and 256-bit of which are used as an HMAC key. The stretched master key is used to
 encrypt the user's symmetric key.
 
+:::warning
+
 New usage of `MasterKey` is not supported. When interacting with it, please be aware that
-synchronization issues of the email (salt) or kdf settings will lead to a failure of decryption.
+synchronization issues of the email (salt) or KDF settings will lead to a failure of decryption.
+
+:::
 
 ### Authenticating with a password
 
@@ -196,6 +200,13 @@ response.
 
 The master key used for unlock is also re-used for authentication. The
 `serverAuthorizationMasterKeyHash` is derived from the master-key using PBKDF2, with the password as
-a salt and 1 iteration applied. This hash is then sent to the server for authentication.
+salt and one iteration applied. This hash is then sent to the server for authentication.
+
+However, the separate unlock and authentication data structures are designed for a future in which
+there is **not** a shared salt between the two. While they happen to be the same currently, the salt
+for authentication and salt for decryption are intended to be separate from one another. For
+decryption, the internals - like salt - may disappear in the future and be replaced, and so they are
+not a public API. It is just the case that currently authentication still happens to rely on the
+(now non-public / deprecated) internals such as salt.
 
 :::
