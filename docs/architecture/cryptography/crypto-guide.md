@@ -194,7 +194,7 @@ should be used when transmitting `MasterPasswordAuthenticationData` between the 
 For example,
 [`MasterPasswordAuthenticationDataRequestModel`](https://github.com/bitwarden/server/blob/d6528d2b89a160fd8d4a15756df6bbb4e8f58e4e/src/Api/KeyManagement/Models/Requests/MasterPasswordAuthenticationDataRequestModel.cs#L6)
 is provided and should be used when the `MasterPasswordAuthenticationData` is sent in an API
-response.
+request.
 
 :::note
 
