@@ -125,9 +125,9 @@ Initial content placeholders provide AI assistance and automated code reviews:
 
 Actions workflows for review of issues and pull requests. Targets two use cases:
 
-- Review of pull requests: Reviews are posted via a persistent comment that updates with new
-  commits. Reviews will only performed if an `ai-review` label is present (or added) on the pull
-  request.
+- Review of pull requests: Reviews are posted via a sticky comment that updates. Reviews will only
+  performed if an `ai-review` label is present on the pull request. The pull request must be opened,
+  reopened, or synchronized (e.g. new commits pushed) to trigger a review.
 - Response: By mentioning `@claude` in issue or pull request (including inline) comments. Specific
   responses to the mention will be generated.
 
