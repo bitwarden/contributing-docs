@@ -116,7 +116,7 @@ The vast majority of existing encrypted data still uses `EncString`s.
 Existing attachments are protected using an `EncArrayBuffer`. This is just an `EncString`, but
 encoded slightly differently. Again, a content-encryption-key is usually used, but not enforced.
 When encrypting files for new purposes, a content-encryption-key **MUST** be used. Consider that
-with the current encryption scheme, the entire file must be downloaded and loaded into ram for
+with the current encryption scheme, the entire file must be downloaded and loaded into memory for
 decryption.
 
 :::note
