@@ -35,12 +35,15 @@ likely that security bugs get introduced, and the less complexity to maintain an
 Only where not otherwise possible should low level primitives be used, and this should be done with
 extreme caution and oversight.
 
-Encryption in the TypeScript clients for new cases is deprecated. Any new cryptographic code should
-be written in the
-[SDK](https://github.com/bitwarden/sdk-internal/tree/main/crates/bitwarden-crypto), if possible.
-Existing use-cases can be continued in the TypeScript clients for now, but eventually will be
-migrated too. First, the SDK has better memory safety guarantees and prevents key material from
-being left behind in memory. Second, newer, safer APIs are not exposed outside of the SDK.
+Encryption in the TypeScript clients for new cases is deprecated. **Any new code accessing
+cryptographic APIs must be written in the
+[SDK](https://github.com/bitwarden/sdk-internal/tree/main/crates/bitwarden-crypto)**. Existing
+use-cases can be continued in the TypeScript clients for now, but eventually will be migrated too.
+The reasons for this are:
+
+1. The SDK has better memory safety guarantees and prevents key material from being left behind in
+   memory, and
+2. Newer, safer APIs are not exposed outside of the SDK and can only be consumed by Rust code.
 
 ## Terminology
 
