@@ -19,7 +19,7 @@ Currently, there is a set of low-level APIs
 that have been used to build most features, with each team owning the cryptographic constructions
 created. Recently, high-level safe primitives were introduced that will move the complexity out of
 each team's ownership. These are not yet complete, and if a particular use-case is not covered by
-them, teams should reach out to the key-management team! The goal of these is to have most teams
+them, teams should reach out to the Key Management team! The goal of these is to have most teams
 never have to think about cryptography, or having to do safety analysis, or to own any cryptographic
 construct or protocol. These high-level primitives abstract away all complex details and give teams
 a low-complexity, easy to use and hard to misuse interface to work with.
