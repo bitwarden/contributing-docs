@@ -13,13 +13,13 @@ build features that need end-to-end encryption. This guide provides an overview 
 for composing features that need cryptographic protection.
 
 Currently, there is a set of low-level APIs
-([EncString](https://github.com/bitwarden/sdk-internal/blob/c60a5d794732d2c0fc203feb21ce5851d5325fe1/crates/bitwarden-crypto/src/enc_string/symmetric.rs#L59),
-[UnsignedSharedKey](https://github.com/bitwarden/sdk-internal/blob/c60a5d794732d2c0fc203feb21ce5851d5325fe1/crates/bitwarden-crypto/src/enc_string/asymmetric.rs#L58),
-[MasterKey](https://github.com/bitwarden/sdk-internal/blob/c60a5d794732d2c0fc203feb21ce5851d5325fe1/crates/bitwarden-crypto/src/keys/master_key.rs#L32))
+([`EncString`](https://github.com/bitwarden/sdk-internal/blob/c60a5d794732d2c0fc203feb21ce5851d5325fe1/crates/bitwarden-crypto/src/enc_string/symmetric.rs#L59),
+[`UnsignedSharedKey`](https://github.com/bitwarden/sdk-internal/blob/c60a5d794732d2c0fc203feb21ce5851d5325fe1/crates/bitwarden-crypto/src/enc_string/asymmetric.rs#L58),
+[`MasterKey`](https://github.com/bitwarden/sdk-internal/blob/c60a5d794732d2c0fc203feb21ce5851d5325fe1/crates/bitwarden-crypto/src/keys/master_key.rs#L32))
 that have been used to build most features, with each team owning the cryptographic constructions
 created. Recently, high-level safe primitives were introduced that will move the complexity out of
 each team's ownership. These are not yet complete, and if a particular use-case is not covered by
-them, teams should reach out to the key-management team! The goal of these is to have most teams
+them, teams should reach out to the Key Management team! The goal of these is to have most teams
 never have to think about cryptography, or having to do safety analysis, or to own any cryptographic
 construct or protocol. These high-level primitives abstract away all complex details and give teams
 a low-complexity, easy to use and hard to misuse interface to work with.
@@ -35,11 +35,15 @@ likely that security bugs get introduced, and the less complexity to maintain an
 Only where not otherwise possible should low level primitives be used, and this should be done with
 extreme caution and oversight.
 
-Encryption in the TypeScript clients for new cases is deprecated. Any new cryptographic code should
-be written in the SDK, if possible. Existing use-cases can be continued in the TypeScript clients
-for now, but eventually will be migrated too. First, the SDK has better memory safety guarantees and
-prevents key material from being left behind in memory. Second, newer, safer APIs are not exposed
-outside of the SDK.
+Encryption in the TypeScript clients for new cases is deprecated. **Any new code accessing
+cryptographic APIs must be written in the
+[SDK](https://github.com/bitwarden/sdk-internal/tree/main/crates/bitwarden-crypto)**. Existing
+use-cases can be continued in the TypeScript clients for now, but eventually will be migrated too.
+The reasons for this are:
+
+1. The SDK has better memory safety guarantees and prevents key material from being left behind in
+   memory, and
+2. Newer, safer APIs are not exposed outside of the SDK and can only be consumed by Rust code.
 
 ## Terminology
 
@@ -66,7 +70,7 @@ content-encryption-key needs to be re-uploaded.
 Content-encryption-keys are currently used for file attachments, and for vault items ("cipher
 keys").
 
-### Key wrap
+### Key wrapping
 
 Key wrapping describes encrypting a symmetric key, a signature key or private key with a
 **symmetric** key. There are various reasons for doing this. One of them is decoupling of keys, as
@@ -86,7 +90,7 @@ a combination of these, teams should reach out!
 ### Protecting a document / struct
 
 Use
-[DataEnvelope](https://github.com/bitwarden/sdk-internal/blob/c60a5d794732d2c0fc203feb21ce5851d5325fe1/crates/bitwarden-crypto/src/safe/data_envelope.rs).
+[`DataEnvelope`](https://github.com/bitwarden/sdk-internal/blob/c60a5d794732d2c0fc203feb21ce5851d5325fe1/crates/bitwarden-crypto/src/safe/data_envelope.rs).
 This handles encryption versioning, and hides exact sizes of the encrypted contents. The existing
 [example](https://github.com/bitwarden/sdk-internal/blob/c60a5d794732d2c0fc203feb21ce5851d5325fe1/crates/bitwarden-crypto/examples/seal_struct.rs)
 can be used as a reference. Using the data envelope API, an encrypted blob is obtained and,
@@ -96,26 +100,27 @@ content-encryption-key and the encrypted blob are required.
 
 :::note
 
-EncStrings have been used for this process. Instead of protecting the document as a whole, they
+`EncStrings` have been used for this process. Instead of protecting the document as a whole, they
 protected individual fields on the document. These are no longer recommended for new use-cases.
 There are a few reasons, such as performance impact of many small decrypt operations, overhead of
 MAC / IV of many small encrypted items, certain kinds of tampering attacks on the document as a
 whole. Further, maintainability is harder, requiring a lot more work both on the client side as well
 as the server side, if the structs are passed along in this representation.
 
-If there is still a need to maintain EncStrings and help is needed figuring out a path to migrate,
+If there is still a need to maintain `EncString`s and help is needed figuring out a path to migrate,
 teams should reach out.
 
-The vast majority of existing encrypted data still uses EncStrings.
+The vast majority of existing encrypted data still uses `EncString`s.
 
 :::
 
 ### Protecting a file
 
-Existing attachments are protected using an EncArrayBuffer. This is just an EncString, but encoded
-slightly differently. Again, a content-encryption-key is usually used, but not enforced. When
-encrypting files for new purposes, a content-encryption-key **MUST** be used. Consider that with the
-current encryption scheme, the entire file must be downloaded and loaded into ram for decryption.
+Existing attachments are protected using an `EncArrayBuffer`. This is just an `EncString`, but
+encoded slightly differently. Again, a content-encryption-key is usually used, but not enforced.
+When encrypting files for new purposes, a content-encryption-key **MUST** be used. Consider that
+with the current encryption scheme, the entire file must be downloaded and loaded into memory for
+decryption.
 
 :::note
 
@@ -128,13 +133,13 @@ needed, teams should reach out.
 
 ### Protecting a key with another key
 
-Currently EncStrings are used to protect keys with other symmetric keys. The SDK contains high-level
-functions for doing this as shown in this
+Currently `EncString`s are used to protect keys with other symmetric keys. The SDK contains
+high-level functions for doing this as shown in this
 [example](https://github.com/bitwarden/sdk-internal/blob/95e329ada87369bb984040b03024ef298f95e5e2/crates/bitwarden-crypto/src/store/context.rs#L210).
 
 :::note
 
-In the future, a CoseEncrypt0 message with more context will be provided that supports advertising
+In the future, a `CoseEncrypt0` message with more context will be provided that supports advertising
 the contained key id, so that the server can validate key relationships, along with an abstraction
 around this. Further, strong context binding / separation into namespaces will be provided.
 
@@ -143,44 +148,68 @@ around this. Further, strong context binding / separation into namespaces will b
 ### Protecting a key with a password
 
 Use
-[PasswordProtectedKeyEnvelope](https://github.com/bitwarden/sdk-internal/blob/c60a5d794732d2c0fc203feb21ce5851d5325fe1/crates/bitwarden-crypto/src/safe/password_protected_key_envelope.rs)
+[`PasswordProtectedKeyEnvelope`](https://github.com/bitwarden/sdk-internal/blob/c60a5d794732d2c0fc203feb21ce5851d5325fe1/crates/bitwarden-crypto/src/safe/password_protected_key_envelope.rs)
 as described in the
 [example](https://github.com/bitwarden/sdk-internal/blob/c60a5d794732d2c0fc203feb21ce5851d5325fe1/crates/bitwarden-crypto/examples/protect_key_with_password.rs).
 This allows storing a key with a low-entropy password or PIN. The envelope handles brute-force
 protection.
 
-#### MasterPasswordUnlockData
+#### Unlocking the vault with a password
 
-[MasterPasswordUnlockData](https://github.com/bitwarden/sdk-internal/blob/c60a5d794732d2c0fc203feb21ce5851d5325fe1/crates/bitwarden-core/src/key_management/master_password.rs#L46)
+[`MasterPasswordUnlockData`](https://github.com/bitwarden/sdk-internal/blob/c60a5d794732d2c0fc203feb21ce5851d5325fe1/crates/bitwarden-core/src/key_management/master_password.rs#L46)
 is a struct that encapsulates the data needed to unlock a vault using a master password. It is
 currently backwards compatible to master-key based unlock, but this is not the case in the future.
 Features relating to master-password based unlock should use this abstraction.
 
-#### MasterKey
+In order to separate concerns between API contracts and data models, request or response models
+should be used when transmitting `MasterPasswordUnlockData` between the server and client. For
+example,
+[`MasterPasswordUnlockResponseModel`](https://github.com/bitwarden/server/blob/d6528d2b89a160fd8d4a15756df6bbb4e8f58e4e/src/Core/KeyManagement/Models/Api/Response/MasterPasswordUnlockResponseModel.cs#L7-L8)
+is provided and should be used when the `MasterPasswordUnlockData` is sent in an API response.
 
-Historically, the master-key was used to protect keys with passwords. The master key is derived from
-the user's master password using PBKDF2 or Argon2id with the user's email address used as the salt
-and the synchronized account KDF parameters used as input, producing a 256-bit key. This master key
-is then expanded using HKDF into a 512-bit stretched master key, 256-bit of which are used as an
+#### `MasterKey`
+
+Historically, the `MasterKey` was used to protect keys with passwords. The master key is derived
+from the user's master password using PBKDF2 or Argon2id with the user's email address used as the
+salt and the synchronized account KDF parameters used as input, producing a 256-bit key. This master
+key is then expanded using HKDF into a 512-bit stretched master key, 256-bit of which are used as an
 aes256-cbc key, and 256-bit of which are used as an HMAC key. The stretched master key is used to
 encrypt the user's symmetric key.
 
-New usage of MasterKey is not supported. When interacting with it, please be aware that
-synchronization issues of the email (salt) or kdf settings will lead to a failure of decryption.
+:::warning
+
+New usage of `MasterKey` is not supported. When interacting with it, please be aware that
+synchronization issues of the email (salt) or KDF settings will lead to a failure of decryption.
+
+:::
 
 ### Authenticating with a password
 
 Use
-[MasterPasswordAuthenticationData](https://github.com/bitwarden/sdk-internal/blob/c60a5d794732d2c0fc203feb21ce5851d5325fe1/crates/bitwarden-core/src/key_management/master_password.rs#L122).
+[`MasterPasswordAuthenticationData`](https://github.com/bitwarden/sdk-internal/blob/c60a5d794732d2c0fc203feb21ce5851d5325fe1/crates/bitwarden-core/src/key_management/master_password.rs#L122).
 It encapsulates the data needed to authenticate using a master password. It contains the
-serverAuthorizationMasterKeyHash, the KDF settings and salt used. The cryptography is the same as
+`serverAuthorizationMasterKeyHash`, the KDF settings and salt used. The cryptography is the same as
 for MasterKey based authentication, but the abstraction prevents authentication issues resulting
 from unsynchronized state.
 
+In order to separate concerns between API contracts and data models, request or response models
+should be used when transmitting `MasterPasswordAuthenticationData` between the server and client.
+For example,
+[`MasterPasswordAuthenticationDataRequestModel`](https://github.com/bitwarden/server/blob/d6528d2b89a160fd8d4a15756df6bbb4e8f58e4e/src/Api/KeyManagement/Models/Requests/MasterPasswordAuthenticationDataRequestModel.cs#L6)
+is provided and should be used when the `MasterPasswordAuthenticationData` is sent in an API
+request.
+
 :::note
 
-The master-key used for unlock is also re-used for authentication. The
-serverAuthorizationMasterKeyHash is derived from the master-key using pbkdf2, with the password as a
-salt and 1 iteration applied. This hash is then sent to the server for authentication.
+The master key used for unlock is also re-used for authentication. The
+`serverAuthorizationMasterKeyHash` is derived from the master-key using PBKDF2, with the password as
+salt and one iteration applied. This hash is then sent to the server for authentication.
+
+However, the separate unlock and authentication data structures are designed for a future in which
+there is **not** a shared salt between the two. While they happen to be the same currently, the salt
+for authentication and salt for decryption are intended to be separate from one another. For
+decryption, the internals - like salt - may disappear in the future and be replaced, and so they are
+not a public API. It is just the case that currently authentication still happens to rely on the
+(now non-public / deprecated) internals such as salt.
 
 :::
