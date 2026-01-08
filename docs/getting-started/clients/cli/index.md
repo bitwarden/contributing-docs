@@ -52,7 +52,7 @@ npm run build:oss:watch
 
 </Community>
 
-By default, this will use the official Bitwarden servers. If you need to develop with a Server instance running locally, follow the instructions in Environment setup below.
+By default, this will use the official Bitwarden servers. If you need to develop with Server running locally, follow the instructions below in Environment setup.
 
 
 ## Environment setup
@@ -83,9 +83,7 @@ Otherwise, you need to set the individual Server API locations as follows:
 ```bash
 node build/bw.js config server --web-vault http://localhost:8080 \
   --api http://localhost:4000 \
-  --identity http://localhost:33656 \ 
-  --icons http://localhost:50024 \
-  --notifications http://localhost:61840 
+  --identity http://localhost:33656
 ```
 
 ## Testing and Debugging
