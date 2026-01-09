@@ -52,11 +52,13 @@ npm run build:oss:watch
 
 </Community>
 
-By default, this will use the official Bitwarden servers. If you need to develop with Server running locally, follow the instructions below in Environment setup.
-
+By default, this will use the official Bitwarden servers. If you need to develop with Server running
+locally, follow the instructions below in Environment setup.
 
 ## Environment setup
+
 ### Configure Node to trust development certificates
+
 A quick way to do this is to give Node access to your system certificates in the macOS Keychain:
 
 ```bash
@@ -70,7 +72,10 @@ export NODE_EXTRA_CA_CERTS=/path/to/your-certificate.pem
 ```
 
 ### Target local Server instance
-If you are running the Bitwarden Web application locally, you will only need to set the base server location. This works because the web application uses Webpack to proxy API requests through to your local Server APIs. 
+
+If you are running the Bitwarden Web application locally, you will only need to set the base server
+location. This works because the web application uses Webpack to proxy API requests through to your
+local Server APIs.
 
 Run the following when you have Web running locally:
 
@@ -87,6 +92,7 @@ node build/bw.js config server --web-vault http://localhost:8080 \
 ```
 
 ## Testing and Debugging
+
 The build is located at `build/bw.js`. You can run this with node, for example:
 
 ```bash
