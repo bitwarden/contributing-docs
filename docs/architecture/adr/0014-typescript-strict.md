@@ -9,7 +9,7 @@ tags: [clients, typescript]
 
 <AdrTable frontMatter={frontMatter}></AdrTable>
 
-## Context and Problem Statement
+## Context and problem statement
 
 For compatibility reasons since the codebase was originally written in JavaScript we have never been
 able to use the TypeScript strict flag. This has lead to several issues with bugs and resulted in a
@@ -33,7 +33,7 @@ The [Typescript strict mode plugin][plugin] is a TypeScript plugin that allows y
 turn on strict mode on a file by file basis. This will allow us to progressively update our codebase
 to support strict mode without requiring a significant initial engineering effort.
 
-## Considered Options
+## Considered options
 
 - **Keep strict disabled** - We will continue to run into null issues, and code quality will be
   lower than it could be.
@@ -42,16 +42,16 @@ to support strict mode without requiring a significant initial engineering effor
   conflicts.
 - **Progressively enable strict flag** - Use the TypeScript plugin to migrate files one by one.
 
-## Decision Outcome
+## Decision outcome
 
 Chosen option: **Progressively enable strict flag**.
 
-### Positive Consequences
+### Positive consequences
 
 - We can immediately start using the strict flag.
 - Lower initial developer effort.
 
-### Negative Consequences
+### Negative consequences
 
 - Migration will be slower.
 - We will continue to have parts of the code with null issues.

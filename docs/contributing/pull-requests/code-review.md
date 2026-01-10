@@ -31,6 +31,20 @@ You can find more tips for PR review here:
 
 :::
 
+## Before submitting for review
+
+Before marking a PR as ready for review, ensure you've completed the following reminders:
+
+- Contributor guidelines followed
+- All formatters and local linters executed and passed
+- Written new unit and / or integration tests where applicable
+- Protected functional changes with optionality (feature flags)
+- Used internationalization (i18n) for all UI strings
+- CI builds passed
+- Communicated to DevOps any deployment requirements
+- Updated any necessary documentation (Confluence, contributing docs) or informed the documentation
+  team
+
 ## Responding to review requests
 
 To ensure that teams within the organization operate on same set of assumptions for performing
@@ -86,6 +100,23 @@ assumptions. Code, after merge, should represent the best solution that fulfills
 requirements, which may not necessarily be in line with the previous solution.
 
 :::
+
+### Providing rich feedback
+
+When leaving comments on a PR, you can use emoji reactions to clarify the intent and severity of
+your feedback. This helps the author quickly understand which comments are blocking concerns versus
+informational notes or suggestions:
+
+| Emoji                                    | Meaning                                        |
+| ---------------------------------------- | ---------------------------------------------- |
+| 👍 `:+1:`                                | Excellent contribution or work                 |
+| 📝 `:memo:` / ℹ️ `:information_source:`  | Note or informational comment                  |
+| ❓ `:question:`                          | Question or inquiry                            |
+| 🤔 `:thinking:` / 💭 `:thought_balloon:` | Open for discussion                            |
+| 🎨 `:art:`                               | Suggestion or improvement                      |
+| ❌ `:x:` / ⚠️ `:warning:`                | Significant concern that should be addressed   |
+| 🌱 `:seedling:` / ♻️ `:recycle:`         | Future work or technical debt to address later |
+| ⛏ `:pick:`                              | Minor nitpick                                  |
 
 ### Review statuses
 
@@ -165,12 +196,12 @@ If a PR affects multiple teams, approval will be required by all teams impacted.
 the team that produced the PR[^1] is responsible for approving the change as a whole, while impacted
 teams are responsible only for their portion of the codebase.
 
-## Reviewing Techniques
+## Reviewing techniques
 
 There are no one-size-fits-all technique for reviewing code. However there are techniques, tools,
 and other resources that can help you review code more efficiently.
 
-### Multiple Focus Areas
+### Multiple focus areas
 
 It can be helpful to split the code review into multiple focus areas. And focus on a single view at
 a time.
@@ -206,9 +237,9 @@ following articles.
   - displaying the old code and the new code separately (so you can read the new code without all
     the noise) - or combining them (so you can see exactly what’s changed)
 
-### Running Locally
+### Running locally
 
-Many changes can be reviewed online on GitHub. However, sometimes it’s useful to run the code
+Many changes can be reviewed online on GitHub. However, sometimes it's useful to run the code
 locally to improve your understanding - for example:
 
 - To use IDE features (like jumping to definitions or finding references)

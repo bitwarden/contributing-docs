@@ -6,8 +6,13 @@ sidebar_position: 1
 
 ## Requirements
 
-1. [Xcode](https://developer.apple.com/xcode/) (version 16.3)
-2. An iPhone 16 Pro simulator (iOS 18.1) set up
+1. [Xcode](https://developer.apple.com/xcode/) (using
+   [this](https://github.com/bitwarden/ios/blob/main/.xcode-version) version)
+2. iOS & watchOS simulator runtimes installed
+3. An iPhone simulator set up (check
+   [model](https://github.com/bitwarden/ios/blob/main/.test-simulator-device-name) &
+   [version](https://github.com/bitwarden/ios/blob/main/.test-simulator-ios-version) to make/run
+   snapshots)
 
 ## Setup
 
@@ -42,6 +47,10 @@ sidebar_position: 1
    > need to be run every time the project configuration or file structure has changed (for example,
    > when files have been added, removed or moved). It is typically best practice to run
    > `bootstrap.sh` any time you switch branches or pull down changes.
+   >
+   > If you're using [swiftly](https://github.com/swiftlang/swiftly) to manage Swift versions, some
+   > packages require a different Swift version than the default one, which can cause conflicts. If
+   > you see related errors, try **`swiftly run Scripts/bootstrap.sh +xcode`**.
 
    Alternatively, you can create git hooks to automatically execute the `bootstrap.sh` script every
    time a git hook occurs. To use the git hook scripts already defined in the `Scripts` directory,
@@ -50,6 +59,15 @@ sidebar_position: 1
    ```sh
    $ cp Scripts/post-merge .git/hooks/
    $ cp Scripts/post-checkout .git/hooks/
+   ```
+
+   Also, if the Xcode version installed mismatches the expected one you will receive a warning when
+   the script finishes like this one which can help troubleshooting.
+
+   ```
+   🟡 Xcode version mismatch!
+   Required version: 26.0.1
+   Current version: 16.4
    ```
 
 4. Install [fastlane](https://docs.fastlane.tools/) for automated package deployments:
@@ -103,7 +121,7 @@ sidebar_position: 1
 
 ### Run the app
 
-1. Open the project in Xcode 16.3+.
+1. Open the project in Xcode.
 2. Run the app in the Simulator with the `Bitwarden` target for the Password Manager app or
    `Authenticator` for the Authenticator app.
 

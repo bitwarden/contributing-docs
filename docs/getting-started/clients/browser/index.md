@@ -8,7 +8,23 @@ sidebar_position: 3
 
 Before you start, you must complete the [Clients repository setup instructions](../index.md).
 
-## Build Instructions
+## Build instructions
+
+:::tip Nx commands are preferred.
+
+We now recommend using Nx commands for building projects. For the browser extension:
+
+```bash
+# Build and watch (chrome is the default)
+npx nx serve browser
+# Build and watch for specific browsers
+npx nx serve browser --configuration=firefox-dev
+npx nx serve browser --configuration=safari-dev
+```
+
+For complete Nx documentation and all available commands, see
+[Using Nx to Build Projects](https://github.com/bitwarden/clients/blob/main/docs/using-nx-to-build-projects.md).
+:::
 
 1.  Build and run the extension:
 
@@ -28,7 +44,7 @@ Before you start, you must complete the [Clients repository setup instructions](
 
 2.  Load the unpacked browser extension in your browser using the instructions in the next section.
 
-## Environment Setup
+## Environment setup
 
 By default, the browser extension will run pointing to the production server endpoints. To override
 this for local development and testing, there are several options.
@@ -119,7 +135,7 @@ Once configured, your local Custom Environment should look like this:
 
 ![Screenshot of Custom Environments](custom-local-environment.png)
 
-## Testing and Debugging
+## Testing and debugging
 
 ### Chrome and Chromium-based browsers
 

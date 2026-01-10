@@ -18,6 +18,8 @@ Before you start: make sure you’ve installed the recommended
 - Visual Studio 2022
 - Powershell
 - [NET 8.0 SDK](https://dotnet.microsoft.com/download)
+- [Rust](https://www.rust-lang.org/tools/install) latest stable version - (preferably installed via
+  [rustup](https://rustup.rs/))
 - Your preferred database management tool
 
 :::
@@ -176,7 +178,7 @@ the following commands:
     pwsh setup_azurite.ps1
     ```
 
-## Configure User Secrets
+## Configure user secrets
 
 [User secrets](https://docs.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-6.0)
 are a method for managing application settings on a per-developer basis. They override the settings
@@ -268,7 +270,7 @@ up-to-date. See [MSSQL Database](./database/mssql/index.md) for more information
 
 <Bitwarden>
 
-## Install Licensing Certificate
+## Install licensing certificate
 
 To run your local server environment as a licensed instance, you will need to download the
 `Licensing Certificate - Dev` from the shared Engineering collection and install it. This can be
@@ -291,7 +293,7 @@ attempting to "Build and Run the Server".
 
 </Bitwarden>
 
-## Build and Run the Server
+## Build and run the server
 
 You are now ready to build and run your development server.
 

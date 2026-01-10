@@ -9,7 +9,7 @@ tags: [clients, angular]
 
 <AdrTable frontMatter={frontMatter}></AdrTable>
 
-## Context and Problem Statement
+## Context and problem statement
 
 Our Angular application currently partially uses a layered folder structure. This results in a
 domain context being split between multiple folders several levels deep. This causes friction since
@@ -18,7 +18,7 @@ modifying services often requires modifying the models belonging to that service
 Understandably our application uses a lot of models, however the biggest and most isolated part of
 the models are the request and responses. Which makes them a good starting point.
 
-## Considered Options
+## Considered options
 
 - **Continue as is** - We can continue as we are, and continue to put models in
   `libs/common/models`.

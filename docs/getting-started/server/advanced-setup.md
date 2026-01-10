@@ -9,7 +9,7 @@ sidebar_position: 2
 Once you have your server up and running, there may be some additional configuration required to
 activate all of Bitwarden's features.
 
-## Premium Features
+## Premium features
 
 The user secrets file includes a test Stripe key, which will allow you to "buy" premium features
 without actually being charged.
@@ -58,7 +58,7 @@ integration.
 - [bytemark/docker-smtp](https://github.com/BytemarkHosting/docker-smtp) - a local SMTP server
   running on Docker.
 
-## File Uploads (File Sends and Attachments)
+## File uploads (File Sends and Attachments)
 
 File uploads are stored using one of two methods.
 
@@ -137,7 +137,7 @@ The steps for setting up your local server for YubiKey validation are:
       dotnet user-secrets set globalSettings:yubico:clientid [ClientId]
    ```
 
-## Reverse Proxy Setup
+## Reverse proxy setup
 
 Running a reverse proxy can be used to simulate running multiple server services in a distributed
 manner. The [Docker Compose](https://docs.docker.com/compose/) configuration in the `/dev` folder
@@ -224,3 +224,47 @@ utilize our GitHub Packages setup for NuGet.
 
 Full releases of shared libraries will go to our
 [NuGet.org presence](https://www.nuget.org/profiles/Bitwarden).
+
+## Redis Cache
+
+Redis provides distributed caching capabilities. Redis is optional, and available caching
+configurations have specific fallbacks including database store or in-memory caching.
+
+:::info
+
+For details on which features can take advantage of Redis and available configurations, see
+[CACHING.md](https://github.com/bitwarden/server/blob/main/src/Core/Utilities/CACHING.md).
+
+:::
+
+1. Launch the Redis container using Docker Compose:
+
+   ```bash
+   docker compose --profile redis up -d
+   ```
+
+   This starts a Redis instance on port `6379` with data persistence via append-only file.
+
+2. Configure your server to use Redis by configuring
+   [user secrets](./guide.md#configure-user-secrets) and starting or restarting your server
+   application:
+
+   ```json
+   {
+      ...
+      "globalSettings": {
+         "distributedCache": {
+            "redis": {
+               "connectionString": "localhost:6379"
+            }
+         }
+      }
+      ...
+   }
+   ```
+
+3. (Optional) [Monitor](https://redis.io/docs/latest/commands/monitor/) Redis activity using the
+   Redis CLI:
+   ```bash
+   docker compose exec redis redis-cli
+   ```

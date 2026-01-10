@@ -33,7 +33,7 @@ objects. This differs from `wasm-bindgen`, which allows JavaScript to interact d
 Rust-owned structures in memory. `tsify` is generally better for handling complex data types,
 especially when working with Rust crates that already support `serde`.
 
-## Choosing Between `wasm-bindgen` and `tsify`
+## Choosing between `wasm-bindgen` and `tsify`
 
 Here's a quick overview of when to use each tool:
 

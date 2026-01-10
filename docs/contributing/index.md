@@ -4,7 +4,7 @@ sidebar_position: 0
 
 # Contributing
 
-## How to Contribute
+## How to contribute
 
 Contributions of all kinds are welcome!
 
@@ -40,13 +40,13 @@ Here is how you can get involved:
   report through our [HackerOne Program](https://hackerone.com/bitwarden/). You can read our
   security policy below.
 
-### Contributor Agreement
+### Contributor agreement
 
 Please sign the [Contributor Agreement](https://cla-assistant.io/bitwarden/clients) if you intend on
 contributing to any Github repository. Pull requests cannot be accepted and merged unless the author
 has signed the Contributor Agreement.
 
-### Pull Request Guidelines
+### Pull request guidelines
 
 - use `npm run lint` and fix any linting suggestions before submitting a pull request
 - commit any pull requests against the `main` branch
@@ -70,7 +70,7 @@ a translation correction), please register an account at Crowdin and join our pr
 - [https://crowdin.com/project/bitwarden-web](https://crowdin.com/project/bitwarden-web)
 
 If the language that you are interested in translating is not already listed, create a new account
-on Crowdin, join the project, and [contact the project owner](https://crowdin.com/profile/wsalmon).
+on Crowdin, join the project, and [contact the project owner](https://crowdin.com/profile/mpowerbw).
 
 You can read Crowdin's getting started guide for translators here:
 [https://support.crowdin.com/crowdin-intro/](https://support.crowdin.com/crowdin-intro/).
@@ -82,7 +82,7 @@ users safe. If you believe you've found a security issue in our product or servi
 to please submit a report through our [HackerOne Program](https://hackerone.com/bitwarden/). We
 welcome working with you to resolve the issue promptly. Thanks in advance!
 
-### Disclosure Policy
+### Disclosure policy
 
 - Let us know as soon as possible upon discovery of a potential security issue, and we'll make every
   effort to quickly resolve the issue.

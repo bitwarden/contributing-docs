@@ -9,7 +9,7 @@ tags: [server]
 
 <AdrTable frontMatter={frontMatter}></AdrTable>
 
-## Context and Problem Statement
+## Context and problem statement
 
 `Microsoft.Extensions.DependencyInjection` (the DI provider we use) has a "last one wins" behavior
 -- this means that if you inject two services of the same service type, the last implementation that
@@ -105,9 +105,9 @@ show a clear dependency graph. There are a few services that are allowed to not 
 as they are expected to always be included in the host -- those services are `ILogger<>`,
 `ILoggerFactory`, `IConfiguration`, and `IHostEnvironment`.
 
-## Considered Options
+## Considered options
 
-- **Ad-hoc usage** - Where we are today, the `TryAdd` overloads are allowed to be used and are used
+- **Ad hoc usage** - Where we are today, the `TryAdd` overloads are allowed to be used and are used
   occasionally throughout the codebase but they is no outside encouragement to use them.
 - **Encourage usage** - Start encouraging usage through team training and encouragement to use them
   in code reviews but don't make any automatic check to enforce usage.
@@ -118,18 +118,18 @@ as they are expected to always be included in the host -- those services are `IL
 - **Disallow usage** - There doesn't seem like a good reason to do this as there are more explicit
   versions of the non-`TryAdd` overloads. If you want to use them you should be allowed to.
 
-## Decision Outcome
+## Decision outcome
 
 Chosen option: **Enforce usage**.
 
-### Positive Consequences
+### Positive consequences
 
 - More explicit intention.
 - Built-in dependency graph.
 - Easier ability for the host to make overarching decisions.
 - A single project that bootstraps multiple services is much easier.
 
-### Negative Consequences
+### Negative consequences
 
 - New paradigm.
 - A migration to `TryAdd` if done incorrectly could break things.

@@ -462,10 +462,8 @@ WHERE
     [Column] IS NULL
 GO
 
-ALTER TABLE
-    [dbo].[Column]
-ALTER COLUMN
-    [Column] INT NOT NULL
+ALTER TABLE [dbo].[Table]
+    ALTER COLUMN [Column] INT NOT NULL
 GO
 ```
 
@@ -474,13 +472,19 @@ This is better:
 ```sql
 IF COL_LENGTH('[dbo].[Table]', 'Column' IS NULL
 BEGIN
-    ALTER TABLE
-        [dbo].[Column]
-    ADD
-        [Column] INT NOT NULL CONSTRAINT DF_Table_Column DEFAULT 0
+    ALTER TABLE [dbo].[Table]
+        ADD [Column] INT NOT NULL CONSTRAINT DF_Table_Column DEFAULT 0
 END
 GO
 ```
+
+:::warning Do not use defaults for string columns
+
+Default values should only be used for integral types (`BIT`, `TINYINT`, `SMALLINT`, `INT`,
+`BIGINT`). Do not provide default values for string columns (`VARCHAR`, `NVARCHAR`, or their `MAX`
+variants), as this can lead to unnecessary storage overhead and performance issues.
+
+:::
 
 #### Changing a column data type
 
@@ -591,6 +595,33 @@ in Azure SQL.
 CREATE NONCLUSTERED INDEX [IX_OrganizationUser_UserIdOrganizationIdStatus]
    ON [dbo].[OrganizationUser]([UserId] ASC, [OrganizationId] ASC, [Status] ASC)
    INCLUDE ([AccessAll])
+```
+
+#### Modifying Existing Indexes
+
+To add columns to an existing index, recreate the index with the same name using
+`DROP_EXISTING = ON`. SQL Server will build the new index from the existing one while keeping the
+old index available for queries during the rebuild.
+
+```sql
+IF EXISTS (
+    SELECT * FROM sys.indexes
+    WHERE name = 'IX_Organization_Enabled'
+    AND object_id = OBJECT_ID('[dbo].[Organization]')
+)
+BEGIN
+    CREATE NONCLUSTERED INDEX [IX_Organization_Enabled]
+    ON [dbo].[Organization]([Id] ASC, [Enabled] ASC)
+    INCLUDE ([UseTotp], [UsersGetPremium])
+    WITH (DROP_EXISTING = ON);
+END
+ELSE
+BEGIN
+    CREATE NONCLUSTERED INDEX [IX_Organization_Enabled]
+    ON [dbo].[Organization]([Id] ASC, [Enabled] ASC)
+    INCLUDE ([UseTotp], [UsersGetPremium]);
+END
+GO
 ```
 
 #### Index best practices

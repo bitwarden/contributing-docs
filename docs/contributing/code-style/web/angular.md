@@ -14,14 +14,14 @@ Always strive to write idiomatic up to date Angular code. Since Angular is a liv
 best practices and recommendations may evolve over time. Stay informed about the latest changes and
 adapt your code accordingly.
 
-### Change Detection
+### Change detection
 
 Use the `OnPush` change detection strategy. We will eventually enforce this project wide for
 performance reasons.
 
 ### Control flow
 
-Only use the new Angular Control Flow syntax (`@if`), do **not** use the older structural directives
+Only use the new Angular control flow syntax (`@if`), do **not** use the older structural directives
 (`*ngIf`).
 
 ### Dependency injection
@@ -134,14 +134,14 @@ prefixes are allowed:
 - `Default`: Used for the default implementation of an abstract class.
 - `Web`, `Browser`, `Desktop` and `Cli` for platform specific implementations.
 
-## Thin Components
+## Thin components
 
 Components should be thin and only contain the logic required to render the view. All other logic
 belongs to services. This way components that behave almost identical but looks quite different
 visually can avoid code duplication by sharing the same service. Services tends to be much easier to
 test than components as well.
 
-### Composition over Inheritance ([ADR-0009](../../../architecture/adr/0009-angular-composition-over-inheritance.md))
+### Composition over inheritance ([ADR-0009](../../../architecture/adr/0009-angular-composition-over-inheritance.md))
 
 Due to the multi client nature of Bitwarden, we have a lot of shared components with slightly
 different behavior client to client. Traditionally this was implemented using inheritance, however
@@ -212,7 +212,7 @@ component "Organization Reports Module" {
 @enduml
 ```
 
-## Reactivity ([ADR-0003](../../../architecture/adr/0003-observable-data-services.md) & ADR-0028)
+## Reactivity ([ADR-0003](../../../architecture/adr/0003-observable-data-services.md) & [ADR-0029](../../../architecture/adr/0029-angular-signals.md))
 
 We make heavy use of reactive programming using [Angular Signals][signals] & [RxJS][rxjs]. Generally
 components should always derive their state reactively from services whenever possible.
@@ -373,7 +373,7 @@ Some appropriate operators are:
   observables but not care about the order. If ordering is important use `concatMap`. If you only
   care about the latest value use `switchMap`.
 
-### Reactive Forms ([ADR-0001](../../../architecture/adr/0001-reactive-forms.md))
+### Reactive forms ([ADR-0001](../../../architecture/adr/0001-reactive-forms.md))
 
 We almost exclusively use [Angular Reactive forms](https://angular.dev/guide/forms/reactive-forms)
 instead of Template Driven forms. And the Bitwarden Component Library is designed to integrate with
@@ -391,7 +391,7 @@ Reactive forms.
 For general guidance on enum-likes, consult
 [Avoid TypeScript Enums](./typescript.md#avoid-typescript-enums).
 
-### String-backed Enum-likes
+### String-backed enum-likes
 
 String-typed enum likes can be used as inputs of a component directly. Simply expose the enum-like
 property from your component:
@@ -416,7 +416,7 @@ Composers can use the enum's string values directly:
 <my-component input="value" />
 ```
 
-### Numeric Enum-likes
+### Numeric enum-likes
 
 Using numeric enum-likes in components should be avoided. If it is necessary, follow the same
 pattern as a string-backed enum.
