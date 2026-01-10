@@ -384,7 +384,7 @@ of the `FeatureFlagKeys` enum.
 
 :::
 
-### Step 3: Remove flag from LaunchDarkly
+### Step 3: Archive flag in LaunchDarkly
 
 :::tip Timing
 
@@ -394,7 +394,23 @@ Step 2. Appropriate time should be taken to ensure a rollback of the release wil
 :::
 
 Once the server codebase has been deployed to all environments without any references to the flag,
-the flag should be archived in LaunchDarkly.
+the flag can be archived in LaunchDarkly.
+
+Before the flag is archived, it should first be **disabled** in the Development and QA environments
+and verified that there are no unintended side-effects.
+
+:::warning "Ready to Archive" recommendation
 
 Feature flags not accessed for a long period of time will automatically move to an "inactive" state
 that can also help with identifying technical debt to clean up.
+
+Because we do not use the LaunchDarkly client-side SDK, LaunchDarkly does **not** know if we are
+evaluating a flag on the client. We retrieve all flags via the `/api/config` endpoint on the
+Bitwarden API and serve those up to the client. The retrieval of all flags through the server-side
+LaunchDarkly SDK
+[does not report as evaluation of the flags](https://launchdarkly.com/docs/sdk/features/all-flags#about-the-all-flags-feature),
+which means that that flag may be falsely reported as "inactive" and available to archive.
+
+Flags that are evaluated on the server only will be reliably reported as being available to archive.
+
+:::
