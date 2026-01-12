@@ -73,7 +73,7 @@ export NODE_EXTRA_CA_CERTS=/path/to/your-certificate.pem
 
 ### Target local Server instance
 
-If you are running the Bitwarden Web application locally, you will only need to set the base server
+If you are running the Bitwarden Web application locally, you only need to set the base server
 location. This works because the web application uses Webpack to proxy API requests through to your
 local Server APIs.
 
