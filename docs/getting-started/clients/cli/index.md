@@ -65,7 +65,7 @@ A quick way to do this is to give Node access to your system certificates in the
 export NODE_USE_SYSTEM_CA=1
 ```
 
-Alternatively, you can add the certificate directly to Node by referencing it like so:
+Alternatively, you can add the certificate directly to Node:
 
 ```bash
 export NODE_EXTRA_CA_CERTS=/path/to/your-certificate.pem
