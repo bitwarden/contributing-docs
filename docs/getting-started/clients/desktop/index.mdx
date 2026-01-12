@@ -68,7 +68,7 @@ npm run build
 #### Windows on ARM
 
 If you're building in Windows on ARM, you might need to run `build.js` with the `cross-platform`
-argument:
+argument to build both arm64 and x64 native binaries:
 
 ```bash
 node desktop_native/build.js cross-platform
@@ -90,6 +90,74 @@ export PKG_CONFIG_ALL_STATIC=1
 export PKG_CONFIG_ALLOW_CROSS=1
 npm run build -- --target x86_64-unknown-linux-musl # Replace with relevant target
 ```
+
+#### Targeting Windows Appx from macOS
+
+The Windows Appx can be built from macOS[^1]. This can be helpful if you have a macOS development
+machine and an underpowered Windows test machine, like a VM or test laptop.
+
+(Note: If you are using a Windows VM on macOS with Apple Silicon, we recommend using [UTM][utm] with
+a [Windows 11 arm64][win11-arm64] build for the best performance.)
+
+##### Prerequisites
+
+- PowerShell 7.x: Build scripts
+- makemsix from [microsoft/msix-packaging][msix-packaging]: Packages the file in an Appx
+- [osslsigncode][]: Produces signatures in the Appx format using OpenSSL.
+- [cargo-xwin][]: Used to cross-compile native binaries for the Windows MSVC target.
+
+You can install these with the following script:
+
+```shell
+brew install powershell iinuwa/msix-packaging-tap/msix-packaging osslsigncode
+cargo install --version 0.20.2 --locked cargo-xwin
+```
+
+Our build scripts will also automatically attempt to install these utilities when cross-compiling to
+Windows from macOS.
+
+Before building the first time, you must generate a signing certificate and set up your test machine
+to trust it. See the setup instructions in the [Microsoft Store docs][ms-store-docs] for more
+information.
+
+After that, you can build the Appx from macOS using the steps below.
+
+##### Cross-compiling Appx
+
+```sh
+cd apps/desktop
+export CERTIFICATE_PASSWORD="<password>"
+./scripts/appx-cross-build.ps1 -Architecture arm64 -CertificatePath "<path to signing cert>.pfx"
+```
+
+Once complete, you can copy the Appx file from `apps/desktop/dist/Bitwarden-<version>.appx` to your
+Windows test machine and install it there.
+
+Use PowerShell's help system to get more information about the script arguments:
+
+```powershell
+Get-Help ./scripts/appx-cross-build.ps1 -Full
+```
+
+[^1]:
+    <p>
+      Linux is not currently supported for cross-compilation of the Appx. It could work by using the
+      same instructions as for macOS listed above, but we are not aware of a packaged version of
+      `msix-packaging` tools required for building the Appx.
+    </p>
+    <p>
+      Contributions to the documentation on how to build this package for Linux are welcome.
+      Alternatively, you can consider contributing to the third party Homebrew tap to add Linux
+      support at [`iinuwa/msix-packaging-tap/msix-packaging`][msix-packaging-tap].
+    </p>
+
+[cargo-xwin]: https://github.com/rust-cross/cargo-xwin
+[ms-store-docs]: /getting-started/clients/desktop/microsoft-store#macos
+[msix-packaging]: https://github.com/microsoft/msix-packaging
+[msix-packaging-tap]: https://github.com/iinuwa/homebrew-msix-packaging-tap/
+[osslsigncode]: https://github.com/mtrojnar/osslsigncode
+[utm]: https://getutm.app/
+[win11-arm64]: https://www.microsoft.com/en-us/software-download/windows11arm64
 
 ## Build instructions
 
