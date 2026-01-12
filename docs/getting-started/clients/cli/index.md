@@ -59,7 +59,7 @@ locally, follow the instructions below in Environment setup.
 
 ### Configure Node to trust development certificates
 
-A quick way to do this is to give Node access to your system certificates in the macOS Keychain:
+A quick way to do this is to give Node access to your system certificates:
 
 ```bash
 export NODE_USE_SYSTEM_CA=1
