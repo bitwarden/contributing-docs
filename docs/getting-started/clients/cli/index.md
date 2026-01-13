@@ -85,7 +85,7 @@ node build/bw.js config server https://localhost:8080
 Otherwise, you need to set the individual Server API locations as follows:
 
 ```bash
-node build/bw.js config server \
+node build/bw.js config server  \
   --api http://localhost:4000 \
   --identity http://localhost:33656
 ```
