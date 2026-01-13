@@ -157,6 +157,15 @@ point.
 
 When the release is complete, the `rc` branch is deleted.
 
+### Branch Protection Requirements
+
+After the initial `rc`, `hotfix-rc`, or `hotfix-rc-*` branch is pushed to GitHub, it becomes
+protected. Any additional changes require:
+
+- All changes must go through pull requests (no direct pushes)
+- At least 1 approval required
+- Code owner review required
+
 ### Hotfix releases
 
 For a hotfix release, a hotfix branch is created off of the release tag for the release upon which
@@ -170,7 +179,9 @@ separately, each client in the `clients` repo has their own named hotfix branch:
 - CLI: `hotfix-rc-cli`
 
 Once the hotfix branch has been created, the individual commits in `main` are cherry-picked into the
-hotfix branches. For a client fix, this may require cherry-picking to multiple hotfix branches.
+hotfix branches. The initial hotfix branch can be pushed directly with the first cherry-pick. Any
+additional cherry-picks must be done via pull request due to branch protection. For a client fix,
+this may require cherry-picking to multiple hotfix branches.
 
 Once the hotfix has been deployed, the hotfix branches are deleted.
 
