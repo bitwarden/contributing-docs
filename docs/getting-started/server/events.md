@@ -197,7 +197,6 @@ To emulate this locally:
     [Server Setup Guide](./guide.md#azurite)
 
 2.  Make sure that the following user secrets are set correctly:
-
     - `globalSettings:events:connectionString` should not be set, or has the default value of
       `UseDevelopmentStorage=true`
     - `globalSettings:events:queueName` should be set to `"event"`
