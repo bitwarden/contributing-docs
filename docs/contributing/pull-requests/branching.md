@@ -163,7 +163,7 @@ After the initial `rc`, `hotfix-rc`, or `hotfix-rc-*` branch is pushed to GitHub
 protected. Any additional changes require:
 
 - Going through pull requests (no direct pushes)
-- At least 1 approval required
+- At least one approval
 - Code owner review required
 
 ### Hotfix releases
