@@ -164,7 +164,7 @@ protected. Any additional changes require:
 
 - Going through pull requests (no direct pushes)
 - At least one approval
-- Code owner review required
+- Code owner review
 
 ### Hotfix releases
 
