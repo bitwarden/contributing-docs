@@ -196,8 +196,11 @@ To emulate this locally:
 1.  Make sure you've installed and setup Azurite, as described in the
     [Server Setup Guide](./guide.md#azurite)
 
-2.  Make sure that the `globalSettings:events:connectionString` user secret is not set, or has the
-    default value of `UseDevelopmentStorage=true`
+2.  Make sure that the following user secrets are set correctly:
+
+    - `globalSettings:events:connectionString` should not be set, or has the default value of
+      `UseDevelopmentStorage=true`
+    - `globalSettings:events:queueName` should be set to `"event"`
 
 3.  Start the Events and EventsProcessor projects using `dotnet run` or your IDE. (Also ensure you
     have Api, Identity and your web vault running.)
