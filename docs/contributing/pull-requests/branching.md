@@ -157,7 +157,7 @@ point.
 
 When the release is complete, the `rc` branch is deleted.
 
-### Branch Protection Requirements
+### Branch protection requirements
 
 After the initial `rc`, `hotfix-rc`, or `hotfix-rc-*` branch is pushed to GitHub, it becomes
 protected. Any additional changes require:
