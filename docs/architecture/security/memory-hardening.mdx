@@ -1,0 +1,40 @@
+# Memory Hardening
+
+While protecting against user-space memory attacks in the general case is not within the threat
+model for Bitwarden applications, the lock state must be protected, and it should not be possible to
+unlock a locked vault. Because of this, passwords or keys cannot be left behind in memory an
+accessible state. Besides this requirement, some features such as SSH agent require process
+hardening where possible, required by the specification of the protocol.
+
+## Zeroizing and Process Reload
+
+To clear secrets on locking, Bitwarden clients use two techniques, zeroizing and process reload. For
+any memory that lives in Rust, memory is overwritten with zeroes, as soon as it becomes unused /
+gets dropped. This hardens the SDK, and the Rust desktop module (desktop native) against memory
+being left behind. Process reload wipes the entire process - on the web app by reloading the page,
+on browser by reloading the extension, and on desktop by force-crashing the renderer process. The
+assumption here is that since the process dies, the memory gets wiped too. Javascript does not allow
+zeroizing memory consistently, and frequently leaves secrets, or partial secrets behind in memory,
+that are not cleared, even after a garbage collection cycle.
+
+## Process Isolation and Key Protection on Desktop Apps
+
+Next to process reload and zeorizing, desktop apps can use OS-level protections to harden memory.
+There are two mechanisms used here: Process isolation and key protection. Process isolation uses
+OS-level features to isolate the process from debugger access. Windows and desktop Linux by default
+allow user-space processes to debug other user-space processes and read memory. MacOS does not allow
+this by default and requires user consent to allow a process to debug another process. On Linux,
+some distros such as Ubuntu use yama.ptrace_scope to limit ptrace access.
+
+To harden against user-space memory attacks, Bitwarden desktop isolates the main process. On
+Windows, DACL is used to restrict access to the process, on Linux PR_SET_DUMPABLE is used to disable
+ptrace access and on MacOS the process is hardened using the Hardened Runtime entitlements, and also
+by using PT_DENY_ATTACH to prevent debugger attachment. On Linux, a dynamic library that sets
+PR_SET_DUMPABLE is also injected into the renderer processes, so that these are isolated too. These
+mechanisms apply on all apps except for the Snap desktop app.
+
+Next to hardening the entire process, operating systems offer mechanisms to protect cryptographic
+keys in memory. On Windows, DPAPI can be used to encrypt a key in memory, with a key bound to the
+process. On Linux, `memfd_secret` and `keyctl` are available, each of which can be used to store
+keys in memory while preventing other processes from reading them. This is used to hold the
+biometric unlock key in memory while the desktop app is locked.
