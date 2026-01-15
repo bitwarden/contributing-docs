@@ -45,6 +45,7 @@ libmagic
 LLDB
 Mailcatcher
 minio
+Mjml
 MVVM
 NGRX
 OIDCS
@@ -88,6 +89,7 @@ typealias
 typecheck
 typechecks
 typesafe
+uniffi
 unsynchronized
 WCAG
 Xcodes.app
