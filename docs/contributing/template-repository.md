@@ -105,7 +105,30 @@ Actions workflows for code scanning. Targets two domains:
   push events.
 - Quality: Additional language-specific findings and improvements not strictly related to security.
 
+Each above domain-specific scanner calls a reusable workflow in the `gh-actions` repository.
+
 SAST results are exported as
 [SARIF](https://docs.oasis-open.org/sarif/sarif/v2.1.0/sarif-v2.1.0.html) (Static Analysis Results
 Interchange Format) and uploaded to the GitHub Advanced Security interface for internal review.
 Quality results are also made available in the interface when security-related.
+
+## AI
+
+Initial content placeholders provide AI assistance and automated code reviews:
+
+```
+.claude/
+└── CLAUDE.md             # General project context, guidelines, and instructions
+```
+
+### Automated reviews
+
+Actions workflows for review of issues and pull requests. Targets two use cases:
+
+- Review of pull requests: Reviews are posted via a sticky comment that updates. Reviews will only
+  performed if an `ai-review` label is present on the pull request. The pull request must be opened,
+  reopened, or synchronized (e.g. new commits pushed) to trigger a review.
+- Response: By mentioning `@claude` in issue or pull request (including inline) comments. Specific
+  responses to the mention will be generated.
+
+Each above use case calls a reusable workflow in the `gh-actions` repository.
