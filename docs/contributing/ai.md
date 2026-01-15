@@ -28,7 +28,19 @@ productive contributors.
 
 **Security-First Approach**: We carefully select and configure AI tools that align with our security
 requirements, ensuring that sensitive code and data remain protected while still benefiting from AI
-assistance.
+assistance. However, AI tools complement—rather than replace—human oversight and decision-making.
+
+While AI tools enhance developer productivity and help identify potential issues, all code
+contributions to Bitwarden undergo thorough human review and approval by the Bitwarden engineering
+team.
+
+Every contribution, whether created with or without AI assistance, must meet strict security and
+quality standards, align with Bitwarden's core architecture, and be thoroughly tested before being
+merged.
+
+This ensures that the final decision-making and quality assurance remain firmly in the hands of our
+security-conscious development team. Contributors can be confident that all merged code has been
+carefully vetted by the Bitwarden team, regardless of the tools used to create it.
 
 Our primary AI tooling stack centers around Anthropic's Claude, which offers both a powerful
 language model and flexible integration capabilities through the Model Context Protocol (MCP). This
@@ -81,11 +93,25 @@ Install via [claude.ai/download](https://claude.ai/download) or Homebrew `brew i
 - Configure your workspace preferences
 - Enable MCP server connections in Settings → Developer → MCP Servers
 
-## MCP servers
+## MCP servers and extensions
 
 Model Context Protocol (MCP) servers extend Claude's capabilities by providing access to external
 tools, APIs, and data sources. They enable Claude to interact with your development environment,
 databases, and other services while maintaining security boundaries.
+
+### Bitwarden AI plugin marketplace
+
+Bitwarden maintains a curated [marketplace of AI plugins](https://github.com/bitwarden/ai-plugins)
+specifically designed for our development workflows. This marketplace was created to provide
+quality-controlled, security-reviewed plugins that follow Bitwarden's coding standards and security
+requirements. All marketplace plugins are maintained by the Bitwarden team and include comprehensive
+documentation, testing, and security validation.
+
+To use the marketplace with Claude Code:
+
+```bash
+/plugin marketplace add bitwarden/ai-plugins
+```
 
 ### Understanding MCP servers
 

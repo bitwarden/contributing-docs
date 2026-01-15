@@ -37,7 +37,7 @@ environment.
   development environments
 - [PowerShell](https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell-core-on-macos)
   (available via Homebrew: `brew install powershell`)
-- [NodeJS](https://nodejs.org/) v20 (preferably using a [node version manager][nvm])
+- [NodeJS](https://nodejs.org/) v22 (preferably using a [node version manager][nvm])
 - [NPM](https://www.npmjs.com/) v10 (included with Node)
 - [Rust](https://www.rust-lang.org/tools/install) latest stable version - (preferably installed via
   [rustup](https://rustup.rs/))
@@ -95,6 +95,8 @@ recommended ones include the following:
     integrate with prettier code formatting
   - [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) -
     Integrations for ESLint
+  - [Nx Console](https://marketplace.visualstudio.com/items?itemName=nrwl.angular-console) - UI over
+    the Nx CLI
 - Rust
   - [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=matklad.rust-analyzer) -
     Great rust language server

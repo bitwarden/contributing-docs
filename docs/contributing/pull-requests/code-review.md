@@ -31,6 +31,20 @@ You can find more tips for PR review here:
 
 :::
 
+## Before submitting for review
+
+Before marking a PR as ready for review, ensure you've completed the following reminders:
+
+- Contributor guidelines followed
+- All formatters and local linters executed and passed
+- Written new unit and / or integration tests where applicable
+- Protected functional changes with optionality (feature flags)
+- Used internationalization (i18n) for all UI strings
+- CI builds passed
+- Communicated to DevOps any deployment requirements
+- Updated any necessary documentation (Confluence, contributing docs) or informed the documentation
+  team
+
 ## Responding to review requests
 
 To ensure that teams within the organization operate on same set of assumptions for performing
@@ -86,6 +100,23 @@ assumptions. Code, after merge, should represent the best solution that fulfills
 requirements, which may not necessarily be in line with the previous solution.
 
 :::
+
+### Providing rich feedback
+
+When leaving comments on a PR, you can use emoji reactions to clarify the intent and severity of
+your feedback. This helps the author quickly understand which comments are blocking concerns versus
+informational notes or suggestions:
+
+| Emoji                                    | Meaning                                        |
+| ---------------------------------------- | ---------------------------------------------- |
+| 👍 `:+1:`                                | Excellent contribution or work                 |
+| 📝 `:memo:` / ℹ️ `:information_source:`  | Note or informational comment                  |
+| ❓ `:question:`                          | Question or inquiry                            |
+| 🤔 `:thinking:` / 💭 `:thought_balloon:` | Open for discussion                            |
+| 🎨 `:art:`                               | Suggestion or improvement                      |
+| ❌ `:x:` / ⚠️ `:warning:`                | Significant concern that should be addressed   |
+| 🌱 `:seedling:` / ♻️ `:recycle:`         | Future work or technical debt to address later |
+| ⛏ `:pick:`                              | Minor nitpick                                  |
 
 ### Review statuses
 
