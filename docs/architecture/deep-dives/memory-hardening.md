@@ -1,7 +1,3 @@
----
-sidebar_position: 10
----
-
 # Memory Hardening
 
 While protecting against user-space memory attacks in the general case is not within the threat
