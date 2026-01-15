@@ -14,8 +14,8 @@ gets dropped. This hardens the SDK, and the Rust desktop module (desktop native)
 being left behind. Process reload wipes the entire process - on the web app by reloading the page,
 on browser extensions by reloading the extension, and on desktop by force-crashing the renderer
 process. The assumption here is that since the process dies, the memory gets wiped too. JavaScript
-does not allow zeroizing memory consistently, and frequently leaves secrets, or partial secrets
-behind in memory, that are not cleared, even after a garbage collection cycle.
+does not provide mechanisms for reliably zeroizing memory. Secrets or partial secrets frequently
+remain in memory even after garbage collection cycles complete.
 
 ## Process isolation and key protection on desktop apps
 
@@ -31,7 +31,8 @@ Windows, `DACL` is used to restrict access to the process, on Linux `PR_SET_DUMP
 disable ptrace access and on MacOS the process is hardened using the Hardened Runtime entitlements,
 and also by using `PT_DENY_ATTACH` to prevent debugger attachment. On Linux, a dynamic library that
 sets `PR_SET_DUMPABLE` is also injected into the renderer processes, so that these are isolated too.
-These mechanisms apply to all apps except for the Snap desktop app.
+These mechanisms apply to all apps except for the Snap desktop app. Snap does not support
+`PR_SET_DUMPABLE` currently and breaks file picker support, due to a bug in the desktop portal.
 
 Next to hardening the entire process, operating systems offer mechanisms to protect cryptographic
 keys in memory. On Windows, `DPAPI` can be used to encrypt a key in memory, with a key bound to the
