@@ -88,6 +88,7 @@ typealias
 typecheck
 typechecks
 typesafe
+udeps
 unsynchronized
 WCAG
 Xcodes.app
