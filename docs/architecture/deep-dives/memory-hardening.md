@@ -11,11 +11,11 @@ where possible, as required by the protocol specification.
 To clear secrets on locking, Bitwarden clients use two techniques, zeroizing and process reload. For
 any memory that lives in Rust, memory is overwritten with zeroes, as soon as it becomes unused or
 gets dropped
-[1](https://github.com/bitwarden/sdk-internal/blob/4591981820f12a24e64609fb0a9fd4fdaabbb216/crates/bitwarden-crypto/src/lib.rs#L13).
+[[1]](https://github.com/bitwarden/sdk-internal/blob/4591981820f12a24e64609fb0a9fd4fdaabbb216/crates/bitwarden-crypto/src/lib.rs#L13).
 This hardens the SDK, and the Rust desktop module (desktop native) against memory being left behind.
 Process reload wipes the entire process - on the web app by reloading the page, on browser
 extensions by reloading the extension, and on desktop by force-crashing the renderer process
-[2](https://github.com/bitwarden/clients/blob/16e67566436ae7becbea85f900656c437204824b/libs/common/src/key-management/services/default-process-reload.service.ts#L22).
+[[2]](https://github.com/bitwarden/clients/blob/16e67566436ae7becbea85f900656c437204824b/libs/common/src/key-management/services/default-process-reload.service.ts#L22).
 The assumption here is that since the process dies, the memory gets wiped too. JavaScript does not
 provide mechanisms for reliably zeroizing memory. Secrets or partial secrets frequently remain in
 memory even after garbage collection cycles complete.
@@ -39,7 +39,7 @@ disable ptrace access and on MacOS the process is hardened using the Hardened Ru
 and also by using `PT_DENY_ATTACH` to prevent debugger attachment. On Linux, a dynamic library that
 sets [`PR_SET_DUMPABLE`](https://man7.org/linux/man-pages/man2/pr_set_dumpable.2const.html) is also
 injected into the renderer processes by injecting a shared object into the renderer processes
-[3](https://github.com/bitwarden/clients/blob/16e67566436ae7becbea85f900656c437204824b/apps/desktop/desktop_native/process_isolation/src/lib.rs),
+[`3`](https://github.com/bitwarden/clients/blob/16e67566436ae7becbea85f900656c437204824b/apps/desktop/desktop_native/process_isolation/src/lib.rs),
 so that these are isolated too. These mechanisms apply to all apps except for the Snap desktop app.
 Snap does not support
 [`PR_SET_DUMPABLE`](https://man7.org/linux/man-pages/man2/pr_set_dumpable.2const.html) currently and
