@@ -35,7 +35,7 @@ To harden against user-space memory attacks, Bitwarden desktop isolates the main
 Windows, [`DACL`](https://learn.microsoft.com/en-us/windows/win32/secauthz/dacls-and-aces) is used
 to restrict access to the process, on Linux
 [`PR_SET_DUMPABLE`](https://man7.org/linux/man-pages/man2/pr_set_dumpable.2const.html) is used to
-disable ptrace access and on MacOS the process is hardened using the Hardened Runtime entitlements,
+disable ptrace access and on macOS the process is hardened using the Hardened Runtime entitlements,
 and also by using `PT_DENY_ATTACH` to prevent debugger attachment. On Linux, a dynamic library that
 sets [`PR_SET_DUMPABLE`](https://man7.org/linux/man-pages/man2/pr_set_dumpable.2const.html) is also
 injected into the renderer processes by injecting a shared object into the renderer processes in the
