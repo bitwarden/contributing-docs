@@ -25,7 +25,7 @@ memory even after garbage collection cycles complete.
 Next to process reload and zeroizing, desktop apps can use OS-level protections to harden memory.
 There are two mechanisms used here: Process isolation and key protection. Process isolation uses
 OS-level features to isolate the process from debugger access. Windows and desktop Linux by default
-allow user-space processes to debug other user-space processes and read memory. MacOS does not allow
+allow user-space processes to debug other user-space processes and read memory. macOS does not allow
 this by default and requires user consent to allow a process to debug another process. On Linux,
 some distributions such as Ubuntu use
 [yama.ptrace_scope](https://www.kernel.org/doc/Documentation/security/Yama.txt) to limit ptrace
