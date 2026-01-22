@@ -205,7 +205,8 @@ decision.
 - Does the functionality need the SDK to produce an observable or reactive value?
   - The SDK does not support reactivity at this time. However we still encourage migrating the
     relevant business logic to the SDK and then building reactivity with that logic in TypeScript.
-    </Bitwarden>
+
+</Bitwarden>
 
 [sdk-internal-468]: https://github.com/bitwarden/sdk-internal/pull/468
 [state-crate]: https://github.com/bitwarden/sdk-internal/tree/main/crates/bitwarden-state
