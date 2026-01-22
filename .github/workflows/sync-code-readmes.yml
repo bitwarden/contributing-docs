@@ -1,0 +1,160 @@
+name: Sync Code README Table of Contents
+
+on:
+  # Run when manually triggered
+  workflow_dispatch:
+  # Run on a schedule (weekly on Sunday at midnight UTC)
+  schedule:
+    - cron: "0 0 * * 0"
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  sync-code-readmes:
+    name: Sync README ToC from Bitwarden repos
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Check out contributing-docs repo
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          fetch-depth: 1
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Check out repositories to document
+        run: |
+          # Array of repositories to check out
+          # Format: "org/repo|local-directory"
+          repos=(
+            "bitwarden/clients|clients-repo"
+            "bitwarden/server|server-repo"
+            "bitwarden/sdk-internal|sdk-internal-repo"
+          )
+
+          for repo_info in "${repos[@]}"; do
+            IFS='|' read -r repo_name local_dir <<< "$repo_info"
+            echo "Checking out $repo_name to $local_dir..."
+            git clone --depth 1 "https://github.com/${repo_name}.git" "$local_dir"
+          done
+
+      - name: Find and process README files
+        run: |
+          # Define repositories to process
+          # Format: "repo_name|directory|display_name|github_org"
+          declare -a repos=(
+            "clients|clients-repo|Clients Repository|bitwarden/clients"
+            "server|server-repo|Server Repository|bitwarden/server"
+            "sdk-internal|sdk-internal-repo|SDK Internal Repository|bitwarden/sdk-internal"
+          )
+
+          # Update the existing TOC file
+          toc_file="docs/documentation/code-readmes.md"
+
+          # Clear existing content but keep frontmatter
+          cat > "$toc_file" << 'EOF'
+          ---
+          sidebar_position: 1
+          ---
+
+          # Code Documentation
+
+          This page provides an organized table of contents for all `README` files in the Bitwarden repositories.
+
+          EOF
+
+          # Process each repository
+          for repo_info in "${repos[@]}"; do
+            IFS='|' read -r repo_name repo_dir display_name github_path <<< "$repo_info"
+
+            echo "## $display_name" >> "$toc_file"
+            echo "" >> "$toc_file"
+            echo "`README` files from [$github_path](https://github.com/$github_path)." >> "$toc_file"
+            echo "" >> "$toc_file"
+
+            cd "$repo_dir"
+
+            # Create temp file to collect all entries
+            temp_file=$(mktemp)
+
+            find . -type f -iname "README*.md" -not -path "*/node_modules/*" | grep -v "^./README.md$" | while read -r readme_file; do
+              readme_path="${readme_file#./}"
+              base_folder=$(echo "$readme_path" | cut -d'/' -f1)
+
+              # Extract title from README
+              title=$(grep -m 1 "^# " "$readme_file" | sed 's/^# //' || basename "$readme_path")
+              if [ -z "$title" ]; then
+                title=$(basename "$readme_path")
+              fi
+
+              github_url="https://github.com/$github_path/blob/main/${readme_path}"
+
+              # Build the display path (directory path with / separators)
+              # Remove the base folder from the path since it's shown in the section header
+              dir_path=$(dirname "$readme_path")
+              # If dir_path equals base_folder, the README is at the root of the section
+              if [ "$dir_path" = "$base_folder" ]; then
+                display_path=""
+              else
+                display_path=$(echo "$dir_path" | sed "s|^${base_folder}/||" | sed 's|/| / |g')
+              fi
+
+              echo "${base_folder}|${readme_path}|${display_path}|${title}|${github_url}"
+            done > "$temp_file"
+
+            # Sort by path to ensure alphabetical order
+            sort -t'|' -k2,2 "$temp_file" > "${temp_file}.sorted"
+
+            # Generate output
+            current_base=""
+
+            while IFS='|' read -r base_folder readme_path display_path title url; do
+              # Check if we need a new base section
+              if [ "$base_folder" != "$current_base" ]; then
+                if [ -n "$current_base" ]; then
+                  echo "" >> "../$toc_file"
+                fi
+                echo "### $base_folder" >> "../$toc_file"
+                echo "" >> "../$toc_file"
+                current_base="$base_folder"
+              fi
+
+              # Format the link text based on whether display_path is empty
+              if [ -z "$display_path" ]; then
+                echo "- [$title]($url)" >> "../$toc_file"
+              else
+                echo "- [$display_path / $title]($url)" >> "../$toc_file"
+              fi
+            done < "${temp_file}.sorted"
+
+            echo "" >> "../$toc_file"
+
+            cd ..
+          done
+
+          # Add footer
+          cat >> "$toc_file" << EOF
+
+          ---
+
+          *This page is automatically updated by the [Sync Code READMEs workflow](https://github.com/bitwarden/contributing-docs/actions/workflows/sync-code-readmes.yml).*
+
+          *Last updated: $(date -u +"%Y-%m-%d %H:%M:%S UTC")*
+          EOF
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@c5a7806660adbe173f04e3e038b0ccdcd758773c # v6.1.0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "docs: Update README table of contents"
+          title: "docs: Update README table of contents"
+          body: |
+            This PR updates the README table of contents with all `README` files from the configured repositories.
+
+            This is an automated PR created by the [Sync README TOC workflow](https://github.com/bitwarden/contributing-docs/actions/workflows/sync-code-readmes.yml).
+          branch: automated/code-readmes-update
+          delete-branch: true
+          labels: |
+            documentation
+            automated
