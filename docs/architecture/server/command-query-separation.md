@@ -1,10 +1,8 @@
 ---
-sidebar_position: 6
+sidebar_position: 1
 ---
 
-# Server Architecture
-
-## Command Query Separation (CQS)
+# Command Query Separation (CQS)
 
 Our server architecture uses the Command Query Separation (CQS) pattern.
 
