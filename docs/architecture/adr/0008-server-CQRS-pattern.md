@@ -70,7 +70,7 @@ removed over time.
 
 ## Further reading
 
-- [Server Architecture](../server/index.md) - Practical guide on implementing CQS in the server
-  codebase
+- [Command Query Separation](../server/command-query-separation.md) - Practical guide on
+  implementing CQS in the server codebase
 - [Martin Fowler on CQS](https://martinfowler.com/bliki/CommandQuerySeparation.html) - High-level
   summary of the CQS principle
