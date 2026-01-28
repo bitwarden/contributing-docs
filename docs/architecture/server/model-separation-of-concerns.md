@@ -2,7 +2,7 @@
 sidebar_position: 2
 ---
 
-# Models separation of concerns
+# Model separation of concerns
 
 To maintain clean architecture and separation of concerns, **API contracts** (request/response
 models) must be kept separate from **data models**. This separation allows:
