@@ -63,7 +63,7 @@ assistance into their terminal-based workflows.
 3. Configure your API key:
 
    ```bash
-   claude-code configure
+   claude configure
    ```
 
    Walk through the process to sign into the Anthropic Console via SSO and authenticate your local
@@ -73,10 +73,10 @@ assistance into their terminal-based workflows.
 
 ```bash
 # Start an interactive session
-claude-code
+claude
 
 # Ask a question
-claude-code "How do I add a feature flag around my changes?"
+claude "How do I add a feature flag around my changes?"
 ```
 
 ### Claude Desktop
