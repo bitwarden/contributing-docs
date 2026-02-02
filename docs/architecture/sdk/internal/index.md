@@ -122,7 +122,10 @@ Bindings are those crates whose purpose is to provide bindings for other project
 ### Application Interfaces
 
 An application interface collects the various features relevant for a given Bitwarden product, e.g.
-Password Manager, or Secrets Manager, into a single easy-to-use crate for that particular product.
+Password Manager, or Secrets Manager, into a single easy-to-use client for that particular product.
+
+These clients, exposed through an external binding layer, are how consumers of the SDK will interact
+with it.
 
 ### Core and Utility
 
@@ -133,8 +136,14 @@ more details.
 ### Features and Domains
 
 Feature and domain crates constitute the application business logic. Feature crates depend on
-`bitwarden-core` and provide extensions to the Client struct to implement specific domains.
-<Bitwarden>These crates are usually owned and maintained by individual teams.</Bitwarden>
+`bitwarden-core` for their runtime and provide extensions to the `Client` struct to implement
+specific domains. <Bitwarden>These crates are usually owned and maintained by individual
+teams.</Bitwarden>
+
+The each feature or domain crate exposes its extended `Client` struct(s), which can be further
+grouped into application interfaces for consumption. See the
+[`VaultClient`](https://github.com/bitwarden/sdk-internal/blob/main/crates/bitwarden-vault/src/vault_client.rs)
+as as example.
 
 ## Language bindings
 
@@ -149,8 +158,8 @@ respectively. While UniFFI supports additional languages they typically lag a fe
 the UniFFI core library.
 
 The Android bindings are currently published on
-[GitHub Packages](https://github.com/bitwarden/sdk/packages/1945788) in the SDK repository. The
-swift package is published in the [`sdk-swift` repository](https://github.com/bitwarden/sdk-swift).
+[GitHub Packages](https://github.com/bitwarden/sdk/packages/) in the `sdk_internal` repository. The
+Swift package is published in the [`sdk-swift` repository](https://github.com/bitwarden/sdk-swift).
 
 ### Web bindings
 
@@ -161,7 +170,21 @@ that can be used as a fallback.
 
 The WebAssembly module is published on [npm](https://www.npmjs.com/package/@bitwarden/sdk-internal).
 
+<Bitwarden>
 ## Adding New Functionality
+
+### Adding new feature and domain crates
+
+Teams are encouraged to add their own feature or domain crates as they build additional
+functionality in the SDK.
+
+Adding the crate and referencing it from the appropriate application interface clients should be
+done as a separate pull request from adding any functionality in the crate itself.
+
+This will ensure that the scope of the initial setup pull request is small and focused, as our
+Platform team will be responsible for reviewing additions to the application clients.
+
+### How do I decide what to move to the internal SDK?
 
 Considering adding to or moving code into the SDK? Review these questions to help come to a
 decision.
@@ -182,6 +205,8 @@ decision.
 - Does the functionality need the SDK to produce an observable or reactive value?
   - The SDK does not support reactivity at this time. However we still encourage migrating the
     relevant business logic to the SDK and then building reactivity with that logic in TypeScript.
+
+</Bitwarden>
 
 [sdk-internal-468]: https://github.com/bitwarden/sdk-internal/pull/468
 [state-crate]: https://github.com/bitwarden/sdk-internal/tree/main/crates/bitwarden-state
