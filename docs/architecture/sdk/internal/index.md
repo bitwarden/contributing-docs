@@ -49,7 +49,13 @@ package "Features" #f3e5f5 {
     component "Exporters" as export
 }
 
-component "Core" as core #e8f5e9
+component "Core Runtime" as core #e8f5e9
+
+package "Back-End API Interfaces" #ffebee {
+  component "API Client" as api_client
+  component "Identity Client" as identity_client
+  component "API Client Base" as api_base
+}
 
 bindings --> passwordMgr
 bindings --> secretsMgr
@@ -64,54 +70,20 @@ passwordMgr --> core
 
 secretsMgr --> core
 
-auth --> core
-vault --> core
-send --> core
-generators --> core
-export --> core
+auth --> core : Extends
+vault --> core : Extends
+send --> core : Extends
+generators --> core : Extends
+export --> core : Extends
+
+core --> api_client : Manages
+core --> identity_client : Manages
+
+api_base --> api_client : Provides shared functionality for
+api_base --> identity_client : Provides shared functionality for
 
 @enduml
 ```
-
-<details>
-<summary>Prior to [bitwarden/sdk-internal#468][sdk-internal-468], the application interfaces had not been explicitly created.</summary>
-
-```kroki type=plantuml
-@startuml
-skinparam componentStyle rectangle
-skinparam defaultTextAlignment center
-
-component "Bindings (WASM & UniFFI)" as bindings #e1f5ff
-
-package "Features" #f3e5f5 {
-    component "Auth" as auth
-    component "Vault" as vault
-    component "Exporters" as export
-    component "Generators" as generators
-    component "Send" as send
-    component "Crypto" as crypto
-}
-
-component "Core" as core #e8f5e9
-
-bindings --> core
-bindings --> auth
-bindings --> vault
-bindings --> export
-bindings --> generators
-bindings --> send
-
-auth --> core
-vault --> core
-export --> core
-generators --> core
-send --> core
-crypto --> core
-
-@enduml
-```
-
-</details>
 
 ### Bindings
 
@@ -127,12 +99,6 @@ Password Manager, or Secrets Manager, into a single easy-to-use client for that 
 These clients, exposed through an external binding layer, are how consumers of the SDK will interact
 with it.
 
-### Core and Utility
-
-The `bitwarden-core` crate contains the core runtime of the SDK. See the
-[crate documentation](https://github.com/bitwarden/sdk-internal/tree/main/crates/bitwarden-core) for
-more details.
-
 ### Features and Domains
 
 Feature and domain crates constitute the application business logic. Feature crates depend on
@@ -144,6 +110,22 @@ The each feature or domain crate exposes its extended `Client` struct(s), which 
 grouped into application interfaces for consumption. See the
 [`VaultClient`](https://github.com/bitwarden/sdk-internal/blob/main/crates/bitwarden-vault/src/vault_client.rs)
 as as example.
+
+### Core
+
+The `bitwarden-core` crate contains the core runtime of the SDK. See the
+[crate documentation](https://github.com/bitwarden/sdk-internal/tree/main/crates/bitwarden-core) for
+more details.
+
+### Server API interfaces
+
+The `bitwarden-core` runtime includes the management and persistence of `ApiClient`s to manage HTTP
+requests to our server back-end. This includes requests to our API and our Identity services. These
+clients are defined in the `bitwarden-api-*` crates, such as `bitwarden-api-api` and
+`bitwarden-api-identity`, which manage the API and Identity clients, respectively. These crates also
+manage the request and response model bindings for the contracts with our server endpoints. For more
+detail on our bindings, see the `sdk-internal`
+[`README`](https://github.com/bitwarden/sdk-internal#server-api-bindings).
 
 ## Language bindings
 
