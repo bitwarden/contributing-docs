@@ -114,9 +114,10 @@ Please note this will set the admin password to `password`. This is for developm
 
 :::warning
 
-Splunk uses https and requires additional configuration to work with your local dev server. We don't
-have instructions for this yet. In the meantime, we recommend configuring Splunk to use a Bitwarden
-cloud deployment (such as the internal Dev or QA environments).
+Splunk uses https and requires additional configuration to work with your local dev server (Events
+needs to run in https). We don't have instructions for this yet. In the meantime, we recommend
+configuring Splunk to use a Bitwarden cloud deployment (such as the internal Dev or QA
+environments). To do this, select Self-Hosted and enter the URL of your hosted environment.
 
 :::
 
