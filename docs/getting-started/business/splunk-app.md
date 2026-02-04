@@ -1,3 +1,5 @@
+import Tabs from "@theme/Tabs"; import TabItem from "@theme/TabItem";
+
 # Splunk app
 
 The Bitwarden Splunk app fetches event log data from the Bitwarden Public API and makes it available
@@ -50,9 +52,18 @@ in Splunk.
 
 1. Run Splunk Enterprise:
 
+<Tabs groupId="os">
+<TabItem value="windows" label="Windows">
    ```
-   docker compose -f dev/docker-compose.yml up -d
+   docker compose -f dev/docker-compose.yml up -d splunk
    ```
+</TabItem>
+<TabItem value="macos" label="macOS">
+   ```
+   docker compose -f dev/docker-compose.yml up -d splunk93
+   ```
+</TabItem>
+</Tabs>
 
 :::warning
 
