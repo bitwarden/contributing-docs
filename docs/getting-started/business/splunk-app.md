@@ -116,12 +116,40 @@ Please note this will set the admin password to `password`. This is for developm
 
 Splunk uses https and requires additional configuration to work with your local dev server. We don't
 have instructions for this yet. In the meantime, we recommend configuring Splunk to use a Bitwarden
-cloud deployment (such as production or an internal QA environment).
+cloud deployment (such as the internal Dev or QA environments).
 
 :::
 
 You should now see your organization events in _Apps_ -> _Bitwarden Event Logs_ -> _Dashboards_. If
 no event logs appear, check the Splunk logs (see above).
+
+Events are categorized by Auth Events, Vault Events, and Organization Events. Here are a few
+examples of each:
+
+Auth Events:
+
+- User Login
+- User Changed Password
+
+Vault Events:
+
+- Item Created
+- Item Deleted
+- Item Updated
+
+Organization Events:
+
+- User Invited
+- User Revoked
+- User Restored
+
+:::note
+
+When configuring the Bitwarden Event Logs app, all previous values will be overwritten. This means
+that if you have previously configured the app, it will empty out the configuration and you will
+need to re-enter your secret key and client id.
+
+:::
 
 [Bitwarden Splunk SIEM]: https://bitwarden.com/help/splunk-siem/
 [poetry]: https://python-poetry.org/docs/#installation
