@@ -10,6 +10,7 @@ in Splunk.
 - Docker. If you're using an Apple Silicon Mac, enable _Docker Desktop_ -> _Settings_ -> _General_
   -> _Use Rosetta for x86_64/amd64 emulation on Apple Silicon_
 - Python 3.7 - 3.10
+  - (Optional) Use something like [PyEnv](https://github.com/pyenv/pyenv) to manage Python versions
 - [Poetry][poetry]
   - Also install Poetry export plugin with `poetry self add poetry-plugin-export`
 - libmagic (macOS only), available via homebrew: `brew install libmagic`
@@ -41,6 +42,9 @@ in Splunk.
 
    Where `<executable>` is the executable for Python. If this is in your PATH variable then you do
    not need to specify the full path. e.g. `poetry env use python3.9`.
+
+   If using PyEnv, you can use `pyenv local <version>` to set the global version. And then follow
+   that up with, `poetry env use python`.
 
 4. Install dependencies:
 
