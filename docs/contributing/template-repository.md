@@ -119,6 +119,7 @@ Initial content placeholders provide AI assistance and automated code reviews:
 ```
 .claude/
 └── CLAUDE.md             # General project context, guidelines, and instructions
+└── settings.json         # Project settings e.g. [marketplaces](./ai.md#bitwarden-ai-plugin-marketplace)
 ```
 
 ### Automated reviews
