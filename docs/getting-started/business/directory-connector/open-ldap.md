@@ -58,8 +58,8 @@ This is also the method used to run integration tests in the CI workflow(s).
 - **This server pages search results:** [unchecked]
 
 - **This server uses an encrypted connection:** check if using StartTLS or SSL, then configure the
-  certificate options that appear below. Certificates are located in `openldap/certs` in your local
-  Directory Connector repository.
+  certificate options that appear below. Certificates are located in `utils/openldap/certs` in your
+  local Directory Connector repository.
 
 - **Username**: cn=admin,dc=bitwarden,dc=com
 
@@ -115,14 +115,14 @@ change to the OpenLDAP directory data will cause these tests to fail.
 An LDIF file contains the configuration for your directory (such as users, groups, etc). You can
 modify or use a custom LDIF file to customize your test data.
 
-LDIF files can be placed in `openldap/ldifs` in your Directory Connector repository. You may have to
-delete and recreate your Docker container for the changes to take effect (e.g.
+LDIF files can be placed in `utils/openldap/ldifs` in your Directory Connector repository. You may
+have to delete and recreate your Docker container for the changes to take effect (e.g.
 `docker compose up -d --force-recreate`).
 
 ### Use example LDIF file
 
-Sample LDIF files of different sizes are included in the `openldap/examples` folder in the Directory
-Connector repository.
+Sample LDIF files of different sizes are included in the `utils/openldap/example-ldifs` folder in
+the Directory Connector repository.
 
 ### Generate your own LDIF file
 
