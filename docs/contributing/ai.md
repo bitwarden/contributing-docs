@@ -263,3 +263,79 @@ Common issues and solutions:
 - Configure project-specific MCP servers in repository `.claude/` directories
 - Document custom MCP server requirements in project README files
 - Share MCP configurations with team members for consistency
+
+<Bitwarden>
+## Using Claude for code reviews
+
+### Our goals: Why are we using Claude for code reviews?
+
+The goals of using Claude code reviews at Bitwarden are to:
+
+1. Improve the overall code product, and
+2. Reduce the time a human needs to spend reviewing code
+
+### Measurement: How are we gauging success?
+
+We are currently assessing progress toward these goals through:
+
+- Internal feedback gathered from the Engineering organization
+- Gathering anecdotal evidence from PR **reviewers** as to a positive effect this has on the effort
+  that they need to apply to reviews and the amount of feedback they need to recommend.
+- Gathering anecdotal evidence from PR **authors** on on things that Claude is catching that would
+  otherwise either make it into `main` or have to be caught by human reviewers.
+
+We do not currently have any metrics in place to measure PR throughput at an aggregate level. We may
+in the future, but we don't now.
+
+### Recommended pull request workflow using Claude
+
+#### Step 1: (Optional) Local code review
+
+At any point during your local development, you can optionally request a local Claude code review,
+using the `/code-review-local` command.
+
+The goal of the local review would be to allow the PR author to address any feedback incrementally
+earlier in the SDLC, minimizing the need for feedback when the changes are in a final form on the
+pull request.
+
+Keep in mind that local review feedback is not visible to others, and so there are disadvantages to
+not acknowledging Claude's review feedback in a more public forum, where others can learn from it
+and react to it.
+
+On the other hand, addressing changes locally can shorten the feedback loop.
+
+For full instructions on `/code-review-local`, see the `README` in the
+[marketplace repository](https://github.com/bitwarden/ai-plugins).
+
+#### Step 2: Create draft pull request and push changes to it
+
+Create a draft PR for your changes in Github and push changes to it as you work.
+
+#### Step 3: Request Claude review on your draft PR
+
+Request Claude's review using the `ai-review` label.
+
+The recommended workflow is to request a Claude review on a draft pull request, so that the PR
+author can address Claude's feedback _before_ `CODEOWNERS` automatically requests reviews from teams
+when the pull request is opened.
+
+:::tip What if I already addressed feedback locally? As the local feedback from Claude is not
+visible to human reviewers, and may differ based on local Claude context, we currently recommend
+that you use the `ai-review` label for more consistent and visible reviews. There is value in having
+more eyes on Claude's feedback as the pull request goes through review, to ensure that we deliver
+the highest-quality code and nothing is missed.
+
+:::
+
+#### Step 4: Address Claude's feedback
+
+After Claude has reviewed your pull request, you should evaluate its feedback. If you judge that the
+feedback is valid, you should make the changes before opening the PR for review.
+
+For feedback that is not addressed, you can optionally use the opportunity to explain why it wasn't
+addressed as input to the future reviewers as they look at the changes.
+
+#### Step 5: Open the PR for review
+
+When you have addressed any Claude feedback that you judge is necessary, open the PR for review.
+</Bitwarden>
