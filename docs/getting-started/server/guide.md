@@ -106,7 +106,7 @@ facilitate easy customization.
     docker compose --profile cloud --profile mail up -d
     ```
 
-    Which starts MSSQL, mail, redis, and Azurite container. The additional Azurite container is
+    Which starts MSSQL, mail, Redis, and Azurite container. The additional Azurite container is
     required to emulate Azure used by the Bitwarden cloud environment.
 
     </Bitwarden>
