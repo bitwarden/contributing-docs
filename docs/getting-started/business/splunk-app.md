@@ -1,3 +1,5 @@
+import Tabs from "@theme/Tabs"; import TabItem from "@theme/TabItem";
+
 # Splunk app
 
 The Bitwarden Splunk app fetches event log data from the Bitwarden Public API and makes it available
@@ -8,6 +10,7 @@ in Splunk.
 - Docker. If you're using an Apple Silicon Mac, enable _Docker Desktop_ -> _Settings_ -> _General_
   -> _Use Rosetta for x86_64/amd64 emulation on Apple Silicon_
 - Python 3.7 - 3.10
+  - (Optional) Use something like [PyEnv](https://github.com/pyenv/pyenv) to manage Python versions
 - [Poetry][poetry]
   - Also install Poetry export plugin with `poetry self add poetry-plugin-export`
 - libmagic (macOS only), available via homebrew: `brew install libmagic`
@@ -40,6 +43,9 @@ in Splunk.
    Where `<executable>` is the executable for Python. If this is in your PATH variable then you do
    not need to specify the full path. e.g. `poetry env use python3.9`.
 
+   If using PyEnv, you can use `pyenv local <version>` to set the global version. And then follow
+   that up with, `poetry env use python`.
+
 4. Install dependencies:
 
    ```
@@ -50,9 +56,18 @@ in Splunk.
 
 1. Run Splunk Enterprise:
 
+<Tabs groupId="os">
+<TabItem value="windows" label="Windows">
    ```
-   docker compose -f dev/docker-compose.yml up -d
+   docker compose -f dev/docker-compose.yml up -d splunk
    ```
+</TabItem>
+<TabItem value="macos" label="macOS">
+   ```
+   docker compose -f dev/docker-compose.yml up -d splunk93
+   ```
+</TabItem>
+</Tabs>
 
 :::warning
 
@@ -103,14 +118,43 @@ Please note this will set the admin password to `password`. This is for developm
 
 :::warning
 
-Splunk uses https and requires additional configuration to work with your local dev server. We don't
-have instructions for this yet. In the meantime, we recommend configuring Splunk to use a Bitwarden
-cloud deployment (such as production or an internal QA environment).
+Splunk uses https and requires additional configuration to work with your local dev server (Events
+needs to run in https). We don't have instructions for this yet. In the meantime, we recommend
+configuring Splunk to use a Bitwarden cloud deployment (such as the internal Dev or QA
+environments). To do this, select Self-Hosted and enter the URL of your hosted environment.
 
 :::
 
 You should now see your organization events in _Apps_ -> _Bitwarden Event Logs_ -> _Dashboards_. If
 no event logs appear, check the Splunk logs (see above).
+
+Events are categorized by Auth Events, Vault Events, and Organization Events. Here are a few
+examples of each:
+
+Auth Events:
+
+- User Login
+- User Changed Password
+
+Vault Events:
+
+- Item Created
+- Item Deleted
+- Item Updated
+
+Organization Events:
+
+- User Invited
+- User Revoked
+- User Restored
+
+:::note
+
+When configuring the Bitwarden Event Logs app, all previous values will be overwritten. This means
+that if you have previously configured the app, it will empty out the configuration and you will
+need to re-enter your secret key and client id.
+
+:::
 
 [Bitwarden Splunk SIEM]: https://bitwarden.com/help/splunk-siem/
 [poetry]: https://python-poetry.org/docs/#installation

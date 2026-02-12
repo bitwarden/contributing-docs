@@ -88,6 +88,7 @@ typealias
 typecheck
 typechecks
 typesafe
+udeps
 unsynchronized
 WCAG
 Xcodes.app
@@ -97,6 +98,7 @@ Yellowpages
 Yubico
 YubiKey
 YubiKeys
+Zeroizing
 
 # Forbidden words
 !auto-fill
