@@ -287,9 +287,9 @@ We are currently assessing progress toward these goals through:
 We do not currently have any metrics in place to measure PR throughput at an aggregate level. We may
 in the future, but we don't now.
 
-### Recommended pull request workflow using Claude
+## Recommended pull request workflow using Claude
 
-#### Step 1: Local code review
+### Step 1: Local code review
 
 During the course of your local development, we recommend that you use the local Claude code review
 slash command - `/code-review-local` - installed from our
@@ -306,11 +306,11 @@ and react to it.
 For full instructions on `/code-review-local`, see the `README` in the
 [marketplace repository](https://github.com/bitwarden/ai-plugins).
 
-#### Step 2: Create draft pull request and push changes to it
+### Step 2: Create draft pull request and push changes to it
 
 Create a draft PR for your changes in Github and push changes to it as you work.
 
-#### Step 3: Request Claude review on your draft PR
+### Step 3: Request Claude review on your draft PR
 
 Request Claude's review using the `ai-review` label.
 
@@ -326,7 +326,7 @@ the highest-quality code and nothing is missed.
 
 :::
 
-#### Step 4: Address Claude's feedback
+### Step 4: Address Claude's feedback
 
 After Claude has reviewed your pull request, you should evaluate its feedback. If you judge that the
 feedback is valid, you should make the changes before opening the PR for review.
@@ -334,7 +334,7 @@ feedback is valid, you should make the changes before opening the PR for review.
 For feedback that is not addressed, you can optionally use the opportunity to explain why it wasn't
 addressed as input to the future reviewers as they look at the changes.
 
-#### Step 5: Open the PR for review
+### Step 5: Open the PR for review
 
 When you have addressed any Claude feedback that you judge is necessary, open the PR for review.
 </Bitwarden>
