@@ -289,20 +289,19 @@ in the future, but we don't now.
 
 ### Recommended pull request workflow using Claude
 
-#### Step 1: (Optional) Local code review
+#### Step 1: Local code review
 
-At any point during your local development, you can optionally request a local Claude code review,
-using the `/code-review-local` command.
+During the course of your local development, we recommend that you use the local Claude code review
+slash command - `/code-review-local` - installed from our
+[marketplace](#bitwarden-ai-plugin-marketplace). This can be done multiple times as your code
+evolves, as well as immediately prior to opening a pull request.
 
-The goal of the local review would be to allow the PR author to address any feedback incrementally
-earlier in the SDLC, minimizing the need for feedback when the changes are in a final form on the
-pull request.
+The goal of local review is to provide allow you to address any feedback incrementally earlier in
+the SDLC, minimizing the need for feedback when the changes are in a final form on the pull request.
 
 Keep in mind that local review feedback is not visible to others, and so there are disadvantages to
 not acknowledging Claude's review feedback in a more public forum, where others can learn from it
 and react to it.
-
-On the other hand, addressing changes locally can shorten the feedback loop.
 
 For full instructions on `/code-review-local`, see the `README` in the
 [marketplace repository](https://github.com/bitwarden/ai-plugins).
