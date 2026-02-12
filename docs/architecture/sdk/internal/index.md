@@ -190,6 +190,5 @@ decision.
 
 </Bitwarden>
 
-[sdk-internal-468]: https://github.com/bitwarden/sdk-internal/pull/468
 [state-crate]: https://github.com/bitwarden/sdk-internal/tree/main/crates/bitwarden-state
 [vault-crate]: https://github.com/bitwarden/sdk-internal/tree/main/crates/bitwarden-vault
