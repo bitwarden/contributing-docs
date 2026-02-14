@@ -4,19 +4,18 @@ sidebar_position: 1
 
 # Tools
 
-## Operating system
+:::warning Operating System Assumptions
 
-All Bitwarden developers are issued with a MacBook. The tooling recommendations and instructions in
-this documentation assume that you’re using macOS. This may require some adaptation if you’re using
-a different operating system.
+The tooling recommendations and instructions in this documentation assume that you’re using macOS.
+This may require some adaptation if you’re using a different operating system.
 
-## Recommended tools
+:::
 
 The following tools are strongly recommended as part of the “standard” developer setup. We recommend
 that any new Bitwarden developer install all of them as part of setting up their local development
 environment.
 
-### IDEs
+## IDEs
 
 - [Visual Studio Code](https://code.visualstudio.com/) - used for all Typescript projects.
   Suboptimal for C#. Be sure to install [extensions](#visual-studio-code-extensions)
@@ -25,7 +24,7 @@ environment.
 - [Xcode](https://developer.apple.com/xcode/) - required for iOS Mobile development and Safari web
   extension
 
-### Local environment
+## Local environment
 
 - [Homebrew](https://brew.sh/) - package manager for macOS
 - [Iterm2](https://iterm2.com/) (available via Homebrew) - a better terminal emulator
@@ -45,7 +44,7 @@ environment.
   - [Commit signing](../../contributing/commit-signing.mdx) is strongly recommended
 - [AI tools](../../contributing/ai.md)
 
-### Mobile
+## Mobile
 
 - [Android Studio](https://developer.android.com/studio/) - Nice for setting up and running Android
   Simulators
@@ -53,7 +52,7 @@ environment.
 - [Apple Icons Generator Gist](https://gist.github.com/brutella/0bcd671a9e4f63edc12e) - Script to
   generate Apple icons from an image
 
-### Databases
+## Databases
 
 - [MSSQL VSCode Extension](https://marketplace.visualstudio.com/items?itemName=ms-mssql.mssql) for
   working with your local SQL Server
@@ -61,7 +60,7 @@ environment.
 - [MySQLWorkbench](https://www.mysql.com/products/workbench/) - Useful for fiddling with MySQL db
 - [SQLiteStudio](https://www.sqlitestudio.pl/) - Useful for fiddling with SQLite db
 
-### Visual Studio Code Extensions
+## Visual Studio Code Extensions
 
 There are some vs code extensions that are life-savers in our line of work. A list of highly
 recommended ones include the following:
@@ -109,6 +108,171 @@ recommended ones include the following:
     syntax highlighting for MySQL
   - [PostgreSQL](https://marketplace.visualstudio.com/items?itemName=ckolkman.vscode-postgres) -
     syntax highlighting for PostgreSQL
+
+## AI tools
+
+### Claude Code
+
+Claude Code is Anthropic's official CLI tool that brings Claude's capabilities directly to your
+terminal. It's ideal for developers who prefer command-line interfaces and want to integrate AI
+assistance into their terminal-based workflows.
+
+#### Installation
+
+1. [Node.js](https://nodejs.org/) v18 or higher is available
+2. Install via NPM `npm install -g @anthropic-ai/claude-code` or Homebrew
+   `brew install --cask claude-code`
+3. Configure your API key:
+
+   ```bash
+   claude configure
+   ```
+
+   Walk through the process to sign into the Anthropic Console via SSO and authenticate your local
+   client.
+
+#### Basic usage
+
+```bash
+# Start an interactive session
+claude
+
+# Ask a question
+claude "How do I add a feature flag around my changes?"
+```
+
+### Claude Desktop
+
+Claude Desktop provides a graphical interface for interacting with Claude, ideal for developers who
+prefer a dedicated application with rich formatting and file management capabilities.
+
+#### Installation
+
+Install via [claude.ai/download](https://claude.ai/download) or Homebrew `brew install claude`
+
+- Launch Claude Desktop
+- Sign in with your Anthropic account via SSO
+- Configure your workspace preferences
+- Enable MCP server connections in Settings → Developer → MCP Servers
+
+### Bitwarden AI plugin marketplace
+
+Bitwarden maintains a curated [marketplace of AI plugins](https://github.com/bitwarden/ai-plugins)
+specifically designed for our development workflows. This marketplace was created to provide
+quality-controlled, security-reviewed plugins that follow Bitwarden's coding standards and security
+requirements. All marketplace plugins are maintained by the Bitwarden team and include comprehensive
+documentation, testing, and security validation.
+
+To use the marketplace with Claude Code:
+
+```bash
+/plugin marketplace add bitwarden/ai-plugins
+```
+
+### MCP servers
+
+We recommend that you install two MCP servers:
+
+- Sequential Thinking
+- Memory
+
+:::warning MCP Server Security
+
+See [here](../../contributing/ai/#mcp-servers) for background on what an MCP server is and for
+important security considerations. Read this before installing any other MCP servers.
+
+:::
+
+#### Sequential Thinking MCP server
+
+The Sequential Thinking server enhances Claude's problem-solving capabilities by providing
+structured, step-by-step reasoning for complex tasks.
+
+##### Claude Code
+
+```bash
+claude mcp add --scope user sequential-thinking -- npx -y @modelcontextprotocol/server-sequential-thinking
+```
+
+##### Claude Desktop
+
+Edit your `~/.claude.json`, go to the `mcpServers` section and add:
+
+```json
+"sequential-thinking": {
+   "type": "stdio",
+   "command": "npx",
+   "args": [
+      "-y",
+      "@modelcontextprotocol/server-sequential-thinking"
+   ]
+   }
+```
+
+Restart Claude Desktop to activate the server.
+
+#### Memory MCP server
+
+The Memory server provides Claude with persistent memory capabilities, allowing it to remember
+context across sessions and maintain a knowledge graph of your projects.
+
+##### Claude Code
+
+```bash
+claude mcp add --scope user memory -- npx -y @modelcontextprotocol/server-memory
+```
+
+##### Claude Desktop
+
+Edit your `~/.claude.json`, go to the `mcpServers` section and add:
+
+```json
+"memory": {
+   "type": "stdio",
+   "command": "npx",
+   "args": [
+      "-y",
+      "@modelcontextprotocol/server-memory"
+   ]
+   }
+```
+
+Restart Claude Desktop to activate the server.
+
+#### Verifying MCP installations
+
+##### Claude Code
+
+```bash
+claude mcp list
+```
+
+##### Claude Desktop
+
+1. Open Claude Desktop
+2. Start a new conversation
+3. Type: "Can you list your available MCP servers?"
+4. Claude should respond with the configured servers
+
+#### Troubleshooting
+
+Common issues and solutions:
+
+**Server not starting**:
+
+- Verify NPM packages are installed globally
+- Check Node version (must be 18+)
+- Review server logs in `~/.claude-code/logs/` or Claude Desktop's developer console
+
+**Permission errors**:
+
+- Ensure data directories have proper permissions
+- On macOS/Linux: `chmod 755 ~/.claude-memory`
+
+**Configuration not loading**:
+
+- Validate JSON syntax in configuration files
+- Restart Claude Code or Claude Desktop after configuration changes
 
 ## Optional tools
 
