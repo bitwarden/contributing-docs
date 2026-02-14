@@ -300,29 +300,37 @@ The goal of local review is to provide allow you to address any feedback increme
 the SDLC, minimizing the need for feedback when the changes are in a final form on the pull request.
 
 Keep in mind that local review feedback is not visible to others, and so there are disadvantages to
-not acknowledging Claude's review feedback in a more public forum, where others can learn from it
-and react to it.
+using only local reviews; we miss the opportunity to see Claude's review feedback in a more public
+forum, where others can learn from it and consider it in their review.
 
 For full instructions on `/code-review-local`, see the `README` in the
 [marketplace repository](https://github.com/bitwarden/ai-plugins).
 
-### Step 2: Create draft pull request and push changes to it
+### Step 2: Request Claude review on a draft pull request
 
-Create a draft PR for your changes in Github and push changes to it as you work.
+We recommend that you then use the `ai-review` label to request Claude review on a draft pull
+request containing your work.
 
-### Step 3: Request Claude review on your draft PR
+The guidance is that you request the review on a draft pull request so that the PR author can
+address Claude's feedback _before_ `CODEOWNERS` automatically requests reviews from teams when the
+pull request is opened.
 
-Request Claude's review using the `ai-review` label.
+Due to limitations inherent to the `labeled` action and the inability to trigger workflows based on
+it, we recommend one of the following two options to get the review on your pull request:
 
-The recommended workflow is to request a Claude review on a draft pull request, so that the PR
-author can address Claude's feedback _before_ `CODEOWNERS` automatically requests reviews from teams
-when the pull request is opened.
+1. **Add label along with initial push.** In this case, you would make all of your changes locally,
+   and then push a draft PR with the label on it. This push would trigger the Claude review action.
+2. **Add the label after incremental pushes.** In this case, you would create a draft PR and push
+   changes incrementally to it as you work. Then, as you near completion of your work, you would add
+   the `ai-review` label. **However, in this case, you have to have some other workflow-triggering
+   action _after_ you add the label, so that the Claude review workflow will have a chance to run.**
 
-:::tip What if I already addressed feedback locally? As the local feedback from Claude is not
-visible to human reviewers, and may differ based on local Claude context, we currently recommend
-that you use the `ai-review` label for more consistent and visible reviews. There is value in having
-more eyes on Claude's feedback as the pull request goes through review, to ensure that we deliver
-the highest-quality code and nothing is missed.
+:::tip What if I already addressed feedback locally?
+
+As the local feedback from Claude is not visible to human reviewers, and may differ based on local
+Claude context, we currently recommend that you use the `ai-review` label for more consistent and
+visible reviews. There is value in having more eyes on Claude's feedback as the pull request goes
+through review, to ensure that we deliver the highest-quality code and nothing is missed.
 
 :::
 
