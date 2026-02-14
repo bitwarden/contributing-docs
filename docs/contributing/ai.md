@@ -151,8 +151,8 @@ slash command - `/code-review-local` - installed from our
 [marketplace](#bitwarden-ai-plugin-marketplace). This can be done multiple times as your code
 evolves, as well as immediately prior to opening a pull request.
 
-The goal of local review is to provide allow you to address any feedback incrementally earlier in
-the SDLC, minimizing the need for feedback when the changes are in a final form on the pull request.
+The goal of local review is to allow you to address any feedback incrementally earlier in the SDLC,
+minimizing the need for feedback when the changes are in a final form on the pull request.
 
 Keep in mind that local review feedback is not visible to others, and so there are disadvantages to
 using only local reviews; we miss the opportunity to see Claude's review feedback in a more public
