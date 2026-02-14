@@ -179,6 +179,8 @@ it, we recommend one of the following two options to get the review on your pull
    changes incrementally to it as you work. Then, as you near completion of your work, you would add
    the `ai-review` label. **However, in this case, you have to have some other workflow-triggering
    action _after_ you add the label, so that the Claude review workflow will have a chance to run.**
+   For example, an empty commit could be triggered like this:
+   `git commit --allow-empty -m "trigger review"`.
 
 :::tip What if I already addressed feedback locally?
 

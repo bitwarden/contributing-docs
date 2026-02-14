@@ -42,7 +42,6 @@ environment.
   [rustup](https://rustup.rs/))
 - [Git](https://git-scm.com)
   - [Commit signing](../../contributing/commit-signing.mdx) is strongly recommended
-- [AI tools](../../contributing/ai.md)
 
 ## Mobile
 
