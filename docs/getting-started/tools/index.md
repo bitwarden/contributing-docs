@@ -60,7 +60,7 @@ environment.
 - [MySQLWorkbench](https://www.mysql.com/products/workbench/) - Useful for fiddling with MySQL db
 - [SQLiteStudio](https://www.sqlitestudio.pl/) - Useful for fiddling with SQLite db
 
-## Visual Studio Code Extensions
+## Visual Studio Code extensions
 
 There are some vs code extensions that are life-savers in our line of work. A list of highly
 recommended ones include the following:
