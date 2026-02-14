@@ -136,7 +136,7 @@ We are currently assessing progress toward these goals through:
 - Internal feedback gathered from the Engineering organization
 - Gathering anecdotal evidence from PR **reviewers** as to a positive effect this has on the effort
   that they need to apply to reviews and the amount of feedback they need to recommend.
-- Gathering anecdotal evidence from PR **authors** on on things that Claude is catching that would
+- Gathering anecdotal evidence from PR **authors** on things that Claude is catching that would
   otherwise either make it into `main` or have to be caught by human reviewers.
 
 We do not currently have any metrics in place to measure PR throughput at an aggregate level. We may
@@ -148,8 +148,8 @@ in the future, but we don't now.
 
 During the course of your local development, we recommend that you use the local Claude code review
 slash command - `/code-review-local` - installed from our
-[marketplace](#bitwarden-ai-plugin-marketplace). This can be done multiple times as your code
-evolves, as well as immediately prior to opening a pull request.
+[marketplace](../getting-started//tools#bitwarden-ai-plugin-marketplace). This can be done multiple
+times as your code evolves, as well as immediately prior to opening a pull request.
 
 The goal of local review is to allow you to address any feedback incrementally earlier in the SDLC,
 minimizing the need for feedback when the changes are in a final form on the pull request.
