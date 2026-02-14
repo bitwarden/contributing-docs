@@ -148,7 +148,7 @@ in the future, but we don't now.
 
 During the course of your local development, we recommend that you use the local Claude code review
 slash command - `/code-review-local` - installed from our
-[marketplace](../getting-started//tools#bitwarden-ai-plugin-marketplace). This can be done multiple
+[marketplace](../getting-started/tools#bitwarden-ai-plugin-marketplace). This can be done multiple
 times as your code evolves, as well as immediately prior to opening a pull request.
 
 The goal of local review is to allow you to address any feedback incrementally earlier in the SDLC,
