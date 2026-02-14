@@ -189,7 +189,7 @@ through review, to ensure that we deliver the highest-quality code and nothing i
 
 :::
 
-### Step 4: Address Claude's feedback
+### Step 3: Address Claude's feedback
 
 After Claude has reviewed your pull request, you should evaluate its feedback. If you judge that the
 feedback is valid, you should make the changes before opening the PR for review.
@@ -197,7 +197,7 @@ feedback is valid, you should make the changes before opening the PR for review.
 For feedback that is not addressed, you can optionally use the opportunity to explain why it wasn't
 addressed as input to the future reviewers as they look at the changes.
 
-### Step 5: Open the PR for review
+### Step 4: Open the PR for review
 
 When you have addressed any Claude feedback that you judge is necessary, open the PR for review.
 </Bitwarden>
