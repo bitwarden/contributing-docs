@@ -69,7 +69,7 @@ They can:
 We currently recommend at least two be installed by everyone:
 
 - [Sequential Thinking](../getting-started/tools#sequential-thinking-mcp-server)
-- [Memory](../getting-started//tools#memory-mcp-server)
+- [Memory](../getting-started/tools#memory-mcp-server)
 
 ### Best practices
 
