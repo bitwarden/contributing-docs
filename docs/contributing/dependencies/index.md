@@ -304,14 +304,6 @@ Let Renovate manage its own branches whenever possible. If you need Renovate to 
 PR immediately, select the corresponding checkbox on the Dependency Dashboard or the PR itself; no
 manual intervention on the branch is usually needed.
 
-:::warning Avoid merging the upstream into Renovate branches
-
-Merging the base branch (e.g. `main`) into a Renovate branch is often unnecessary. Renovate will
-rebase the branch on its own schedule and CI will catch any conflicts. Resist the urge to keep
-Renovate branches up-to-date with the upstream manually.
-
-:::
-
 If you need to push additional changes to a Renovate branch e.g. to resolve a breaking change
 introduced by the update you can do so, however **once a non-Renovate user pushes to the branch,
 Renovate will stop updating that PR entirely.** Further updates to the package(s) included in the PR

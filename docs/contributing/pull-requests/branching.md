@@ -106,6 +106,18 @@ It can be helpful to think of this exercise in terms of two dimensions:
   - Introducing changes to one component or page independently others.
   - Introducing changes on a client-by-client basis.
 
+### Keeping your branch up to date
+
+It is usually unnecessary to merge the base branch (e.g. `main`) into a short-lived PR branch.
+Frequent merges from the upstream add noise to the commit history without meaningful benefit; CI
+will surface any conflicts or incompatibilities when the PR is ready to merge. If a rebase is
+needed, prefer rebasing over merging so the branch history stays clean.
+
+Reserve merging `main` into a branch for situations where you genuinely need changes from the
+upstream to continue your work, such as depending on a newly merged API or resolving a non-trivial
+conflict. In most cases, the branch will be merged shortly and keeping it in sync is wasted effort,
+especially on our build and test workflows.
+
 ### Additional considerations for long-lived feature branches
 
 :::note
