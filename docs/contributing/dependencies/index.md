@@ -300,18 +300,26 @@ A typical dependency workflow involves the following steps:
 
 #### Changing a generated PR
 
-When reviewing the PR, you may rarely have to make changes to the branch yourself.
+Let Renovate manage its own branches whenever possible. If you need Renovate to rebase or recreate a
+PR immediately, select the corresponding checkbox on the Dependency Dashboard or the PR itself; no
+manual intervention on the branch is usually needed.
 
-However, caution should be taken when doing so. If a non-Renovate user pushes changes to the
-Renovate-generated PR, Renovate assumes that it is no longer responsible for maintaining the PR.
-**This means that further updates to the package(s) included in the PR will be blocked until the
-modified PR has been merged.**
+:::warning Avoid merging the upstream into Renovate branches
 
-What this means is that if you do need to make changes during review, you should maintain ownership
-of the PR through the rest of the workflow and not leave the PR open for an extended period.
+Merging the base branch (e.g. `main`) into a Renovate branch is often unnecessary. Renovate will
+rebase the branch on its own schedule and CI will catch any conflicts. Resist the urge to keep
+Renovate branches up-to-date with the upstream manually.
 
-If you do want Renovate to take over managing the dependencies in the PR again, you can request that
-by selecting the "rebase/retry" checkbox on the PR description.
+:::
+
+If you need to push additional changes to a Renovate branch e.g. to resolve a breaking change
+introduced by the update you can do so, however **once a non-Renovate user pushes to the branch,
+Renovate will stop updating that PR entirely.** Further updates to the package(s) included in the PR
+will be blocked until the modified PR has been merged.
+
+If you do push changes to a branch you should maintain ownership of the PR through the rest of the
+workflow and not leave it open for an extended period. Also keep in mind that if you use the above
+Renovate update process on the branch that it will remove any work you performed yourself.
 
 ![Updating a PR](image.png)
 
