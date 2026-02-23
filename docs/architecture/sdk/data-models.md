@@ -31,8 +31,7 @@ are valid in each context, and pushes the burden of validation from the compiler
 and consumer. This leads to ambiguous contracts ("what happens if I pass a key on create?") and
 potential bugs on either side.
 
-Separate structs make each operation's contract explicit and self-documenting. Combined
-`*AddEditRequest` structs may exist in some older code but should not be used for new code.
+Separate structs make each operation's contract explicit and self-documenting.
 
 ## Internal models
 
