@@ -18,6 +18,22 @@ We can generally group the public models into the following categories:
   `ProjectGetRequest`, `ProjectCreateRequest`, etc.
 - **Response models**: Returns data from the SDK e.g. `ProjectResponse`.
 
+### Create vs. Edit request models
+
+When a resource supports both create and edit operations, define **separate** `*CreateRequest` and
+`*EditRequest` structs rather than a single combined `*AddEditRequest` struct.
+
+The key motivation is encoding intent in the type system. Create and edit operations often have
+meaningfully different fields — for example, an edit typically requires identifying the existing
+item (e.g. `id`, `revision_date`), while some fields may only be set on creation and are immutable
+thereafter. A combined struct forces optional fields where none should exist, obscures which fields
+are valid in each context, and pushes the burden of validation from the compiler to the implementer
+and consumer. This leads to ambiguous contracts ("what happens if I pass a key on create?") and
+potential bugs on either side.
+
+Separate structs make each operation's contract explicit and self-documenting. Combined
+`*AddEditRequest` structs may exist in some older code but should not be used for new code.
+
 ## Internal models
 
 The SDK also maintains internal models:
