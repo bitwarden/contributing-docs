@@ -63,6 +63,7 @@ proxied
 recompositions
 Redis
 refactorings
+Rickabaugh
 roadmap
 roadmaps
 rollout
