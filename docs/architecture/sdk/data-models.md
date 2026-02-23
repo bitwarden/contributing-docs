@@ -33,6 +33,31 @@ potential bugs on either side.
 
 Separate structs make each operation's contract explicit and self-documenting.
 
+### Variant data in models
+
+When a model has a type discriminant where each variant carries its own data, use an **enum with
+associated data** rather than a bare discriminant field alongside multiple `Option` fields.
+
+```rust
+// Preferred
+pub enum SendContent {
+    Text(SendTextView),
+    File(SendFileView),
+}
+
+// Avoid
+pub r#type: SendType,
+pub text: Option<SendTextView>,
+pub file: Option<SendFileView>,
+```
+
+The flat pattern allows invalid states — the wrong variant populated for a given type, or multiple
+variants populated simultaneously — and forces every consumer to reason about combinations that
+should be impossible.
+
+The server wire format uses numeric discriminants and optional fields, but that transformation
+belongs at the API→domain mapping boundary, not in the domain or view models.
+
 ## Internal models
 
 The SDK also maintains internal models:
