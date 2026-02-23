@@ -4,7 +4,7 @@ sidebar_position: 1
 
 # Tools
 
-:::warning Operating System Assumptions
+:::warning Operating system assumptions
 
 The tooling recommendations and instructions in this documentation assume that you’re using macOS.
 This may require some adaptation if you’re using a different operating system.
@@ -108,6 +108,8 @@ recommended ones include the following:
   - [PostgreSQL](https://marketplace.visualstudio.com/items?itemName=ckolkman.vscode-postgres) -
     syntax highlighting for PostgreSQL
 
+<Bitwarden>
+
 ## AI tools
 
 ### Claude Code
@@ -175,7 +177,7 @@ We recommend that you install two MCP servers:
 - Sequential Thinking
 - Memory
 
-:::warning MCP Server Security
+:::warning MCP server security
 
 See [here](../../contributing/ai/#mcp-servers) for background on what an MCP server is and for
 important security considerations. Read this before installing any other MCP servers.
@@ -272,6 +274,8 @@ Common issues and solutions:
 
 - Validate JSON syntax in configuration files
 - Restart Claude Code or Claude Desktop after configuration changes
+
+</Bitwarden>
 
 ## Optional tools
 

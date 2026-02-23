@@ -122,7 +122,7 @@ We currently recommend at least two be installed by everyone:
 <Bitwarden>
 ## Using Claude for code reviews
 
-### Our goals: Why are we using Claude for code reviews?
+### Goals
 
 The goals of using Claude code reviews at Bitwarden are to:
 
@@ -142,9 +142,9 @@ We are currently assessing progress toward these goals through:
 We do not currently have any metrics in place to measure PR throughput at an aggregate level. We may
 in the future, but we don't now.
 
-## Recommended pull request workflow using Claude
+### Recommended pull request workflow using Claude
 
-### Step 1: Local code review
+#### Local reviews
 
 During the course of your local development, we recommend that you use the local Claude code review
 slash command - `/code-review-local` - installed from our
@@ -154,52 +154,35 @@ times as your code evolves, as well as immediately prior to opening a pull reque
 The goal of local review is to allow you to address any feedback incrementally earlier in the SDLC,
 minimizing the need for feedback when the changes are in a final form on the pull request.
 
-Keep in mind that local review feedback is not visible to others, and so there are disadvantages to
-using only local reviews; we miss the opportunity to see Claude's review feedback in a more public
-forum, where others can learn from it and consider it in their review.
-
 For full instructions on `/code-review-local`, see the `README` in the
 [marketplace repository](https://github.com/bitwarden/ai-plugins).
 
-### Step 2: Request Claude review on a draft pull request
+#### GitHub pull request reviews
 
-We recommend that you then use the `ai-review` label to request Claude review on a draft pull
-request containing your work.
-
-The guidance is that you request the review on a draft pull request so that the PR author can
+We recommend that you use the `ai-review` label to request Claude review on a draft pull request
+containing your work. Requesting the review when the pull request is in draft allows the author to
 address Claude's feedback _before_ `CODEOWNERS` automatically requests reviews from teams when the
 pull request is opened.
 
-Due to limitations inherent to the `labeled` action and the inability to trigger workflows based on
-it, we recommend one of the following two options to get the review on your pull request:
+The Claude review workflow runs when a pull request is opened, updated (new commits pushed), or
+reopened, provided the `ai-review` label is present. Add the label before or after your first push;
+subsequent pushes will trigger new reviews automatically.
 
-1. **Add label along with initial push.** In this case, you would make all of your changes locally,
-   and then push a draft PR with the label on it. This push would trigger the Claude review action.
-2. **Add the label after incremental pushes.** In this case, you would create a draft PR and push
-   changes incrementally to it as you work. Then, as you near completion of your work, you would add
-   the `ai-review` label. **However, in this case, you have to have some other workflow-triggering
-   action _after_ you add the label, so that the Claude review workflow will have a chance to run.**
-   For example, an empty commit could be triggered like this:
-   `git commit --allow-empty -m "trigger review"`.
+Claude posts its findings as PR comments and inline annotations on specific lines — it does not
+submit a formal GitHub review approval or request changes.
 
-:::tip What if I already addressed feedback locally?
+Even if you have already addressed feedback locally, we recommend using the `ai-review` label for
+more consistent and visible reviews, as local feedback is not visible to human reviewers.
 
-As the local feedback from Claude is not visible to human reviewers, and may differ based on local
-Claude context, we currently recommend that you use the `ai-review` label for more consistent and
-visible reviews. There is value in having more eyes on Claude's feedback as the pull request goes
-through review, to ensure that we deliver the highest-quality code and nothing is missed.
+#### Acting on feedback
 
-:::
-
-### Step 3: Address Claude's feedback
-
-After Claude has reviewed your pull request, you should evaluate its feedback. If you judge that the
-feedback is valid, you should make the changes before opening the PR for review.
+Evaluate Claude's findings with the same critical eye and judgement you'd apply to any review
+suggestion, addressing those comments that provide helpful feedback and, if warranted, providing
+commentary as to why others were not implemented. Claude complements your engineering judgment, not
+replaces it.
 
 For feedback that is not addressed, you can optionally use the opportunity to explain why it wasn't
 addressed as input to the future reviewers as they look at the changes.
-
-### Step 4: Open the PR for review
 
 When you have addressed any Claude feedback that you judge is necessary, open the PR for review.
 </Bitwarden>
