@@ -153,12 +153,15 @@ sent to real email addresses. You can open its web interface at
 ### Redis
 
 <Bitwarden>
+
 :::note
 
 Redis is required for Email and Authenticator two-factor authentication flows, as well as OTP
 validation for new device and user verification scenarios when developing for the `cloud` profile.
 
-::: </Bitwarden>
+:::
+
+</Bitwarden>
 
 Redis provides distributed caching capabilities. Available caching configurations have specific
 fallbacks including process-scoped, in-memory caching, or database store for self-hosted
