@@ -1,0 +1,112 @@
+# Logging
+
+The mechanics of logging for individual programming languages used at Bitwarden can be found in the
+sub-pages of this documentation. The guidance in this page is overarching and agnostic to language.
+The language sub-pages provide specifics on how to apply these principles in practice..
+
+## To log, or not to log?
+
+A developer might be wondering, should I log here, there, both, or not at all? There is no single
+prescriptive formula but here are some guidelines. The logging framework being used, and the
+mechanics of output for log streams can influence these guidelines. Consult any specific
+documentation on logging for the respective GH repo in [Getting Started](../../index.mdx).
+
+- Imagine debugging failures while developing. The gut feeling that something might be tricky to
+  debug is a sign that to consider adding some debug logging to it.
+
+- Not all functions need logging. There is a balance to strike.
+
+- Where an existing logging heuristic is already present, for consistency it should be followed when
+  modelling code from that.
+
+- If propagating an Error, consider whether to log at the lowest level where it occurred, or upwards
+  in the call stack.
+  - Could there be some other failure in the call stack such that we fail to log any error? Logging
+    an error twice is better than not logging it at all.
+
+  - Are there multiple uses of the function? If so, the callers might decide differently whether
+    it’s a business logic error or if it’s something like a transient warning state to retry, in
+    which case, it might be safer to leave to the caller to handle logging.
+
+  - Is it a library, or an application? If a library, does the consuming application (where we have
+    control over both) filter out the library logs?
+
+## Log levels
+
+Never log sensitive data. There are ways of protecting against this in the code, but it is extremely
+important given the security of our users to think about and fully understand what is being logging
+when writing code. Currently our default log level in production is Info.
+
+When writing code in a logging framework, there consists a log message and a log level. This level
+is compared at runtime and/or compile time to the level filter, which notates the highest level
+which will be logged during the programs execution. By default, in production the log level is info.
+Generally speaking, debug builds should be able to use the debug level.
+
+When to use each log level is described below in descending order of verbosity/severity. Note that
+depending on the logging framework/programming language, not all levels may be available. For
+example, if a Warn level does not exist in the given framework, apply the scenarios from Warn, to
+Error. The nature of the functionality or system being logged influences level usage. For example,
+many systems may only need Error, Info and Debug.
+
+### Error
+
+- Unexpected problems that disrupt a flow.
+
+- Generally not recoverable.
+
+- Often is user noticeable / impacting.
+
+#### Examples
+
+- We executed a system call that should have succeeded and is not retry-able, resulting in an
+  inability to proceed with a flow.
+
+### Warn
+
+- Abnormal behavior but not critical to a flow.
+
+- Often is recoverable.
+
+- May or may not be user noticeable / impacting.
+
+#### Examples
+
+- A network call failed but is reasonable to retry. We use a warn log that it failed including how
+  many times we retried, duration until the next retry (esp when using backoff). If all retries
+  fail, an error level would then be used.
+
+### Info
+
+- General useful information about the state of the program or user flow.
+
+- Tells the story of what the happened during the program’s runtime.
+
+#### Examples
+
+- A user successfully logged in. A user clicked a toggle setting, “Feature XYZ enabled/disabled.”.
+
+### Debug
+
+- Low priority information.
+
+Information that is mostly useful to developers to see the code path with more clarity.
+
+#### Examples
+
+- Taking the user toggle setting example above, debug logs could be used to share the state of a
+  feature flag or other intermediary data that is used to decide if the setting can be enabled.
+
+### Trace
+
+- Very low priority information.
+
+- Typically verbose information that occurs with high frequency during runtime and can quickly fill
+  up the output log stream, often making them not human readable, but searchable.
+
+- Trace logs are often tedious to sift through manually and are used in deep investigations. Being
+  able to run search queries on such non-human consumable amounts of data requires a consistency in
+  log message structure.
+
+#### Examples
+
+- The browser detected a focus event on a field we control and it issued a callback.
