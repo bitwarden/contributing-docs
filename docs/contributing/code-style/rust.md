@@ -26,12 +26,18 @@ as strict rules but rather as best practices to follow in our codebases.
 
 ### General guidelines
 
-Avoid starting documentation with `This module`, `This function`, `This field` or similar phrases.
-The context will be inferred implicitly by the reader. Instead, focus on describing the purpose and
-behavior of the item directly.
+- Avoid starting documentation with `This module`, `This function`, `This field` or similar phrases.
+  The context will be inferred implicitly by the reader. Instead, focus on describing the purpose
+  and behavior of the item directly.
 
-When possible document from the consumer's perspective. This helps ensure that the documentation is
-relevant and useful to those who will be using the code.
+- When possible document from the consumer's perspective. This helps ensure that the documentation
+  is relevant and useful to those who will be using the code.
+
+- If you find yourself having to deeply explain the code in doc comments or code comments, it could
+  be a hint to re-evaluate the design.
+
+- Library code (code consumed in multiple places) should be properly documented with `///` comments.
+  For example `pub trait` definitions.
 
 ### Documenting Examples
 
@@ -63,39 +69,48 @@ documenting modules use the `//!` syntax to write documentation comments at the 
 Please ensure functions and their arguments have descriptive names. It's often better to use longer
 names that convey more meaning if it improves clarity.
 
+Helper functions (not pub) are often self documenting, and generally do not warrant a doc comment.
+
+```rust
+fn sum_positive_integers(uint_a: u32, uint_b: u32) -> u32 {
+    uint_a + uint_b
+}
+```
+
 #### Arguments
 
-We avoid documenting function arguments since rust does not have a good convention for doing so.
-Instead focus on using well descriptive names and appropriate types for the arguments. For example
-rather than using `i32` for a positive integer, use `u32`. If the value should never be 0 use
-`NonZeroU32`. The [NewType](#newtype) pattern can be useful here in case there is no built in
+Avoid documenting function arguments when descriptive names and strict types are sufficient. For
+example rather than using `i32` for a positive integer, use `u32`. If the value should never be 0
+use `NonZeroU32`. The [NewType](#newtype) pattern can be useful here in case there is no built in
 representation of the type.
 
-If you still feel that a comment would be helpful, another technique is to extract the arguments
-into a separate struct to improve clarity and enforce type safety.
+If you still sense that explicit argument documentation would be helpful, this could be a hint to
+extract the arguments into a separate struct to improve clarity and enforce type safety.
+
+Let's say `sum_positive_integers()` is now a library function in our utils module.
 
 ```rust
 // Good
 
-/// Sums two arguments.
-fn sum_arguments(arg1: i32, arg2: i32) -> i32 {
-    arg1 + arg2
+/// Returns the sum of two positive integers.
+pub fn sum_positive_integers(uint_a: u32, uint_b: u32) -> u32 {
+    uint_a + uint_b
 }
 
 // Bad
 
-/// Sums two arguments
+/// Sums two arguments.
 ///
 /// # Arguments
 ///
-/// * `x` - The first argument.
-/// * `y` - The second argument.
+/// * `a` - The first positive integer
+/// * `b` - The second positive argument.
 ///
 /// # Returns
 ///
 /// Returns the sum of the arguments.
-fn do_something(arg1: i32, arg2: i32) -> i32 {
-    arg1 + arg2
+pub fn sum(a: u32, b: u32) -> u32 {
+    a + b
 }
 ```
 
@@ -107,14 +122,22 @@ misused consider using the [NewType](#newtype) pattern.
 ## Avoid panics
 
 Panics are highly discouraged in the Bitwarden codebase outside of tests. Errors should be handled
-gracefully and returned to the caller. `clippy` will forbid you from using `unwrap`. While `expect`
-is allowed, it should be used sparingly and should always provide a helpful message indicating why
-it can never occur.
+gracefully and returned to the caller. `clippy` will forbid you from using `unwrap()`. While
+`expect()` is allowed, it should be used sparingly and should always provide a helpful message
+indicating why it should never occur. Ideally this message is worded to reflect _what_ expectation
+was violated. This provides highly readable code and crash logs. For example:
 
-Some scenarios where `expect` are allowed are:
+```rust
+let some_object = self.shared_object.lock().expect("Mutex not to be poisoned.");
+```
+
+Scenarios where `expect()` is allowed are:
 
 - Calling libraries that guarantee that the allowed inputs never results in `Err` or `None`.
 - Operating on slices or arrays where the index is guaranteed to be within bounds.
+- Acquiring a Mutex. The `Err` case occurs when another thread panicked while holding the lock
+  (which is a poisoned mutex). Generally this means we don't want to proceed with the runtime.
+  `unwrap_or_else()` can alternatively be used if protections from mutex poisoning is necessary.
 
 ## Pattern matching
 
