@@ -78,10 +78,10 @@ If you feel that someone else has good knowledge of the code you are reviewing, 
 reach out to them or add them as a reviewer. <Bitwarden>Bitwarden developers can use the [SME
 Yellowpages][sme-yellowpages] to look for knowledge area experts.</Bitwarden>
 
-Please do **not** approve code you do not understand the implications of. Comments and concerns are
-always welcome! For example, it’s okay to leave some general comments or feedback, while also saying
-that you don’t have enough knowledge to approve the changes. The author can ask for another review
-from someone else, and there’s nothing wrong in having two reviewers on a PR.
+Please do **not** approve code of which do not understand the implications. Comments and concerns
+are always welcome! For example, it’s okay to leave some general comments or feedback, while also
+saying that you don’t have enough knowledge to approve the changes. The author can ask for another
+review from someone else, and there’s nothing wrong in having two reviewers on a PR.
 
 When undertaking a review, keep in mind that you are taking an ownership stake in the changes. You
 should always strive to provide actionable feedback to the author and to make yourself available for
@@ -91,6 +91,15 @@ While we mostly use an asynchronous review process, please don't hesitate to sch
 the author to discuss the changes. While asynchronous communication can be useful, it incurs a time
 penalty which can drag out the review process. Sometimes setting up a short call to discuss the
 changes can save a lot of time.
+
+Also, consider the impact of the code being reviewed on in-progress work on your team. This is
+especially important for pull requests authored outside of your team that touch your team's owned
+code. As the assigned reviewer, you are the arbiter of these changes for your team and have a
+responsibility to alert the team if you foresee conflicts with ongoing work in a given domain. For
+example, if your team has active work on a given component or service, and you are assigned to
+review a pull request that makes changes to that component or service, you should alert your team so
+that those changes can be incorporated into the ongoing work. This will avoid mis-aligned
+expectations and potential bugs when the two sets of changes are merged.
 
 :::info Assumptions
 
