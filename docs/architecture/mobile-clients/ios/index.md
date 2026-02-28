@@ -453,6 +453,54 @@ This makes it convenient to switch between these files or open them side-by-side
   [ios version](https://github.com/bitwarden/ios/blob/main/.test-simulator-ios-version)), otherwise
   tests may fail because of subtle differences between iOS versions.
 
+### Mock generation
+
+We use [Sourcery](https://github.com/krzysztofzablocki/Sourcery) for automatic mock generation.
+
+In order to automatically generate a mock from a protocol, just add a comment with
+`// sourcery: AutoMockable` to such protocol, perform a build and the mock will be automatically
+generated and added to the `AutoMockable.generated.swift` file.
+
+For example:
+
+```swift
+protocol FooProtocol { // sourcery: AutoMockable
+    func bar() -> Bool
+}
+```
+
+:::info Manual generation
+
+There are some cases where the automatically generated mock does not cover the mock scenario we want
+or it cannot handle some closure types, especially in function parameters. In such cases prefer to
+create the mock manually and remove the protocol's `AutoMockable` comment.
+
+:::
+
+#### Custom annotations
+
+Sourcery allows us to annotate different parts of our code to guide code generation. Custom
+annotations have been added in `AutoMockable.stencil` to handle special cases.
+
+- **useSelectorName**: Method annotation used to indicate that the generated mocked properties need
+  to use the selector name instead of the short method name. This is especially useful when using
+  function overloading where we need the mocked names to also have the parameter names to
+  differentiate between the different mocked functions.
+- **mockReceivedInvocations**: Method annotation used to indicate that we want to generate the
+  mocked property to store an array of the received invocations of the parameters passed each time
+  the function is called.
+
+For example:
+
+```swift
+protocol FooProtocol { // sourcery: AutoMockable
+    func bar(fooParameter: String) -> Bool
+    func bar(anotherParameter: Int) -> Bool // sourcery: useSelectorName
+    func saveNumber(theNumber: Int) -> Bool // sourcery: mockReceivedInvocations
+    func annotateMultiple(fooParameter: String) // sourcery: useSelectorName, mockReceivedInvocations
+}
+```
+
 ### Test plans
 
 Test plans are organized in the `TestPlans` folder of the iOS repository. Each project has multiple
