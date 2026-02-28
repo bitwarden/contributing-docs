@@ -273,6 +273,76 @@ public async Task Delete(Guid id) {}
 public async Task PostDelete(Guid id) {}
 ```
 
+### Telemetry
+
+Bitwarden uses OpenTelemetry for collecting metrics and traces to enable diagnostics collection
+making it easier to get to the bottom of issues.
+
+#### Avoiding PII
+
+Telemetry data may be collected, stored, and inspected externally. Metrics and traces must never
+contain user personally identifiable information (PII). Examples of PII to avoid in metric
+attributes, trace tags, and span attributes:
+
+- User IDs, email addresses, or usernames
+- Vault item names or contents
+- Organization names or IDs
+- IP addresses or device identifiers
+
+Use aggregate values (counts, durations, error codes) rather than any data tied to a specific user
+or their vault data.
+
+#### Metrics
+
+Custom metrics are enabled in our services when using our in-house server SDK. They should be used
+via the [`IMeterFactory`][meter-factory] that is available from our DI container.
+
+```csharp
+public class MyFeatureMetrics
+{
+    private readonly Counter<long> _requestCounter;
+    private readonly Histogram<double> _processingDuration;
+
+    public MyFeatureMetrics(IMeterFactory meterFactory)
+    {
+        var meter = meterFactory.Create("Bitwarden.MyFeature");
+        _requestCounter = meter.CreateCounter<long>(
+            "bitwarden.myfeature.requests",
+            unit: "{requests}",
+            description: "Number of requests processed");
+        _processingDuration = meter.CreateHistogram<double>(
+            "bitwarden.myfeature.processing.duration",
+            unit: "s",
+            description: "Duration of request processing");
+    }
+}
+```
+
+The meter name should be a dot separated, pascal case, hierarchy of names similar to a namespace.
+The name should begin with `Bitwarden.` to enable automatic collection of that metric. The
+instrument names should follow [Open Telemetry naming guidelines][otel-naming-guidelines]
+([permalink][otel-naming-guidelines-permalink]).
+
+#### Traces
+
+Custom traces can be created using [`ActivitySource`][activity-source].
+
+```csharp
+public class MyService
+{
+    private static readonly ActivitySource _myActivitySource = new("Bitwarden.MyFeature");
+
+    public void DoWork()
+    {
+        using var activity = _myActivitySource.StartActivity("MyOperation");
+        // ...
+    }
+}
+```
+
+The activity source name should be a dot separated, pascal case, hierarchy of names similar to a
+namespace. The name should begin with `Bitwarden.` to enable automatic collection of that trace.
+
 [null-forgiving]:
   https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/operators/null-forgiving
 [null-state-attributes]:
@@ -287,3 +357,11 @@ public async Task PostDelete(Guid id) {}
   https://learn.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection?view=aspnetcore-9.0#register-groups-of-services-with-extension-methods
 [guid-newguid]: https://learn.microsoft.com/en-us/dotnet/api/system.guid.newguid
 [corehelpers-generatecomb]: https://fastuuid.com/learn-about-uuids/comb-guids
+[meter-factory]:
+  https://learn.microsoft.com/en-us/dotnet/core/diagnostics/metrics-instrumentation?source=recommendations#get-a-meter-via-dependency-injection
+[otel-naming-guidelines]:
+  https://github.com/open-telemetry/semantic-conventions/blob/main/docs/general/naming.md
+[otel-naming-guidelines-permalink]:
+  https://github.com/open-telemetry/semantic-conventions/blob/084f18ed184d297545af4274fa4681feca3ecf6e/docs/general/naming.md
+[activity-source]:
+  https://learn.microsoft.com/en-us/dotnet/core/diagnostics/distributed-tracing-instrumentation-walkthroughs#activitysource
