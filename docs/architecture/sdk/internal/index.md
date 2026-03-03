@@ -147,7 +147,7 @@ as as example.
 
 ## Client structure
 
-One of the core concepts of our SDK is the "client". The "client" groups the SDK API surface into
+One of the core concepts of our SDK is the "client". The client groups the SDK API surface into
 domain-specific bundles for easier instantiation and use by the consuming application.
 
 There are two recommended approaches for structuring a client, depending on the size of the domain.
@@ -196,8 +196,12 @@ domain/
     └── request.rs           # supporting types (errors, etc.)
 ```
 
+:::warning
+
 Avoid the thin passthrough pattern, where the client delegates to free functions defined elsewhere.
 This creates unnecessary indirection and splits documentation away from the API surface.
+
+:::
 
 ## Language bindings
 
