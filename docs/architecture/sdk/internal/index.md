@@ -10,7 +10,7 @@ across both mobile and web platforms. It will cover best practices for structuri
 platform-specific challenges, and ensuring that your implementation works seamlessly across
 Bitwarden’s mobile and web applications.
 
-## Architecture
+## Crate structure
 
 The internal SDK is structured as a single
 [Git repository](https://github.com/bitwarden/sdk-internal) with multiple internal crates. This
@@ -144,6 +144,60 @@ The each feature or domain crate exposes its extended `Client` struct(s), which 
 grouped into application interfaces for consumption. See the
 [`VaultClient`](https://github.com/bitwarden/sdk-internal/blob/main/crates/bitwarden-vault/src/vault_client.rs)
 as as example.
+
+## Client structure
+
+One of the core concepts of our SDK is the "client". The "client" groups the SDK API surface into
+domain-specific bundles for easier instantiation and use by the consuming application.
+
+There are two recommended approaches for structuring a client, depending on the size of the domain.
+
+### Single file
+
+Define the client struct, its initialization, and all method `impl` blocks in one file. This
+minimizes indirection and keeps related code easy to discover. Prefer this structure when the file
+is manageable in size (~500 lines, including tests).
+
+```
+domain_client.rs
+├── DomainClient struct definition and initialization
+└── impl DomainClient with full method implementations and tests
+```
+
+### Per-method files or subdirectories
+
+When the single file would otherwise become unwieldy (~500 lines, including tests), the client
+definition should be split from individual method implementations.
+
+Define the client struct in one file and each method in either its own file or its own subdirectory,
+depending on the implementation complexity.
+
+When each method is self-contained and does not require supporting types alongside it, individual
+methods can be split into separate files.
+
+```
+domain/
+├── domain_client.rs     # DomainClient struct definition and initialization
+├── mod.rs
+├── method_name.rs       # impl DomainClient { fn method_name() } and tests
+└── other_method.rs      # impl DomainClient { fn other_method() } and tests
+```
+
+For more complex clients, subdirectories can be used to contain the `impl DomainClient` block for
+that method, its tests, and any supporting types.
+
+```
+domain/
+├── domain_client.rs         # DomainClient struct definition and initialization
+├── mod.rs
+└── method_name/
+    ├── mod.rs
+    ├── method_name_impl.rs  # impl DomainClient { fn method_name() } and tests
+    └── request.rs           # supporting types (errors, etc.)
+```
+
+Avoid the thin passthrough pattern, where the client delegates to free functions defined elsewhere.
+This creates unnecessary indirection and splits documentation away from the API surface.
 
 ## Language bindings
 
