@@ -1,8 +1,8 @@
 # Rust
 
-We have standardized on the
-[`tracing`](https://docs.rs/tracing/latest/tracing/) crate. It's worth reading that crate's
-documentation page, as it explains its central philosophy and how to use the macros.
+We have standardized on the [`tracing`](https://docs.rs/tracing/latest/tracing/) crate. It's worth
+reading that crate's documentation page, as it explains its central philosophy and how to use the
+macros.
 
 The tracing crate provides the following advantages over alternatives:
 
@@ -49,6 +49,11 @@ outputs
 
 #### `tracing`
 
+In the below code, `db_path` is presumed to be a string type, which has an implementation of the
+[Display trait](https://doc.rust-lang.org/std/fmt/trait.Display.html). The leverage of `Display` in
+tracing is a very useful way to take advantage of delegating the responsibility of _how_ to display
+a struct, to the struct itself. An example of this can be found below in the `Demo` section.
+
 ```rust
 tracing::info!(resource= %db_path, "Starting.");
 ```
@@ -62,12 +67,12 @@ outputs
 ## Setup
 
 In general, the infrastructure for wiring up the tracing should already be set up, unless starting a
-new project. Existing usage and the `tracing` crate docs can be consulted for details for any new project.
+new project. Existing usage and the `tracing` crate docs can be consulted for details for any new
+project.
 
-Briefly, a subscriber is initialized and is where configuration for
-log levels and output streams happens. Subscribers consume log events and should only be set up by application code.
-Library code and Application code can both emit `tracing::Events` through the use of the convenience
-macros.
+Briefly, a subscriber is initialized and is where configuration for log levels and output streams
+happens. Subscribers consume log events and should only be set up by application code. Library code
+and Application code can both emit `tracing::Events` through the use of the convenience macros.
 
 ## Basic usage guidelines
 
@@ -79,9 +84,10 @@ macros.
   name is defaulted, and using it saves space. If you renaming variables for the log output is
   frequent,consider improving the variable naming.
 
-- Primitive types are logged as-is. The `?` sigil indicates serialization through `fmt::Debug` and `%` sigil through `fmt::Display`. In general, Display should be used when there is a meaningful, human readable
-  implementation of the trait for a struct. Debug can be a fallback for `info` level, and should be
-  the first choice for `debug` and `trace` levels. See the
+- Primitive types are logged as-is. The `?` sigil indicates serialization through `fmt::Debug` and
+  `%` sigil through `fmt::Display`. In general, Display should be used when there is a meaningful,
+  human readable implementation of the trait for a struct. Debug can be a fallback for `info` level,
+  and should be the first choice for `debug` and `trace` levels. See the
   [recording-fields](https://docs.rs/tracing/latest/tracing/index.html#recording-fields) for more
   information.
 
