@@ -72,8 +72,17 @@ names that convey more meaning if it improves clarity.
 Helper functions (not pub) are often self documenting, and generally do not warrant a doc comment.
 
 ```rust
+// Good
+
 fn sum_positive_integers(uint_a: u32, uint_b: u32) -> u32 {
     uint_a + uint_b
+}
+
+// Bad
+
+/// Sums two arguments.
+fn sum(a: u32, b: u32) -> u32 {
+    a + b
 }
 ```
 
@@ -87,7 +96,7 @@ representation of the type.
 If you still sense that explicit argument documentation would be helpful, this could be a hint to
 extract the arguments into a separate struct to improve clarity and enforce type safety.
 
-Let's say `sum_positive_integers()` is now a library function in our utils module.
+Suppose we are moving the helper summing function to be a library function in a utils module:
 
 ```rust
 // Good
@@ -109,7 +118,7 @@ pub fn sum_positive_integers(uint_a: u32, uint_b: u32) -> u32 {
 /// # Returns
 ///
 /// Returns the sum of the arguments.
-pub fn sum(a: u32, b: u32) -> u32 {
+pub fn sum_positive_integers(a: u32, b: u32) -> u32 {
     a + b
 }
 ```
@@ -125,13 +134,15 @@ Panics are highly discouraged in the Bitwarden codebase outside of tests. Errors
 gracefully and returned to the caller. `clippy` will forbid you from using `unwrap()`. While
 `expect()` is allowed, it should be used sparingly and should always provide a helpful message
 indicating why it should never occur. Ideally this message is worded to reflect _what_ expectation
-was violated. This provides highly readable code and crash logs. For example:
+was violated. This provides highly readable code and crash logs. See
+[Common message styles](neuronull/pm-31660/rust-style-guide-documenting-code-and-mutex-panics). For
+example:
 
 ```rust
 let some_object = self.shared_object.lock().expect("Mutex not to be poisoned.");
 ```
 
-Scenarios where `expect()` is allowed are:
+Some scenarios where `expect()` is allowed are:
 
 - Calling libraries that guarantee that the allowed inputs never results in `Err` or `None`.
 - Operating on slices or arrays where the index is guaranteed to be within bounds.
