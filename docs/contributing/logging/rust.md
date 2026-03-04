@@ -79,8 +79,7 @@ macros.
   name is defaulted, and using it saves space. If you renaming variables for the log output is
   frequent,consider improving the variable naming.
 
-- Primitive types are logged as-is. The `?` sigil is used for `fmt::Debug`, and `%` sigil is used
-  for `fmt::Display`. In general, Display should be used when there is a meaningful, human readable
+- Primitive types are logged as-is. The `?` sigil indicates serialization through `fmt::Debug` and `%` sigil through `fmt::Display`. In general, Display should be used when there is a meaningful, human readable
   implementation of the trait for a struct. Debug can be a fallback for `info` level, and should be
   the first choice for `debug` and `trace` levels. See the
   [recording-fields](https://docs.rs/tracing/latest/tracing/index.html#recording-fields) for more
