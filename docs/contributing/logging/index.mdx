@@ -1,15 +1,14 @@
 # Logging
 
-The mechanics of logging for individual programming languages used at Bitwarden can be found in the
-sub-pages of this documentation. The guidance in this page is overarching and agnostic to language.
-The language sub-pages provide specifics on how to apply these principles in practice..
+The guidance in this page is programming language agnostic.
+The language sub-pages provide specifics on how to apply these principles in practice.
 
 ## To log, or not to log?
 
 A developer might be wondering, should I log here, there, both, or not at all? There is no single
-prescriptive formula but here are some guidelines. The logging framework being used, and the
-mechanics of output for log streams can influence these guidelines. Consult any specific
-documentation on logging for the respective GH repo in [Getting Started](../../index.mdx).
+prescriptive formula. The logging framework being used and the
+mechanics of output for log streams influence any guidelines, but some broad stokes follow. Consult any specific
+documentation on logging for the respective GH repository in [Getting Started](../../index.mdx).
 
 - Imagine debugging failures while developing. The gut feeling that something might be tricky to
   debug is a sign that to consider adding some debug logging to it.
@@ -33,16 +32,20 @@ documentation on logging for the respective GH repo in [Getting Started](../../i
 
 ## Log levels
 
-Never log sensitive data. There are ways of protecting against this in the code, but it is extremely
-important given the security of our users to think about and fully understand what is being logging
-when writing code. Currently our default log level in production is Info.
+:::warning Never log sensitive data.
 
-When writing code in a logging framework, there consists a log message and a log level. This level
+There are ways of redacting data in the code, but it is extremely
+important given the security of our users to think about and fully understand what is being logging
+when writing code. 
+
+:::
+
+When writing code in a logging framework, at a minimum calls consist of a log message and a log level. This level
 is compared at runtime and/or compile time to the level filter, which notates the highest level
-which will be logged during the programs execution. By default, in production the log level is info.
+which will be logged during the program's execution. By default, in production the log level is info.
 Generally speaking, debug builds should be able to use the debug level.
 
-When to use each log level is described below in descending order of verbosity/severity. Note that
+When to use each log level is described below in descending order of severity. Note that
 depending on the logging framework/programming language, not all levels may be available. For
 example, if a Warn level does not exist in the given framework, apply the scenarios from Warn, to
 Error. The nature of the functionality or system being logged influences level usage. For example,
@@ -79,7 +82,7 @@ many systems may only need Error, Info and Debug.
 
 - General useful information about the state of the program or user flow.
 
-- Tells the story of what the happened during the program’s runtime.
+- Tells the story of what happened during the program’s runtime.
 
 #### Examples
 

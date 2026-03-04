@@ -1,8 +1,8 @@
 # Rust
 
-Across our repos that use Rust, we have standardized to use the
+We have standardized on the
 [`tracing`](https://docs.rs/tracing/latest/tracing/) crate. It's worth reading that crate's
-documentation page, as it explains the philosophy and how to use the macros.
+documentation page, as it explains its central philosophy and how to use the macros.
 
 The tracing crate provides the following advantages over alternatives:
 
@@ -62,11 +62,10 @@ outputs
 ## Setup
 
 In general, the infrastructure for wiring up the tracing should already be set up, unless starting a
-new project. The `tracing` crate docs should be consulted for details in this case, as well as our
-existing usages.
+new project. Existing usage and the `tracing` crate docs can be consulted for details for any new project.
 
-A subscriber is initialized, which is what consumes the log events, and is where configuration for
-log levels and output streams happens. The subscriber should only be set up by application code.
+Briefly, a subscriber is initialized and is where configuration for
+log levels and output streams happens. Subscribers consume log events and should only be set up by application code.
 Library code and Application code can both emit `tracing::Events` through the use of the convenience
 macros.
 
