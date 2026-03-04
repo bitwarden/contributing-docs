@@ -192,17 +192,21 @@ The `#[instrument]` macro should be used on async functions when:
 
 - There are log events emitted (i.e. don’t blanket add the macro to all async functions)
 
+The `level` argument can be used to override the default (`INFO`) level of the generated span. This
+can be useful to apply instrumentation only when the subscriber's filter is set to `debug`, for
+example.
+
 ### Demo
 
 ```rust
-use rand::{Rng, thread_rng};
+use rand::RngExt;
 use tokio::time::{Duration, sleep};
-use tracing::{info, instrument};
+use tracing::{debug, info, instrument};
 
 async fn rnd_sleep() {
     let ms = {
-        let mut rng = thread_rng();
-        rng.gen_range(100..=500)
+        let mut rng = rand::rng();
+        rng.random_range(100..=500)
     };
     sleep(Duration::from_millis(ms)).await;
 }
@@ -223,10 +227,11 @@ async fn do_thing_instrumented(id: u64, _password: &str) {
     info!("doing thing for user");
 }
 
-#[instrument(skip(_password))]
+#[instrument(skip(_password), level = "debug")]
 async fn do_other_thing_instrumented(id: u64, _password: &str) {
     rnd_sleep().await;
-    info!("doing another thing for user");
+    debug!("a really incredibly helpful message specific to the user.");
+    info!("did something not user specific");
 }
 
 #[tokio::main]
@@ -267,19 +272,19 @@ async fn main() {
 
 ```
 === WITHOUT #[instrument] ===
-2026-02-27T17:24:25.963843Z  INFO doing thing for user
-2026-02-27T17:24:26.067109Z  INFO doing another thing for user
-2026-02-27T17:24:26.070572Z  INFO doing another thing for user
-2026-02-27T17:24:26.207227Z  INFO doing thing for user
-2026-02-27T17:24:26.247501Z  INFO doing thing for user
-2026-02-27T17:24:26.269603Z  INFO doing another thing for user
+2026-03-04T22:16:33.411720Z  INFO doing another thing for user
+2026-03-04T22:16:33.544027Z  INFO doing another thing for user
+2026-03-04T22:16:33.614329Z  INFO doing thing for user
+2026-03-04T22:16:33.647056Z  INFO doing another thing for user
+2026-03-04T22:16:33.674319Z  INFO doing thing for user
+2026-03-04T22:16:33.685544Z  INFO doing thing for user
 
 === WITH #[instrument] ===
-2026-02-27T17:24:27.487348Z  INFO do_other_thing_instrumented{id=2}: fetching user
-2026-02-27T17:24:27.632838Z  INFO do_thing_instrumented{id=3}: fetching user
-2026-02-27T17:24:27.646628Z  INFO do_thing_instrumented{id=1}: fetching user
-2026-02-27T17:24:27.696809Z  INFO do_other_thing_instrumented{id=1}: fetching user
-2026-02-27T17:24:27.758738Z  INFO do_thing_instrumented{id=2}: fetching user
-2026-02-27T17:24:27.772336Z  INFO do_other_thing_instrumented{id=3}: fetching user
+2026-03-04T22:16:35.006149Z  INFO did something not user specific
+2026-03-04T22:16:35.007511Z  INFO do_thing_instrumented{id=2}: doing thing for user
+2026-03-04T22:16:35.015020Z  INFO did something not user specific
+2026-03-04T22:16:35.110271Z  INFO do_thing_instrumented{id=3}: doing thing for user
+2026-03-04T22:16:35.178081Z  INFO do_thing_instrumented{id=1}: doing thing for user
+2026-03-04T22:16:35.179495Z  INFO did something not user specific
 
 ```
