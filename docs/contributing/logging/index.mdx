@@ -1,22 +1,21 @@
 # Logging
 
-The guidance in this page is programming language agnostic.
-The language sub-pages provide specifics on how to apply these principles in practice.
+The guidance in this page is programming language agnostic. The language sub-pages provide specifics
+on how to apply these principles in practice.
 
 ## To log, or not to log?
 
 A developer might be wondering, should I log here, there, both, or not at all? There is no single
-prescriptive formula. The logging framework being used and the
-mechanics of output for log streams influence any guidelines, but some broad stokes follow. Consult any specific
-documentation on logging for the respective GH repository in [Getting Started](../../index.mdx).
+prescriptive formula. The logging framework being used and the mechanics of output for log streams
+influence any guidelines, but some broad stokes follow. Consult any specific documentation on
+logging for the respective GH repository in [Getting Started](../../index.mdx).
 
 - Imagine debugging failures while developing. The gut feeling that something might be tricky to
   debug is a sign that to consider adding some debug logging to it.
 
 - Not all functions need logging. There is a balance to strike.
 
-- Where an existing logging heuristic is already present, for consistency it should be followed when
-  modelling code from that.
+- When writing new code, follow any existing logging patterns that have been established.
 
 - If propagating an Error, consider whether to log at the lowest level where it occurred, or upwards
   in the call stack.
@@ -34,22 +33,21 @@ documentation on logging for the respective GH repository in [Getting Started](.
 
 :::warning Never log sensitive data.
 
-There are ways of redacting data in the code, but it is extremely
-important given the security of our users to think about and fully understand what is being logging
-when writing code. 
+There are ways of redacting data in the code, but it is extremely important given the security of
+our users to think about and fully understand what is being logging when writing code.
 
 :::
 
-When writing code in a logging framework, at a minimum calls consist of a log message and a log level. This level
-is compared at runtime and/or compile time to the level filter, which notates the highest level
-which will be logged during the program's execution. By default, in production the log level is info.
-Generally speaking, debug builds should be able to use the debug level.
+When writing code in a logging framework, at a minimum calls consist of a log message and a log
+level. This level is compared at runtime and/or compile time to the level filter, which notates the
+highest level which will be logged during the program's execution. By default, in production the log
+level is info. Generally speaking, debug builds should be able to use the debug level.
 
-When to use each log level is described below in descending order of severity. Note that
-depending on the logging framework/programming language, not all levels may be available. For
-example, if a Warn level does not exist in the given framework, apply the scenarios from Warn, to
-Error. The nature of the functionality or system being logged influences level usage. For example,
-many systems may only need Error, Info and Debug.
+When to use each log level is described below in descending order of severity. Note that depending
+on the logging framework/programming language, not all levels may be available. For example, if a
+Warn level does not exist in the given framework, apply the scenarios from Warn, to Error. The
+nature of the functionality or system being logged influences level usage. For example, many systems
+may only need Error, Info and Debug.
 
 ### Error
 
