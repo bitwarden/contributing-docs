@@ -275,8 +275,8 @@ public async Task PostDelete(Guid id) {}
 
 ### Telemetry
 
-Bitwarden uses OpenTelemetry for collecting metrics and traces to enable diagnostics collection
-making it easier to get to the bottom of issues.
+Bitwarden uses [OpenTelemetry][open-telemetry] for collecting metrics and traces to enable
+diagnostics collection making it easier to get to the bottom of issues.
 
 #### Avoiding PII
 
@@ -357,6 +357,7 @@ namespace. The name should begin with `Bitwarden.` to enable automatic collectio
   https://learn.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection?view=aspnetcore-9.0#register-groups-of-services-with-extension-methods
 [guid-newguid]: https://learn.microsoft.com/en-us/dotnet/api/system.guid.newguid
 [corehelpers-generatecomb]: https://fastuuid.com/learn-about-uuids/comb-guids
+[open-telemetry]: https://opentelemetry.io/docs/
 [meter-factory]:
   https://learn.microsoft.com/en-us/dotnet/core/diagnostics/metrics-instrumentation?source=recommendations#get-a-meter-via-dependency-injection
 [otel-naming-guidelines]:
