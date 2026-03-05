@@ -340,7 +340,7 @@ public class MyService
 }
 ```
 
-The activity source name should be a dot separated, pascal case, hierarchy of names similar to a
+The activity source name should be a dot-separated, Pascal case, hierarchy of names similar to a
 namespace. The name should begin with `Bitwarden.` to enable automatic collection of that trace.
 
 [null-forgiving]:
