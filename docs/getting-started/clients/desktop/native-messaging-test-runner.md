@@ -10,16 +10,17 @@ the root of the `desktop` app in `bitwarden/clients` repo.
 
 ## Getting started
 
-1.  Clone the [bitwarden/clients](https://github.com/bitwarden/clients) repo
-2.  Run the desktop app locally following [these](../desktop/index.mdx) instructions
-3.  In the running desktop app, go to `Preferences` and turn on the
+1.  [Install](https://duckduckgo.com/app) the Duck Duck Go browser.
+2.  Clone the [bitwarden/clients](https://github.com/bitwarden/clients) repo
+3.  Run the desktop app locally following [these](../desktop/index.mdx) instructions
+4.  In the running desktop app, go to `Preferences` and turn on the
     `Allow DuckDuckGo browser integration` setting:
 
     ![Screenshot of desktop settings](native-messaging/settings.png)
 
-4.  In a separate terminal, navigate into `apps/desktop/native-messaging-test-runner`
-5.  Run `npm ci`
-6.  Pick a command and run it! A good one to start with is `status`. A full list of commands can be
+5.  In a separate terminal, navigate into `apps/desktop/native-messaging-test-runner`
+6.  Run `npm ci`
+7.  Pick a command and run it! A good one to start with is `status`. A full list of commands can be
     seen in the `Commands` section of this doc. Some commands take parameters such as `create`. When
     running these, pass parameters the following way, with two additional dashes before all of the
     parameters: ` npm run create -- --name NewLogin!` **NOTE** You will need to accept the prompt in
@@ -114,11 +115,23 @@ Utility used by the `IPCService` when creating a promise that allows the usage o
 waiting for messages. We can't guarantee that we will get a response from the desktop app, so this
 allows us to gracefully cancel if a response isn't received in a timely manner.
 
+## PR reviews
+
+If you're reading this documentation because of an automated message from GitHub Actions to validate
+the DDG integration as part of your PR, please follow the steps above and use the following
+guidelines for what to validate:
+
+- If the DDG integration's feature code is modified, a thorough pass with all the commands is
+  recommended.
+- If there are cipher changes, the `status` and `bw-credential-create` should be tested.
+- If the PR is a non-breaking change dependency update, `status` is sufficient.
+
 ## Troubleshooting
 
-- If you are seeing unexpected behavior with services used by the test runner or when editing
-  commands, delete the `dist` folder at the top level of the `native-messaging-test-runner` and
-  re-run the command.
+- If you are seeing unexpected behavior or timeouts with services used by the test runner or when
+  editing commands: 1. Close the desktop app. 2. Delete the `dist` folder at the top level of the
+  `native-messaging-test-runner`. 3. Run the desktop app. 3. Run `npm ci` in the
+  `native-messaging-test-runner` folder. 4. Re-try the command.
 
 - If you are adding/editing command files and getting a `MODULE_NOT_FOUND` error when running the
   command, make sure you have `import "module-alias/register";` in your command file. This maps the
