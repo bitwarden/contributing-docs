@@ -85,13 +85,16 @@ For a detailed look at the architecture and technical details, see
 
    :::
 
-2. Re-run the secrets script to publish the new secrets
+2. Using Azurite for local emulation, set the `globalSettings:events:connectionString` user secret
+   to `UseDevelopmentStorage=true`.
+
+3. Re-run the secrets script to publish the new secrets
 
    ```bash
    pwsh setup_secrets.ps1 -clear
    ```
 
-3. Start or re-start all services, including `EventsProcessor` (which is where the Azure Service Bus
+4. Start or re-start all services, including `EventsProcessor` (which is where the Azure Service Bus
    listeners run)
 
 ### RabbitMQ
