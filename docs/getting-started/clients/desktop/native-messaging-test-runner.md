@@ -132,7 +132,10 @@ If you're reading this documentation because of an automated message from GitHub
 the DDG integration as part of your PR, please follow the steps above and use the following
 guidelines for what to validate:
 
-- If there are cipher changes, the `status` and `bw-credential-create` should be tested.
+- If the DDG integration's feature code is modified, use commands that map to areas of the feature
+  that are impacted.
+  - For example: If there are cipher changes, the `status` and `bw-credential-create` should be
+    tested.
 - If the PR is a non-breaking change dependency update, `status` is sufficient.
 
 ## Troubleshooting
