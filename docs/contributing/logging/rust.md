@@ -193,9 +193,10 @@ The `#[instrument]` macro should be used on async functions when:
 
 - There are log events emitted (i.e. don’t blanket add the macro to all async functions)
 
-The `level` argument can be used to override the default (`INFO`) level of the generated span. This
-can be useful to apply instrumentation only when the subscriber's filter is set to `debug`, for
-example.
+The `level` argument can be used to override the default (`INFO`) level of the generated span.
+Notably, when using `level`, the instrument's context is only applied when the level is met. This
+might be useful to apply instrumentation only when the subscriber's filter is set to `debug` to only
+apply detailed context in debug log statements as seen in the demo below.
 
 ### Demo
 
