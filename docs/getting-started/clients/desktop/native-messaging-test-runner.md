@@ -8,23 +8,30 @@ is located
 [here](https://github.com/bitwarden/clients/tree/main/apps/desktop/native-messaging-test-runner) at
 the root of the `desktop` app in `bitwarden/clients` repo.
 
-:::note This tool does not provide complete testing coverage for the DDG integration. It is a useful
-tool during development, to troubleshoot, and as a general regression check. To do a full
-comprehensive test of the DDG integration, download the DDG browser and test directly with it. :::
+:::note
+
+This tool does not provide complete testing coverage for the DDG integration. It is a useful tool
+during development, to troubleshoot, and as a general regression check. To do a full comprehensive
+test of the DDG integration, download the DDG browser and test directly with it.
+
+:::
 
 ## Getting started
 
-1.  [Install](https://duckduckgo.com/app) the Duck Duck Go browser.
-2.  Clone the [bitwarden/clients](https://github.com/bitwarden/clients) repo
-3.  Run the desktop app locally following [these](../desktop/index.mdx) instructions
-4.  In the running desktop app, go to `Preferences` and turn on the
+0.  (optional) [Install](https://duckduckgo.com/app) the Duck Duck Go browser. While this is not
+    strictly required to utilize the test runner, without it, [errors](#troubleshooting) are apt to
+    occur.
+
+1.  Clone the [bitwarden/clients](https://github.com/bitwarden/clients) repo
+2.  Run the desktop app locally following [these](../desktop/index.mdx) instructions
+3.  In the running desktop app, go to `Preferences` and turn on the
     `Allow DuckDuckGo browser integration` setting:
 
     ![Screenshot of desktop settings](native-messaging/settings.png)
 
-5.  In a separate terminal, navigate into `apps/desktop/native-messaging-test-runner`
-6.  Run `npm ci`
-7.  Pick a command and run it! A good one to start with is `status`. A full list of commands can be
+4.  In a separate terminal, navigate into `apps/desktop/native-messaging-test-runner`
+5.  Run `npm ci`
+6.  Pick a command and run it! A good one to start with is `status`. A full list of commands can be
     seen in the `Commands` section of this doc. Some commands take parameters such as `create`. When
     running these, pass parameters the following way, with two additional dashes before all of the
     parameters: ` npm run create -- --name NewLogin!` **NOTE** You will need to accept the prompt in
@@ -140,3 +147,6 @@ guidelines for what to validate:
   compiled JavaScript classes to the ones used in the Typescript files.
 
   ![Screenshot of MODULE_NOT_FOUND error](native-messaging/module-not-found.png)
+
+- If you are seeing messages in the runner output stating `Received unexpected:  { <...>`, those are
+  benign, but should resolve upon completing [step 0 of Getting Started](#getting-started).
