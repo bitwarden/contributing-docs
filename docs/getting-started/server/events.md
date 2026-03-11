@@ -62,7 +62,8 @@ For a detailed look at the architecture and technical details, see
 
 #### Configuring the server to use Azure Service Bus for events
 
-1. Add the following to `"globalSettings"` in your `dev/secrets.json` to configure the service bus:
+1. Add the following to `"globalSettings"` in your `dev/secrets.json` to configure the service bus
+   and Azurite emulator:
 
    ```json
        "eventLogging": {
@@ -75,6 +76,9 @@ For a detailed look at the architecture and technical details, see
            "webhookSubscriptionName": "events-webhook-subscription"
          }
        },
+       "events": {
+           "connectionString": "UseDevelopmentStorage=true"
+       }
    ```
 
    :::info
@@ -85,16 +89,13 @@ For a detailed look at the architecture and technical details, see
 
    :::
 
-2. Using Azurite for local emulation, set the `globalSettings:events:connectionString` user secret
-   to `UseDevelopmentStorage=true`.
-
-3. Re-run the secrets script to publish the new secrets
+2. Re-run the secrets script to publish the new secrets
 
    ```bash
    pwsh setup_secrets.ps1 -clear
    ```
 
-4. Start or re-start all services, including `EventsProcessor` (which is where the Azure Service Bus
+3. Start or re-start all services, including `EventsProcessor` (which is where the Azure Service Bus
    listeners run)
 
 ### RabbitMQ
