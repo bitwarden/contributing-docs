@@ -52,7 +52,8 @@ outputs
 In the below code, `db_path` is presumed to be a string type, which has an implementation of the
 [Display trait](https://doc.rust-lang.org/std/fmt/trait.Display.html). The leverage of `Display` in
 tracing is a very useful way to take advantage of delegating the responsibility of _how_ to display
-a struct, to the struct itself. An example of this can be found below in the `Demo` section.
+a struct, to the struct itself. This solves the warning about sensitive data described in
+[Log levels](./index.mdx#Log_levels) An example of this can be found below in the `Demo` section.
 
 ```rust
 tracing::info!(resource= %db_path, "Starting.");
