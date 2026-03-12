@@ -192,7 +192,7 @@ domain/
 ├── mod.rs
 └── method_name/
     ├── mod.rs
-    ├── method_name_impl.rs  # impl DomainClient { fn method_name() } and tests
+    ├── method_name.rs  # impl DomainClient { fn method_name() } and tests
     └── request.rs           # supporting types (errors, etc.)
 ```
 
@@ -200,6 +200,15 @@ domain/
 
 Avoid the thin passthrough pattern, where the client delegates to free functions defined elsewhere.
 This creates unnecessary indirection and splits documentation away from the API surface.
+
+```rust
+  impl LoginClient {
+      // Avoid delegating the entire implementation to another function like this.
+      pub async fn login_with_password(&self, data: LoginData) -> Result<()> {
+          login_with_password(self.client, data).await
+      }
+  }
+```
 
 :::
 
