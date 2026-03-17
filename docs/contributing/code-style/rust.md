@@ -139,7 +139,7 @@ was violated. This provides highly readable code and crash logs. See
 example:
 
 ```rust
-let some_object = self.shared_object.lock().expect("mutex not to be poisoned.")?;
+let some_object = self.shared_object.lock().expect("mutex not to be poisoned")?;
 ```
 
 Some scenarios where `expect()` is allowed are:
