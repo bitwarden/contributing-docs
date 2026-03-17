@@ -1,1 +1,116 @@
 # Desktop Native
+
+Desktop Native (DN) is a Rust project that represents all of the native operating system logic used
+in the Desktop client.
+
+The DN code is effectively a library that is exposed to Electron via
+[napi-rs](https://napi.rs/docs/introduction/getting-started). See [Napi](#napi) for more
+information.
+
+## Dependencies
+
+1. [Rust](https://www.rust-lang.org/tools/install)
+2. The nightly toolchain: `rustup toolchain install nightly`
+3. Cargo binaries for pre-commit hooks
+   - [cargo-sort](https://crates.io/crates/cargo-sort)
+   - [cargo-udeps](https://crates.io/crates/cargo-udeps)
+   - [cargo-deny](https://crates.io/crates/cargo-deny)
+
+## Compiling
+
+To ensure the code will compile, a faster check than building binaries is to use `check`.
+
+```
+  cargo check
+```
+
+The binary target can be built as well, however there is marginal gain from that since the
+compilation as part of running the Desktop electron app will be building the executable code.
+
+```
+  cargo build
+```
+
+## Checks
+
+The following checks are run in CI and also as pre-commit hooks. They can also be run manually.
+
+```
+cargo +nightly fmt --check
+```
+
+```
+cargo +nightly clippy --all-features --all-targets --tests -- -D warnings
+```
+
+## Automated testing
+
+Tests are invoked in CI and can be ran manually with the below commands.
+
+### Examples
+
+Execute the unit and integration tests:
+
+```
+cargo test
+```
+
+Execute the only unit tests:
+
+```
+cargo test --lib
+```
+
+## Cross compiling
+
+Since the Desktop client supports multiple platforms, much of the code is compile-time gated with
+`cfg` flags. [Cross](https://crates.io/crates/cross) can be useful to check compilation of
+non-native OS specific code.
+
+```
+cargo install cross --git https://github.com/cross-rs/cross
+```
+
+### Examples
+
+Check compilation for Linux:
+
+```
+cross check --target  x86_64-unknown-linux-gnu
+```
+
+Run `clippy` for Intel Macs:
+
+```
+cross clippy --target x86_64-apple-darwin --all-features --tests
+```
+
+Run unit tests for Windows:
+
+```
+cross test --lib --target x86_64-pc-windows-gnu
+```
+
+Run integration tests for Apple Silicon Macs:
+
+```
+cross --target aarch64-apple-darwin
+```
+
+## Napi
+
+`napi-rs` provides an abstraction layer by wrapping the C API that Node.js exposes, in safe Rust
+bindings. This enables development without having to manually write unsafe FFI.
+
+Most feature crates in the DN workspace have a Napi layer in the project's
+[napi](https://github.com/bitwarden/clients/tree/main/apps/desktop/desktop_native/napi/src) crate
+source. This Napi layer is compiled as part of the normal build processes, and `napi` is a standard
+crate dependency in the project's workspace.
+
+::::note
+
+In order to actually generate the bindings,
+[building the Desktop client](../index.mdx#build-native-module) in the parent directory is
+necessary.
+
+::::
