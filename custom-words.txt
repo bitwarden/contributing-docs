@@ -47,6 +47,8 @@ Mailcatcher
 minio
 MVVM
 NGRX
+Napi
+napi
 OIDCS
 Omnisharp
 onboarded
