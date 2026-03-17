@@ -193,17 +193,20 @@ The `#[instrument]` macro should be used on async functions when:
 
 - There are log events emitted (i.e. don’t blanket add the macro to all async functions)
 
-The `level` argument can be used to override the default (`INFO`) level of the generated span.
-Notably, when using `level`, the instrument's context is only applied when the level is met. This
-might be useful to apply instrumentation only when the subscriber's filter is set to `debug` to only
-apply detailed context in debug log statements as seen in the demo below.
+::::warning
+
+The instrument macro provides a `level` argument which overrides the default (`INFO`) level of the
+generated span. Notably, when using `level`, the instrument's context is only applied when the level
+is met. This is counter-intuitive and it's usage should be avoided.
+
+::::
 
 ### Demo
 
 ```rust
 use rand::RngExt;
 use tokio::time::{Duration, sleep};
-use tracing::{debug, info, instrument};
+use tracing::{info, instrument};
 
 async fn rnd_sleep() {
     let ms = {
@@ -227,13 +230,6 @@ async fn do_other_thing(_id: u64) {
 async fn do_thing_instrumented(id: u64, _password: &str) {
     rnd_sleep().await;
     info!("doing thing for user");
-}
-
-#[instrument(skip(_password), level = "debug")]
-async fn do_other_thing_instrumented(id: u64, _password: &str) {
-    rnd_sleep().await;
-    debug!("a really incredibly helpful message specific to the user.");
-    info!("did something not user specific");
 }
 
 #[tokio::main]
@@ -260,9 +256,6 @@ async fn main() {
         tokio::spawn(do_thing_instrumented(1, "sensitive_data")),
         tokio::spawn(do_thing_instrumented(2, "sensitive_data")),
         tokio::spawn(do_thing_instrumented(3, "sensitive_data")),
-        tokio::spawn(do_other_thing_instrumented(1, "sensitive_data")),
-        tokio::spawn(do_other_thing_instrumented(2, "sensitive_data")),
-        tokio::spawn(do_other_thing_instrumented(3, "sensitive_data")),
     ];
     for h in handles {
         h.await.unwrap();
@@ -282,11 +275,7 @@ async fn main() {
 2026-03-04T22:16:33.685544Z  INFO doing thing for user
 
 === WITH #[instrument] ===
-2026-03-04T22:16:35.006149Z  INFO did something not user specific
 2026-03-04T22:16:35.007511Z  INFO do_thing_instrumented{id=2}: doing thing for user
-2026-03-04T22:16:35.015020Z  INFO did something not user specific
 2026-03-04T22:16:35.110271Z  INFO do_thing_instrumented{id=3}: doing thing for user
 2026-03-04T22:16:35.178081Z  INFO do_thing_instrumented{id=1}: doing thing for user
-2026-03-04T22:16:35.179495Z  INFO did something not user specific
-
 ```
