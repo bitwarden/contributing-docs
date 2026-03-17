@@ -62,7 +62,8 @@ For a detailed look at the architecture and technical details, see
 
 #### Configuring the server to use Azure Service Bus for events
 
-1. Add the following to your `secrets.json` in `dev` to configure the service bus:
+1. Add the following to `"globalSettings"` in your `dev/secrets.json` to configure the service bus
+   and Azurite emulator:
 
    ```json
        "eventLogging": {
@@ -75,6 +76,9 @@ For a detailed look at the architecture and technical details, see
            "webhookSubscriptionName": "events-webhook-subscription"
          }
        },
+       "events": {
+           "connectionString": "UseDevelopmentStorage=true"
+       }
    ```
 
    :::info

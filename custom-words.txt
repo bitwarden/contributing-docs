@@ -47,6 +47,8 @@ Mailcatcher
 minio
 MVVM
 NGRX
+Napi
+napi
 OIDCS
 Omnisharp
 onboarded
@@ -88,6 +90,7 @@ typealias
 typecheck
 typechecks
 typesafe
+udeps
 unsynchronized
 WCAG
 Xcodes.app
@@ -97,6 +100,7 @@ Yellowpages
 Yubico
 YubiKey
 YubiKeys
+Zeroizing
 
 # Forbidden words
 !auto-fill

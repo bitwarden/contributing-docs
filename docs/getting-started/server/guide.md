@@ -106,8 +106,8 @@ facilitate easy customization.
     docker compose --profile cloud --profile mail up -d
     ```
 
-    Which starts MSSQL, mail, and Azurite container. The additional Azurite container is required to
-    emulate Azure used by the Bitwarden cloud environment.
+    Which starts MSSQL, mail, Redis, and Azurite container. The additional Azurite container is
+    required to emulate Azure used by the Bitwarden cloud environment.
 
     </Bitwarden>
 
@@ -149,6 +149,34 @@ The server uses emails for many user interactions. We provide a pre-configured i
 [MailCatcher](https://mailcatcher.me/), which catches any outbound email and prevents it from being
 sent to real email addresses. You can open its web interface at
 [http://localhost:1080](http://localhost:1080).
+
+### Redis
+
+<Bitwarden>
+
+:::note
+
+Redis is required for Email and Authenticator two-factor authentication flows, as well as OTP
+validation for new device and user verification scenarios when developing for the `cloud` profile.
+
+:::
+
+</Bitwarden>
+
+Redis provides distributed caching capabilities. Available caching configurations have specific
+fallbacks including process-scoped, in-memory caching, or database store for self-hosted
+configurations.
+
+For details on which features can take advantage of Redis and available configurations, including
+connection string setting in `secrets.json`, see
+[CACHING.md](https://github.com/bitwarden/server/blob/main/src/Core/Utilities/CACHING.md).
+
+(Optional) [Monitor](https://redis.io/docs/latest/commands/monitor/) Redis activity using the Redis
+CLI:
+
+```bash
+docker compose exec redis redis-cli
+```
 
 ### Azurite
 

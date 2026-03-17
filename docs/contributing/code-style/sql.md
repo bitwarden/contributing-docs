@@ -10,6 +10,16 @@ We use the [Repository pattern][repository] with the MSSQL repositories being wr
 [Dapper][dapper]. Each repository method in turn calls a _Stored Procedure_, which primarily fetches
 data from _Views_.
 
+1. **Views** define explicit column lists, selecting specific columns from tables
+2. **Stored Procedures** select `*` from views
+3. **C# objects** returned by repository methods match the columns defined in the corresponding view
+
+This separation of concerns means:
+
+- The view definition is where you specify which columns are needed
+- Stored procedures simply `SELECT * FROM [dbo].[ViewName]`
+- The view acts as a contract between the database and application layer
+
 ## Best practices
 
 1. **Consistency**: Follow established patterns throughout the codebase

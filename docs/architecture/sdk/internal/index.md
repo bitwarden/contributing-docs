@@ -10,7 +10,7 @@ across both mobile and web platforms. It will cover best practices for structuri
 platform-specific challenges, and ensuring that your implementation works seamlessly across
 Bitwarden’s mobile and web applications.
 
-## Architecture
+## Crate structure
 
 The internal SDK is structured as a single
 [Git repository](https://github.com/bitwarden/sdk-internal) with multiple internal crates. This
@@ -122,7 +122,10 @@ Bindings are those crates whose purpose is to provide bindings for other project
 ### Application Interfaces
 
 An application interface collects the various features relevant for a given Bitwarden product, e.g.
-Password Manager, or Secrets Manager, into a single easy-to-use crate for that particular product.
+Password Manager, or Secrets Manager, into a single easy-to-use client for that particular product.
+
+These clients, exposed through an external binding layer, are how consumers of the SDK will interact
+with it.
 
 ### Core and Utility
 
@@ -133,8 +136,81 @@ more details.
 ### Features and Domains
 
 Feature and domain crates constitute the application business logic. Feature crates depend on
-`bitwarden-core` and provide extensions to the Client struct to implement specific domains.
-<Bitwarden>These crates are usually owned and maintained by individual teams.</Bitwarden>
+`bitwarden-core` for their runtime and provide extensions to the `Client` struct to implement
+specific domains. <Bitwarden>These crates are usually owned and maintained by individual
+teams.</Bitwarden>
+
+The each feature or domain crate exposes its extended `Client` struct(s), which can be further
+grouped into application interfaces for consumption. See the
+[`VaultClient`](https://github.com/bitwarden/sdk-internal/blob/main/crates/bitwarden-vault/src/vault_client.rs)
+as as example.
+
+## Client structure
+
+One of the core concepts of our SDK is the "client". The client groups the SDK API surface into
+domain-specific bundles for easier instantiation and use by the consuming application.
+
+There are two recommended approaches for structuring a client, depending on the size of the domain.
+
+### Single file
+
+Define the client struct, its initialization, and all method `impl` blocks in one file. This
+minimizes indirection and keeps related code easy to discover. Prefer this structure when the file
+is manageable in size (~500 lines, including tests).
+
+```
+domain_client.rs
+├── DomainClient struct definition and initialization
+└── impl DomainClient with full method implementations and tests
+```
+
+### Per-method files or subdirectories
+
+When the single file would otherwise become unwieldy (~500 lines, including tests), the client
+definition should be split from individual method implementations.
+
+Define the client struct in one file and each method in either its own file or its own subdirectory,
+depending on the implementation complexity.
+
+When each method is self-contained and does not require supporting types alongside it, individual
+methods can be split into separate files.
+
+```
+domain/
+├── domain_client.rs     # DomainClient struct definition and initialization
+├── mod.rs
+├── method_name.rs       # impl DomainClient { fn method_name() } and tests
+└── other_method.rs      # impl DomainClient { fn other_method() } and tests
+```
+
+For more complex clients, subdirectories can be used to contain the `impl DomainClient` block for
+that method, its tests, and any supporting types.
+
+```
+domain/
+├── domain_client.rs         # DomainClient struct definition and initialization
+├── mod.rs
+└── method_name/
+    ├── mod.rs
+    ├── method_name.rs  # impl DomainClient { fn method_name() } and tests
+    └── request.rs           # supporting types (errors, etc.)
+```
+
+:::warning
+
+Avoid the thin passthrough pattern, where the client delegates to free functions defined elsewhere.
+This creates unnecessary indirection and splits documentation away from the API surface.
+
+```rust
+  impl LoginClient {
+      // Avoid delegating the entire implementation to another function like this.
+      pub async fn login_with_password(&self, data: LoginData) -> Result<()> {
+          login_with_password(self.client, data).await
+      }
+  }
+```
+
+:::
 
 ## Language bindings
 
@@ -149,8 +225,8 @@ respectively. While UniFFI supports additional languages they typically lag a fe
 the UniFFI core library.
 
 The Android bindings are currently published on
-[GitHub Packages](https://github.com/bitwarden/sdk/packages/1945788) in the SDK repository. The
-swift package is published in the [`sdk-swift` repository](https://github.com/bitwarden/sdk-swift).
+[GitHub Packages](https://github.com/bitwarden/sdk/packages/) in the `sdk_internal` repository. The
+Swift package is published in the [`sdk-swift` repository](https://github.com/bitwarden/sdk-swift).
 
 ### Web bindings
 
@@ -161,7 +237,21 @@ that can be used as a fallback.
 
 The WebAssembly module is published on [npm](https://www.npmjs.com/package/@bitwarden/sdk-internal).
 
+<Bitwarden>
 ## Adding New Functionality
+
+### Adding new feature and domain crates
+
+Teams are encouraged to add their own feature or domain crates as they build additional
+functionality in the SDK.
+
+Adding the crate and referencing it from the appropriate application interface clients should be
+done as a separate pull request from adding any functionality in the crate itself.
+
+This will ensure that the scope of the initial setup pull request is small and focused, as our
+Platform team will be responsible for reviewing additions to the application clients.
+
+### How do I decide what to move to the internal SDK?
 
 Considering adding to or moving code into the SDK? Review these questions to help come to a
 decision.
@@ -182,6 +272,8 @@ decision.
 - Does the functionality need the SDK to produce an observable or reactive value?
   - The SDK does not support reactivity at this time. However we still encourage migrating the
     relevant business logic to the SDK and then building reactivity with that logic in TypeScript.
+
+</Bitwarden>
 
 [sdk-internal-468]: https://github.com/bitwarden/sdk-internal/pull/468
 [state-crate]: https://github.com/bitwarden/sdk-internal/tree/main/crates/bitwarden-state
