@@ -135,7 +135,7 @@ gracefully and returned to the caller. `clippy` will forbid you from using `unwr
 `expect()` is allowed, it should be used sparingly and should always provide a helpful message
 indicating why it should never occur. Ideally this message is worded to reflect _what_ expectation
 was violated. This provides highly readable code and crash logs. See
-[Common message styles](neuronull/pm-31660/rust-style-guide-documenting-code-and-mutex-panics). For
+[Common message styles](https://doc.rust-lang.org/std/error/index.html#common-message-styles). For
 example:
 
 ```rust
