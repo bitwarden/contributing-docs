@@ -9,7 +9,8 @@ import TabItem from "@theme/TabItem";
 
 ## Requirements
 
-Before you start, you must complete the [Clients repository setup instructions](../index.md).
+Before you start, you must complete the [Clients repository setup instructions](../index.md), as
+well as install the [Desktop Native dependencies](./desktop-native/index.mdx#Dependencies).
 
 <Tabs groupId="os">
 <TabItem value="win" label="Windows" default>
@@ -17,23 +18,11 @@ Before you start, you must complete the [Clients repository setup instructions](
 These are available as additional dependencies in the Visual Studio Installer.
 
 - Visual C++ Build tools
-- [Rust](https://www.rust-lang.org/tools/install)
-  1. The nightly toolchain: `rustup toolchain install nightly`
-  2. Cargo binaries for pre-commit hooks
-     - [cargo-sort](https://crates.io/crates/cargo-sort)
-     - [cargo-udeps](https://crates.io/crates/cargo-udeps)
-     - [cargo-deny](https://crates.io/crates/cargo-deny)
 
 </TabItem>
 <TabItem value="mac" label="macOS">
 
 - Xcode Command Line Tools
-- [Rust](https://www.rust-lang.org/tools/install)
-  1. The nightly toolchain: `rustup toolchain install nightly`
-  2. Cargo binaries for pre-commit hooks
-     - [cargo-sort](https://crates.io/crates/cargo-sort)
-     - [cargo-udeps](https://crates.io/crates/cargo-udeps)
-     - [cargo-deny](https://crates.io/crates/cargo-deny)
 
 </TabItem>
 <TabItem value="lin" label="Linux">
@@ -42,12 +31,6 @@ These are available as additional dependencies in the Visual Studio Installer.
   - `build-essential`
   - `libsecret-1-dev`
   - `libglib2.0-dev`
-- [Rust](https://www.rust-lang.org/tools/install)
-  1. The nightly toolchain: `rustup toolchain install nightly`
-  2. Cargo binaries for pre-commit hooks
-     - [cargo-sort](https://crates.io/crates/cargo-sort)
-     - [cargo-udeps](https://crates.io/crates/cargo-udeps)
-     - [cargo-deny](https://crates.io/crates/cargo-deny)
 
 </TabItem>
 </Tabs>
@@ -69,7 +52,7 @@ For complete Nx documentation and all available commands, see
 
 The desktop application relies on a native module written in rust, which needs to be compiled
 separately. This is baked in to the build process for `npm run electron`, but you can also compile
-it manually.
+it manually. See [Desktop Native](./desktop-native/index.mdx) for more information.
 
 ```bash
 cd apps/desktop/desktop_native/napi
