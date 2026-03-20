@@ -137,12 +137,14 @@ You’re missing the `uid` claim for the user in `authsources.php`.
 
 ### IdP displays a "Metadata not found" error
 
-Your Entity ID and/or ACS URL in `.env` are incorrect. Make sure they match the values shown in the
-SSO configuration page of the Admin Console. If you change the values in `.env`, run the
-`docker compose` command above to restart the container with the updated variables.
+- Your Entity ID and/or ACS URL in `.env` are incorrect. Make sure they match the values shown in
+  the SSO configuration page of the Admin Console. If you change the values in `.env`, run the
+  `docker compose` command above to restart the container with the updated variables.
+- Your domain has been claimed by a different organization (e.g. due to old test data). Bitwarden is
+  using that organization's SSO configuration, which doesn't match your local IDP configuration.
+  Remove any claimed domains and try again.
 
-Note that the URL shown on the error page is not sourced from your `.env` file, so do not be
-confused if the URL on the error page is correct.
+Note that the URL shown on the error page may appear correct despite the above issues.
 
 ### Desktop client does not open correctly after SSO
 
