@@ -96,3 +96,18 @@ will call `dbo_finalization`.
 
 Upon execution any finalization scripts will be [automatically moved](./edd.mdx#online-environments)
 for proper history.
+
+### Data migrations
+
+Data migrations are sometimes needed during deployment — for example, seeding a new column or
+inserting rows required by a new feature.
+
+However, large or active tables can make this infeasible, as migrations may take hours or days.
+Migrations also run before code releases, so data can become stale by the time the app deploys.
+
+Therefore, new features must handle both old and new data states. This decouples migrations from
+code releases and allows natural migration over time (e.g. write the expected value on first access,
+then use the new value going forward).
+
+Once the bulk of data has been naturally migrated, a cleanup script can bring remaining data to the
+desired state, at which point the old code path can be removed.
