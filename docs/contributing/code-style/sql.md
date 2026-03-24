@@ -344,7 +344,7 @@ END
 **Read many with filter** -- multiple `AND` conditions with an inline status code comment:
 
 ```sql
-CREATE PROCEDURE [dbo].[EntityName_ReadManyByOrganizationIdAndRole]
+CREATE PROCEDURE [dbo].[EntityName_ReadManyByOrganizationIdRole]
     @OrganizationId UNIQUEIDENTIFIER,
     @Role TINYINT
 AS
