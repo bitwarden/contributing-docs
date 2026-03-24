@@ -84,12 +84,10 @@ These standards should be applied across any T-SQL scripts that you write.
 - **Blank lines**: Separate sections of code with at least one blank line
 - **Commas**: Commas should be placed at the right end of the line
 - **Parentheses**: Parentheses should be vertically aligned with spanning multiple lines
-- **Data type modifiers**: When a data type has a size or precision modifier, the preferred style is
-  to omit the space between the type name and the opening parenthesis (e.g., `NVARCHAR(50)` not
-  `NVARCHAR (50)`, `DATETIME2(7)` not `DATETIME2 (7)`)
-- **ID generation**: Do not use `NEWID()` to generate IDs in the database. New IDs are generated in
-  application code using `CoreHelpers.GenerateComb()`. See
-  [GUID generation](./csharp#guid-generation) for more information.
+- **Data type modifiers**: Omit the space between type name and opening parenthesis (e.g.,
+  `NVARCHAR(50)` not `NVARCHAR (50)`, `DATETIME2(7)` not `DATETIME2 (7)`)
+- **ID generation**: Use `CoreHelpers.GenerateComb()` in application code, not `NEWID()` in the
+  database -- see [GUID generation](./csharp#guid-generation)
 
 ### `SELECT` statements
 
@@ -122,7 +120,7 @@ WHERE
 
 #### `WHERE` clause conditions
 
-- `AND`/`OR` keywords go at the **start** of the next line, indented to align with the condition
+- `AND` / `OR` keywords go at the **start** of the next line, indented to align with the condition
   above it
 - Wrap grouped `OR` conditions in parentheses, with the opening `(` on the **same line** as `AND`
   and the closing `)` on its own line aligned with `AND`
@@ -162,15 +160,16 @@ WHERE
 
 #### Subqueries
 
-- Use `EXISTS` (not `IN`) for correlated subqueries — `EXISTS` short-circuits on the first match,
+- Use `EXISTS` (not `IN`) for correlated subqueries -- `EXISTS` short-circuits on the first match,
   whereas `IN` evaluates all matching values first
 - Use `IN` for non-correlated subqueries (where the inner query does not reference the outer query)
-  — the optimizer typically produces equivalent plans, and `IN` reads more naturally in this context
+  -- the optimizer typically produces equivalent plans, and `IN` reads more naturally in this
+  context
 - Use `SELECT 1` inside `EXISTS` checks, not `SELECT *`
 - Indent the subquery body 4 spaces within the parentheses; align the closing `)` with the opening
   context
 
-Correlated subquery (references outer query — use `EXISTS`):
+Correlated subquery (references outer query -- use `EXISTS`):
 
 ```sql
 CASE WHEN EXISTS (
@@ -186,7 +185,7 @@ CASE WHEN EXISTS (
     ) THEN 1 ELSE 0 END AS [IsProvider]
 ```
 
-Non-correlated subquery (self-contained — use `IN`):
+Non-correlated subquery (self-contained -- use `IN`):
 
 ```sql
 SELECT
@@ -277,7 +276,7 @@ LEFT JOIN
 
 :::
 
-:::warning Avoid using `Get` in procedure names
+:::warning Do not use `Get` in procedure names
 
 Some procedures in the codebase use `Get` instead of `Read` in the name (e.g.,
 `CipherOrganizationPermissions_GetManyByOrganizationId`, `OrganizationReport_GetSummaryDataById`).
@@ -306,7 +305,7 @@ END
 
 #### Common examples
 
-**Read by ID** — select a single record from a view:
+**Read by ID** -- select a single record from a view:
 
 ```sql
 CREATE PROCEDURE [dbo].[EntityName_ReadById]
@@ -324,7 +323,7 @@ BEGIN
 END
 ```
 
-**Read many by IDs** — bulk read using a table-valued parameter:
+**Read many by IDs** -- bulk read using a table-valued parameter:
 
 ```sql
 CREATE PROCEDURE [dbo].[EntityName_ReadManyByIds]
@@ -342,7 +341,7 @@ BEGIN
 END
 ```
 
-**Read many with filter** — multiple `AND` conditions with an inline status code comment:
+**Read many with filter** -- multiple `AND` conditions with an inline status code comment:
 
 ```sql
 CREATE PROCEDURE [dbo].[EntityName_ReadManyByOrganizationIdAndRole]
