@@ -7,6 +7,16 @@ in Splunk.
 
 ## Requirements
 
+:::note
+
+The deployed Splunk environment runs on ARM64, and `splunk-appinspect` (which validates compliance
+with Splunk requirements) requires ARM64 binaries. You must use an ARM64 development environment to
+deploy to the local Splunk Enterprise Docker container, or use artifacts produced by the pipeline.
+For more context, see
+[this comment](https://github.com/bitwarden/splunk/pull/118#issuecomment-3741864101).
+
+:::
+
 - Docker. If you're using an Apple Silicon Mac, enable _Docker Desktop_ -> _Settings_ -> _General_
   -> _Use Rosetta for x86_64/amd64 emulation on Apple Silicon_
 - Python 3.7 - 3.10
