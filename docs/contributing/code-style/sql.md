@@ -343,6 +343,14 @@ END
 
 **Read many with filter** -- multiple `AND` conditions with an inline status code comment:
 
+:::warning Do not use `And` between parameter names in procedure names
+
+Some procedures in the codebase use `And` between parameter names. These are incorrect and should
+not be used as a reference. Always concatenate parameter names directly, e.g.
+`EntityName_ReadManyByOrganizationIdRole`.
+
+:::
+
 ```sql
 CREATE PROCEDURE [dbo].[EntityName_ReadManyByOrganizationIdRole]
     @OrganizationId UNIQUEIDENTIFIER,
