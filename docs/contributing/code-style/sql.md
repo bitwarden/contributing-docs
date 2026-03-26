@@ -343,6 +343,13 @@ END
 
 **Read many with filter** -- multiple `AND` conditions with an inline status code comment:
 
+:::note
+
+When naming stored procedures with multiple parameters, do not use `And` between parameter names.
+`ReadManyByOrganizationIdRole` is correct; `ReadManyByOrganizationIdAndRole` is not.
+
+:::
+
 ```sql
 CREATE PROCEDURE [dbo].[EntityName_ReadManyByOrganizationIdRole]
     @OrganizationId UNIQUEIDENTIFIER,
