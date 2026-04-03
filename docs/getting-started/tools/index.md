@@ -137,8 +137,8 @@ environment. See [VS Code](https://code.claude.com/docs/en/vs-code) instructions
 
 We recommend that you start with
 [common workflows](https://code.claude.com/docs/en/common-workflows) and
-[best practices](https://code.claude.com/docs/en/best-practices) from Anthropic to understand how to
-use Claude Code.
+[best practices](https://code.claude.com/docs/en/best-practices) from Anthropic for learning how to
+start using Claude for development.
 
 ### Bitwarden AI plugin marketplace
 
