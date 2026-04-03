@@ -121,15 +121,17 @@ documentation. This page specifies how to configure AI tooling for development.
 
 ### Claude Code
 
-Claude Code is Anthropic's official CLI tool that brings Claude's capabilities directly to your
-terminal. It's ideal for developers who prefer command-line interfaces and want to integrate AI
-assistance into their terminal-based workflows.
+We use Claude Code as our primary AI tool for development workflows, including planning work,
+exploring the codebase, and proposing solutions.
 
 #### Installation
 
 Follow the installation instructions [here](https://code.claude.com/docs/en/quickstart) for your OS
 and interface of choice. When prompted, sign into the Anthropic Console via SSO and authenticate
 your local client.
+
+Depending on your IDE of choice, you may also want to integrate Claude Code into your development
+environment. See [VS Code](https://code.claude.com/docs/en/vs-code) instructions, for example.
 
 #### Basic usage
 
@@ -146,7 +148,7 @@ quality-controlled, security-reviewed plugins that follow Bitwarden's coding sta
 requirements. All marketplace plugins are maintained by the Bitwarden team and include comprehensive
 documentation, testing, and security validation.
 
-To use the marketplace with Claude Code:
+You should install the marketplace plugins using the `/plugin` command:
 
 ```bash
 /plugin marketplace add bitwarden/ai-plugins
