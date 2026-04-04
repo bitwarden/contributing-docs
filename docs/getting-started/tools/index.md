@@ -11,9 +11,9 @@ This may require some adaptation if you’re using a different operating system.
 
 :::
 
-The following tools make up the standard Bitwarden developer setup and should be installed as part of your local development environment.
-that any new Bitwarden developer install all of them as part of setting up their local development
-environment.
+The following tools make up the standard Bitwarden developer setup and should be installed as part
+of your local development environment. that any new Bitwarden developer install all of them as part
+of setting up their local development environment.
 
 ## IDEs
 
@@ -121,17 +121,19 @@ documentation. This page specifies how to configure AI tooling for development.
 
 ### Claude Code
 
-We use Claude Code as our primary AI tool for development workflows.
-exploring the codebase, and proposing solutions.
+We use Claude Code as our primary AI tool for development workflows. exploring the codebase, and
+proposing solutions.
 
 #### Installation
 
-Follow the installation instructions [here](https://code.claude.com/docs/en/quickstart). When prompted, sign into the Anthropic Console via SSO and authenticate your local client.
-and interface of choice. When prompted, sign into the Anthropic Console via SSO and authenticate
-your local client.
+Follow the installation instructions [here](https://code.claude.com/docs/en/quickstart). When
+prompted, sign into the Anthropic Console via SSO and authenticate your local client. and interface
+of choice. When prompted, sign into the Anthropic Console via SSO and authenticate your local
+client.
 
-We also recommend integrating Claude Code into your IDE. See [VS Code](https://code.claude.com/docs/en/vs-code) for setup instructions.
-environment. See [VS Code](https://code.claude.com/docs/en/vs-code) instructions, for example.
+We also recommend integrating Claude Code into your IDE. See
+[VS Code](https://code.claude.com/docs/en/vs-code) for setup instructions. environment. See
+[VS Code](https://code.claude.com/docs/en/vs-code) instructions, for example.
 
 #### Basic usage
 
@@ -142,11 +144,8 @@ start using Claude for development.
 
 ### Bitwarden AI plugin marketplace
 
-Bitwarden maintains a curated [marketplace of AI plugins](https://github.com/bitwarden/ai-plugins)
-specifically designed for our development workflows. This marketplace was created to provide
-quality-controlled, security-reviewed plugins that follow Bitwarden's coding standards and security
-requirements. All marketplace plugins are maintained by the Bitwarden team and include comprehensive
-documentation, testing, and security validation.
+Bitwarden maintains a curated marketplace of AI plugins designed for our development workflows in
+our [marketplace](https://github.com/bitwarden/ai-plugins).
 
 You should install the marketplace plugins using the `/plugin` command:
 
