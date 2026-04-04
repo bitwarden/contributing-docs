@@ -126,7 +126,7 @@ exploring the codebase, and proposing solutions.
 
 #### Installation
 
-Follow the installation instructions [here](https://code.claude.com/docs/en/quickstart) for your OS
+Follow the installation instructions [here](https://code.claude.com/docs/en/quickstart). When prompted, sign into the Anthropic Console via SSO and authenticate your local client.
 and interface of choice. When prompted, sign into the Anthropic Console via SSO and authenticate
 your local client.
 
