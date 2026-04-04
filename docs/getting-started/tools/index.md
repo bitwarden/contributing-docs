@@ -144,8 +144,8 @@ start using Claude for development.
 
 ### Bitwarden AI plugin marketplace
 
-Bitwarden maintains a curated marketplace of AI plugins designed for our development workflows in
-our [marketplace](https://github.com/bitwarden/ai-plugins).
+Bitwarden maintains a curated set of AI plugins designed for our development workflows in our
+[marketplace](https://github.com/bitwarden/ai-plugins).
 
 You should install the marketplace plugins using the `/plugin` command:
 
