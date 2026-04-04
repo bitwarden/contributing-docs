@@ -11,7 +11,7 @@ This may require some adaptation if you’re using a different operating system.
 
 :::
 
-The following tools are strongly recommended as part of the “standard” developer setup. We recommend
+The following tools make up the standard Bitwarden developer setup and should be installed as part of your local development environment.
 that any new Bitwarden developer install all of them as part of setting up their local development
 environment.
 
