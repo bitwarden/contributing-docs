@@ -121,7 +121,7 @@ documentation. This page specifies how to configure AI tooling for development.
 
 ### Claude Code
 
-We use Claude Code as our primary AI tool for development workflows, including planning work,
+We use Claude Code as our primary AI tool for development workflows.
 exploring the codebase, and proposing solutions.
 
 #### Installation
