@@ -130,7 +130,7 @@ Follow the installation instructions [here](https://code.claude.com/docs/en/quic
 and interface of choice. When prompted, sign into the Anthropic Console via SSO and authenticate
 your local client.
 
-Depending on your IDE of choice, you may also want to integrate Claude Code into your development
+We also recommend integrating Claude Code into your IDE. See [VS Code](https://code.claude.com/docs/en/vs-code) for setup instructions.
 environment. See [VS Code](https://code.claude.com/docs/en/vs-code) instructions, for example.
 
 #### Basic usage
