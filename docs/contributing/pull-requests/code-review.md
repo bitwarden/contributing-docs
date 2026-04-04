@@ -116,7 +116,7 @@ informational notes or suggestions:
 | 🎨 `:art:`                               | Suggestion or improvement                      |
 | ❌ `:x:` / ⚠️ `:warning:`                | Significant concern that should be addressed   |
 | 🌱 `:seedling:` / ♻️ `:recycle:`         | Future work or technical debt to address later |
-| ⛏ `:pick:`                               | Minor nitpick                                  |
+| ⛏ `:pick:`                              | Minor nitpick                                  |
 
 ### Review statuses
 
