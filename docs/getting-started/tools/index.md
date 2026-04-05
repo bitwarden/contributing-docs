@@ -12,8 +12,7 @@ This may require some adaptation if you’re using a different operating system.
 :::
 
 The following tools make up the standard Bitwarden developer setup and should be installed as part
-of your local development environment. that any new Bitwarden developer install all of them as part
-of setting up their local development environment.
+of your local development environment.
 
 ## IDEs
 
@@ -121,19 +120,15 @@ documentation. This page specifies how to configure AI tooling for development.
 
 ### Claude Code
 
-We use Claude Code as our primary AI tool for development workflows. exploring the codebase, and
-proposing solutions.
+We use Claude Code as our primary AI tool for development workflows.
 
 #### Installation
 
 Follow the installation instructions [here](https://code.claude.com/docs/en/quickstart). When
-prompted, sign into the Anthropic Console via SSO and authenticate your local client. and interface
-of choice. When prompted, sign into the Anthropic Console via SSO and authenticate your local
-client.
+prompted, sign into the Anthropic Console via SSO and authenticate your local client.
 
 We also recommend integrating Claude Code into your IDE. See
-[VS Code](https://code.claude.com/docs/en/vs-code) for setup instructions. environment. See
-[VS Code](https://code.claude.com/docs/en/vs-code) instructions, for example.
+[VS Code](https://code.claude.com/docs/en/vs-code) for setup instructions.
 
 #### Basic usage
 
