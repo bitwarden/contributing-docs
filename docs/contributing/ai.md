@@ -46,3 +46,11 @@ Our primary AI tooling stack centers around Anthropic's Claude, which offers bot
 language model and flexible integration capabilities through the Model Context Protocol (MCP). This
 allows us to create custom workflows and integrate with our existing development tools while
 maintaining control over data privacy and security.
+
+:::tip Setting up AI tooling
+
+To set up AI tooling in your development environment, see the
+[[AI Tools](./../getting-started/tools/index.md#ai-tools) instructions of our Getting Started
+section.
+
+:::
