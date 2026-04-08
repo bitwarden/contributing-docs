@@ -185,7 +185,9 @@ var id = Guid.NewGuid();
 ```
 
 :::note For non-primary-key GUIDs (e.g. correlation IDs or other values not used as a database
-primary key), `Guid.NewGuid()` is acceptable. :::
+primary key), `Guid.NewGuid()` is acceptable.
+
+:::
 
 Entities should implement `SetNewId()`:
 
