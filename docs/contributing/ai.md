@@ -50,7 +50,7 @@ maintaining control over data privacy and security.
 :::tip Setting up AI tooling
 
 To set up AI tooling in your development environment, see the
-[[AI Tools](./../getting-started/tools/index.md#ai-tools) instructions of our Getting Started
+[AI Tools](./../getting-started/tools/index.md#ai-tools) instructions of our Getting Started
 section.
 
 :::
