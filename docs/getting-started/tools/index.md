@@ -4,19 +4,17 @@ sidebar_position: 1
 
 # Tools
 
-## Operating system
+:::warning Operating system assumptions
 
-All Bitwarden developers are issued with a MacBook. The tooling recommendations and instructions in
-this documentation assume that you’re using macOS. This may require some adaptation if you’re using
-a different operating system.
+The tooling recommendations and instructions in this documentation assume that you’re using macOS.
+This may require some adaptation if you’re using a different operating system.
 
-## Recommended tools
+:::
 
-The following tools are strongly recommended as part of the “standard” developer setup. We recommend
-that any new Bitwarden developer install all of them as part of setting up their local development
-environment.
+The following tools make up the standard Bitwarden developer setup and should be installed as part
+of your local development environment.
 
-### IDEs
+## IDEs
 
 - [Visual Studio Code](https://code.visualstudio.com/) - used for all Typescript projects.
   Suboptimal for C#. Be sure to install [extensions](#visual-studio-code-extensions)
@@ -25,7 +23,7 @@ environment.
 - [Xcode](https://developer.apple.com/xcode/) - required for iOS Mobile development and Safari web
   extension
 
-### Local environment
+## Local environment
 
 - [Homebrew](https://brew.sh/) - package manager for macOS
 - [Iterm2](https://iterm2.com/) (available via Homebrew) - a better terminal emulator
@@ -43,9 +41,8 @@ environment.
   [rustup](https://rustup.rs/))
 - [Git](https://git-scm.com)
   - [Commit signing](../../contributing/commit-signing.mdx) is strongly recommended
-- [AI tools](../../contributing/ai.md)
 
-### Mobile
+## Mobile
 
 - [Android Studio](https://developer.android.com/studio/) - Nice for setting up and running Android
   Simulators
@@ -53,7 +50,7 @@ environment.
 - [Apple Icons Generator Gist](https://gist.github.com/brutella/0bcd671a9e4f63edc12e) - Script to
   generate Apple icons from an image
 
-### Databases
+## Databases
 
 - [MSSQL VSCode Extension](https://marketplace.visualstudio.com/items?itemName=ms-mssql.mssql) for
   working with your local SQL Server
@@ -61,7 +58,7 @@ environment.
 - [MySQLWorkbench](https://www.mysql.com/products/workbench/) - Useful for fiddling with MySQL db
 - [SQLiteStudio](https://www.sqlitestudio.pl/) - Useful for fiddling with SQLite db
 
-### Visual Studio Code Extensions
+## Visual Studio Code extensions
 
 There are some vs code extensions that are life-savers in our line of work. A list of highly
 recommended ones include the following:
@@ -109,6 +106,46 @@ recommended ones include the following:
     syntax highlighting for MySQL
   - [PostgreSQL](https://marketplace.visualstudio.com/items?itemName=ckolkman.vscode-postgres) -
     syntax highlighting for PostgreSQL
+
+<Bitwarden>
+
+## AI tools
+
+:::tip
+
+To learn more about how we use AI tools at Bitwarden, see our [AI](../../contributing/ai.md)
+documentation. This page specifies how to configure AI tooling for development.
+
+:::
+
+### Claude Code
+
+We use Claude Code as our primary AI tool for development workflows.
+
+#### Installation
+
+Follow the installation instructions [here](https://code.claude.com/docs/en/quickstart). When
+prompted, sign into the Anthropic Console via SSO and authenticate your local client.
+
+We also recommend integrating Claude Code into your IDE. See
+[VS Code](https://code.claude.com/docs/en/vs-code) for setup instructions.
+
+#### Basic usage
+
+We recommend that you start with
+[common workflows](https://code.claude.com/docs/en/common-workflows) and
+[best practices](https://code.claude.com/docs/en/best-practices) from Anthropic for learning how to
+start using Claude for development.
+
+### Bitwarden AI plugin marketplace
+
+Bitwarden maintains a curated set of AI plugins designed for our development workflows in our
+[marketplace](https://github.com/bitwarden/ai-plugins).
+
+See the [`README`](https://github.com/bitwarden/ai-plugins/tree/main?tab=readme-ov-file#usage) in
+the `ai-plugins` repo for installation and setup instructions.
+
+</Bitwarden>
 
 ## Optional tools
 
