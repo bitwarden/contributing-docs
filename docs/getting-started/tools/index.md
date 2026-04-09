@@ -145,6 +145,8 @@ Bitwarden maintains a curated set of AI plugins designed for our development wor
 See the [`README`](https://github.com/bitwarden/ai-plugins/tree/main?tab=readme-ov-file#usage) in
 the `ai-plugins` repo for installation and setup instructions.
 
+</Bitwarden>
+
 ## Optional tools
 
 The following tools may be useful depending on your preferences or what you’re developing.
