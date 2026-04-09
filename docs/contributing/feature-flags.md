@@ -327,3 +327,90 @@ follows:
 
 Local and development self-hosted installations may choose to configure alternative
 [data sources](#flag-data-sources) to more quickly adopt a feature.
+
+## Removing a feature flag
+
+Once the flag has been enabled in all environments and the feature is verified to be functioning as
+expected, the final steps are to remove the flagged conditional logic from our codebase, then the
+flag itself. When defining the tasks for feature-flagged code, we also include cleanup tasks that
+capture each step in the process of removing the feature flag.
+
+Due to the complexity of the different client deployments and how we expose feature flags through
+our API, it is important that each feature flag be removed in the appropriate sequence, with the
+appropriate timing considerations.
+
+### Step 1: Remove business logic and client references
+
+:::tip Timing
+
+**Step 1** can take place immediately after the feature is released.
+
+:::
+
+In this step, teams should remove all business logic that relies on the flag from both client and
+server code. This includes all references in the client codebase, and also any business logic on the
+server that checks the flag value.
+
+:exclamation: This does **not** include removing the flag from the FeatureFlagKeys on the server --
+we must leave this here for backward compatibility, so that existing clients who have not updated
+continue to be served the correct "on" value when querying for the flag, even after the new server
+release.
+
+This code should then be deployed to all clients and to the server.
+
+### Step 2: Remove flag from server
+
+:::tip Timing
+
+**Step 2** can take place either:
+
+- Three major releases after the feature flag was removed from the clients in **Step 1**, if the
+  flag is used in non-web clients, or
+- At the same time as the feature flag was removed from the clients in **Step 1**, if the flag is
+  only used on the web client.
+
+:::
+
+Once we have satisfied the backward compatibility
+[requirements](https://bitwarden.com/help/bitwarden-software-release-support/) for our clients, we
+can completely remove the feature flag from the server codebase. This can be done by removing the
+flag value from the `FeatureFlagKeys`.
+
+:::info Determining when it's safe to remove
+
+To assess when a flag was removed from the TypeScript clients, you can check the
+[history](https://github.com/bitwarden/clients/commits/main/libs/common/src/enums/feature-flag.enum.ts)
+of the `FeatureFlagKeys` enum.
+
+:::
+
+### Step 3: Archive flag in LaunchDarkly
+
+:::tip Timing
+
+**Step 3** can take place immediately after the changes have been deployed the cloud servers for
+Step 2. Appropriate time should be taken to ensure a rollback of the release will not be required.
+
+:::
+
+Once the server codebase has been deployed to all environments without any references to the flag,
+the flag can be archived in LaunchDarkly.
+
+Before the flag is archived, it should first be **disabled** in the Development and QA environments
+and verified that there are no unintended side-effects.
+
+:::warning "Ready to Archive" recommendation
+
+Feature flags not accessed for a long period of time will automatically move to an "inactive" state
+that can also help with identifying technical debt to clean up.
+
+Because we do not use the LaunchDarkly client-side SDK, LaunchDarkly does **not** know if we are
+evaluating a flag on the client. We retrieve all flags via the `/api/config` endpoint on the
+Bitwarden API and serve those up to the client. The retrieval of all flags through the server-side
+LaunchDarkly SDK
+[does not report as evaluation of the flags](https://launchdarkly.com/docs/sdk/features/all-flags#about-the-all-flags-feature),
+which means that that flag may be falsely reported as "inactive" and available to archive.
+
+Flags that are evaluated on the server only will be reliably reported as being available to archive.
+
+:::
