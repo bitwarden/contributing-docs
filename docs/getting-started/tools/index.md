@@ -142,13 +142,8 @@ start using Claude for development.
 Bitwarden maintains a curated set of AI plugins designed for our development workflows in our
 [marketplace](https://github.com/bitwarden/ai-plugins).
 
-You should install the marketplace plugins using the `/plugin` command:
-
-```bash
-/plugin marketplace add bitwarden/ai-plugins
-```
-
-</Bitwarden>
+See the [`README`](https://github.com/bitwarden/ai-plugins/tree/main?tab=readme-ov-file#usage) in
+the `ai-plugins` repo for installation and setup instructions.
 
 ## Optional tools
 
