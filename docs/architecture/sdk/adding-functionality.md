@@ -4,11 +4,14 @@ sidebar_position: 1
 
 # Adding new functionality
 
-This guide covers the practical steps for adding new functionality to the SDK. For guidance on
-whether something belongs in the SDK at all, see
+This guide walks through the steps for adding new functionality to the SDK. For guidance on whether
+something belongs in the SDK at all, see
 [What belongs in the SDK](index.md#what-belongs-in-the-sdk).
 
-## Readiness checklist
+The examples below use `FoldersClient` from `bitwarden-vault` as a reference. For guidance on how to
+organize the files within a client, see [Client patterns](client-patterns.md).
+
+## 1. Readiness checklist
 
 Before creating a new crate or adding to an existing one, work through these questions to identify
 any blockers or prerequisites.
@@ -28,7 +31,7 @@ any blockers or prerequisites.
 - **Does the functionality need the SDK to produce an observable or reactive value?** Migrate the
   business logic to the SDK and build reactivity on top of it in TypeScript.
 
-## Creating a feature crate
+## 2. Create the crate
 
 When the functionality warrants its own crate — typically when it represents a distinct domain — add
 a new crate under the `crates/` directory in the
@@ -38,32 +41,11 @@ a new crate under the `crates/` directory in the
 2. Add `bitwarden-core` as a dependency for the shared runtime.
 3. Configure `CODEOWNERS` to ensure the appropriate team is assigned to review changes to the crate.
 
-### Pull request strategy
+## 3. Define the client struct
 
-Adding the crate and referencing it from the appropriate application interface client should be done
-as a separate pull request from adding any functionality in the crate itself.
-
-This keeps the initial setup pull request small and focused. The Platform team reviews additions to
-the application interface clients, so a narrow scope helps move that review along quickly.
-
-### Ownership
-
-Feature and domain crates are usually owned and maintained by individual teams. When creating a new
-crate, coordinate with the Platform team to establish ownership and review expectations.
-
-## Creating a new `FeatureClient`
-
-Each feature crate exposes one or more client structs that group related operations. These clients
-are composed into a higher-level application interface client (e.g. `VaultClient`) and ultimately
-exposed through the binding layer. For guidance on how to organize the files within a client, see
-[Client patterns](client-patterns.md).
-
-The examples below use `FoldersClient` from `bitwarden-vault` as a reference.
-
-### 1. Define the client struct
-
-Create a struct that holds the dependencies the client needs. Use the `#[derive(FromClient)]` macro
-to automatically populate fields from the SDK `Client`.
+Each feature crate exposes one or more client structs that group related operations. Create a struct
+that holds the dependencies the client needs and use the `#[derive(FromClient)]` macro to
+automatically populate fields from the SDK `Client`.
 
 ```rust
 #[derive(FromClient)]
@@ -77,38 +59,7 @@ pub struct FoldersClient {
 If the client will be exposed over WASM, annotate it with
 `#[cfg_attr(feature = "wasm", wasm_bindgen)]`.
 
-### 2. Implement methods
-
-Add methods directly on the client struct. Each method should own its logic — avoid thin
-passthroughs to free functions. For larger clients, split methods into separate files or
-subdirectories as described in
-[Client patterns](client-patterns.md#per-method-files-or-subdirectories).
-
-:::important
-
-Every public method on a client is a contract with consumers and must have test coverage. Treat
-client methods as a public API boundary — changes to their behavior can break downstream consumers
-across multiple platforms.
-
-:::
-
-```rust
-#[cfg_attr(feature = "wasm", wasm_bindgen)]
-impl FoldersClient {
-    pub async fn get(&self, folder_id: FolderId) -> Result<FolderView, GetFolderError> {
-        let folder = self
-            .repository
-            .require()?
-            .get(folder_id)
-            .await?
-            .ok_or(ItemNotFoundError)?;
-
-        Ok(self.key_store.decrypt(&folder)?)
-    }
-}
-```
-
-### 3. Wire into the application interface
+## 4. Wire into the application interface
 
 Connect the feature client to the SDK `Client` by defining an extension trait. This makes the
 feature accessible without modifying `Client` itself.
@@ -138,11 +89,68 @@ impl VaultClient {
 }
 ```
 
-Consumers access the feature through the extension trait and application interface:
+Finally, expose the new client in the application interface entry point so consumers can reach it.
+For the Password Manager SDK, this means adding an accessor method to
+[`PasswordManagerClient`][pm-lib]:
+
+```rust
+impl PasswordManagerClient {
+    pub fn vault(&self) -> bitwarden_vault::VaultClient {
+        self.0.vault()
+    }
+}
+```
+
+:::tip
+
+Steps 2–4 (create crate, define client, wire into application interface) should be submitted as a
+single pull request. Keep it small and focused on scaffolding — the Platform team reviews additions
+to the application interface clients, so a narrow scope helps move that review along quickly.
+
+:::
+
+## 5. Implement methods
+
+With the crate scaffolding merged, add methods in subsequent pull requests. Each method should own
+its logic directly on the client struct — avoid thin passthroughs to free functions. For larger
+clients, split methods into separate files or subdirectories as described in
+[Client patterns](client-patterns.md#per-method-files-or-subdirectories).
+
+:::important
+
+Every public method on a client is a contract with consumers and must have test coverage. Treat
+client methods as a public API boundary — changes to their behavior can break downstream consumers
+across multiple platforms.
+
+:::
+
+```rust
+#[cfg_attr(feature = "wasm", wasm_bindgen)]
+impl FoldersClient {
+    pub async fn get(&self, folder_id: FolderId) -> Result<FolderView, GetFolderError> {
+        let folder = self
+            .repository
+            .require()?
+            .get(folder_id)
+            .await?
+            .ok_or(ItemNotFoundError)?;
+
+        Ok(self.key_store.decrypt(&folder)?)
+    }
+}
+```
+
+Consumers access the feature through the application interface:
 
 ```rust
 let folders = client.vault().folders().list().await?;
 ```
 
+## Ownership
+
+Feature and domain crates are usually owned and maintained by individual teams. When creating a new
+crate, coordinate with the Platform team to establish ownership and review expectations.
+
+[pm-lib]: https://github.com/bitwarden/sdk-internal/blob/main/crates/bitwarden-pm/src/lib.rs
 [state-crate]: https://github.com/bitwarden/sdk-internal/tree/main/crates/bitwarden-state
 [vault-crate]: https://github.com/bitwarden/sdk-internal/tree/main/crates/bitwarden-vault

@@ -8,7 +8,7 @@ Clients group the SDK API surface into domain-specific bundles. Each client stru
 `#[derive(FromClient)]` to pull its dependencies from the SDK `Client` and is wired into an
 application interface via an extension trait. For a walkthrough of defining a client, implementing
 methods, and connecting it to the application interface, see
-[Adding new functionality](adding-functionality.md#creating-a-new-featureclient).
+[Adding new functionality](adding-functionality.md).
 
 This page covers how to **organize the files** within a client, depending on the size of the domain.
 
