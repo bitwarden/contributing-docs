@@ -45,7 +45,9 @@ a new crate under the `crates/` directory in the
 
 Each feature crate exposes one or more client structs that group related operations. Create a struct
 that holds the dependencies the client needs and use the `#[derive(FromClient)]` macro to
-automatically populate fields from the SDK `Client`.
+automatically populate fields from the SDK `Client`. See
+[Client patterns — `FromClient` and dependency injection](client-patterns.md#fromclient-and-dependency-injection)
+for details on how this works and which dependency types are available.
 
 ```rust
 #[derive(FromClient)]
@@ -61,8 +63,9 @@ If the client will be exposed over WASM, annotate it with
 
 ## 4. Wire into the application interface
 
-Connect the feature client to the SDK `Client` by defining an extension trait. This makes the
-feature accessible without modifying `Client` itself.
+Connect the feature client to the SDK `Client` by defining an
+[extension trait](client-patterns.md#extension-traits). This makes the feature accessible without
+modifying `Client` itself.
 
 ```rust
 pub trait VaultClientExt {
@@ -120,7 +123,8 @@ clients, split methods into separate files or subdirectories as described in
 
 Every public method on a client is a contract with consumers and must have test coverage. Treat
 client methods as a public API boundary — changes to their behavior can break downstream consumers
-across multiple platforms.
+across multiple platforms. See [Client patterns — Testing](client-patterns.md#testing) for how to
+set up test doubles.
 
 :::
 
