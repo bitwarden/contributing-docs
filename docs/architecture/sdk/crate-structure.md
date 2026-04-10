@@ -1,26 +1,23 @@
 ---
-sidebar_position: 1
+sidebar_position: 2
 ---
 
 # Crate structure
 
-The internal SDK is structured as a single
-[Git repository](https://github.com/bitwarden/sdk-internal) with multiple internal crates. This
-document describes the general structure of the project. Please review the `README`'s in the
-repository for information about the specific crates or implementation details.
+The internal SDK is organized as a mono-repository containing multiple Rust crates, each with a
+focused responsibility. The crates form a layered architecture where higher-level crates depend on
+lower-level ones, but never the reverse. This layering keeps the codebase modular and ensures that
+each crate can be developed, tested, and compiled independently.
 
-Crates in the project fall into one of these categories.
+The [SDK repository](https://github.com/bitwarden/sdk-internal) groups its crates into four
+categories:
 
-- Bindings
-- Application Interfaces
-- Features
-- Core and Utility
+- **Bindings** — compile the SDK for consumption by non-Rust platforms (WASM, iOS, Android)
+- **Application Interfaces** — assemble features into product-specific clients
+- **Features** — implement individual business-logic domains
+- **Core and Utility** — provide the shared runtime, cryptographic primitives, and common types
 
-We generally strive towards extracting features into separate crates to keep the `bitwarden-core`
-crate as lean as possible. This has multiple benefits such as faster compile-time and clear
-ownership of features.
-
-This hierarchy winds up producing a structure that looks like:
+From top to bottom, the dependency flow looks like this:
 
 ```kroki type=plantuml
 @startuml
@@ -65,76 +62,48 @@ export --> core
 @enduml
 ```
 
-### Bindings
+## Bindings
 
-Bindings are those crates whose purpose is to provide bindings for other projects by targeting
-`wasm`, iOS, and Android. The two mobile targets are built using UniFFI. See
-[Language bindings](language-bindings.md) for more information.
+Binding crates compile the SDK into platform-specific artifacts. They translate Rust types and
+functions into interfaces that non-Rust consumers can call. The two binding strategies are:
 
-### Application Interfaces
+- **WASM** — targets web clients via `wasm-bindgen`, producing a WebAssembly module consumed as an
+  NPM package
+- **UniFFI** — targets mobile clients, generating Kotlin and Swift bindings from Rust definitions
 
-An application interface collects the various features relevant for a given Bitwarden product, e.g.
-Password Manager, or Secrets Manager, into a single easy-to-use client for that particular product.
+Bindings depend on the application interface crates and selectively re-export their public API. See
+[Language bindings](language-bindings.md) for details on each strategy.
 
-These clients, exposed through an external binding layer, are how consumers of the SDK will interact
-with it.
+## Application interfaces
 
-### Core and Utility
+An application interface crate collects the features relevant to a Bitwarden product and presents
+them through a single, cohesive client. For example, the Password Manager client exposes auth,
+vault, send, generators, and exporters, while the Secrets Manager client exposes a narrower surface
+focused on secret storage and retrieval.
 
-The `bitwarden-core` crate contains the core runtime of the SDK. See the
+These clients are the primary entry points for SDK consumers. The binding layer wraps them so that
+callers on each platform interact with a consistent, product-scoped API rather than reaching into
+individual feature crates directly.
+
+## Core and utility
+
+The `bitwarden-core` crate provides the shared runtime that every other crate builds on. This
+includes client initialization, authentication state management, HTTP request handling, and common
+error types. The companion `bitwarden-crypto` crate owns all cryptographic primitives — encryption,
+decryption, key derivation, and key management.
+
+Feature crates depend on core for their runtime but should not embed functionality that could be
+shared. See the
 [crate documentation](https://github.com/bitwarden/sdk-internal/tree/main/crates/bitwarden-core) for
-more details.
+specifics.
 
-### Features and Domains
+## Features and domains
 
-Feature and domain crates constitute the application business logic. Feature crates depend on
-`bitwarden-core` for their runtime and provide extensions to the `Client` struct to implement
-specific domains. <Bitwarden>These crates are usually owned and maintained by individual
-teams.</Bitwarden>
+Feature crates contain the business logic for a specific domain such as vault management,
+authentication, or password generation. Each crate extends the `Client` struct with domain-specific
+methods, keeping feature code isolated from unrelated domains.
 
-Each feature or domain crate exposes its extended `Client` struct(s), which can be further grouped
-into application interfaces for consumption. See the
-[`VaultClient`](https://github.com/bitwarden/sdk-internal/blob/main/crates/bitwarden-vault/src/vault_client.rs)
-as an example.
-
-<Bitwarden>
-
-## Adding new functionality
-
-### Adding new feature and domain crates
-
-Teams are encouraged to add their own feature or domain crates as they build additional
-functionality in the SDK.
-
-Adding the crate and referencing it from the appropriate application interface clients should be
-done as a separate pull request from adding any functionality in the crate itself.
-
-This will ensure that the scope of the initial setup pull request is small and focused, as our
-Platform team will be responsible for reviewing additions to the application clients.
-
-### How do I decide what to move to the internal SDK?
-
-Considering adding to or moving code into the SDK? Review these questions to help come to a
-decision.
-
-- Does the functionality or service depend on other functionality that is not currently part of the
-  SDK?
-  - Moving that functionality to the SDK is not recommended at this time, but asking the team
-    responsible for the other functionality to migrate that to the SDK _is_ recommended.
-- Does the functionality require authenticated requests?
-  - The autogenerated bindings can help with that. See [`bitwarden-vault`][vault-crate] as an
-    example.
-- Does this functionality require persistent state?
-  - Review the docs for [`bitwarden-state`][state-crate] and see [`bitwarden-vault`][vault-crate] as
-    an example.
-- Is the functionality only relevant for a single client?
-  - There is likely not much chance of reusing that functionality, but it may still be added to the
-    SDK.
-- Does the functionality need the SDK to produce an observable or reactive value?
-  - The SDK does not support reactivity at this time. However we still encourage migrating the
-    relevant business logic to the SDK and then building reactivity with that logic in TypeScript.
-
-</Bitwarden>
-
-[state-crate]: https://github.com/bitwarden/sdk-internal/tree/main/crates/bitwarden-state
-[vault-crate]: https://github.com/bitwarden/sdk-internal/tree/main/crates/bitwarden-vault
+Extracting features into their own crates keeps `bitwarden-core` lean and brings practical benefits:
+faster incremental compile times, clearer code ownership, and the ability to evolve a domain without
+touching shared infrastructure. <Bitwarden>These crates are usually owned and maintained by
+individual teams.</Bitwarden>

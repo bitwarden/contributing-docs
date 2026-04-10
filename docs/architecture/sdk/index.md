@@ -132,14 +132,3 @@ When implementing a feature, ask:
 
 - It's purely presentational (rendering, animations, gestures)
 - It requires platform-specific APIs with no cross-platform abstraction
-
-## In this section
-
-- [Crate structure](crate-structure.md) — how the SDK repository and crates are organized
-- [Client patterns](client-patterns.md) — structuring Rust client types
-- [Data models](data-models.md) — public and internal data model conventions
-- [Language bindings](language-bindings.md) — UniFFI (mobile) and `wasm-bindgen` (web)
-- [Dependencies](dependencies.md) — dependency management policy
-- [Versioning](versioning.md) — backward compatibility and changelog
-- [Secrets Manager SDK](secrets-manager.md) — the external-facing Secrets Manager SDK
-- [Web](web/index.md) — web-specific guidance and interoperability

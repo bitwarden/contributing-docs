@@ -1,15 +1,16 @@
 ---
-sidebar_position: 2
+sidebar_position: 3
 ---
 
 # Client patterns
 
-One of the core concepts of our SDK is the "client". The client groups the SDK API surface into
-domain-specific bundles for easier instantiation and use by the consuming application. See the
-[`VaultClient`](https://github.com/bitwarden/sdk-internal/blob/main/crates/bitwarden-vault/src/vault_client.rs)
-for a real-world example.
+Clients group the SDK API surface into domain-specific bundles. Each client struct uses
+`#[derive(FromClient)]` to pull its dependencies from the SDK `Client` and is wired into an
+application interface via an extension trait. For a walkthrough of defining a client, implementing
+methods, and connecting it to the application interface, see
+[Adding new functionality](adding-functionality.md#creating-a-new-featureclient).
 
-There are two recommended approaches for structuring a client, depending on the size of the domain.
+This page covers how to **organize the files** within a client, depending on the size of the domain.
 
 ## Single file
 
