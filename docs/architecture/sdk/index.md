@@ -58,6 +58,9 @@ package "Client Applications" <<clients>> {
     [iOS\n(Swift)] as ios
     [Android\n(Kotlin)] as android
   }
+  package "Rust" {
+    [Rust CLI] as rustcli
+  }
 }
 
 package "Binding Layer" <<bindings>> as bindings {
@@ -70,12 +73,13 @@ package "Rust SDK" <<sdk>> as sdk {
     [Password Manager] as pm
     [Secrets Manager] as sm
   }
-  package "Features" {
-    [Send] as send
-    [Generators] as generators
-    [Exporters] as exporters
-    [Auth] as auth
-    [Vault] as vault
+  folder "Features" {
+    [Vault]
+    [Generators]
+  }
+  folder "Utils" {
+    [Crypto]
+    [Logging]
   }
   [Core Runtime] as core
 }
@@ -91,10 +95,15 @@ android -[hidden]> uniffi
 
 bindings --> pm
 bindings --> sm
+uniffi --[hidden]-> pm
+uniffi --[hidden]-> sm
 
-[Application Interfaces] --> [Features]
-[Application Interfaces] --> core
-[Features] --> core : extends
+rustcli --> pm
+
+[Application Interfaces] -> [Features]
+[Application Interfaces] ---> core
+[Features] --> core
+[Features] ---> Utils
 
 @enduml
 ```
