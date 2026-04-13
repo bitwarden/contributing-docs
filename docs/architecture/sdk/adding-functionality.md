@@ -150,6 +150,44 @@ Consumers access the feature through the application interface:
 let folders = client.vault().folders().list().await?;
 ```
 
+## 6. Add mobile bindings
+
+If the new functionality needs to be available on mobile platforms (Android / iOS), add a
+[UniFFI](language-bindings.md#mobile-bindings) wrapper in the `bitwarden-uniffi` crate.
+
+### Expose the client
+
+Add an accessor method on the appropriate UniFFI client — typically in
+[`bitwarden-uniffi/src/lib.rs`][uniffi-lib] or a sub-client — that returns a new wrapper struct:
+
+```rust
+impl Client {
+    pub fn vault(&self) -> Arc<VaultClient> {
+        Arc::new(VaultClient(self.0.clone()))
+    }
+}
+```
+
+### Create the wrapper
+
+Create a wrapper struct that holds the SDK `Client` and delegates to the underlying Rust client. See
+[`bitwarden-uniffi/src/tool/sends.rs`][uniffi-sends] for a complete example.
+
+```rust
+use crate::Result;
+
+pub struct FoldersClient(pub(crate) SharedClient);
+
+#[uniffi::export]
+impl FoldersClient {
+    pub async fn get(&self, folder_id: FolderId) -> Result<FolderView> {
+        Ok(self.0.vault().folders().get(folder_id).await?)
+    }
+}
+```
+
+The wrapper should convert errors into `BitwardenError`.
+
 ## Ownership
 
 Feature and domain crates are usually owned and maintained by individual teams. When creating a new
@@ -157,4 +195,7 @@ crate, coordinate with the Platform team to establish ownership and review expec
 
 [pm-lib]: https://github.com/bitwarden/sdk-internal/blob/main/crates/bitwarden-pm/src/lib.rs
 [state-crate]: https://github.com/bitwarden/sdk-internal/tree/main/crates/bitwarden-state
+[uniffi-lib]: https://github.com/bitwarden/sdk-internal/blob/main/crates/bitwarden-uniffi/src/lib.rs
+[uniffi-sends]:
+  https://github.com/bitwarden/sdk-internal/blob/main/crates/bitwarden-uniffi/src/tool/sends.rs
 [vault-crate]: https://github.com/bitwarden/sdk-internal/tree/main/crates/bitwarden-vault
