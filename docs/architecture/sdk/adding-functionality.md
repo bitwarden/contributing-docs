@@ -79,6 +79,14 @@ impl VaultClientExt for Client {
 }
 ```
 
+:::note
+
+While there is a team called `vault`, `VaultClient` refers to the vault-domain, not the team. You
+should not create team-clients in the SDK. Instead, organize clients by domain or feature area, and
+assign ownership to the team that maintains that domain or feature.
+
+:::
+
 For larger domains, the application interface client delegates to sub-clients rather than
 implementing every method itself. For example, `VaultClient` exposes `FoldersClient`,
 `CiphersClient`, and others through accessor methods:
