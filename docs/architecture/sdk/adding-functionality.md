@@ -186,7 +186,9 @@ impl FoldersClient {
 }
 ```
 
-The wrapper should convert errors into `BitwardenError`.
+The wrapper should convert errors into `BitwardenError`. When introducing a new error type, add a
+variant for it in [`bitwarden-uniffi/src/error.rs`][uniffi-error] and implement the `From`
+conversion.
 
 ## Ownership
 
@@ -195,6 +197,8 @@ crate, coordinate with the Platform team to establish ownership and review expec
 
 [pm-lib]: https://github.com/bitwarden/sdk-internal/blob/main/crates/bitwarden-pm/src/lib.rs
 [state-crate]: https://github.com/bitwarden/sdk-internal/tree/main/crates/bitwarden-state
+[uniffi-error]:
+  https://github.com/bitwarden/sdk-internal/blob/main/crates/bitwarden-uniffi/src/error.rs
 [uniffi-lib]: https://github.com/bitwarden/sdk-internal/blob/main/crates/bitwarden-uniffi/src/lib.rs
 [uniffi-sends]:
   https://github.com/bitwarden/sdk-internal/blob/main/crates/bitwarden-uniffi/src/tool/sends.rs

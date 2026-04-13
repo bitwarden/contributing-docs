@@ -42,6 +42,38 @@ If the client will be exposed over WASM, annotate both the struct and its `impl`
 #[cfg_attr(feature = "wasm", wasm_bindgen)]
 ```
 
+### UniFFI wrappers
+
+Mobile clients access the SDK through thin wrapper structs in the `bitwarden-uniffi` crate. Each
+wrapper holds a `SharedClient` (a type alias for `Arc<Client>`) and delegates to the underlying Rust
+client:
+
+```rust
+pub struct FoldersClient(pub(crate) SharedClient);
+
+#[uniffi::export]
+impl FoldersClient {
+    pub async fn get(&self, folder_id: FolderId) -> Result<FolderView> {
+        Ok(self.0.vault().folders().get(folder_id).await?)
+    }
+}
+```
+
+The wrapper mirrors the structure of the Rust client hierarchy — parent wrappers expose child
+wrappers through accessor methods, just like the application interface clients do. For example, a
+`VaultClient` wrapper returns `Arc<FoldersClient>`.
+
+#### Error conversion
+
+UniFFI wrappers use a crate-level `Result<T>` type alias that maps errors to `BitwardenError`. This
+ensures all errors crossing the FFI boundary are converted into a type that UniFFI can serialize for
+Kotlin and Swift consumers. Use the `?` operator in wrapper methods to automatically convert
+domain-specific errors through the `From<E> for BitwardenError` implementations.
+
+When introducing a new error type, add a variant for it in
+[`bitwarden-uniffi/src/error.rs`][uniffi-error] and implement the `From` conversion so it can be
+propagated with `?`.
+
 ## Extension traits
 
 Feature crates connect to the SDK `Client` through extension traits. This keeps feature code
@@ -188,3 +220,6 @@ async fn test_get_folder_not_found() {
     assert!(matches!(result.unwrap_err(), GetFolderError::ItemNotFound(_)));
 }
 ```
+
+[uniffi-error]:
+  https://github.com/bitwarden/sdk-internal/blob/main/crates/bitwarden-uniffi/src/error.rs
