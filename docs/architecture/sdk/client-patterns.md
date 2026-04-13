@@ -97,11 +97,10 @@ to a subdirectory:
 
 ```
 domain/
-├── domain_client.rs         # DomainClient struct definition and initialization
+├── domain_client.rs     # DomainClient struct definition and initialization
 ├── mod.rs
 └── method_name/
-    ├── mod.rs
-    ├── method_name.rs   # impl DomainClient { fn method_name() } + tests
+    ├── mod.rs           # impl DomainClient { fn method_name() } + tests
     └── request.rs       # supporting types
 ```
 
