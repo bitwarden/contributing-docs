@@ -17,7 +17,7 @@ For API documentation view the latest
 [API documentation](https://sdk-api-docs.bitwarden.com/bitwarden/index.html) that also includes
 internal private items.
 
-## Architecture Overview
+## Architecture overview
 
 ```kroki type=plantuml
 @startuml
@@ -108,14 +108,14 @@ rustcli --> pm
 @enduml
 ```
 
-## What Belongs in the SDK
+## What belongs in the SDK
 
 **The guiding principle: everything except presentational logic belongs in the SDK.**
 
 The SDK should own all business logic that would otherwise be duplicated across clients. Client code
 should be limited to UI rendering, platform-specific integrations, and calling SDK methods.
 
-### SDK Responsibility
+### SDK responsibility
 
 | Layer             | Owned By | Examples                                     |
 | ----------------- | -------- | -------------------------------------------- |
@@ -126,7 +126,7 @@ should be limited to UI rendering, platform-specific integrations, and calling S
 | Cryptography      | **SDK**  | Encryption, decryption, key derivation       |
 | Data Models       | **SDK**  | Domain objects, view models                  |
 
-### Decision Checklist
+### Decision checklist
 
 When implementing a feature, ask:
 

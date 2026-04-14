@@ -14,7 +14,7 @@ The primary goal of the Secrets Manager SDK is to provide a **stable public API*
 external consumers from the churn of internal SDK APIs. While the internal SDK evolves rapidly to
 support all Bitwarden clients, the SM SDK exposes a curated, backward-compatible surface.
 
-## Architecture Overview
+## Architecture overview
 
 ```kroki type=plantuml
 @startuml
