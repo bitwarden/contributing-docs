@@ -57,6 +57,7 @@ OTLP
 owasp
 passcode
 passwordless
+passthroughs
 pinentry
 PNSs
 POSIX
