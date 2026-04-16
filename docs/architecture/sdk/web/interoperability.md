@@ -1,3 +1,7 @@
+---
+sidebar_position: 1
+---
+
 # Interoperability
 
 When working with the SDK, one of the key challenges is managing Rust/JavaScript bindings to enable
@@ -28,7 +32,7 @@ need additional work to be represented correctly in JavaScript.
 
 On the other hand, `tsify` leverages Rust's `serde` ecosystem to expose Rust data models to
 JavaScript and automatically provide TypeScript bindings. It accomplishes this by serializing Rust
-data structures into JavaScript objects, allowing them to be treated as native, typed TypesScript
+data structures into JavaScript objects, allowing them to be treated as native, typed TypeScript
 objects. This differs from `wasm-bindgen`, which allows JavaScript to interact directly with
 Rust-owned structures in memory. `tsify` is generally better for handling complex data types,
 especially when working with Rust crates that already support `serde`.
@@ -130,7 +134,7 @@ export class User {
 
 This ensures that values like `String` are properly cloned before being passed to JavaScript.
 
-### Structs with Functions
+### Structs with functions
 
 You can also return types with methods:
 
@@ -160,7 +164,7 @@ export class User {
 }
 ```
 
-### About the `free` Method
+### About the `free` method
 
 When working with `wasm-bindgen`, you may notice that all generated classes have a `free` method.
 This method is used to forcibly free the memory allocated for the Rust object when it is no longer
@@ -170,7 +174,7 @@ up automatically. For more information see
 
 ## How to use `tsify`
 
-### Basic Types
+### Basic types
 
 To return a struct from Rust to JavaScript using `tsify`, derive `Serialize`, `Deserialize`, and
 `Tsify`:
@@ -214,7 +218,7 @@ export interface Address {
 Note how `tsify` creates TypeScript interfaces, whereas `wasm-bindgen` creates classes that
 reference Rust objects stored in WebAssembly memory.
 
-### External Types
+### External types
 
 With `tsify`, fields can be any type that `serde` can serialize or deserialize, including external
 types from other crates. For example:
@@ -267,4 +271,4 @@ export type Utc = unknown;
 
 ```
 
-This ensures the TypesScript definitions match the serialized Rust structure.
+This ensures the TypeScript definitions match the serialized Rust structure.

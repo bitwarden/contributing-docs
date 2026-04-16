@@ -1,13 +1,18 @@
+---
+sidebar_position: 4
+---
+
 # Data models
 
 The SDK is expected to be used in a variety of projects, and to that end it defines a stable public
-interface. Care must be taken to avoid exposing the inner workings on the SDK including its data
-model.
+interface. Care must be taken to avoid exposing the inner workings of the SDK including its data
+model. For general Rust coding conventions, see the
+[Rust code style guide](/contributing/code-style/rust).
 
 ## Public interface
 
 The public interface of the SDK is anything that is exposed externally, be it function names, types,
-or exposed models. The SDK generally exposes request and response models that contains the expected
+or exposed models. The SDK generally exposes request and response models that contain the expected
 data for each API call.
 
 We can generally group the public models into the following categories:
@@ -54,7 +59,7 @@ variants populated simultaneously — and forces every consumer to reason about 
 should be impossible.
 
 The server wire format uses numeric discriminants and optional fields, but that transformation
-belongs at the API→domain mapping boundary, not in the domain or view models.
+belongs at the `API → domain` mapping boundary, not in the domain or view models.
 
 ## Internal models
 
