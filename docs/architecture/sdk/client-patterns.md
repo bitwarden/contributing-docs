@@ -18,7 +18,7 @@ directly to obtain their dependencies.
 ```rust
 #[derive(FromClient)]
 pub struct FoldersClient {
-    pub(crate) key_store: KeyStore<KeyIds>,
+    pub(crate) key_store: KeyStore<KeySlotIds>,
     pub(crate) api_configurations: Arc<ApiConfigurations>,
     pub(crate) repository: Option<Arc<dyn Repository<Folder>>>,
 }
@@ -26,7 +26,7 @@ pub struct FoldersClient {
 
 Some of the available dependency types that can be extracted are:
 
-- `KeyStore<KeyIds>` — access to the cryptographic key store
+- `KeyStore<KeySlotIds>` — access to the cryptographic key store
 - `Arc<ApiConfigurations>` — HTTP API client configuration
 - `Option<Arc<dyn Repository<T>>>` — state repository for a given domain type
 

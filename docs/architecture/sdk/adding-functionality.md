@@ -52,7 +52,7 @@ for details on how this works and which dependency types are available.
 ```rust
 #[derive(FromClient)]
 pub struct FoldersClient {
-    pub(crate) key_store: KeyStore<KeyIds>,
+    pub(crate) key_store: KeyStore<KeySlotIds>,
     pub(crate) api_configurations: Arc<ApiConfigurations>,
     pub(crate) repository: Option<Arc<dyn Repository<Folder>>>,
 }
