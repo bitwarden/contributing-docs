@@ -536,15 +536,8 @@ WHERE
 
 ### User defined types
 
-- **User Defined Type Name**: `[Schema].[TypeName]` (e.g., `[dbo].[GuidIdArray]`)
-  - The name should describe the type
-
-```sql
-CREATE TYPE [dbo].[TypeName] AS TABLE
-(   [Column1] DATATYPE NOT NULL,
-    [Column2] DATATYPE NOT NULL
-);
-```
+- New user defined types should not be created, but existing types can be used when creating or
+  modifying stored procedures
 
 ### Indexes
 
