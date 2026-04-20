@@ -67,6 +67,9 @@
     "node": "~22.14.0",
     "npm": "~11.3.0"
   },
+  "overrides": {
+    "webpack": "5.105.4"
+  },
   "lint-staged": {
     "*": "prettier --cache --write --ignore-unknown",
     "*.md{x,}": "cspell lint"
