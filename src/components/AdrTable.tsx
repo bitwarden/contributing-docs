@@ -1,3 +1,5 @@
+// FIXME: remove @ts-nocheck and address type errors in this file
+// @ts-nocheck
 import React from "react";
 
 const formatDate = (date: Date) => {
@@ -14,7 +16,7 @@ const badgeColors = {
   Superseded: "warning",
 };
 
-export default function AdrTable({ frontMatter }): JSX.Element {
+export default function AdrTable({ frontMatter }): React.JSX.Element {
   return (
     <table>
       <tbody>

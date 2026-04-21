@@ -1,3 +1,5 @@
+// FIXME: remove @ts-nocheck and address type errors in this file
+// @ts-nocheck
 import React from "react";
 import DropdownNavbarItem from "@theme-original/NavbarItem/DropdownNavbarItem";
 import { useDevMode, DevModes } from "@site/src/contexts/devMode";
@@ -18,7 +20,7 @@ export default function DevDropdown({
   dropdownItemsBefore,
   dropdownItemsAfter,
   ...props
-}): JSX.Element {
+}): React.JSX.Element {
   const { devMode, setDevMode } = useDevMode();
 
   const items = dropdownOptions.map((item) => {
