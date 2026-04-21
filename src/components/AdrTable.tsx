@@ -8,15 +8,27 @@ const formatDate = (date: Date): string | undefined => {
   }
 };
 
-const badgeColors = {
-  Proposed: "primary",
-  Accepted: "success",
-  Rejected: "danger",
-  Deprecated: "warning",
-  Superseded: "warning",
+const AdrStatus = {
+  Proposed: "Proposed",
+  Accepted: "Accepted",
+  Rejected: "Rejected",
+  Deprecated: "Deprecated",
+  Superseded: "Superseded",
+} as const;
+
+type AdrStatus = (typeof AdrStatus)[keyof typeof AdrStatus];
+
+const badgeColors: Record<AdrStatus, string> = {
+  [AdrStatus.Proposed]: "primary",
+  [AdrStatus.Accepted]: "success",
+  [AdrStatus.Rejected]: "danger",
+  [AdrStatus.Deprecated]: "warning",
+  [AdrStatus.Superseded]: "warning",
 };
 
-const isBadgeColorKey = (key: string): key is keyof typeof badgeColors => key in badgeColors;
+function isAdrStatus(value: unknown): value is AdrStatus {
+  return typeof value === "string" && value in AdrStatus;
+}
 
 interface AdrFrontMatter {
   adr: string;
@@ -30,7 +42,7 @@ export default function AdrTable({
   frontMatter: AdrFrontMatter;
 }): React.JSX.Element {
   const { status } = frontMatter;
-  const badgeColor = status && isBadgeColorKey(status) ? badgeColors[status] : "secondary";
+  const badgeColor = isAdrStatus(status) ? badgeColors[status] : "secondary";
 
   return (
     <table>
