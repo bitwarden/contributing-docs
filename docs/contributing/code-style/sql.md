@@ -536,8 +536,24 @@ WHERE
 
 ### User defined types
 
-- New user defined types should not be created, but existing types can be used when creating or
-  modifying stored procedures
+New user defined types should not be created. The following existing types may be used as
+table-valued parameters in stored procedures:
+
+- **`[dbo].[GuidIdArray]`** — a single-column table of `UNIQUEIDENTIFIER` values. Use when passing a
+  list of IDs to a stored procedure (e.g., bulk reads or deletes).
+
+- **`[dbo].[TwoGuidIdArray]`** — a two-column table of `UNIQUEIDENTIFIER` pairs (`Id1`, `Id2`). Use
+  when an operation requires two related IDs per row (e.g., user ID + organization ID).
+
+- **`[dbo].[EmailArray]`** — a single-column table of `NVARCHAR(256)` email addresses. Use when
+  passing a list of emails to a stored procedure.
+
+- **`[dbo].[CollectionAccessSelectionType]`** — a table representing collection access grants with
+  columns `Id` (GUID), `ReadOnly` (bit), `HidePasswords` (bit), and `Manage` (bit). Use when
+  assigning or updating collection access for multiple users or groups in a single operation.
+
+- **`[dbo].[OrganizationSponsorshipType]`** — a table representing full `OrganizationSponsorship`
+  records. Use for bulk insert or update of sponsorship rows.
 
 ### Indexes
 
