@@ -1,11 +1,11 @@
-// FIXME: remove @ts-nocheck and address type errors in this file
-// @ts-nocheck
 import React from "react";
 
-const formatDate = (date: Date) => {
+const formatDate = (date: Date): string | undefined => {
   try {
     return date.toISOString().split("T")[0];
-  } catch {}
+  } catch {
+    return undefined;
+  }
 };
 
 const badgeColors = {
@@ -16,7 +16,22 @@ const badgeColors = {
   Superseded: "warning",
 };
 
-export default function AdrTable({ frontMatter }): React.JSX.Element {
+const isBadgeColorKey = (key: string): key is keyof typeof badgeColors => key in badgeColors;
+
+interface AdrFrontMatter {
+  adr: string;
+  status?: string;
+  date: Date;
+}
+
+export default function AdrTable({
+  frontMatter,
+}: {
+  frontMatter: AdrFrontMatter;
+}): React.JSX.Element {
+  const { status } = frontMatter;
+  const badgeColor = status && isBadgeColorKey(status) ? badgeColors[status] : "secondary";
+
   return (
     <table>
       <tbody>
@@ -24,13 +39,11 @@ export default function AdrTable({ frontMatter }): React.JSX.Element {
           <th>ID:</th>
           <td>ADR-{frontMatter.adr}</td>
         </tr>
-        {frontMatter.status && (
+        {status && (
           <tr>
             <th>Status:</th>
             <td>
-              <span className={`badge badge--${badgeColors[frontMatter.status] ?? "secondary"}`}>
-                {frontMatter.status?.toUpperCase()}
-              </span>
+              <span className={`badge badge--${badgeColor}`}>{status.toUpperCase()}</span>
             </td>
           </tr>
         )}
