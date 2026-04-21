@@ -3,7 +3,6 @@
   "extends": "@docusaurus/tsconfig",
   "compilerOptions": {
     "baseUrl": null,
-    "types": ["remark-kroki"],
     "paths": {
       "@site/*": ["./*"]
     }
