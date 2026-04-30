@@ -12,7 +12,6 @@ async function createConfig() {
     url: "https://contributing.bitwarden.com",
     baseUrl: "/",
     onBrokenLinks: "throw",
-    onBrokenMarkdownLinks: "warn",
     favicon: "img/favicon.png",
 
     // Even if you don't use internalization, you can use this field to set useful
@@ -21,6 +20,12 @@ async function createConfig() {
     i18n: {
       defaultLocale: "en",
       locales: ["en"],
+    },
+
+    markdown: {
+      hooks: {
+        onBrokenMarkdownLinks: "warn",
+      },
     },
 
     plugins: [require.resolve("docusaurus-lunr-search")],
