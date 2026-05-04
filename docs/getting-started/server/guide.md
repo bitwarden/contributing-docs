@@ -301,16 +301,7 @@ up-to-date. See [MSSQL Database](./database/mssql/index.md) for more information
 ## Install licensing certificate
 
 To run your local server environment as a licensed instance, you will need to download the
-`Licensing Certificate - Dev` from the shared Engineering collection and install it. This can be
-done by double-clicking on the downloaded certificate.
-
-:::note
-
-Mac users: When prompted to save the downloaded certificate and PFX file in Keychain Access be sure
-to select "Default Keychain > login" from the dropdown otherwise they will not be found when
-attempting to "Build and Run the Server".
-
-:::
+`Licensing Certificate - Dev` from the shared Engineering collection.
 
 1. Log in to your company-issued Bitwarden account
 2. On the "Vaults" page, scroll down to the "Licensing Certificate - Dev" item
