@@ -315,9 +315,11 @@ attempting to "Build and Run the Server".
 1. Log in to your company-issued Bitwarden account
 2. On the "Vaults" page, scroll down to the "Licensing Certificate - Dev" item
 3. View attachments and download both files
-4. Go to Keychain Access and set the dev.cer certificate to "Always Trust"
-5. The dev.pfx file will ask for a password. You can get this by clicking and opening the Licensing
-   Certificate - Dev item in the vault
+4. Create a `~/.secrets/` folder and place the dev.cer inside
+5. Add the path to the `dev.cer` to `secrets.json` under `LicenseCertificatePath`
+
+:::warning Do not import the "Licensing Certificate - Dev" into your keychain. Doing so may
+compromise all TLS traffic on your development machine. :::
 
 </Bitwarden>
 
