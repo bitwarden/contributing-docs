@@ -309,8 +309,12 @@ To run your local server environment as a licensed instance, you will need to do
 4. Create a `~/.secrets/` folder and place the dev.cer inside
 5. Add the path to the `dev.cer` to `secrets.json` under `LicenseCertificatePath`
 
-:::warning Do not import the "Licensing Certificate - Dev" into your keychain. Doing so may
-compromise all TLS traffic on your development machine. :::
+:::warning
+
+Do not import the "Licensing Certificate - Dev" into your keychain. Doing so may compromise all TLS
+traffic on your development machine.
+
+:::
 
 </Bitwarden>
 
