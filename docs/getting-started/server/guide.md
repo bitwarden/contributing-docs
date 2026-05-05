@@ -305,7 +305,7 @@ To run your local server environment as a licensed instance, you will need to do
 
 1. Log in to your company-issued Bitwarden account
 2. On the "Vaults" page, scroll down to the "Licensing Certificate - Dev" item
-3. View attachments and download both files
+3. View attachments and only download `dev.pfx`
 4. Create a `~/.secrets/` folder and place `dev.pfx` inside
 5. Add the following under `globalSettings` in `secrets.json`, substituting your own path to
    `dev.pfx` and the password from the "Licensing Certificate - Dev" vault item:
