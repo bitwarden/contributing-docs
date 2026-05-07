@@ -548,13 +548,6 @@ table-valued parameters in stored procedures:
 - **`[dbo].[EmailArray]`** — a single-column table of `NVARCHAR(256)` email addresses. Use when
   passing a list of emails to a stored procedure.
 
-- **`[dbo].[CollectionAccessSelectionType]`** — a table representing collection access grants with
-  columns `Id` (GUID), `ReadOnly` (bit), `HidePasswords` (bit), and `Manage` (bit). Use when
-  assigning or updating collection access for multiple users or groups in a single operation.
-
-- **`[dbo].[OrganizationSponsorshipType]`** — a table representing full `OrganizationSponsorship`
-  records. Use for bulk insert or update of sponsorship rows.
-
 ### Indexes
 
 - **Index Name**: `IX_{TableName}_{ColumnName(s)}` (e.g., `[IX_User_Email]`)
