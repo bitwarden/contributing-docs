@@ -301,23 +301,29 @@ up-to-date. See [MSSQL Database](./database/mssql/index.md) for more information
 ## Install licensing certificate
 
 To run your local server environment as a licensed instance, you will need to download the
-`Licensing Certificate - Dev` from the shared Engineering collection and install it. This can be
-done by double-clicking on the downloaded certificate.
-
-:::note
-
-Mac users: When prompted to save the downloaded certificate and PFX file in Keychain Access be sure
-to select "Default Keychain > login" from the dropdown otherwise they will not be found when
-attempting to "Build and Run the Server".
-
-:::
+`Licensing Certificate - Dev` from the shared Engineering collection.
 
 1. Log in to your company-issued Bitwarden account
 2. On the "Vaults" page, scroll down to the "Licensing Certificate - Dev" item
-3. View attachments and download both files
-4. Go to Keychain Access and set the dev.cer certificate to "Always Trust"
-5. The dev.pfx file will ask for a password. You can get this by clicking and opening the Licensing
-   Certificate - Dev item in the vault
+3. View attachments and only download `dev.pfx`
+4. Create a `~/.secrets/` folder and place `dev.pfx` inside
+5. Add the following under `globalSettings` in `secrets.json`, substituting your own path to
+   `dev.pfx` and the password from the "Licensing Certificate - Dev" vault item:
+
+   ```json
+   "licenseCertificatePath": "/Users/<your name>/.secrets/dev.pfx",
+   "licenseCertificatePassword": "<password from the vault item>"
+   ```
+
+6. Re-run `setup_secrets.ps1` to apply the new values to every server project — see
+   [Configure user secrets](#configure-user-secrets).
+
+:::warning
+
+Do not import the "Licensing Certificate - Dev" into your keychain. Doing so may compromise all TLS
+traffic on your development machine.
+
+:::
 
 </Bitwarden>
 
