@@ -318,6 +318,14 @@ To run your local server environment as a licensed instance, you will need to do
 6. Re-run `setup_secrets.ps1` to apply the new values to every server project — see
    [Configure user secrets](#configure-user-secrets).
 
+:::note macOS users
+
+The `dev.pfx` file does not need to be imported into Keychain Access. If macOS reports that the
+password is invalid while opening or importing the file, leave it out of Keychain and use the
+`licenseCertificatePath` and `licenseCertificatePassword` values in `secrets.json` instead.
+
+:::
+
 :::warning
 
 Do not import the "Licensing Certificate - Dev" into your keychain. Doing so may compromise all TLS
