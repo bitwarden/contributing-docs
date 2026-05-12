@@ -17,7 +17,7 @@ Before you start: make sure you’ve installed the recommended
 - Docker Desktop
 - Visual Studio 2022
 - Powershell
-- [NET 8.0 SDK](https://dotnet.microsoft.com/download)
+- [.NET 10 SDK](https://dotnet.microsoft.com/download)
 - [Rust](https://www.rust-lang.org/tools/install) latest stable version - (preferably installed via
   [rustup](https://rustup.rs/))
 - Your preferred database management tool
