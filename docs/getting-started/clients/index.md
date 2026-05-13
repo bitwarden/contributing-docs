@@ -17,8 +17,11 @@ In this context, "clients" generally refers to the Typescript clients, which are
 
 ## Requirements
 
-Before you start, you should have Node and npm installed. See the [Tools and Libraries](../tools)
-page for more information.
+Before you start:
+
+- Install node and npm. See the [Tools and Libraries](../tools) page for more information.
+- Install the Rust ecosystem dependencies. See the
+  [Desktop Native Dependencies](./desktop/desktop-native/#dependencies) for more information.
 
 ## Setup instructions
 

@@ -84,6 +84,10 @@ These standards should be applied across any T-SQL scripts that you write.
 - **Blank lines**: Separate sections of code with at least one blank line
 - **Commas**: Commas should be placed at the right end of the line
 - **Parentheses**: Parentheses should be vertically aligned with spanning multiple lines
+- **Data type modifiers**: Omit the space between type name and opening parenthesis (e.g.,
+  `NVARCHAR(50)` not `NVARCHAR (50)`, `DATETIME2(7)` not `DATETIME2 (7)`)
+- **ID generation**: Use `CoreHelpers.GenerateComb()` in application code, not `NEWID()` in the
+  database -- see [GUID generation](./csharp#guid-generation)
 
 ### `SELECT` statements
 
@@ -114,6 +118,146 @@ WHERE
     U.[Enabled] = 1
 ```
 
+#### `WHERE` clause conditions
+
+- `AND` / `OR` keywords go at the **start** of the next line, indented to align with the condition
+  above it
+- Wrap grouped `OR` conditions in parentheses, with the opening `(` on the **same line** as `AND`
+  and the closing `)` on its own line aligned with `AND`
+- Use inline comments to explain non-obvious conditions, such as status code meanings
+
+```sql
+WHERE
+    O.[Enabled] = 1
+    AND O.[UsePolicies] = 1
+    AND (
+        -- Active users linked by UserId
+        (OU.[Status] != 0 AND OU.[UserId] = @UserId)
+        -- Invited users matched by email (Status = 0)
+        OR EXISTS (
+            SELECT
+                1
+            FROM
+                [dbo].[UserView] U
+            WHERE
+                U.[Id] = @UserId
+                AND OU.[Email] = U.[Email]
+                AND OU.[Status] = 0
+        )
+    )
+```
+
+#### `IN` clauses
+
+- For bulk operations, prefer table-valued parameters (TVPs) using the `IN (SELECT [Id] FROM @Ids)`
+  pattern
+- For direct value lists, use no spaces after commas: `IN (0,1,2)`
+
+```sql
+WHERE
+    [Id] IN (SELECT [Id] FROM @Ids)
+```
+
+#### Subqueries
+
+- Use `EXISTS` (not `IN`) for correlated subqueries -- `EXISTS` short-circuits on the first match,
+  whereas `IN` evaluates all matching values first
+- Use `IN` for non-correlated subqueries (where the inner query does not reference the outer query)
+  -- the optimizer typically produces equivalent plans, and `IN` reads more naturally in this
+  context
+- Use `SELECT 1` inside `EXISTS` checks, not `SELECT *`
+- Indent the subquery body 4 spaces within the parentheses; align the closing `)` with the opening
+  context
+
+Correlated subquery (references outer query -- use `EXISTS`):
+
+```sql
+CASE WHEN EXISTS (
+        SELECT
+            1
+        FROM
+            [dbo].[ProviderUserView] PU
+        INNER JOIN
+            [dbo].[ProviderOrganizationView] PO ON PO.[ProviderId] = PU.[ProviderId]
+        WHERE
+            PU.[UserId] = OU.[UserId]
+            AND PO.[OrganizationId] = P.[OrganizationId]
+    ) THEN 1 ELSE 0 END AS [IsProvider]
+```
+
+Non-correlated subquery (self-contained -- use `IN`):
+
+```sql
+SELECT
+    [Id],
+    [Name]
+FROM
+    [dbo].[OrganizationView]
+WHERE
+    [Id] IN (
+        SELECT
+            [OrganizationId]
+        FROM
+            [dbo].[CollectionView]
+        WHERE
+            [ExternalId] IS NOT NULL
+    )
+```
+
+#### Common table expressions (CTEs)
+
+- Prefix the `WITH` keyword with a semicolon: `;WITH`
+- Place the CTE name and `AS` followed by the opening `(` on the same line
+- Put the closing `)` on its own line; follow it with a comma and the next CTE name when chaining
+- Each CTE `SELECT` follows the same formatting rules as a regular `SELECT` statement
+- Put `UNION ALL` on its own line, with a blank line above and below it
+
+```sql
+;WITH OrgUsers AS
+(
+    -- Active users: direct UserId match
+    SELECT
+        OU.[Id],
+        OU.[OrganizationId],
+        OU.[Status]
+    FROM
+        [dbo].[OrganizationUserView] OU
+    WHERE
+        OU.[Status] <> 0
+        AND OU.[UserId] = @UserId
+
+    UNION ALL
+
+    -- Invited users: matched by email
+    SELECT
+        OU.[Id],
+        OU.[OrganizationId],
+        OU.[Status]
+    FROM
+        [dbo].[OrganizationUserView] OU
+    WHERE
+        OU.[Status] = 0
+        AND OU.[Email] = @UserEmail
+),
+Providers AS
+(
+    SELECT
+        [OrganizationId]
+    FROM
+        [dbo].[UserProviderAccessView]
+    WHERE
+        [UserId] = @UserId
+)
+SELECT
+    OU.[Id],
+    OU.[OrganizationId],
+    CASE WHEN PR.[OrganizationId] IS NULL THEN 0 ELSE 1 END AS [IsProvider]
+FROM
+    OrgUsers OU
+LEFT JOIN
+    Providers PR ON PR.[OrganizationId] = OU.[OrganizationId]
+```
+
 ### Stored procedures
 
 - **Stored Procedure Name**: `{EntityName}_{Action}` format (e.g., `[dbo].[User_ReadById]`)
@@ -132,7 +276,18 @@ WHERE
 
 :::
 
+:::warning Do not use `Get` in procedure names
+
+Some procedures in the codebase use `Get` instead of `Read` in the name (e.g.,
+`CipherOrganizationPermissions_GetManyByOrganizationId`, `OrganizationReport_GetSummaryDataById`).
+These are incorrect and should not be used as a reference. Always use `Read` or `ReadMany` for
+`SELECT` operations.
+
+:::
+
 #### Basic structure
+
+- Wrap the entire procedure body in `BEGIN`/`END` statements
 
 ```sql
 CREATE PROCEDURE [dbo].[EntityName_Action]
@@ -145,6 +300,73 @@ BEGIN
 
     -- Procedure logic here
 
+END
+```
+
+#### Common examples
+
+**Read by ID** -- select a single record from a view:
+
+```sql
+CREATE PROCEDURE [dbo].[EntityName_ReadById]
+    @Id UNIQUEIDENTIFIER
+AS
+BEGIN
+    SET NOCOUNT ON
+
+    SELECT
+        *
+    FROM
+        [dbo].[EntityNameView]
+    WHERE
+        [Id] = @Id
+END
+```
+
+**Read many by IDs** -- bulk read using a table-valued parameter:
+
+```sql
+CREATE PROCEDURE [dbo].[EntityName_ReadManyByIds]
+    @Ids AS [dbo].[GuidIdArray] READONLY
+AS
+BEGIN
+    SET NOCOUNT ON
+
+    SELECT
+        *
+    FROM
+        [dbo].[EntityNameView]
+    WHERE
+        [Id] IN (SELECT [Id] FROM @Ids)
+END
+```
+
+**Read many with filter** -- multiple `AND` conditions with an inline status code comment:
+
+:::warning Do not use `And` between parameter names in procedure names
+
+Some procedures in the codebase use `And` between parameter names. These are incorrect and should
+not be used as a reference. Always concatenate parameter names directly, e.g.
+`EntityName_ReadManyByOrganizationIdRole`.
+
+:::
+
+```sql
+CREATE PROCEDURE [dbo].[EntityName_ReadManyByOrganizationIdRole]
+    @OrganizationId UNIQUEIDENTIFIER,
+    @Role TINYINT
+AS
+BEGIN
+    SET NOCOUNT ON
+
+    SELECT
+        *
+    FROM
+        [dbo].[EntityNameDetailsView]
+    WHERE
+        [OrganizationId] = @OrganizationId
+        AND [Status] = 2 -- 2 = Confirmed
+        AND [Type] = @Role
 END
 ```
 
@@ -204,7 +426,8 @@ WHERE
 
 ### Tables
 
-- **Table Name**: PascalCase (e.g., [dbo].[User], [dbo].[AuthRequest])
+- **Table Name**: Singular form of the object name, PascalCase (e.g., `[dbo].[User]` not
+  `[dbo].[Users]`, `[dbo].[AuthRequest]` not `[dbo].[AuthRequests]`)
 - **Column Names**: PascalCase (e.g., [Id], [CreationDate], [MasterPasswordHash])
 - **Primary Key**: `PK_{TableName}` (e.g., [PK_User], [PK_Organization])
 - **Foreign Keys**: `FK_{TableName}_{ReferencedTable}` (e.g., FK_Device_User)
@@ -220,6 +443,8 @@ WHERE
   - `VARCHAR(n)` for ASCII text
   - `BIT` for boolean values
   - `TINYINT`, `SMALLINT`, `INT`, `BIGINT` for integers
+- **Data type modifiers**: No space between the type name and its size or precision modifier (e.g.,
+  `NVARCHAR(50)` not `NVARCHAR (50)`, `DATETIME2(7)` not `DATETIME2 (7)`)
 - **Nullability**: Explicitly specify `NOT NULL` or `NULL`
 - **Standard Columns**: Most tables include:
   - `[Id] UNIQUEIDENTIFIER NOT NULL` - Primary key
@@ -229,12 +454,13 @@ WHERE
 ```sql
 CREATE TABLE [dbo].[TableName]
 (
-    [Column1] INT IDENTITY(1,1) NOT NULL,
-    [Column2] NVARCHAR(100) NOT NULL,
-    [Column3] NVARCHAR(255) NULL,
-    [Column4] BIT NOT NULL CONSTRAINT [DF_TableName_Column4] DEFAULT (1),
-
-    CONSTRAINT [PK_TableName] PRIMARY KEY CLUSTERED ([Column1] ASC)
+    [Id]            UNIQUEIDENTIFIER    NOT NULL,
+    [Column2]       NVARCHAR(100)       NOT NULL,
+    [Column3]       NVARCHAR(255)       NULL,
+    [CreationDate]  DATETIME2(7)        NOT NULL,
+    [RevisionDate]  DATETIME2(7)        NOT NULL,
+    [Column6]       BIT                 NOT NULL CONSTRAINT [DF_TableName_Column6] DEFAULT (1),
+    CONSTRAINT [PK_TableName] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
 ```
 
@@ -295,8 +521,8 @@ CREATE FUNCTION [dbo].[FunctionName](@Parameter DATATYPE)
 RETURNS TABLE
 AS RETURN
 SELECT
-    Column1,
-    Column2,
+    [Column1],
+    [Column2],
     CASE
         WHEN Condition
         THEN Value1
@@ -310,15 +536,17 @@ WHERE
 
 ### User defined types
 
-- **User Defined Type Name**: `[Schema].[TypeName]` (e.g., `[dbo].[GuidIdArray]`)
-  - The name should describe the type
+New user defined types should not be created. The following existing types may be used as
+table-valued parameters in stored procedures:
 
-```sql
-CREATE TYPE [dbo].[TypeName] AS TABLE
-(   [Column1] DATATYPE NOT NULL,
-    [Column2] DATATYPE NOT NULL
-);
-```
+- **`[dbo].[GuidIdArray]`** — a single-column table of `UNIQUEIDENTIFIER` values. Use when passing a
+  list of IDs to a stored procedure (e.g., bulk reads or deletes).
+
+- **`[dbo].[TwoGuidIdArray]`** — a two-column table of `UNIQUEIDENTIFIER` pairs (`Id1`, `Id2`). Use
+  when an operation requires two related IDs per row (e.g., user ID + organization ID).
+
+- **`[dbo].[EmailArray]`** — a single-column table of `NVARCHAR(256)` email addresses. Use when
+  passing a list of emails to a stored procedure.
 
 ### Indexes
 
@@ -503,11 +731,15 @@ script will not modify the data type again.
 
 ```sql
 IF EXISTS (
-    SELECT *
-    FROM INFORMATION_SCHEMA.COLUMNS
-    WHERE COLUMN_NAME = '{column_name}' AND
-        DATA_TYPE = '{datatype}' AND
-        TABLE_NAME = '{table_name}')
+    SELECT
+        *
+    FROM
+        INFORMATION_SCHEMA.COLUMNS
+    WHERE
+        COLUMN_NAME = '{column_name}'
+        AND DATA_TYPE = '{datatype}'
+        AND TABLE_NAME = '{table_name}'
+)
 BEGIN
     ALTER TABLE [dbo].[{table_name}]
     ALTER COLUMN [{column_name}] {NEW_TYPE} {NULL|NOT NULL}
@@ -554,8 +786,7 @@ GO
 #### Adjusting metadata
 
 When altering views, you may also need to refresh modules (stored procedures or functions) that
-reference that view or function so that SQL Server to update its statistics and compiled references
-to it.
+reference that view so that SQL Server can update its cached metadata and compiled references to it.
 
 ```sql
 IF OBJECT_ID('[dbo].[{procedure_or_function}]') IS NOT NULL
@@ -615,9 +846,13 @@ old index available for queries during the rebuild.
 
 ```sql
 IF EXISTS (
-    SELECT * FROM sys.indexes
-    WHERE name = 'IX_Organization_Enabled'
-    AND object_id = OBJECT_ID('[dbo].[Organization]')
+    SELECT
+        *
+    FROM
+        sys.indexes
+    WHERE
+        name = 'IX_Organization_Enabled'
+        AND object_id = OBJECT_ID('[dbo].[Organization]')
 )
 BEGIN
     CREATE NONCLUSTERED INDEX [IX_Organization_Enabled]
