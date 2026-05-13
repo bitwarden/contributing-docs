@@ -307,14 +307,14 @@ not apply here. If you need Renovate to rebase or recreate a PR immediately, sel
 corresponding checkbox on the Dependency Dashboard or the PR itself; no manual intervention on the
 branch is usually needed.
 
-If you need to push additional changes to a Renovate branch e.g. to resolve a breaking change
-introduced by the update you can do so, however **once a non-Renovate user pushes to the branch,
+If you need to push additional changes to a Renovate branch, e.g. to resolve a breaking change
+introduced by the update, you can do so. However, **once a non-Renovate user pushes to the branch,
 Renovate will stop updating that PR entirely.** Further updates to the package(s) included in the PR
 will be blocked until the modified PR has been merged.
 
 If you do push changes to a branch you should maintain ownership of the PR through the rest of the
 workflow and not leave it open for an extended period. Also keep in mind that if you use the above
-Renovate update process on the branch that it will remove any work you performed yourself.
+Renovate update process on the branch it will remove any work you performed yourself.
 
 ![Updating a PR](image.png)
 
