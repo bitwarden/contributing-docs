@@ -300,9 +300,12 @@ A typical dependency workflow involves the following steps:
 
 #### Changing a generated PR
 
-Let Renovate manage its own branches whenever possible. If you need Renovate to rebase or recreate a
-PR immediately, select the corresponding checkbox on the Dependency Dashboard or the PR itself; no
-manual intervention on the branch is usually needed.
+Let Renovate manage its own branches whenever possible. Renovate keeps its branches current with
+`main` on its own schedule, so the general guidance on
+[keeping your branch up to date](../pull-requests/branching.md#keeping-your-branch-up-to-date) does
+not apply here. If you need Renovate to rebase or recreate a PR immediately, select the
+corresponding checkbox on the Dependency Dashboard or the PR itself; no manual intervention on the
+branch is usually needed.
 
 If you need to push additional changes to a Renovate branch e.g. to resolve a breaking change
 introduced by the update you can do so, however **once a non-Renovate user pushes to the branch,
