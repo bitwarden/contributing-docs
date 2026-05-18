@@ -64,6 +64,8 @@ POSIX
 precompiler
 proxied
 recompositions
+recordset
+recordsets
 Redis
 refactorings
 roadmap
