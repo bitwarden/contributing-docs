@@ -1,3 +1,7 @@
+---
+sidebar_position: 9
+---
+
 # Web
 
 The Password Manager SDK supports web-based clients, allowing developers to integrate core password

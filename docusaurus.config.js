@@ -108,10 +108,6 @@ async function createConfig() {
                   href: "https://community.bitwarden.com/",
                 },
                 {
-                  label: "Gitter",
-                  href: "https://gitter.im/bitwarden/Lobby",
-                },
-                {
                   label: "Reddit",
                   href: "https://reddit.com/r/bitwarden",
                 },

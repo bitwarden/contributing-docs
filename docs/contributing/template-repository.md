@@ -118,26 +118,21 @@ Initial content placeholders provide AI assistance and automated code reviews:
 
 ```
 .claude/
-├── CLAUDE.md             # General project context, guidelines, and instructions
-├── commands/             # Custom slash commands
-└── prompts/
-    └── review-code.md    # Code review prompt
+└── CLAUDE.md             # General project context, guidelines, and instructions
+└── settings.json         # Project settings
 ```
+
+Project settings contain useful configuration such as
+[our marketplace](./../getting-started/tools/index.md#bitwarden-ai-plugin-marketplace).
 
 ### Automated reviews
 
 Actions workflows for review of issues and pull requests. Targets two use cases:
 
-- Review of non-draft pull requests: The above `review-code.md` Markdown file is used as a gate to
-  execute the workflow. Repositories without this file will not have automated code reviews
-  performed. Reviews are posted via a persistent comment that updates with new commits.
+- Review of pull requests: Reviews are posted via a sticky comment that updates. Reviews will only
+  performed if an `ai-review` label is present on the pull request. The pull request must be opened,
+  reopened, or synchronized (e.g. new commits pushed) to trigger a review.
 - Response: By mentioning `@claude` in issue or pull request (including inline) comments. Specific
   responses to the mention will be generated.
 
 Each above use case calls a reusable workflow in the `gh-actions` repository.
-
-### Best practices
-
-- Commands (`.claude/commands/`): For interactive Claude Code sessions.
-- Prompts (`.claude/prompts/`): For automated GitHub Actions workflows.
-- `CLAUDE.md`: General project context available in all Claude interactions.

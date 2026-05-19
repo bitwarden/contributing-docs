@@ -106,6 +106,26 @@ It can be helpful to think of this exercise in terms of two dimensions:
   - Introducing changes to one component or page independently others.
   - Introducing changes on a client-by-client basis.
 
+### Keeping your branch up to date
+
+It is usually unnecessary to merge the base branch (e.g. `main`) into a short-lived PR branch.
+Frequent merges add commits that don't represent your work and consume build and test resources
+without meaningful benefit. Once the PR is merged, CI on `main` will surface any conflicts or
+incompatibilities introduced by other work that landed in parallel.
+
+Reserve syncing your branch with `main` for situations where you genuinely need upstream changes to
+continue your work, such as depending on a newly merged API, working through a non-trivial conflict,
+or coordinating ordering-sensitive changes -- database migrations are the canonical example, as two
+PRs adding migrations in parallel will need the second one rebased before merge.
+
+When you do need to sync, either rebasing or merging is acceptable. Rebasing more closely matches
+how the branch will appear in `main` after squash-merge, but force-pushing can disrupt an in-flight
+review; merging is the safer option once reviewers are engaged.
+
+This guidance applies to human-authored branches. Renovate manages its own branches and will sync
+them as needed -- see [Dependency Management](../dependencies/index.md) for how to interact with
+Renovate PRs.
+
 ### Additional considerations for long-lived feature branches
 
 :::note
@@ -157,6 +177,15 @@ point.
 
 When the release is complete, the `rc` branch is deleted.
 
+### Branch protection requirements
+
+After the initial `rc`, `hotfix-rc`, or `hotfix-rc-*` branch is pushed to GitHub it becomes
+protected. Any additional changes require:
+
+- Going through pull requests (no direct pushes)
+- At least one approval
+- Code owner review
+
 ### Hotfix releases
 
 For a hotfix release, a hotfix branch is created off of the release tag for the release upon which
@@ -170,7 +199,9 @@ separately, each client in the `clients` repo has their own named hotfix branch:
 - CLI: `hotfix-rc-cli`
 
 Once the hotfix branch has been created, the individual commits in `main` are cherry-picked into the
-hotfix branches. For a client fix, this may require cherry-picking to multiple hotfix branches.
+hotfix branches. The initial hotfix branch can be pushed directly with the first cherry-pick. Any
+additional cherry-picks must be done via pull request due to branch protection. For a client fix,
+this may require cherry-picking to multiple hotfix branches.
 
 Once the hotfix has been deployed, the hotfix branches are deleted.
 

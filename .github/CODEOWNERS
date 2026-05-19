@@ -14,6 +14,9 @@ package-lock.json
 # Architecture department for architecture content
 docs/architecture @bitwarden/dept-architecture
 
+# Key management and Architecture for crypto concepts
+docs/architecture/cryptography @bitwarden/team-key-management-dev @bitwarden/dept-architecture
+
 # Architecture and AppSec for security concepts
 docs/architecture/security @bitwarden/team-appsec @bitwarden/dept-architecture
 

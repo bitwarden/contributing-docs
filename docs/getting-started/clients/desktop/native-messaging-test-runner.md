@@ -1,14 +1,26 @@
 # Native Messaging Test Runner
 
 The Native Messaging Test Runner is a Node application for testing the Native Messaging
-functionality in Desktop, specifically the commands received from the DuckDuckGo browser. It
+functionality in Desktop, specifically the commands received from the DuckDuckGo (DDG) browser. It
 communicates with the desktop app using Inter-process communication (IPC). It was created to enable
 development on the native messages themselves, and to give QA the ability to test these commands. It
 is located
 [here](https://github.com/bitwarden/clients/tree/main/apps/desktop/native-messaging-test-runner) at
 the root of the `desktop` app in `bitwarden/clients` repo.
 
+:::note
+
+This tool does not provide complete testing coverage for the DDG integration. It is a useful tool
+during development, to troubleshoot, and as a general regression check. To do a full comprehensive
+test of the DDG integration, download the DDG browser and test directly with it.
+
+:::
+
 ## Getting started
+
+0.  (optional) [Install](https://duckduckgo.com/app) the Duck Duck Go browser. While this is not
+    strictly required to utilize the test runner, without it, [errors](#troubleshooting) are apt to
+    occur.
 
 1.  Clone the [bitwarden/clients](https://github.com/bitwarden/clients) repo
 2.  Run the desktop app locally following [these](../desktop/index.mdx) instructions
@@ -114,14 +126,32 @@ Utility used by the `IPCService` when creating a promise that allows the usage o
 waiting for messages. We can't guarantee that we will get a response from the desktop app, so this
 allows us to gracefully cancel if a response isn't received in a timely manner.
 
+## PR reviews
+
+If you're reading this documentation because of an automated message from GitHub Actions to validate
+the DDG integration as part of your PR, please follow the steps above and use the following
+guidelines for what to validate:
+
+- If the DDG integration's feature code is modified, use commands that map to areas of the feature
+  that are impacted.
+  - For example: If there are cipher changes, the `status` and `bw-credential-create` should be
+    tested.
+- If the PR is a breaking change dependency update, `status` and one of the create / read / update
+  commands should be tested (for example, `bw-credential-create`).
+- If the PR is a non-breaking change dependency update, `status` is sufficient.
+
 ## Troubleshooting
 
-- If you are seeing unexpected behavior with services used by the test runner or when editing
-  commands, delete the `dist` folder at the top level of the `native-messaging-test-runner` and
-  re-run the command.
+- If you are seeing unexpected behavior or timeouts with services used by the test runner or when
+  editing commands: 1. Close the desktop app. 2. Delete the `dist` folder at the top level of the
+  `native-messaging-test-runner`. 3. Run the desktop app. 3. Run `npm ci` in the
+  `native-messaging-test-runner` folder. 4. Re-try the command.
 
 - If you are adding/editing command files and getting a `MODULE_NOT_FOUND` error when running the
   command, make sure you have `import "module-alias/register";` in your command file. This maps the
   compiled JavaScript classes to the ones used in the Typescript files.
 
   ![Screenshot of MODULE_NOT_FOUND error](native-messaging/module-not-found.png)
+
+- If you are seeing messages in the runner output stating `Received unexpected:  { <...>`, those are
+  benign, but should resolve upon completing [step 0 of Getting Started](#getting-started).

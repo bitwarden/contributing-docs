@@ -1,3 +1,7 @@
+---
+sidebar_position: 7
+---
+
 # Versioning and breaking changes
 
 The SDK strives towards maintaining backward compatibility for a reasonable time. This ensures that
@@ -7,7 +11,7 @@ see the [SemVer Compatibility section](https://doc.rust-lang.org/cargo/reference
 [the Cargo book](https://doc.rust-lang.org/cargo/index.html).
 
 There may be certain functionality that is actively being developed and is not yet stable. In these
-cases, they should be marked as such and gated behind a `unstable` feature flag. Consuming client
+cases, they should be marked as such and gated behind an `unstable` feature flag. Consuming client
 applications should avoid merging changes that depend on these features into `main`.
 
 ## Public APIs
