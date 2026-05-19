@@ -88,6 +88,10 @@ These standards should be applied across any T-SQL scripts that you write.
   `NVARCHAR(50)` not `NVARCHAR (50)`, `DATETIME2(7)` not `DATETIME2 (7)`)
 - **ID generation**: Use `CoreHelpers.GenerateComb()` in application code, not `NEWID()` in the
   database -- see [GUID generation](./csharp#guid-generation)
+- **Datetime generation**: Generate datetime values in application code and pass them as parameters
+  (e.g., `@RevisionDate`), not using SQL functions (`SYSUTCDATETIME()`, `GETUTCDATE()`) — this keeps
+  timestamp generation consistent and testable. See the [accepted exceptions](#datetime-values)
+  documented in the stored procedures section.
 
 ### `SELECT` statements
 
@@ -418,6 +422,69 @@ backward compatibility and ensure existing code can be called without modificati
 Use `SET NOCOUNT ON` to prevent the automatic return of row count messages, which improves
 performance and ensures consistent behavior across different client applications that might handle
 these messages differently.
+
+#### Datetime values
+
+As noted in the general standards, datetime values must be generated in application code and passed
+as parameters. Do **not** use `SYSUTCDATETIME()` or `GETUTCDATE()` inline:
+
+```sql
+-- Wrong
+UPDATE
+    [dbo].[Entity]
+SET
+    [RevisionDate] = GETUTCDATE()
+WHERE
+    [Id] = @Id
+
+-- Correct
+UPDATE
+    [dbo].[Entity]
+SET
+    [RevisionDate] = @RevisionDate
+WHERE
+    [Id] = @Id
+```
+
+**Accepted exceptions**
+
+There are specific patterns in the codebase where using a SQL datetime function is intentional and
+correct:
+
+1. **Account revision date bumping** — The `User_BumpAccountRevisionDate*` family of procedures
+   exist solely to stamp `[AccountRevisionDate]` to the current UTC time atomically, without a
+   round-trip to application code.
+
+2. **Bulk operations requiring a consistent timestamp** — When a procedure must apply the same
+   timestamp across multiple rows or statements in one transaction, declare a local variable once
+   and reuse it throughout the procedure:
+
+   ```sql
+   DECLARE @UtcNow DATETIME2(7) = SYSUTCDATETIME();
+
+   UPDATE
+       [dbo].[Cipher]
+   SET
+       [DeletedDate] = @UtcNow,
+       [RevisionDate] = @UtcNow
+   WHERE
+       [Id] IN (SELECT [Id] FROM @Ids)
+   ```
+
+3. **`WHERE` clause predicates** — Comparing against the current time in a filter is acceptable
+   (e.g., deleting expired records, skipping rows whose date has not changed since yesterday):
+
+   ```sql
+   WHERE
+       [ExpirationDate] < GETUTCDATE()
+   ```
+
+4. **Nullable parameter fallbacks** — When a parameter is intentionally nullable and the procedure
+   should default to the current time when no value is supplied:
+
+   ```sql
+   SET @Created = COALESCE(@Created, GETUTCDATE())
+   ```
 
 #### `INSERT` statements
 
