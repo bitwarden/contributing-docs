@@ -35,16 +35,16 @@ cd server
 
 ## Configure Git
 
-1. Configure Git to ignore the Prettier revision:
+1. Configure Git to ignore the `dotnet format` revision:
 
    ```bash
    git config blame.ignoreRevsFile .git-blame-ignore-revs
    ```
 
-2. _(Optional)_ Set up the pre-commit `dotnet format` hook:
+2. _(Optional)_ Set up the shared repository config to use hooks:
 
    ```bash
-   git config --local core.hooksPath .git-hooks
+   git config set --local include.path ../.gitignore
    ```
 
    Formatting requires a full build, which may be too slow to do every commit. As an alternative,
