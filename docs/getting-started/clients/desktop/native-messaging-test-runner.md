@@ -136,6 +136,8 @@ guidelines for what to validate:
   that are impacted.
   - For example: If there are cipher changes, the `status` and `bw-credential-create` should be
     tested.
+- If the PR is a breaking change dependency update, `status` and one of the create / read / update
+  commands should be tested (for example, `bw-credential-create`).
 - If the PR is a non-breaking change dependency update, `status` is sufficient.
 
 ## Troubleshooting
