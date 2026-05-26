@@ -74,7 +74,7 @@ function useContextValue(): ContextValue {
   );
 }
 
-export function DevModeProvider({ children }: { children: ReactNode }): JSX.Element {
+export function DevModeProvider({ children }: { children: ReactNode }): React.JSX.Element {
   const value = useContextValue();
   return <Context.Provider value={value}>{children}</Context.Provider>;
 }
