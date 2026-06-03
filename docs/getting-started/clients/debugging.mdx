@@ -9,16 +9,17 @@ import CodeBlock from "@theme/CodeBlock";
 # Debugging with VS Code
 
 The clients repository ships VS Code launch configurations in its `.vscode` folder, so you can
-attach the debugger to the Desktop app and the Web Vault without any extra setup. Open the
-**Run and Debug** panel and select a configuration from the dropdown.
+attach the debugger to the Desktop app and the Web Vault without any extra setup. Open the **Run and
+Debug** panel and select a configuration from the dropdown.
 
 ## Desktop
 
 Electron apps have a renderer process, which runs in the Electron window, and the main process,
 which runs in the background.
 
-Select **`Desktop: Attach Debugger (main + renderer)",`** from the Run and Debug dropdown. This attaches VSCode's
-debugger to a running desktop client. You can then set breakpoints directly in the TypeScript source.
+Select **`Desktop: Attach Debugger (main + renderer)",`** from the Run and Debug dropdown. This
+attaches VSCode's debugger to a running desktop client. You can then set breakpoints directly in the
+TypeScript source.
 
 :::tip
 
@@ -50,4 +51,3 @@ Then, in the Chrome instance you just launched, navigate to `https://localhost:8
 
 Finally, in VS Code, select **`Web: Renderer (attach)`** from the Run and Debug dropdown to attach
 the debugger. You can then set breakpoints directly in the TypeScript source.
-
