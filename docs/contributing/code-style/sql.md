@@ -149,14 +149,26 @@ WHERE
 
 #### `IN` clauses
 
-- For bulk operations, prefer table-valued parameters (TVPs) using the `IN (SELECT [Id] FROM @Ids)`
-  pattern
-- For direct value lists, use no spaces after commas: `IN (0,1,2)`
+- For bulk operations with a small, bounded number of IDs, use the TVP `IN` pattern:
 
 ```sql
 WHERE
     [Id] IN (SELECT [Id] FROM @Ids)
 ```
+
+- For bulk operations where the recordset may be large (e.g., all users in an organization), prefer
+  an `INNER JOIN` on the TVP — this gives the query optimizer full flexibility to choose an
+  efficient join strategy (hash join, merge join) rather than defaulting to nested loops, which is
+  the typical result of an `IN` subquery:
+
+```sql
+FROM
+    [dbo].[EntityNameView] E
+INNER JOIN
+    @Ids I ON E.[Id] = I.[Id]
+```
+
+- For direct value lists, use no spaces after commas: `IN (0,1,2)`
 
 #### Subqueries
 
@@ -323,7 +335,7 @@ BEGIN
 END
 ```
 
-**Read many by IDs** -- bulk read using a table-valued parameter:
+**Read many by IDs (small/bounded recordset)** -- bulk read using a table-valued parameter:
 
 ```sql
 CREATE PROCEDURE [dbo].[EntityName_ReadManyByIds]
@@ -338,6 +350,25 @@ BEGIN
         [dbo].[EntityNameView]
     WHERE
         [Id] IN (SELECT [Id] FROM @Ids)
+END
+```
+
+**Read many by IDs (large/unbounded recordset)** -- JOIN pattern for better optimizer plan selection
+when the TVP may contain many rows:
+
+```sql
+CREATE PROCEDURE [dbo].[EntityName_ReadManyByIds]
+    @Ids AS [dbo].[GuidIdArray] READONLY
+AS
+BEGIN
+    SET NOCOUNT ON
+
+    SELECT
+        *
+    FROM
+        [dbo].[EntityNameView] E
+    INNER JOIN
+        @Ids I ON E.[Id] = I.[Id]
 END
 ```
 
@@ -446,6 +477,8 @@ WHERE
 - **Data type modifiers**: No space between the type name and its size or precision modifier (e.g.,
   `NVARCHAR(50)` not `NVARCHAR (50)`, `DATETIME2(7)` not `DATETIME2 (7)`)
 - **Nullability**: Explicitly specify `NOT NULL` or `NULL`
+- **Datetime column naming**: Datetime columns must end with `Date` (e.g., `CreationDate`,
+  `RevisionDate`, `ExpirationDate`) — do not use `At` suffixes (e.g., `CreatedAt`, `UpdatedAt`)
 - **Standard Columns**: Most tables include:
   - `[Id] UNIQUEIDENTIFIER NOT NULL` - Primary key
   - `[CreationDate] DATETIME2(7) NOT NULL` - Record creation timestamp
@@ -536,15 +569,17 @@ WHERE
 
 ### User defined types
 
-- **User Defined Type Name**: `[Schema].[TypeName]` (e.g., `[dbo].[GuidIdArray]`)
-  - The name should describe the type
+New user defined types should not be created. The following existing types may be used as
+table-valued parameters in stored procedures:
 
-```sql
-CREATE TYPE [dbo].[TypeName] AS TABLE
-(   [Column1] DATATYPE NOT NULL,
-    [Column2] DATATYPE NOT NULL
-);
-```
+- **`[dbo].[GuidIdArray]`** — a single-column table of `UNIQUEIDENTIFIER` values. Use when passing a
+  list of IDs to a stored procedure (e.g., bulk reads or deletes).
+
+- **`[dbo].[TwoGuidIdArray]`** — a two-column table of `UNIQUEIDENTIFIER` pairs (`Id1`, `Id2`). Use
+  when an operation requires two related IDs per row (e.g., user ID + organization ID).
+
+- **`[dbo].[EmailArray]`** — a single-column table of `NVARCHAR(256)` email addresses. Use when
+  passing a list of emails to a stored procedure.
 
 ### Indexes
 
@@ -664,7 +699,16 @@ BEGIN
         ADD [{column_name}] {DATATYPE} {NULL|NOT NULL};
 END
 GO
+
 ```
+
+:::warning Always add new columns at the end of the column list
+
+`ALTER TABLE ... ADD` always appends columns to the end of the table. Place new columns after the
+last existing column in the table definition so the schema file stays in sync with the deployed
+table structure.
+
+:::
 
 When adding a new `NOT NULL` column to an existing table, please re-evaluate the need for it to
 truly be required. Do not be afraid of using Nullable\<T\> primitives in C# and in the application
