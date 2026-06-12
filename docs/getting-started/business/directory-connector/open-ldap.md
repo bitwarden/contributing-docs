@@ -23,7 +23,7 @@ This is also the method used to run integration tests in the CI workflow(s).
 
 1. Open a terminal in the Directory Connector repository.
 
-2. Start the OpenLDAP Docker container (this also configures TLS certificates):
+2. Configure the TLS certificates:
 
    ```bash
    npm run test:integration:setup
