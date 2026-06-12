@@ -3,21 +3,26 @@ import TabItem from "@theme/TabItem";
 
 # Directory Connector
 
-The Bitwarden Directory Connector is a a desktop application used to sync your Bitwarden enterprise
+The Bitwarden Directory Connector is a desktop application used to sync your Bitwarden enterprise
 organization to an existing directory of users and groups.
 
-Directory Connector receives fewer updates than the main clients. To reduce maintenance costs, it
-has its own copy of our shared Javascript libraries (formerly known as jslib), located in the
-`jslib` subdirectory.
+## Repository Structure
+
+The repository is organized as follows:
+
+- `libs/` — shared business logic (services, models, abstractions)
+- `src-gui/` — Angular + Electron desktop app
+- `src-cli/` — CLI tool (`bwdc`)
+- `native/` — Rust native module for secure credential storage
 
 ## Requirements
 
-- [Node.js](https://nodejs.org/) v20
+- [Node.js](https://nodejs.org/) v25
 
-- Windows users: To compile the native node modules used in the app you will need the Visual C++
-  toolset, available through the standard Visual Studio installer (recommended) or by installing
-  `windows-build-tools` through `npm`. See more at
-  [Compiling native Addon modules](https://github.com/Microsoft/nodejs-guidelines/blob/master/windows-environment.md#compiling-native-addon-modules).
+- [Rust toolchain](https://rustup.rs/) — required to build the native credential storage module
+
+- Windows users: To compile the native Rust module you will need Visual Studio with the **Desktop
+  development with C++** workload installed.
 
 # Build Instructions
 
@@ -34,7 +39,15 @@ has its own copy of our shared Javascript libraries (formerly known as jslib), l
     npm ci
     ```
 
-3.  Run the app:
+3.  Build the native Rust module:
+
+    ```bash
+    npm run rebuild
+    ```
+
+    This compiles the `dc-native` Rust module used for secure credential storage.
+
+4.  Run the app:
 
     <Tabs>
 
@@ -49,7 +62,7 @@ has its own copy of our shared Javascript libraries (formerly known as jslib), l
     <TabItem value="cli" label="CLI">
 
     ```bash
-    npm run build:cli:watch
+    npm run build:cli
     ```
 
     You can then run commands from the `./build-cli` folder:
@@ -65,6 +78,13 @@ has its own copy of our shared Javascript libraries (formerly known as jslib), l
     # Real sync
     node bwdc.js sync
     ```
+
+    :::note
+
+    Use `npm run build:cli` (not `build:cli:watch`) when you need the native `.node` files to be
+    copied into `build-cli/`. The watch variant skips the native file copy step.
+
+    :::
 
     </TabItem>
 
