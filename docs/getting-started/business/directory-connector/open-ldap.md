@@ -137,7 +137,6 @@ to do this unless you have special requirements.
 3. Run `java -jar LDIFGen.jar`
 
 4. Use the following settings:
-
    - Base Added: dc=bitwarden, dc=com
 
    - Generate OUs: Generic
