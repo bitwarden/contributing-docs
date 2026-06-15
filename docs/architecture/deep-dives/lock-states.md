@@ -18,7 +18,7 @@ differently depending on the current state.
 
 The **first** unlock is what moves the app out of the BFU state. Once unlocked, subsequent locks
 land in the AFU state rather than BFU, because the in-memory secrets remain available. The app only
-returns to BFU (or logged out) when the in-memory state is cleared — for example on a process
+returns to BFU (or logged out) when the in-memory state is cleared - for example on a process
 reload, app restart, or logout.
 
 ## Feature impact
@@ -50,7 +50,7 @@ locked (via the `EncryptedMemoryStore` abstraction, see
 The [SSH agent](./ssh/agent.md) holds the private keys of the active, unlocked account and wipes
 them on lock. The public keys, however, are kept on lock so that listing still works. This means
 that in the AFU state a client can list the available keys, the correct key for a server can be
-chosen, and a signing request can be made — which then prompts the user to unlock their vault to
+chosen, and a signing request can be made - which then prompts the user to unlock their vault to
 approve the request. In the BFU state no keys are present, so listing returns nothing.
 
 ## Why secrets are re-hydrated rather than persisted
@@ -58,6 +58,6 @@ approve the request. In the BFU state no keys are present, so listing returns no
 These in-memory-only secrets are intentionally not stored at rest. A locked vault must remain secure
 even if the device is compromised after locking (see the security principle
 [A locked vault is secure](../security/principles/02-locked-vault-is-secure.mdx)). Keeping the
-secrets in memory only — and clearing them on process reload — limits the window in which they exist
+secrets in memory only - and clearing them on process reload - limits the window in which they exist
 and avoids leaving them recoverable from disk. They are re-hydrated on each unlock rather than read
 back from persistent storage.
