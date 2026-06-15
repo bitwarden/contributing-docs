@@ -64,6 +64,8 @@ POSIX
 precompiler
 proxied
 recompositions
+recordset
+recordsets
 Redis
 refactorings
 reprompt
@@ -81,6 +83,7 @@ SDLC
 Serilog
 signtool
 signup
+Sourcery
 sqlcmd
 struct
 structs

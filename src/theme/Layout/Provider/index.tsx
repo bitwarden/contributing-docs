@@ -7,7 +7,7 @@ import { DevModeProvider } from "@site/src/contexts/devMode";
 
 const Provider = composeProviders([DevModeProvider]);
 
-export default function LayoutProvider({ children }: Props): JSX.Element {
+export default function LayoutProvider({ children }: Props): React.JSX.Element {
   return (
     <ThemeLayoutProvider>
       <Provider>{children}</Provider>
