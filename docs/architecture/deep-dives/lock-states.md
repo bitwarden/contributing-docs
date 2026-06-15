@@ -32,7 +32,7 @@ When PIN unlock is configured to require a master password reprompt, the materia
 the reprompt is only retained in memory after the first unlock. In the AFU state the PIN can be used
 to unlock directly. In the BFU state that material is not present, so the user must fall back to a
 full master password unlock. To prevent the application from going back into the BFU state, PIN
-unlock may prevent process reload from occuring.
+unlock may prevent process reload from occurring.
 
 ### Biometrics
 
