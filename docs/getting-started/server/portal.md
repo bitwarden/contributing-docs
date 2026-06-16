@@ -16,7 +16,7 @@ To disambiguate this application from others in the Bitwarden landscape, we refe
 
 ## Setup
 
-1.  Navigate to the `server/src/admin` directory.
+1.  Navigate to the `server/src/Admin` directory.
 2.  Restore nuget packages:
 
     ```bash
