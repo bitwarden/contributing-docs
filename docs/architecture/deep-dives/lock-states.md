@@ -9,12 +9,12 @@ differently depending on the current state.
 
 ## States
 
-| State            | Description                                                                                                                                                                                                                              |
-| ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Logged out**   | No account is loaded. No keys or secrets are present.                                                                                                                                                                                    |
+| State                                  | Description                                                                                                                                                                                                       |
+| -------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Logged out**                         | No account is loaded. No keys or secrets are present.                                                                                                                                                             |
 | **Locked - Before First Unlock (BFU)** | An account is loaded but has not been unlocked since the process started (fresh launch, after a restart, or after a process reload). Only data persisted at rest is available; in-memory-only secrets are absent. |
-| **Locked - After First Unlock (AFU)** | The vault was unlocked at least once during this session and then locked. In-memory-only secrets derived during the first unlock are still retained in protected memory.                                           |
-| **Unlocked**     | The user key is available and the vault is fully decrypted and usable.                                                                                                                                                                   |
+| **Locked - After First Unlock (AFU)**  | The vault was unlocked at least once during this session and then locked. In-memory-only secrets derived during the first unlock are still retained in protected memory.                                          |
+| **Unlocked**                           | The user key is available and the vault is fully decrypted and usable.                                                                                                                                            |
 
 The **first** unlock is what moves the app out of the BFU state. Once unlocked, subsequent locks
 land in the AFU state rather than BFU, because the in-memory secrets remain available. The app only
@@ -31,8 +31,8 @@ those secrets are absent, so the feature is either unavailable or behaves differ
 When PIN unlock is configured to require a master password reprompt, the material needed to satisfy
 the reprompt is only retained in memory after the first unlock. In the AFU state the PIN can be used
 to unlock directly. In the BFU state that material is not present, so the user must fall back to a
-full master password unlock. To prevent the application from going back into the BFU state, PIN
-unlock may prevent process reload from occurring.
+full master password unlock. When PIN unlock is configured in AFU mode, this prevents process reload
+from occurring, since this would clear the in-memory copy of the data needed to unlock via PIN.
 
 ### Biometrics
 
