@@ -68,6 +68,7 @@ recordset
 recordsets
 Redis
 refactorings
+Rickabaugh
 roadmap
 roadmaps
 rollout
