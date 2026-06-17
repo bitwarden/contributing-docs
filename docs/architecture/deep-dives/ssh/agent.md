@@ -96,5 +96,6 @@ signing operations. In total, the SSH agent feature consists of multiple compone
 The key store is synced on an interval from the renderer process and receives the decrypted private
 keys from the vault ciphers. When locking / changing users the private keys of the keystore are
 wiped. When locking the public keys are kept so that listing still works -- this means that when
-locked after unlocking once the correct SSH key for a server can be chosen and a signing request
-made; this then prompts the user to unlock their vault in order to approve the request.
+locked after unlocking once (the [after-first-unlock state](../lock-states.md)) the correct SSH key
+for a server can be chosen and a signing request made; this then prompts the user to unlock their
+vault in order to approve the request.
