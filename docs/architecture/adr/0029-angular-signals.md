@@ -5,7 +5,7 @@ date: 2025-11-24
 tags: [clients, angular]
 ---
 
-# 0028 - Adopt Angular Signals for Component State
+# 0029 - Adopt Angular Signals for Component State
 
 <AdrTable frontMatter={frontMatter}></AdrTable>
 
