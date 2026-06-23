@@ -8,9 +8,9 @@ sidebar_position: 1
 
 1. [Xcode](https://developer.apple.com/xcode/) (using
    [this](https://github.com/bitwarden/ios/blob/main/.xcode-version) version)
-2. iOS & watchOS simulator runtimes installed
+2. iOS and watchOS simulator runtimes installed
 3. An iPhone simulator set up (check
-   [model](https://github.com/bitwarden/ios/blob/main/.test-simulator-device-name) &
+   [model](https://github.com/bitwarden/ios/blob/main/.test-simulator-device-name) and
    [version](https://github.com/bitwarden/ios/blob/main/.test-simulator-ios-version) to make/run
    snapshots)
 
@@ -61,8 +61,8 @@ sidebar_position: 1
    $ cp Scripts/post-checkout .git/hooks/
    ```
 
-   Also, if the Xcode version installed mismatches the expected one you will receive a warning when
-   the script finishes like this one which can help troubleshooting.
+   Also, if the installed Xcode version does not match the expected version, you will receive a
+   warning, which can help with troubleshooting. That warning looks like this:
 
    ```
    🟡 Xcode version mismatch!

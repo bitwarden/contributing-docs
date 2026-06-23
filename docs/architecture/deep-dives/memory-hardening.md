@@ -53,7 +53,8 @@ be used to encrypt a key in memory, with a key bound to the process. On Linux,
 [`memfd_secret`](https://man7.org/linux/man-pages/man2/memfd_secret.2.html) and
 [`keyctl`](https://man7.org/linux/man-pages/man1/keyctl.1.html) are available, each of which can be
 used to store keys in memory while preventing other processes from reading them. This is used to
-hold the biometric unlock key in memory while the desktop app is locked. Access to this protected
+hold the biometric unlock key in memory while the desktop app is locked, which is what allows
+biometric unlock in the [after-first-unlock state](./lock-states.md). Access to this protected
 memory is available via the
 [`EncryptedMemoryStore`](https://github.com/bitwarden/clients/blob/16e67566436ae7becbea85f900656c437204824b/apps/desktop/desktop_native/core/src/secure_memory/encrypted_memory_store.rs#L16)
 abstraction that automatically uses the correct memory protection.

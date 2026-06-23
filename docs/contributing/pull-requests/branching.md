@@ -106,6 +106,26 @@ It can be helpful to think of this exercise in terms of two dimensions:
   - Introducing changes to one component or page independently others.
   - Introducing changes on a client-by-client basis.
 
+### Keeping your branch up to date
+
+It is usually unnecessary to merge the base branch (e.g. `main`) into a short-lived PR branch.
+Frequent merges add commits that don't represent your work and consume build and test resources
+without meaningful benefit. Once the PR is merged, CI on `main` will surface any conflicts or
+incompatibilities introduced by other work that landed in parallel.
+
+Reserve syncing your branch with `main` for situations where you genuinely need upstream changes to
+continue your work, such as depending on a newly merged API, working through a non-trivial conflict,
+or coordinating ordering-sensitive changes -- database migrations are the canonical example, as two
+PRs adding migrations in parallel will need the second one rebased before merge.
+
+When you do need to sync, either rebasing or merging is acceptable. Rebasing more closely matches
+how the branch will appear in `main` after squash-merge, but force-pushing can disrupt an in-flight
+review; merging is the safer option once reviewers are engaged.
+
+This guidance applies to human-authored branches. Renovate manages its own branches and will sync
+them as needed -- see [Dependency Management](../dependencies/index.md) for how to interact with
+Renovate PRs.
+
 ### Additional considerations for long-lived feature branches
 
 :::note
