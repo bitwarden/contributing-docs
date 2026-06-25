@@ -79,6 +79,19 @@ src/
     ...
 ```
 
+Libraries and services under `bitwarden_license/` follow the exact same layout, rooted there instead
+of `src/`:
+
+```
+bitwarden_license/
+  Libraries/
+    SecretsManager/   # settings, services, repositories, endpoints for Secrets Manager
+    ...
+  Services/
+    Scim/             # composes libraries into a deployable service
+    ...
+```
+
 Libraries use the root namespace `Bit.[Feature]` and an assembly name of `[Feature]`. Services use
 the root namespace `Bit.Services.[Name]` and an assembly name of `[Name]`. This applies primarily to
 net new code; when migrating existing code out of `Core`, retaining the existing namespace is
