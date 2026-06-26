@@ -11,26 +11,24 @@ tags: [server]
 
 ## Context and problem statement
 
-.NET introduced minimal APIs in .NET 8 targeted at being simpler, faster, and ahead-of-time
-compilable. As of .NET 10, minimal APIs now support automatic validation via data annotation
-attributes, closing the last significant feature gap with controllers.
+.NET 6 introduced minimal APIs — a lighter alternative to controllers designed for simplicity,
+speed, and ahead-of-time (AOT) compilation. As of .NET 10, minimal APIs now support automatic
+validation via data annotation attributes, closing the last significant feature gap with
+controllers.
 
-The biggest advantage that minimal APIs give us is in architectural design — they allow us to design
-our server in smaller, more composable pieces. When a feature lives in its own library with its own
-`.csproj`, teams have full ownership over the packages and dependencies they pull in. This design
-makes it easier to independently deploy a feature as a separate service, or compose multiple
-features into a single project for a true Lite container.
+The key architectural advantage: minimal APIs let us decompose the server into smaller, composable
+pieces. Each feature in its own library owns its `.csproj` — and its dependencies — making it
+straightforward to deploy a feature independently or bundle several into a single Lite container.
 
 ## Considered options
 
 - **Keep using controllers** - Continue using controllers for all our APIs. Controllers are well
-  understood by the team and have a proven track record. However, they are not what .NET is pushing
-  anymore, there are no plans for them to become AoT compatible, and they make a composable
-  architecture much harder.
+  understood by the team and have a proven track record. However, controllers are no longer
+  Microsoft's preferred direction, have no path to AOT compatibility, and resist the composable
+  architecture we're moving toward.
 - **Use minimal APIs for new endpoints** - Controllers and minimal APIs can be used side-by-side;
   new features can use minimal APIs exclusively, segregating their concerns in their own project.
-  This also gives us a clearer path towards being able to one day AoT compile our application for
-  performance benefits.
+  This also keeps a future AOT compilation path open.
 - **Migrate controllers to minimal APIs** - We could ban controllers entirely and embark on an
   aggressive switch to minimal APIs, resulting in a consistent codebase with no mixed styles.
   However, this is very time-consuming, and there are other pieces that need to fall into place
@@ -41,11 +39,10 @@ features into a single project for a true Lite container.
 
 Chosen option: **Use minimal APIs for new endpoints**.
 
-New endpoints should start using minimal APIs and should put them in a feature-scoped library. That
-library should have two public methods, an `Add[Feature]Services` and a `Map[Feature]Endpoints`.
-Those methods are then consumed in the service that should host those endpoints under an endpoint
-group. This should enable us to later spin our endpoints into their own service behind a reverse
-proxy.
+New endpoints use minimal APIs, placed in a feature-scoped library that exposes two methods:
+`Add[Feature]Services` and `Map[Feature]Endpoints`. The host service calls both under an endpoint
+group, which makes extracting any feature into a standalone service behind a reverse proxy
+straightforward later.
 
 ```csharp
 // Feature library: MyFeature/ServiceCollectionExtensions.cs
@@ -94,10 +91,11 @@ app.UseEndpoints(endpoints =>
 
 ### Plan
 
-A new `ENDPOINT_LIBRARY.md` file will be written in a new `src/Libraries` directory. This document
-will cover the decision to move to minimal APIs and to build them in a feature-scoped library. It
-will also show how to incorporate the library into the existing monolith as well as the path towards
-spinning a feature into its own service if/when that is desired.
+An `ENDPOINT_LIBRARY.md` in `src/Libraries` will document the canonical library shape, how to wire
+it into the existing monolith, and the path to extracting a feature as a standalone service.
 
-Existing controllers will be migrated opportunistically. Projects that are light on endpoints — such
-as Icons, Notifications, and Events — may be prioritized for a more aggressive migration timeline.
+New endpoints added to existing controller-based projects should still use minimal APIs where
+possible, even if not yet in their own feature-scoped library. Existing controllers will be migrated
+opportunistically. Icons, Notifications, and Events are prioritized as early migration targets given
+their small endpoint surface area; migration for a project is considered complete when it has no
+remaining controller classes. Heavier projects will be migrated as opportunities arise.
