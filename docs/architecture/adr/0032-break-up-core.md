@@ -179,7 +179,7 @@ libraries needed to share code across those boundaries.
   }
 
   // Libraries/Mailer/ServiceCollectionExtensions.cs
-  public static IServiceCollection AddMailers(this IServiceCollection services)
+  public static IServiceCollection AddMailer(this IServiceCollection services)
   {
       services.TryAddSingleton<IMailer, Mailer>();
       return services;
@@ -196,7 +196,7 @@ libraries needed to share code across those boundaries.
 
   // Services/Api/Program.cs
   builder.Services.Configure<MailerSettings>(builder.Configuration.GetSection("Mailer"));
-  builder.Services.AddMailers();
+  builder.Services.AddMailer();
   ```
 
 - Existing code in `Core` should be moved out opportunistically when a team is already working in
