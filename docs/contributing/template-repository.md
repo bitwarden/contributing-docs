@@ -39,34 +39,14 @@ Editor configuration sets rules for file formatting. Similar to the above for ig
 should receive updates for new languages and company standards. Linters will obey editor
 configurations when enforcing rules.
 
-## Local linting
+## Linting
 
-[Husky](https://github.com/typicode/husky) and [lint-staged](https://github.com/okonet/lint-staged)
-via NPM are used to locally lint and format changed files. Run:
-
-```bash
-npm install
-```
-
-after cloning your new repository to install the necessary Git hooks.
-
-Within the `lint-staged` section of the
-[package configuration](https://github.com/bitwarden/template/blob/main/package.json) exist linter
-configurations for specific file types, with [Prettier](https://github.com/prettier/prettier) as a
-default formatter for all files. Extend this for relevant file types that have formatters available,
-for example with .NET applications:
-
-```json
-"*.cs": "dotnet format --include"
-```
-
-or TypeScript:
-
-```json
-"*.ts": "eslint --cache --cache-strategy content --fix"
-```
-
-The editor configuration used above is accessed by many linters to drive results.
+A `pre-commit` Git hook and a matching
+[lint workflow](https://github.com/bitwarden/template/blob/main/.github/workflows/lint.yml) run
+[Prettier](https://github.com/prettier/prettier) and
+[CSpell](https://github.com/streetsidesoftware/cspell) over Markdown and config files. This is a
+starting point; repositories are expected to add and configure linters for their own languages,
+keeping the hook and the workflow in sync.
 
 ## Dependency management
 
