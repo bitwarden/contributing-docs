@@ -64,3 +64,30 @@ Communicated information is limited to vault item URIs. These URIs are part of a
 content, but we do this to speed up loading of vaults, ensure favicons accurately represent the
 associated URI, and avoid leaking vault contents to local network administrators. This feature is
 easily disabled in client settings.
+
+### Automatic confirmation policy
+
+By default, users invited to join a Bitwarden organization must be confirmed by an administrator
+once they accept an invitation to join. The confirmation step completes the key exchange which
+allows for end-to-end-encrypted sharing of items between organizations and their members.
+
+Enterprise organizations can optionally set up automatic confirmation of users if they do not want
+to manually confirm each user. Once activated, a background process will run in the unlocked browser
+extension of some administrator roles, which will perform this key exchange automatically upon
+request from the server.
+
+This is incompatible with end-to-end encryption because it allows the Bitwarden server to request a
+key exchange on demand. Any actor with control over Bitwarden infrastructure may fabricate an
+invite, which would trigger the automatic confirmation process and give the attacker a copy of the
+organization key. This can then be used to decrypt organization data.
+
+For these reasons:
+
+1. The feature is opt-in only and administrators are warned about the security implications. The
+   feature cannot be activated by the server acting alone - each browser extension that wishes to
+   perform the key exchange must also enable a setting that can only be set locally on that device.
+
+2. The organization and its members are cryptographically isolated from other organizations,
+   providers and users to prevent cryptographic traversal and the compromise of other parties. These
+   measures are outlined in our
+   [help documentation](https://bitwarden.com/help/automatic-confirmation/).
