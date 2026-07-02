@@ -1,12 +1,4 @@
-# SSH Keys and Agent
-
-:::info
-
-For more information on how Bitwarden implements its SSH agent, see [SSH Agent](./agent).
-
-:::
-
-## What are SSH Keys?
+# What are SSH keys?
 
 SSH keys are asymmetric key pairs that can be used for signing. Historically they were intended for
 logging into servers, but recently they can also be used for signing arbitrary data such as Git
