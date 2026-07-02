@@ -1,4 +1,4 @@
-# SSH Agent
+# What is an SSH Agent?
 
 An SSH agent acts as a program that holds a set of private keys and provides a way to sign
 challenges with those keys, without ever letting the private keys leave the vault. These challenges
