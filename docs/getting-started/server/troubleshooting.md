@@ -6,6 +6,17 @@ sidebar_position: 10
 
 ## macOS
 
+### PFX password rejected by Keychain Access
+
+If Keychain Access reports that the password is invalid when opening a `.pfx` file, first confirm
+that the setup instructions actually require importing the file. For example, the
+`Licensing Certificate - Dev` should be referenced from `secrets.json`, not imported into Keychain
+Access.
+
+When you are generating your own PKCS#12 file and do need to import it into Keychain Access,
+regenerate the file with a macOS-compatible PKCS#12 format. For OpenSSL 3, add the `-legacy` option
+to the `openssl pkcs12 -export` command, or regenerate the file with OpenSSL 1.1.
+
 ### AppleCFErrorCryptographicException
 
 Error:
