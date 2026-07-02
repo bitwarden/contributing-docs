@@ -1,6 +1,6 @@
 # Bitwarden SSH Agent architecture
 
-![`Bitwarden SSH Agent high level](./ssh-agent-v2-highlevel.png#center)
+![`Bitwarden SSH Agent high level`](./ssh-agent-v2-highlevel.png#center)
 
 Bitwarden’s SSH Agent is primarily implemented in the Rust language, as a server that accepts ssh
 client connections over the SSH Agent protocol. This server interfaces with the Desktop UI through
@@ -14,9 +14,9 @@ Our agent is unique from native OS ones in that:
 
 ---
 
-# End to end data flow
+## End to end data flow
 
-![`Bitwarden SSH Agent end-to-end](./ssh-agent-v2-e2e.png)
+![`Bitwarden SSH Agent end-to-end`](./ssh-agent-v2-e2e.png)
 
 When the user enables the SSH Agent feature in user settings, the SSH key vault items are retrieved
 from the vault and sent to the agent. The agent server is started and it’s keystore populated with
@@ -30,9 +30,9 @@ items.
 
 ---
 
-# The SSH Agent
+## The SSH Agent
 
-![`Bitwarden SSH Agent](./ssh-agent-v2.png)
+![`Bitwarden SSH Agent`](./ssh-agent-v2.png)
 
 The core agent implementation itself is part of the Rust Desktop Native layer in the Desktop client.
 It is an almost entirely self-contained workspace crate within desktop_native.
@@ -44,34 +44,34 @@ The architecture of the agent was designed with these goals:
 - maintainability
 - testability
 
-## Modules
+### Modules
 
-### server
+#### server
 
 Low level agent protocol implementation. It is responsible for listening for and managing new
 connections (clients), handling requests from connections and returning responses.
 
-### crypto
+#### crypto
 
 Cryptographic primitive type definitions for public and private key types that we support and
 handling of the signing of requests and any key-based operation.
 
-### storage
+#### storage
 
 Logic that handles the storage and management of data that the agent uses, effectively the SSH keys.
 Currently our implementation of a key store is in-memory.
 
-### authorization
+#### authorization
 
 Defines the concrete policy which our agent enforces for authorization of requests. The
 authorization of requests is requested by the server.
 
-### approval
+#### approval
 
 Interface for our agent to get approval for requests via an external entity (in our present case,
 Electron).
 
-### agent
+#### agent
 
 The agent crate itself is a the orchestrator of all the above components. It starts and stops the
 server, updates the storage of keys, enforces the authorization policy, and interfaces with the
@@ -121,7 +121,7 @@ requests approvals through.
 
 ---
 
-# Napi bindings
+## Napi bindings
 
 The `sshagent_v2` module contains the definitions for the napi bindings which act as the bridge
 between the Rust implementation of the agent, and the Electron UI.
@@ -135,16 +135,16 @@ answer the approval requests that are cascaded up from the server.
 
 ---
 
-# Electron services
+## Electron services
 
-## Main service
+### Main service
 
 The Main SSH Agent service is primarily a pass-through for exchanging request/response calls between
 Render and agent.
 
 It maintains a request ID counter and stores the pending requests keyed by that ID.
 
-## Render service
+### Render service
 
 The Render SSH Agent service is the primary business logic that interfaces between the vault data,
 the user interactions, and the downstream agent.
@@ -163,26 +163,26 @@ It has the following responsibilities:
 
 ---
 
-# Vault lock state behavior
+## Vault lock state behavior
 
 This section describes how the agent behaves in the various [vault states](../lock-states.md). For
 simplicity, assume only one account is active on the client and that the feature is enabled in user
 settings.
 
-## Logged out
+### Logged out
 
 The agent is not running.
 
-## Locked Before First Unlock (BFU)
+### Locked Before First Unlock (BFU)
 
 The agent is running. All requests result in a toast prompt to unlock the vault.
 
-## Locked After First Unlock (AFU)
+### Locked After First Unlock (AFU)
 
 The agent is running. List requests are supported. Sign requests are supported- if authorization is
 required based on user setting, user is prompted to unlock their vault first, then prompted to
 approve the request.
 
-## Unlocked
+### Unlocked
 
 The agent is running, all functionality supported.
