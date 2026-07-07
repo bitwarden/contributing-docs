@@ -1,6 +1,6 @@
 ---
 adr: "0032"
-status: "Proposed"
+status: Accepted
 date: 2026-06-25
 tags: [server]
 ---
