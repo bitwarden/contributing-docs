@@ -1,6 +1,6 @@
 ---
 adr: "0031"
-status: "Proposed"
+status: Accepted
 date: 2026-06-23
 tags: [server]
 ---

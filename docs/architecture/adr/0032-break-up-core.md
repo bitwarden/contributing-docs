@@ -1,6 +1,6 @@
 ---
 adr: "0032"
-status: "Proposed"
+status: Accepted
 date: 2026-06-25
 tags: [server]
 ---
@@ -83,7 +83,7 @@ Libraries and services under `bitwarden_license/` follow the exact same layout, 
 of `src/`:
 
 ```
-bitwarden_license/
+bitwarden_license/src/
   Libraries/
     SecretsManager/   # settings, services, repositories, endpoints for Secrets Manager
     ...
