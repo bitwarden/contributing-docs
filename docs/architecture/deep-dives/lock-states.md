@@ -45,14 +45,6 @@ locked (via the `EncryptedMemoryStore` abstraction, see
 - On **Windows** availability depends on the configured setting; depending on that setting the key
   may be recoverable in BFU as well.
 
-### SSH agent
-
-The [SSH agent](./ssh/agent.md) holds the private keys of the active, unlocked account and wipes
-them on lock. The public keys, however, are kept on lock so that listing still works. This means
-that in the AFU state a client can list the available keys, the correct key for a server can be
-chosen, and a signing request can be made - which then prompts the user to unlock their vault to
-approve the request. In the BFU state no keys are present, so listing returns nothing.
-
 ## Why secrets are re-hydrated rather than persisted
 
 These in-memory-only secrets are intentionally not stored at rest. A locked vault must remain secure
