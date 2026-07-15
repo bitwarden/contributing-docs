@@ -554,8 +554,8 @@ don't need to roll back with them.
 
 :::warning Do not wrap a single statement in an explicit transaction
 
-Several `Delete` procedures in the codebase wrap a lone `DELETE` in an explicit transaction (e.g.,
-`OrganizationSponsorship_DeleteById`). These are incorrect and should not be used as a reference:
+Several `Delete` procedures in the codebase wrap a lone `DELETE` in an explicit transaction. These
+should not be used as a reference:
 
 ```sql
 -- Wrong -- the transaction wraps a single statement and adds nothing
