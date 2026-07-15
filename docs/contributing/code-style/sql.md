@@ -428,6 +428,9 @@ END
 - Align parameters with consistent indentation (4 spaces)
 - Default values on same line as parameter
 - `OUTPUT` parameters clearly marked
+- Pass values in as parameters from application code rather than hard-coding them or generating them
+  with a SQL function inside the procedure (e.g., `GETUTCDATE()`) -- see
+  [accepted exceptions](#datetime-values) for cases where a SQL function is appropriate
 
 :::warning Default parameter values
 
@@ -539,6 +542,88 @@ WHERE
     [Id] = @Id
 ```
 
+#### Explicit transactions
+
+Only wrap statements in an explicit `BEGIN TRANSACTION` / `COMMIT TRANSACTION` when a procedure
+performs multiple statements that must all succeed or all fail together. A single `INSERT`,
+`UPDATE`, or `DELETE` statement is already atomic on its own -- SQL Server implicitly wraps every
+individual statement in a transaction, so adding an explicit one around it adds nothing except
+unnecessary lock hold time and noise. When a transaction is needed, keep its scope as small as
+possible -- only the statements that need to be atomic, not unrelated reads or `EXEC` calls that
+don't need to roll back with them.
+
+:::warning Do not wrap a single statement in an explicit transaction
+
+Several `Delete` procedures in the codebase wrap a lone `DELETE` in an explicit transaction (e.g.,
+`OrganizationSponsorship_DeleteById`). These are incorrect and should not be used as a reference:
+
+```sql
+-- Wrong -- the transaction wraps a single statement and adds nothing
+CREATE PROCEDURE [dbo].[EntityName_DeleteById]
+    @Id UNIQUEIDENTIFIER
+AS
+BEGIN
+    SET NOCOUNT ON
+
+    BEGIN TRANSACTION
+
+    DELETE
+    FROM
+        [dbo].[EntityName]
+    WHERE
+        [Id] = @Id
+
+    COMMIT TRANSACTION
+END
+```
+
+```sql
+-- Correct -- no explicit transaction needed
+CREATE PROCEDURE [dbo].[EntityName_DeleteById]
+    @Id UNIQUEIDENTIFIER
+AS
+BEGIN
+    SET NOCOUNT ON
+
+    DELETE
+    FROM
+        [dbo].[EntityName]
+    WHERE
+        [Id] = @Id
+END
+```
+
+:::
+
+Use an explicit transaction when a procedure deletes (or otherwise modifies) rows across multiple
+related tables that must be kept in sync -- e.g. deleting a parent record along with its dependent
+child records:
+
+```sql
+CREATE PROCEDURE [dbo].[EntityName_DeleteById]
+    @Id UNIQUEIDENTIFIER
+AS
+BEGIN
+    SET NOCOUNT ON
+
+    BEGIN TRANSACTION
+
+    DELETE
+    FROM
+        [dbo].[ChildEntity]
+    WHERE
+        [EntityNameId] = @Id
+
+    DELETE
+    FROM
+        [dbo].[EntityName]
+    WHERE
+        [Id] = @Id
+
+    COMMIT TRANSACTION
+END
+```
+
 ### Tables
 
 - **Table Name**: Singular form of the object name, PascalCase (e.g., `[dbo].[User]` not
@@ -579,6 +664,17 @@ CREATE TABLE [dbo].[TableName]
     [Column6]       BIT                 NOT NULL CONSTRAINT [DF_TableName_Column6] DEFAULT (1),
     CONSTRAINT [PK_TableName] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
+```
+
+### Indexes
+
+- **Index Name**: `IX_{TableName}_{ColumnName(s)}` (e.g., `[IX_User_Email]`)
+  - The name should clearly indicate the table and the columns being indexed
+
+```sql
+CREATE NONCLUSTERED INDEX [IX_OrganizationUser_UserIdOrganizationIdStatus]
+   ON [dbo].[OrganizationUser]([UserId] ASC, [OrganizationId] ASC, [Status] ASC)
+   INCLUDE ([AccessAll])
 ```
 
 ### Views
@@ -654,7 +750,7 @@ WHERE
 ### User defined types
 
 New user defined types should not be created. The following existing types may be used as
-table-valued parameters in stored procedures:
+table-valued parameters in stored procedures for simple, scalar lists:
 
 - **`[dbo].[GuidIdArray]`** — a single-column table of `UNIQUEIDENTIFIER` values. Use when passing a
   list of IDs to a stored procedure (e.g., bulk reads or deletes).
@@ -665,16 +761,58 @@ table-valued parameters in stored procedures:
 - **`[dbo].[EmailArray]`** — a single-column table of `NVARCHAR(256)` email addresses. Use when
   passing a list of emails to a stored procedure.
 
-### Indexes
+For anything beyond these scalar list shapes -- multi-column rows, or a shape that may need new
+properties over time -- serialize the data as JSON in application code and pass it as a single
+`NVARCHAR(MAX)` parameter, rather than creating a new TVP.
 
-- **Index Name**: `IX_{TableName}_{ColumnName(s)}` (e.g., `[IX_User_Email]`)
-  - The name should clearly indicate the table and the columns being indexed
+#### Passing structured data as JSON
+
+Use `OPENJSON` with an explicit `WITH` clause to shred a JSON array of objects into a typed table.
+This is the preferred pattern for bulk `INSERT`/`UPDATE` operations that need more than one column
+per row:
 
 ```sql
-CREATE NONCLUSTERED INDEX [IX_OrganizationUser_UserIdOrganizationIdStatus]
-   ON [dbo].[OrganizationUser]([UserId] ASC, [OrganizationId] ASC, [Status] ASC)
-   INCLUDE ([AccessAll])
+CREATE PROCEDURE [dbo].[EntityName_CreateMany]
+    @EntityNameJson NVARCHAR(MAX)
+AS
+BEGIN
+    SET NOCOUNT ON
+
+    INSERT INTO [dbo].[EntityName]
+    (
+        [Id],
+        [Name],
+        [CreationDate],
+        [RevisionDate]
+    )
+    SELECT
+        [Id],
+        [Name],
+        [CreationDate],
+        [RevisionDate]
+    FROM
+        OPENJSON(@EntityNameJson)
+        WITH (
+            [Id]           UNIQUEIDENTIFIER '$.Id',
+            [Name]         NVARCHAR(256)     '$.Name',
+            [CreationDate] DATETIME2(7)      '$.CreationDate',
+            [RevisionDate] DATETIME2(7)      '$.RevisionDate'
+        )
+END
 ```
+
+In application code, serialize the collection with `JsonSerializer.Serialize()` and pass the result
+as the parameter value; Dapper maps it to the `NVARCHAR(MAX)` parameter like any other string.
+
+:::tip When to use JSON vs. an existing TVP
+
+- Use the existing TVPs (`GuidIdArray`, `TwoGuidIdArray`, `EmailArray`) for simple, single- or
+  two-column lists of scalar values.
+- Use a JSON parameter when each row needs more than two columns, or when the row shape may need to
+  gain properties over time -- adding a property to a JSON payload doesn't require a schema change,
+  unlike adding a column to a TVP.
+
+:::
 
 ## Error handling
 
@@ -896,7 +1034,7 @@ GO
 
 #### Creating or modifying a view
 
-We recommend using the `CREATE OR ALTER` syntax for adding or modifying a view.
+Use the `CREATE OR ALTER` syntax for adding or modifying a view.
 
 ```sql
 CREATE OR ALTER VIEW [dbo].[{view_name}]
@@ -910,7 +1048,7 @@ GO
 
 #### Deleting a view
 
-When deleting a view, use `IF EXISTS` to avoid an error if the table doesn't exist.
+When deleting a view, use `IF EXISTS` to avoid an error if the view doesn't exist.
 
 ```sql
 DROP IF EXISTS [dbo].[{view_name}]
@@ -934,8 +1072,7 @@ GO
 
 #### Creating or modifying a function or stored procedure
 
-We recommend using the `CREATE OR ALTER` syntax for adding or modifying a function or stored
-procedure.
+Use the `CREATE OR ALTER` syntax for adding or modifying a function or stored procedure.
 
 ```sql
 CREATE OR ALTER {PROCEDURE|FUNCTION} [dbo].[{sproc_or_func_name}]
