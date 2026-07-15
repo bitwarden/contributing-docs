@@ -1,0 +1,53 @@
+---
+sidebar_position: 6
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+import CodeBlock from "@theme/CodeBlock";
+
+# Debugging with VS Code
+
+The clients repository ships VS Code launch configurations in its `.vscode` folder, so you can
+attach the debugger to the Desktop app and the Web Vault without any extra setup. Open the **Run and
+Debug** panel and select a configuration from the dropdown.
+
+## Desktop
+
+Electron apps have a renderer process, which runs in the Electron window, and the main process,
+which runs in the background.
+
+Select **`Desktop: Attach Debugger (main + renderer)`** from the Run and Debug dropdown. This
+attaches VSCode's debugger to a running desktop client. You can then set breakpoints directly in the
+TypeScript source.
+
+:::tip
+
+The renderer process can also be inspected using the Chromium DevTools, which open automatically
+when the Desktop app opens, or which you can open from the "View" menu.
+
+:::
+
+## Web Vault
+
+First, build and serve the [Web Vault](./web-vault/index.mdx).
+
+Next, launch Chrome with remote debugging enabled, using a dedicated profile so it doesn't interfere
+with your normal browser session:
+
+<Tabs groupId="os">
+  <TabItem value="mac" label="macOS" default>
+    <CodeBlock language="bash">{`open -a "Google Chrome" --args --remote-debugging-port=9223 --user-data-dir=remote-debug-profile`}</CodeBlock>
+  </TabItem>
+  <TabItem value="win" label="Windows">
+    <CodeBlock language="bash">{`chrome.exe --remote-debugging-port=9223 --user-data-dir=remote-debug-profile`}</CodeBlock>
+  </TabItem>
+  <TabItem value="lin" label="Linux">
+    <CodeBlock language="bash">{`google-chrome --remote-debugging-port=9223 --user-data-dir=remote-debug-profile`}</CodeBlock>
+  </TabItem>
+</Tabs>
+
+Then, in the Chrome instance you just launched, navigate to `https://localhost:8080`.
+
+Finally, in VS Code, select **`Web: Renderer (attach)`** from the Run and Debug dropdown to attach
+the debugger. You can then set breakpoints directly in the TypeScript source.

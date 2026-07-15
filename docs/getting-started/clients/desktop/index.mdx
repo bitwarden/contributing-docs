@@ -101,17 +101,10 @@ cd apps/desktop
 npm run electron
 ```
 
-## Debugging and testing
+## Debugging
 
-Electron apps have a renderer process, which runs in the Electron window, and the main process,
-which runs in the background.
-
-The renderer process can be inspected using the Chromium debugger. It should open automatically when
-the Desktop app opens, or you can open it from the “View” menu.
-
-The main process can be debugged by running the app from a
-[Javascript Debug Terminal](https://code.visualstudio.com/docs/nodejs/nodejs-debugging#_javascript-debug-terminal)
-in Visual Studio Code and then placing breakpoints in `build/main.js`.
+See [Debugging with VS Code](../debugging.mdx#desktop) for how to attach the VS Code debugger to the
+main and renderer processes.
 
 ## Biometric unlock (Native Messaging)
 

@@ -14,6 +14,7 @@ CODEOWNERS
 COSE
 CQRS
 CQS
+cryptominer
 CTAP2
 deinitializer
 deinitializers
@@ -27,6 +28,7 @@ HMAC
 hotfix
 hotfixed
 hotfixes
+Hulud
 Hyperscale
 iframes
 inet
@@ -68,10 +70,12 @@ recordset
 recordsets
 Redis
 refactorings
+reprompt
 roadmap
 roadmaps
 rollout
 rollouts
+Rspack
 rustup
 sandboxed
 SARIF
@@ -80,6 +84,7 @@ SCIM
 SDET
 SDLC
 Serilog
+Shai
 signtool
 signup
 Sourcery
