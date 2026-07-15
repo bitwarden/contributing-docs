@@ -55,8 +55,6 @@ This separation of concerns means:
   - e.g. `UserView.sql`, `ApiKeyDetailsView.sql`
 - **Functions**: `{EntityName}{Purpose}.sql`
   - e.g. `UserCollectionDetails.sql`
-- **User Defined Types**: `{TypeName}.sql`
-  - e.g. `GuidIdArray.sql`
 
 :::tip Versioning
 
@@ -83,9 +81,11 @@ These standards should be applied across any T-SQL scripts that you write.
   makes code changes easily detectable
 - **Blank lines**: Separate sections of code with at least one blank line
 - **Commas**: Commas should be placed at the right end of the line
-- **Parentheses**: Parentheses should be vertically aligned with spanning multiple lines
+- **Parentheses**: Parentheses should be vertically aligned when spanning multiple lines
 - **Data type modifiers**: Omit the space between type name and opening parenthesis (e.g.,
   `NVARCHAR(50)` not `NVARCHAR (50)`, `DATETIME2(7)` not `DATETIME2 (7)`)
+- **Naming**: Use full, unabbreviated names throughout — object names, column names, parameters, and
+  descriptors (e.g., `OrganizationId` not `OrgId`)
 - **ID generation**: Use `CoreHelpers.GenerateComb()` in application code, not `NEWID()` in the
   database -- see [GUID generation](./csharp#guid-generation)
 - **Datetime generation**: Generate datetime values in application code and pass them as parameters
@@ -276,19 +276,34 @@ LEFT JOIN
 
 ### Stored procedures
 
-- **Stored Procedure Name**: `{EntityName}_{Action}` format (e.g., `[dbo].[User_ReadById]`)
-  - EntityName: The main table or concept (e.g. User, Organization, Cipher)
-  - Action: What the procedure does (e.g. Create, ReadById, DeleteMany)
-- **Parameters**: Start with `@` and use PascalCase (e.g., `@UserId`, `@OrganizationId`)
-- **OUTPUT parameters**: Explicitly declare with `OUTPUT` keyword
+#### Naming
 
-:::tip Example of common CRUD operations
+Stored procedures follow the `{EntityName}_{Action}` format (e.g., `[dbo].[User_ReadById]`):
 
-- **Create**: `{EntityName}_Create` procedures
-- **Read**: `{EntityName}_ReadById`, `{EntityName}_ReadBy{Criteria}` procedures
-- **Read Many**: `{EntityName}_ReadManyByIds`, `{EntityName}_ReadManyBy{Criteria}` procedures
-- **Update**: `{EntityName}_Update` procedures
-- **Delete**: `{EntityName}_DeleteById`, `{EntityName}_Delete` procedures
+- **EntityName**: The main table or concept the procedure operates on (e.g., `User`, `Organization`,
+  `Cipher`)
+- **Action**: A verb from the standard list below, optionally followed by a short descriptor that
+  clarifies what the procedure does
+
+**Standard action verbs**
+
+| Verb         | Description             |
+| ------------ | ----------------------- |
+| `Create`     | Insert a new record     |
+| `Read`       | Select a single record  |
+| `ReadMany`   | Select multiple records |
+| `Update`     | Modify a record         |
+| `UpdateMany` | Modify multiple records |
+| `Delete`     | Remove a record         |
+| `DeleteMany` | Remove multiple records |
+
+:::tip When an operation is more specific than a standard verb alone, append a short descriptor:
+
+- `User_ReadById` — read filtered by a specific field
+- `User_ReadManyByOrganizationId` — filtered bulk read
+- `OrganizationUser_UpdateStatus` — update a specific field
+- `OrganizationUser_UpdateManyRevoke` — bulk revoke
+- `User_UpdateApplicationData` — update a named subset of fields
 
 :::
 
@@ -303,6 +318,8 @@ These are incorrect and should not be used as a reference. Always use `Read` or 
 
 #### Basic structure
 
+- **Parameters**: Start with `@` and use PascalCase (e.g., `@UserId`, `@OrganizationId`)
+- **OUTPUT parameters**: Explicitly declare with `OUTPUT` keyword
 - Wrap the entire procedure body in `BEGIN`/`END` statements
 
 ```sql
@@ -401,7 +418,7 @@ BEGIN
     WHERE
         [OrganizationId] = @OrganizationId
         AND [Status] = 2 -- 2 = Confirmed
-        AND [Type] = @Role
+        AND [Role] = @Role
 END
 ```
 
@@ -708,6 +725,14 @@ END CATCH;
 - Don't comment unnecessarily, such as commenting that an insert statement is about to be executed
 
 ## Deployment scripts
+
+:::note Evolutionary database design
+
+Bitwarden follows [Evolutionary Database Design (EDD)](../database-migrations/edd). If a deployment
+fails and server code is rolled back, database changes are **not** rolled back with it. This means
+all migrations must support both the current release and the next release simultaneously.
+
+:::
 
 There are specific ways migration scripts should be structured. We do so to adhere to the following
 guiding principles:
