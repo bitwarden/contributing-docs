@@ -766,6 +766,38 @@ variants), as this can lead to unnecessary storage overhead and performance issu
 
 :::
 
+##### Populating a `NOT NULL` column from a bulk (JSON/TVP) procedure
+
+When a `NOT NULL` column is populated through a bulk procedure that reads from `OPENJSON` or a
+table-valued parameter (e.g. `OrganizationUser_CreateMany`, `OrganizationUser_UpdateMany`), wrap the
+value in `ISNULL([Column], {default})` at every insert and update site.
+
+A scalar procedure parameter stays backwards compatible through its own default value
+(`@Column BIT = 0`), so an old server that calls the procedure without the new argument still works.
+A JSON or TVP field has no equivalent per-field default: during a rolling deployment an old server
+sends a payload that omits the field, `OPENJSON` (or the TVP) yields `NULL`, and the write fails
+against the `NOT NULL` constraint.
+
+This breaks during a rolling deployment:
+
+```sql
+INSERT INTO [dbo].[Table] ([Column])
+SELECT
+    OUI.[Column] -- NULL when the payload predates the column
+FROM
+    OPENJSON(@jsonData) WITH ([Column] BIT '$.Column') OUI
+```
+
+This is safe:
+
+```sql
+INSERT INTO [dbo].[Table] ([Column])
+SELECT
+    ISNULL(OUI.[Column], 0)
+FROM
+    OPENJSON(@jsonData) WITH ([Column] BIT '$.Column') OUI
+```
+
 #### Changing a column data type
 
 You must wrap the `ALTER TABLE` statement in a conditional block, so that subsequent runs of the
