@@ -5,7 +5,7 @@ date: 2026-07-16
 tags: [clients, mobile, server, sdk]
 ---
 
-# 0033 - Adopt the diagram standard
+# 0033 - Adopt Mermaid diagram standard
 
 <AdrTable frontMatter={frontMatter}></AdrTable>
 
@@ -36,10 +36,10 @@ audience-specific views -- requires substantial rework per audience in practice.
 
 ## Decision outcome
 
-Chosen option: **Mermaid with defined conventions**, published as the
-[diagram standard](../../contributing/diagrams.md). The standard is the living reference. Its rules
-evolve by PR without superseding this decision and this ADR is superseded only if the chosen option
-itself changes. A snapshot of the rules at adoption:
+Chosen option: **Mermaid with defined conventions**, published as the diagram standard on the
+contributing site. The standard is the living reference. Its rules evolve by PR without superseding
+this decision and this ADR is superseded only if the chosen option itself changes. A snapshot of the
+rules at adoption:
 
 1. Diagrams are Mermaid source text, nothing else: as Mermaid code blocks, or, if in Confluence, via
    Macro Pack's Mermaid diagram in text-input mode.
@@ -77,5 +77,25 @@ itself changes. A snapshot of the rules at adoption:
 - **A rendered diagram shared as an image loses its perspective**, since the caption attaches in the
   doc rather than inside the Mermaid source (embedding was tested and fails to render on Macro
   Pack). This is accepted.
-- A migration backlog: the contributing site's PlantUML/Kroki diagrams, static diagram assets, and
-  source-less images convert to Mermaid.
+
+### Plan
+
+[PR #834](https://github.com/bitwarden/contributing-docs/pull/834) publishes the standard at
+Contributing › Diagrams and converts the contributing site's existing diagrams (PlantUML/Kroki
+sources, static diagram assets, and source-less images) to comply, so the site itself becomes the
+reference implementation of the standard. Elsewhere, legacy diagrams convert when their docs are
+next touched: images and non-Mermaid sources in repos become Mermaid code blocks, and Confluence
+attachments and images become Macro Pack's Mermaid diagram in text-input mode.
+
+The remaining adoption work is delegated to its owners:
+
+- The architecture team authors the initial system context and container diagrams for the site's
+  Architecture section, since none exist today, and validates the standard end to end with a pilot
+  domain diagram set.
+- Owning teams add perspective captions to the converted site diagrams and to the existing in-repo
+  Mermaid diagrams, since the conversion was faithful to originals that carried none.
+- The Autofill team redraws the overlay architecture and messaging diagrams as several purpose-built
+  diagrams, because the current pair crams a whole subsystem into one picture and cannot be
+  converted mechanically. The overlay SVGs remain on the site as a tracked deviation until the
+  replacements ship. The team also refreshes the Collecting Page Details deep dive, whose content
+  predates Manifest v3, and re-derives its diagrams afterward.
