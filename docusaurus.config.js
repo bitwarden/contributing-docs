@@ -15,6 +15,10 @@ async function createConfig() {
     onBrokenMarkdownLinks: "warn",
     favicon: "img/favicon.png",
 
+    markdown: {
+      mermaid: true,
+    },
+
     // Even if you don't use internalization, you can use this field to set useful
     // metadata like html lang. For example, if your site is Chinese, you may want
     // to replace "en" with "zh-Hans".
@@ -24,6 +28,8 @@ async function createConfig() {
     },
 
     plugins: [require.resolve("docusaurus-lunr-search")],
+
+    themes: ["@docusaurus/theme-mermaid"],
 
     presets: [
       [
