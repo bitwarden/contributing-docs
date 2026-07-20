@@ -55,7 +55,23 @@ three phases: _Start_, _Transition_, and _End_ as shown in the diagram below.
 
 <figure>
 
-![Refactoring Stages](./transitions.png)
+```mermaid
+flowchart LR
+    Start["Start"]
+    Transition["Transition"]
+    End["End"]
+
+    Start -->|"Deploy X + 1<br/>Initial migration"| Transition
+    Transition -->|"Deploy X + 2<br/>Finalization migration"| End
+    Transition -->|"Transition migration"| Transition
+
+    classDef phaseStart fill:#ff2603,color:#ffffff,stroke:#000000
+    classDef phaseTransition fill:#fffc02,color:#000000,stroke:#000000
+    classDef phaseEnd fill:#73fa79,color:#000000,stroke:#000000
+    class Start phaseStart
+    class Transition phaseTransition
+    class End phaseEnd
+```
 
 <figcaption>Refactoring Phases</figcaption>
 
@@ -102,22 +118,39 @@ These migrations are run as part of the deployment of _Release X+2_.
 
 ### Example
 
-Let's look at an example, the rename column refactor is shown in the image below.
+Let's look at an example. Suppose we want to rename a hypothetical `username` column in the `User`
+table to `email` without breaking any running code.
 
-![Rename Column Refactor](./rename-column.gif)
+```mermaid
+flowchart LR
+    start["User<br/>username"]
+    transition["User<br/>username + email"]
+    ending["User<br/>email"]
 
-In this refactor we rename the column `Fname` in the `Customer` table to `FirstName`. This could
-easily be achieved using a regular `Alter Table` statement but that would break compatibility with
-existing running code. Instead let's look at how we can incrementally refactor this table.
+    start -->|"Initial migration<br/>add email, sync both in the SPROC"| transition
+    transition -->|"Finalization migration<br/>drop username"| ending
+    transition -->|"Transition migration<br/>copy username to email"| transition
 
-We will begin by creating a migration which adds the column `FirstName` to the `Customer` Table. At
-the same time we will also update the Stored Procedures to sync the content between `FName` and
-`FirstName` which ensures both the old and new server releases can run at the same time. The sync
-code is highlighted in the code snippet below.
+    classDef phaseStart fill:#ff2603,color:#ffffff,stroke:#000000
+    classDef phaseTransition fill:#fffc02,color:#000000,stroke:#000000
+    classDef phaseEnd fill:#73fa79,color:#000000,stroke:#000000
+    class start phaseStart
+    class transition phaseTransition
+    class ending phaseEnd
+```
+
+This could easily be achieved using a regular `Alter Table` statement but that would break
+compatibility with existing running code. Instead let's look at how we can incrementally refactor
+this table.
+
+We will begin by creating a migration which adds the column `email` to the `User` table. At the same
+time we will also update the Stored Procedures to sync the content between `username` and `email`
+which ensures both the old and new server releases can run at the same time. The sync code is
+highlighted in the code snippet below.
 
 Afterwards the new server version will be deployed, once everything checks out the existing data
-will be migrated using a _Data Migration_ script. Which essentially copies the `FName` to
-`FirstName` columns.
+will be migrated using a _Data Migration_ script. Which essentially copies the `username` to `email`
+columns.
 
 Lastly the _Second Migration_ will be run which removes the old column and updates the Stored
 Procedure to remove the synchronization logic.
@@ -138,44 +171,44 @@ Located in `util/Migrator/DbScripts`.
 
 ```sql
 -- Add Column
-IF COL_LENGTH('[dbo].[Customer]', 'FirstName') IS NULL
+IF COL_LENGTH('[dbo].[User]', 'email') IS NULL
 BEGIN
     ALTER TABLE
-        [dbo].[Customer]
+        [dbo].[User]
     ADD
-        [FirstName] NVARCHAR(MAX) NULL
+        [email] NVARCHAR(MAX) NULL
 END
 GO
 
 -- Drop existing SPROC
-IF OBJECT_ID('[dbo].[Customer_Create]') IS NOT NULL
+IF OBJECT_ID('[dbo].[User_Create]') IS NOT NULL
 BEGIN
-    DROP PROCEDURE [dbo].[Customer_Create]
+    DROP PROCEDURE [dbo].[User_Create]
 END
 GO
 
 -- Create the new SPROC
-CREATE PROCEDURE [dbo].[Customer_Create]
-    @CustomerId UNIQUEIDENTIFIER OUTPUT,
-    @FName NVARCHAR(MAX) = NULL, -- Deprecated as of YYYY-MM-DD
-    @FirstName NVARCHAR(MAX) = NULL
+CREATE PROCEDURE [dbo].[User_Create]
+    @UserId UNIQUEIDENTIFIER OUTPUT,
+    @username NVARCHAR(MAX) = NULL, -- Deprecated as of YYYY-MM-DD
+    @email NVARCHAR(MAX) = NULL
 AS
 BEGIN
     SET NOCOUNT ON
 
-    SET @FirstName = COALESCE(@FirstName, @FName);
+    SET @email = COALESCE(@email, @username);
 
-    INSERT INTO [dbo].[Customer]
+    INSERT INTO [dbo].[User]
     (
-        [CustomerId],
-        [FName],
-        [FirstName]
+        [UserId],
+        [username],
+        [email]
     )
     VALUES
     (
-        @CustomerId,
-        @FirstName,
-        @FirstName
+        @UserId,
+        @email,
+        @email
     )
 END
 ```
@@ -186,9 +219,17 @@ END
 Located in `util/Migrator/DbScripts_transition`.
 
 ```sql
-UPDATE [dbo].Customer SET
-    FirstName=FName
-WHERE FirstName IS NULL
+DECLARE @BatchSize INT = 1000;
+DECLARE @RowsAffected INT = 1;
+
+WHILE @RowsAffected > 0
+BEGIN
+    UPDATE TOP (@BatchSize) [dbo].[User]
+    SET email = username
+    WHERE email IS NULL;
+
+    SET @RowsAffected = @@ROWCOUNT;
+END
 ```
 
 </TabItem>
@@ -198,39 +239,39 @@ Located in `util/Migrator/DbScripts_finalization`.
 
 ```sql
 -- Remove Column
-IF COL_LENGTH('[dbo].[Customer]', 'FName') IS NOT NULL
+IF COL_LENGTH('[dbo].[User]', 'username') IS NOT NULL
 BEGIN
     ALTER TABLE
-        [dbo].[Customer]
+        [dbo].[User]
     DROP COLUMN
-        [FName]
+        [username]
 END
 GO
 
 -- Drop existing SPROC
-IF OBJECT_ID('[dbo].[Customer_Create]') IS NOT NULL
+IF OBJECT_ID('[dbo].[User_Create]') IS NOT NULL
 BEGIN
-    DROP PROCEDURE [dbo].[Customer_Create]
+    DROP PROCEDURE [dbo].[User_Create]
 END
 GO
 
 -- Create the new SPROC
-CREATE PROCEDURE [dbo].[Customer_Create]
-    @CustomerId UNIQUEIDENTIFIER OUTPUT,
-    @FirstName NVARCHAR(MAX) = NULL
+CREATE PROCEDURE [dbo].[User_Create]
+    @UserId UNIQUEIDENTIFIER OUTPUT,
+    @email NVARCHAR(MAX) = NULL
 AS
 BEGIN
     SET NOCOUNT ON
 
-    INSERT INTO [dbo].[Customer]
+    INSERT INTO [dbo].[User]
     (
-        [CustomerId],
-        [FirstName]
+        [UserId],
+        [email]
     )
     VALUES
     (
-        @CustomerId,
-        @FirstName
+        @UserId,
+        @email
     )
 END
 ```
@@ -247,16 +288,32 @@ There are some important constraints to the implementation of the process:
   same always-on application constraint
 - Minimization of manual steps in the process
 
-The process to support all of these constraints is a complex one. Below is an image of a state
-machine that will hopefully help visualize the process and what it supports. It assumes that all
+The process to support all of these constraints is a complex one. The state machine below tracks a
+single destructive change through the phases and shows which rollbacks are safe. It assumes that all
 database changes follow the standards that are laid out in [Migrations](./mssql.md).
 
----
+```mermaid
+flowchart LR
+    Start["Old code<br/>Old schema"]
+    Initial["Old code<br/>New schema<br/>(both releases supported)"]
+    Transition["New code<br/>New schema<br/>(both releases supported)"]
+    End["New code<br/>Finalized schema<br/>(only new release supported)"]
+    Broken["Old code<br/>Finalized schema<br/>= broken"]
 
-![Bitwarden EDD State Machine](./edd_state_machine.jpg) \[Open Image in a new tab for better
-viewing\]
+    Start -->|"initial migration (deploy)"| Initial
+    Initial -->|"roll code forward"| Transition
+    Transition -->|"transition migration"| Transition
+    Transition -->|"finalization migration (next deploy)"| End
+    Transition -->|"roll back (safe)"| Initial
+    Initial -->|"roll back (safe)"| Start
+    End -->|"roll code back"| Broken
 
----
+    classDef broken fill:#f8b4b4,stroke:#c81e1e,color:#111827
+    class Broken broken
+    style Initial fill:#dbe4e8,stroke:#94a3b8
+    style Transition fill:#fffc02,color:#000000,stroke:#000000
+    style End fill:#73fa79,color:#000000,stroke:#000000
+```
 
 ### Online environments
 
