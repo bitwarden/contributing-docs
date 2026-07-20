@@ -31,6 +31,8 @@ async function createConfig() {
 
     themes: ["@docusaurus/theme-mermaid"],
 
+    clientModules: [require.resolve("./src/mermaid-icons.js")],
+
     presets: [
       [
         "classic",

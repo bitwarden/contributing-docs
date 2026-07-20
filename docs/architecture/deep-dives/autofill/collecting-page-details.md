@@ -51,48 +51,40 @@ These flows are diagrammed below:
 
 #### Autofill on Page Load
 
-```kroki type=plantuml
-@startuml
-box "Content Scripts" #B8B8B8
-participant "autofill-init.ts" as autofill
-participant autofiller.ts as autofiller
-end box
-
-box "Background Pages" #E5E8E8
-participant notification.background.ts as notification
-participant runtime.background.ts as runtime
-participant main.background.ts as main
-end box
-
-autofiller -> runtime : bgCollectPageDetails [sender: autofiller]
-runtime --> main : collectPageDetailsForContentScript()
-main -> autofill : collectPageDetails [sender: autofiller]
-autofill -> runtime : collectPageDetailsResponse [sender: autofiller]
-
-@enduml
+```mermaid
+sequenceDiagram
+    box rgb(184,184,184) Content Scripts
+        participant autofill as autofill-init.ts
+        participant autofiller as autofiller.ts
+    end
+    box rgb(229,232,232) Background Pages
+        participant notification as notification.background.ts
+        participant runtime as runtime.background.ts
+        participant main as main.background.ts
+    end
+    autofiller->>runtime: bgCollectPageDetails [sender: autofiller]
+    runtime-->>main: collectPageDetailsForContentScript()
+    main->>autofill: collectPageDetails [sender: autofiller]
+    autofill->>runtime: collectPageDetailsResponse [sender: autofiller]
 ```
 
 #### Notification Bar
 
-```kroki type=plantuml
-@startuml
-box "Content Scripts" #B8B8B8
-participant "autofill-init.ts" as autofill
-participant notificationBar.ts as notificationBar
-end box
-
-box "Background Pages" #E5E8E8
-participant notification.background.ts as notification
-participant runtime.background.ts as runtime
-participant main.background.ts as main
-end box
-
-notificationBar -> runtime : bgCollectPageDetails [sender: notificationBar]
-runtime --> main : collectPageDetailsForContentScript()
-main -> autofill : collectPageDetails [sender: notificationBar]
-autofill -> notificationBar: collectPageDetailsResponse [sender: notificationBar]
-
-@enduml
+```mermaid
+sequenceDiagram
+    box rgb(184,184,184) Content Scripts
+        participant autofill as autofill-init.ts
+        participant notificationBar as notificationBar.ts
+    end
+    box rgb(229,232,232) Background Pages
+        participant notification as notification.background.ts
+        participant runtime as runtime.background.ts
+        participant main as main.background.ts
+    end
+    notificationBar->>runtime: bgCollectPageDetails [sender: notificationBar]
+    runtime-->>main: collectPageDetailsForContentScript()
+    main->>autofill: collectPageDetails [sender: notificationBar]
+    autofill->>notificationBar: collectPageDetailsResponse [sender: notificationBar]
 ```
 
 ### Requesting page details from context menu
@@ -107,27 +99,21 @@ fired. This event is handled by the `contextMenus.background.js` background page
 catches this request and issues a `collectPageDetailsResponse` with a sender of `contextMenus` when
 complete, which is handled by the `runtime.background.js` background page.
 
-```kroki type=plantuml
-@startuml
-
-actor User
-participant "Autofill Context Menu" as autofillContext
-
-box "Content Scripts" #B8B8B8
-participant "autofill-init.ts" as autofill
-end box
-
-box "Background Pages" #E5E8E8
-participant contextMenus.background.ts as context
-participant runtime.background.ts as runtime
-end box
-
-User --> autofillContext
-autofillContext -> context : contextMenus.onClicked()
-context -> autofill : collectPageDetails [sender: contextMenu]
-autofill -> runtime : collectPageDetailsResponse [sender: contextMenu]
-
-@enduml
+```mermaid
+sequenceDiagram
+    actor User
+    participant autofillContext as Autofill Context Menu
+    box rgb(184,184,184) Content Scripts
+        participant autofill as autofill-init.ts
+    end
+    box rgb(229,232,232) Background Pages
+        participant context as contextMenus.background.ts
+        participant runtime as runtime.background.ts
+    end
+    User-->>autofillContext:
+    autofillContext->>context: contextMenus.onClicked()
+    context->>autofill: collectPageDetails [sender: contextMenu]
+    autofill->>runtime: collectPageDetailsResponse [sender: contextMenu]
 ```
 
 ### Requesting page details on keyboard shortcut
@@ -149,27 +135,21 @@ After generating the page details, the `autofill-init.ts` content script broadca
 `collectPageDetailsResponse` message with an `autofill_cmd` sender. The `runtime.background.js`
 background page is listening for this message and receives it.
 
-```kroki type=plantuml
-@startuml
-
-actor User
-
-box "Content Scripts" #B8B8B8
-participant "autofill-init.ts" as autofill
-end box
-
-box "Background Pages" #E5E8E8
-participant commands.background.ts as commands
-participant runtime.background.ts as runtime
-participant main.background.ts as main
-end box
-
-User -> commands : autofill_login
-commands --> main : collectPageDetailsForContentScript()
-main -> autofill : collectPageDetails [sender: autofill_cmd]
-autofill -> runtime : collectPageDetailsResponse [sender: autofill_cmd]
-
-@enduml
+```mermaid
+sequenceDiagram
+    actor User
+    box rgb(184,184,184) Content Scripts
+        participant autofill as autofill-init.ts
+    end
+    box rgb(229,232,232) Background Pages
+        participant commands as commands.background.ts
+        participant runtime as runtime.background.ts
+        participant main as main.background.ts
+    end
+    User->>commands: autofill_login
+    commands-->>main: collectPageDetailsForContentScript()
+    main->>autofill: collectPageDetails [sender: autofill_cmd]
+    autofill->>runtime: collectPageDetailsResponse [sender: autofill_cmd]
 ```
 
 #### Manifest v3
@@ -183,24 +163,18 @@ response is **not** another message broadcast through the browser command API. I
 `autofill-init.ts` content script performs the page details generation and returns the response
 asynchronously through a Promise.
 
-```kroki type=plantuml
-@startuml
-
-actor User
-
-box "Content Scripts" #B8B8B8
-participant "autofill-init.ts" as autofill
-end box
-
-
-box "Listeners" #7A7A7A
-participant commandListener as listener
-end box
-
-User -> listener : autofill_login
-listener -> autofill : collectPageDetailsImmediately
-autofill --> listener
-@enduml
+```mermaid
+sequenceDiagram
+    actor User
+    box rgb(184,184,184) Content Scripts
+        participant autofill as autofill-init.ts
+    end
+    box rgb(122,122,122) Listeners
+        participant listener as commandListener
+    end
+    User->>listener: autofill_login
+    listener->>autofill: collectPageDetailsImmediately
+    autofill-->>listener:
 ```
 
 ### Requesting page details from the extension UI
@@ -215,34 +189,36 @@ instance's unique `BroadcasterSubscriptionId` as the `sender`. The `autofill-ini
 generates the page details and responds with a `collectPageDetailsResponse` message with the same
 `sender`, ensuring that the message is received properly by the correct sender.
 
-```kroki type=plantuml
-@startuml
-actor User
+Autofill from the item view (`view.component.ts`):
 
-box "Content Scripts" #B8B8B8
-participant "autofill-init.ts" as autofill
-end box
+```mermaid
+sequenceDiagram
+    actor User
+    box rgb(184,184,184) Content Scripts
+        participant autofill as autofill-init.ts
+    end
+    box rgb(122,122,122) Extension UI
+        participant viewComponent as view.component.ts
+    end
+    User-->>viewComponent: Clicks Autofill Button
+    viewComponent->>autofill: collectPageDetails [sender: BroadcasterSubscriptionId]
+    autofill-->>viewComponent: collectPageDetailsResponse [sender: BroadcasterSubscriptionId]
+```
 
-box "Extension UI" #7A7A7A
-participant view.component.ts as viewComponent
-participant "current-tab.component.ts" as currentTab
-end box
+Autofill from the current tab view (`current-tab.component.ts`):
 
-group Autofill from Item View
-  User --> viewComponent : Clicks Autofill Button
-  viewComponent -> autofill : collectPageDetails [sender: BroadcasterSubscriptionId]
-  autofill --> viewComponent : collectPageDetailsResponse [sender: BroadcasterSubscriptionId]
-end group
-
-break
-
-group Autofill from Current Tab View
-  User --> currentTab : Clicks Autofill on Cipher
-  currentTab -> autofill : collectPageDetails [sender: BroadcasterSubscriptionId]
-  autofill --> currentTab : collectPageDetailsResponse [sender: BroadcasterSubscriptionId]
-end group
-
-@enduml
+```mermaid
+sequenceDiagram
+    actor User
+    box rgb(184,184,184) Content Scripts
+        participant autofill as autofill-init.ts
+    end
+    box rgb(122,122,122) Extension UI
+        participant currentTab as current-tab.component.ts
+    end
+    User-->>currentTab: Clicks Autofill on Cipher
+    currentTab->>autofill: collectPageDetails [sender: BroadcasterSubscriptionId]
+    autofill-->>currentTab: collectPageDetailsResponse [sender: BroadcasterSubscriptionId]
 ```
 
 ## Performing the collection of the page details

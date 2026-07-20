@@ -19,93 +19,67 @@ internal private items.
 
 ## Architecture overview
 
-```kroki type=plantuml
-@startuml
-skinparam packageStyle rectangle
-skinparam componentStyle rectangle
-skinparam linetype ortho
-skinparam shadowing false
-skinparam defaultTextAlignment center
+```mermaid
+flowchart TB
+    subgraph clients ["Client Applications"]
+        subgraph ts ["TypeScript"]
+            direction TB
+            web["Web vault"]
+            desktop["Desktop"]
+            browser["Browser extension"]
+            cli["CLI"]
+        end
+        subgraph mobile ["Mobile"]
+            direction LR
+            ios["iOS<br/>(Swift)"]
+            android["Android<br/>(Kotlin)"]
+        end
+        subgraph rust ["Rust"]
+            direction LR
+            rustcli["Rust CLI"]
+        end
+    end
 
-skinparam package {
-  BackgroundColor<<clients>> #E3F2FD
-  BorderColor<<clients>> #1976D2
-  BackgroundColor<<bindings>> #FFF3E0
-  BorderColor<<bindings>> #F57C00
-  BackgroundColor<<sdk>> #E8F5E9
-  BorderColor<<sdk>> #388E3C
-}
+    subgraph bindings ["Binding Layer"]
+        wasm["WASM"]
+        uniffi["UniFFI"]
+    end
 
-skinparam component {
-  BackgroundColor<<sdk>> #E8F5E9
-  BorderColor<<sdk>> #388E3C
-}
+    subgraph sdk ["Rust SDK"]
+        subgraph appInterfaces ["Application Interfaces"]
+            direction TB
+            pm["Password Manager"]
+            sm["Secrets Manager"]
+        end
+        subgraph feat ["Features"]
+            direction TB
+            vault["Vault"]
+            generators["Generators"]
+        end
+        subgraph utils ["Utils"]
+            direction TB
+            crypto["Crypto"]
+            logging["Logging"]
+        end
+        core["Core Runtime"]
+    end
 
-skinparam component {
-  BackgroundColor #FFFFFF
-  BorderColor #424242
-  FontSize 12
-}
+    ts --> wasm
+    mobile --> uniffi
 
-package "Client Applications" <<clients>> {
-  package "TypeScript" {
-    [Web vault] as web
-    [Desktop] as desktop
-    [Browser extension] as browser
-    [CLI] as cli
-  }
-  package "Mobile" {
-    [iOS\n(Swift)] as ios
-    [Android\n(Kotlin)] as android
-  }
-  package "Rust" {
-    [Rust CLI] as rustcli
-  }
-}
+    bindings --> pm
+    bindings --> sm
 
-package "Binding Layer" <<bindings>> as bindings {
-  [WASM] as wasm
-  [UniFFI] as uniffi
-}
+    rustcli --> pm
 
-package "Rust SDK" <<sdk>> as sdk {
-  package "Application Interfaces" {
-    [Password Manager] as pm
-    [Secrets Manager] as sm
-  }
-  folder "Features" {
-    [Vault]
-    [Generators]
-  }
-  folder "Utils" {
-    [Crypto]
-    [Logging]
-  }
-  [Core Runtime] as core
-}
+    appInterfaces --> feat
+    appInterfaces --> core
+    feat --> core
+    feat --> utils
 
-TypeScript --> wasm
-web -[hidden]> wasm
-desktop -[hidden]> wasm
-browser -[hidden]> wasm
-cli -[hidden]> wasm
-Mobile --> uniffi
-ios -[hidden]> uniffi
-android -[hidden]> uniffi
-
-bindings --> pm
-bindings --> sm
-uniffi --[hidden]-> pm
-uniffi --[hidden]-> sm
-
-rustcli --> pm
-
-[Application Interfaces] -> [Features]
-[Application Interfaces] ---> core
-[Features] --> core
-[Features] ---> Utils
-
-@enduml
+    style clients fill:#e3f2fd
+    style bindings fill:#fff3e0
+    style sdk fill:#e8f5e9
 ```
 
 ## What belongs in the SDK
