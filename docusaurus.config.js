@@ -3,9 +3,7 @@
 
 import { themes } from "prism-react-renderer";
 
-async function createConfig() {
-  const { remarkKroki } = await import("remark-kroki");
-
+function createConfig() {
   /** @type {import('@docusaurus/types').Config} */
   const config = {
     title: "Bitwarden Contributing Documentation",
@@ -44,7 +42,6 @@ async function createConfig() {
             // Please change this to your repo.
             // Remove this to remove the "edit this page" links.
             editUrl: "https://github.com/bitwarden/contributing-docs/tree/main/",
-            remarkPlugins: [[remarkKroki, { server: "https://kroki.io/" }]],
           },
           theme: {
             customCss: require.resolve("./src/css/custom.css"),
