@@ -47,7 +47,7 @@
     "@types/react": "19.2.2",
     "cspell": "10.0.0",
     "husky": "9.1.7",
-    "lint-staged": "16.4.0",
+    "lint-staged": "17.0.8",
     "prettier": "3.8.1",
     "typescript": "6.0.3"
   },
