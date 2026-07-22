@@ -18,6 +18,8 @@ cryptominer
 CTAP2
 deinitializer
 deinitializers
+deprioritized
+diffable
 dockerized
 dotfile
 F-Droid
@@ -32,6 +34,7 @@ Hulud
 Hyperscale
 iframes
 inet
+ingestibility
 initialisms
 IntelliJ
 Iterm
@@ -41,10 +44,12 @@ jumpcloud
 keychain
 keypair
 keyserver
+Kroki
 Kubebuilder
 LDIF
 libmagic
 LLDB
+Lucidchart
 Mailcatcher
 minio
 MVVM
@@ -76,6 +81,7 @@ roadmaps
 rollout
 rollouts
 Rspack
+rustdoc
 rustup
 sandboxed
 SARIF
@@ -91,6 +97,7 @@ Sourcery
 sqlcmd
 struct
 structs
+Structurizr
 subfolders
 subprocessor
 toolset
@@ -102,6 +109,7 @@ typesafe
 udeps
 unsynchronized
 WCAG
+weweave
 Xcodes.app
 xcworkspace
 xmldoc
