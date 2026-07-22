@@ -81,7 +81,7 @@ changes across clients.
 ```mermaid
 classDiagram
     class Internal["Internal[Domain]Service"] {
-        <<Interface>>
+        <<Abstract>>
         +upsert(item: [Domain])
         +replace(items: [Domain][])
     }
