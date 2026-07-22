@@ -39,7 +39,7 @@ audience-specific views -- requires substantial rework per audience in practice.
 Chosen option: **Mermaid with defined conventions**, published as the
 [diagram standard](../../contributing/diagrams.md) on the contributing site. The standard is the
 living reference and its rules evolve by PR without superseding this decision. This ADR is
-superseded only if the chosen option itself changes, but A snapshot of the rules at adoption:
+superseded only if the chosen option itself changes. A snapshot of the rules at adoption:
 
 1. Diagrams are Mermaid source text, nothing else: as Mermaid code blocks, or, if in Confluence, via
    Macro Pack's Mermaid diagram in text-input mode.
