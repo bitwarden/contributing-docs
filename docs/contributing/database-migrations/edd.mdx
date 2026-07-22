@@ -226,7 +226,7 @@ WHILE @RowsAffected > 0
 BEGIN
     UPDATE TOP (@BatchSize) [dbo].[User]
     SET email = username
-    WHERE email IS NULL;
+    WHERE email IS NULL AND username IS NOT NULL;
 
     SET @RowsAffected = @@ROWCOUNT;
 END
