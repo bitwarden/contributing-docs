@@ -633,6 +633,14 @@ END
 - **Foreign Keys**: `FK_{TableName}_{ReferencedTable}` (e.g., FK_Device_User)
 - **Default Constraints**: `DF_{TableName}_{ColumnName}` (e.g., [DF_Organization_UseScim])
 
+:::warning Do not create `CHECK` constraints
+
+Only primary keys, foreign keys, unique constraints, and default constraints are permitted on
+tables. Do not create `CHECK` constraints -- they encode business logic in the database, which goes
+against our policy of keeping business logic in the application layer.
+
+:::
+
 #### Column definitions
 
 - **Alignment**: Column names, data types, and nullability vertically aligned using spaces
