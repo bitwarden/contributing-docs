@@ -3,9 +3,7 @@
 
 import { themes } from "prism-react-renderer";
 
-async function createConfig() {
-  const { remarkKroki } = await import("remark-kroki");
-
+function createConfig() {
   /** @type {import('@docusaurus/types').Config} */
   const config = {
     title: "Bitwarden Contributing Documentation",
@@ -14,6 +12,10 @@ async function createConfig() {
     onBrokenLinks: "throw",
     onBrokenMarkdownLinks: "warn",
     favicon: "img/favicon.png",
+
+    markdown: {
+      mermaid: true,
+    },
 
     // Even if you don't use internalization, you can use this field to set useful
     // metadata like html lang. For example, if your site is Chinese, you may want
@@ -24,6 +26,10 @@ async function createConfig() {
     },
 
     plugins: [require.resolve("docusaurus-lunr-search")],
+
+    themes: ["@docusaurus/theme-mermaid"],
+
+    clientModules: [require.resolve("./src/mermaid-icons.js")],
 
     presets: [
       [
@@ -36,7 +42,6 @@ async function createConfig() {
             // Please change this to your repo.
             // Remove this to remove the "edit this page" links.
             editUrl: "https://github.com/bitwarden/contributing-docs/tree/main/",
-            remarkPlugins: [[remarkKroki, { server: "https://kroki.io/" }]],
           },
           theme: {
             customCss: require.resolve("./src/css/custom.css"),

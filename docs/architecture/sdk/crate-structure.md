@@ -19,47 +19,48 @@ categories:
 
 From top to bottom, the dependency flow looks like this:
 
-```kroki type=plantuml
-@startuml
-skinparam componentStyle rectangle
+```mermaid
+flowchart TB
+    bindings["Bindings (WASM & UniFFI)"]
 
-component "Bindings (WASM & UniFFI)" as bindings #e1f5ff
+    subgraph appInterfaces ["Application Interfaces"]
+        passwordMgr["Password Manager"]
+        secretsMgr["Secrets Manager"]
+    end
 
-package "Application Interfaces" #fff3e0 {
-    component "Password Manager" as passwordMgr
-    component "Secrets Manager" as secretsMgr
-}
+    subgraph features ["Features"]
+        auth["Auth"]
+        vault["Vault"]
+        send["Send"]
+        generators["Generators"]
+        export["Exporters"]
+    end
 
-package "Features" #f3e5f5 {
-    component "Auth" as auth
-    component "Vault" as vault
-    component "Send" as send
-    component "Generators" as generators
-    component "Exporters" as export
-}
+    core["Core"]
 
-component "Core" as core #e8f5e9
+    bindings --> passwordMgr
+    bindings --> secretsMgr
+    bindings --> core
 
-bindings --> passwordMgr
-bindings --> secretsMgr
-bindings --> core
+    passwordMgr --> auth
+    passwordMgr --> vault
+    passwordMgr --> send
+    passwordMgr --> generators
+    passwordMgr --> export
+    passwordMgr --> core
 
-passwordMgr --> auth
-passwordMgr --> vault
-passwordMgr --> send
-passwordMgr --> generators
-passwordMgr --> export
-passwordMgr --> core
+    secretsMgr --> core
 
-secretsMgr --> core
+    auth --> core
+    vault --> core
+    send --> core
+    generators --> core
+    export --> core
 
-auth --> core
-vault --> core
-send --> core
-generators --> core
-export --> core
-
-@enduml
+    style bindings fill:#e1f5ff
+    style core fill:#e8f5e9
+    style appInterfaces fill:#fff3e0
+    style features fill:#f3e5f5
 ```
 
 ## Bindings

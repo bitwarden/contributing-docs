@@ -8,23 +8,24 @@ This document describes the internal data model used by the different client app
 several dedicated models to represent our data layer. With a slightly complicated data
 transformation pipeline.
 
-```kroki type=plantuml
-@startuml
-skinparam componentStyle rectangle
-component [""<Domain>""] as Domain
-component [""<Domain><Modifier>""Request] As Request
-component [""<Domain>""Response] as Response
-component [""<Domain>""View] as View
-component [""<Domain>""Export] as Export
-component [""<Domain>""Data] as Data
-
-[Response] -r-> [Data]
-[Data] <-r-> [Domain]
-[Domain] -r-> [Request]
-[Domain] <--> [View]
-[Domain] <--> [Export]
-[Export] -r-> [View]
-@enduml
+```mermaid
+---
+config:
+  layout: elk
+---
+flowchart LR
+    Response["&lt;Domain&gt;Response"]
+    Data["&lt;Domain&gt;Data"]
+    Domain["&lt;Domain&gt;"]
+    Request["&lt;Domain&gt;&lt;Modifier&gt;Request"]
+    Export["&lt;Domain&gt;Export"]
+    View["&lt;Domain&gt;View"]
+    Response --> Data
+    Data <--> Domain
+    Domain --> Request
+    Domain <--> Export
+    Domain <--> View
+    Export --> View
 ```
 
 ## Domain

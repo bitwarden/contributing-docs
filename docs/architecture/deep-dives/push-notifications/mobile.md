@@ -42,20 +42,20 @@ device when the appropriate user triggers them on another device.
 
 #### Cloud implementation
 
-```kroki type=plantuml
-@startuml
-participant MC_LS as "Mobile Device"
-participant PNS as "Platform Notification Service"
-participant API as "Bitwarden Cloud API"
-participant NH as "Azure Notification Hub"
+```mermaid
+sequenceDiagram
+    participant MC_LS as Mobile Device
+    participant PNS as Platform Notification Service
+    participant API as Bitwarden Cloud API
+    participant NH as Azure Notification Hub
 
-group Register for token
-MC_LS->>PNS: Register
-PNS->>MC_LS: Push Token
-MC_LS->>API: Store Push Token with Device and User
-API->>NH: Associate Push Token with Device and User
-end
-@enduml
+    rect rgba(128,128,128,0.1)
+        Note over MC_LS,NH: Register for token
+        MC_LS->>PNS: Register
+        PNS->>MC_LS: Push Token
+        MC_LS->>API: Store Push Token with Device and User
+        API->>NH: Associate Push Token with Device and User
+    end
 ```
 
 If we are running a Bitwarden cloud instance, the Bitwarden API is responsible for directly
@@ -65,22 +65,22 @@ communicating with the Azure Notification Hub to register the push token. This i
 
 #### Self-hosted implementation
 
-```kroki type=plantuml
-@startuml
- participant MC_LS as "Mobile Device"
-    participant PNS as "Platform Notification Service"
-    participant API as "Self-Hosted API"
-    participant BWAPI as "Bitwarden Cloud API"
-    participant NH as "Azure Notification Hub"
+```mermaid
+sequenceDiagram
+    participant MC_LS as Mobile Device
+    participant PNS as Platform Notification Service
+    participant API as Self-Hosted API
+    participant BWAPI as Bitwarden Cloud API
+    participant NH as Azure Notification Hub
 
-    group Register
+    rect rgba(128,128,128,0.1)
+        Note over MC_LS,NH: Register
         MC_LS->>PNS: Register
         PNS->>MC_LS: Push Token
         MC_LS->>API: Store Push Token with Device and User
         API->>BWAPI: RelayPushRegistration sends message to /push/register
         BWAPI->>NH: Associate Token with Device and User (same as Cloud)
     end
-@enduml
 ```
 
 For self-hosted instances, the self-hosted instance cannot communicate directly with Bitwarden's
@@ -118,26 +118,27 @@ responsible for sending push notifications to all mobile clients to make them aw
 
 #### Cloud implementation
 
-```kroki type=plantuml
-@startuml
-participant MC_LS as "Mobile Device"
-participant WC as "Other Client"
-participant PNS as "Platform Notification Service"
-participant API as "Bitwarden Cloud API"
-participant NH as "Azure Notification Hub"
+```mermaid
+sequenceDiagram
+    participant WC as Other Client
+    participant API as Bitwarden Cloud API
+    participant NH as Azure Notification Hub
+    participant PNS as Platform Notification Service
+    participant MC_LS as Mobile Device
 
-group Other client updates data
-WC->>API: Update Data
-API->>NH: Send Message to Hub
-end
+    rect rgba(128,128,128,0.1)
+        Note over WC,MC_LS: Other client updates data
+        WC->>API: Update Data
+        API->>NH: Send Message to Hub
+    end
 
-group Mobile message distribution
-NH->>PNS: Send Message to Clients by Push Token
-PNS->>MC_LS: OnMessageAsync()
-MC_LS->>API: Request data
-API->>MC_LS: Return data requested
-end
-@enduml
+    rect rgba(128,128,128,0.1)
+        Note over WC,MC_LS: Mobile message distribution
+        NH->>PNS: Send Message to Clients by Push Token
+        PNS->>MC_LS: OnMessageAsync()
+        MC_LS->>API: Request data
+        API->>MC_LS: Return data requested
+    end
 ```
 
 For notifications to mobile devices, this is handled in the
@@ -154,29 +155,30 @@ device when the user _and_ device match.
 
 #### Self-hosted implementation
 
-```kroki type=plantuml
-@startuml
- participant MC_LS as "Mobile Device"
-    participant WC as "Other Client"
-    participant PNS as "Platform Notification Service"
-    participant API as "Self-Hosted API"
-    participant SHN as "Self-Hosted Notification API"
-    participant BWAPI as "Bitwarden Cloud API"
-    participant NH as "Azure Notification Hub"
+```mermaid
+sequenceDiagram
+    participant WC as Other Client
+    participant API as Self-Hosted API
+    participant SHN as Self-Hosted Notification API
+    participant BWAPI as Bitwarden Cloud API
+    participant NH as Azure Notification Hub
+    participant PNS as Platform Notification Service
+    participant MC_LS as Mobile Device
 
-    Group Other client updates data
+    rect rgba(128,128,128,0.1)
+        Note over WC,MC_LS: Other client updates data
         WC->>API: Update Data
         API->>BWAPI: RelayPushNotification sends message to /push/send
         BWAPI->>NH: Send Message to Hub (same as Cloud)
     end
 
-    group Update clients
+    rect rgba(128,128,128,0.1)
+        Note over WC,MC_LS: Update clients
         NH->>PNS: Send Message to Clients
         PNS->>MC_LS: OnMessageAsync()
         MC_LS->>API: Request data
         API->>MC_LS: Return data requested by message
     end
-@enduml
 ```
 
 Just as with the registration of the push token, the self-hosted instance uses the

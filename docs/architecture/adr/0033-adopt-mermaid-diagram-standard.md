@@ -1,6 +1,6 @@
 ---
 adr: "0033"
-status: Proposed
+status: Accepted
 date: 2026-07-16
 tags: [clients, mobile, server, sdk]
 ---
@@ -36,10 +36,10 @@ audience-specific views -- requires substantial rework per audience in practice.
 
 ## Decision outcome
 
-Chosen option: **Mermaid with defined conventions**, published as the diagram standard on the
-contributing site. The standard is the living reference. Its rules evolve by PR without superseding
-this decision and this ADR is superseded only if the chosen option itself changes. A snapshot of the
-rules at adoption:
+Chosen option: **Mermaid with defined conventions**, published as the
+[diagram standard](../../contributing/diagrams.md) on the contributing site. The standard is the
+living reference and its rules evolve by PR without superseding this decision. This ADR is
+superseded only if the chosen option itself changes. A snapshot of the rules at adoption:
 
 1. Diagrams are Mermaid source text, nothing else: as Mermaid code blocks, or, if in Confluence, via
    Macro Pack's Mermaid diagram in text-input mode.
@@ -80,12 +80,12 @@ rules at adoption:
 
 ### Plan
 
-[PR #834](https://github.com/bitwarden/contributing-docs/pull/834) publishes the standard at
-Contributing › Diagrams and converts the contributing site's existing diagrams (PlantUML/Kroki
-sources, static diagram assets, and source-less images) to comply, so the site itself becomes the
-reference implementation of the standard. Elsewhere, legacy diagrams convert when their docs are
-next touched: images and non-Mermaid sources in repos become Mermaid code blocks, and Confluence
-attachments and images become Macro Pack's Mermaid diagram in text-input mode.
+The standard is published at Contributing › Diagrams, and the bulk of the contributing site's
+existing diagrams (PlantUML/Kroki sources, static diagram assets, and source-less images) have been
+converted to comply, so the site becomes the reference implementation of the standard, with the
+exceptions noted below. Elsewhere, legacy diagrams convert when their docs are next touched: images
+and non-Mermaid sources in repos become Mermaid code blocks, and Confluence attachments and images
+become Macro Pack's Mermaid diagram in text-input mode.
 
 The remaining adoption work is delegated to its owners:
 

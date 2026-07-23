@@ -33,44 +33,40 @@ For readability, ubiquitous app dependencies to `common` are hidden.
 
 :::
 
-```kroki type=plantuml
-@startuml
-skinparam BackgroundColor transparent
-skinparam componentStyle rectangle
-skinparam linetype ortho
+```mermaid
+---
+title: Simplified Package Diagram
+---
+flowchart TB
+    subgraph license ["Bitwarden License"]
+        BitWeb["Bit Web"]
+    end
 
-title Simplified Package Diagram
+    subgraph apps
+        WebVault["Web Vault"]
+        Desktop["Desktop"]
+        BrowserExtension["Browser Extension"]
+        CLI["CLI"]
+    end
 
-component "Bitwarden License" {
-  component "Bit Web"
-}
+    subgraph libs
+        Common["Common"]
+        Angular["Angular"]
+        Node["Node"]
+    end
 
-component apps {
-  component "Web Vault"
-  component "Desktop"
-  component "Browser Extension"
-  component "CLI"
-}
+    BitWeb --> WebVault
+    BitWeb --> Angular
 
-component libs {
-  component "Common"
-  component "Angular"
-  component "Node"
-}
+    WebVault --> Angular
 
-[Bit Web] --> [Web Vault]
-[Bit Web] --[norank]> [Angular]
+    BrowserExtension --> Angular
 
-[Web Vault] --> [Angular]
+    CLI --> Node
 
-[Browser Extension] --> [Angular]
+    Angular --> Common
 
-[CLI] --> [Node]
+    Desktop --> Angular
 
-[Angular] --> [Common]
-
-[Desktop] --> [Angular]
-
-[Node] --> [Common]
-@enduml
+    Node --> Common
 ```

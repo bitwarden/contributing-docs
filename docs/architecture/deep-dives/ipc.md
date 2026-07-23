@@ -39,34 +39,20 @@ high-level logic of the IPC communication. This includes the serialization and d
 messages, as well as the encryption and decryption of messages. They depend on the platform-specific
 parts to integrate with the underlying platform's IPC mechanisms.
 
-```kroki type=plantuml
-@startuml
-skinparam BackgroundColor transparent
-skinparam componentStyle rectangle
-skinparam linetype ortho
-skinparam Padding 7
-hide members
+```mermaid
+flowchart TB
+    IpcClient["IpcClient"]
+    CommunicationBackend(["CommunicationBackend"])
+    CryptoProvider(["CryptoProvider"])
+    SessionRepository(["SessionRepository"])
+    NoEncryptionCryptoProvider["NoEncryptionCryptoProvider"]
 
-package "Platform agnostic" <<frame>> {
-    struct IpcClient
-
-    interface CommunicationBackend
-    interface CryptoProvider
-    interface SessionRepository
-
-    IpcClient --> CommunicationBackend: owns
-    IpcClient --> CryptoProvider: owns
-    IpcClient --> SessionRepository: owns
-
-    CryptoProvider .l.> CommunicationBackend: uses
-    CryptoProvider .r.> SessionRepository: uses
-
-    struct NoEncryptionCryptoProvider
-
-    CryptoProvider <|.. NoEncryptionCryptoProvider: implements
-}
-
-@enduml
+    IpcClient -->|owns| CommunicationBackend
+    IpcClient -->|owns| CryptoProvider
+    IpcClient -->|owns| SessionRepository
+    CryptoProvider -.->|uses| CommunicationBackend
+    CryptoProvider -.->|uses| SessionRepository
+    NoEncryptionCryptoProvider -.->|implements| CryptoProvider
 ```
 
 ### Platform-specific
@@ -78,47 +64,32 @@ details of the IPC communication. Below is an illustration of the platform-speci
 for the WebAssembly (WASM) platform, which uses JavaScript to implement how messages are sent and
 received:
 
-```kroki type=plantuml
-@startuml
-skinparam BackgroundColor transparent
-skinparam componentStyle rectangle
-skinparam linetype ortho
-skinparam Padding 7
-hide members
-
-package SDK <<frame>> {
-    package "Platform agnostic" <<frame>> {
-        struct IpcClient
-
-        interface CommunicationBackend
-
-        IpcClient --> CommunicationBackend
-    }
-
-    package "Platform specific (WASM)" <<frame>> {
-        struct JsCommunicationBackend
-    }
-}
-
-package JavaScript <<frame>> {
-    class WebIpcService
-    class IpcBackgroundService
-}
-
-JsCommunicationBackend -left|> CommunicationBackend
-
-note bottom of JsCommunicationBackend
-  JsCommunicationBackend converts the Rust trait into a JavaScript-compatible interface
-end note
-
-WebIpcService .up|> JsCommunicationBackend: implements
-IpcBackgroundService .up|> JsCommunicationBackend: implements
-
-WebIpcService -[hidden]-> IpcBackgroundService
-JavaScript -down[hidden]-> SDK
-
-@enduml
-
+```mermaid
+---
+config:
+  layout: elk
+---
+flowchart TB
+    subgraph sdk ["SDK"]
+        subgraph agnostic ["Platform agnostic"]
+            IpcClient["IpcClient"]
+            CommunicationBackend(["CommunicationBackend"])
+            IpcClient -->|owns| CommunicationBackend
+        end
+        subgraph wasm ["Platform specific (WASM)"]
+            JsCommunicationBackend["JsCommunicationBackend"]
+        end
+    end
+    subgraph js ["JavaScript"]
+        WebIpcService["WebIpcService"]
+        IpcBackgroundService["IpcBackgroundService"]
+    end
+    JsCommunicationBackend -.->|implements| CommunicationBackend
+    WebIpcService -.->|implements| JsCommunicationBackend
+    IpcBackgroundService -.->|implements| JsCommunicationBackend
+    jsNote["JsCommunicationBackend converts the Rust trait<br/>into a JavaScript-compatible interface"]
+    JsCommunicationBackend -.- jsNote
+    style jsNote fill:#fffbe6,stroke:#e0c200
 ```
 
 ## Security
@@ -181,33 +152,27 @@ implementations to define how messages are sent across the wire. This allows the
 flexible and adaptable to different platforms and use cases, while still providing a consistent
 interface for consumers.
 
-```kroki type=plantuml
-@startuml
-skinparam linetype ortho
-skinparam Padding 7
-skinparam componentStyle rectangle
-
-component OutgoingIpcMessage {
-    component "topic: Option<String>" as outgoing_topic
-    component "destination: Endpoint" as outgoing_destination
-    component "payload: Vec<u8>" as outgoing_payload
-
-    outgoing_topic -[hidden]-> outgoing_destination
-    outgoing_destination -[hidden]-> outgoing_payload
-}
-
-component IncomingIpcMessage {
-    component "topic: Option<String>" as incoming_topic
-    component "destination: Endpoint" as incoming_destination
-    component "source: Endpoint" as incoming_source
-    component "payload: Vec<u8>" as incoming_payload
-
-    incoming_topic -[hidden]-> incoming_destination
-    incoming_destination -[hidden]-> incoming_source
-    incoming_source -[hidden]-> incoming_payload
-}
-
-@enduml
+```mermaid
+---
+config:
+  layout: elk
+---
+flowchart TB
+    subgraph outgoing ["OutgoingIpcMessage"]
+        direction TB
+        o_topic["topic: Option&lt;String&gt;"]
+        o_dest["destination: Endpoint"]
+        o_payload["payload: Vec&lt;u8&gt;"]
+        o_topic ~~~ o_dest ~~~ o_payload
+    end
+    subgraph incoming ["IncomingIpcMessage"]
+        direction TB
+        i_topic["topic: Option&lt;String&gt;"]
+        i_dest["destination: Endpoint"]
+        i_source["source: Endpoint"]
+        i_payload["payload: Vec&lt;u8&gt;"]
+        i_topic ~~~ i_dest ~~~ i_source ~~~ i_payload
+    end
 ```
 
 ### Request / Response
@@ -222,46 +187,37 @@ data being sent in the request. The framework will then serialize the response a
 response message will contain the request identifier, type, and payload, allowing the framework to
 match the response with the original request and handle it accordingly.
 
-```kroki type=plantuml
-@startuml
-skinparam linetype ortho
-skinparam Padding 7
-skinparam componentStyle rectangle
-
-component OutgoingIpcMessage {
-    component "topic: "RpcRequestMessage"" as outgoing_topic
-    component "destination: Endpoint" as outgoing_destination
-    component "RpcRequestMessage" <<payload>> as outgoing_payload {
-        component "request_id: String" as outgoing_rpc_id
-        component "request_type: String" as outgoing_rpc_type
-        component "request: Vec<u8>" as outgoing_rpc_data
-
-        outgoing_rpc_id -[hidden]-> outgoing_rpc_type
-        outgoing_rpc_type -[hidden]-> outgoing_rpc_data
-    }
-
-    outgoing_topic -[hidden]-> outgoing_destination
-    outgoing_destination -[hidden]-> outgoing_payload
-}
-
-component IncomingIpcMessage {
-    component "topic: "RpcResponseMessage"" as incoming_topic
-    component "destination: Endpoint" as incoming_destination
-    component "source: Endpoint" as incoming_source
-
-    component "RpcResponseMessage" <<payload>> as incoming_payload {
-        component "request_id: String" as incoming_rpc_id
-        component "request_type: String" as incoming_rpc_type
-        component "request: Vec<u8>" as incoming_rpc_data
-
-        incoming_rpc_id -[hidden]-> incoming_rpc_type
-        incoming_rpc_type -[hidden]-> incoming_rpc_data
-    }
-
-    incoming_topic -[hidden]-> incoming_destination
-    incoming_destination -[hidden]-> incoming_source
-    incoming_source -[hidden]-> incoming_payload
-}
-
-@enduml
+```mermaid
+---
+config:
+  layout: elk
+---
+flowchart TB
+    subgraph outgoing ["OutgoingIpcMessage"]
+        direction TB
+        o_topic["topic: &quot;RpcRequestMessage&quot;"]
+        o_dest["destination: Endpoint"]
+        subgraph o_payload ["payload: RpcRequestMessage"]
+            direction TB
+            o_id["request_id: String"]
+            o_type["request_type: String"]
+            o_req["request: Vec&lt;u8&gt;"]
+            o_id ~~~ o_type ~~~ o_req
+        end
+        o_topic ~~~ o_dest ~~~ o_payload
+    end
+    subgraph incoming ["IncomingIpcMessage"]
+        direction TB
+        i_topic["topic: &quot;RpcResponseMessage&quot;"]
+        i_dest["destination: Endpoint"]
+        i_source["source: Endpoint"]
+        subgraph i_payload ["payload: RpcResponseMessage"]
+            direction TB
+            i_id["request_id: String"]
+            i_type["request_type: String"]
+            i_req["request: Vec&lt;u8&gt;"]
+            i_id ~~~ i_type ~~~ i_req
+        end
+        i_topic ~~~ i_dest ~~~ i_source ~~~ i_payload
+    end
 ```
