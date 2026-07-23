@@ -55,8 +55,6 @@ This separation of concerns means:
   - e.g. `UserView.sql`, `ApiKeyDetailsView.sql`
 - **Functions**: `{EntityName}{Purpose}.sql`
   - e.g. `UserCollectionDetails.sql`
-- **User Defined Types**: `{TypeName}.sql`
-  - e.g. `GuidIdArray.sql`
 
 :::tip Versioning
 
@@ -83,11 +81,17 @@ These standards should be applied across any T-SQL scripts that you write.
   makes code changes easily detectable
 - **Blank lines**: Separate sections of code with at least one blank line
 - **Commas**: Commas should be placed at the right end of the line
-- **Parentheses**: Parentheses should be vertically aligned with spanning multiple lines
+- **Parentheses**: Parentheses should be vertically aligned when spanning multiple lines
 - **Data type modifiers**: Omit the space between type name and opening parenthesis (e.g.,
   `NVARCHAR(50)` not `NVARCHAR (50)`, `DATETIME2(7)` not `DATETIME2 (7)`)
+- **Naming**: Use full, unabbreviated names throughout — object names, column names, parameters, and
+  descriptors (e.g., `OrganizationId` not `OrgId`)
 - **ID generation**: Use `CoreHelpers.GenerateComb()` in application code, not `NEWID()` in the
   database -- see [GUID generation](./csharp#guid-generation)
+- **Datetime generation**: Generate datetime values in application code and pass them as parameters
+  (e.g., `@RevisionDate`), not using SQL functions (`SYSUTCDATETIME()`, `GETUTCDATE()`) — this keeps
+  timestamp generation consistent and testable. See the [accepted exceptions](#datetime-values)
+  documented in the stored procedures section.
 
 ### `SELECT` statements
 
@@ -272,19 +276,34 @@ LEFT JOIN
 
 ### Stored procedures
 
-- **Stored Procedure Name**: `{EntityName}_{Action}` format (e.g., `[dbo].[User_ReadById]`)
-  - EntityName: The main table or concept (e.g. User, Organization, Cipher)
-  - Action: What the procedure does (e.g. Create, ReadById, DeleteMany)
-- **Parameters**: Start with `@` and use PascalCase (e.g., `@UserId`, `@OrganizationId`)
-- **OUTPUT parameters**: Explicitly declare with `OUTPUT` keyword
+#### Naming
 
-:::tip Example of common CRUD operations
+Stored procedures follow the `{EntityName}_{Action}` format (e.g., `[dbo].[User_ReadById]`):
 
-- **Create**: `{EntityName}_Create` procedures
-- **Read**: `{EntityName}_ReadById`, `{EntityName}_ReadBy{Criteria}` procedures
-- **Read Many**: `{EntityName}_ReadManyByIds`, `{EntityName}_ReadManyBy{Criteria}` procedures
-- **Update**: `{EntityName}_Update` procedures
-- **Delete**: `{EntityName}_DeleteById`, `{EntityName}_Delete` procedures
+- **EntityName**: The main table or concept the procedure operates on (e.g., `User`, `Organization`,
+  `Cipher`)
+- **Action**: A verb from the standard list below, optionally followed by a short descriptor that
+  clarifies what the procedure does
+
+**Standard action verbs**
+
+| Verb         | Description             |
+| ------------ | ----------------------- |
+| `Create`     | Insert a new record     |
+| `Read`       | Select a single record  |
+| `ReadMany`   | Select multiple records |
+| `Update`     | Modify a record         |
+| `UpdateMany` | Modify multiple records |
+| `Delete`     | Remove a record         |
+| `DeleteMany` | Remove multiple records |
+
+:::tip When an operation is more specific than a standard verb alone, append a short descriptor:
+
+- `User_ReadById` — read filtered by a specific field
+- `User_ReadManyByOrganizationId` — filtered bulk read
+- `OrganizationUser_UpdateStatus` — update a specific field
+- `OrganizationUser_UpdateManyRevoke` — bulk revoke
+- `User_UpdateApplicationData` — update a named subset of fields
 
 :::
 
@@ -299,6 +318,8 @@ These are incorrect and should not be used as a reference. Always use `Read` or 
 
 #### Basic structure
 
+- **Parameters**: Start with `@` and use PascalCase (e.g., `@UserId`, `@OrganizationId`)
+- **OUTPUT parameters**: Explicitly declare with `OUTPUT` keyword
 - Wrap the entire procedure body in `BEGIN`/`END` statements
 
 ```sql
@@ -397,7 +418,7 @@ BEGIN
     WHERE
         [OrganizationId] = @OrganizationId
         AND [Status] = 2 -- 2 = Confirmed
-        AND [Type] = @Role
+        AND [Role] = @Role
 END
 ```
 
@@ -407,6 +428,9 @@ END
 - Align parameters with consistent indentation (4 spaces)
 - Default values on same line as parameter
 - `OUTPUT` parameters clearly marked
+- Pass values in as parameters from application code rather than hard-coding them or generating them
+  with a SQL function inside the procedure (e.g., `GETUTCDATE()`) -- see
+  [accepted exceptions](#datetime-values) for cases where a SQL function is appropriate
 
 :::warning Default parameter values
 
@@ -418,6 +442,69 @@ backward compatibility and ensure existing code can be called without modificati
 Use `SET NOCOUNT ON` to prevent the automatic return of row count messages, which improves
 performance and ensures consistent behavior across different client applications that might handle
 these messages differently.
+
+#### Datetime values
+
+As noted in the general standards, datetime values must be generated in application code and passed
+as parameters. Do **not** use `SYSUTCDATETIME()` or `GETUTCDATE()` inline:
+
+```sql
+-- Wrong
+UPDATE
+    [dbo].[Entity]
+SET
+    [RevisionDate] = GETUTCDATE()
+WHERE
+    [Id] = @Id
+
+-- Correct
+UPDATE
+    [dbo].[Entity]
+SET
+    [RevisionDate] = @RevisionDate
+WHERE
+    [Id] = @Id
+```
+
+**Accepted exceptions**
+
+There are specific patterns in the codebase where using a SQL datetime function is intentional and
+correct:
+
+1. **Account revision date bumping** — The `User_BumpAccountRevisionDate*` family of procedures
+   exist solely to stamp `[AccountRevisionDate]` to the current UTC time atomically, without a
+   round-trip to application code.
+
+2. **Bulk operations requiring a consistent timestamp** — When a procedure must apply the same
+   timestamp across multiple rows or statements in one transaction, declare a local variable once
+   and reuse it throughout the procedure:
+
+   ```sql
+   DECLARE @UtcNow DATETIME2(7) = SYSUTCDATETIME();
+
+   UPDATE
+       [dbo].[Cipher]
+   SET
+       [DeletedDate] = @UtcNow,
+       [RevisionDate] = @UtcNow
+   WHERE
+       [Id] IN (SELECT [Id] FROM @Ids)
+   ```
+
+3. **`WHERE` clause predicates** — Comparing against the current time in a filter is acceptable
+   (e.g., deleting expired records, skipping rows whose date has not changed since yesterday):
+
+   ```sql
+   WHERE
+       [ExpirationDate] < GETUTCDATE()
+   ```
+
+4. **Nullable parameter fallbacks** — When a parameter is intentionally nullable and the procedure
+   should default to the current time when no value is supplied:
+
+   ```sql
+   SET @Created = COALESCE(@Created, GETUTCDATE())
+   ```
 
 #### `INSERT` statements
 
@@ -453,6 +540,88 @@ SET
     [Column3] = @Parameter3
 WHERE
     [Id] = @Id
+```
+
+#### Explicit transactions
+
+Only wrap statements in an explicit `BEGIN TRANSACTION` / `COMMIT TRANSACTION` when a procedure
+performs multiple statements that must all succeed or all fail together. A single `INSERT`,
+`UPDATE`, or `DELETE` statement is already atomic on its own -- SQL Server implicitly wraps every
+individual statement in a transaction, so adding an explicit one around it adds nothing except
+unnecessary lock hold time and noise. When a transaction is needed, keep its scope as small as
+possible -- only the statements that need to be atomic, not unrelated reads or `EXEC` calls that
+don't need to roll back with them.
+
+:::warning Do not wrap a single statement in an explicit transaction
+
+Several `Delete` procedures in the codebase wrap a lone `DELETE` in an explicit transaction. These
+should not be used as a reference:
+
+```sql
+-- Wrong -- the transaction wraps a single statement and adds nothing
+CREATE PROCEDURE [dbo].[EntityName_DeleteById]
+    @Id UNIQUEIDENTIFIER
+AS
+BEGIN
+    SET NOCOUNT ON
+
+    BEGIN TRANSACTION
+
+    DELETE
+    FROM
+        [dbo].[EntityName]
+    WHERE
+        [Id] = @Id
+
+    COMMIT TRANSACTION
+END
+```
+
+```sql
+-- Correct -- no explicit transaction needed
+CREATE PROCEDURE [dbo].[EntityName_DeleteById]
+    @Id UNIQUEIDENTIFIER
+AS
+BEGIN
+    SET NOCOUNT ON
+
+    DELETE
+    FROM
+        [dbo].[EntityName]
+    WHERE
+        [Id] = @Id
+END
+```
+
+:::
+
+Use an explicit transaction when a procedure deletes (or otherwise modifies) rows across multiple
+related tables that must be kept in sync -- e.g. deleting a parent record along with its dependent
+child records:
+
+```sql
+CREATE PROCEDURE [dbo].[EntityName_DeleteById]
+    @Id UNIQUEIDENTIFIER
+AS
+BEGIN
+    SET NOCOUNT ON
+
+    BEGIN TRANSACTION
+
+    DELETE
+    FROM
+        [dbo].[ChildEntity]
+    WHERE
+        [EntityNameId] = @Id
+
+    DELETE
+    FROM
+        [dbo].[EntityName]
+    WHERE
+        [Id] = @Id
+
+    COMMIT TRANSACTION
+END
 ```
 
 ### Tables
@@ -495,6 +664,17 @@ CREATE TABLE [dbo].[TableName]
     [Column6]       BIT                 NOT NULL CONSTRAINT [DF_TableName_Column6] DEFAULT (1),
     CONSTRAINT [PK_TableName] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
+```
+
+### Indexes
+
+- **Index Name**: `IX_{TableName}_{ColumnName(s)}` (e.g., `[IX_User_Email]`)
+  - The name should clearly indicate the table and the columns being indexed
+
+```sql
+CREATE NONCLUSTERED INDEX [IX_OrganizationUser_UserIdOrganizationIdStatus]
+   ON [dbo].[OrganizationUser]([UserId] ASC, [OrganizationId] ASC, [Status] ASC)
+   INCLUDE ([AccessAll])
 ```
 
 ### Views
@@ -570,7 +750,7 @@ WHERE
 ### User defined types
 
 New user defined types should not be created. The following existing types may be used as
-table-valued parameters in stored procedures:
+table-valued parameters in stored procedures for simple, scalar lists:
 
 - **`[dbo].[GuidIdArray]`** — a single-column table of `UNIQUEIDENTIFIER` values. Use when passing a
   list of IDs to a stored procedure (e.g., bulk reads or deletes).
@@ -581,16 +761,58 @@ table-valued parameters in stored procedures:
 - **`[dbo].[EmailArray]`** — a single-column table of `NVARCHAR(256)` email addresses. Use when
   passing a list of emails to a stored procedure.
 
-### Indexes
+For anything beyond these scalar list shapes -- multi-column rows, or a shape that may need new
+properties over time -- serialize the data as JSON in application code and pass it as a single
+`NVARCHAR(MAX)` parameter, rather than creating a new TVP.
 
-- **Index Name**: `IX_{TableName}_{ColumnName(s)}` (e.g., `[IX_User_Email]`)
-  - The name should clearly indicate the table and the columns being indexed
+#### Passing structured data as JSON
+
+Use `OPENJSON` with an explicit `WITH` clause to shred a JSON array of objects into a typed table.
+This is the preferred pattern for bulk `INSERT`/`UPDATE` operations that need more than one column
+per row:
 
 ```sql
-CREATE NONCLUSTERED INDEX [IX_OrganizationUser_UserIdOrganizationIdStatus]
-   ON [dbo].[OrganizationUser]([UserId] ASC, [OrganizationId] ASC, [Status] ASC)
-   INCLUDE ([AccessAll])
+CREATE PROCEDURE [dbo].[EntityName_CreateMany]
+    @EntityNameJson NVARCHAR(MAX)
+AS
+BEGIN
+    SET NOCOUNT ON
+
+    INSERT INTO [dbo].[EntityName]
+    (
+        [Id],
+        [Name],
+        [CreationDate],
+        [RevisionDate]
+    )
+    SELECT
+        [Id],
+        [Name],
+        [CreationDate],
+        [RevisionDate]
+    FROM
+        OPENJSON(@EntityNameJson)
+        WITH (
+            [Id]           UNIQUEIDENTIFIER '$.Id',
+            [Name]         NVARCHAR(256)     '$.Name',
+            [CreationDate] DATETIME2(7)      '$.CreationDate',
+            [RevisionDate] DATETIME2(7)      '$.RevisionDate'
+        )
+END
 ```
+
+In application code, serialize the collection with `JsonSerializer.Serialize()` and pass the result
+as the parameter value; Dapper maps it to the `NVARCHAR(MAX)` parameter like any other string.
+
+:::tip When to use JSON vs. an existing TVP
+
+- Use the existing TVPs (`GuidIdArray`, `TwoGuidIdArray`, `EmailArray`) for simple, single- or
+  two-column lists of scalar values.
+- Use a JSON parameter when each row needs more than two columns, or when the row shape may need to
+  gain properties over time -- adding a property to a JSON payload doesn't require a schema change,
+  unlike adding a column to a TVP.
+
+:::
 
 ## Error handling
 
@@ -641,6 +863,14 @@ END CATCH;
 - Don't comment unnecessarily, such as commenting that an insert statement is about to be executed
 
 ## Deployment scripts
+
+:::note Evolutionary database design
+
+Bitwarden follows [Evolutionary Database Design (EDD)](../database-migrations/edd). If a deployment
+fails and server code is rolled back, database changes are **not** rolled back with it. This means
+all migrations must support both the current release and the next release simultaneously.
+
+:::
 
 There are specific ways migration scripts should be structured. We do so to adhere to the following
 guiding principles:
@@ -804,7 +1034,7 @@ GO
 
 #### Creating or modifying a view
 
-We recommend using the `CREATE OR ALTER` syntax for adding or modifying a view.
+Use the `CREATE OR ALTER` syntax for adding or modifying a view.
 
 ```sql
 CREATE OR ALTER VIEW [dbo].[{view_name}]
@@ -818,7 +1048,7 @@ GO
 
 #### Deleting a view
 
-When deleting a view, use `IF EXISTS` to avoid an error if the table doesn't exist.
+When deleting a view, use `IF EXISTS` to avoid an error if the view doesn't exist.
 
 ```sql
 DROP IF EXISTS [dbo].[{view_name}]
@@ -842,8 +1072,7 @@ GO
 
 #### Creating or modifying a function or stored procedure
 
-We recommend using the `CREATE OR ALTER` syntax for adding or modifying a function or stored
-procedure.
+Use the `CREATE OR ALTER` syntax for adding or modifying a function or stored procedure.
 
 ```sql
 CREATE OR ALTER {PROCEDURE|FUNCTION} [dbo].[{sproc_or_func_name}]
