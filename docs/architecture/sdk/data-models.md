@@ -71,18 +71,19 @@ The SDK also maintains internal models:
 - **DTO**: Data Transfer Objects are used to transfer data between layers of the SDK. They are
   generally used to decouple the domain models from the API models.
 
-```kroki type=plantuml
-@startuml
-skinparam componentStyle rectangle
-component [""<Domain>""] as Domain
-component [""<API><Modifier>""Requests] As Requests
-component [""<API>""Response] as Response
-component [""<Domain>""Views] as Views
-component [""<Domain>""DTOs] as DTOs
-
-[Response] -r-> [Domain]
-[Domain] -r-> [Requests]
-[Domain] <--> [Views]
-[Domain] <--> [DTOs]
-@enduml
+```mermaid
+---
+config:
+  layout: elk
+---
+flowchart LR
+    Response["&lt;API&gt;Response"]
+    Domain["&lt;Domain&gt;"]
+    Requests["&lt;API&gt;&lt;Modifier&gt;Requests"]
+    Views["&lt;Domain&gt;Views"]
+    DTOs["&lt;Domain&gt;DTOs"]
+    Response --> Domain
+    Domain --> Requests
+    Domain <--> Views
+    Domain <--> DTOs
 ```

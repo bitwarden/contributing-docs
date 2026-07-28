@@ -37,34 +37,28 @@ access the specific domain in the _State Service_.
 Below is an example how a _domain component_ and _domain service_ interacts with the _State
 Service_.
 
-```kroki type=plantuml
-@startuml
-skinparam BackgroundColor transparent
-skinparam componentStyle rectangle
+```mermaid
+---
+title: State Service
+---
+flowchart TB
+    subgraph exampleDomain ["Example Domain"]
+        components["Components"]
+        domain["Domain Service"]
+    end
 
-title State Service
+    state["State Service"]
 
-component "Example Domain" {
-  component "Components" as components
+    storage["Storage Service"]
+    secure["Secure Storage Service"]
+    memory["Memory Storage Service"]
 
-  component "Domain Service" as domain
-}
+    components -->|"subscribe<br/>observable"| domain
+    domain -->|"retrieve state"| state
 
-component "State Service" as state
-
-component "Storage Service" as storage
-component "Secure Storage Service" as secure
-component "Memory Storage Service" as memory
-
-components -d-> domain : subscribe \n observable
-domain -> state : retrieve state
-
-state --> storage
-state --> secure
-
-state --> memory
-
-@enduml
+    state --> storage
+    state --> secure
+    state --> memory
 ```
 
 ## Services

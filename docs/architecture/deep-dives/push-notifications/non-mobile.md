@@ -15,28 +15,30 @@ self-hosted.
 
 ### Cloud implementation
 
-```kroki type=plantuml
-@startuml
-participant C1 as "Initiating Client"
-participant C2 as "Receiving Client"
-participant API as "Bitwarden Cloud API"
-participant Q as "Azure Queue"
-participant NAPI as "Bitwarden Notifications API"
+```mermaid
+sequenceDiagram
+    participant C1 as Initiating Client
+    participant API as Bitwarden Cloud API
+    participant Q as Azure Queue
+    participant NAPI as Bitwarden Notifications API
+    participant C2 as Receiving Client
 
-group Establish SignalR connection
-C2->>NAPI: Registers as SignalR client
-end
+    rect rgba(128,128,128,0.1)
+        Note over C1,C2: Establish SignalR connection
+        C2->>NAPI: Registers as SignalR client
+    end
 
-group Other client updates data
-C1->>API: Updates Data
-API->>Q: Sends Message to Azure Queue
-end
+    rect rgba(128,128,128,0.1)
+        Note over C1,C2: Other client updates data
+        C1->>API: Updates Data
+        API->>Q: Sends Message to Azure Queue
+    end
 
-group Notifications API processes message
-NAPI<<-Q: Reads from Azure Queue
-NAPI->>C2: Sends SignalR message to registered clients
-end
-@enduml
+    rect rgba(128,128,128,0.1)
+        Note over C1,C2: Notifications API processes message
+        Q->>NAPI: Reads from Azure Queue
+        NAPI->>C2: Sends SignalR message to registered clients
+    end
 ```
 
 For the Bitwarden Cloud implementation, the API uses the
@@ -51,26 +53,28 @@ queue and sends them to all clients registered for the initiating user or organi
 
 ### Self-hosted implementation
 
-```kroki type=plantuml
-@startuml
-participant C1 as "Initiating Client"
-participant C2 as "Receiving Client"
-participant SHAPI as "Self-Hosted API"
-participant SHNAPI as "Self-Hosted Notifications API"
+```mermaid
+sequenceDiagram
+    participant C1 as Initiating Client
+    participant SHAPI as Self-Hosted API
+    participant SHNAPI as Self-Hosted Notifications API
+    participant C2 as Receiving Client
 
-group Register
-C2->>SHNAPI: Registers as SignalR client
-end
+    rect rgba(128,128,128,0.1)
+        Note over C1,C2: Register
+        C2->>SHNAPI: Registers as SignalR client
+    end
 
-Group Other client updates data
-C1->>SHAPI: Updates data
-SHAPI->>SHNAPI: Calls Notifications API to distribute the notification
-end
+    rect rgba(128,128,128,0.1)
+        Note over C1,C2: Other client updates data
+        C1->>SHAPI: Updates data
+        SHAPI->>SHNAPI: Calls Notifications API to distribute the notification
+    end
 
-group Update clients
-SHNAPI->>C2: Sends Message to registered clients
-end
-@enduml
+    rect rgba(128,128,128,0.1)
+        Note over C1,C2: Update clients
+        SHNAPI->>C2: Sends Message to registered clients
+    end
 ```
 
 For a self-hosted implementation, the push notification architecture differs because there is no

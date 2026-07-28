@@ -17,40 +17,42 @@ types of services, for a given domain in our [Data Model](../data-model.md):
 - `Internal[Domain]Service`
 - `[Domain]ApiService`
 
-```kroki type=plantuml
-@startuml
-abstract class Internal[Domain]Service #aliceblue {
-  + upsert(item: [Domain])
-  + replace(items: [Domain][])
-}
-class [Domain]Service #aliceblue {
-  # subject : BehaviorSubject<[Domain][]>
-  + observable: Observable<[Domain][]>
-  - updateObservables()
-}
-class [Domain]ApiService #aliceblue {
-  + get[Domain]()
-  + get[Domain]by[Property]()
-  + put[Domain]()
-}
-class "UI Component"
-class SyncService {
-  + fullSync()
-  - sync[Domain]()
-}
-class ApiService {
-  + send()
-}
+```mermaid
+classDiagram
+    class Internal["Internal[Domain]Service"] {
+        <<Abstract>>
+        +upsert(item: [Domain])
+        +replace(items: [Domain][])
+    }
+    class DomainSvc["[Domain]Service"] {
+        #subject : BehaviorSubject~[Domain][]~
+        +observable : Observable~[Domain][]~
+        -updateObservables()
+    }
+    class ApiSvc["[Domain]ApiService"] {
+        +get[Domain]()
+        +get[Domain]by[Property]()
+        +put[Domain]()
+    }
+    class UI["UI Component"]
+    class Sync["SyncService"] {
+        +fullSync()
+        -sync[Domain]()
+    }
+    class Api["ApiService"] {
+        +send()
+    }
 
-"UI Component" *-- "[Domain]Service" : uses
-"UI Component" *-- "[Domain]ApiService" : uses
+    UI *-- DomainSvc : uses
+    UI *-- ApiSvc : uses
+    DomainSvc --|> Internal : extends
+    Sync *-- Internal : uses
+    ApiSvc *-- Api : uses
+    ApiSvc *-- Internal : uses
 
-"[Domain]Service" --|> "Internal[Domain]Service" : extends
-SyncService *-- "Internal[Domain]Service" : uses
-
-"[Domain]ApiService" *-- ApiService : uses
-"[Domain]ApiService" *-- "Internal[Domain]Service" : uses
-@enduml
+    style Internal fill:#f0f8ff
+    style DomainSvc fill:#f0f8ff
+    style ApiSvc fill:#f0f8ff
 ```
 
 The classes and their responsibilities are detailed below:
@@ -76,34 +78,36 @@ changes across clients.
 
 ### Server Update: Updated in the current client
 
-```kroki type=plantuml
-@startuml
-abstract class Internal[Domain]Service #aliceblue {
-  + upsert(item: [Domain])
-  + replace(items: [Domain][])
-}
-class [Domain]Service #aliceblue {
-  # subject : BehaviorSubject<[Domain][]>
-  + observable: Observable<[Domain][]>
-  - updateObservables()
-}
-class [Domain]ApiService #aliceblue {
-  + put[Domain]()
-}
-together {
-class "UI Component"
-class "Other UI Component"
-}
-class ApiService {
-  + send()
-}
+```mermaid
+classDiagram
+    class Internal["Internal[Domain]Service"] {
+        <<Abstract>>
+        +upsert(item: [Domain])
+        +replace(items: [Domain][])
+    }
+    class DomainSvc["[Domain]Service"] {
+        #subject : BehaviorSubject~[Domain][]~
+        +observable : Observable~[Domain][]~
+        -updateObservables()
+    }
+    class ApiSvc["[Domain]ApiService"] {
+        +put[Domain]()
+    }
+    class UI["UI Component"]
+    class OtherUI["Other UI Component"]
+    class Api["ApiService"] {
+        +send()
+    }
 
-"UI Component" --> "[Domain]ApiService"
-"[Domain]ApiService" --> ApiService
-"[Domain]ApiService" --> "Internal[Domain]Service"
-"Internal[Domain]Service" --> "[Domain]Service"
-"[Domain]Service" ..> "Other UI Component" : Observable next()
-@enduml
+    UI --> ApiSvc
+    ApiSvc --> Api
+    ApiSvc --> Internal
+    Internal --> DomainSvc
+    DomainSvc ..> OtherUI : Observable next()
+
+    style Internal fill:#f0f8ff
+    style DomainSvc fill:#f0f8ff
+    style ApiSvc fill:#f0f8ff
 ```
 
 In the case that the domain is updated in the client, the change will begin with the user modifying
@@ -119,30 +123,30 @@ You can see those responsibilities above, where `ApiService` updates the server 
 
 ### Cache-Only Update: Updated in a different client
 
-```kroki type=plantuml
-@startuml
-abstract class Internal[Domain]Service #aliceblue {
-  + upsert(item: [Domain])
-  + replace(items: [Domain][])
-}
-class [Domain]Service #aliceblue {
-  # subject : BehaviorSubject<[Domain][]>
-  + observable: Observable<[Domain][]>
-  - updateObservables()
-}
-together {
-    class "UI Component"
-    class SyncService {
-    + fullSync()
-    - sync[Domain]()
+```mermaid
+classDiagram
+    class Internal["Internal[Domain]Service"] {
+        <<Abstract>>
+        +upsert(item: [Domain])
+        +replace(items: [Domain][])
     }
-}
+    class DomainSvc["[Domain]Service"] {
+        #subject : BehaviorSubject~[Domain][]~
+        +observable : Observable~[Domain][]~
+        -updateObservables()
+    }
+    class UI["UI Component"]
+    class Sync["SyncService"] {
+        +fullSync()
+        -sync[Domain]()
+    }
 
-SyncService --> "Internal[Domain]Service"
-"Internal[Domain]Service" --> "[Domain]Service"
-"[Domain]Service" ..> "UI Component" : Observable next()
+    Sync --> Internal
+    Internal --> DomainSvc
+    DomainSvc ..> UI : Observable next()
 
-@enduml
+    style Internal fill:#f0f8ff
+    style DomainSvc fill:#f0f8ff
 ```
 
 For domain updates from another client, the current client receives those messages through the
@@ -156,25 +160,25 @@ mechanism, but that implementation is abstracted from the `SyncService` and any 
 
 ## Domain reads
 
-```kroki type=plantuml
-@startuml
+```mermaid
+classDiagram
+    class ApiSvc["[Domain]ApiService"] {
+        +get[Domain]()
+        +get[Domain]by[Property]()
+    }
+    class UI["UI Component"] {
+        load()
+    }
+    class Api["ApiService"] {
+        +send()
+    }
 
-class [Domain]ApiService #aliceblue {
-  + get[Domain]()
-  + get[Domain]by[Property]()
-}
-class "UI Component" {
-    load()
-}
-class ApiService {
-  + send()
-}
+    UI --> ApiSvc
+    ApiSvc --> Api
+    Api --> ApiSvc
+    ApiSvc --> UI
 
-"UI Component" --> "[Domain]ApiService"
-"[Domain]ApiService" --> ApiService
-ApiService --> "[Domain]ApiService"
-"[Domain]ApiService" --> "UI Component"
-@enduml
+    style ApiSvc fill:#f0f8ff
 ```
 
 When it is necessary to retrieve data directly from the server rather than subscribing to the
