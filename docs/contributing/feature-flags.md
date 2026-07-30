@@ -90,25 +90,25 @@ client development the flags are served from the Bitwarden API.
 
 | Server configuration | Flag source                                                  |
 | -------------------- | ------------------------------------------------------------ |
-| Local development    | Local application settings, JSON file, or code modification  |
+| Local development    | Local application settings or code modification              |
 | Self-hosted          | Flags are "off" unless above local configuration is provided |
 | QA Cloud             | LaunchDarkly QA                                              |
 | Production Cloud     | LaunchDarkly Production                                      |
 
 :::caution Self-hosted support
 
-Feature flags are not officially supported for self-hosted customers. Using application settings or
-a JSON file is not a supported method of sourcing feature flag values, outside of Bitwarden internal
-testing. See [Self-hosted considerations](#self-hosted-considerations) for how feature flagging
-applies to self-hosted.
+Feature flags are not officially supported for self-hosted customers. Using application settings is
+not a supported method of sourcing feature flag values, outside of Bitwarden internal testing. See
+[Self-hosted considerations](#self-hosted-considerations) for how feature flagging applies to
+self-hosted.
 
 :::
 
 Local development server instances will not query LaunchDarkly for feature flag values.
 
 If you need to change any feature flag values from their defaults during local development, you will
-need to set up either local application settings or a file-based data source. **Without the local
-data store, all flag values will resolve as their default ("off") value.**
+need to set up local application settings. **Without the local data store, all flag values will
+resolve as their default ("off") value.**
 
 ### Local configuration: user secrets
 
@@ -134,29 +134,6 @@ values accordingly.
 Remember to run `dev/setup_secrets.ps1` and restart your server for the new secrets to take effect.
 
 Environment variables can also be used like with other application setting overrides.
-
-### Local configuration: JSON file
-
-To set up a data source via a local file, create a `flags.json` file as follows:
-
-```json
-{
-  "flagValues": {
-    "example-boolean-key": true,
-    "example-string-key": "value"
-  }
-}
-```
-
-Replace `example-boolean-key` and `example-string-key` with your flag names and update the flag
-values accordingly.
-
-By default, the LaunchDarkly startup will look for this file in the root project directory (e.g.
-`/src/Api/` for the `Api` project), where it will be deployed to the build output directory.
-However, if you prefer to store the file in a different location, the `FlagDataFilePath`
-configuration setting can be used to override it. The file must be present before building the
-solution, but once there you can change the file contents and see immediate results in running /
-debugging code.
 
 ### Local configuration: code modification
 
