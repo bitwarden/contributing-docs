@@ -21,9 +21,9 @@ Documentation practice has fragmented as the organization has grown:
   homes.
 - Stale content accumulates with no supersession discipline, leaving superseded pages beside current
   ones with no deprecation.
-- AI agents have become first-class documentation consumers and maintainers (CLAUDE.md, rules, and
-  skills across all repos), with no governing standard tying instruction files to the docs they
-  reference.
+- AI agents have become first-class documentation consumers and maintainers, and their instruction
+  files (CLAUDE.md, rules, and skills across all repos) accumulate documentation-like content with
+  nothing defining whether they are documentation at all.
 
 A 2026-07 audit classified every documentation artifact across the major repos, this site, and
 Confluence against a proposed routing model, confirming these gaps.
@@ -48,7 +48,6 @@ snapshot of the rules at adoption:
 2. **Located at the lowest common ancestor** of what is described.
 3. **Every doc has an audience**. AI agents and humans are both first-class audiences and
    maintainers.
-   1. AI instruction files point, documentation contains.
 4. **Always up to date**. Doc maintenance is a top priority and happens alongside changes to what it
    describes.
 5. **Discoverable and unified**, enforced by the style guide the standard publishes.
@@ -56,6 +55,9 @@ snapshot of the rules at adoption:
 Diagrams follow the separate diagram standard adopted in
 [ADR-0033](./0033-adopt-mermaid-diagram-standard.md), which keeps its own living reference at
 Contributing › Diagrams.
+
+AI instruction files are explicitly not documentation and are out of the standard's scope. Their
+guidance lives with the AI tooling.
 
 ### Positive consequences
 
