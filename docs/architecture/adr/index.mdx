@@ -75,6 +75,68 @@ the thinking process and alternatives considered rather than simply stating what
 if an ADR doesn't cover every edge case or alternative it provides valuable context and can be
 refined through discussion.
 
+## Format
+
+ADRs follow the [MADR](https://adr.github.io/madr/) structure: a context and problem statement, the
+considered options, and the decision outcome with its consequences. Start from the template below.
+
+Each ADR is a file named `NNNN-short-title.md` in `docs/architecture/adr/`, numbered with the next
+unused number. Refer to an ADR elsewhere by that number as ADR-NNNN, linking the file relatively so
+the reference survives a move of this section.
+
+<details>
+<summary>ADR template</summary>
+
+Delete the guidance comments before opening the pull request.
+
+```text
+---
+adr: "NNNN"
+status: Proposed
+date: YYYY-MM-DD
+tags: [clients, mobile, server, sdk]
+---
+
+# NNNN - Short imperative title
+
+<AdrTable frontMatter={frontMatter}></AdrTable>
+
+{/* Optional "## Notation" section here if the ADR relies on notation (RFC 2119
+    keywords, symbols). Delete when unused. */}
+
+## Context and problem statement
+
+{/* 2–4 paragraphs. What situation forces a decision? What breaks or
+    stays painful if we decide nothing? Link code, issues, and prior ADRs. */}
+
+## Considered options
+
+- **Option A:** one-line description.
+- **Option B:** one-line description.
+
+{/* Optional per-option subsections with pros/cons when the tradeoffs
+    need more than a line. Include "do nothing" when it is a real option. */}
+
+## Decision outcome
+
+Chosen option: **Option A**, because {decisive reason}.
+
+### Positive consequences
+
+- ...
+
+### Negative consequences
+
+- ...
+
+### Plan
+
+{/* How the decision takes effect: the follow-up work, migrations, and owners.
+    Delete when the ADR needs no follow-up. */}
+```
+
+</details>
+
 ## Status definition
 
 ADRs progress through different statuses throughout their lifecycle. Understanding these statuses

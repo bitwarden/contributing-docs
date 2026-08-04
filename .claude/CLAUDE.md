@@ -108,7 +108,9 @@ for full ownership details.
 ### Architecture documentation
 
 - ADRs go in `docs/architecture/adr/` with format `####-title.md`
-- Follow existing ADR structure (Status, Context, Decision, Consequences)
+- Follow the MADR structure from the template on the ADR index (`docs/architecture/adr/index.mdx`):
+  frontmatter (`adr`, `status`, `date`, `tags`), Context and problem statement, Considered options,
+  Decision outcome
 
 ## Testing before committing
 

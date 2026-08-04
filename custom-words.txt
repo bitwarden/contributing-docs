@@ -22,6 +22,7 @@ deprioritized
 diffable
 dockerized
 dotfile
+evals
 F-Droid
 frontmatter
 Gitter
@@ -52,6 +53,7 @@ LLDB
 Lucidchart
 Mailcatcher
 minio
+mortems
 MVVM
 NGRX
 Napi
@@ -107,6 +109,7 @@ typecheck
 typechecks
 typesafe
 udeps
+ungated
 unsynchronized
 WCAG
 weweave
