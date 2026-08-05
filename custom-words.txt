@@ -22,7 +22,6 @@ deprioritized
 diffable
 dockerized
 dotfile
-evals
 F-Droid
 frontmatter
 Gitter
