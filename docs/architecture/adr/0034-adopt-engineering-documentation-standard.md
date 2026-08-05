@@ -1,7 +1,7 @@
 ---
 adr: "0034"
 status: Proposed
-date: 2026-07-22
+date: 2026-08-05
 tags: [clients, mobile, server, sdk]
 ---
 
