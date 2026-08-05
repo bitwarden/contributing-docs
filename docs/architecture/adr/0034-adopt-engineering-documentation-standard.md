@@ -97,9 +97,8 @@ tracked as work items; the long-running efforts:
 - **Shipped-code architecture migrates out of Confluence**: pages describing shipped code (the SSH
   agent suite, event collection, key management cryptography) move in-repo or to this site per the
   decision rule.
-- **README coverage in `bitwarden/clients`**: generated stubs and missing module READMEs
-  (`libs/common`, `libs/components`, `libs/angular`) brought to the module README standard, and
-  filename casing normalized.
+- **README coverage in Bitwarden repositories**: generated stubs and missing module READMEs brought
+  to the module README standard, and filename casing normalized.
 - **Confluence hygiene**: stale and superseded pages deleted or stale-marked, and team runbook
   indexes adopt the runbook standard and its Last verified discipline.
 - **Incident documentation consolidation**: RCAs converge on the incident.io export as the single
