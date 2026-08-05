@@ -175,8 +175,8 @@ propose the fix and the new row in the same PR.
 
 Documents without a targeted audience lack focus. Even if the original author had a specific
 audience in mind, the living and collaborative nature of our documentation makes an explicit
-audience callout necessary. Every isolated (not directly attached to code) document MUST include an
-audience the document is written for.
+audience callout necessary. Apart from ADRs, every isolated (not directly attached to code) document
+MUST include an audience the document is written for.
 
 ## Documentation updates (rule 4)
 
