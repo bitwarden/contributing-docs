@@ -105,7 +105,7 @@ C4 is adopted as a **mental model only**. We are explicitly **NOT** adopting any
 
 ## Ownership and currency (rules 7 and 8)
 
-- The owner is CODEOWNERS for in-repo docs and the page's owning team on Confluence.
+- The owner is `CODEOWNERS` for in-repo docs and the page's owning team on Confluence.
 - Updates land in the same PR or page edit as the change the diagram depicts. A diagram known to be
   wrong is deleted or updated rather than left to mislead.
 - Every repo's root `CLAUDE.md` MUST carry the base documentation obligations, which cover diagrams:

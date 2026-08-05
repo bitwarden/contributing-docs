@@ -57,8 +57,8 @@ typically its `README.md`, and splits into a `docs/` folder beside it when it ou
 [Component documentation](./component-documentation.md). Wherever this standard says `README.md` or
 `docs/`, it means that artifact at either stage.
 
-AI instruction files (CLAUDE.md, rules, skills) are not documentation: they are instructions on how
-to behave and how to consume documentation. This standard does not govern them, and content that
+AI instruction files (`CLAUDE.md`, rules, skills) are not documentation: they are instructions on
+how to behave and how to consume documentation. This standard does not govern them, and content that
 belongs in documentation MUST NOT live in an instruction file, since that would give it a second
 home.
 
@@ -76,7 +76,7 @@ Apply in order. First match wins:
    for tech breakdowns and work specifications, **Confluence** in the owning team's space for
    everything else.
 2. Does it describe **code in one repo**? → **that repo**, in the owning scope's
-   [README.md or docs/](./component-documentation.md).
+   [`README.md` or `docs/`](./component-documentation.md).
 3. Is it **how to contribute or build**, **architecture spanning repos**, or an **architectural
    decision**? → **contributing.bitwarden.com**
    ([bitwarden/contributing-docs](https://github.com/bitwarden/contributing-docs)), behind the
@@ -127,19 +127,19 @@ propose the fix and the new row in the same PR.
 
 #### In the repo
 
-| Documentation type                                                                                         | Home                                                                                      | Format                                             |
-| ---------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- | -------------------------------------------------- |
-| Component docs: what one library, crate, or feature does and how to use it                                 | `README.md` (or the component's `docs/`) next to the code                                 | [Component documentation][component-docs]          |
-| Guides spanning multiple components in one repo                                                            | `docs/` or README at the components' lowest common ancestor                               | [Component documentation][component-docs]          |
-| Architecture of one repo                                                                                   | The owning scope's `docs/` or README                                                      | [Component documentation][component-docs]          |
-| Repo overview, build entry point                                                                           | Root `README.md`                                                                          | The [bitwarden/template][template] README skeleton |
-| New-repo doc scaffolding (README skeleton, CONTRIBUTING pointer, `.claude/`)                               | [bitwarden/template][template]                                                            | —                                                  |
-| Repo-specific code style overrides (coupled to lint/formatter config)                                      | Repo `docs/`, linking the org baseline                                                    | —                                                  |
-| API / SDK reference                                                                                        | Doc comments in source                                                                    | [Component documentation][component-docs]          |
-| UI component library usage docs (audience: developers **and** designers)                                   | `.mdx` colocated with the UI component, rendered at [components.bitwarden.com][storybook] | Storybook `autodocs`                               |
-| Changelog for a published artifact                                                                         | `CHANGELOG.md` next to the artifact                                                       | Ecosystem convention                               |
-| Platform-mandated files (`SECURITY.md`, `.github` templates, CODEOWNERS, registry READMEs, store metadata) | Path fixed by the platform                                                                | Platform-defined                                   |
-| Legal, licensing, and trademark notices                                                                    | Repo root                                                                                 | —                                                  |
+| Documentation type                                                                                           | Home                                                                                      | Format                                             |
+| ------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------- | -------------------------------------------------- |
+| Component docs: what one library, crate, or feature does and how to use it                                   | `README.md` (or the component's `docs/`) next to the code                                 | [Component documentation][component-docs]          |
+| Guides spanning multiple components in one repo                                                              | `docs/` or README at the components' lowest common ancestor                               | [Component documentation][component-docs]          |
+| Architecture of one repo                                                                                     | The owning scope's `docs/` or README                                                      | [Component documentation][component-docs]          |
+| Repo overview, build entry point                                                                             | Root `README.md`                                                                          | The [bitwarden/template][template] README skeleton |
+| New-repo doc scaffolding (README skeleton, CONTRIBUTING pointer, `.claude/`)                                 | [bitwarden/template][template]                                                            | —                                                  |
+| Repo-specific code style overrides (coupled to lint/formatter config)                                        | Repo `docs/`, linking the org baseline                                                    | —                                                  |
+| API / SDK reference                                                                                          | Doc comments in source                                                                    | [Component documentation][component-docs]          |
+| UI component library usage docs (audience: developers **and** designers)                                     | `.mdx` colocated with the UI component, rendered at [components.bitwarden.com][storybook] | Storybook `autodocs`                               |
+| Changelog for a published artifact                                                                           | `CHANGELOG.md` next to the artifact                                                       | Ecosystem convention                               |
+| Platform-mandated files (`SECURITY.md`, `.github` templates, `CODEOWNERS`, registry READMEs, store metadata) | Path fixed by the platform                                                                | Platform-defined                                   |
+| Legal, licensing, and trademark notices                                                                      | Repo root                                                                                 | —                                                  |
 
 #### On contributing.bitwarden.com
 
@@ -210,7 +210,7 @@ even when correction is not prioritized.
 
 ### Owners
 
-Ownership follows CODEOWNERS for in-repo docs. Confluence pages name an owning team in the header
+Ownership follows `CODEOWNERS` for in-repo docs. Confluence pages name an owning team in the header
 and SHOULD follow the owners of the Confluence space.
 
 Owners are responsible for the maintenance and general health of the documentation they own.
@@ -273,6 +273,6 @@ formality, since readers and tooling act on their exact wording:
 A documentation change (or the doc portion of a code change) is done when it satisfies
 [the standard](#the-standard) and the [style guide](#style-guide-rule-5).
 
-For a **code** change, every README, `docs/` page, diagram, doc comment, and CLAUDE.md that
+For a **code** change, every README, `docs/` page, diagram, doc comment, and `CLAUDE.md` that
 describes the changed behavior MUST be updated in the same PR. If none described it but it warrants
 documentation per the [component README standard](./component-documentation.md), add it.
