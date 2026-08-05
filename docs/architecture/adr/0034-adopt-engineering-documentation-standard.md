@@ -22,7 +22,7 @@ Documentation practice has fragmented as the organization has grown:
 - Stale content accumulates with no supersession discipline, leaving superseded pages beside current
   ones with no deprecation.
 - AI agents have become first-class documentation consumers and maintainers, and their instruction
-  files (CLAUDE.md, rules, and skills across all repos) accumulate documentation-like content with
+  files (`CLAUDE.md`, rules, and skills across all repos) accumulate documentation-like content with
   nothing defining whether they are documentation at all.
 
 A 2026-07 audit classified every documentation artifact across the major repos, this site, and
@@ -80,10 +80,10 @@ Follow-up PRs complete the standard:
 - The standard, with its format guidance and templates, publishes as the Documentation section under
   Contributing and becomes the living reference this ADR mandates.
 - The doc-currency plugin, which enforces rule 4, publishes in
-  [bitwarden/ai-plugins](https://github.com/bitwarden/ai-plugins) and distributes the root CLAUDE.md
-  documentation obligations.
-- Each repo adopts the standard: base documentation obligations in the root CLAUDE.md, a
-  CONTRIBUTING pointer, and markdown tooling parity.
+  [bitwarden/ai-plugins](https://github.com/bitwarden/ai-plugins) and distributes the root
+  `CLAUDE.md` documentation obligations.
+- Each repo adopts the standard: base documentation obligations in the root `CLAUDE.md`, a
+  `CONTRIBUTING` pointer, and markdown tooling parity.
 - Remediation work items are filed for every rule that current reality violates, and the superseded
   Confluence standards page is deleted.
 
