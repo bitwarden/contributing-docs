@@ -79,9 +79,9 @@ Follow-up PRs complete the standard:
 
 - The standard, with its format guidance and templates, publishes as the Documentation section under
   Contributing and becomes the living reference this ADR mandates.
-- The doc-currency plugin, which enforces rule 4, publishes in
-  [bitwarden/ai-plugins](https://github.com/bitwarden/ai-plugins) and distributes the root
-  `CLAUDE.md` documentation obligations.
+- An ai-plugin is produced and made available to help identify when local documents needs to be
+  updated as well as adding both local and external documentation update requirements to AI review
+  tools.
 - Each repo adopts the standard: base documentation obligations in the root `CLAUDE.md`, a
   `CONTRIBUTING` pointer, and markdown tooling parity.
 - Remediation work items are filed for every rule that current reality violates, and the superseded
