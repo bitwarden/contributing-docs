@@ -43,7 +43,8 @@ This separation of concerns means:
   - `Stored Procedures/` - General stored procedures
   - `Tables/` - Core tables
   - `Views/` - General views
-  - `User Defined Types/` - Custom data types
+  - `User Defined Types/` - Custom data types (no new types should be added; see
+    [User defined types](#user-defined-types))
 
 ### File naming conventions
 
@@ -85,7 +86,8 @@ These standards should be applied across any T-SQL scripts that you write.
 - **Data type modifiers**: Omit the space between type name and opening parenthesis (e.g.,
   `NVARCHAR(50)` not `NVARCHAR (50)`, `DATETIME2(7)` not `DATETIME2 (7)`)
 - **Naming**: Use full, unabbreviated names throughout — object names, column names, parameters, and
-  descriptors (e.g., `OrganizationId` not `OrgId`)
+  descriptors (e.g., `OrganizationId` not `OrgId`). Conventional short forms are exempt (`Id`, the
+  `IX_`/`PK_`/`FK_` prefixes, short-lived local variables like `@UtcNow`).
 - **ID generation**: Use `CoreHelpers.GenerateComb()` in application code, not `NEWID()` in the
   database -- see [GUID generation](./csharp#guid-generation)
 - **Datetime generation**: Generate datetime values in application code and pass them as parameters
@@ -229,7 +231,7 @@ WHERE
 - Put `UNION ALL` on its own line, with a blank line above and below it
 
 ```sql
-;WITH OrgUsers AS
+;WITH OrganizationUsers AS
 (
     -- Active users: direct UserId match
     SELECT
@@ -269,7 +271,7 @@ SELECT
     OU.[OrganizationId],
     CASE WHEN PR.[OrganizationId] IS NULL THEN 0 ELSE 1 END AS [IsProvider]
 FROM
-    OrgUsers OU
+    OrganizationUsers OU
 LEFT JOIN
     Providers PR ON PR.[OrganizationId] = OU.[OrganizationId]
 ```
@@ -283,13 +285,16 @@ Stored procedures follow the `{EntityName}_{Action}` format (e.g., `[dbo].[User_
 - **EntityName**: The main table or concept the procedure operates on (e.g., `User`, `Organization`,
   `Cipher`)
 - **Action**: A verb from the standard list below, optionally followed by a short descriptor that
-  clarifies what the procedure does
+  clarifies what the procedure does. `Read` and `ReadMany` are almost always paired with a
+  descriptor (e.g., `ReadById`, `ReadByOrganizationId`) since a bare `Read`/`ReadMany` rarely
+  conveys which record(s) are selected.
 
 **Standard action verbs**
 
 | Verb         | Description             |
 | ------------ | ----------------------- |
 | `Create`     | Insert a new record     |
+| `CreateMany` | Insert multiple records |
 | `Read`       | Select a single record  |
 | `ReadMany`   | Select multiple records |
 | `Update`     | Modify a record         |
@@ -297,13 +302,16 @@ Stored procedures follow the `{EntityName}_{Action}` format (e.g., `[dbo].[User_
 | `Delete`     | Remove a record         |
 | `DeleteMany` | Remove multiple records |
 
-:::tip When an operation is more specific than a standard verb alone, append a short descriptor:
+:::tip Appending a descriptor
+
+When an operation is more specific than a standard verb alone, append a short descriptor to clarify
+what it does:
 
 - `User_ReadById` — read filtered by a specific field
-- `User_ReadManyByOrganizationId` — filtered bulk read
-- `OrganizationUser_UpdateStatus` — update a specific field
+- `OrganizationIntegration_ReadManyByOrganizationId` — filtered bulk read
+- `User_UpdateRenewalReminderDate` — update a specific field
 - `OrganizationUser_UpdateManyRevoke` — bulk revoke
-- `User_UpdateApplicationData` — update a named subset of fields
+- `OrganizationReport_UpdateApplicationData` — update a named subset of fields
 
 :::
 
@@ -422,6 +430,9 @@ BEGIN
 END
 ```
 
+`[Role]` is a placeholder column name for this generic example; the real codebase column for this
+pattern is `[Type]`.
+
 #### Parameter declaration
 
 - One parameter per line
@@ -429,7 +440,7 @@ END
 - Default values on same line as parameter
 - `OUTPUT` parameters clearly marked
 - Pass values in as parameters from application code rather than hard-coding them or generating them
-  with a SQL function inside the procedure (e.g., `GETUTCDATE()`) -- see
+  with a SQL function inside the procedure (e.g., `GETUTCDATE()`) — see
   [accepted exceptions](#datetime-values) for cases where a SQL function is appropriate
 
 :::warning Default parameter values
@@ -472,12 +483,14 @@ There are specific patterns in the codebase where using a SQL datetime function 
 correct:
 
 1. **Account revision date bumping** — The `User_BumpAccountRevisionDate*` family of procedures
-   exist solely to stamp `[AccountRevisionDate]` to the current UTC time atomically, without a
+   exists solely to stamp `[AccountRevisionDate]` to the current UTC time atomically, without a
    round-trip to application code.
 
-2. **Bulk operations requiring a consistent timestamp** — When a procedure must apply the same
-   timestamp across multiple rows or statements in one transaction, declare a local variable once
-   and reuse it throughout the procedure:
+2. **Bulk operations spanning multiple statements** — SQL Server evaluates `GETUTCDATE()`/
+   `SYSUTCDATETIME()` once per statement, so a single statement never needs this exception — every
+   row it touches already gets the same value. When a procedure executes multiple statements that
+   must share the exact same timestamp, declare a local variable once and reuse it throughout the
+   procedure:
 
    ```sql
    DECLARE @UtcNow DATETIME2(7) = SYSUTCDATETIME();
@@ -489,21 +502,28 @@ correct:
        [RevisionDate] = @UtcNow
    WHERE
        [Id] IN (SELECT [Id] FROM @Ids)
+
+   UPDATE
+       [dbo].[Folder]
+   SET
+       [RevisionDate] = @UtcNow
+   WHERE
+       [UserId] = @UserId
    ```
 
 3. **`WHERE` clause predicates** — Comparing against the current time in a filter is acceptable
-   (e.g., deleting expired records, skipping rows whose date has not changed since yesterday):
+   (e.g., deleting expired records):
 
    ```sql
    WHERE
-       [ExpirationDate] < GETUTCDATE()
+       [ExpirationDate] < SYSUTCDATETIME()
    ```
 
 4. **Nullable parameter fallbacks** — When a parameter is intentionally nullable and the procedure
    should default to the current time when no value is supplied:
 
    ```sql
-   SET @Created = COALESCE(@Created, GETUTCDATE())
+   SET @Created = COALESCE(@Created, SYSUTCDATETIME())
    ```
 
 #### `INSERT` statements
@@ -546,11 +566,11 @@ WHERE
 
 Only wrap statements in an explicit `BEGIN TRANSACTION` / `COMMIT TRANSACTION` when a procedure
 performs multiple statements that must all succeed or all fail together. A single `INSERT`,
-`UPDATE`, or `DELETE` statement is already atomic on its own -- SQL Server implicitly wraps every
-individual statement in a transaction, so adding an explicit one around it adds nothing except
-unnecessary lock hold time and noise. When a transaction is needed, keep its scope as small as
-possible -- only the statements that need to be atomic, not unrelated reads or `EXEC` calls that
-don't need to roll back with them.
+`UPDATE`, or `DELETE` statement is already atomic on its own — SQL Server implicitly wraps every
+individual statement in a transaction, so adding an explicit one around it adds nothing but noise
+and the risk of an orphaned open transaction if the statement errors before `COMMIT` is reached.
+When a transaction is needed, keep its scope as small as possible — only the statements that need to
+be atomic, not unrelated reads or `EXEC` calls that don't need to roll back with them.
 
 :::warning Do not wrap a single statement in an explicit transaction
 
@@ -558,7 +578,7 @@ Several `Delete` procedures in the codebase wrap a lone `DELETE` in an explicit 
 should not be used as a reference:
 
 ```sql
--- Wrong -- the transaction wraps a single statement and adds nothing
+-- Wrong: the transaction wraps a single statement and adds nothing
 CREATE PROCEDURE [dbo].[EntityName_DeleteById]
     @Id UNIQUEIDENTIFIER
 AS
@@ -578,7 +598,7 @@ END
 ```
 
 ```sql
--- Correct -- no explicit transaction needed
+-- Correct: no explicit transaction needed
 CREATE PROCEDURE [dbo].[EntityName_DeleteById]
     @Id UNIQUEIDENTIFIER
 AS
@@ -596,8 +616,10 @@ END
 :::
 
 Use an explicit transaction when a procedure deletes (or otherwise modifies) rows across multiple
-related tables that must be kept in sync -- e.g. deleting a parent record along with its dependent
-child records:
+related tables that must be kept in sync — e.g. deleting a parent record along with its dependent
+child records. Set `XACT_ABORT ON` and wrap the transaction in `TRY`/`CATCH` (see
+[Error handling](#error-handling)) so a mid-transaction error rolls back everything instead of
+committing a partial change:
 
 ```sql
 CREATE PROCEDURE [dbo].[EntityName_DeleteById]
@@ -605,22 +627,31 @@ CREATE PROCEDURE [dbo].[EntityName_DeleteById]
 AS
 BEGIN
     SET NOCOUNT ON
+    SET XACT_ABORT ON
 
-    BEGIN TRANSACTION
+    BEGIN TRY
+        BEGIN TRANSACTION
 
-    DELETE
-    FROM
-        [dbo].[ChildEntity]
-    WHERE
-        [EntityNameId] = @Id
+        DELETE
+        FROM
+            [dbo].[ChildEntity]
+        WHERE
+            [EntityNameId] = @Id
 
-    DELETE
-    FROM
-        [dbo].[EntityName]
-    WHERE
-        [Id] = @Id
+        DELETE
+        FROM
+            [dbo].[EntityName]
+        WHERE
+            [Id] = @Id
 
-    COMMIT TRANSACTION
+        COMMIT TRANSACTION
+    END TRY
+    BEGIN CATCH
+        IF @@TRANCOUNT > 0
+            ROLLBACK TRANSACTION
+
+        THROW
+    END CATCH
 END
 ```
 
@@ -672,9 +703,8 @@ CREATE TABLE [dbo].[TableName]
   - The name should clearly indicate the table and the columns being indexed
 
 ```sql
-CREATE NONCLUSTERED INDEX [IX_OrganizationUser_UserIdOrganizationIdStatus]
-   ON [dbo].[OrganizationUser]([UserId] ASC, [OrganizationId] ASC, [Status] ASC)
-   INCLUDE ([AccessAll])
+CREATE NONCLUSTERED INDEX [IX_OrganizationUser_UserIdOrganizationIdStatusV2]
+    ON [dbo].[OrganizationUser]([UserId] ASC, [OrganizationId] ASC, [Status] ASC)
 ```
 
 ### Views
@@ -761,8 +791,12 @@ table-valued parameters in stored procedures for simple, scalar lists:
 - **`[dbo].[EmailArray]`** — a single-column table of `NVARCHAR(256)` email addresses. Use when
   passing a list of emails to a stored procedure.
 
-For anything beyond these scalar list shapes -- multi-column rows, or a shape that may need new
-properties over time -- serialize the data as JSON in application code and pass it as a single
+A small number of multi-column TVPs predate this guidance and remain in active use (e.g.
+`[dbo].[CollectionAccessSelectionType]`, `[dbo].[OrganizationSponsorshipType]`) — continue using
+them in procedures that already depend on them, but don't follow them as a pattern for new work.
+
+For anything beyond the scalar list shapes above — multi-column rows, or a shape that may need new
+properties over time — serialize the data as JSON in application code and pass it as a single
 `NVARCHAR(MAX)` parameter, rather than creating a new TVP.
 
 #### Passing structured data as JSON
@@ -779,8 +813,7 @@ BEGIN
     SET NOCOUNT ON
 
     INSERT INTO [dbo].[EntityName]
-    (
-        [Id],
+    (   [Id],
         [Name],
         [CreationDate],
         [RevisionDate]
@@ -793,7 +826,7 @@ BEGIN
     FROM
         OPENJSON(@EntityNameJson)
         WITH (
-            [Id]           UNIQUEIDENTIFIER '$.Id',
+            [Id]           UNIQUEIDENTIFIER  '$.Id',
             [Name]         NVARCHAR(256)     '$.Name',
             [CreationDate] DATETIME2(7)      '$.CreationDate',
             [RevisionDate] DATETIME2(7)      '$.RevisionDate'
@@ -804,12 +837,21 @@ END
 In application code, serialize the collection with `JsonSerializer.Serialize()` and pass the result
 as the parameter value; Dapper maps it to the `NVARCHAR(MAX)` parameter like any other string.
 
+:::warning `OPENJSON` paths are lax and case-sensitive by default
+
+`WITH` clause paths are lax unless prefixed with `strict`: a missing or misspelled property yields
+`NULL` instead of an error. JSON property names are also case-sensitive, so a camelCase
+serialization policy will silently break a path like `'$.Id'`. Use `strict $.Id` for columns that
+must always be present, and confirm the application's JSON casing matches the paths used here.
+
+:::
+
 :::tip When to use JSON vs. an existing TVP
 
 - Use the existing TVPs (`GuidIdArray`, `TwoGuidIdArray`, `EmailArray`) for simple, single- or
   two-column lists of scalar values.
 - Use a JSON parameter when each row needs more than two columns, or when the row shape may need to
-  gain properties over time -- adding a property to a JSON payload doesn't require a schema change,
+  gain properties over time — adding a property to a JSON payload doesn't require a schema change,
   unlike adding a column to a TVP.
 
 :::
@@ -914,7 +956,7 @@ GO
 When deleting a table, use `IF EXISTS` to avoid an error if the table doesn't exist.
 
 ```sql
-DROP IF EXISTS [dbo].[{table_name}]
+DROP TABLE IF EXISTS [dbo].[{table_name}]
 GO
 ```
 
@@ -1099,7 +1141,7 @@ GO
 When deleting a view, use `IF EXISTS` to avoid an error if the view doesn't exist.
 
 ```sql
-DROP IF EXISTS [dbo].[{view_name}]
+DROP VIEW IF EXISTS [dbo].[{view_name}]
 GO
 ```
 
@@ -1133,7 +1175,7 @@ GO
 When deleting a function or stored procedure, use `IF EXISTS` to avoid an error if it doesn't exist.
 
 ```sql
-DROP IF EXISTS [dbo].[{sproc_or_func_name}]
+DROP {PROCEDURE|FUNCTION} IF EXISTS [dbo].[{sproc_or_func_name}]
 GO
 ```
 
@@ -1152,9 +1194,8 @@ heavy-read tables and the locks can cause exceptionally high CPU, wait times and
 in Azure SQL.
 
 ```sql
-CREATE NONCLUSTERED INDEX [IX_OrganizationUser_UserIdOrganizationIdStatus]
-   ON [dbo].[OrganizationUser]([UserId] ASC, [OrganizationId] ASC, [Status] ASC)
-   INCLUDE ([AccessAll])
+CREATE NONCLUSTERED INDEX [IX_OrganizationUser_UserIdOrganizationIdStatusV2]
+    ON [dbo].[OrganizationUser]([UserId] ASC, [OrganizationId] ASC, [Status] ASC)
 ```
 
 #### Modifying Existing Indexes
