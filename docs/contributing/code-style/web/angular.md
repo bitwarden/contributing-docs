@@ -151,65 +151,52 @@ work with, as well as a multi level inheritance tree.
 To avoid this, components should be broken up into logical standalone pieces. The different clients
 should use the the shared components by customizing the page level components.
 
-```kroki type=plantuml
-@startuml
-skinparam BackgroundColor transparent
-skinparam componentStyle rectangle
+```mermaid
+---
+title: Login Component
+---
+flowchart TB
+    subgraph webVault ["Web Vault"]
+        loginWeb["Login Page Component"]
+    end
+    subgraph desktop ["Desktop"]
+        loginDesktop["Login Page Component"]
+    end
+    subgraph angular ["Angular"]
+        loginComponent["Login Component"]
+        captcha["Captcha Component"]
+        authService["Auth Service"]
+    end
 
-title Login Component
-
-component "Web Vault" {
-    component "Login Page Component" as loginWeb
-}
-
-component "Desktop" {
-    component "Login Page Component" as loginDesktop
-}
-
-component "Angular" {
-    together {
-        component "Login Component"
-        component "Captcha Component"
-        component "Auth Service"
-    }
-}
-
-[loginWeb] --> [Login Component]: Child component
-[loginDesktop] --> [Login Component]: Child component
-[Login Component] -> [Captcha Component]: Child component
-[Login Component] --> [Auth Service]: Dependency
-@enduml
+    loginWeb -->|Child component| loginComponent
+    loginDesktop -->|Child component| loginComponent
+    loginComponent -->|Child component| captcha
+    loginComponent -->|Dependency| authService
 ```
 
 The diagram below showcases how the reports share logic by extracting the list into a shared
 component. Instead of the organization component directly extending the base report page component.
 For more details, read [the PR for the refactor](https://github.com/bitwarden/clients/pull/3204).
 
-```kroki type=plantuml
-@startuml
-skinparam BackgroundColor transparent
-skinparam componentStyle rectangle
+```mermaid
+---
+title: Reports Home Page
+---
+flowchart TB
+    subgraph reportsModule ["Reports Module"]
+        reportsPage["Reports Page"]
+    end
+    subgraph reportsSharedModule ["Reports Shared Module"]
+        reportList["Report List Component"]
+        reportComponent["Report Component"]
+    end
+    subgraph orgReportsModule ["Organization Reports Module"]
+        orgReportsPage["Organization Reports Page"]
+    end
 
-title Reports Home Page
-
-component "Reports Module" {
-    component "Reports Page"
-}
-
-component "Reports Shared Module" {
-    component "Report List Component"
-    component "Report Component"
-}
-
-component "Organization Reports Module" {
-    component "Organization Reports Page"
-}
-
-[Reports Page] --> [Report List Component]: @Input reports[]
-[Organization Reports Page] --> [Report List Component]: @Input reports[]
-[Report List Component] --> [Report Component]: @Input report
-
-@enduml
+    reportsPage -->|"@Input reports[]"| reportList
+    orgReportsPage -->|"@Input reports[]"| reportList
+    reportList -->|"@Input report"| reportComponent
 ```
 
 ## Reactivity ([ADR-0003](../../../architecture/adr/0003-observable-data-services.md) & [ADR-0029](../../../architecture/adr/0029-angular-signals.md))

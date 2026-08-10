@@ -34,12 +34,13 @@
   "dependencies": {
     "@docusaurus/core": "3.10.1",
     "@docusaurus/preset-classic": "3.10.1",
+    "@docusaurus/theme-mermaid": "3.10.1",
     "@mdx-js/react": "3.1.0",
+    "@mermaid-js/layout-elk": "0.1.9",
     "docusaurus-lunr-search": "3.6.0",
     "prism-react-renderer": "2.4.1",
     "react": "19.2.0",
-    "react-dom": "19.2.0",
-    "remark-kroki": "0.3.7"
+    "react-dom": "19.2.0"
   },
   "devDependencies": {
     "@docusaurus/module-type-aliases": "3.10.1",

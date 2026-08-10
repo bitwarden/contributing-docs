@@ -16,65 +16,42 @@ support all Bitwarden clients, the SM SDK exposes a curated, backward-compatible
 
 ## Architecture overview
 
-```kroki type=plantuml
-@startuml
-skinparam packageStyle rectangle
-skinparam componentStyle rectangle
-skinparam shadowing false
-skinparam defaultTextAlignment center
+```mermaid
+flowchart TB
+    subgraph langBindings ["Language Bindings"]
+        py["Python"]
+        go["Golang"]
+        csharp["C#"]
+        js["JS"]
+    end
 
-skinparam package {
-  BackgroundColor<<sdk-sm>> #E3F2FD
-  BorderColor<<sdk-sm>> #1976D2
-  BackgroundColor<<bindings>> #FFF3E0
-  BorderColor<<bindings>> #F57C00
-  BackgroundColor<<sdk>> #E8F5E9
-  BorderColor<<sdk>> #388E3C
-}
+    subgraph smSdk ["Secrets Manager SDK"]
+        bws["bws (CLI)"]
+        bitwarden["bitwarden"]
+        bitwardenC["bitwarden-c"]
+        bitwardenJson["bitwarden-json"]
+        bitwardenNapi["bitwarden-napi"]
+        bitwardenPy["bitwarden-py"]
+    end
 
-skinparam component {
-  BackgroundColor<<sdk>> #E8F5E9
-  BorderColor<<sdk>> #388E3C
-}
+    rustSdk["Rust SDK"]
 
-skinparam component {
-  BackgroundColor #FFFFFF
-  BorderColor #424242
-  FontSize 12
-}
+    bws --> bitwarden
+    bitwardenJson --> bitwarden
+    bitwardenC --> bitwardenJson
+    bitwardenNapi --> bitwardenJson
+    bitwardenPy --> bitwardenJson
 
-package "Language Bindings" <<bindings>> as bindings {
-  [Python] as py
-  [Golang] as go
-  [C#] as csharp
-  [JS] as wasm
-}
+    bitwarden --> rustSdk
 
-package "Secrets Manager SDK" <<sdk-sm>> as sm {
-  [bws] <<CLI>>
-  [bitwarden]
-  [bitwarden-c]
-  [bitwarden-json]
-  [bitwarden-napi]
-  [bitwarden-py]
-}
+    py --> bitwardenPy
+    go --> bitwardenC
+    csharp --> bitwardenC
+    js --> bitwardenNapi
 
-["Rust SDK"] <<sdk>> as sdk
-
-[bws] --> [bitwarden]
-[bitwarden-json] --> [bitwarden]
-[bitwarden-c] --> [bitwarden-json]
-[bitwarden-napi] --> [bitwarden-json]
-[bitwarden-py] --> [bitwarden-json]
-
-[bitwarden] --> sdk
-
-py --> [bitwarden-py]
-go --> [bitwarden-c]
-csharp --> [bitwarden-c]
-wasm --> [bitwarden-napi]
-
-@enduml
+    style langBindings fill:#fff3e0
+    style smSdk fill:#e3f2fd
+    style rustSdk fill:#e8f5e9
 ```
 
 ## `bitwarden` crate

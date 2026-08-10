@@ -60,23 +60,18 @@ them. The Autofill architecture leverages the
 in order to communicate between the extension UI, the background pages, and the content scripts that
 are running on each browser tab.
 
-```kroki type=plantuml
-@startuml
-
- package "Browser Tab" as T {
-    [Page Source]
-    [Content Scripts]
- }
-
- node "Bitwarden Browser Extension" as E {
-    [Browser Extension UI]
-    [Background Pages]
- }
-
- [Background Pages] --> [Content Scripts] : tabSendMessage
- [Content Scripts] --> [Background Pages] : sendMessage
-
-@enduml
+```mermaid
+flowchart TB
+    subgraph T ["Browser Tab"]
+        pageSource["Page Source"]
+        contentScripts["Content Scripts"]
+    end
+    subgraph E ["Bitwarden Browser Extension"]
+        extUi["Browser Extension UI"]
+        backgroundPages["Background Pages"]
+    end
+    backgroundPages -->|tabSendMessage| contentScripts
+    contentScripts -->|sendMessage| backgroundPages
 ```
 
 #### Sending a request from the content script to the extension

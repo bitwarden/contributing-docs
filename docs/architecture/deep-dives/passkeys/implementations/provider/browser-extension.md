@@ -33,50 +33,42 @@ See [Naming Convention](../../naming-convention) for more information.
 
 :::
 
-```kroki type=plantuml
-@startuml
-skinparam BackgroundColor transparent
-skinparam componentStyle rectangle
+```mermaid
+---
+title: Browser extension FIDO2 architecture overview
+---
+flowchart TB
+    subgraph browser ["Browser"]
+        direction TB
+        subgraph webPage ["Web page"]
+            jsApp["JavaScript Application"]
+            subgraph pageScript ["Page Script «Injected»"]
+                customWebauthn["Custom WebAuthn API"]
+                pageMessenger["Messenger"]
+            end
+            subgraph contentScript ["Content Script"]
+                contentMessenger["Messenger"]
+            end
+            uaWebauthn["User Agent WebAuthn API «Native»"]
+        end
+        subgraph extension ["Extension"]
+            bgScript["Background Script"]
+            fido2Client["FIDO2 Client"]
+            fido2Auth["FIDO2 Authenticator"]
+            fido2Ui["FIDO2 User Interface"]
+            vault[("Vault")]
+        end
+    end
 
-title Browser extension FIDO2 architecture overview
-
-component "Browser" {
-    component "Web page" {
-        component "JavaScript Application"
-        component "Page Script" <<Injected>> {
-            component "Custom WebAuthn API"
-            component "Messenger" as pageScriptMessenger
-
-            [Custom WebAuthn API] -> [pageScriptMessenger]
-        }
-
-        component "Content Script" {
-            component "Messenger" as contentScriptMessenger
-        }
-
-        component "User Agent WebAuthn API" <<Native>>
-
-        [JavaScript Application] -> [Custom WebAuthn API]
-        [Custom WebAuthn API] --> [User Agent WebAuthn API]
-    }
-
-    component "Extension" {
-        component "Background Script"
-        component "FIDO2 Client"
-        component "FIDO2 Authenticator"
-        component "FIDO2 User Interface"
-        database "Vault"
-
-        [FIDO2 Client] -> [FIDO2 Authenticator]
-        [FIDO2 Authenticator] -> [Vault]
-        [FIDO2 Authenticator] --> [FIDO2 User Interface]
-    }
-
-    [pageScriptMessenger] <--> [contentScriptMessenger]
-    [contentScriptMessenger] --> [Background Script]
-    [Background Script] -> [FIDO2 Client]
-}
-@enduml
+    customWebauthn --> pageMessenger
+    jsApp --> customWebauthn
+    customWebauthn --> uaWebauthn
+    fido2Client --> fido2Auth
+    fido2Auth --> vault
+    fido2Auth --> fido2Ui
+    pageMessenger <--> contentMessenger
+    contentMessenger --> bgScript
+    bgScript --> fido2Client
 ```
 
 ## Discoverability
