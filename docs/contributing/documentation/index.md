@@ -182,9 +182,9 @@ MUST include an audience the document is written for.
 
 The only thing that is worse than missing documentation is inaccurate documentation. It misinforms,
 wastes time, and frustrates. This standard is designed to maximize the amount of documentation that
-can be kept in lock-step with the code it describes, and the **doc-currency plugin**, which every
-repo MUST adopt from [bitwarden/ai-plugins](https://github.com/bitwarden/ai-plugins), enforces it:
-at agent execution time for in-repo docs, and at review time for external docs. When a change
+can be kept in lock-step with the code it describes, and the **doc-parity plugin**, which every repo
+MUST adopt from [bitwarden/ai-plugins](https://github.com/bitwarden/ai-plugins), enforces it: at
+agent execution time for in-repo docs, and at review time for external docs. When a change
 invalidates an external doc, a work item MUST be created before merge and the doc MUST receive a
 [stale marker](#stale-markers) at the same time. The work item is done when the marker comes off,
 and prioritization belongs to the owning team. Finally, the PR checklist item "Updated any necessary

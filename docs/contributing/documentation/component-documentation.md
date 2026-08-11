@@ -7,7 +7,7 @@ sidebar_position: 1
 **Audience:** Bitwarden engineers and AI agents writing or consuming in-repo documentation.
 
 Notation follows the [documentation standard's Notation](./index.md#notation). These requirements
-hold for every repo for as long as it lives, enforced by review and the doc-currency plugin. New
+hold for every repo for as long as it lives, enforced by review and the doc-parity plugin. New
 repositories satisfy them at initialization by starting from
 [bitwarden/template](https://github.com/bitwarden/template). Existing repos converge per
 [Changes to this standard](./index.md#changes-to-this-standard). Additional local guidance MAY be
