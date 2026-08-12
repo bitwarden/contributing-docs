@@ -85,15 +85,14 @@ These standards should be applied across any T-SQL scripts that you write.
 - **Parentheses**: Parentheses should be vertically aligned when spanning multiple lines
 - **Data type modifiers**: Omit the space between type name and opening parenthesis (e.g.,
   `NVARCHAR(50)` not `NVARCHAR (50)`, `DATETIME2(7)` not `DATETIME2 (7)`)
-- **Naming**: Use full, unabbreviated names throughout — object names, column names, parameters, and
-  descriptors (e.g., `OrganizationId` not `OrgId`). Conventional short forms are exempt (`Id`, the
-  `IX_`/`PK_`/`FK_` prefixes, short-lived local variables like `@UtcNow`).
+- **Naming**: Use full, unabbreviated names throughout -- object names, column names, parameters,
+  and descriptors (e.g., `OrganizationId` not `OrgId`). Conventional short forms are exempt (`Id`,
+  the `IX_`/`PK_`/`FK_` prefixes, short-lived local variables like `@UtcNow`).
 - **ID generation**: Use `CoreHelpers.GenerateComb()` in application code, not `NEWID()` in the
   database -- see [GUID generation](./csharp#guid-generation)
 - **Datetime generation**: Generate datetime values in application code and pass them as parameters
-  (e.g., `@RevisionDate`), not using SQL functions (`SYSUTCDATETIME()`, `GETUTCDATE()`) — this keeps
-  timestamp generation consistent and testable. See the [accepted exceptions](#datetime-values)
-  documented in the stored procedures section.
+  (e.g., `@RevisionDate`) instead of computing them in SQL (`SYSUTCDATETIME()`, `GETUTCDATE()`) --
+  see [Datetime values](#datetime-values) for why.
 
 ### `SELECT` statements
 
@@ -163,7 +162,7 @@ WHERE
 ```
 
 - For bulk operations where the recordset may be large (e.g., all users in an organization), prefer
-  an `INNER JOIN` on the TVP — this gives the query optimizer full flexibility to choose an
+  an `INNER JOIN` on the TVP -- this gives the query optimizer full flexibility to choose an
   efficient join strategy (hash join, merge join) rather than defaulting to nested loops, which is
   the typical result of an `IN` subquery:
 
@@ -307,11 +306,11 @@ Stored procedures follow the `{EntityName}_{Action}` format (e.g., `[dbo].[User_
 When an operation is more specific than a standard verb alone, append a short descriptor to clarify
 what it does:
 
-- `User_ReadById` — read filtered by a specific field
-- `OrganizationIntegration_ReadManyByOrganizationId` — filtered bulk read
-- `User_UpdateRenewalReminderDate` — update a specific field
-- `OrganizationUser_UpdateManyRevoke` — bulk revoke
-- `OrganizationReport_UpdateApplicationData` — update a named subset of fields
+- `User_ReadById` -- read filtered by a specific field
+- `OrganizationIntegration_ReadManyByOrganizationId` -- filtered bulk read
+- `User_UpdateRenewalReminderDate` -- update a specific field
+- `OrganizationUser_UpdateManyRevoke` -- bulk revoke
+- `OrganizationReport_UpdateApplicationData` -- update a named subset of fields
 
 :::
 
@@ -430,9 +429,6 @@ BEGIN
 END
 ```
 
-`[Role]` is a placeholder column name for this generic example; the real codebase column for this
-pattern is `[Type]`.
-
 #### Parameter declaration
 
 - One parameter per line
@@ -440,8 +436,7 @@ pattern is `[Type]`.
 - Default values on same line as parameter
 - `OUTPUT` parameters clearly marked
 - Pass values in as parameters from application code rather than hard-coding them or generating them
-  with a SQL function inside the procedure (e.g., `GETUTCDATE()`) — see
-  [accepted exceptions](#datetime-values) for cases where a SQL function is appropriate
+  with a SQL function inside the procedure (e.g., `GETUTCDATE()`)
 
 :::warning Default parameter values
 
@@ -456,8 +451,11 @@ these messages differently.
 
 #### Datetime values
 
-As noted in the general standards, datetime values must be generated in application code and passed
-as parameters. Do **not** use `SYSUTCDATETIME()` or `GETUTCDATE()` inline:
+Datetime values must be generated in application code and passed as parameters, not computed inline
+with `SYSUTCDATETIME()` or `GETUTCDATE()`. Deciding what "now" is belongs to application logic, not
+the database. Generating the value once also keeps it atomic for the whole operation -- every row or
+table the operation touches gets the same timestamp, instead of each statement computing its own
+slightly different one:
 
 ```sql
 -- Wrong
@@ -476,55 +474,6 @@ SET
 WHERE
     [Id] = @Id
 ```
-
-**Accepted exceptions**
-
-There are specific patterns in the codebase where using a SQL datetime function is intentional and
-correct:
-
-1. **Account revision date bumping** — The `User_BumpAccountRevisionDate*` family of procedures
-   exists solely to stamp `[AccountRevisionDate]` to the current UTC time atomically, without a
-   round-trip to application code.
-
-2. **Bulk operations spanning multiple statements** — SQL Server evaluates `GETUTCDATE()`/
-   `SYSUTCDATETIME()` once per statement, so a single statement never needs this exception — every
-   row it touches already gets the same value. When a procedure executes multiple statements that
-   must share the exact same timestamp, declare a local variable once and reuse it throughout the
-   procedure:
-
-   ```sql
-   DECLARE @UtcNow DATETIME2(7) = SYSUTCDATETIME();
-
-   UPDATE
-       [dbo].[Cipher]
-   SET
-       [DeletedDate] = @UtcNow,
-       [RevisionDate] = @UtcNow
-   WHERE
-       [Id] IN (SELECT [Id] FROM @Ids)
-
-   UPDATE
-       [dbo].[Folder]
-   SET
-       [RevisionDate] = @UtcNow
-   WHERE
-       [UserId] = @UserId
-   ```
-
-3. **`WHERE` clause predicates** — Comparing against the current time in a filter is acceptable
-   (e.g., deleting expired records):
-
-   ```sql
-   WHERE
-       [ExpirationDate] < SYSUTCDATETIME()
-   ```
-
-4. **Nullable parameter fallbacks** — When a parameter is intentionally nullable and the procedure
-   should default to the current time when no value is supplied:
-
-   ```sql
-   SET @Created = COALESCE(@Created, SYSUTCDATETIME())
-   ```
 
 #### `INSERT` statements
 
@@ -566,11 +515,11 @@ WHERE
 
 Only wrap statements in an explicit `BEGIN TRANSACTION` / `COMMIT TRANSACTION` when a procedure
 performs multiple statements that must all succeed or all fail together. A single `INSERT`,
-`UPDATE`, or `DELETE` statement is already atomic on its own — SQL Server implicitly wraps every
+`UPDATE`, or `DELETE` statement is already atomic on its own -- SQL Server implicitly wraps every
 individual statement in a transaction, so adding an explicit one around it adds nothing but noise
 and the risk of an orphaned open transaction if the statement errors before `COMMIT` is reached.
-When a transaction is needed, keep its scope as small as possible — only the statements that need to
-be atomic, not unrelated reads or `EXEC` calls that don't need to roll back with them.
+When a transaction is needed, keep its scope as small as possible -- only the statements that need
+to be atomic, not unrelated reads or `EXEC` calls that don't need to roll back with them.
 
 :::warning Do not wrap a single statement in an explicit transaction
 
@@ -578,45 +527,29 @@ Several `Delete` procedures in the codebase wrap a lone `DELETE` in an explicit 
 should not be used as a reference:
 
 ```sql
--- Wrong: the transaction wraps a single statement and adds nothing
-CREATE PROCEDURE [dbo].[EntityName_DeleteById]
-    @Id UNIQUEIDENTIFIER
-AS
-BEGIN
-    SET NOCOUNT ON
+-- Wrong
+BEGIN TRANSACTION
 
-    BEGIN TRANSACTION
+DELETE
+FROM
+    [dbo].[EntityName]
+WHERE
+    [Id] = @Id
 
-    DELETE
-    FROM
-        [dbo].[EntityName]
-    WHERE
-        [Id] = @Id
+COMMIT TRANSACTION
 
-    COMMIT TRANSACTION
-END
-```
-
-```sql
--- Correct: no explicit transaction needed
-CREATE PROCEDURE [dbo].[EntityName_DeleteById]
-    @Id UNIQUEIDENTIFIER
-AS
-BEGIN
-    SET NOCOUNT ON
-
-    DELETE
-    FROM
-        [dbo].[EntityName]
-    WHERE
-        [Id] = @Id
-END
+-- Correct
+DELETE
+FROM
+    [dbo].[EntityName]
+WHERE
+    [Id] = @Id
 ```
 
 :::
 
 Use an explicit transaction when a procedure deletes (or otherwise modifies) rows across multiple
-related tables that must be kept in sync — e.g. deleting a parent record along with its dependent
+related tables that must be kept in sync -- e.g. deleting a parent record along with its dependent
 child records. Set `XACT_ABORT ON` and wrap the transaction in `TRY`/`CATCH` (see
 [Error handling](#error-handling)) so a mid-transaction error rolls back everything instead of
 committing a partial change:
@@ -678,7 +611,7 @@ END
   `NVARCHAR(50)` not `NVARCHAR (50)`, `DATETIME2(7)` not `DATETIME2 (7)`)
 - **Nullability**: Explicitly specify `NOT NULL` or `NULL`
 - **Datetime column naming**: Datetime columns must end with `Date` (e.g., `CreationDate`,
-  `RevisionDate`, `ExpirationDate`) — do not use `At` suffixes (e.g., `CreatedAt`, `UpdatedAt`)
+  `RevisionDate`, `ExpirationDate`) -- do not use `At` suffixes (e.g., `CreatedAt`, `UpdatedAt`)
 - **Standard Columns**: Most tables include:
   - `[Id] UNIQUEIDENTIFIER NOT NULL` - Primary key
   - `[CreationDate] DATETIME2(7) NOT NULL` - Record creation timestamp
@@ -782,21 +715,17 @@ WHERE
 New user defined types should not be created. The following existing types may be used as
 table-valued parameters in stored procedures for simple, scalar lists:
 
-- **`[dbo].[GuidIdArray]`** — a single-column table of `UNIQUEIDENTIFIER` values. Use when passing a
-  list of IDs to a stored procedure (e.g., bulk reads or deletes).
+- **`[dbo].[GuidIdArray]`** -- a single-column table of `UNIQUEIDENTIFIER` values. Use when passing
+  a list of IDs to a stored procedure (e.g., bulk reads or deletes).
 
-- **`[dbo].[TwoGuidIdArray]`** — a two-column table of `UNIQUEIDENTIFIER` pairs (`Id1`, `Id2`). Use
+- **`[dbo].[TwoGuidIdArray]`** -- a two-column table of `UNIQUEIDENTIFIER` pairs (`Id1`, `Id2`). Use
   when an operation requires two related IDs per row (e.g., user ID + organization ID).
 
-- **`[dbo].[EmailArray]`** — a single-column table of `NVARCHAR(256)` email addresses. Use when
+- **`[dbo].[EmailArray]`** -- a single-column table of `NVARCHAR(256)` email addresses. Use when
   passing a list of emails to a stored procedure.
 
-A small number of multi-column TVPs predate this guidance and remain in active use (e.g.
-`[dbo].[CollectionAccessSelectionType]`, `[dbo].[OrganizationSponsorshipType]`) — continue using
-them in procedures that already depend on them, but don't follow them as a pattern for new work.
-
-For anything beyond the scalar list shapes above — multi-column rows, or a shape that may need new
-properties over time — serialize the data as JSON in application code and pass it as a single
+For anything beyond the scalar list shapes above -- multi-column rows, or a shape that may need new
+properties over time -- serialize the data as JSON in application code and pass it as a single
 `NVARCHAR(MAX)` parameter, rather than creating a new TVP.
 
 #### Passing structured data as JSON
@@ -851,7 +780,7 @@ must always be present, and confirm the application's JSON casing matches the pa
 - Use the existing TVPs (`GuidIdArray`, `TwoGuidIdArray`, `EmailArray`) for simple, single- or
   two-column lists of scalar values.
 - Use a JSON parameter when each row needs more than two columns, or when the row shape may need to
-  gain properties over time — adding a property to a JSON payload doesn't require a schema change,
+  gain properties over time -- adding a property to a JSON payload doesn't require a schema change,
   unlike adding a column to a TVP.
 
 :::
