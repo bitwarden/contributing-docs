@@ -43,7 +43,8 @@ This separation of concerns means:
   - `Stored Procedures/` - General stored procedures
   - `Tables/` - Core tables
   - `Views/` - General views
-  - `User Defined Types/` - Custom data types
+  - `User Defined Types/` - Custom data types (no new types should be added; see
+    [User defined types](#user-defined-types))
 
 ### File naming conventions
 
@@ -55,8 +56,6 @@ This separation of concerns means:
   - e.g. `UserView.sql`, `ApiKeyDetailsView.sql`
 - **Functions**: `{EntityName}{Purpose}.sql`
   - e.g. `UserCollectionDetails.sql`
-- **User Defined Types**: `{TypeName}.sql`
-  - e.g. `GuidIdArray.sql`
 
 :::tip Versioning
 
@@ -83,11 +82,17 @@ These standards should be applied across any T-SQL scripts that you write.
   makes code changes easily detectable
 - **Blank lines**: Separate sections of code with at least one blank line
 - **Commas**: Commas should be placed at the right end of the line
-- **Parentheses**: Parentheses should be vertically aligned with spanning multiple lines
+- **Parentheses**: Parentheses should be vertically aligned when spanning multiple lines
 - **Data type modifiers**: Omit the space between type name and opening parenthesis (e.g.,
   `NVARCHAR(50)` not `NVARCHAR (50)`, `DATETIME2(7)` not `DATETIME2 (7)`)
+- **Naming**: Use full, unabbreviated names throughout -- object names, column names, parameters,
+  and descriptors (e.g., `OrganizationId` not `OrgId`). Conventional short forms are exempt (`Id`,
+  the `IX_`/`PK_`/`FK_` prefixes, short-lived local variables like `@UtcNow`).
 - **ID generation**: Use `CoreHelpers.GenerateComb()` in application code, not `NEWID()` in the
   database -- see [GUID generation](./csharp#guid-generation)
+- **Datetime generation**: Generate datetime values in application code and pass them as parameters
+  (e.g., `@RevisionDate`) instead of computing them in SQL (`SYSUTCDATETIME()`, `GETUTCDATE()`) --
+  see [Datetime values](#datetime-values) for why.
 
 ### `SELECT` statements
 
@@ -157,7 +162,7 @@ WHERE
 ```
 
 - For bulk operations where the recordset may be large (e.g., all users in an organization), prefer
-  an `INNER JOIN` on the TVP — this gives the query optimizer full flexibility to choose an
+  an `INNER JOIN` on the TVP -- this gives the query optimizer full flexibility to choose an
   efficient join strategy (hash join, merge join) rather than defaulting to nested loops, which is
   the typical result of an `IN` subquery:
 
@@ -225,7 +230,7 @@ WHERE
 - Put `UNION ALL` on its own line, with a blank line above and below it
 
 ```sql
-;WITH OrgUsers AS
+;WITH OrganizationUsers AS
 (
     -- Active users: direct UserId match
     SELECT
@@ -265,26 +270,47 @@ SELECT
     OU.[OrganizationId],
     CASE WHEN PR.[OrganizationId] IS NULL THEN 0 ELSE 1 END AS [IsProvider]
 FROM
-    OrgUsers OU
+    OrganizationUsers OU
 LEFT JOIN
     Providers PR ON PR.[OrganizationId] = OU.[OrganizationId]
 ```
 
 ### Stored procedures
 
-- **Stored Procedure Name**: `{EntityName}_{Action}` format (e.g., `[dbo].[User_ReadById]`)
-  - EntityName: The main table or concept (e.g. User, Organization, Cipher)
-  - Action: What the procedure does (e.g. Create, ReadById, DeleteMany)
-- **Parameters**: Start with `@` and use PascalCase (e.g., `@UserId`, `@OrganizationId`)
-- **OUTPUT parameters**: Explicitly declare with `OUTPUT` keyword
+#### Naming
 
-:::tip Example of common CRUD operations
+Stored procedures follow the `{EntityName}_{Action}` format (e.g., `[dbo].[User_ReadById]`):
 
-- **Create**: `{EntityName}_Create` procedures
-- **Read**: `{EntityName}_ReadById`, `{EntityName}_ReadBy{Criteria}` procedures
-- **Read Many**: `{EntityName}_ReadManyByIds`, `{EntityName}_ReadManyBy{Criteria}` procedures
-- **Update**: `{EntityName}_Update` procedures
-- **Delete**: `{EntityName}_DeleteById`, `{EntityName}_Delete` procedures
+- **EntityName**: The main table or concept the procedure operates on (e.g., `User`, `Organization`,
+  `Cipher`)
+- **Action**: A verb from the standard list below, optionally followed by a short descriptor that
+  clarifies what the procedure does. `Read` and `ReadMany` are almost always paired with a
+  descriptor (e.g., `ReadById`, `ReadByOrganizationId`) since a bare `Read`/`ReadMany` rarely
+  conveys which record(s) are selected.
+
+**Standard action verbs**
+
+| Verb         | Description             |
+| ------------ | ----------------------- |
+| `Create`     | Insert a new record     |
+| `CreateMany` | Insert multiple records |
+| `Read`       | Select a single record  |
+| `ReadMany`   | Select multiple records |
+| `Update`     | Modify a record         |
+| `UpdateMany` | Modify multiple records |
+| `Delete`     | Remove a record         |
+| `DeleteMany` | Remove multiple records |
+
+:::tip Appending a descriptor
+
+When an operation is more specific than a standard verb alone, append a short descriptor to clarify
+what it does:
+
+- `User_ReadById` -- read filtered by a specific field
+- `OrganizationIntegration_ReadManyByOrganizationId` -- filtered bulk read
+- `User_UpdateRenewalReminderDate` -- update a specific field
+- `OrganizationUser_UpdateManyRevoke` -- bulk revoke
+- `OrganizationReport_UpdateApplicationData` -- update a named subset of fields
 
 :::
 
@@ -299,6 +325,8 @@ These are incorrect and should not be used as a reference. Always use `Read` or 
 
 #### Basic structure
 
+- **Parameters**: Start with `@` and use PascalCase (e.g., `@UserId`, `@OrganizationId`)
+- **OUTPUT parameters**: Explicitly declare with `OUTPUT` keyword
 - Wrap the entire procedure body in `BEGIN`/`END` statements
 
 ```sql
@@ -397,7 +425,7 @@ BEGIN
     WHERE
         [OrganizationId] = @OrganizationId
         AND [Status] = 2 -- 2 = Confirmed
-        AND [Type] = @Role
+        AND [Role] = @Role
 END
 ```
 
@@ -407,6 +435,8 @@ END
 - Align parameters with consistent indentation (4 spaces)
 - Default values on same line as parameter
 - `OUTPUT` parameters clearly marked
+- Pass values in as parameters from application code rather than hard-coding them or generating them
+  with a SQL function inside the procedure (e.g., `GETUTCDATE()`)
 
 :::warning Default parameter values
 
@@ -418,6 +448,32 @@ backward compatibility and ensure existing code can be called without modificati
 Use `SET NOCOUNT ON` to prevent the automatic return of row count messages, which improves
 performance and ensures consistent behavior across different client applications that might handle
 these messages differently.
+
+#### Datetime values
+
+Datetime values must be generated in application code and passed as parameters, not computed inline
+with `SYSUTCDATETIME()` or `GETUTCDATE()`. Deciding what "now" is belongs to application logic, not
+the database. Generating the value once also keeps it atomic for the whole operation -- every row or
+table the operation touches gets the same timestamp, instead of each statement computing its own
+slightly different one:
+
+```sql
+-- Wrong
+UPDATE
+    [dbo].[Entity]
+SET
+    [RevisionDate] = GETUTCDATE()
+WHERE
+    [Id] = @Id
+
+-- Correct
+UPDATE
+    [dbo].[Entity]
+SET
+    [RevisionDate] = @RevisionDate
+WHERE
+    [Id] = @Id
+```
 
 #### `INSERT` statements
 
@@ -455,6 +511,83 @@ WHERE
     [Id] = @Id
 ```
 
+#### Explicit transactions
+
+Only wrap statements in an explicit `BEGIN TRANSACTION` / `COMMIT TRANSACTION` when a procedure
+performs multiple statements that must all succeed or all fail together. A single `INSERT`,
+`UPDATE`, or `DELETE` statement is already atomic on its own -- SQL Server implicitly wraps every
+individual statement in a transaction, so adding an explicit one around it adds nothing but noise
+and the risk of an orphaned open transaction if the statement errors before `COMMIT` is reached.
+When a transaction is needed, keep its scope as small as possible -- only the statements that need
+to be atomic, not unrelated reads or `EXEC` calls that don't need to roll back with them.
+
+:::warning Do not wrap a single statement in an explicit transaction
+
+Several `Delete` procedures in the codebase wrap a lone `DELETE` in an explicit transaction. These
+should not be used as a reference:
+
+```sql
+-- Wrong
+BEGIN TRANSACTION
+
+DELETE
+FROM
+    [dbo].[EntityName]
+WHERE
+    [Id] = @Id
+
+COMMIT TRANSACTION
+
+-- Correct
+DELETE
+FROM
+    [dbo].[EntityName]
+WHERE
+    [Id] = @Id
+```
+
+:::
+
+Use an explicit transaction when a procedure deletes (or otherwise modifies) rows across multiple
+related tables that must be kept in sync -- e.g. deleting a parent record along with its dependent
+child records. Set `XACT_ABORT ON` and wrap the transaction in `TRY`/`CATCH` (see
+[Error handling](#error-handling)) so a mid-transaction error rolls back everything instead of
+committing a partial change:
+
+```sql
+CREATE PROCEDURE [dbo].[EntityName_DeleteById]
+    @Id UNIQUEIDENTIFIER
+AS
+BEGIN
+    SET NOCOUNT ON
+    SET XACT_ABORT ON
+
+    BEGIN TRY
+        BEGIN TRANSACTION
+
+        DELETE
+        FROM
+            [dbo].[ChildEntity]
+        WHERE
+            [EntityNameId] = @Id
+
+        DELETE
+        FROM
+            [dbo].[EntityName]
+        WHERE
+            [Id] = @Id
+
+        COMMIT TRANSACTION
+    END TRY
+    BEGIN CATCH
+        IF @@TRANCOUNT > 0
+            ROLLBACK TRANSACTION
+
+        THROW
+    END CATCH
+END
+```
+
 ### Tables
 
 - **Table Name**: Singular form of the object name, PascalCase (e.g., `[dbo].[User]` not
@@ -478,7 +611,7 @@ WHERE
   `NVARCHAR(50)` not `NVARCHAR (50)`, `DATETIME2(7)` not `DATETIME2 (7)`)
 - **Nullability**: Explicitly specify `NOT NULL` or `NULL`
 - **Datetime column naming**: Datetime columns must end with `Date` (e.g., `CreationDate`,
-  `RevisionDate`, `ExpirationDate`) — do not use `At` suffixes (e.g., `CreatedAt`, `UpdatedAt`)
+  `RevisionDate`, `ExpirationDate`) -- do not use `At` suffixes (e.g., `CreatedAt`, `UpdatedAt`)
 - **Standard Columns**: Most tables include:
   - `[Id] UNIQUEIDENTIFIER NOT NULL` - Primary key
   - `[CreationDate] DATETIME2(7) NOT NULL` - Record creation timestamp
@@ -495,6 +628,16 @@ CREATE TABLE [dbo].[TableName]
     [Column6]       BIT                 NOT NULL CONSTRAINT [DF_TableName_Column6] DEFAULT (1),
     CONSTRAINT [PK_TableName] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
+```
+
+### Indexes
+
+- **Index Name**: `IX_{TableName}_{ColumnName(s)}` (e.g., `[IX_User_Email]`)
+  - The name should clearly indicate the table and the columns being indexed
+
+```sql
+CREATE NONCLUSTERED INDEX [IX_OrganizationUser_UserIdOrganizationIdStatusV2]
+    ON [dbo].[OrganizationUser]([UserId] ASC, [OrganizationId] ASC, [Status] ASC)
 ```
 
 ### Views
@@ -570,27 +713,77 @@ WHERE
 ### User defined types
 
 New user defined types should not be created. The following existing types may be used as
-table-valued parameters in stored procedures:
+table-valued parameters in stored procedures for simple, scalar lists:
 
-- **`[dbo].[GuidIdArray]`** — a single-column table of `UNIQUEIDENTIFIER` values. Use when passing a
-  list of IDs to a stored procedure (e.g., bulk reads or deletes).
+- **`[dbo].[GuidIdArray]`** -- a single-column table of `UNIQUEIDENTIFIER` values. Use when passing
+  a list of IDs to a stored procedure (e.g., bulk reads or deletes).
 
-- **`[dbo].[TwoGuidIdArray]`** — a two-column table of `UNIQUEIDENTIFIER` pairs (`Id1`, `Id2`). Use
+- **`[dbo].[TwoGuidIdArray]`** -- a two-column table of `UNIQUEIDENTIFIER` pairs (`Id1`, `Id2`). Use
   when an operation requires two related IDs per row (e.g., user ID + organization ID).
 
-- **`[dbo].[EmailArray]`** — a single-column table of `NVARCHAR(256)` email addresses. Use when
+- **`[dbo].[EmailArray]`** -- a single-column table of `NVARCHAR(256)` email addresses. Use when
   passing a list of emails to a stored procedure.
 
-### Indexes
+For anything beyond the scalar list shapes above -- multi-column rows, or a shape that may need new
+properties over time -- serialize the data as JSON in application code and pass it as a single
+`NVARCHAR(MAX)` parameter, rather than creating a new TVP.
 
-- **Index Name**: `IX_{TableName}_{ColumnName(s)}` (e.g., `[IX_User_Email]`)
-  - The name should clearly indicate the table and the columns being indexed
+#### Passing structured data as JSON
+
+Use `OPENJSON` with an explicit `WITH` clause to shred a JSON array of objects into a typed table.
+This is the preferred pattern for bulk `INSERT`/`UPDATE` operations that need more than one column
+per row:
 
 ```sql
-CREATE NONCLUSTERED INDEX [IX_OrganizationUser_UserIdOrganizationIdStatus]
-   ON [dbo].[OrganizationUser]([UserId] ASC, [OrganizationId] ASC, [Status] ASC)
-   INCLUDE ([AccessAll])
+CREATE PROCEDURE [dbo].[EntityName_CreateMany]
+    @EntityNameJson NVARCHAR(MAX)
+AS
+BEGIN
+    SET NOCOUNT ON
+
+    INSERT INTO [dbo].[EntityName]
+    (   [Id],
+        [Name],
+        [CreationDate],
+        [RevisionDate]
+    )
+    SELECT
+        [Id],
+        [Name],
+        [CreationDate],
+        [RevisionDate]
+    FROM
+        OPENJSON(@EntityNameJson)
+        WITH (
+            [Id]           UNIQUEIDENTIFIER  '$.Id',
+            [Name]         NVARCHAR(256)     '$.Name',
+            [CreationDate] DATETIME2(7)      '$.CreationDate',
+            [RevisionDate] DATETIME2(7)      '$.RevisionDate'
+        )
+END
 ```
+
+In application code, serialize the collection with `JsonSerializer.Serialize()` and pass the result
+as the parameter value; Dapper maps it to the `NVARCHAR(MAX)` parameter like any other string.
+
+:::warning `OPENJSON` paths are lax and case-sensitive by default
+
+`WITH` clause paths are lax unless prefixed with `strict`: a missing or misspelled property yields
+`NULL` instead of an error. JSON property names are also case-sensitive, so a camelCase
+serialization policy will silently break a path like `'$.Id'`. Use `strict $.Id` for columns that
+must always be present, and confirm the application's JSON casing matches the paths used here.
+
+:::
+
+:::tip When to use JSON vs. an existing TVP
+
+- Use the existing TVPs (`GuidIdArray`, `TwoGuidIdArray`, `EmailArray`) for simple, single- or
+  two-column lists of scalar values.
+- Use a JSON parameter when each row needs more than two columns, or when the row shape may need to
+  gain properties over time -- adding a property to a JSON payload doesn't require a schema change,
+  unlike adding a column to a TVP.
+
+:::
 
 ## Error handling
 
@@ -642,6 +835,14 @@ END CATCH;
 
 ## Deployment scripts
 
+:::note Evolutionary database design
+
+Bitwarden follows [Evolutionary Database Design (EDD)](../database-migrations/edd). If a deployment
+fails and server code is rolled back, database changes are **not** rolled back with it. This means
+all migrations must support both the current release and the next release simultaneously.
+
+:::
+
 There are specific ways migration scripts should be structured. We do so to adhere to the following
 guiding principles:
 
@@ -684,7 +885,7 @@ GO
 When deleting a table, use `IF EXISTS` to avoid an error if the table doesn't exist.
 
 ```sql
-DROP IF EXISTS [dbo].[{table_name}]
+DROP TABLE IF EXISTS [dbo].[{table_name}]
 GO
 ```
 
@@ -852,7 +1053,7 @@ GO
 
 #### Creating or modifying a view
 
-We recommend using the `CREATE OR ALTER` syntax for adding or modifying a view.
+Use the `CREATE OR ALTER` syntax for adding or modifying a view.
 
 ```sql
 CREATE OR ALTER VIEW [dbo].[{view_name}]
@@ -866,10 +1067,10 @@ GO
 
 #### Deleting a view
 
-When deleting a view, use `IF EXISTS` to avoid an error if the table doesn't exist.
+When deleting a view, use `IF EXISTS` to avoid an error if the view doesn't exist.
 
 ```sql
-DROP IF EXISTS [dbo].[{view_name}]
+DROP VIEW IF EXISTS [dbo].[{view_name}]
 GO
 ```
 
@@ -890,8 +1091,7 @@ GO
 
 #### Creating or modifying a function or stored procedure
 
-We recommend using the `CREATE OR ALTER` syntax for adding or modifying a function or stored
-procedure.
+Use the `CREATE OR ALTER` syntax for adding or modifying a function or stored procedure.
 
 ```sql
 CREATE OR ALTER {PROCEDURE|FUNCTION} [dbo].[{sproc_or_func_name}]
@@ -904,7 +1104,7 @@ GO
 When deleting a function or stored procedure, use `IF EXISTS` to avoid an error if it doesn't exist.
 
 ```sql
-DROP IF EXISTS [dbo].[{sproc_or_func_name}]
+DROP {PROCEDURE|FUNCTION} IF EXISTS [dbo].[{sproc_or_func_name}]
 GO
 ```
 
@@ -923,9 +1123,8 @@ heavy-read tables and the locks can cause exceptionally high CPU, wait times and
 in Azure SQL.
 
 ```sql
-CREATE NONCLUSTERED INDEX [IX_OrganizationUser_UserIdOrganizationIdStatus]
-   ON [dbo].[OrganizationUser]([UserId] ASC, [OrganizationId] ASC, [Status] ASC)
-   INCLUDE ([AccessAll])
+CREATE NONCLUSTERED INDEX [IX_OrganizationUser_UserIdOrganizationIdStatusV2]
+    ON [dbo].[OrganizationUser]([UserId] ASC, [OrganizationId] ASC, [Status] ASC)
 ```
 
 #### Modifying Existing Indexes
