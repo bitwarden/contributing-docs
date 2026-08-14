@@ -81,11 +81,13 @@ when you are ready.
 
 Claude loads every `CLAUDE.md` and `CLAUDE.local.md` by
 [walking up from the working directory](https://code.claude.com/docs/en/memory#how-claude-md-files-load),
-looking in each ancestor directly rather than in a nested `.claude/` subdirectory. Files below the
-working directory, including nested `.claude/skills/`, load lazily when Claude reads into that
-subtree. Use that hierarchy:
+checking both `CLAUDE.md` and `.claude/CLAUDE.md` in each ancestor. Files below the working
+directory, including nested `.claude/skills/`, load lazily when Claude reads into that subtree. Use
+that hierarchy:
 
-- Applies everywhere in the repository: the root `CLAUDE.md` or `.claude/skills/`.
+- Applies everywhere in the repository: `CLAUDE.md` or `.claude/CLAUDE.md` at the repository root,
+  or `.claude/skills/`. Several repositories use the `.claude/` location rather than a root file, so
+  check which one your repository already has before adding another.
 - Applies only within one app, library, utility, or subtree: a nested `CLAUDE.md` or
   `.claude/skills/` in that directory.
 
@@ -105,10 +107,14 @@ instead of a nested `CLAUDE.md`.
 | Teach a procedure Claude invokes on demand              | `.claude/skills/<name>/SKILL.md`                                                           |
 | Give Claude a specialized subagent with its own context | `.claude/agents/<name>.md`, with `name` and `description` required in the YAML frontmatter |
 | Add a user-invocable slash command                      | `.claude/commands/<name>.md`                                                               |
-| Trigger a shell script on a Claude Code event           | A hook registered in `settings.local.json`                                                 |
+| Trigger a shell script on a Claude Code event           | `.claude/hooks/<name>.sh`, registered per developer in `.claude/settings.local.json`       |
 
 If Claude only needs it sometimes, it is a skill. Once a `CLAUDE.md` loads it stays in context for
 the rest of the session, so keep each one lean, especially the root.
+
+Hook scripts are committed so the whole team can use them, but registration stays in each
+developer's gitignored `.claude/settings.local.json`, which means a hook you add is opt-in for
+everyone else rather than automatic.
 
 ### Security conventions
 
@@ -175,4 +181,5 @@ The Claude Code ecosystem moves quickly, so last session's habits may already be
 
 5. Open the pull request. A non-draft pull request receives a Claude Code review automatically, once
    per pull request, with no label needed. Apply the `ai-review` label to review a draft, or to
-   request another review after one has already posted.
+   request another review after one has already posted. The label keeps working on every push, so
+   remove it once you have the review you wanted.
