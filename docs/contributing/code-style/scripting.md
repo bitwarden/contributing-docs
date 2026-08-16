@@ -6,9 +6,10 @@ Scripts committed to a Bitwarden repository must use the scripting language alre
 that repository. New scripts should not introduce a different language based on personal preference
 or on what an AI assistant happened to generate.
 
-A proliferation of scripting languages across a repository increases the support burden and widens
-the range of skills anyone maintaining it later must hold. Immediate inconvenience of writing in the
-established language is the price for long-term supportability.
+A proliferation of scripting languages within a repository and between repositories with similar
+code languages and frameworks increases the support burden and widens the range of skills anyone
+maintaining it later must hold. Immediate inconvenience of writing in the established language is
+the price for long-term supportability.
 
 ## Established languages per repository
 
