@@ -112,9 +112,10 @@ instead of a nested `CLAUDE.md`.
 If Claude only needs it sometimes, it is a skill. Once a `CLAUDE.md` loads it stays in context for
 the rest of the session, so keep each one lean, especially the root.
 
-Hook scripts are committed so the whole team can use them, but registration stays in each
-developer's gitignored `.claude/settings.local.json`, which means a hook you add is opt-in for
-everyone else rather than automatic.
+Claude Code registers hooks from the committed `.claude/settings.json` as well, but our convention
+is to commit only the hook script and leave registration to each developer's gitignored
+`.claude/settings.local.json`. A merged pull request should never start executing shell commands in
+a teammate's session, so hooks stay opt-in.
 
 ### Security conventions
 
