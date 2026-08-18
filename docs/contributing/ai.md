@@ -162,7 +162,9 @@ The Claude Code ecosystem moves quickly, so last session's habits may already be
 2. Survey the landscape. Skim the target repository's `.claude/` tree and
    [bitwarden/ai-plugins](https://github.com/bitwarden/ai-plugins), then match the voice you find.
    Your contribution should read like its neighbors.
-3. Build iteratively. When authoring a skill, start with the `skill-creator` command:
+3. Build iteratively. When authoring a skill, start with
+   [`skill-creator`](https://github.com/anthropics/claude-plugins-official/tree/main/plugins/skill-creator)
+   from Anthropic's official plugin marketplace:
 
    ```
    /skill-creator:skill-creator
@@ -179,6 +181,14 @@ The Claude Code ecosystem moves quickly, so last session's habits may already be
    ```
    /bitwarden-code-review:code-review-local
    ```
+
+   A diff that touches `CLAUDE.md`, a skill, an agent, a command, a hook, or `.claude/` settings
+   picks up a Claude-configuration pass over frontmatter, structure, prompt quality, and
+   config-specific security issues such as a committed `settings.local.json` or an agent granted
+   broader tool access than it needs. The automated review on your pull request always runs that
+   pass; install
+   [`claude-config-validator`](https://github.com/bitwarden/ai-plugins/tree/main/plugins/claude-config-validator)
+   to get it locally too.
 
 5. Open the pull request. A non-draft pull request receives a Claude Code review automatically, once
    per pull request, with no label needed. Apply the `ai-review` label to review a draft, or to
