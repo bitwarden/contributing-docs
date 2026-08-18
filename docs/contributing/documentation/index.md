@@ -93,7 +93,7 @@ Apply in order. First match wins:
 
 :::
 
-The inverse of these rules can be round in the [reverse routing tables](./reverse_routing_tables.md)
+The inverse of these rules can be found in the [reverse routing tables](./reverse_routing_tables.md)
 
 ### Private content
 

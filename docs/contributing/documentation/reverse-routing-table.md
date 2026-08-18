@@ -5,6 +5,10 @@ sidebar_label: Reverse Routing Table
 
 # Reverse routing table
 
+**Audience:** Bitwarden engineers and AI agents deciding where a document belongs.
+
+Notation follows the [documentation standard's Notation](./index.md#notation).
+
 Where each kind of documentation lives, grouped by home. Owners follow the
 [ownership rule](./index.md#owners). The Format column links the page that owns the type's format,
 where one exists. When more than one row fits, the most specific row wins. This applies within a
