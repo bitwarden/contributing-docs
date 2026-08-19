@@ -1,6 +1,6 @@
 ---
 sidebar_position: 3
-sidebar_label: Reverse Routing Table
+sidebar_label: Reverse routing table
 ---
 
 # Reverse routing table
@@ -54,7 +54,7 @@ standard: propose the fix and the new row in the same PR.
 | Documentation type                                                                                            | Home                                                                                                                               | Format                                                                                                        |
 | ------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
 | Runbooks, on-call, operational docs                                                                           | Confluence, owning **team** space                                                                                                  | <Bitwarden>[Runbook template][runbook-template]</Bitwarden><Community>Runbook template (internal)</Community> |
-| Incident post-mortems / RCAs                                                                                  | incident.io → Confluence export (IP space only)                                                                                    | incident.io process                                                                                           |
+| Incident post-mortems / RCAs                                                                                  | incident.io → Confluence export (Incident Postmortem space only)                                                                   | incident.io process                                                                                           |
 | Infrastructure and deployment architecture                                                                    | Confluence, owning team space                                                                                                      | —                                                                                                             |
 | Production change records                                                                                     | Confluence, owning team space                                                                                                      | —                                                                                                             |
 | Team & org process: planning, assessments, investigations, onboarding and hiring, directories, working groups | Confluence team space                                                                                                              | —                                                                                                             |
