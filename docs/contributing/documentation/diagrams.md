@@ -103,14 +103,14 @@ vocabulary. The example above is at context level.
 
 C4 is adopted as a **mental model only**. We are explicitly **NOT** adopting any C4 tooling/DSL.
 
-## Ownership and currency (rules 7 and 8)
+## Ownership and updates (rules 7 and 8)
 
-- The owner is CODEOWNERS for in-repo docs and the page's owning team on Confluence.
+- The owner is `CODEOWNERS` for in-repo docs and the page's owning team on Confluence.
 - Updates land in the same PR or page edit as the change the diagram depicts. A diagram known to be
   wrong is deleted or updated rather than left to mislead.
 - Every repo's root `CLAUDE.md` MUST carry the base documentation obligations, which cover diagrams:
   when you change code that a diagram describes, update the diagram in the same change. The
-  doc-currency plugin in [bitwarden/ai-plugins](https://github.com/bitwarden/ai-plugins) distributes
+  doc-parity plugin in [bitwarden/ai-plugins](https://github.com/bitwarden/ai-plugins) distributes
   the obligation and enforces it across every documented scope above a change. The plugin's own
   documentation owns the mechanism.
 - Agent-authored diagrams follow the same rules. Generated diagrams MUST carry a perspective caption

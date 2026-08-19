@@ -52,6 +52,7 @@ LLDB
 Lucidchart
 Mailcatcher
 minio
+mortems
 MVVM
 NGRX
 Napi
@@ -107,6 +108,7 @@ typecheck
 typechecks
 typesafe
 udeps
+ungated
 unsynchronized
 WCAG
 weweave

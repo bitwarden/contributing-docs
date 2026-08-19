@@ -1,6 +1,6 @@
 ---
 adr: "0034"
-status: Proposed
+status: Accepted
 date: 2026-08-05
 tags: [clients, mobile, server, sdk]
 ---
@@ -38,10 +38,10 @@ Confluence against a proposed routing model, confirming these gaps.
 
 ## Decision outcome
 
-Chosen option: **one org-wide, docs-as-code documentation standard**, published as the Documentation
-section under Contributing on this site. The standard is the living reference. Its rules evolve by
-PR without superseding this decision and this ADR is superseded only if the model itself changes. A
-snapshot of the rules at adoption:
+Chosen option: **one org-wide, docs-as-code documentation standard**, published as the
+[Documentation section](../../contributing/documentation/index.md). The standard is the living
+reference. Its rules evolve by PR without superseding this decision and this ADR is superseded only
+if the model itself changes. A snapshot of the rules at adoption:
 
 1. **Public by default**. Private content is limited to documentation about working at Bitwarden and
    sensitive information.
@@ -54,7 +54,7 @@ snapshot of the rules at adoption:
 
 Diagrams follow the separate diagram standard adopted in
 [ADR-0033](./0033-adopt-mermaid-diagram-standard.md), which keeps its own living reference at
-Contributing › Diagrams.
+Contributing › Documentation › Diagrams.
 
 AI instruction files are explicitly not documentation and are out of the standard's scope. Their
 guidance lives with the AI tooling.
