@@ -160,8 +160,8 @@ A running implementation of this model is at
   ```
 
   > _Perspective: Council reviewers weighing the scoped-install claim. What two representative
-  > bundles actually resolve to at install time, contrasted side by side. Component level. Omits
-  > the other six bundles, which resolve by the same pattern._
+  > bundles actually resolve to at install time, contrasted side by side. Component level. Omits the
+  > other six bundles, which resolve by the same pattern._
 
 - Consolidating the funnel skills into one plugin converts thirteen cross-plugin references into
   intra-plugin calls, and co-locating `consulting-adrs` with `architecting-solutions` makes the
