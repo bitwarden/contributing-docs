@@ -132,9 +132,6 @@ The operational detail lives in the marketplace repository rather than here: the
 of which skill moves where, the rename ledger, and the migration sequencing. This ADR is superseded
 only if the two-layer model itself changes.
 
-A running implementation of this model is at
-[github.com/SaintPatrck/bitwarden-ai-plugins](https://github.com/SaintPatrck/bitwarden-ai-plugins).
-
 ### Positive consequences
 
 - "Which plugin does this skill go in" has one answer, and the answer set excludes every role-named
