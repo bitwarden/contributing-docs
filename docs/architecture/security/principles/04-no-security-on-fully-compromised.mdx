@@ -1,5 +1,9 @@
 # P04 - No security on fully compromised systems
 
+When hardware or OS-level integrity is fully compromised, vault data may become accessible to
+attackers. While Bitwarden continuously strives to provide robust protections, certain threats fall
+beyond the reach of software-based security measures.
+
 :::info Note
 
 This principle applies only to unlocked vaults. Refer to [P02](./locked-vault-is-secure) for details
@@ -15,7 +19,3 @@ limited by the environments in which Bitwarden operates. For this reason, TEEs a
 when defining what constitutes a fully compromised device.
 
 :::
-
-When hardware or OS-level integrity is fully compromised, vault data may become accessible to
-attackers. While Bitwarden continuously strives to provide robust protections, certain threats fall
-beyond the reach of software-based security measures.

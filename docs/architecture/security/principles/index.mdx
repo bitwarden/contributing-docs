@@ -1,4 +1,6 @@
-# Principles
+import DocCardList from "@theme/DocCardList";
+
+# Security principles
 
 **Audience:** Bitwarden engineers and AI agents building or reviewing behavior that touches vault
 data, and external readers who want to understand Bitwarden's security model.
@@ -14,44 +16,6 @@ Several principles define the device compromise level they assume. P02 governs l
 P03 and P04 apply only to unlocked vaults on semi-compromised and fully compromised devices
 respectively.
 
-## P01 - Servers are zero knowledge
+## Principles
 
-Neither an attacker nor a Bitwarden employee can reach unencrypted vault data by compromising
-Bitwarden's infrastructure. The user's key, which Bitwarden cannot access, is the only thing that
-decrypts vault data or creates new encrypted data, and the server cannot coerce a client into
-weakening that protection or pass its own plaintext off as the user's data. This is what "end-to-end
-encrypted" and "zero knowledge" mean at Bitwarden.
-[P01 sets out the threat model, the security goals, and how account key sharing fits](./servers-are-zero-knowledge).
-
-## P02 - A locked vault is secure
-
-Once a vault is locked, clients must keep highly sensitive vault data out of plain text, even if the
-device is compromised after the lock occurs. Protections are not guaranteed when the device is
-compromised before the lock.
-[P02 covers the platform limits on this guarantee and the bar that key storage mechanisms such as PINs must meet](./locked-vault-is-secure).
-
-## P03 - Limited security for vaults on semi-compromised devices
-
-On a device where malware runs in user space but has not breached kernel or OS-level protections,
-clients must use the protections available to them to keep malware away from plaintext vault data
-while the vault is unlocked.
-[P03 distinguishes the technical controls from the administrative controls and how to balance them against usability](./limited-security-on-semi-compromised).
-
-## P04 - No security on fully compromised systems
-
-When hardware or OS-level integrity is fully compromised, vault data may become accessible to
-attackers. Some threats fall beyond the reach of software-based security measures.
-[P04 explains why Trusted Execution Environments do not currently change this boundary](./no-security-on-fully-compromised).
-
-## P05 - Controlled access to vault data
-
-Vault data, at rest or in use, must be reachable only by authorized parties and always under the
-user's explicit control. Even while the vault is unlocked, access must be restricted to specific
-contexts such as autofill or an explicit user action.
-[P05 describes the isolation expected in environments prone to unauthorized access, such as browsers](./controlled-access).
-
-## P06 - Minimized impact of security breaches
-
-User error and unforeseen vulnerabilities can still lead to a breach. Bitwarden should limit the
-damage in both scope and duration when one occurs.
-[P06 lists the expected actions, including invalidating compromised sessions and rotating keys for forward secrecy](./minimized-impact-of-security-breaches).
+<DocCardList />
