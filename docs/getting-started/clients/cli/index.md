@@ -17,28 +17,13 @@ Before you start, you must complete the [Clients repository setup instructions](
 
 ## Build instructions
 
-:::tip Nx commands are preferred.
-
-We now recommend using Nx commands for building projects. For the cli:
-
-```bash
-# Build and watch (GPL)
-npx nx serve cli --configuration=oss-dev
-# Build and watch (Bitwarden)
-npx nx serve cli --configuration=commercial-dev
-```
-
-For complete Nx documentation and all available commands, see
-[Using Nx to Build Projects](https://github.com/bitwarden/clients/blob/main/docs/using-nx-to-build-projects.md).
-:::
-
-Build and run:
+We recommend using Nx commands to build the CLI. Run the following from the repository root to build
+and watch:
 
 <Bitwarden>
 
 ```bash
-cd apps/cli
-npm run build:bit:watch
+npx nx serve cli --configuration=commercial-dev
 ```
 
 </Bitwarden>
@@ -46,11 +31,13 @@ npm run build:bit:watch
 <Community>
 
 ```bash
-cd apps/cli
-npm run build:oss:watch
+npx nx serve cli --configuration=oss-dev
 ```
 
 </Community>
+
+For complete Nx documentation and all available commands, see
+[Using Nx to Build Projects](https://github.com/bitwarden/clients/blob/main/docs/using-nx-to-build-projects.md).
 
 By default, this will use the official Bitwarden servers. If you need to develop with Server running
 locally, follow the instructions below in Environment setup.
@@ -78,34 +65,119 @@ location. The web application proxies API requests to your local Server APIs.
 
 Run the following when you have Web running locally:
 
+<Bitwarden>
+
 ```bash
-node build/bw.js config server https://localhost:8080
+node dist/apps/cli/commercial-dev/bw.js config server https://localhost:8080
 ```
+
+</Bitwarden>
+
+<Community>
+
+```bash
+node dist/apps/cli/oss-dev/bw.js config server https://localhost:8080
+```
+
+</Community>
 
 Otherwise, you need to set the individual Server API locations as follows:
 
+<Bitwarden>
+
 ```bash
-node build/bw.js config server \
+node dist/apps/cli/commercial-dev/bw.js config server \
   --api http://localhost:4000 \
   --identity http://localhost:33656
 ```
 
-## Testing and Debugging
+</Bitwarden>
 
-The build is located at `build/bw.js`. You can run this with node, for example:
+<Community>
 
 ```bash
-node build/bw.js login
+node dist/apps/cli/oss-dev/bw.js config server \
+  --api http://localhost:4000 \
+  --identity http://localhost:33656
 ```
+
+</Community>
+
+## Testing and Debugging
+
+The Nx build is located at `dist/apps/cli/<configuration>/bw.js`, where `<configuration>` matches
+the configuration you built (for example `commercial-dev` or `oss-dev`). You can run this with node,
+for example:
+
+<Bitwarden>
+
+```bash
+node dist/apps/cli/commercial-dev/bw.js login
+```
+
+</Bitwarden>
+
+<Community>
+
+```bash
+node dist/apps/cli/oss-dev/bw.js login
+```
+
+</Community>
 
 It may be more convenient to make the file executable first:
 
+<Bitwarden>
+
 ```bash
-cd build
+cd dist/apps/cli/commercial-dev
 chmod +x bw.js
 ./bw.js login
 ```
 
+</Bitwarden>
+
+<Community>
+
+```bash
+cd dist/apps/cli/oss-dev
+chmod +x bw.js
+./bw.js login
+```
+
+</Community>
+
 To debug the CLI client, run it from a
 [Javascript Debug Terminal](https://code.visualstudio.com/docs/nodejs/nodejs-debugging#_javascript-debug-terminal)
 and place the breakpoints in your Typescript code.
+
+## Manual build commands
+
+Before the migration to Nx, the CLI was built directly with npm scripts. These commands are still
+available but are no longer the recommended approach.
+
+Build and watch:
+
+<Bitwarden>
+
+```bash
+cd apps/cli
+npm run build:bit:watch
+```
+
+</Bitwarden>
+
+<Community>
+
+```bash
+cd apps/cli
+npm run build:oss:watch
+```
+
+</Community>
+
+These scripts output the build to `build/bw.js`, which you can run with node, for example:
+
+```bash
+node build/bw.js login
+```
