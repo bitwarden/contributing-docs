@@ -23,88 +23,87 @@ we have pre-configured in an `idp` Docker container for easy setup.
 
 ### Configure the IdP
 
-1.   Open your local web client and navigate to your organization → Settings → Single Sign-On.
-2.   Tick the "Allow SSO authentication" box.
-3.   Come up with and enter an SSO Identifier.
-4.   Select "SAML 2.0" as the SSO type. Don't save or exit this page yet, you'll need to come back
-     to it later.
-5.   Open a new terminal and navigate to the `dev` folder in your server repository, e.g.
-     ```bash
-     cd ~/Projects/server/dev
-     ```
-6.   Open your `.env` file and set the following environment variables using the "SP Entity ID" and
-     "Assertion Consumer Service (ACS) URL" values from the SSO configuration page opened in step #4
-     above:
-
-     ```bash
-     IDP_SP_ENTITY_ID={SP Entity ID}
-     IDP_SP_ACS_URL={ACS URL}
-     ```
-
-     :::note
-
-     You should have created this `.env` file during your initial server setup. You can refer back
-     to the `.env.example` file if required.
-
-     :::
-
-7.   (Optional) You may generate a certificate to sign SSO requests. You can do this with a script
-     made for your OS of choice.
-
-     ```bash
-     # Mac
-     ./create_certificates_mac.sh
-
-     # Windows
-     .\create_certificates_windows.ps1
-
-     # Linux
-     ./create_certificates_linux.sh
-     ```
-
-     Paste the thumbprint, for example `0BE8A0072214AB37C6928968752F698EEC3A68B5`, into your
-     `secrets.json` file under `globalSettings` > `identityServer` > `certificateThumbprint`. Update
-     your secrets as [shown here](../guide.md#configure-user-secrets).
-
-8.   Make a copy of the provided `authsources.php.example` file, which contains the configuration
-     for your IdP users.
-
-     ```bash
-     cp authsources.php.example authsources.php
-     ```
-
-     By default, this file has two users configured: `user1` and `user2`, and both have the password
-     `password`. You can add or modify users by following this format, or just use the defaults. See
-     [here](https://github.com/kenchan0130/docker-simplesamlphp#advanced-usage) for more information
-     about customizing this file.
-
-9.   (Optional) You may copy the provided `saml20-sp-remote.php.example` file, which contains the
-     configuration for the IdP's assertion encryption capabilities. See
-     [here](https://github.com/kenchan0130/docker-simplesamlphp#customize-sp-remote-metadata-reference)
-     for more information about this file.
-
-     ```bash
-     cp saml20-sp-remote.php.example saml20-sp-remote.php
-     ```
-
-     To enable assertion encryption, follow the instructions in the file to put your certificate
-     data from the certificate configured above and set `assertion.encryption` to `TRUE`.
-
-     This file must be present for the container volume mount. If you do not copy and configure this
-     file, the `idp-init` Docker Compose prerequisite creates a default copy for you. Assertions are
-     not encrypted in this case.
-
-10.  Start the docker container:
+1.  Open your local web client and navigate to your organization → Settings → Single Sign-On.
+2.  Tick the "Allow SSO authentication" box.
+3.  Come up with and enter an SSO Identifier.
+4.  Select "SAML 2.0" as the SSO type. Don't save or exit this page yet, you'll need to come back to
+    it later.
+5.  Open a new terminal and navigate to the `dev` folder in your server repository, e.g.
+    ```bash
+    cd ~/Projects/server/dev
+    ```
+6.  Open your `.env` file and set the following environment variables using the "SP Entity ID" and
+    "Assertion Consumer Service (ACS) URL" values from the SSO configuration page opened in step #4
+    above:
 
     ```bash
+    IDP_SP_ENTITY_ID={SP Entity ID}
+    IDP_SP_ACS_URL={ACS URL}
+    ```
 
+    :::note
+
+    You should have created this `.env` file during your initial server setup. You can refer back to
+    the `.env.example` file if required.
+
+    :::
+
+7.  (Optional) You may generate a certificate to sign SSO requests. You can do this with a script
+    made for your OS of choice.
+
+    ```bash
+    # Mac
+    ./create_certificates_mac.sh
+
+    # Windows
+    .\create_certificates_windows.ps1
+
+    # Linux
+    ./create_certificates_linux.sh
+    ```
+
+    Paste the thumbprint, for example `0BE8A0072214AB37C6928968752F698EEC3A68B5`, into your
+    `secrets.json` file under `globalSettings` > `identityServer` > `certificateThumbprint`. Update
+    your secrets as [shown here](../guide.md#configure-user-secrets).
+
+8.  Make a copy of the provided `authsources.php.example` file, which contains the configuration for
+    your IdP users.
+
+    ```bash
+    cp authsources.php.example authsources.php
+    ```
+
+    By default, this file has two users configured: `user1` and `user2`, and both have the password
+    `password`. You can add or modify users by following this format, or just use the defaults. See
+    [here](https://github.com/kenchan0130/docker-simplesamlphp#advanced-usage) for more information
+    about customizing this file.
+
+9.  (Optional) You may copy the provided `saml20-sp-remote.php.example` file, which contains the
+    configuration for the IdP's assertion encryption capabilities. See
+    [here](https://github.com/kenchan0130/docker-simplesamlphp#customize-sp-remote-metadata-reference)
+    for more information about this file.
+
+    ```bash
+    cp saml20-sp-remote.php.example saml20-sp-remote.php
+    ```
+
+    To enable assertion encryption, follow the instructions in the file to put your certificate data
+    from the certificate configured above and set `assertion.encryption` to `TRUE`.
+
+    This file must be present for the container volume mount. If you do not copy and configure this
+    file, the `idp-init` Docker Compose prerequisite creates a default copy for you. Assertions are
+    not encrypted in this case.
+
+10. Start the docker container:
+
+    ```bash
     docker compose --profile idp up -d
     ```
 
 11. You can test your user configuration by navigating to
-[http://localhost:8090/simplesaml](http://localhost:8090/simplesaml) and clicking Authentication →
-Test Configured Authentication Sources → `example-userpass`. You should be able to log in with the
-users you’ve configured.
+    [http://localhost:8090/simplesaml](http://localhost:8090/simplesaml) and clicking Authentication
+    → Test Configured Authentication Sources → `example-userpass`. You should be able to log in with
+    the users you’ve configured.
 
 ### Configure Bitwarden
 
