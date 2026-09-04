@@ -78,21 +78,20 @@ we have pre-configured in an `idp` Docker container for easy setup.
     [here](https://github.com/kenchan0130/docker-simplesamlphp#advanced-usage) for more information
     about customizing this file.
 
-9.  (Optional) You may copy the provided `saml20-sp-remote.php.example` file, which contains the
-    configuration for the IdP's assertion encryption capabilities. See
-    [here](https://github.com/kenchan0130/docker-simplesamlphp#customize-sp-remote-metadata-reference)
-    for more information about this file.
+9.  Make a copy of the provided `saml20-sp-remote.php.example` file, which contains the
+    configuration for the IdP's assertion encryption capabilities.
 
     ```bash
     cp saml20-sp-remote.php.example saml20-sp-remote.php
     ```
 
-    To enable assertion encryption, follow the instructions in the file to put your certificate data
-    from the certificate configured above and set `assertion.encryption` to `TRUE`.
+    Assertion encryption is disabled by default. To enable assertion encryption, follow the
+    instructions in the file to put your certificate data from the certificate configured above and
+    set `assertion.encryption` to `TRUE`.
 
-    This file must be present for the container volume mount. If you do not copy and configure this
-    file, the `idp-init` Docker Compose prerequisite creates a default copy for you. Assertions are
-    not encrypted in this case.
+    See
+    [here](https://github.com/kenchan0130/docker-simplesamlphp#customize-sp-remote-metadata-reference)
+    for more information about this file.
 
 10. Start the docker container:
 
