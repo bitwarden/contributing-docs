@@ -42,11 +42,11 @@ count peaked at 16 in the final month.
 The boundaries in this chain are not all the same, and that difference is the reason a monorepo is
 worth considering at all:
 
-| Boundary                | Nature                             | Shared version            | A monorepo helps |
-| ----------------------- | ---------------------------------- | ------------------------- | ---------------- |
-| `server` -> SDK         | time-decoupled pull (bindings bot) | pull when ready           | no               |
-| SDK <-> clients/mobile  | build-time, compiled together      | real, per build           | yes              |
-| deployed app <-> server | run-time wire (HTTP/JSON)          | open-world, many versions | no               |
+| Boundary                  | Nature                             | Shared version            | A monorepo helps |
+| ------------------------- | ---------------------------------- | ------------------------- | ---------------- |
+| `server -> SDK`           | time-decoupled pull (bindings bot) | pull when ready           | no               |
+| `SDK <-> clients/mobile`  | build-time, compiled together      | real, per build           | yes              |
+| `deployed app <-> server` | run-time wire (HTTP/JSON)          | open-world, many versions | no               |
 
 The SDK is compiled into each app build, so `SDK <-> app` is purely a build-time concern and the
 shared version is real, not a fiction. That is precisely the boundary where breaking events happen,
