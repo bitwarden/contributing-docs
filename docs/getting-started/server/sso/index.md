@@ -78,13 +78,28 @@ we have pre-configured in an `idp` Docker container for easy setup.
     [here](https://github.com/kenchan0130/docker-simplesamlphp#advanced-usage) for more information
     about customizing this file.
 
-9.  Start the docker container:
+9.  Make a copy of the provided `saml20-sp-remote.php.example` file, which contains the
+    configuration for the IdP's assertion encryption capabilities.
+
+    ```bash
+    cp saml20-sp-remote.php.example saml20-sp-remote.php
+    ```
+
+    Assertion encryption is disabled by default. To enable assertion encryption, follow the
+    instructions in the file to put your certificate data from the certificate configured above and
+    set `assertion.encryption` to `TRUE`.
+
+    See
+    [here](https://github.com/kenchan0130/docker-simplesamlphp#customize-sp-remote-metadata-reference)
+    for more information about this file.
+
+10. Start the docker container:
 
     ```bash
     docker compose --profile idp up -d
     ```
 
-10. You can test your user configuration by navigating to
+11. You can test your user configuration by navigating to
     [http://localhost:8090/simplesaml](http://localhost:8090/simplesaml) and clicking Authentication
     → Test Configured Authentication Sources → `example-userpass`. You should be able to log in with
     the users you’ve configured.
