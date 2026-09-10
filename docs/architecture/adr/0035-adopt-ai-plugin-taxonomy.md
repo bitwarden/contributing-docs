@@ -66,9 +66,9 @@ Chosen option: **two layers, capability plugins plus role bundles**. The rules a
    component serving three roles lives once and appears in three bundles.
 4. **Placement is decided in order,** for any component: repo-specific knowledge stays in that
    repo's local configuration, where repo-specific means unusable outside that repo's codebase; an
-   artifact dispatched only by a sibling stays with its consumer; knowledge that would transfer
-   unchanged to another company using the same vendor product belongs to that vendor's integration
-   plugin; everything else is named for the artifact or practice it acts on.
+   artifact dispatched only by a sibling stays with its consumer; knowledge of how Bitwarden uses a
+   vendor's product, stated generically, belongs to that vendor's integration plugin; everything
+   else is named for the artifact or practice it acts on.
 5. **A plugin description enumerates what it provides**, which makes the boundary self-enforcing at
    review time. A component that does not fit the enumeration either forces a deliberate description
    change or goes elsewhere.
@@ -92,7 +92,7 @@ flowchart TD
     B -->|yes| B1["Stays in that repo's local configuration"]
     B -->|no| C{"Dispatched only by one sibling?"}
     C -->|yes| C1["Stays with its consumer"]
-    C -->|no| D{"Transfers unchanged to another company<br/>on the same vendor product?"}
+    C -->|no| D{"How we use a vendor's product,<br/>stated generically?"}
     D -->|yes| D1["That vendor's integration plugin"]
     D -->|no| E["Named for the artifact or practice it acts on"]
 ```
@@ -100,6 +100,10 @@ flowchart TD
 > _Perspective: A contributor placing a new component. The four-branch test rule 4 states in prose,
 > walked in order. Omits the plugin-description self-check in rule 5, which runs after this tree
 > lands on an answer._
+
+The vendor branch has a reciprocal. A component driving one workflow through a vendor surface
+composes that vendor's integration plugin and hands it content, so the conventions for using the
+product stay in one place and the specialized component carries none of them.
 
 A third kind of entry sits outside both layers. An **external entry** names a third-party repository
 and a commit. Its files stay upstream, so the pinned commit is the whole of its security boundary.
