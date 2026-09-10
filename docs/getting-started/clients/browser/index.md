@@ -10,39 +10,52 @@ Before you start, you must complete the [Clients repository setup instructions](
 
 ## Build instructions
 
-:::tip Nx commands are preferred.
-
-We now recommend using Nx commands for building projects. For the browser extension:
+We recommend using Nx commands to build the browser extension. Run the following from the repository
+root to build and watch:
 
 ```bash
-# Build and watch (chrome is the default)
+# Chrome is the default
 npx nx serve browser
-# Build and watch for specific browsers
+# Build and watch for a specific browser
 npx nx serve browser --configuration=firefox-dev
 npx nx serve browser --configuration=safari-dev
 ```
 
 For complete Nx documentation and all available commands, see
 [Using Nx to Build Projects](https://github.com/bitwarden/clients/blob/main/docs/using-nx-to-build-projects.md).
+
+:::note
+
+The build commands use
+[Manifest v3](https://developer.chrome.com/docs/extensions/develop/migrate/what-is-mv3) by default.
+
 :::
 
-1.  Build and run the extension:
+Each configuration outputs its build to `dist/apps/browser/<configuration>` (for example
+`dist/apps/browser/chrome-dev`). Once built, load the unpacked browser extension in your browser
+using the instructions in the [Testing and debugging](#testing-and-debugging) section.
 
-    ```bash
-    cd apps/browser
-    npm run build:watch
-    ```
+## Manual build commands
 
-    :::note
+Before the migration to Nx, the browser extension was built directly with npm scripts. These
+commands are still available but are no longer the recommended approach.
 
-    The build commands use
-    [Manifest v3](https://developer.chrome.com/docs/extensions/develop/migrate/what-is-mv3) by
-    default. If you are building for a non-Chrome browser like Firefox or Safari, you should use the
-    command `npm run build:watch:<browser client name>` instead.
+Build and watch (Chrome is the default):
 
-    :::
+```bash
+cd apps/browser
+npm run build:watch
+```
 
-2.  Load the unpacked browser extension in your browser using the instructions in the next section.
+To build for a non-Chrome browser, use `npm run build:watch:<browser client name>` instead, for
+example:
+
+```bash
+npm run build:watch:firefox
+npm run build:watch:safari
+```
+
+These scripts output the build to the `build` folder.
 
 ## Environment setup
 
@@ -144,13 +157,13 @@ To load the browser extension build:
 1. Build the extension for Chrome:
 
    ```bash
-   npm run build:watch
+   npx nx serve browser
    ```
 
 2. Navigate to `chrome://extensions` in your address bar. This will open the extensions page
 3. Enable “developer mode” (toggle switch)
 4. Click the “Load unpacked” button
-5. Open the `build` folder of your local repository and confirm your choice
+5. Open the `dist/apps/browser/chrome-dev` folder of your local repository and confirm your choice
 
 You will now have your local build of the browser extension installed.
 
@@ -165,13 +178,14 @@ To load the browser extension build:
 1. Build the extension for Firefox:
 
    ```bash
-   npm run build:watch:firefox
+   npx nx serve browser --configuration=firefox-dev
    ```
 
 2. Navigate to `about:debugging` in your address bar. This will open the add-on debugging page
 3. Click “This Firefox”
 4. Click “Load Temporary Add-on”
-5. Open the `build` folder of your local repository and open the `manifest.json` file
+5. Open the `dist/apps/browser/firefox-dev` folder of your local repository and open the
+   `manifest.json` file
 
 You will now have your local build of the browser extension installed.
 
@@ -197,13 +211,13 @@ To load the browser extension build:
 1. Build the extension for Safari:
 
    ```bash
-   npm run build:watch:safari
+   npx nx serve browser --configuration=safari-dev
    ```
 
 2. Open Safari and navigate to `Safari -> Settings -> Developer`
 3. Click “Allow unsigned extensions”
 4. Click “Add Temporary Extension...”
-5. Open the `build` folder of your local repository
+5. Open the `dist/apps/browser/safari-dev` folder of your local repository
 
 You will now have your local build of the browser extension installed.
 
