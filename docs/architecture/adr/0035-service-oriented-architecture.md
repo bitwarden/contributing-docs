@@ -131,7 +131,7 @@ The following decisions govern what a service is and how it behaves.
 3. Services `MUST` be built on the `Bitwarden.Server.Sdk` package.
 4. Services `MUST` document their APIs in [OpenAPI format](https://www.openapis.org/) and conform to
    **API Standards**.
-5. Services `MUST NOT` make breaking changes. Changes that _would_ be breaking should follow the API
+5. Services `MUST NOT` make breaking changes. Changes that _would_ be breaking `MUST` follow the API
    versioning process as outlined by API Standards.
 6. Services `MUST` provide a **service client** for clients and other services (a.k.a. "consumers")
    to use.
