@@ -82,7 +82,7 @@ flowchart LR
 ```
 
 > _Perspective: Council reviewers ratifying the model. How a component reaches the person who
-> installs it. System context level. Omits the dependency edges between capability plugins._
+> installs it. System context level. Omits the dependencies between capability plugins._
 
 Rule 4's ordering is a decision procedure:
 
@@ -113,11 +113,12 @@ Bundles use the plugin manifest's dependencies array, which the platform documen
 a manifest consisting of only dependencies packages a curated set behind one install, and bundles
 can be pushed org-wide through managed settings.
 
-Cross-plugin dependencies are accepted at both layers, bounded by one rule: every
-capability-to-capability edge names the specific skill that composes across it. An edge that cannot
-name one is deleted. One integration plugin remains a soft dependency everywhere because it ships a
-connection to an external service that prompts for credentials, and a declared edge would force that
-prompt on every member of the roles that depend on it.
+A plugin may depend on another plugin at either layer. Before declaring one, name the call: this
+skill in one plugin calls that skill in the other. A dependency nobody can name that way comes out.
+
+Dependencies are all or nothing. The platform has no optional kind, so a plugin whose dependency is
+missing does not load at all. Anything meant to work without a plugin it calls has to say so, and
+keep working when that plugin is gone.
 
 The operational detail lives in the marketplace repository. Its contribution guide carries the
 procedure a contributor follows, including the placement test walked with worked examples and the
@@ -144,8 +145,7 @@ engineering.
   used at scale elsewhere yet. Bitwarden would be an early adopter of that machinery, and its
   failure modes each disable the dependent plugin until resolved.
 - Single-sourcing concentrates dependents onto a few shared capability plugins. A bad release of one
-  disables every dependent sitting behind a hard-abort edge, and that radius widens as more roles
-  compose the same shared plugin.
+  disables every dependent, and that radius widens as more roles compose the same shared plugin.
 - Marketplace entries grow in count even though ambiguity falls, because only some of the resulting
   entries can hold a component.
 - Migration spans several pull requests, each carrying a version bump and a changelog entry, and
@@ -160,7 +160,7 @@ Follow-up work in the marketplace repository, sequenced so no step depends on a 
 ```mermaid
 flowchart LR
     P0["0 · No renames<br/>delete phantoms, rewrite descriptions"] --> P1["1 · Free rename<br/>rename a plugin to match what it acts on"]
-    P1 --> P2["2 · Make dependencies real<br/>README prose becomes declared edges"]
+    P1 --> P2["2 · Make dependencies real<br/>README prose becomes declared dependencies"]
     P2 --> P3["3 · Consolidate<br/>related skills, related pairs"]
     P3 --> P4["4 · Hollow role plugins into bundles"]
 ```
