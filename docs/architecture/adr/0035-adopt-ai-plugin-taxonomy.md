@@ -101,9 +101,9 @@ flowchart TD
 > walked in order. Omits the plugin-description self-check in rule 5, which runs after this tree
 > lands on an answer._
 
-The vendor branch has a reciprocal. A component driving one workflow through a vendor surface
-composes that vendor's integration plugin and hands it content, so the conventions for using the
-product stay in one place and the specialized component carries none of them.
+A component driving one workflow through a vendor surface composes that vendor's integration plugin
+and hands it content, so the conventions for using the product stay in one place and the specialized
+component carries none of them.
 
 A third kind of entry sits outside both layers. An **external entry** names a third-party repository
 and a commit. Its files stay upstream, so the pinned commit is the whole of its security boundary.
