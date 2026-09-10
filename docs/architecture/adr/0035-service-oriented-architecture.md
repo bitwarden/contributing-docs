@@ -131,21 +131,22 @@ The following decisions govern what a service is and how it behaves.
 3. Services `MUST` be built on the `Bitwarden.Server.Sdk` package.
 4. Services `MUST` document their APIs in [OpenAPI format](https://www.openapis.org/) and conform to
    **API Standards**.
-5. Services `MUST NOT` make breaking changes.
-6. Services `MUST` provide a **service client** for clients and other services (a.k.a. "consumers")
+5. Services `MUST NOT` make breaking changes.  Changes that *would* be breaking should follow the
+   API versioning process as outlined by API Standards.
+7. Services `MUST` provide a **service client** for clients and other services (a.k.a. "consumers")
    to use.
-7. Service clients `SHOULD` make use of a network cache to mitigate performance issues.
+8. Service clients `SHOULD` make use of a network cache to mitigate performance issues.
    - Any cache used `MUST` be owned and invalidated by the owning service.
    - Serving results from cache `MUST NOT` bypass authorization the owning service would otherwise
      enforce.
-8. Services that need to read, write, or validate data owned by another service `SHOULD` do so via
+9. Services that need to read, write, or validate data owned by another service `SHOULD` do so via
    the service's published service client.
-9. A service `MAY` hold a local copy of another service's data only with a recorded justification
+10. A service `MAY` hold a local copy of another service's data only with a recorded justification
    (e.g. a measured hot-path volume, a stated availability requirement, etc.).
    - Any service holding a local copy `MUST` enforce the owner's row-level security on that copy and
      document the security ramifications of a stale copy (due to messaging lag, event processing
      failures, etc.).
-10. Services `MUST` publish events as a matter of course using the "transactional outbox" pattern,
+11. Services `MUST` publish events as a matter of course using the "transactional outbox" pattern,
     regardless of whether there are any known consumers.
 
 ### Positive consequences
