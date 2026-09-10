@@ -5,7 +5,7 @@ date: 2026-08-21
 tags: [clients, mobile, server, sdk]
 ---
 
-# 0035 - Adopt a taxonomy for AI skills, prompts, and agents
+# 0035 - Adopt a taxonomy for the AI plugin marketplace
 
 <AdrTable frontMatter={frontMatter}></AdrTable>
 
@@ -17,11 +17,11 @@ duplication and churn rather than as an argument anyone wins.
 
 The marketplace's contribution guide defines a small number of plugin families. A meaningful
 fraction of plugins fit none of them cleanly: several have no family at all, and others fit only on
-a technicality — named for an activity rather than a role, or named for a role but shipping no agent
-and nothing but generic skills. Those are exactly the plugins whose contents are hardest to predict
-from their names. A family of subject-matter skill libraries exists in practice but is undocumented,
-so it has no membership test, and one plugin became the default home for anything skill-shaped that
-was not a persona. It now holds several unrelated concerns behind a single name.
+a technicality, named for an activity instead of a role, or named for a role but shipping no agent
+and nothing but generic skills. Those are the plugins whose contents are hardest to predict from
+their names. A family of subject-matter skill libraries exists in practice but is undocumented, so
+it has no membership test, and one plugin became the default home for anything skill-shaped that was
+not a persona. It now holds several unrelated concerns behind a single name.
 
 The absence of a rule is measurable in the tree:
 
@@ -56,10 +56,10 @@ skill and leaves the joining problem where it is.
 
 Chosen option: **two layers, capability plugins plus role bundles**. The rules at adoption:
 
-1. **A capability plugin carries components.** Whatever kinds of component the platform supports,
-   this is what holds them, and every component has exactly one home. It is named for what its
-   components act on, meaning an artifact, a practice, or an integration surface, never for a job
-   title, a seniority level, or a lifecycle phase.
+1. **A capability plugin carries components,** whatever kinds the platform supports, and every
+   component has exactly one home. It is named for what its components act on, meaning an artifact,
+   a practice, or an integration surface, never for a job title, a seniority level, or a lifecycle
+   phase.
 2. **A role bundle holds nothing but a name, a description, and dependencies.** No components of any
    kind. CI enforces it. It is what a person installs, and it is named for the role.
 3. **Placement therefore ranges only over capability plugins**, because a bundle holds nothing. A
@@ -81,11 +81,10 @@ flowchart LR
     Ext["External entry<br/>upstream files at a pinned commit"] -->|installed by| Person
 ```
 
-> _Perspective: Council reviewers ratifying the model. What separates a capability plugin from a
-> role bundle, and how a person ends up with either. System context level. Omits concrete plugin
-> names, covered below._
+> _Perspective: Council reviewers ratifying the model. How a component reaches the person who
+> installs it. System context level. Omits the dependency edges between capability plugins._
 
-Rule 4's ordering is itself a decision procedure, not just a sentence:
+Rule 4's ordering is a decision procedure:
 
 ```mermaid
 flowchart TD
@@ -103,13 +102,12 @@ flowchart TD
 > lands on an answer._
 
 A third kind of entry sits outside both layers. An **external entry** names a third-party repository
-and a commit rather than shipping files of its own, so the pinned commit is the whole of its
-security boundary. It carries no Bitwarden practice, so no placement rule reaches it and neither
-layer contains it.
+and a commit. Its files stay upstream, so the pinned commit is the whole of its security boundary.
+It carries no Bitwarden practice, so no placement rule reaches it and neither layer contains it.
 
-Bundles use the plugin manifest's dependencies array, which the platform documents for exactly this
-purpose: a manifest consisting of only dependencies packages a curated set behind one install, and
-bundles can be pushed org-wide through managed settings.
+Bundles use the plugin manifest's dependencies array, which the platform documents for this purpose:
+a manifest consisting of only dependencies packages a curated set behind one install, and bundles
+can be pushed org-wide through managed settings.
 
 Cross-plugin dependencies are accepted at both layers, bounded by one rule: every
 capability-to-capability edge names the specific skill that composes across it. An edge that cannot
@@ -117,12 +115,11 @@ name one is deleted. One integration plugin remains a soft dependency everywhere
 connection to an external service that prompts for credentials, and a declared edge would force that
 prompt on every member of the roles that depend on it.
 
-The operational detail lives in the marketplace repository rather than here. Its contribution guide
-carries the procedure a contributor follows, including the placement test walked with worked
-examples, the tie-breakers that settle an ambiguous case, and the current dependency graph. This ADR
-records only the decision and what it rules out. It is superseded only if the two-layer model itself
-changes. Rule 4's branch set is revisable as the marketplace absorbs disciplines beyond engineering,
-and revising it does not supersede this decision.
+The operational detail lives in the marketplace repository. Its contribution guide carries the
+procedure a contributor follows, including the placement test walked with worked examples and the
+tie-breakers that settle an ambiguous case. This decision is superseded only if the two-layer model
+itself changes. Rule 4's branch set stays revisable as the marketplace absorbs disciplines beyond
+engineering.
 
 ### Positive consequences
 
@@ -159,14 +156,13 @@ Follow-up work in the marketplace repository, sequenced so no step depends on a 
 ```mermaid
 flowchart LR
     P0["0 · No renames<br/>delete phantoms, rewrite descriptions"] --> P1["1 · Free rename<br/>rename a plugin to match what it acts on"]
-    P1 --> P2["2 · Make dependencies real<br/>README prose → declared edges"]
+    P1 --> P2["2 · Make dependencies real<br/>README prose becomes declared edges"]
     P2 --> P3["3 · Consolidate<br/>related skills, related pairs"]
     P3 --> P4["4 · Hollow role plugins into bundles"]
 ```
 
-> _Perspective: Whoever sequences the migration PRs. The five phases below, in the order each
-> depends on the last. Roadmap level. Omits per-plugin task detail, which lives in the marketplace
-> repository's own tracking._
+> _Perspective: Whoever sequences the migration PRs. The order in which each phase depends on the
+> last. Omits per-plugin task detail, which lives in the marketplace repository's own tracking._
 
 - The contribution guide's plugin families are rewritten against this decision, and the marketplace
   catalog is regrouped by layer.
@@ -175,7 +171,7 @@ flowchart LR
   declared dependency resolves to something real, alongside the lexical invariants the marketplace
   currently lacks. Rule 2 is one of them: a bundle directory carrying a component of any kind fails
   the build.
-- The capability consolidations land one plugin identity per pull request, beginning with the plugin
-  that has not yet shipped and can be renamed at no cost.
+- The capability consolidations land one plugin identity per pull request, beginning with those that
+  have not shipped and can be renamed at no cost.
 - The role plugins are hollowed into bundles once their skills have moved, and a bundle is added for
-  the one role with no plugin today.
+  any role with no plugin of its own.
