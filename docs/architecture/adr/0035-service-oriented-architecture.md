@@ -23,9 +23,9 @@ The server is one application over one shared data store. Any code path can join
 so a domain's data has no enforceable owner: the schema is the integration contract, and every team
 is coupled to every other team's tables. Three consequences follow:
 
-  1. A schema change cannot be reasoned about locally.
-  2. Organization scoping is applied by convention at each call site.
-  3. No team can deploy on its own cadence.
+1. A schema change cannot be reasoned about locally.
+2. Organization scoping is applied by convention at each call site.
+3. No team can deploy on its own cadence.
 
 Organization scoping is the clearest symptom. It is enforced today by roughly 98 hand-written
 organization comparisons across 65 files, each applied to a row that has already been read. Every
@@ -44,9 +44,9 @@ resulting service owns and how a boundary is crossed.
 Services will be extracted regardless, because teams need independent deployment. Without that
 agreement they will be extracted with divergent answers to the same questions:
 
-  - Who may read this table?
-  - What happens when the owner is unavailable?
-  - Is a copy is acceptable?
+- Who may read this table?
+- What happens when the owner is unavailable?
+- Is a copy acceptable?
 
 Reconciling those answers afterward is far more expensive than agreeing to them once.
 
