@@ -19,36 +19,13 @@ _service_, _consumer_, _service client_, and _row-level security_ are defined in
 
 ## Context and problem statement
 
-The server is one application over one shared data store. Any code path can join across any domain,
-so a domain's data has no enforceable owner: the schema is the integration contract, and every team
-is coupled to every other team's tables. Three consequences follow:
+The server is one monolithic application over one monolithic database. Any code path can join
+across any domain, so a domain's data has no enforceable owner: the database is the integration
+contract, and every team is coupled to every other team's tables. Three consequences follow:
 
 1. A schema change cannot be reasoned about locally.
 2. Organization scoping is applied by convention at each call site.
 3. No team can deploy on its own cadence.
-
-Organization scoping is the clearest symptom. It is enforced today by roughly 98 hand-written
-organization comparisons across 65 files, each applied to a row that has already been read. Every
-one is a place a future change can omit the check, and nothing structural distinguishes a correct
-call site from a missing one.
-
-The pieces needed to decompose already exist. `Bitwarden.Server.Sdk` is a shared MSBuild SDK package
-consumed by fifteen projects in `server`. Command-query separation is established at scale per
-[ADR-0008](./0008-server-CQRS-pattern.md), with several hundred single-operation command and query
-classes in the tree. [ADR-0031](./0031-adopt-minimal-apis.md) and
-[ADR-0032](./0032-break-up-core.md) already define the path a feature takes out of the monolith: a
-feature-scoped library under `src/Libraries/[Feature]`, which moves to `src/Services/[Name]` when it
-graduates into its own deployable container. What those decisions do not settle is what the
-resulting service owns and how a boundary is crossed.
-
-Services will be extracted regardless, because teams need independent deployment. Without that
-agreement they will be extracted with divergent answers to the same questions:
-
-- Who may read this table?
-- What happens when the owner is unavailable?
-- Is a copy acceptable?
-
-Reconciling those answers afterward is far more expensive than agreeing to them once.
 
 ## Considered options
 
@@ -117,8 +94,7 @@ Reconciling those answers afterward is far more expensive than agreeing to them 
 
 ## Decision outcome
 
-Chosen option: **service-oriented architecture** — one implementation of each read, owned by the
-team accountable for its rules.
+Chosen option: **Service-Oriented Architecture**
 
 The rules are published as the
 [service-oriented architecture standard](../service-oriented-architecture/services.md). That page is
