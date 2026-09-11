@@ -2,7 +2,7 @@
 adr: "0035"
 status: Proposed
 date: 2026-09-10
-tags: [server, sdk]
+tags: [server, server-sdk]
 ---
 
 # 0035 - Service-oriented architecture
