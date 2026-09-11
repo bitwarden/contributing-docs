@@ -19,9 +19,9 @@ _service_, _consumer_, _service client_, and _row-level security_ are defined in
 
 ## Context and problem statement
 
-The server is one monolithic application over one monolithic database. Any code path can join
-across any domain, so a domain's data has no enforceable owner: the database is the integration
-contract, and every team is coupled to every other team's tables. Three consequences follow:
+The server is one monolithic application over one monolithic database. Any code path can join across
+any domain, so a domain's data has no enforceable owner: the database is the integration contract,
+and every team is coupled to every other team's tables. Three consequences follow:
 
 1. A schema change cannot be reasoned about locally.
 2. Organization scoping is applied by convention at each call site.
