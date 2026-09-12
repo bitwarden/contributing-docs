@@ -4,7 +4,7 @@
 
 We recommend using the automated helper script described in the
 [Server Setup Guide](../getting-started/server/guide.md). However, you can manually edit or
-troubleshoot your user secrets using the instructions below. If you are manually editing using
+troubleshoot your user secrets using the instructions below. If you are manually editing user
 secrets, make sure to remember to copy your changes across to all projects if required.
 
 ### Editing user secrets - Visual Studio on Windows
@@ -45,4 +45,4 @@ You can edit this file directly, which is much easier than using the command lin
 ### Editing user secrets - Rider
 
 - Navigate to **Preferences -> Plugins** and Install .NET Core User Secrets
-- Right click on the a project and click **Tools** > **Open project user secrets**
+- Right click on a project and click **Tools** > **Open project user secrets**
