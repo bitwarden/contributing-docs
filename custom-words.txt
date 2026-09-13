@@ -3,11 +3,13 @@
 # by the spellchecker. Please keep the list sorted alphabetically.
 AndroidX
 AOSP
+Appibase
 backplane
 Bitwarden
 bitwardensecret
 bytemark
 Casbin
+Catalio
 clickjacking
 codebases
 CODEOWNERS
@@ -23,6 +25,7 @@ diffable
 dockerized
 dotfile
 F-Droid
+fieldsets
 frontmatter
 Gitter
 HKDF
@@ -54,9 +57,9 @@ Mailcatcher
 minio
 mortems
 MVVM
-NGRX
 Napi
 napi
+NGRX
 OIDCS
 Omnisharp
 onboarded
@@ -64,8 +67,8 @@ opid
 OTLP
 owasp
 passcode
-passwordless
 passthroughs
+passwordless
 pinentry
 PNSs
 POSIX

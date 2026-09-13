@@ -1,0 +1,34 @@
+---
+sidebar_position: 0
+---
+
+# Service-Oriented Architecture
+
+**Audience:** Bitwarden engineers and AI agents building, extracting, or reviewing a service.
+
+This section is the living standard for how Bitwarden's services are built and how they relate to
+one another: what a service owns, how a boundary is crossed, what travels on a call, and what every
+service publishes.
+
+## Key patterns
+
+### Internal API standards
+
+Service-to-service APIs follow a standard based on JSON:API, adopted selectively, and are versioned
+in the path.
+
+See [Internal API standards](./internal-api-standards.md) for the full standard.
+
+### Command Query Separation (CQS)
+
+We use the CQS pattern to break up large service classes into smaller, focused commands and queries.
+This results in classes with fewer interdependencies that are easier to change and test.
+
+See [Command Query Separation](./command-query-separation.md) for details.
+
+### Model separation of concerns
+
+API contracts (request/response models) are kept separate from internal data models. This allows
+APIs to evolve independently from internal data structures and business logic.
+
+See [Model separation of concerns](./model-separation-of-concerns.md) for details.
