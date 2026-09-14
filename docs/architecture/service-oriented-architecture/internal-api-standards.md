@@ -494,7 +494,7 @@ Upon success, APIs `SHOULD` return `204` but `MAY` return `202`.
 Services `MAY` support "soft deletes" for any number of reasons. Services that do, `SHOULD` follow
 the following guidelines:
 
-- Delete APIs perform a soft deletes by default and read-many APIs exclude soft-deletes by default.
+- Delete APIs perform a soft delete by default and read-many APIs exclude soft-deletes by default.
 - If callers can request that a delete be "hard", callers pass `permanent=true` query parameter.
 - If callers can request that soft-deletes be included in responses, callers pass
   `includeDeleted=true` query parameter.
@@ -839,7 +839,7 @@ Content-Type: application/json
 {
   "filter": {
     "and": [
-      { "==": [{ "var": "status" }, "invited"] },
+      { "==": [{ "var": "status" }, "INVITED"] },
       { "<": [{ "var": "invitedAt" }, "2026-06-01T00:00:00Z"] }
     ]
   }
@@ -939,7 +939,7 @@ calling, instead, and, ideally, how much time they have to migrate.
 
 ```http
 Deprecation: @1688169599
-Sunset: Sun, 30 Jun 2024 23:59:59 UTC
+Sunset: Sun, 30 Jun 2024 23:59:59 GMT
 Link: </api/v2/groups>; rel="successor-version"
 ```
 
@@ -1018,8 +1018,8 @@ sticking to simple updates.
 > How do I support just adding or removing an element from a collection?
 
 You `MAY` implement the [JSON Patch](https://www.rfc-editor.org/info/rfc6902/) specification, which
-was designed for exactly this. However, think an [action](#acting-upon-resources) works just as well
-and is simpler:
+was designed for exactly this. However, we think an [action](#acting-upon-resources) works just as
+well and is simpler:
 
 ```
 POST /api/v1/groups/62bed180-1f78-45d4-8a56-c996936a2947/actions/add-collection
