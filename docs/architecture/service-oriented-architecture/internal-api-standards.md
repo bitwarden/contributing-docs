@@ -878,8 +878,8 @@ includes the following:
 
 ## Errors
 
-Errors `MUST` be returned as an array of error objects within a top-level `errors` field where each
-error populates the following fields:
+Errors `MUST` be returned as an array of error objects within a top-level `errors` field. Each error
+populates the following fields, except that at most one `source` member applies to any one error:
 
 | Field              | Description                                                                                                       | Type     |
 | ------------------ | ----------------------------------------------------------------------------------------------------------------- | -------- |
@@ -899,6 +899,7 @@ error populates the following fields:
 {
   "errors": [
     {
+      "id": "9f3c1e2a-7d40-4c8b-9b17-2f5a1c6e83d1",
       "status": "400",
       "code": "resource-not-found",
       "title": "Referenced resource does not exist",
