@@ -173,8 +173,9 @@ parameters, and headers.
 
 - Services `MUST` respect the `Accept` media type requested by the caller. If the caller asks for
   XML and the server cannot return XML, the service `MUST` return `406 Not Acceptable`.
-- Because our APIs are largely based on JSON:API, services `MUST` accept `application/vnd.api+json`
-  if provided by the client, even though the API itself only advertises `application/json`.
+- Because our APIs are largely based on JSON:API, services `MUST` accept a request whose
+  `Content-Type` is `application/vnd.api+json`, and `MUST` honor an `Accept` of
+  `application/vnd.api+json`, even though the API itself only advertises `application/json`.
 - Services `MUST` return `415 Unsupported Media Type` if the server can't process the specified
   `Content-Type`.
 
@@ -262,8 +263,9 @@ APIs `MUST` use the standard verb semantics:
 | `POST`   | Create a resource.                                                                                                |
 | `PUT`    | Update a resource with "completely replace" semantics. APIs that support create-or-update `MUST` do so via `PUT`. |
 
-The only exceptions are [advanced queries](#advanced-queries), [bulk updates](#bulk-updates), and
-[bulk deletes](#bulk-deletes), which use `POST` because the request carries a body.
+The only exceptions are [actions](#acting-upon-resources), [advanced queries](#advanced-queries),
+[bulk updates](#bulk-updates), and [bulk deletes](#bulk-deletes), which use `POST` without creating
+a resource.
 
 ## Creating resources
 
