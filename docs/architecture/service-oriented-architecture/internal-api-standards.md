@@ -205,18 +205,17 @@ every API:
 - Return `400` for requests that are malformed and cannot even be parsed (e.g. invalid JSON).
 - Return `422` for invalid requests. See [Request validation](#request-validation).
 
-### 400 vs 404
-
-- If the resource specified by the URL is **not found**, or the caller should not know it exists,
-  APIs `MUST` return `404`.
-- If the resource specified by the URL is **found**, but a resource referenced within the payload
-  does not exist (or the caller should not know it exists), that is a "bad request" and, thus, APIs
-  `MUST` return `400`.
-
 ### 403 vs. 404
 
 - Return `403` for attempts to read, write, or act upon resources the user is allowed to know exist.
 - Return `404` for attempts to read, write, or act upon resources the user should _not_ know exist.
+
+### 404 vs. 422
+
+- If the resource specified by the URL is **not found**, or the caller should not know it exists,
+  APIs `MUST` return `404`.
+- If the resource specified by the URL is **found**, but a resource referenced within the payload
+  does not exist (or the caller should not know it exists), APIs `MUST` return `422`.
 
 ### 500 vs. 503
 
@@ -747,7 +746,7 @@ supported:
 | `!`                  | Negation.                                           |
 
 A request that uses any other operator, or references a field that does not exist, `MUST` be
-rejected with `400`.
+rejected with `422`.
 
 **Example**
 
@@ -900,7 +899,7 @@ populates the following fields, except that at most one `source` member applies 
   "errors": [
     {
       "id": "9f3c1e2a-7d40-4c8b-9b17-2f5a1c6e83d1",
-      "status": "400",
+      "status": "422",
       "code": "resource-not-found",
       "title": "Referenced resource does not exist",
       "detail": "'e3d2eb3e-755c-41cd-86f0-0e0649043ef6' is not a group in this organization.",
