@@ -87,8 +87,8 @@ contract, coupling teams directly to one another's tables. Three consequences fo
 
 - Introduces a synchronous dependency between services, which must be authenticated, authorized,
   cached, and operated.
-- Independently deployable services are independently versioned services, which means compatibility
-  matrices on customer installations.
+- Independently deployable services are independently versioned services, which the release pipeline
+  has to keep shipping as one coordinated set.
 
 ## Decision outcome
 
@@ -132,9 +132,12 @@ The rules:
 
 ### Negative consequences
 
-- **Version skew becomes a supported condition.** Independently deployed services mean compatibility
-  matrices on customer installations, with no rollback available on a customer's own hardware. Rule
-  5 keeps this tractable, and it is a permanent obligation.
+- **Versioning.** Independently deployable services will likely be versioned independently as well,
+  and enhancements and bug fixes will land service by service, each producing a new version of that
+  service. Rule 5 ensures a new version never introduces a breaking change, so a customer may at any
+  time run an "upgrade everything" script and take the latest of every service — which is exactly
+  what self-host installs. Our obligation is to just make sure "the latest version of everything"
+  always works.
 - **A synchronous dependency now exists where none did.** It has to be authenticated, authorized,
   observed, and operated. A dependency's unavailability becomes a caller's failure mode.
 - **Service-to-service authentication has to be built for cloud.** The existing internal grant has
