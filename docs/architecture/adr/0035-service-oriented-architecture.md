@@ -15,7 +15,7 @@ This ADR uses [RFC 2119](https://www.rfc-editor.org/info/rfc2119/) keywords (`MU
 `SHOULD`, `SHOULD NOT`, `MAY`) deliberately. Anything marked `MUST` or `MUST NOT` is not negotiable
 at team level; a team that needs an exception brings the case to the architecture group. The terms
 _service_, _consumer_, _service client_, and _row-level security_ are defined in the
-[service-oriented architecture standard](../service-oriented-architecture/services.md).
+[service-oriented architecture standard](../server/services.md).
 
 ## Context and problem statement
 
@@ -96,10 +96,9 @@ and every team is coupled to every other team's tables. Three consequences follo
 
 Chosen option: **Service-Oriented Architecture**
 
-The rules are published as the
-[service-oriented architecture standard](../service-oriented-architecture/services.md). That page is
-the living reference: its rules evolve by pull request without superseding this decision, and this
-ADR is superseded only if the model itself changes. The rules at adoption:
+The rules are published as the [service-oriented architecture standard](../server/services.md). That
+page is the living reference: its rules evolve by pull request without superseding this decision,
+and this ADR is superseded only if the model itself changes. The rules at adoption:
 
 1. Service boundaries `MUST` derive from data ownership, not from team structure.
 2. Every resource `MUST` have exactly one owning service, and that service is the only process that
