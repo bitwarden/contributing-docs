@@ -18,8 +18,8 @@ at team level; a team that needs an exception brings the case to the architectur
 ## Context and problem statement
 
 The server is one monolithic application over one monolithic database. Any code path can join across
-any domain, so a domain's data has no enforceable owner: the database is the integration contract,
-and every team is coupled to every other team's tables. Three consequences follow:
+domain boundaries, leaving data with no enforceable owner. The database serves as the integration
+contract, coupling teams directly to one another's tables. Three consequences follow:
 
 1. A schema change cannot be reasoned about locally.
 2. Organization scoping is applied by convention at each call site.
@@ -110,11 +110,11 @@ The rules:
    - Serving results from cache `MUST NOT` bypass authorization the owning service would otherwise
      enforce.
 8. Services that need to read, write, or validate data owned by another service `SHOULD` do so via
-   the service's published service client.
+   the owner's published service client.
 9. A service `MAY` hold a local copy of another service's data only with a recorded justification
    (e.g. a measured hot-path volume, a stated availability requirement, etc.).
-   - Any service holding a local copy `MUST` enforce the owner's row-level security on that copy and
-     document the security ramifications of a stale copy (due to messaging lag, event processing
+   - Any service holding a local copy `MUST` enforce the owner's row-level security on that data and
+     document the security ramifications of stale reads (due to messaging lag, event processing
      failures, etc.).
 10. Services `MUST` publish events for every state change using the "transactional outbox" pattern,
     regardless of whether there are any known consumers.
@@ -136,7 +136,7 @@ The rules:
   matrices on customer installations, with no rollback available on a customer's own hardware. Rule
   5 keeps this tractable, and it is a permanent obligation.
 - **A synchronous dependency now exists where none did.** It has to be authenticated, authorized,
-  observed, and operated, and a dependency's unavailability becomes a caller's failure mode.
+  observed, and operated. A dependency's unavailability becomes a caller's failure mode.
 - **Service-to-service authentication has to be built for cloud.** The existing internal grant has
   only ever been registered for self-hosted deployments.
 - **Every extracted service is another process on the smallest tier.** Bitwarden Lite already runs
