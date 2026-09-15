@@ -94,7 +94,7 @@ need to make them, without it becoming a coordinated effort.
 - Introduces a synchronous dependency between services, which must be authenticated, authorized,
   cached, and operated.
 - Adds latency to any read that crosses a boundary and can be particularly harmful if 1 API
-  invocation turns into N calls to another service. This, however, is not unlike from N+1 database
+  invocation turns into N calls to another service. This, however, is not unlike N+1 database
   queries that can result from a careless for loop and the same strategies used to turn N+1 database
   queries into 2 queries can usually be brought to bear for service-to-service calls, as well.
 - Independently deployable services are independently versioned services, which the release pipeline
