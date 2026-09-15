@@ -92,7 +92,7 @@ contract, coupling teams directly to one another's tables. Three consequences fo
 
 ## Decision outcome
 
-Chosen option: **Service-Oriented Architecture**
+Chosen option: **Service-oriented architecture**.
 
 The rules:
 
