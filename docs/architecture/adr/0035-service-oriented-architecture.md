@@ -102,7 +102,7 @@ need to make them, without it becoming a coordinated effort.
 
 ## Decision outcome
 
-Chosen option: **Service-Oriented Architecture**
+Chosen option: **Service-oriented architecture**.
 
 The rules:
 
