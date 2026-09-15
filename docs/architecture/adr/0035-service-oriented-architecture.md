@@ -25,6 +25,12 @@ contract, coupling teams directly to one another's tables. Three consequences fo
 2. Organization scoping is applied by convention at each call site.
 3. No team can deploy on its own cadence.
 
+Every team ships on the monolith's schedule and any regression anywhere blocks everyone. As a
+result, teams may respond by batching work into larger releases, which makes each release riskier to
+review and harder to roll back. Independent deployment is what breaks that cycle: a team that owns
+its store, its service, and its release can make whatever changes they need to make, whenever they
+need to make them, without it becoming a coordinated effort.
+
 ## Considered options
 
 - **Status quo:** one monolithic application over one monolithic shared database, with logical
@@ -87,6 +93,10 @@ contract, coupling teams directly to one another's tables. Three consequences fo
 
 - Introduces a synchronous dependency between services, which must be authenticated, authorized,
   cached, and operated.
+- Adds latency to any read that crosses a boundary and can be particularly harmful if 1 API
+  invocation turns into N calls to another service. This, however, is not unlike from N+1 database
+  queries that can result from a careless for loop and the same strategies used to turn N+1 database
+  queries into 2 queries can usually be brought to bear for service-to-service calls, as well.
 - Independently deployable services are independently versioned services, which the release pipeline
   has to keep shipping as one coordinated set.
 
@@ -148,8 +158,10 @@ The rules:
 - **Row-level security in the data layer is not yet portable.** The current implementation composes
   T-SQL and has no Entity Framework path, so the enforcement this ADR relies on is available on SQL
   Server only until that gap is closed.
-- **Caching is not uniformly available.** Neither full self-host nor Bitwarden Lite ships a shared
-  cache today, so rule 7's cache is cloud-only until that is addressed.
+- **A cache cannot be assumed to exist.** Redis and Cosmos are both exposed through configuration
+  and some self-host operators do configure one, but neither is provisioned by default and Bitwarden
+  Lite ships no cache service at all. Rule 7's caching is therefore an optimization a service may
+  find available, never a mechanism it can depend on being there.
 
 ### Plan
 
