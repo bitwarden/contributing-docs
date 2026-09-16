@@ -212,5 +212,5 @@ crate, coordinate with the Platform team to establish ownership and review expec
   https://github.com/bitwarden/sdk-internal/blob/main/crates/bitwarden-uniffi/src/error.rs
 [uniffi-lib]: https://github.com/bitwarden/sdk-internal/blob/main/crates/bitwarden-uniffi/src/lib.rs
 [uniffi-sends]:
-  https://github.com/bitwarden/sdk-internal/blob/main/crates/bitwarden-uniffi/src/tool/sends.rs
+  https://github.com/bitwarden/sdk-internal/blob/main/crates/bitwarden-uniffi/src/tools/sends.rs
 [vault-crate]: https://github.com/bitwarden/sdk-internal/tree/main/crates/bitwarden-vault
