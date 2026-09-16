@@ -127,7 +127,8 @@ The rules:
      document the security ramifications of stale reads (due to messaging lag, event processing
      failures, etc.).
 10. Services `MUST` publish events for every state change using the "transactional outbox" pattern,
-    regardless of whether there are any known consumers.
+    regardless of whether there are any known consumers. Standards for these events will be the
+    subject of a forthcoming ADR and out of scope for this ADR.
 
 ### Positive consequences
 
