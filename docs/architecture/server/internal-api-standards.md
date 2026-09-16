@@ -991,6 +991,10 @@ Link: </api/v2/groups>; rel="successor-version"
   subset is rejected with `422`. See
   [Unrecognized fields, query parameters, and headers](#unrecognized-fields-query-parameters-and-headers).
 - Implementation-specific query parameters are not required to contain a non-`a-z` character.
+- Resources are updated with `PUT` and complete-replace semantics rather than `PATCH`. `PATCH`,
+  where a service supports it, follows the specification's partial-update semantics.
+- We do not support `relationships` objects. A reference to another resource is an `attributes`
+  member holding its ID.
 
 ## Frequently asked questions
 
