@@ -978,6 +978,10 @@ Link: </api/v2/groups>; rel="successor-version"
 - Paged responses are not required to include `links`.
 - For sparse fieldsets, callers specify the fields to include via a `fields` query parameter. We do
   not support the `fields[{type}]` form.
+- Unrecognized query parameters are ignored rather than rejected with `400`, and the result-shaping
+  subset is rejected with `422`. See
+  [Unrecognized fields, query parameters, and headers](#unrecognized-fields-query-parameters-and-headers).
+- Implementation-specific query parameters are not required to contain a non-`a-z` character.
 
 ## Frequently asked questions
 
