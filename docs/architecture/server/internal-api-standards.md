@@ -574,10 +574,11 @@ comma-delimited list. This allows APIs that started with single-value query para
 supporting multiple-values without changing the external-facing contract. When multiple values are
 provided, "or" query semantics `MUST` be applied.
 
-On a parameter that accepts multiple values or a [range](#ranges), a comma or backslash that is part
-of a value `MUST` be escaped with a backslash — `filter[displayName]=Smith\, Jr` is the single value
-`Smith, Jr`. A parameter that takes a single value is never split, so its value needs no escaping.
-An asterisk `MUST` likewise be escaped wherever the API supports wildcard matching.
+On a parameter that accepts multiple values or a [range](#ranges), a comma that is part of a value
+`MUST` be escaped with a backslash — `filter[displayName]=Smith\, Jr` is the single value
+`Smith, Jr`. An asterisk `MUST` likewise be escaped wherever the API supports wildcard matching.
+Wherever either escape applies, a backslash that is part of a value `MUST` also be escaped as `\\`.
+A parameter that takes a single value is never split, so a comma in its value needs no escaping.
 
 > **Take care when a single-value parameter gains multi-value support.** A caller sending an
 > unescaped comma will suddenly be sending two values. That is usually safe, because the evolution
