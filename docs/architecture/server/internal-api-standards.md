@@ -116,19 +116,19 @@ duplicated in the URL path.
 
 ## Breaking changes and versioning
 
-APIs `MUST NOT` make **breaking changes**. A breaking change is defined as follows:
+APIs `SHOULD NOT` make **breaking changes**. A breaking change is defined as follows:
 
 1. Removing (or relocating) a field.
 1. Changing the datatype of a field.
 1. Making an optional field required.
 1. Adding additional constraints to a field.
 
-The lone exception to this rule is when the constraints that need to be added are fixing a bug. In
-this case, even though it is technically a "breaking change", API versioning is not required: the
-constraint may be added to the existing version of the API.
+The lone exception to this rule are security and cryptographic issues. Such issues `SHOULD` be fixed
+"in place", without creating new versions of the API, even if the changes would technically be
+considered breaking changes.
 
-If changes need to be made that _would_ be breaking changes, a new version of the API must be
-created and the old one [deprecated](#deprecation).
+Otherwise if changes need to be made that _would_ be breaking changes, a new version of the API must
+be created and the old one [deprecated](#deprecation).
 
 > **Adding a value to a constrained field deserves a second look.** It is additive, so it is not a
 > breaking change by the definition above, and a caller that treats the field as an open string is
