@@ -854,6 +854,7 @@ Bulk deletes delete every resource matching a filter.
 - HTTP verb `MUST` be `POST`.
 - API path `MUST` be like `/api/v1/{resource plural}:bulk-delete`.
 - `filter` `MUST` be present and use the [advanced query](#advanced-queries) expression language.
+- On a service that supports [soft deletes](#soft-deletes), a bulk delete `MUST` soft-delete.
 
 **Example**
 
