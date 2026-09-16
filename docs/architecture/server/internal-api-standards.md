@@ -118,9 +118,9 @@ duplicated in the URL path.
 
 APIs `SHOULD NOT` make **breaking changes**. A breaking change is defined as follows:
 
-1. Removing (or relocating) a field.
-1. Changing the datatype of a field.
+1. Adding a new, required field.
 1. Making an optional field required.
+1. Changing the datatype of a field.
 1. Adding additional constraints to a field.
 
 The lone exception to this rule are security and cryptographic issues. Such issues `SHOULD` be fixed
