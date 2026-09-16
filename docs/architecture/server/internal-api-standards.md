@@ -428,11 +428,13 @@ Content-Type: application/json
 
 **Success responses**
 
-Upon success, APIs `SHOULD` return `200` but `MAY` return `202` or `204`.
+Upon success, APIs `SHOULD` return `200` — or `201` if the request created the resource — but `MAY`
+return `202` or `204`.
 
 | Status           | Description                              | Response                                                    |
 | ---------------- | ---------------------------------------- | ----------------------------------------------------------- |
 | `200 OK`         | The resource was updated.                | The latest representation of the resource.                  |
+| `201 Created`    | The resource was created.                | The latest representation of the resource.                  |
 | `202 Accepted`   | The resource is scheduled to be updated. | The [job](#jobs) that was scheduled to update the resource. |
 | `204 No Content` | The resource was updated.                | Nothing.                                                    |
 
@@ -442,7 +444,8 @@ See also: [Partial updates](#partial-updates)
 
 Services `SHOULD NOT` support partial updates — see [the FAQ](#frequently-asked-questions) for why.
 A service that _does_ support them `MUST` use `PATCH` and `MUST` ignore any field that isn't
-specified.
+specified. In a partial update, an absent field means "do not change" and an explicit `null` clears
+the value.
 
 **Example**
 
