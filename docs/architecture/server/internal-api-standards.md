@@ -129,12 +129,11 @@ caller. A team `MAY` make a breaking change in place when it can account for eve
 because the change has been coordinated with them, or because the rejection surfaces somewhere the
 caller or the user can act on it.
 
-The lone exception to this rule are security and cryptographic issues. Such issues `SHOULD` be fixed
-"in place", without creating new versions of the API, even if the changes would technically be
-considered breaking changes.
+Bugs, however, `SHOULD` be fixed "in place", without creating new versions of the API, even if the
+changes would technically be considered breaking changes.
 
-Otherwise if changes need to be made that _would_ be breaking changes, a new version of the API must
-be created and the old one [deprecated](#deprecation).
+Otherwise, if changes need to be made that _would_ be breaking changes, a new version of the API
+must be created and the old one [deprecated](#deprecation).
 
 > **Adding a value to a constrained field deserves a second look.** It is additive, so it is not a
 > breaking change by the definition above, and a caller that treats the field as an open string is
