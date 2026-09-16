@@ -768,7 +768,7 @@ supported:
 | `and`, `or`          | Boolean composition, each taking two or more terms. |
 | `!`                  | Negation.                                           |
 
-A request that uses any other operator, or references a field that does not exist, `MUST` be
+A request that uses any other operator, or references a field the API does not support, `MUST` be
 rejected with `422`.
 
 **Example**
