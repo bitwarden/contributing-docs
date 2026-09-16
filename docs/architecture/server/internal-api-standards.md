@@ -509,6 +509,8 @@ Services `MAY` support "soft deletes" for any number of reasons. Services that d
 the following guidelines:
 
 - Delete APIs perform a soft delete by default and read-many APIs exclude soft-deletes by default.
+- Read-one APIs `SHOULD` return `404` for a soft-deleted resource unless the caller passes
+  `includeDeleted=true`.
 - If callers can request that a delete be "hard", callers pass `permanent=true` query parameter.
 - If callers can request that soft-deletes be included in responses, callers pass
   `includeDeleted=true` query parameter.
