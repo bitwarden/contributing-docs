@@ -116,12 +116,18 @@ duplicated in the URL path.
 
 ## Breaking changes and versioning
 
-APIs `SHOULD NOT` make **breaking changes**. A breaking change is defined as follows:
+APIs `SHOULD NOT` make **breaking changes**. A breaking change is any change that causes a request
+that is valid today to be rejected tomorrow. In practice, that means:
 
 1. Adding a new, required field.
 1. Making an optional field required.
 1. Changing the datatype of a field.
 1. Adding additional constraints to a field.
+
+The verb is `SHOULD NOT` rather than `MUST NOT` because these are internal APIs and we own every
+caller. A team `MAY` make a breaking change in place when it can account for every caller — either
+because the change has been coordinated with them, or because the rejection surfaces somewhere the
+caller or the user can act on it.
 
 The lone exception to this rule are security and cryptographic issues. Such issues `SHOULD` be fixed
 "in place", without creating new versions of the API, even if the changes would technically be

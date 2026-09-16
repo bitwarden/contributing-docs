@@ -130,8 +130,9 @@ Chosen option: **Adopt JSON:API selectively with versioning**.
   robust than any standard we might invent ourselves. It is widely adopted among some of the largest
   SaaS vendors in the industry including [ART19](https://marketplace.apilayer.com/art19_content-api)
   (an Amazon company) and [Datadog](https://docs.datadoghq.com/api/latest).
-- We feel strongly that internal APIs should be formally versioned. Without formal versioning, every
-  change must be additive, which means the shape can never change and every new field is optional.
+- We feel strongly that internal APIs should be formally versioned. Without formal versioning, a
+  change to an existing contract has to be either additive or coordinated with every consumer's
+  release cycle, which in practice means the shape rarely changes and every new field is optional.
   Contracts constrained like that get weaker over time, and what we _want_ to express eventually
   cannot be expressed, because we have committed ourselves to "additive changes only". This rules
   out adopting the existing public API conventions, which are expressly unversioned.
