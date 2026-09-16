@@ -133,7 +133,7 @@ Bugs, however, `SHOULD` be fixed "in place", without creating new versions of th
 changes would technically be considered breaking changes.
 
 Otherwise, if changes need to be made that _would_ be breaking changes, a new version of the API
-must be created and the old one [deprecated](#deprecation).
+`MUST` be created and the old one [deprecated](#deprecation).
 
 > **Adding a value to a constrained field deserves a second look.** It is additive, so it is not a
 > breaking change by the definition above, and a caller that treats the field as an open string is
