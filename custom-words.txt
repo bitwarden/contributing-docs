@@ -52,8 +52,11 @@ libmagic
 LLDB
 Lucidchart
 Mailcatcher
+makemsix
 minio
 mortems
+msix
+MSVC
 MVVM
 NGRX
 Napi
@@ -62,12 +65,14 @@ OIDCS
 Omnisharp
 onboarded
 opid
+osslsigncode
 OTLP
 owasp
 passcode
 passwordless
 passthroughs
 pinentry
+PKCS12
 PNSs
 POSIX
 precompiler
@@ -116,6 +121,7 @@ weweave
 Xcodes.app
 xcworkspace
 xmldoc
+xwin
 Yellowpages
 Yubico
 YubiKey
