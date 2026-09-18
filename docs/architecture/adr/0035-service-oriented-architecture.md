@@ -187,7 +187,7 @@ and are out of scope here.
   authorization by scope, and context propagation, and build the cloud path it describes.
 - Provide an Entity Framework path for organization scoping, so rule 9 holds on all supported
   database providers.
-- Provide a transactional outbox and a broker-free event transport, so rules 10 through 12 hold on
+- Provide a transactional outbox and a broker-free event transport, so rules 10 and 11 hold on
   deployments that ship no broker.
 - Decide the shared cache posture for full self-host and Bitwarden Lite. The cache implementation is
   settled by [ADR-0028](./0028-adopt-fusion-cache.md).
