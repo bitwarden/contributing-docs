@@ -127,8 +127,18 @@ The rules:
      document the security ramifications of stale reads (due to messaging lag, event processing
      failures, etc.).
 10. Services `MUST` publish events for every state change using the "transactional outbox" pattern,
-    regardless of whether there are any known consumers. Standards for these events will be the
-    subject of a forthcoming ADR and out of scope for this ADR.
+    regardless of whether there are any known consumers.
+11. A service that owns resources whose lifetime depends on a resource owned by another service
+    `MUST` consume that owner's "resource deleted" events and cascade the deletion to the resources
+    it owns. An owning service is not responsible for deleting data it does not own.
+
+:::note
+
+Standards for events published and consumed by services, including the "shape" of these events, the
+authorization model, and retry and dead-letter policies, will be the subject of a forthcoming ADR
+and are out of scope here.
+
+:::
 
 ### Positive consequences
 
@@ -138,6 +148,9 @@ The rules:
 - Consumers write the same code on every deployment tier; the service client resolves how a call is
   made.
 - Audit and future integrations read one event stream that already exists.
+- A data owner does not need to know which services hold data that depends on its resources.
+  Dependents invert the dependency by subscribing to the owner's events, so adding a dependent
+  requires no change to the owner.
 - Local copies stay available where warranted, with the justification and the staleness consequences
   recorded where the copy is introduced.
 
@@ -174,8 +187,8 @@ The rules:
   authorization by scope, and context propagation, and build the cloud path it describes.
 - Provide an Entity Framework path for organization scoping, so rule 9 holds on all supported
   database providers.
-- Provide a transactional outbox and a broker-free event transport, so rule 10 holds on deployments
-  that ship no broker.
+- Provide a transactional outbox and a broker-free event transport, so rules 10 through 12 hold on
+  deployments that ship no broker.
 - Decide the shared cache posture for full self-host and Bitwarden Lite. The cache implementation is
   settled by [ADR-0028](./0028-adopt-fusion-cache.md).
 - Apply the standard to the next service extraction as the reference implementation.
