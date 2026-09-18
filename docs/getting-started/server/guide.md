@@ -75,11 +75,11 @@ facilitate easy customization.
     [password complexity guidelines](https://docs.microsoft.com/en-us/sql/relational-databases/security/password-policy?view=sql-server-ver15#password-complexity)
     - It must be at least eight characters long.
     - It must contain characters from three of the following four categories:
-    - Latin uppercase letters (A through Z)
-    - Latin lowercase letters (a through z)
-    - Base 10 digits (0 through 9)
-    - Non-alphanumeric characters such as: exclamation point (!), dollar sign ($), number sign (#),
-      or percent (%).
+      - Latin uppercase letters (A through Z)
+      - Latin lowercase letters (a through z)
+      - Base 10 digits (0 through 9)
+      - Non-alphanumeric characters such as: exclamation point (!), dollar sign ($), number sign (#),
+        or percent (%).
 
     :::
 
