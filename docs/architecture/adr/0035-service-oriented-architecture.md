@@ -126,19 +126,14 @@ The rules:
    - Any service holding a local copy `MUST` enforce the owner's row-level security on that data and
      document the security ramifications of stale reads (due to messaging lag, event processing
      failures, etc.).
-10. Services `MUST` publish events for every state change using the "transactional outbox" pattern,
-    regardless of whether there are any known consumers.
+10. Services `SHOULD` publish events for all relevant state changes using the "transactional outbox"
+    pattern, regardless of whether there are any known consumers. Exactly what makes an event
+    "relevant", the shape of such events, the authorization model, dead-letter policies, and how
+    such events are delivered and consumed will be the subject of a forthcoming ADR and is out of
+    scope here.
 11. A service that owns resources whose lifetime depends on a resource owned by another service
     `MUST` consume that owner's "resource deleted" events and cascade the deletion to the resources
     it owns. An owning service is not responsible for deleting data it does not own.
-
-:::note
-
-Standards for events published and consumed by services, including the "shape" of these events, the
-authorization model, and retry and dead-letter policies, will be the subject of a forthcoming ADR
-and are out of scope here.
-
-:::
 
 ### Positive consequences
 
