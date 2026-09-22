@@ -110,10 +110,15 @@ The rules:
 2. Every resource `MUST` have exactly one owning service, and that service is the only process that
    reads or writes its data store.
 3. Services `MUST` be built on the `Bitwarden.Server.Sdk` package.
-4. Services `MUST` document their APIs in [OpenAPI format](https://www.openapis.org/) and conform to
-   **API Standards**.
-5. Services `MUST NOT` make breaking changes. Changes that _would_ be breaking `MUST` follow the API
-   versioning process as outlined by API Standards.
+4. Services `MUST` document their APIs in [OpenAPI format](https://www.openapis.org/) and, if the
+   service is an internal service, such APIs `MUST` conform to the forthcoming **Internal API
+   Standards**.
+5. Services `SHOULD NOT` make breaking changes.
+   - If the changes that need to be made _would_ be breaking and the service is an internal service,
+     such services `SHOULD` follow the API versioning process as outlined by the forthcoming
+     Internal API Standards.
+   - Fixing bugs, including security issues, are not subject to this rule and `MUST` be fixed "in
+     place".
 6. Services `MUST` provide a **service client** for consumers.
 7. Service clients `SHOULD` make use of a network cache to mitigate performance issues.
    - Any cache used `MUST` be owned and invalidated by the owning service.
