@@ -8,8 +8,9 @@ sidebar_position: 3
 
 **Audience:** Bitwarden engineers and AI agents building or consuming a service-to-service API.
 
-**Scope.** Internal, service-to-service APIs. Bitwarden's existing public API is out of scope and is
-not changing; nothing here applies to it.
+**Scope.** Internal, service-to-service APIs. Bitwarden's existing public API, including the part
+that is currently referred to as "internal", is out of scope and is not changing. This ADR applies
+only to internal, service-to-service APIs that are not exposed to the internet.
 
 This page is the living standard, adopted in [ADR-0036](../adr/0036-internal-api-standards.md). Its
 rules evolve by pull request without superseding that decision.
