@@ -1,11 +1,11 @@
 ---
 adr: "0035"
 status: Proposed
-date: 2026-09-09
+date: 2026-09-22
 tags: [clients, mobile, sdk, server]
 ---
 
-# 0035 - Move SDK application crates into a product repository
+# 0035 - Move the SDK into the clients monorepo
 
 <AdrTable frontMatter={frontMatter}></AdrTable>
 
@@ -103,11 +103,10 @@ decision.
 - **Coordinated merge gate:** keep the repos separate, make the existing breaking-change check
   enforcing, and merge a breaking SDK change together with its client and mobile fixes as one gated
   set (a distributed atomic merge across repos).
+- **Product repository:** split the SDK crates. Move the application-logic crates into a product
+  repository with the clients, and keep the shared, lower-level crates in a separate repository.
 - **Monorepo:** move the whole SDK into the `clients` repository, the way `jslib` was folded in
-  before.
-- **Product repository:** split the SDK crates. Move the application-logic crates into the product
-  repository so they compile together with the clients that consume them, and keep the core
-  infrastructure crates as a separately published, versioned library that every product depends on.
+  before, so the SDK and the clients build together.
 
 ### Do nothing, improve iteratively
 
@@ -134,126 +133,112 @@ version, and CI to re-run on that change. And it leaves the open question of wha
 merges in the window between an SDK merge and its downstream fix: block them, and for how long. The
 coordination logic (ordering, timing, separate CIs) is fiddly to build and maintain.
 
-### Monorepo
-
-Folding the whole SDK into `clients` gives the atomic-commit guarantee: a change to the SDK lands in
-the same commit as the consumer updates it requires, and main is never broken because a change that
-broke a consumer would break CI. It removes the concurrent-bundle problem by construction. The
-drawback is that it binds the shared core into one product's repository. Bitwarden is moving toward
-being a multi-product company, and a single repository that owns both the password-manager
-application code and the crypto and infrastructure core makes it harder, not easier, for a second
-product to depend on that core. It solves this problem while working against the direction the
-product is heading.
-
 ### Product repository
 
-Split the crate graph along the layering that already exists. The application-logic crates (for
-example `bitwarden-vault`, `bitwarden-send`, `bitwarden-generators`, `bitwarden-exporters`) move
-into the product repository and compile together with the clients that consume them, so their churn
-no longer crosses a repository boundary. The core infrastructure crates (for example
-`bitwarden-core`, `bitwarden-crypto`, `bitwarden-encoding`, `bitwarden-state`) stay a separately
-published, versioned library that every product depends on. It keeps the monorepo's guarantee for
-the layer that actually churns, and keeps the core shareable across products. The cost is the same
-as the monorepo (a large one-time migration and a bigger repository) plus the work of drawing the
-crate boundary.
+Split the crate graph instead of folding all of it in. The application-logic crates (for example
+`bitwarden-vault`, `bitwarden-send`, `bitwarden-generators`, `bitwarden-exporters`) move into a
+product repository and compile together with the clients that consume them, while the shared,
+lower-level crates (for example `bitwarden-crypto`, `bitwarden-core`, `bitwarden-encoding`,
+`bitwarden-state`) stay in a separate repository. This keeps the atomic-commit guarantee for the
+application layer, where most of the breaks come from, but leaves the clients consuming the shared
+crates across a version boundary. The trade-off is that it keeps that boundary, a residual of the
+overhead this decision is trying to remove, in order to pre-structure for a split we may never need.
+It remains an option we can revisit later if that need becomes real.
+
+### Monorepo
+
+Fold the whole SDK into the `clients` repository, the way `jslib` was folded in before. A change to
+the SDK lands in the same commit as the consumer updates it requires, and main is never broken,
+because a change that broke a consumer would break CI. The cross-repo breaking change stops being a
+separate thing to coordinate, the same way changing a class and its callers in one commit is one
+change, and the concurrent-bundle problem goes away by construction. The crates are still published
+as versioned packages that other consumers, such as the server, depend on; only the in-repo clients
+drop the version boundary. The cost is a large one-time migration and a bigger repository.
 
 ## Decision outcome
 
-Chosen option: **Product repository**, because it removes the bottleneck for the layer that causes
-it while keeping the shared core available to future products.
+Chosen option: **Monorepo**. Fold the whole SDK into the `clients` repository.
 
-The repository this creates is best understood not as "clients plus the SDK" but as **the Password
-Manager product**: the client apps together with the application-logic crates they consume. Once
-they build from the same source, there is no published package version between them to keep in sync.
-A change to the application code and the client code that uses it becomes one change that only
-merges if it builds, the same way changing a class and its callers in one commit is one change. For
-the application surface, where most of the measured breaking events come from, the cross-repo
-breaking change stops being a separate thing to coordinate, and the concurrent-bundle problem goes
-away by construction.
+Once the SDK and the clients build from the same source, there is no published package version
+between them to keep in sync. A change to the SDK and the client code that uses it becomes one
+change that only merges if it builds. The cross-repo breaking change stops being a separate thing to
+coordinate, and the concurrent-bundle problem goes away by construction.
+
+Against the product repository, the difference is where the SDK source lives and how much of the
+version boundary the clients still cross. Both layouts publish the SDK crates as versioned packages,
+so external consumers like the server depend on them the same way. The product repository splits the
+source across two repositories, which leaves the clients consuming the shared crates across a
+version boundary, a residual of the same bottleneck, to pre-structure for a split we may never need.
+The monorepo removes that boundary for the clients as well, and it does not make a later split any
+harder: extracting a second repository stays a normal refactor if that need ever becomes real. The
+product repository is recorded above as an option we can revisit then.
 
 Against the coordinated merge gate, the difference is that this removes the serialized pipeline
 rather than automating around it. The merge gate reaches for the same "cannot merge unfixed"
 guarantee, but it keeps the publish-and-bump round trip and leaves the unanswered "what do we do in
 the window" question. Compiling together answers both by construction.
 
-Against the plain monorepo, the difference is the core. Keeping the infrastructure crates as a
-shared, versioned library lets Secrets Manager and future products depend on the same core, and it
-sets up extracting products out of the `clients` repository later. The monorepo would fold the core
-into one product and make that harder.
-
-This rests on one assumption: **products do not need to share application logic at the SDK level,
-only the core.** If that turns out false for some piece of application logic, there are two ways
-out: promote that piece down into the shared core and accept that it evolves across the published
-boundary like the rest of core, or model the relationship as product and sub-product, where a
-sub-product depends on a product. Neither looks likely, and both keep the design intact if the
-assumption breaks, so it is a manageable bet.
-
 A public SDK does not change this. To be useful it has to expose product operations like vault and
 send access, which is application logic, so like the client apps it is a consumer of the product,
-not part of the shared core. Its feasibility is unaffected by this decision.
+not a shared crate. Its feasibility is unaffected by this decision.
 
 The upfront migration is real work, but it is one-time work, and we have done a version of it before
 when `jslib` moved into `clients`. What it buys is an environment where we can write changes as
-often as we want to the application layer without carrying a compatibility burden or waiting on a
-cross-repo pipeline, weighed against a coordination cost that otherwise grows with every new team
-contributing to the SDK.
+often as we want without carrying a compatibility burden or waiting on a cross-repo pipeline,
+weighed against a coordination cost that otherwise grows with every new team contributing to the
+SDK.
 
 ### Positive consequences
 
-- Most of the measured breaking events stop being cross-repo events at all. A change to the
-  application surface and the client code that uses it is one commit that only merges if it builds,
-  so main stays green by construction and there is no published version to bundle.
-- The core stays a shared, versioned library, so Secrets Manager and future products can depend on
-  it, and the change sets up extracting products out of the `clients` repository later.
-- Tooling and people get the full product context in one place. AI review, for example, sees the SDK
-  change and the client code that calls it in the same diff, instead of an opaque package-version
-  bump with a new API.
+- Most of the measured breaking events stop being cross-repo events at all. A change to the SDK and
+  the client code that uses it is one commit that only merges if it builds, so main stays green by
+  construction and there is no published version to bundle.
+- Components that are meant to work together share one build graph and one place to reason about
+  them. AI review, for example, sees the SDK change and the client code that calls it in the same
+  diff, instead of an opaque package-version bump with a new API.
+- The SDK crates are still published as packages, so the server and any future product keep
+  depending on them regardless of this layout.
 - One-time migration cost, with a precedent (`jslib`), against a coordination cost that otherwise
   grows with the number of contributing teams.
 
 ### Negative consequences
 
-- A large upfront migration, plus the work of drawing the crate boundary between core and
-  application.
+- A large upfront migration.
 - A bigger repository: git operations and CI get slower unless CI is scoped to build only the
-  projects affected by a change.
+  projects affected by a change. Folding a Rust build graph into the `clients` Nx/TypeScript
+  monorepo, and mobile's Swift and Kotlin builds if they follow, is real build-system work.
 - It does not remove the adaptation work. Changing a shared type still means updating every place
   that uses it; co-locating turns that into one commit instead of a cross-repo sequence, but the
   adaptation itself is no smaller.
-- Core-layer breaks still cross a published-package boundary between the core library and the
-  product repository. This is smaller than today because the core churns less than the application
-  layer, but it is real. The plan addresses it with explicit versioning of the core.
 - It does not touch compatibility between deployed apps and the server. They ship independently, so
   they always have to stay compatible with each other, and that is separate work regardless of how
   the source is organized.
 
 ### Plan
 
-- Draw the crate boundary in `sdk-internal`: classify each crate as core infrastructure (shared) or
-  application logic (product-specific). The obvious cases are legible from the crate names; the
-  in-between crates (`bitwarden-auth`, `bitwarden-sync`, and the crypto-management crates like
-  `bitwarden-user-crypto-management`) need a deliberate call.
-- Publish the core crates as their own versioned library, on **explicit versions** rather than
-  auto-publishing on every merge, so products adopt a core change on their own schedule.
-- Set up required infrastructure to build the SDK in `clients`. Try to scope CI so a change builds
-  and tests only the components it affects, to keep the larger repository workable.
-- Move the application-logic crates into the product repository so they compile together with the
-  clients.
-- Treat extracting a second product (for example Secrets Manager) out of the `clients` repository as
-  a later step this structure enables, not part of this migration.
+- Fold `sdk-internal` into the `clients` repository, following the `jslib` precedent, so the SDK and
+  the clients build together.
+- Scope CI so a change builds and tests only the projects it affects, to keep the larger repository
+  workable.
+- Keep crates buildable as packages that out-of-repo consumers, such as the server, can depend on.
+  Clients consume the crates in-repo with no version boundary; external consumers take them as
+  published, versioned packages.
+- Draw package boundaries where product scope matters, for example splitting policies into a
+  suite-wide package the server and other products can depend on, and PM-specific pieces that stay
+  with the application.
 
 ## Open questions
 
-- **Mobile.** Do we bring android and iOS into the product repository as part of this decision, or
-  leave them as standalone repositories for now and move only the SDK application crates and clients
-  first? The mobile repos carry the larger share of the measured breaking events, but they also add
-  Swift and Kotlin build graphs and Xcode/Gradle CI to the repository, which is the heaviest part of
-  the migration.
+- **Mobile.** Do we bring android and iOS into the monorepo as part of this decision, or leave them
+  as standalone repositories for now and fold in only the SDK and clients first? The mobile repos
+  carry the larger share of the measured breaking events, but they also add Swift and Kotlin build
+  graphs and Xcode/Gradle CI to the repository, which is the heaviest part of the migration.
 
 ## Follow-ups
 
-- **The server circular dependency.** `sdk-internal` and `server` currently have a circular
-  relationship. Moving the application crates into the product repository would make `server` depend
-  on `clients`, which is the wrong direction. A true product repository, where the server and client
-  components live in the same repository and both depend on a shared Rust core there, would resolve
-  this. Whether that is compatible with the backend MSA direction has not been explored.
+- **The server's dependency on the SDK.** `server` currently depends on `sdk-internal` for
+  cryptographic and policy code. Folding the SDK into `clients` should not turn that into a
+  dependency on the `clients` repository. Read as packages, the server depends on the crypto and
+  policy packages wherever they live, published from the monorepo, not on the repository. Whether
+  the server later joins the monorepo or keeps consuming those packages is open, as is compatibility
+  with the backend MSA direction.
