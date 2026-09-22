@@ -140,8 +140,7 @@ public interface IUserService
   suppressions of these ids. Owner: Architecture.
 - Mark the rest of the inventory, one PR each, with the owner on the attribute: `ICipherService`
   (Vault), `IOrganizationService` and `IOrganizationRepository` (Admin Console), then
-  `ICurrentContext` and `IUserRepository` once the Lane 3 ownership register names an owner, since
-  neither has one today.
+  `ICurrentContext` and `IUserRepository` once each has an owner, since neither has one today.
 - Migrate `BWA0001` and `BWA0002` to `[RestrictedDependency]` and delete their `WarningsNotAsErrors`
   carve-outs. Owner: the team that added each carve-out.
 - Publish the engineer recipe in `server` per
