@@ -5,7 +5,7 @@ date: 2026-09-22
 tags: [server, server-sdk]
 ---
 
-# 0036 - Internal API standards
+# 0036 - Service-to-service API standards
 
 <AdrTable frontMatter={frontMatter}></AdrTable>
 
@@ -17,8 +17,8 @@ This ADR uses [RFC 2119](https://www.rfc-editor.org/info/rfc2119/) keywords (`MU
 `SHOULD`, `SHOULD NOT`, `MAY`) deliberately. Anything marked `MUST` or `MUST NOT` is not negotiable
 at team level; a team that needs an exception brings the case to the architecture group.
 
-**Internal API** means a service-to-service API: one Bitwarden service calling another. Bitwarden's
-existing public API is out of scope and is not changing.
+**Service-to-service API** means one Bitwarden service calling another. Bitwarden's existing public
+API is out of scope and is not changing.
 
 ## Context and problem statement
 
@@ -27,22 +27,22 @@ services, a service calling another service needs a wire contract, and no docume
 exists.
 
 One important distinction to keep in mind as we consider various options is that the APIs we are
-talking about are _internal_ APIs. We control both the service that declares them and every client
-that consumes them. While we _do_ still want to adhere to the principle of "no breaking changes", we
-also do not want that to result in an ever-growing number of optional fields that ultimately make
-these contracts less clear.
+talking about are _service-to-service_ APIs. We control both the service that declares them and
+every client that consumes them. While we _do_ still want to adhere to the principle of "no breaking
+changes", we also do not want that to result in an ever-growing number of optional fields that
+ultimately make these contracts less clear.
 
 In the same way we [refactor our code mercilessly](https://wiki.c2.com/?RefactorMercilessly), we
 want the liberty to be able to do the same with our APIs. Especially when they are still under
 active development and rapidly evolving.
 
 Said differently, we do not want the rules that restrict how public-facing APIs may evolve to
-restrict how, or the pace at which, we evolve internal-only APIs.
+restrict how, or the pace at which, we evolve service-to-service APIs.
 
 ## Considered options
 
 - **Adopt the existing public API conventions:** apply the same shape and the same no-versioning
-  posture to internal APIs.
+  posture to service-to-service APIs.
 - **Keep the existing JSON shape and add versioning:** retain today's conventions, introduce path
   versioning.
 - **Adopt [JSON:API](https://jsonapi.org/) strictly:** implement the specification in full,
@@ -54,7 +54,7 @@ restrict how, or the pace at which, we evolve internal-only APIs.
 
 **Pros**
 
-- One shape across every Bitwarden API, public and internal.
+- One shape across every Bitwarden API, public and service-to-service.
 - Nothing new for engineers to learn, and no migration for code already written this way.
 
 **Cons**
@@ -130,24 +130,24 @@ Chosen option: **Adopt JSON:API selectively with versioning**.
   robust than any standard we might invent ourselves. It is widely adopted among some of the largest
   SaaS vendors in the industry including [ART19](https://marketplace.apilayer.com/art19_content-api)
   (an Amazon company) and [Datadog](https://docs.datadoghq.com/api/latest).
-- We feel strongly that internal APIs should be formally versioned. Without formal versioning, a
-  change to an existing contract has to be either additive or coordinated with every consumer's
-  release cycle, which in practice means the shape rarely changes and every new field is optional.
-  Contracts constrained like that get weaker over time, and what we _want_ to express eventually
-  cannot be expressed, because we have committed ourselves to "additive changes only". This rules
-  out adopting the existing public API conventions, which are expressly unversioned.
+- We feel strongly that service-to-service APIs should be formally versioned. Without formal
+  versioning, a change to an existing contract has to be either additive or coordinated with every
+  consumer's release cycle, which in practice means the shape rarely changes and every new field is
+  optional. Contracts constrained like that get weaker over time, and what we _want_ to express
+  eventually cannot be expressed, because we have committed ourselves to "additive changes only".
+  This rules out adopting the existing public API conventions, which are expressly unversioned.
 - We adopt the standard selectively to get most of the benefits of JSON:API without the burden of
   full conformance.
 
 The specific standards, including where we deviate from JSON:API, are published here:
-[Internal API standards](../server/internal-api-standards.md). That page is the living reference:
-its rules evolve by pull request without superseding this decision, and this ADR is superseded only
-if the model itself changes.
+[Service-to-service API standards](../server/service-to-service-api-standards.md). That page is the
+living reference: its rules evolve by pull request without superseding this decision, and this ADR
+is superseded only if the model itself changes.
 
 ### Positive consequences
 
-- One document shape across every internal API, so a consumer calling five services learns one error
-  format, one pagination scheme, and one filter grammar.
+- One document shape across every service-to-service API, so a consumer calling five services learns
+  one error format, one pagination scheme, and one filter grammar.
 - Versioning gives a contract a way to change shape. A breaking change becomes a new version with a
   migration, instead of more optional parameters.
 - The envelope gives pagination state and other response metadata somewhere to live that is not
@@ -157,7 +157,7 @@ if the model itself changes.
 
 ### Negative consequences
 
-- Internal APIs "look different" from public APIs.
+- Service-to-service APIs "look different" from public APIs.
 - Additional work is required to ensure the "envelopes" are largely transparent to developers when
   working with request and response models in code.
 - Partial conformance invites any deviation from the specification to be argued as allowed. We will

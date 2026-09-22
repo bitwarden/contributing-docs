@@ -2,18 +2,19 @@
 sidebar_position: 3
 ---
 
-# Internal API standards
+# Service-to-service API standards
 
 {/* cspell:ignore reate reates eletes elete pdate pdates fieldsets */}
 
 **Audience:** Bitwarden engineers and AI agents building or consuming a service-to-service API.
 
-**Scope.** Internal, service-to-service APIs. Bitwarden's existing public API, including the part
-that is currently referred to as "internal", is out of scope and is not changing. These standards
-apply only to internal, service-to-service APIs that are not exposed to the internet.
+**Scope.** Service-to-service APIs, whose callers are other Bitwarden services. Bitwarden's existing
+public API is out of scope and is not changing, as is the internet-reachable surface our own clients
+call — the part the server repository refers to as "internal".
 
-This page is the living standard, adopted in [ADR-0036](../adr/0036-internal-api-standards.md). Its
-rules evolve by pull request without superseding that decision.
+This page is the living standard, adopted in
+[ADR-0036](../adr/0036-service-to-service-api-standards.md). Its rules evolve by pull request
+without superseding that decision.
 
 [RFC 2119](https://www.rfc-editor.org/info/rfc2119/) keywords (`MUST`, `MUST NOT`, `SHOULD`,
 `SHOULD NOT`, `MAY`) are used deliberately. A `MUST` or `MUST NOT` is not negotiable at team level;
@@ -39,7 +40,7 @@ Standards for each type of API are documented below.
 
 ### JSON:API
 
-Internal Bitwarden APIs are based on top of [JSON:API](https://jsonapi.org/) unless otherwise noted
+Service-to-service APIs are based on top of [JSON:API](https://jsonapi.org/) unless otherwise noted
 in this document. Where our standards are silent, JSON:API standards are assumed.
 
 ### Well-defined APIs
@@ -127,10 +128,10 @@ unprocessable. In practice, that means:
 1. Adding additional constraints to a field.
 1. Removing a field from a response.
 
-The verb is `SHOULD NOT` rather than `MUST NOT` because these are internal APIs and we own every
-caller. A team `MAY` make a breaking change in place when it can account for every caller — either
-because the change has been coordinated with them, or because the rejection surfaces somewhere the
-caller or the user can act on it.
+The verb is `SHOULD NOT` rather than `MUST NOT` because these are service-to-service APIs and we own
+every caller. A team `MAY` make a breaking change in place when it can account for every caller —
+either because the change has been coordinated with them, or because the rejection surfaces
+somewhere the caller or the user can act on it.
 
 Bugs, however, `SHOULD` be fixed "in place", without creating new versions of the API, even if the
 changes would technically be considered breaking changes.
@@ -1020,13 +1021,13 @@ burden of full conformance.
    model classes; how those serialize is the framework's business. No application code should ever
    see `data` or `attributes`.
 
-> Why are internal APIs versioned? Public APIs aren't.
+> Why are service-to-service APIs versioned? Public APIs aren't.
 
-We feel strongly that internal APIs should be formally versioned. Without formal versioning, every
-change must be additive, which means the shape can never change and every new field is optional.
-Contracts constrained like that get weaker over time, and what we _want_ to express eventually
-cannot be expressed, because we have committed ourselves to "additive changes only". This rules out
-adopting the existing public API conventions, which are expressly unversioned.
+We feel strongly that service-to-service APIs should be formally versioned. Without formal
+versioning, every change must be additive, which means the shape can never change and every new
+field is optional. Contracts constrained like that get weaker over time, and what we _want_ to
+express eventually cannot be expressed, because we have committed ourselves to "additive changes
+only". This rules out adopting the existing public API conventions, which are expressly unversioned.
 
 > Why do I have to specify the ID in the path _and_ the JSON body?
 
