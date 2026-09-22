@@ -110,13 +110,14 @@ The rules:
 2. Every resource `MUST` have exactly one owning service, and that service is the only process that
    reads or writes its data store.
 3. Services `MUST` be built on the `Bitwarden.Server.Sdk` package.
-4. Services `MUST` document their APIs in [OpenAPI format](https://www.openapis.org/) and, if the
-   service is an internal service, such APIs `MUST` conform to the forthcoming **Internal API
-   Standards**.
+4. Services `MUST` document their APIs in [OpenAPI format](https://www.openapis.org/). A
+   **service-to-service API** — one whose callers are other Bitwarden services, rather than the
+   clients and third parties that call the private and public APIs today — `MUST` additionally
+   conform to the forthcoming **Internal API Standards**.
 5. Services `SHOULD NOT` make breaking changes.
-   - If the changes that need to be made _would_ be breaking and the service is an internal service,
-     such services `SHOULD` follow the API versioning process as outlined by the forthcoming
-     Internal API Standards.
+   - If the changes that need to be made _would_ be breaking to a service-to-service API, such
+     services `SHOULD` follow the API versioning process as outlined by the forthcoming Internal API
+     Standards.
    - Fixing bugs, including security issues, are not subject to this rule and `MUST` be fixed "in
      place".
 6. Services `MUST` provide a **service client** for consumers.
@@ -136,6 +137,8 @@ The rules:
     "relevant", the shape of such events, the authorization model, dead-letter policies, and how
     such events are delivered and consumed will be the subject of a forthcoming ADR and is out of
     scope here.
+    - A service that owns a resource other services may depend on `MUST` publish a "resource
+      deleted" event for it, so that rule 11 is satisfiable.
 11. A service that owns resources whose lifetime depends on a resource owned by another service
     `MUST` consume that owner's "resource deleted" events and cascade the deletion to the resources
     it owns. An owning service is not responsible for deleting data it does not own.
@@ -158,10 +161,11 @@ The rules:
 
 - **Versioning.** Independently deployable services will likely be versioned independently as well,
   and enhancements and bug fixes will land service by service, each producing a new version of that
-  service. Rule 5 ensures a new version never introduces a breaking change, so a customer may at any
-  time run an "upgrade everything" script and take the latest of every service — which is exactly
-  what self-host installs. Our obligation is to just make sure "the latest version of everything"
-  always works.
+  service. Rule 5 makes a breaking change the exception rather than the norm, so a customer may at
+  any time run an "upgrade everything" script and take the latest of every service — which is
+  exactly what self-host installs. Where a break is genuinely unavoidable, the versioning process is
+  what keeps that script working. Our obligation is to just make sure "the latest version of
+  everything" always works.
 - **A synchronous dependency now exists where none did.** It has to be authenticated, authorized,
   observed, and operated. A dependency's unavailability becomes a caller's failure mode.
 - **Service-to-service authentication has to be built for cloud.** The existing internal grant has
