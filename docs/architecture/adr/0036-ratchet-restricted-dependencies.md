@@ -93,6 +93,8 @@ public interface IUserService
   (BW0007), concrete implementation (BW0008), escape (BW0009).
   - A removed use fails the build (BW0013) until the baseline shrinks.
   - A new member on a sealed type fails (BW0014).
+  - A marked type with no committed baseline, or a member attribute on an unmarked type, fails
+    (BW0015).
 - **Exceptions.** `[RestrictedDependencyException]` with `Owner`, `Reason`, and `Expires` is the
   only sanctioned new gated use.
   - An incomplete exception excepts nothing (BW0010).
