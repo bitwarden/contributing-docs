@@ -137,8 +137,8 @@ The rules:
     "relevant", the shape of such events, the authorization model, dead-letter policies, and how
     such events are delivered and consumed will be the subject of a forthcoming ADR and is out of
     scope here.
-    - A service that owns a resource other services may depend on `MUST` publish a "resource
-      deleted" event for it, so that rule 11 is satisfiable.
+    - A service `MUST` publish a "resource deleted" event for each resource it owns, so that rule 11
+      is satisfiable.
 11. A service that owns resources whose lifetime depends on a resource owned by another service
     `MUST` consume that owner's "resource deleted" events and cascade the deletion to the resources
     it owns. An owning service is not responsible for deleting data it does not own.
