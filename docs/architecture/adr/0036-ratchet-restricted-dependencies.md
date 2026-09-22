@@ -98,8 +98,8 @@ public interface IUserService
   - An incomplete exception excepts nothing (BW0010).
   - An expired one warns (BW0011).
   - A pragma or `[SuppressMessage]` naming any of these ids is an error (BW0012).
-  - Lowering any other id below error in `.editorconfig`, `NoWarn`, or `WarningsNotAsErrors` is an
-    error and has no effect (BW0016).
+  - Lowering any id but BW0011 below error in `.editorconfig`, `NoWarn`, or `WarningsNotAsErrors` is
+    an error and has no effect (BW0016).
 - **Wiring.** One block in `Directory.Build.props`.
   - `RestrictedDependencyAnalysis`, `RestrictedDependencyBaselinesPath`, and
     `RestrictedDependencyUpdateCommand`.
