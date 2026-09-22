@@ -168,7 +168,7 @@ for. APIs `MUST` reject the request with `422` when given:
 
 - Dates `MUST` be formatted in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format (e.g.
   `2026-01-01T00:00:00Z`) and `MUST` include a time zone indicator and `SHOULD` standardize on UTC.
-- Field values that are constrained to a fixed set of values should enumerate the valid values in
+- Field values that are constrained to a fixed set of values `SHOULD` enumerate the valid values in
   all caps (e.g. `RED`, `GREEN`, `BLUE`) both in the OpenAPI spec and in example JSON to help
   distinguish these fields from free-text string fields. At runtime, however, APIs `MUST` ignore
   case when validating these values.
@@ -592,9 +592,9 @@ A parameter that takes a single value is never split, so a comma in its value ne
 
 ### Ranges
 
-Query parameters that allow the caller to specify a range of values should do so using two values,
+Query parameters that allow the caller to specify a range of values `MUST` do so using two values,
 separated by commas, and using `[` and `]` to represent **inclusive** begin and end, and `(` and `)`
-to represent **exclusive** begin and end. An asterisk `*` may be used to represent no limit.
+to represent **exclusive** begin and end. An asterisk `*` `MAY` be used to represent no limit.
 
 Ranges are also how "less than", "greater than", "less than or equal to", and "greater than or equal
 to" are implemented.
