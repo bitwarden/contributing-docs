@@ -44,31 +44,45 @@ If the client will be exposed over WASM, annotate both the struct and its `impl`
 
 ### UniFFI wrappers
 
-Mobile clients access the SDK through thin wrapper structs in the `bitwarden-uniffi` crate. Each
-wrapper holds a `SharedClient` (a type alias for `Arc<Client>`) and delegates to the underlying Rust
-client:
+Expose mobile clients through thin wrapper structs in the `bitwarden-uniffi` crate. Each wrapper is
+a `uniffi::Object` that holds the client it delegates to:
 
 ```rust
-pub struct FoldersClient(pub(crate) SharedClient);
+#[derive(uniffi::Object)]
+pub struct FoldersClient(pub(crate) bitwarden_vault::FoldersClient);
 
 #[uniffi::export]
 impl FoldersClient {
     pub async fn get(&self, folder_id: FolderId) -> Result<FolderView> {
-        Ok(self.0.vault().folders().get(folder_id).await?)
+        Ok(self.0.get(folder_id).await?)
     }
 }
 ```
 
-The wrapper mirrors the structure of the Rust client hierarchy — parent wrappers expose child
-wrappers through accessor methods, just like the application interface clients do. For example, a
-`VaultClient` wrapper returns `Arc<FoldersClient>`.
+The wrapper mirrors the structure of the Rust client hierarchy: parent wrappers expose child
+wrappers through accessor methods, just like the application interface clients do. `VaultClient`
+wraps `bitwarden_vault::VaultClient`, and its `folders()` accessor returns the `FoldersClient`
+wrapper shown above.
+
+#### Why the wrappers exist
+
+UniFFI reports a failed argument conversion by downcasting to the error type declared in the
+exported function's signature, so every method on the mobile surface has to return the same error
+type, `BitwardenError`. Anything else leaves bad input reaching the client as an undeclared internal
+error rather than a typed one. `BitwardenError` is defined in `bitwarden-uniffi`, which depends on
+the feature crates and not the other way round, so a feature crate cannot name it and cannot host
+the export. That is what forces the wrapper layer.
+
+The wrapper layer is a temporary workaround for a UniFFI limitation, tracked
+[upstream][uniffi-issue]. Lifting it would let feature crates export over UniFFI the way they
+already do over WASM. The full mechanism and the rules that follow from it are documented in
+[`bitwarden-uniffi-error`][uniffi-error-crate].
 
 #### Error conversion
 
-UniFFI wrappers use a crate-level `Result<T>` type alias that maps errors to `BitwardenError`. This
-ensures all errors crossing the FFI boundary are converted into a type that UniFFI can serialize for
-Kotlin and Swift consumers. Use the `?` operator in wrapper methods to automatically convert
-domain-specific errors through the `From<E> for BitwardenError` implementations.
+UniFFI wrappers use a crate-level `Result<T>` type alias that maps errors to `BitwardenError`. Use
+the `?` operator in wrapper methods to convert domain-specific errors through the
+`From<E> for BitwardenError` implementations.
 
 When introducing a new error type, add a variant for it in
 [`bitwarden-uniffi/src/error.rs`][uniffi-error] and implement the `From` conversion so it can be
@@ -223,3 +237,6 @@ async fn test_get_folder_not_found() {
 
 [uniffi-error]:
   https://github.com/bitwarden/sdk-internal/blob/main/crates/bitwarden-uniffi/src/error.rs
+[uniffi-error-crate]:
+  https://github.com/bitwarden/sdk-internal/tree/main/crates/bitwarden-uniffi-error
+[uniffi-issue]: https://github.com/mozilla/uniffi-rs/issues/2416
