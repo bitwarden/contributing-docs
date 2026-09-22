@@ -68,8 +68,8 @@ shape of the problem:
   break, it adopts a bundle of unrelated breaks at once.
 - **Nothing gates the publish.** npm and Maven publish on every merge to main. The breaking-change
   check runs on PRs, comments, and adds a `breaking-change` label, but never fails the job (a
-  known-breaking PR, #906, passed green). So a breaking change ships to consumers whether or not its
-  downstream fix exists.
+  known-breaking PR, [sdk-internal#906](https://github.com/bitwarden/sdk-internal/pull/906), passed
+  green). So a breaking change ships to consumers whether or not its downstream fix exists.
 - **Code review is not the bottleneck.** On clients, review latency is negligible and total blocked
   time is small (median 2.4 hours). Mobile is a different shape: android and iOS adopt on a rolling
   branch, with median branch windows of about 80 and 165 hours, but that window is dominated by
