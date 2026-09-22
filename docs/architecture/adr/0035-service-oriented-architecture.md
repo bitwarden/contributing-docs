@@ -113,11 +113,11 @@ The rules:
 4. Services `MUST` document their APIs in [OpenAPI format](https://www.openapis.org/). A
    **service-to-service API** — one whose callers are other Bitwarden services, rather than the
    clients and third parties that call the private and public APIs today — `MUST` additionally
-   conform to the forthcoming **Internal API Standards**.
+   conform to the forthcoming **Service-to-Service API Standards**.
 5. Services `SHOULD NOT` make breaking changes.
    - If the changes that need to be made _would_ be breaking to a service-to-service API, such
-     services `SHOULD` follow the API versioning process as outlined by the forthcoming Internal API
-     Standards.
+     services `SHOULD` follow the API versioning process as outlined by the forthcoming
+     Service-to-Service API Standards.
    - Fixing bugs, including security issues, are not subject to this rule and `MUST` be fixed "in
      place".
 6. Services `MUST` provide a **service client** for consumers.
@@ -183,8 +183,8 @@ The rules:
 
 ### Plan
 
-- Publish **API Standards**. Rules 4 and 5 reference it normatively and it does not exist yet on
-  this site.
+- Publish the **Service-to-Service API Standards**. Rules 4 and 5 reference it normatively and it
+  does not exist yet on this site.
 - Publish a client strategy page covering how a service client is generated, wrapped, versioned, and
   cached.
 - Publish a service identity and context page covering service-to-service authentication,
