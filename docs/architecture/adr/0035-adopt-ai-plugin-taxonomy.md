@@ -73,6 +73,50 @@ Chosen option: **two layers, capability plugins plus role bundles**. The rules a
    review time. A component that does not fit the enumeration either forces a deliberate description
    change or goes elsewhere.
 
+For example, two plugins as they stand today and where their contents land:
+
+```text
+Before
+  bitwarden-delivery-tools/           # named for a lifecycle phase
+    skills/
+      architecting-solutions
+      committing-changes
+      creating-pull-request
+      filing-breakdown-tasks
+      force-multiplier
+      labeling-changes
+      navigating-the-initiative-funnel
+      perform-preflight
+      running-work-transitions
+  bitwarden-tech-lead/                # named for a role, and holds components
+    agents/AGENT.md
+    skills/contributing-to-technical-strategy
+
+After
+  bitwarden-code-contribution-tools/  # a change becoming a commit or pull request
+    skills/
+      committing-changes
+      creating-pull-request
+      force-multiplier
+      labeling-changes
+      perform-preflight
+  bitwarden-architecture-tools/       # architectural judgment
+    skills/
+      architecting-solutions
+  bitwarden-initiative-tools/         # initiatives and technical strategy
+    skills/
+      contributing-to-technical-strategy
+      navigating-the-initiative-funnel
+      running-work-transitions
+  bitwarden-tech-lead/                # role bundle: manifest, README, CHANGELOG
+    dependencies: architecture-tools, initiative-tools,
+                  code-contribution-tools, code-review-tools
+```
+
+`filing-breakdown-tasks` leaves the marketplace, because it cannot run outside the repository that
+holds the breakdowns. The tech lead agent is retired, and the little it said that no skill already
+covered moves into the initiative skills.
+
 ```mermaid
 flowchart LR
     Comp["Any component"] -->|lives once in| Cap["Capability plugin<br/>named for what its components act on"]
