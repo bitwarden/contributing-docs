@@ -22,6 +22,7 @@ deprioritized
 diffable
 dockerized
 dotfile
+downcasting
 F-Droid
 frontmatter
 Gitter
