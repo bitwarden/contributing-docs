@@ -5,33 +5,33 @@ date: 2026-08-21
 tags: [ai]
 ---
 
-# 0035 - Adopt a taxonomy for the AI plugin marketplace
+# 0035 - Adopt a placement taxonomy for AI components
 
 <AdrTable frontMatter={frontMatter}></AdrTable>
 
 ## Context and problem statement
 
-The AI plugin marketplace publishes more than a dozen plugins holding many skills, agents, and
-commands. There is no reliable way to decide which plugin a new skill belongs in, and the cost shows
-up as duplication and churn rather than as an argument anyone wins.
+Bitwarden's AI tooling is a growing set of skills, agents, commands, and prompts. Some live in a
+repository's local configuration, and the rest ship through the AI plugin marketplace, which
+publishes more than a dozen plugins. There is no reliable way to decide where a new component
+belongs, and the cost shows up as duplication and churn rather than as an argument anyone wins.
 
-The marketplace's contribution guide defines a small number of plugin families. A meaningful
-fraction of plugins fit none of them cleanly: several have no family at all, and others fit only on
-a technicality, named for an activity instead of a role, or named for a role but shipping no agent
-and nothing but generic skills. Those are the plugins whose contents are hardest to predict from
-their names. A family of subject-matter skill libraries exists in practice but is undocumented, so
-it has no membership test, and one plugin became the default home for anything skill-shaped that was
-not a persona. It now holds several unrelated concerns behind a single name.
+The problem is sharpest in the marketplace, whose contribution guide defines a small number of
+plugin families. A meaningful fraction of plugins fit none of them cleanly: several have no family
+at all, and others fit only on a technicality, named for an activity instead of a role, or named for
+a role but shipping no agent and nothing but generic skills. Those are the plugins whose contents
+are hardest to predict from their names. A family of subject-matter skill libraries exists in
+practice but is undocumented, so it has no membership test, and one plugin became the default home
+for anything skill-shaped that was not a persona. It now holds several unrelated concerns behind a
+single name.
 
-The absence of a rule is measurable in the tree:
+The absence of a rule shows up in the tree:
 
-- `architecting-solutions` has lived in three plugins: `bitwarden-architect`, `bitwarden-tech-lead`,
-  and `bitwarden-delivery-tools`.
+- A skill has moved between plugins more than once.
 - Two skills covering closely related scopes live in different plugins, and each spends prose
   defining its boundary against the other.
-- The initiative funnel, a single process spanning many steps, is split across
-  `bitwarden-delivery-tools`, `bitwarden-tech-lead`, and `bitwarden-shepherd`, producing many
-  cross-plugin references that exist only because the steps were separated.
+- A single process spanning many steps is split across several plugins, producing many cross-plugin
+  references that exist only because the steps were separated.
 - Guidance keeps getting duplicated across persona plugins, and the copies diverge before anyone
   notices and consolidates them.
 
@@ -193,8 +193,8 @@ engineering.
 
 ### Positive consequences
 
-- "Which plugin does this skill go in" has one answer, and the answer set excludes every role-named
-  plugin by construction.
+- "Where does this component go" has one answer, and the answer set excludes every role-named plugin
+  by construction.
 - Institutional knowledge stays single-sourced, so a reference or a process-phase gate cannot drift
   between copies.
 - A curated per-role install becomes worth having, because one home per skill makes what a bundle
