@@ -9,8 +9,6 @@ tags: [server, server-sdk]
 
 <AdrTable frontMatter={frontMatter}></AdrTable>
 
-{/* cspell:ignore fieldsets */}
-
 ## Notation
 
 This ADR uses [RFC 2119](https://www.rfc-editor.org/info/rfc2119/) keywords (`MUST`, `MUST NOT`,
