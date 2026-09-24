@@ -1,11 +1,11 @@
 ---
-adr: "0035"
+adr: "0036"
 status: Proposed
 date: 2026-08-21
 tags: [ai]
 ---
 
-# 0035 - Adopt a placement taxonomy for AI components
+# 0036 - Adopt a placement taxonomy for AI components
 
 <AdrTable frontMatter={frontMatter}></AdrTable>
 
@@ -14,15 +14,15 @@ tags: [ai]
 Bitwarden's AI tooling is a growing set of skills, agents, commands, and prompts. Some live in a
 repository's local configuration, and the rest ship through the AI plugin marketplace, which
 publishes more than a dozen plugins. There is no reliable way to decide where a new component
-belongs, and the cost shows up as duplication and churn rather than as an argument anyone wins.
+belongs, and the cost shows up as duplication and churn.
 
 The problem is sharpest in the marketplace, whose contribution guide defines a small number of
 plugin families. A meaningful fraction of plugins fit none of them cleanly: several have no family
 at all, and others fit only on a technicality, named for an activity instead of a role, or named for
 a role but shipping no agent and nothing but generic skills. Those are the plugins whose contents
 are hardest to predict from their names. A family of subject-matter skill libraries exists in
-practice but is undocumented, so it has no membership test, and one plugin became the default home
-for anything skill-shaped that was not a persona. It now holds several unrelated concerns behind a
+practice but is undocumented, so it has no membership test. One plugin became the default home for
+anything skill-shaped that was not a persona, and it now holds several unrelated concerns behind a
 single name.
 
 The absence of a rule shows up in the tree:
@@ -35,11 +35,11 @@ The absence of a rule shows up in the tree:
 - Guidance keeps getting duplicated across persona plugins, and the copies diverge before anyone
   notices and consolidates them.
 
-Placement is the problem to solve. Alongside it sits an opportunity: many skills serve several roles
+Placement is the problem to solve, and it comes with an opportunity. Many skills serve several roles
 at once, and a person joining a role currently has to read the whole catalog to work out which
 entries apply. Grouping by role would answer that, but it duplicates shared skills and gives them no
-single home, which is the failure already on the board. A single capability layer keeps one home per
-skill and leaves the joining problem where it is.
+single home. A single capability layer keeps one home per skill but does nothing for a person
+joining a role.
 
 ## Considered options
 
@@ -128,11 +128,10 @@ holds the breakdowns.
 
 An agent is a component like any other: it takes a name for the work it does and lives in the
 capability plugin that work belongs to. An agent that other components dispatch stays, because its
-tools, model, and preloaded skills are what a skill cannot carry, and its prose shrinks to what
-those dispatchers need. Otherwise, a persona agent that only restates skills is deleted, and
-whatever it said that no skill covers moves into the skill that owns that topic. An agent that does
-distinct work is renamed for that work and moves to a capability plugin. Applied to the persona
-agents:
+tools, model, and preloaded skills are what a skill cannot carry. Its prose shrinks to what those
+dispatchers need. Otherwise, a persona agent that only restates skills is deleted, and whatever it
+said that no skill covers moves into the skill that owns that topic. An agent that does distinct
+work is renamed for that work and moves to a capability plugin. Applied to the persona agents:
 
 | Agent             | Disposition                                                                         | Where its content lands                                                                                      |
 | ----------------- | ----------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
@@ -179,11 +178,12 @@ a manifest consisting of only dependencies packages a curated set behind one ins
 can be pushed org-wide through managed settings.
 
 A plugin may depend on another plugin at either layer. Before declaring one, name the call: this
-skill in one plugin calls that skill in the other. A dependency nobody can name that way comes out.
+skill in one plugin calls that skill in the other. Remove any dependency that cannot be named that
+way.
 
-Dependencies are all or nothing. The platform has no optional kind, so a plugin whose dependency is
-missing does not load at all. Anything meant to work without a plugin it calls has to say so, and
-keep working when that plugin is gone.
+The platform has no optional dependencies, so a plugin whose dependency is missing does not load at
+all. Anything meant to work without a plugin it calls has to say so, and keep working when that
+plugin is gone.
 
 The operational detail lives in the marketplace repository. Its contribution guide carries the
 procedure a contributor follows, including the placement test walked with worked examples and the
@@ -197,9 +197,9 @@ engineering.
   by construction.
 - Institutional knowledge stays single-sourced, so a reference or a process-phase gate cannot drift
   between copies.
-- A curated per-role install becomes worth having, because one home per skill makes what a bundle
-  resolves to legible rather than accidental. Bundles are being adopted independently of how
-  placement is settled, so this is a benefit the taxonomy confers rather than one it rests on.
+- A curated per-role install becomes worth having, because one home per skill makes it clear what a
+  bundle resolves to. Bundles are being adopted independently of placement, so the taxonomy improves
+  them without depending on them.
 - Consolidating a multi-step process's skills into one plugin converts many cross-plugin references
   into intra-plugin calls, and co-locating a lookup skill with the skill that needs it makes a
   duplicated procedure removable.
@@ -219,8 +219,8 @@ engineering.
   some plugins need rename entries so existing installs migrate cleanly.
 - Six persona agents change in breaking releases: four are deleted and two are renamed. Anyone who
   invokes one by name moves to the skills that absorbed it, or to the agent's new name.
-- Duplication becomes harder rather than impossible. A team that wants a private copy of a skill now
-  has to argue for it, which is the intent, but it is friction.
+- Duplication stays possible but becomes harder, because a team that wants a private copy of a skill
+  has to argue for it. That friction is intended, and it is still a cost.
 
 ### Plan
 
