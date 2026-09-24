@@ -73,7 +73,7 @@ Chosen option: **two layers, capability plugins plus role bundles**. The rules a
    review time. A component that does not fit the enumeration either forces a deliberate description
    change or goes elsewhere.
 
-For example, two plugins as they stand today and where their contents land:
+For example, three plugins as they stand today and where their contents land:
 
 ```text
 Before
@@ -91,9 +91,12 @@ Before
   bitwarden-tech-lead/                # named for a role, and holds components
     agents/AGENT.md
     skills/contributing-to-technical-strategy
+  bitwarden-software-engineer/        # named for a role, and holds an agent
+    agents/AGENT.md
 
 After
   bitwarden-code-contribution-tools/  # a change becoming a commit or pull request
+    agents/bitwarden-implementor.md
     skills/
       committing-changes
       creating-pull-request
@@ -111,11 +114,14 @@ After
   bitwarden-tech-lead/                # role bundle: manifest, README, CHANGELOG
     dependencies: architecture-tools, initiative-tools,
                   code-contribution-tools, code-review-tools
+  bitwarden-software-engineer/        # role bundle: manifest, README, CHANGELOG
+    dependencies: code-contribution-tools, code-review-tools
 ```
 
 `filing-breakdown-tasks` leaves the marketplace, because it cannot run outside the repository that
-holds the breakdowns. The tech lead agent is retired, and the little it said that no skill already
-covered moves into the initiative skills.
+holds the breakdowns. The software engineer agent becomes `bitwarden-implementor`, named for the
+work it does so it no longer shares a name with the role bundle. The tech lead agent is retired, and
+the little it said that no skill already covered moves into the initiative skills.
 
 An agent is a component like any other: it takes a name for the work it does and lives in the
 capability plugin that work belongs to.
