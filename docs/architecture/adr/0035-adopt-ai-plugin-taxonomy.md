@@ -2,7 +2,7 @@
 adr: "0035"
 status: Proposed
 date: 2026-08-21
-tags: [clients, mobile, server, sdk]
+tags: [ai]
 ---
 
 # 0035 - Adopt a taxonomy for the AI plugin marketplace
@@ -11,9 +11,9 @@ tags: [clients, mobile, server, sdk]
 
 ## Context and problem statement
 
-The AI plugin marketplace publishes dozens of plugins holding many skills, agents, and commands.
-There is no reliable way to decide which plugin a new skill belongs in, and the cost shows up as
-duplication and churn rather than as an argument anyone wins.
+The AI plugin marketplace publishes more than a dozen plugins holding many skills, agents, and
+commands. There is no reliable way to decide which plugin a new skill belongs in, and the cost shows
+up as duplication and churn rather than as an argument anyone wins.
 
 The marketplace's contribution guide defines a small number of plugin families. A meaningful
 fraction of plugins fit none of them cleanly: several have no family at all, and others fit only on
@@ -25,12 +25,13 @@ not a persona. It now holds several unrelated concerns behind a single name.
 
 The absence of a rule is measurable in the tree:
 
-- A skill has moved between plugins more than once, and its own documentation inlines a procedure
-  that duplicates a separate skill sitting in a different plugin.
+- `architecting-solutions` has lived in three plugins: `bitwarden-architect`, `bitwarden-tech-lead`,
+  and `bitwarden-delivery-tools`.
 - Two skills covering closely related scopes live in different plugins, and each spends prose
   defining its boundary against the other.
-- A single process spanning many steps is split across several plugins, producing many cross-plugin
-  references that exist only because the steps were separated.
+- The initiative funnel, a single process spanning many steps, is split across
+  `bitwarden-delivery-tools`, `bitwarden-tech-lead`, and `bitwarden-shepherd`, producing many
+  cross-plugin references that exist only because the steps were separated.
 - Guidance keeps getting duplicated across persona plugins, and the copies diverge before anyone
   notices and consolidates them.
 
@@ -45,7 +46,7 @@ skill and leaves the joining problem where it is.
 - **Status quo:** a small number of families that don't cover a meaningful share of the marketplace,
   and placement settled case by case in review.
 - **Role plugins with deliberate duplication:** one plugin per job function, and a skill serving two
-  roles is copied into both. Other organizations use this model for their own AI plugin libraries.
+  roles is copied into both.
 - **Capability plugins only:** one home per skill, named for what its skills act on, with no
   role-level packaging. Answers placement fully and leaves discovery to a catalog page.
 - **Two layers, capability plugins plus role bundles:** the same capability layer, plus bundle
@@ -54,12 +55,16 @@ skill and leaves the joining problem where it is.
 
 ## Decision outcome
 
-Chosen option: **two layers, capability plugins plus role bundles**. The rules at adoption:
+Chosen option: **two layers, capability plugins plus role bundles**, because it keeps one home per
+component and still gives a person joining a role a single install, without copying any component to
+get there. The rules at adoption:
 
 1. **A capability plugin carries components,** whatever kinds the platform supports, and every
    component has exactly one home. It is named for what its components act on, meaning an artifact,
    a practice, or an integration surface, never for a job title, a seniority level, or a lifecycle
-   phase.
+   phase. The test is whether the name points to something a reviewer can find, such as a file, a
+   tracker record, or a vendor surface, or to a discipline with a Bitwarden standard behind it. A
+   name that only says when work happens is a phase.
 2. **A role bundle holds nothing but a name, a description, and dependencies.** No components of any
    kind. CI enforces it. It is what a person installs, and it is named for the role.
 3. **Placement therefore ranges only over capability plugins**, because a bundle holds nothing. A
@@ -69,7 +74,7 @@ Chosen option: **two layers, capability plugins plus role bundles**. The rules a
    artifact dispatched only by a sibling stays with its consumer; knowledge of how Bitwarden uses a
    vendor's product, stated generically, belongs to that vendor's integration plugin; everything
    else is named for the artifact or practice it acts on.
-5. **A plugin description enumerates what it provides**, which makes the boundary self-enforcing at
+5. **A plugin description enumerates what it provides**, which makes the boundary checkable at
    review time. A component that does not fit the enumeration either forces a deliberate description
    change or goes elsewhere.
 
@@ -119,19 +124,28 @@ After
 ```
 
 `filing-breakdown-tasks` leaves the marketplace, because it cannot run outside the repository that
-holds the breakdowns. The software engineer agent becomes `bitwarden-implementor`, named for the
-work it does so it no longer shares a name with the role bundle. The tech lead agent is retired, and
-the little it said that no skill already covered moves into the initiative skills.
+holds the breakdowns.
 
 An agent is a component like any other: it takes a name for the work it does and lives in the
-capability plugin that work belongs to.
+capability plugin that work belongs to. A persona agent that only restates skills is deleted, and
+whatever it said that no skill covers moves into the skill that owns that topic. An agent that does
+distinct work is renamed for that work and moves to a capability plugin. Applied to the persona
+agents:
+
+| Agent             | Disposition                                                                         | Where its content lands                                                                                      |
+| ----------------- | ----------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| Software engineer | Renamed `bitwarden-implementor`, so it no longer shares a name with its role bundle | `bitwarden-code-contribution-tools`                                                                          |
+| Tech lead         | Deleted                                                                             | Two statements move into the initiative skills; the rest is dropped                                          |
+| Security engineer | Deleted                                                                             | Its reporting tone moves into the security skills' write-up sections                                         |
+| Designer          | Deleted                                                                             | Its boundary against product, engineering, and research roles moves into `facilitating-design-critique`      |
+| Product analyst   | Deleted                                                                             | Its unclaimed content becomes a new skill, `writing-requirements-documents`, and `work-breakdown` is retired |
+| Shepherd          | Deleted                                                                             | Its tech lead authority boundary moves into `shepherding-an-initiative`                                      |
 
 ```mermaid
 flowchart LR
     Comp["Any component"] -->|lives once in| Cap["Capability plugin<br/>named for what its components act on"]
     Cap -->|composed via dependencies into| Bundle["Role bundle<br/>name + description + dependencies, nothing else"]
     Bundle -->|installed by| Person["Person"]
-    Ext["External entry<br/>upstream files at a pinned commit"] -->|installed by| Person
 ```
 
 > _Perspective: Council reviewers ratifying the model. How a component reaches the person who
@@ -157,10 +171,6 @@ flowchart TD
 A component driving one workflow through a vendor surface composes that vendor's integration plugin
 and hands it content, so the conventions for using the product stay in one place and the specialized
 component carries none of them.
-
-A third kind of entry sits outside both layers. An **external entry** names a third-party repository
-and a commit. Its files stay upstream, so the pinned commit is the whole of its security boundary.
-It carries no Bitwarden practice, so no placement rule reaches it and neither layer contains it.
 
 Bundles use the plugin manifest's dependencies array, which the platform documents for this purpose:
 a manifest consisting of only dependencies packages a curated set behind one install, and bundles
@@ -194,15 +204,19 @@ engineering.
 
 ### Negative consequences
 
-- The model depends on plugin dependencies, a platform feature that is documented in depth but not
-  used at scale elsewhere yet. Bitwarden would be an early adopter of that machinery, and its
-  failure modes each disable the dependent plugin until resolved.
+- The model depends on plugin dependencies, a platform feature that is documented in depth.
+  Bitwarden would be an early adopter of that machinery, and its failure modes each disable the
+  dependent plugin until resolved.
 - Single-sourcing concentrates dependents onto a few shared capability plugins. A bad release of one
   disables every dependent, and that radius widens as more roles compose the same shared plugin.
+  Sibling dependencies are unversioned, the same convention we use for our own GitHub Actions at
+  `@main`.
 - Marketplace entries grow in count even though ambiguity falls, because only some of the resulting
   entries can hold a component.
 - Migration spans several pull requests, each carrying a version bump and a changelog entry, and
   some plugins need rename entries so existing installs migrate cleanly.
+- Six persona agents change in breaking releases: five are deleted and one is renamed. Anyone who
+  invokes one by name moves to the skills that absorbed it, or to `bitwarden-implementor`.
 - Duplication becomes harder rather than impossible. A team that wants a private copy of a skill now
   has to argue for it, which is the intent, but it is friction.
 
