@@ -37,7 +37,6 @@ Hyperscale
 iframes
 inet
 ingestibility
-inlines
 initialisms
 IntelliJ
 Iterm
