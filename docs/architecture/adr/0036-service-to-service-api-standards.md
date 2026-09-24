@@ -9,7 +9,7 @@ tags: [server, server-sdk]
 
 <AdrTable frontMatter={frontMatter}></AdrTable>
 
-{/* cspell:ignore Appibase Catalio */}
+{/* cspell:ignore fieldsets */}
 
 ## Notation
 
@@ -22,161 +22,124 @@ API is out of scope and is not changing.
 
 ## Context and problem statement
 
-Service-to-service APIs are new. As server functionality is decomposed into independently deployable
-services, a service calling another service needs a wire contract, and no documented standard
-exists.
+[ADR-0035](./0035-service-oriented-architecture.md) establishes that services communicate through
+published APIs and that service-to-service APIs conform to a forthcoming set of standards. As more
+server functionality is decomposed into independently deployable services, the number of
+service-to-service APIs, and the number of teams building and consuming them, will grow. No
+documented standard for them exists today.
 
-One important distinction to keep in mind as we consider various options is that the APIs we are
-talking about are _service-to-service_ APIs. We control both the service that declares them and
-every client that consumes them. While we _do_ still want to adhere to the principle of "no breaking
-changes", we also do not want that to result in an ever-growing number of optional fields that
-ultimately make these contracts less clear.
+Without one, every team answers the same questions independently, and a consumer calling five
+services learns five error formats, five pagination schemes, and five ways to filter. The
+conventions that exist today live in precedent rather than in writing, so they cannot be cited in
+review, generated from, or enforced.
 
-In the same way we [refactor our code mercilessly](https://wiki.c2.com/?RefactorMercilessly), we
-want the liberty to be able to do the same with our APIs. Especially when they are still under
-active development and rapidly evolving.
+The existing conventions are also a poor fit to adopt as-is. They were shaped by constraints of APIs
+whose callers we do not control, such as additive-only evolution and no formal versioning. With
+service-to-service APIs we control both the service that declares an API and every client that
+consumes it. We still want to avoid breaking changes, but we do not want that goal to produce an
+ever-growing number of optional fields that make contracts less clear over time. The standards we
+need are therefore likely to look very different from the conventions of our existing APIs.
 
-Said differently, we do not want the rules that restrict how public-facing APIs may evolve to
-restrict how, or the pace at which, we evolve service-to-service APIs.
+A well-defined API is much more than an HTTP verb, a path, and a JSON payload. It spells out exactly
+how it is called and what the caller can expect in return, on both the happy path and every other
+path. To be useful, the standards have to be comprehensive. At a minimum, they need to address:
+
+- **Authentication and authorization:** how a caller proves its identity, how a service authorizes
+  an operation, and how the current organization travels with a request.
+- **API descriptions:** how APIs are documented in OpenAPI, including stable operation identifiers
+  for generated clients.
+- **API paths:** how paths are structured and named.
+- **Breaking changes and versioning:** what constitutes a breaking change and how an API evolves
+  when one is unavoidable.
+- **Unrecognized fields, query parameters, and headers:** how a service responds to input it does
+  not understand, including after a rollback.
+- **JSON:** the shape of request and response documents and how values are serialized.
+- **Naming conventions:** casing and naming of resources, fields, and parameters.
+- **Content negotiation:** which media types are accepted and returned, and what happens when a
+  requested type cannot be honored.
+- **Standard responses:** which status codes are returned and when, including the commonly confused
+  cases (400 vs. 422, 403 vs. 404, 404 vs. 422, 500 vs. 503).
+- **Resource fields and standard fields:** the fields every resource carries and the names used for
+  common fields such as creation and modification timestamps.
+- **Verbs:** which HTTP verbs are used for which operations.
+- **Creating resources:** request and response shapes for creation.
+- **Reading resources:** reading one resource and reading many.
+- **Updating resources:** full replacement and partial updates.
+- **Optimistic concurrency:** how conflicting concurrent updates are detected and rejected.
+- **Deleting resources:** hard deletes and soft deletes.
+- **Acting upon resources:** operations that do not fit cleanly into create, read, update, and
+  delete.
+- **Filtering:** a consistent filter grammar, including multi-value parameters and ranges.
+- **Paging:** offset/limit and cursor-style paging.
+- **Sorting:** how callers request an order.
+- **Sparse fieldsets:** how callers request only the fields they need.
+- **Advanced queries:** how richer queries are expressed when simple filters are not enough.
+- **Bulk operations:** updating and deleting many resources in one request.
+- **Request validation:** what is validated, when, and how failures are reported.
+- **Errors:** a single error format that is both human-readable and machine-actionable.
+- **Jobs:** how asynchronous work is accepted and its progress reported.
+- **Deprecation:** how an API or version is marked for removal and communicated to consumers.
 
 ## Considered options
 
-- **Adopt the existing public API conventions:** apply the same shape and the same no-versioning
-  posture to service-to-service APIs.
-- **Keep the existing JSON shape and add versioning:** retain today's conventions, introduce path
-  versioning.
-- **Adopt [JSON:API](https://jsonapi.org/) strictly:** implement the specification in full,
-  including its media type and `relationships` objects, and add versioning.
-- **Adopt [JSON:API](https://jsonapi.org/) selectively:** implement most of the specification but
-  don't worry about 100% compliance, and add versioning.
+- **No documented standards:** each team designs its service-to-service APIs as it sees fit,
+  following existing precedent where it exists.
+- **Documented standards:** publish a comprehensive set of standards that every service-to-service
+  API conforms to.
 
-### Adopt the existing public API conventions
+### No documented standards
 
 **Pros**
 
-- One shape across every Bitwarden API, public and service-to-service.
-- Nothing new for engineers to learn, and no migration for code already written this way.
+- No up-front investment in writing standards.
+- Teams are free to design each API around its immediate needs.
 
 **Cons**
 
-- Carries over the no-versioning posture, which forces additive-only evolution on APIs whose callers
-  we control.
-- Its envelope is undocumented and answers only pagination. `object` and `data` exist only as
-  properties on a response model class, so anything else the response needs to carry has nowhere
-  defined to go.
-- The convention is not written down. A standard that exists only as precedent cannot be cited in
-  review, generated from, or enforced.
+- Every team answers the same questions independently, and the answers diverge.
+- Consumers must learn each service's conventions separately.
+- Precedent cannot be cited in review, generated from, or enforced.
+- Conventions shaped by APIs whose callers we do not control carry over to APIs whose callers we do.
 
-### Keep the existing JSON shape and add versioning
+### Documented standards
 
 **Pros**
 
-- Solves the versioning problem.
-- Smallest change from current practice.
+- One set of answers across every service-to-service API, so consumers learn them once.
+- Standards can be cited in review, relied upon by generated clients and shared tooling, and applied
+  consistently by engineers and AI agents alike.
+- Standards can be designed for APIs whose callers we control, rather than inherited from APIs whose
+  callers we do not.
 
 **Cons**
 
-- Leaves us maintaining a proprietary standard. The questions an API standard answers (document
-  shape, metadata, errors, pagination, filtering, sparse responses, and so on) are not
-  Bitwarden-specific. Where a public specification already proposes answers to these common
-  questions, our time and energy is better spent adopting it.
-- The remaining gaps have to be filled by us, individually, as each one is discovered.
-
-### Adopt JSON:API strictly
-
-**Pros**
-
-- It is a public specification, not house style. Registered as a media type in 2013, now at v1.1,
-  revised in the open, with implementations across major languages.
-- It answers almost every question an API standard faces, not just the obvious ones: document shape,
-  resource identity, pagination, filtering, sorting, sparse responses, compound documents, metadata,
-  and errors.
-- Responses standardize where to find the resource `type`, `id`, and `attributes`, which enables
-  generic tooling over the entire API surface.
-- Error responses are richly described to facilitate both human-readable details and a
-  [JSON Pointer](https://www.rfc-editor.org/info/rfc6901/) that identifies the exact member of the
-  request that failed (which, again, enables generic tooling).
-
-**Cons**
-
-- In code, model objects are typically "flat"; on the JSON:API wire, they are nested inside `data`
-  and `attributes` envelopes. A good framework will mask these envelopes from the actual classes
-  developers work with, but a direct projection will result in request and response models that feel
-  awkward.
-- Parts of the specification are a real implementation burden for little return (e.g.
-  `relationships` objects, with their resource linkage and related-resource links).
-- Every API must advertise that it accepts and returns the `application/vnd.api+json` media type,
-  which inevitably creates problems for clients that expect to send and receive `application/json`.
-  Advertising `application/json` while still accepting `application/vnd.api+json` is only available
-  to us because we are not claiming full conformance.
-
-### Adopt JSON:API selectively
-
-**Pros**
-
-- Almost all the pros of [Adopt JSON:API strictly](#adopt-jsonapi-strictly) with just one con.
-
-**Cons**
-
-- Our APIs will walk like and talk like JSON:API but are not _quite_ JSON:API, which could be
-  surprising to a human. It is hard to imagine any negative impact to the machine that consumes
-  them.
+- Writing and maintaining comprehensive standards takes time and effort.
+- Service-to-service APIs will likely look different from our existing APIs.
 
 ## Decision outcome
 
-Chosen option: **Adopt JSON:API selectively with versioning**.
+Chosen option: **Documented standards**.
 
-- We believe an established standard, with thoughtful answers to every API question, will be more
-  robust than any standard we might invent ourselves. It is widely adopted among some of the largest
-  SaaS vendors in the industry including [ART19](https://marketplace.apilayer.com/art19_content-api)
-  (an Amazon company) and [Datadog](https://docs.datadoghq.com/api/latest).
-- We feel strongly that service-to-service APIs should be formally versioned. Without formal
-  versioning, a change to an existing contract has to be either additive or coordinated with every
-  consumer's release cycle, which in practice means the shape rarely changes and every new field is
-  optional. Contracts constrained like that get weaker over time, and what we _want_ to express
-  eventually cannot be expressed, because we have committed ourselves to "additive changes only".
-  This rules out adopting the existing public API conventions, which are expressly unversioned.
-- We adopt the standard selectively to get most of the benefits of JSON:API without the burden of
-  full conformance.
-
-The specific standards, including where we deviate from JSON:API, are published here:
-[Service-to-service API standards](../server/service-to-service-api-standards.md). That page is the
-living reference: its rules evolve by pull request without superseding this decision, and this ADR
-is superseded only if the model itself changes.
+Service-to-service APIs `MUST` conform to a comprehensive, documented set of standards covering, at
+a minimum, the topics listed above. The standards will be published separately as a living
+reference: their rules evolve by pull request without superseding this decision, and this ADR is
+superseded only if the decision to have documented standards itself changes.
 
 ### Positive consequences
 
-- One document shape across every service-to-service API, so a consumer calling five services learns
-  one error format, one pagination scheme, and one filter grammar.
-- Versioning gives a contract a way to change shape. A breaking change becomes a new version with a
-  migration, instead of more optional parameters.
-- The envelope gives pagination state and other response metadata somewhere to live that is not
-  mixed into the resource.
-- Decisions we would otherwise have to make are already made, in public, by a specification that has
-  been maturing since 2013.
+- Consumers learn one error format, one pagination scheme, one filter grammar, and so on, across
+  every service-to-service API.
+- Decisions are made once, in writing, rather than repeatedly and inconsistently by each team.
+- Consistent contracts enable generated clients and generic tooling over the entire
+  service-to-service API surface.
 
 ### Negative consequences
 
-- Service-to-service APIs "look different" from public APIs.
-- Additional work is required to ensure the "envelopes" are largely transparent to developers when
-  working with request and response models in code.
-- Partial conformance invites any deviation from the specification to be argued as allowed. We will
-  mitigate this by documenting the specific exceptions; we will comply with all other aspects of the
-  specification.
+- Service-to-service APIs will "look different" from existing APIs.
+- The standards require ongoing ownership and maintenance.
 
 ### Plan
 
-- Build out the framework that makes the JSON:API "envelope tax" disappear from daily development.
-- Publish a standard for authentication, authorization, and how the current organization travels
-  with a request.
-- Publish a standard for jobs, the resource a `202 Accepted` returns.
-
-## References
-
-- [Appibase Docs](https://appibase.com/docs)
-- [ART19 Content API](https://marketplace.apilayer.com/art19_content-api)
-- [Bitwarden Public API](https://bitwarden.com/help/public-api)
-- [JSON:API — Active Ants ShopAPI v3](https://developer.activeants.com/docs/shopapi/v3/general-concepts/jsonapi)
-- [JSON:API Overview — Catalio](https://catalio.ai/docs/json-api-overview)
-- [JSON:API specification](https://jsonapi.org/)
-- [Public API](https://contributing.bitwarden.com/getting-started/server/public-api)
+- Publish the service-to-service API standards, addressing every topic listed above.
+- Build the framework support in `Bitwarden.Server.Sdk` that makes conforming to the standards the
+  path of least resistance.
