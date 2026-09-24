@@ -127,7 +127,9 @@ After
 holds the breakdowns.
 
 An agent is a component like any other: it takes a name for the work it does and lives in the
-capability plugin that work belongs to. A persona agent that only restates skills is deleted, and
+capability plugin that work belongs to. An agent that other components dispatch stays, because its
+tools, model, and preloaded skills are what a skill cannot carry, and its prose shrinks to what
+those dispatchers need. Otherwise, a persona agent that only restates skills is deleted, and
 whatever it said that no skill covers moves into the skill that owns that topic. An agent that does
 distinct work is renamed for that work and moves to a capability plugin. Applied to the persona
 agents:
@@ -136,7 +138,7 @@ agents:
 | ----------------- | ----------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
 | Software engineer | Renamed `bitwarden-implementor`, so it no longer shares a name with its role bundle | `bitwarden-code-contribution-tools`                                                                          |
 | Tech lead         | Deleted                                                                             | Two statements move into the initiative skills; the rest is dropped                                          |
-| Security engineer | Deleted                                                                             | Its reporting tone moves into the security skills' write-up sections                                         |
+| Security engineer | Kept and renamed `bitwarden-security-assessor`, because three skills dispatch it    | `bitwarden-security-tools`                                                                                   |
 | Designer          | Deleted                                                                             | Its boundary against product, engineering, and research roles moves into `facilitating-design-critique`      |
 | Product analyst   | Deleted                                                                             | Its unclaimed content becomes a new skill, `writing-requirements-documents`, and `work-breakdown` is retired |
 | Shepherd          | Deleted                                                                             | Its tech lead authority boundary moves into `shepherding-an-initiative`                                      |
@@ -215,8 +217,8 @@ engineering.
   entries can hold a component.
 - Migration spans several pull requests, each carrying a version bump and a changelog entry, and
   some plugins need rename entries so existing installs migrate cleanly.
-- Six persona agents change in breaking releases: five are deleted and one is renamed. Anyone who
-  invokes one by name moves to the skills that absorbed it, or to `bitwarden-implementor`.
+- Six persona agents change in breaking releases: four are deleted and two are renamed. Anyone who
+  invokes one by name moves to the skills that absorbed it, or to the agent's new name.
 - Duplication becomes harder rather than impossible. A team that wants a private copy of a skill now
   has to argue for it, which is the intent, but it is friction.
 
