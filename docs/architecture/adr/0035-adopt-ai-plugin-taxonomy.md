@@ -117,6 +117,9 @@ After
 holds the breakdowns. The tech lead agent is retired, and the little it said that no skill already
 covered moves into the initiative skills.
 
+An agent is a component like any other: it takes a name for the work it does and lives in the
+capability plugin that work belongs to.
+
 ```mermaid
 flowchart LR
     Comp["Any component"] -->|lives once in| Cap["Capability plugin<br/>named for what its components act on"]
