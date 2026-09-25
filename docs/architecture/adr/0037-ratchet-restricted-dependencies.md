@@ -82,7 +82,7 @@ public interface IUserService
 
 - **Rule.** The `(AllowExistingUses, AllowNewUses)` pair sets it. The default is `(true, false)`.
   - `(true, true)` is tracked only. Uses are counted in the baseline and never a diagnostic.
-  - `(true, false)` is gated. Baselined uses pass. Anything beyond the baseline fails.
+  - `(true, false)` is gated. Existing uses pass. Anything beyond the baseline fails.
   - `(false, false)` is forbidden. Every use fails.
   - A member attribute overrides the type's rule for that member.
   - `SealMembers` freezes the declared member set.
@@ -129,7 +129,7 @@ public interface IUserService
 
 ### Negative consequences
 
-- Renaming a method that holds baselined uses reports BW0013 for the old key and BW0006 for the new
+- Renaming a method that holds existing uses reports BW0013 for the old key and BW0006 for the new
   one until `update` runs.
 - The analyzer trusts the committed baseline. A row added by hand is not detected by the build. A CI
   diff check is required and does not exist yet.
