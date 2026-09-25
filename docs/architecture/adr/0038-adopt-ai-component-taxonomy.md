@@ -1,11 +1,11 @@
 ---
-adr: "0036"
+adr: "0038"
 status: Proposed
-date: 2026-08-21
+date: 2026-09-25
 tags: [ai]
 ---
 
-# 0036 - Adopt a placement taxonomy for AI components
+# 0038 - Adopt a placement taxonomy for AI components
 
 <AdrTable frontMatter={frontMatter}></AdrTable>
 
@@ -53,11 +53,97 @@ joining a role.
   plugins that hold only dependencies and compose it. The second layer is additive: it changes
   nothing about where a skill lives.
 
+### Status quo
+
+**Pros**
+
+- No migration, no breaking releases, and no new platform dependency.
+
+**Cons**
+
+- Placement is argued case by case in review, so components keep moving between plugins.
+- Plugins that fit no family have names that do not predict their contents.
+
+### Role plugins with deliberate duplication
+
+**Pros**
+
+- A person joining a role installs one plugin named for their job.
+- Needs no dependency machinery.
+
+**Cons**
+
+- A skill serving several roles is copied into each, and the copies diverge.
+- A shared skill still has no single home, so placement stays undecided for it.
+
+### Capability plugins only
+
+**Pros**
+
+- Every component has exactly one home, decided by a written test.
+- Fewer marketplace entries than a model with bundles.
+
+**Cons**
+
+- A person joining a role still reads the whole catalog to work out which plugins apply.
+- Discovery depends on a hand-maintained catalog page.
+
+### Two layers, capability plugins plus role bundles
+
+**Pros**
+
+- Every component has one home, and a person joining a role still gets a single install.
+- Placement is checkable in review against the plugin description and the placement test.
+- The bundle rule and reference resolution can be enforced in CI.
+
+**Cons**
+
+- The platform has no optional dependencies, so a missing dependency stops the dependent plugin from
+  loading.
+- Sibling dependencies track `@main`, so a bad release of a shared plugin reaches every dependent at
+  once.
+- More marketplace entries, because bundles hold no components.
+
 ## Decision outcome
 
 Chosen option: **two layers, capability plugins plus role bundles**, because it keeps one home per
 component and still gives a person joining a role a single install, without copying any component to
-get there. The rules at adoption:
+get there.
+
+### Positive consequences
+
+- "Where does this component go" has one answer, and the answer set excludes every role-named plugin
+  by construction.
+- Institutional knowledge stays single-sourced, so a reference or a process-phase gate cannot drift
+  between copies.
+- A curated per-role install becomes worth having, because one home per skill makes it clear what a
+  bundle resolves to. Bundles are being adopted independently of placement, so the taxonomy improves
+  them without depending on them.
+- Consolidating a multi-step process's skills into one plugin converts many cross-plugin references
+  into intra-plugin calls, and co-locating a lookup skill with the skill that needs it makes a
+  duplicated procedure removable.
+
+### Negative consequences
+
+- The model depends on plugin dependencies, a platform feature that is documented in depth.
+  Bitwarden would be an early adopter of that machinery, and its failure modes each disable the
+  dependent plugin until resolved.
+- Single-sourcing concentrates dependents onto a few shared capability plugins. A bad release of one
+  disables every dependent, and that radius widens as more roles compose the same shared plugin.
+  Sibling dependencies are unversioned, the same convention we use for our own GitHub Actions at
+  `@main`.
+- Marketplace entries grow in count even though ambiguity falls, because only some of the resulting
+  entries can hold a component.
+- Migration spans several pull requests, each carrying a version bump and a changelog entry, and
+  some plugins need rename entries so existing installs migrate cleanly.
+- Six persona agents change in breaking releases: four are deleted and two are renamed. Anyone who
+  invokes one by name moves to the skills that absorbed it, or to the agent's new name.
+- Duplication stays possible but becomes harder, because a team that wants a private copy of a skill
+  has to argue for it. That friction is intended, and it is still a cost.
+
+### Plan
+
+The rules at adoption:
 
 1. **A capability plugin carries components,** whatever kinds the platform supports, and every
    component has exactly one home. It is named for what its components act on, meaning an artifact,
@@ -190,39 +276,6 @@ procedure a contributor follows, including the placement test walked with worked
 tie-breakers that settle an ambiguous case. This decision is superseded only if the two-layer model
 itself changes. Rule 4's branch set stays revisable as the marketplace absorbs disciplines beyond
 engineering.
-
-### Positive consequences
-
-- "Where does this component go" has one answer, and the answer set excludes every role-named plugin
-  by construction.
-- Institutional knowledge stays single-sourced, so a reference or a process-phase gate cannot drift
-  between copies.
-- A curated per-role install becomes worth having, because one home per skill makes it clear what a
-  bundle resolves to. Bundles are being adopted independently of placement, so the taxonomy improves
-  them without depending on them.
-- Consolidating a multi-step process's skills into one plugin converts many cross-plugin references
-  into intra-plugin calls, and co-locating a lookup skill with the skill that needs it makes a
-  duplicated procedure removable.
-
-### Negative consequences
-
-- The model depends on plugin dependencies, a platform feature that is documented in depth.
-  Bitwarden would be an early adopter of that machinery, and its failure modes each disable the
-  dependent plugin until resolved.
-- Single-sourcing concentrates dependents onto a few shared capability plugins. A bad release of one
-  disables every dependent, and that radius widens as more roles compose the same shared plugin.
-  Sibling dependencies are unversioned, the same convention we use for our own GitHub Actions at
-  `@main`.
-- Marketplace entries grow in count even though ambiguity falls, because only some of the resulting
-  entries can hold a component.
-- Migration spans several pull requests, each carrying a version bump and a changelog entry, and
-  some plugins need rename entries so existing installs migrate cleanly.
-- Six persona agents change in breaking releases: four are deleted and two are renamed. Anyone who
-  invokes one by name moves to the skills that absorbed it, or to the agent's new name.
-- Duplication stays possible but becomes harder, because a team that wants a private copy of a skill
-  has to argue for it. That friction is intended, and it is still a cost.
-
-### Plan
 
 Follow-up work in the marketplace repository, sequenced so no step depends on a later one:
 
