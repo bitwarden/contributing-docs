@@ -176,13 +176,14 @@ for. APIs `MUST` reject the request with `422` when given:
   case when validating these values.
 - APIs `SHOULD` strip leading and trailing whitespace from all strings before processing them.
 - APIs `MUST` treat an empty string the same as if the field is not present.
-- APIs `MUST` treat a field that isn't present the same as `null`.
+- APIs `MUST` treat a field that isn't present the same as `null`, except in
+  [partial updates](#partial-updates).
 - APIs `SHOULD NOT` include `null` fields in responses.
 
 ## Naming conventions
 
 - Field names `MUST` be in camel case (e.g. `firstName`, `lastName`).
-- Fields holding a date or date/time `MUST` end in `At` (e.g. `createdAt`, `expiresAt`).
+- Fields holding a date or date/time `SHOULD` end in `At` (e.g. `createdAt`, `expiresAt`).
 - Boolean fields `MUST NOT` be prefixed with `is` (e.g. `active`, not `isActive`).
 - Fields whose value is the identifier of another resource `SHOULD NOT` be suffixed with `Id`. A
   string-valued `assignedTo` is self-evidently the identifier of the user it is assigned to;
