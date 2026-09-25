@@ -835,8 +835,8 @@ standard decides how each combination looks.
 | [Execution](#synchronous-and-asynchronous)   | Synchronous, asynchronous   | Whether the caller waits for the outcome.     |
 
 Every bulk API `MUST` document, in its OpenAPI description, the targeting it accepts, the atomicity
-modes it supports and which is the default, whether it responds synchronously, asynchronously, or
-both, and the maximum number of items it accepts.
+modes it supports and which is the default, and whether it responds synchronously, asynchronously,
+or both.
 
 All bulk operations use `POST`:
 
@@ -846,7 +846,7 @@ All bulk operations use `POST`:
 | [Bulk update](#bulk-updates)   | `/api/v1/{resource plural}:bulk-update`   | `ids` or `filter`, plus `update` |
 | [Bulk replace](#bulk-replaces) | `/api/v1/{resource plural}:bulk-replace`  | `data`                           |
 | [Bulk delete](#bulk-deletes)   | `/api/v1/{resource plural}:bulk-delete`   | `ids` or `filter`                |
-| [Bulk action](#bulk-actions)   | `/api/v1/{resource plural}:bulk-{action}` | `ids` or `filter`, plus `input`  |
+| [Bulk action](#bulk-actions)   | `/api/v1/{resource plural}:bulk-{action}` | `ids` or `filter`, plus `data`   |
 
 ### Targeting
 
@@ -855,7 +855,7 @@ All bulk operations use `POST`:
 - **`ids`** is an array of resource IDs.
 - **`filter`** is an [advanced query](#advanced-queries) expression.
 
-Where an operation accepts both `ids` and `filter`, a request `MUST` supply exactly one of them.
+A request `MUST` supply exactly one form of targeting, whichever forms the operation accepts.
 
 > **Why `ids` when a `filter` can say `{ "in": [{ "var": "id" }, [...]] }`?** Because of what
 > happens to an ID that matches nothing. With `ids`, the caller named the resource, so a missing one
@@ -881,8 +881,6 @@ the caller may do to each of them. Both always apply.
   state, such as which status transitions are allowed.
 - Each resource that changes `MUST` produce the same side effects — events, notifications, audit
   records — as the single-resource API would.
-- For `ids` and `filter` targeting, this means evaluating the rules against each targeted resource
-  as it currently is, before changing it.
 
 A service `MAY` implement a bulk operation however it likes — including as a single set-based
 statement — provided the outcome, including which resources fail and why, is indistinguishable from
@@ -1164,7 +1162,7 @@ resource.
   `/api/v1/users/{id}/actions/send-email`.
 - Because bulk actions share a namespace with the other bulk operations, actions `MUST NOT` be named
   `create`, `update`, `replace`, or `delete`.
-- `input` holds exactly what the single-resource action would accept as its body, and is applied to
+- `data` holds exactly what the single-resource action would accept as its body, and is applied to
   every targeted resource. It `MAY` be omitted if the action takes no body.
 
 **Example**
@@ -1178,10 +1176,42 @@ Content-Type: application/json
 ```json
 {
   "ids": ["62bed180-1f78-45d4-8a56-c996936a2947", "cacba8c1-29fa-4018-8950-acd400ec76b7"],
-  "input": {
+  "data": {
     "subject": "Hello",
     "body": "World!"
   }
+}
+```
+
+#### Input that differs per resource
+
+Actions that require per-resource bodies specify the data as an array.
+
+- It `MUST` be used with `ids`, not `filter`, and `MUST` be the same length. `data[n]` is the body
+  for `ids[n]`.
+- A failure is reported against `/data/{n}`.
+
+**Example**
+
+```
+POST /api/v1/users:bulk-send-email
+Accept: application/json
+Content-Type: application/json
+```
+
+```json
+{
+  "ids": ["62bed180-1f78-45d4-8a56-c996936a2947", "cacba8c1-29fa-4018-8950-acd400ec76b7"],
+  "data": [
+    {
+      "subject": "Hello.",
+      "body": "Hi, John!"
+    },
+    {
+      "subject": "Hello",
+      "body": "Hi, Mary!"
+    }
+  ]
 }
 ```
 
