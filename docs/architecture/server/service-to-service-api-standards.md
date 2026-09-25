@@ -4,8 +4,6 @@ sidebar_position: 3
 
 # Service-to-service API standards
 
-{/* cspell:ignore reate reates eletes elete pdate pdates fieldsets */}
-
 **Audience:** Bitwarden engineers and AI agents building or consuming a service-to-service API.
 
 **Scope.** Service-to-service APIs, whose callers are other Bitwarden services. Bitwarden's existing
@@ -24,10 +22,10 @@ a team that needs an exception brings the case to the architecture group.
 
 In general, RESTful APIs are resource-oriented and do one of 4 things:
 
-- **C**reate a resource.
-- **R**ead a resource.
-- **U**pdate a resource.
-- **D**elete a resource.
+- **Create** a resource.
+- **Read** a resource.
+- **Update** a resource.
+- **Delete** a resource.
 
 This is the familiar CRUD paradigm and, while there will always be exceptions, developers `SHOULD`
 strive to think in these terms for every API created. Both for simplicity and consistency.
