@@ -90,6 +90,7 @@ public interface IUserService
 - **Baseline.** One committed JSON file per type records every existing use.
   - Rows are keyed by the documentation-comment id of the containing member. Moving lines changes
     nothing.
+  - `declaredMembers` lists the type's members. `SealMembers` checks new members against it.
   - An `update` tool regenerates it. The tool hosts the same analyzer the compiler runs, so the two
     cannot disagree.
   - As of today `IUserService` has 475 uses across 6 projects: 83 injection, 365 member, 7 locator,
