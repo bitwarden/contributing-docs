@@ -149,8 +149,8 @@ The rules at adoption:
    component has exactly one home. It is named for what its components act on, meaning an artifact,
    a practice, or an integration surface, never for a job title, a seniority level, or a lifecycle
    phase. The test is whether the name points to something a reviewer can find, such as a file, a
-   tracker record, or a vendor surface, or to a discipline with a Bitwarden standard behind it. A
-   name that only says when work happens is a phase.
+   Jira issue, or a vendor surface, or to a discipline with a Bitwarden standard behind it. A name
+   that only says when work happens is a phase.
 2. **A role bundle holds nothing but a name, a description, and dependencies.** No components of any
    kind. CI enforces it. It is what a person installs, and it is named for the role.
 3. **Placement therefore ranges only over capability plugins**, because a bundle holds nothing. A
