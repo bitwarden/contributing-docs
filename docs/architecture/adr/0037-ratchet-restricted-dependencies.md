@@ -1,23 +1,28 @@
 ---
-adr: "0036"
+adr: "0037"
 status: Proposed
 date: 2026-09-22
-tags: [server, server-sdk]
+tags: [clients, mobile, server, sdk, server-sdk]
 ---
 
-# 0036 - Ratchet restricted dependencies
+# 0037 - Ratchet restricted dependencies
 
 <AdrTable frontMatter={frontMatter}></AdrTable>
 
 ## Context and problem statement
 
+The `server`, `clients`, `sdk-internal`, `ios`, and `android` codebases each deprecate code with an
+annotation: `[Obsolete]` in C#, `@deprecated` in TypeScript, `#[deprecated]` in Rust,
+`@available(*, deprecated)` in Swift, `@Deprecated` in Kotlin. An annotation names old code. It does
+not drain it. Draining requires a software ratchet: a check that lets the codebase move toward a
+goal but blocks any step backward. This ADR sets the requirements for the whole stack and decides
+the first instance, in the C# `server`. The other four need the same guard, each in its own
+toolchain.
+
 [ADR-0008](./0008-server-CQRS-pattern.md) replaced `<<Entity>>Service` classes with
 [commands and queries](../server/command-query-separation.md). The transition was opportunistic.
 [ADR-0032](./0032-break-up-core.md) named the risk: "Without an aggressive timeline, the migration
-may stall." Four years on, unbounded dependencies like `IUserService`, `IOrganizationService`,
-`IOrganizationRepository`, `ICipherService`, `ICurrentContext`, and `IUserRepository` remain. The
-work to dissolve them requires a software ratchet: a check that lets the codebase move toward a goal
-but blocks any step backward.
+may stall." Four years on, the migration is not done.
 
 Deprecation by the out-of-the-box `[Obsolete]` attribute has not drained:
 
@@ -31,7 +36,7 @@ Deprecation by the out-of-the-box `[Obsolete]` attribute has not drained:
 
 `[Obsolete]` cannot tell an existing use from a new one. Raising it to error fails every caller at
 once, so it stays a warning. It has no count, no owner, and no expiry. It reports one shape: a
-reference to the marked symbol. It cannot stop the type gaining members.
+reference to the annotated symbol. It cannot stop the type gaining members.
 
 A ratchet must do five things. Record every existing use. Reject a new one. Let the record only
 shrink. Require an owner and an expiry on any exception. Freeze the type's member set.
@@ -52,8 +57,8 @@ Chosen option: **Roslyn analyzer with a declaration-side attribute and a committ
 baseline per type, shipped from `dotnet-extensions`**. It is the only option that records existing
 uses, rejects new ones, and its budget can only shrink.
 
-The analyzer ships as `Bitwarden.Server.Sdk.RestrictedDependencies` from `dotnet-extensions` PR
-#328. The type being dissolved is marked where it is declared:
+The analyzer ships as `Bitwarden.Server.Sdk.RestrictedDependencies` from `dotnet-extensions`. The
+type being dissolved is annotated where it is declared:
 
 ```csharp
 [RestrictedDependency(AllowExistingUses = true, AllowNewUses = false,
@@ -93,8 +98,8 @@ public interface IUserService
   (BW0007), concrete implementation (BW0008), escape (BW0009).
   - A removed use fails the build (BW0013) until the baseline shrinks.
   - A new member on a sealed type fails (BW0014).
-  - A marked type with no committed baseline, or a member attribute on an unmarked type, fails
-    (BW0015).
+  - An annotated type with no committed baseline, or a member attribute on an unannotated type,
+    fails (BW0015).
 - **Exceptions.** `[RestrictedDependencyException]` with `Owner`, `Reason`, and `Expires` is the
   only sanctioned new gated use.
   - An incomplete exception excepts nothing (BW0010).
@@ -116,8 +121,10 @@ public interface IUserService
 - The recorded count per type, member, shape, and project is committed and its diff is reviewable.
   It only goes down once the CI check in the Plan lands.
 - The error names the replacement.
-- Marking a type and committing its baseline in one change fails nothing.
+- Annotating a type and committing its baseline in one change fails nothing.
 - Sealing stops the type growing while it is dissolved.
+- Expired `[RestrictedDependencyException]` warns as BW0011 instead of failing. Normal work is
+  uninterrupted.
 
 ### Negative consequences
 
@@ -125,7 +132,6 @@ public interface IUserService
   one until `update` runs.
 - The analyzer trusts the committed baseline. A row added by hand is not detected by the build. A CI
   diff check is required and does not exist yet.
-- `Expires` is advisory. BW0011 warns, excepted sites are not baselined, and nothing chases them.
 - Tracked-only members are not gated in either direction. As of today 240 of the 365 member uses of
   `IUserService` are tracked only.
 - A hand-rolled static service locator is invisible to BW0007.
@@ -133,19 +139,16 @@ public interface IUserService
 
 ### Plan
 
-- Merge `dotnet-extensions` PR #328 and publish the package. Owner: Architecture.
+- Implement `RestrictedDependency` in `dotnet-extensions` and publish the package.
 - Wire `server`: props for `src/` and `bitwarden_license/src/`, the baseline tool, the
   `IUserService` attribute and baseline, `[Obsolete]` removed from `IUserService`, and `BW0011` in
-  `WarningsNotAsErrors`. Owner: Architecture.
+  `WarningsNotAsErrors`.
 - Add the missing guards: a CI job that fails when a baseline gains rows, built on
   `BudgetRatchet.FindGrowth`, and a scan for `RestrictedDependencyAnalysis=false` and global
-  suppressions of these ids. Owner: Architecture.
-- Mark the rest of the inventory, one PR each, with the owner on the attribute: `ICipherService`
-  (Vault), `IOrganizationService` and `IOrganizationRepository` (Admin Console), then
-  `ICurrentContext` and `IUserRepository` once each has an owner, since neither has one today.
+  suppressions of these ids.
+- Annotate the rest of the inventory, one PR each, with the owner on the attribute. A type with no
+  owner waits until it has one.
 - Migrate `BWA0001` and `BWA0002` to `[RestrictedDependency]` and delete their `WarningsNotAsErrors`
-  carve-outs. Owner: the team that added each carve-out.
-- Publish the engineer recipe in `server` per
-  [ADR-0034](./0034-adopt-engineering-documentation-standard.md). Owner: Architecture.
+  carve-outs.
 - A member is done when its rows reach zero and it is deleted, shrinking `declaredMembers`. A type
   is done when `declaredMembers` is empty and the type and its baseline are deleted.
