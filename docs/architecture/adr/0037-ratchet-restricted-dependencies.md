@@ -16,7 +16,7 @@ annotation: `[Obsolete]` in C#, `@deprecated` in TypeScript, `#[deprecated]` in 
 `@available(*, deprecated)` in Swift, `@Deprecated` in Kotlin. An annotation names old code. It does
 not drain it. Draining requires a software ratchet: a check that lets the codebase move toward a
 goal but blocks any step backward. This ADR sets the requirements for the whole stack and decides
-the first instance, in the C# `server`. The other four need the same guard, each in its own
+the first instance, in the C# `server`. The other four need the same ratchet, each in its own
 toolchain.
 
 [ADR-0008](./0008-server-CQRS-pattern.md) replaced `<<Entity>>Service` classes with
@@ -55,7 +55,7 @@ shrink. Require an owner and an expiry on any exception. Freeze the type's membe
 
 Chosen option: **Roslyn analyzer with a declaration-side attribute and a committed shrink-only
 baseline per type, shipped from `dotnet-extensions`**. It is the only option that records existing
-uses, rejects new ones, and its budget can only shrink.
+uses, rejects new ones, and never lets the baseline grow.
 
 The analyzer ships as `Bitwarden.Server.Sdk.RestrictedDependencies` from `dotnet-extensions`. The
 type being dissolved is annotated where it is declared:
@@ -147,8 +147,8 @@ public interface IUserService
 - Add the missing guards: a CI job that fails when a baseline gains rows, built on
   `BudgetRatchet.FindGrowth`, and a scan for `RestrictedDependencyAnalysis=false` and global
   suppressions of these ids.
-- Annotate the rest of the inventory, one PR each, with the owner on the attribute. A type with no
-  owner waits until it has one.
+- Annotate each remaining type being dissolved, one PR each, with the owner on the attribute. A type
+  with no owner waits until it has one.
 - Migrate `BWA0001` and `BWA0002` to `[RestrictedDependency]` and delete their `WarningsNotAsErrors`
   carve-outs.
 - A member is done when its rows reach zero and it is deleted, shrinking `declaredMembers`. A type
