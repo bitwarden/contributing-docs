@@ -193,9 +193,6 @@ for. APIs `MUST` reject the request with `422` when given:
 
 - Services `MUST` respect the `Accept` media type requested by the caller. If the caller asks for
   XML and the server cannot return XML, the service `MUST` return `406 Not Acceptable`.
-- Because our APIs are largely based on JSON:API, services `MUST` accept a request whose
-  `Content-Type` is `application/vnd.api+json`, and `MUST` honor an `Accept` of
-  `application/vnd.api+json`, even though the API itself only advertises `application/json`.
 - Services `MUST` return `415 Unsupported Media Type` if the server can't process the specified
   `Content-Type`.
 
