@@ -105,7 +105,7 @@ API paths `MUST` use **lowercase "kebab-case"** and conform as follows:
 /api/v1/users/123/addresses
 ```
 
-Paths `SHOULD` be "hackable". If `GET /api/v1/users/123/addresses/456` returns the details about
+Paths `SHOULD` be traversable. If `GET /api/v1/users/123/addresses/456` returns the details about
 address 456 of user 123, then every parent path `SHOULD` resolve:
 
 - `GET /api/v1/users/123/addresses` should return all addresses of user 123.
