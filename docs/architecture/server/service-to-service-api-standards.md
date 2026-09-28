@@ -4,19 +4,14 @@ sidebar_position: 3
 
 # Service-to-service API standards
 
-**Audience:** Bitwarden engineers and AI agents building or consuming a service-to-service API.
-
-**Scope.** Service-to-service APIs, whose callers are other Bitwarden services. Bitwarden's existing
-public API is out of scope and is not changing, as is the internet-reachable surface our own clients
-call — the part the server repository refers to as "internal". APIs we must implement that conform
-to some external standard (e.g. webhooks) are also not subject to this standard.
-
 This page is the living standard, adopted in
 [ADR-0036](../adr/0036-service-to-service-api-standards.md). Its rules evolve by pull request
 without superseding that decision.
 
-[RFC 2119](https://www.rfc-editor.org/info/rfc2119/) keywords (`MUST`, `MUST NOT`, `SHOULD`,
-`SHOULD NOT`, `MAY`) are used deliberately.
+## Notation
+
+The keywords `MUST`, `MUST NOT`, `SHOULD`, `SHOULD NOT`, and `MAY` are to be interpreted as
+described in [RFC 2119](https://www.rfc-editor.org/info/rfc2119/).
 
 ## General
 
