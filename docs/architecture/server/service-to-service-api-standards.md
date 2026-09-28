@@ -16,8 +16,7 @@ This page is the living standard, adopted in
 without superseding that decision.
 
 [RFC 2119](https://www.rfc-editor.org/info/rfc2119/) keywords (`MUST`, `MUST NOT`, `SHOULD`,
-`SHOULD NOT`, `MAY`) are used deliberately. A `MUST` or `MUST NOT` is not negotiable at team level;
-a team that needs an exception brings the case to the architecture group.
+`SHOULD NOT`, `MAY`) are used deliberately.
 
 ## General
 
