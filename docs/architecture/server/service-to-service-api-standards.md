@@ -4,10 +4,6 @@ sidebar_position: 3
 
 # Service-to-service API standards
 
-This page is the living standard, adopted in
-[ADR-0036](../adr/0036-service-to-service-api-standards.md). Its rules evolve by pull request
-without superseding that decision.
-
 ## Notation
 
 The keywords `MUST`, `MUST NOT`, `SHOULD`, `SHOULD NOT`, and `MAY` are to be interpreted as
