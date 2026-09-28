@@ -33,11 +33,11 @@ Content-Type: application/json
 Upon success, APIs `SHOULD` return `200` — or `201` if the request created the resource — but `MAY`
 return `202` or `204`.
 
-| Status           | Description                              | Response                                                        |
-| ---------------- | ---------------------------------------- | --------------------------------------------------------------- |
-| `200 OK`         | The resource was updated.                | The latest representation of the resource.                      |
-| `201 Created`    | The resource was created.                | The latest representation of the resource.                      |
-| `202 Accepted`   | The resource is scheduled to be updated. | The [job](./jobs.md) that was scheduled to update the resource. |
-| `204 No Content` | The resource was updated.                | Nothing.                                                        |
+| Status           | Description                              | Response                                           |
+| ---------------- | ---------------------------------------- | -------------------------------------------------- |
+| `200 OK`         | The resource was updated.                | The latest representation of the resource.         |
+| `201 Created`    | The resource was created.                | The latest representation of the resource.         |
+| `202 Accepted`   | The resource is scheduled to be updated. | The job that was scheduled to update the resource. |
+| `204 No Content` | The resource was updated.                | Nothing.                                           |
 
-See also: [Partial updates](./partial-updates.md)
+See also: Partial updates

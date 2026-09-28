@@ -14,6 +14,5 @@ APIs `MUST` use the standard verb semantics:
 | `POST`   | Create a resource.                                                                                                |
 | `PUT`    | Update a resource with "completely replace" semantics. APIs that support create-or-update `MUST` do so via `PUT`. |
 
-The only exceptions are [actions](./acting-upon-resources.md),
-[advanced queries](./advanced-queries.md), and [bulk operations](./bulk-operations.md), which use
-`POST` whether or not they create a resource.
+The only exceptions are actions, advanced queries, and bulk operations, which use `POST` whether or
+not they create a resource.

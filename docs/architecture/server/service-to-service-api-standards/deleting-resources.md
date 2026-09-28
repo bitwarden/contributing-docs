@@ -17,10 +17,10 @@ DELETE /api/v1/users/62bed180-1f78-45d4-8a56-c996936a2947
 
 Upon success, APIs `SHOULD` return `204` but `MAY` return `202`.
 
-| Status           | Description                              | Response                                                        |
-| ---------------- | ---------------------------------------- | --------------------------------------------------------------- |
-| `202 Accepted`   | The resource is scheduled to be deleted. | The [job](./jobs.md) that was scheduled to delete the resource. |
-| `204 No Content` | The resource was deleted.                | Nothing.                                                        |
+| Status           | Description                              | Response                                           |
+| ---------------- | ---------------------------------------- | -------------------------------------------------- |
+| `202 Accepted`   | The resource is scheduled to be deleted. | The job that was scheduled to delete the resource. |
+| `204 No Content` | The resource was deleted.                | Nothing.                                           |
 
 ## Soft deletes
 

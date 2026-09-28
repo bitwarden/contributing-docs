@@ -30,8 +30,8 @@ Content-Type: application/json
 
 Upon success, APIs `SHOULD` return `201` but `MAY` return `202` or `204`.
 
-| Status           | Description                          | Response                                                        |
-| ---------------- | ------------------------------------ | --------------------------------------------------------------- |
-| `201 Created`    | Resource was created.                | The latest representation of the resource.                      |
-| `202 Accepted`   | Resource is scheduled to be created. | The [job](./jobs.md) that was scheduled to create the resource. |
-| `204 No Content` | Resource was created.                | Nothing.                                                        |
+| Status           | Description                          | Response                                           |
+| ---------------- | ------------------------------------ | -------------------------------------------------- |
+| `201 Created`    | Resource was created.                | The latest representation of the resource.         |
+| `202 Accepted`   | Resource is scheduled to be created. | The job that was scheduled to create the resource. |
+| `204 No Content` | Resource was created.                | Nothing.                                           |

@@ -34,5 +34,4 @@ address 456 of user 123, then every parent path `SHOULD` resolve:
 - `GET /api/v1/users` should return all users.
 
 Organization IDs `SHOULD NOT` appear in the path because "the current organization" is part of the
-[context](./authentication-and-authorization.md) of almost every request and, thus, need not be
-duplicated in the URL path.
+context of almost every request and, thus, need not be duplicated in the URL path.
