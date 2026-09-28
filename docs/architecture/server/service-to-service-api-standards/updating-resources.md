@@ -6,6 +6,7 @@ sidebar_position: 17
 
 - HTTP verb `MUST` be `PUT`.
 - API path `SHOULD` be like `/api/v1/{resource plural}/{id}`.
+- Resources `SHOULD` carry `updatedBy` and `updatedAt` fields.
 
 **Example**
 

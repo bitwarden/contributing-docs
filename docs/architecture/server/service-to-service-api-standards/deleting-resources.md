@@ -33,7 +33,7 @@ the following guidelines:
 - If callers can request that a delete be "hard", callers pass `permanent=true` query parameter.
 - If callers can request that soft-deletes be included in responses, callers pass
   `includeDeleted=true` query parameter.
-- Soft-deleted resources `SHOULD` carry a `deletedAt` field.
+- Soft-deleted resources `SHOULD` carry `deletedBy` and `deletedAt` fields.
 
 **Examples**
 
