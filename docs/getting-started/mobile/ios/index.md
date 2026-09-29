@@ -22,11 +22,17 @@ sidebar_position: 1
    $ git clone https://github.com/bitwarden/ios
    ```
 
-2. Install [Mint](https://github.com/yonaskolb/mint):
+2. Install [Homebrew](https://brew.sh/) dependencies (including 
+   [Mint](https://github.com/yonaskolb/mint)) from the repository root:
 
    ```sh
-   $ brew install mint
+   $ cd ios
+   $ brew bundle
    ```
+
+   > **Note** The dependencies are listed in the
+   > [`Brewfile`](https://github.com/bitwarden/ios/blob/main/Brewfile). `Scripts/boostrap.sh` checks
+   > that they are installed, so re-run `brew bundle` if bootstrapping reports missing dependencies.
 
    Alternatively, if you prefer to install Mint without `brew`, clone the Mint repo into a temporary
    directory and run `make`.
@@ -97,17 +103,12 @@ sidebar_position: 1
    $ bundle exec fastlane --version
    ```
 
-   When necessary, update the Ruby version with:
+   If you see an error that a Ruby version is not installed, or that you should run `bundle install`,
+   re-run `rbenv install -s` and `bundle install` from the root of the `ios` repo.
 
-   ```
-   $ rbenv install 3.4.4
-   ```
-
-   Update dependencies with:
-
-   ```
-   $ bundle update
-   ```
+   > **Note** Only run `bundle update` when you intend to upgrade the project's Ruby dependencies. It
+   > resolves the newest gem versions allowed by the `Gemfile` and rewrites `Gemfile.lock`, which
+   > then needs to be committed.
 
    If you're still having issues, here are some helpful commands for troubleshooting:
 
