@@ -34,10 +34,6 @@ described in [RFC 2119](https://www.rfc-editor.org/info/rfc2119/).
 
 ## Contents
 
-> **Note**: The following table of contents represents every topic we intend to provide a standard
-> for. Linked topics have standards; unlinked topics represent topics for which a standard will be
-> forthcoming.
-
 - [API paths](./api-paths.md)
 - [Verbs](./verbs.md)
 - [Creating resources](./creating-resources.md)
