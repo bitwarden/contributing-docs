@@ -1,4 +1,4 @@
-# Service-to-service API standards
+# API standards
 
 In general, RESTful APIs are resource-oriented and do one of 4 things:
 
@@ -24,8 +24,8 @@ return - for both the happy path and the not-so-happy path. Developers are encou
 terms of resources and be on guard against **API proliferation** that can result from over-tailoring
 APIs to the unique needs of this caller or that.
 
-In general, it is better to have one API per resource that can be called two different ways (e.g. query
-parameters) than two APIs that can only be called one way.
+In general, it is better to have one API per resource that can be called two different ways (e.g.
+query parameters) than two APIs that can only be called one way.
 
 ## Notation
 
