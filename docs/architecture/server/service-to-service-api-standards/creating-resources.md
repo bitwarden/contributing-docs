@@ -5,7 +5,7 @@ sidebar_position: 14
 # Creating resources
 
 - HTTP verb `MUST` be `POST`.
-- API path `SHOULD` be like `/api/v1/{resource plural}`.
+- API path `SHOULD` follow the pattern `/api/v1/{resource plural}`.
 
 **Example**
 

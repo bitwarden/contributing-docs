@@ -5,7 +5,7 @@ sidebar_position: 15
 # Read many
 
 - HTTP verb `MUST` be `GET`.
-- API path `SHOULD` be like `/api/v1/{resource plural}`.
+- API path `SHOULD` follow the pattern `/api/v1/{resource plural}`.
 
 **Example**
 
