@@ -13,6 +13,7 @@ API paths `MUST` use **lowercase "kebab-case"** and conform as follows:
    resource-oriented APIs, this element `SHOULD` be the "resource plural" (e.g. `users`).
 1. For resource-oriented APIs, the next element of the API path `SHOULD` be the ID of the resource
    it targets.
+1. Additional elements `MAY` be specified to target sub-resources.
 
 > **Why versioning in the path?** It is visible in logs, traces, routing rules and curl commands; it
 > needs no content negotiation to read; and it lets two versions coexist behind one host. Header and
