@@ -40,5 +40,3 @@ return `202` or `204`.
 | `201 Created`    | The resource was created.                | The latest representation of the resource.         |
 | `202 Accepted`   | The resource is scheduled to be updated. | The job that was scheduled to update the resource. |
 | `204 No Content` | The resource was updated.                | Nothing.                                           |
-
-See also: Partial updates
