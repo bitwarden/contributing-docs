@@ -94,6 +94,7 @@ SDET
 SDLC
 Serilog
 Shai
+SIEM
 signtool
 signup
 Sourcery
