@@ -1,6 +1,6 @@
 ---
 adr: "0035"
-status: Proposed
+status: Accepted
 date: 2026-09-22
 tags: [server, server-sdk]
 ---
