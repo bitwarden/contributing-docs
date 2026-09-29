@@ -2,9 +2,9 @@
 sidebar_position: 0
 ---
 
-# Server Architecture
+# Service-oriented architecture
 
-The Bitwarden server follows architectural patterns and conventions designed to maintain clean,
+Bitwarden services follow architectural patterns and conventions designed to maintain clean,
 maintainable, and scalable code.
 
 ## Key patterns
