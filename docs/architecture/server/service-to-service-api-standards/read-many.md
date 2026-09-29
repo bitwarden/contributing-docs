@@ -44,11 +44,3 @@ Upon success, APIs `MUST` return `200`.
 | Status   | Description             | Response                 |
 | -------- | ----------------------- | ------------------------ |
 | `200 OK` | Request was successful. | The resources requested. |
-
-**See also:**
-
-- Advanced queries
-- Filtering
-- Paging
-- Sorting
-- Sparse fieldsets
