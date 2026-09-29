@@ -17,11 +17,6 @@ There is, however, a 5th type of API that doesn't cleanly fit the CRUD paradigm:
 Each of these, except read, also has a [bulk](./bulk-operations.md) form that applies it to many
 resources at once. Standards for each type of API are documented on their own pages.
 
-## JSON:API {#jsonapi}
-
-Service-to-service APIs are based on top of [JSON:API](https://jsonapi.org/) unless otherwise noted
-in these standards. Where our standards are silent, JSON:API standards are assumed.
-
 ## Well-defined APIs
 
 A well-defined API spells out exactly how it should be called and what the caller can expect in
@@ -91,5 +86,4 @@ described in [RFC 2119](https://www.rfc-editor.org/info/rfc2119/).
 - [Errors](./errors.md)
 - [Jobs](./jobs.md)
 - [Deprecation](./deprecation.md)
-- [Divergences from JSON:API](./divergences-from-jsonapi.md)
 - [Frequently asked questions](./frequently-asked-questions.md)

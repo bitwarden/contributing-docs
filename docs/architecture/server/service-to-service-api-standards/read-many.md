@@ -47,8 +47,8 @@ Upon success, APIs `MUST` return `200`.
 
 **See also:**
 
-- Advanced queries
-- Filtering
-- Paging
-- Sorting
-- Sparse fieldsets
+- [Advanced queries](./advanced-queries.md)
+- [Filtering](./filtering.md)
+- [Paging](./paging.md)
+- [Sorting](./sorting.md)
+- [Sparse fieldsets](./sparse-fieldsets.md)
