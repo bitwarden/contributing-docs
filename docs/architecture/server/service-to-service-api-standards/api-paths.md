@@ -38,7 +38,8 @@ address 456 of user 123, then every parent path `SHOULD` resolve:
 
 Every request targets a **subject** and runs inside a **scope**:
 
-- The **subject** is what the request acts on. It `MUST` be named in the path.
+- The **subject** is what the request acts on (i.e. a resource or a collection of resources). It
+  `MUST` be named in the path.
 - The **scope** is what the request runs inside — the current organization, the current user. It
   `MUST NOT` be named in the path; it travels as context.
 
