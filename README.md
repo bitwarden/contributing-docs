@@ -112,6 +112,10 @@ sidebar_custom_props:
 ---
 ```
 
+Frontmatter on a folder's index doc (`index.md` or `index.mdx`) also applies to the sidebar category
+that folder generates, so the `access` restriction covers the whole category without a
+`_category_.yml`.
+
 # License
 
 Documentation (`docs` folder) is [Creative Commons BY-NC-ND licensed](./LICENSE_CC.txt).
