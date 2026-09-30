@@ -50,7 +50,7 @@ maintaining control over data privacy and security.
 :::tip Setting up AI tooling
 
 To set up AI tooling in your development environment, see the
-[AI Tools](./../getting-started/tools/index.md#ai-tools) instructions of our Getting Started
+[AI Tools](../../getting-started/tools/index.md#ai-tools) instructions of our Getting Started
 section.
 
 :::
@@ -69,8 +69,8 @@ Ask whether the knowledge is specific to one codebase or generic enough to work 
 - **Specific to one codebase**: contribute it to that repository's `.claude/` directory. Examples
   include how a new module is added in that codebase, or how its feature-flag system works.
 - **Generic and reusable across repositories**: contribute it to
-  [bitwarden/ai-plugins](https://github.com/bitwarden/ai-plugins) as a persona plugin, a tool
-  integration, or a shared utility.
+  [bitwarden/ai-plugins](https://github.com/bitwarden/ai-plugins), in the plugin that
+  [component placement](./component-placement.md) points to.
 
 When unsure, keep it in the repository. Promoting it to `ai-plugins` later is easier than pulling it
 back; see the
@@ -120,7 +120,7 @@ a teammate's session, so hooks stay opt-in.
 ### Security conventions
 
 Skills and agents that touch vault data, authentication, or cryptography must use Bitwarden's
-[core vocabulary](../architecture/security/definitions.mdx) (Vault Data, Protected Data, Secure
+[core vocabulary](../../architecture/security/definitions.mdx) (Vault Data, Protected Data, Secure
 Channel, and so on) and restate the zero-knowledge invariant inline. Subagents run in a fresh
 context and do not inherit a repository's `CLAUDE.md`, so include the relevant definitions directly
 in the agent's system prompt.
