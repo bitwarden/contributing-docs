@@ -22,7 +22,7 @@ sidebar_position: 1
    $ git clone https://github.com/bitwarden/ios
    ```
 
-2. Install [Homebrew](https://brew.sh/) dependencies (including 
+2. Install [Homebrew](https://brew.sh/) dependencies (including
    [Mint](https://github.com/yonaskolb/mint)) from the repository root:
 
    ```sh
@@ -103,11 +103,11 @@ sidebar_position: 1
    $ bundle exec fastlane --version
    ```
 
-   If you see an error that a Ruby version is not installed, or that you should run `bundle install`,
-   re-run `rbenv install -s` and `bundle install` from the root of the `ios` repo.
+   If you see an error that a Ruby version is not installed, or that you should run
+   `bundle install`, re-run `rbenv install -s` and `bundle install` from the root of the `ios` repo.
 
-   > **Note** Only run `bundle update` when you intend to upgrade the project's Ruby dependencies. It
-   > resolves the newest gem versions allowed by the `Gemfile` and rewrites `Gemfile.lock`, which
+   > **Note** Only run `bundle update` when you intend to upgrade the project's Ruby dependencies.
+   > It resolves the newest gem versions allowed by the `Gemfile` and rewrites `Gemfile.lock`, which
    > then needs to be committed.
 
    If you're still having issues, here are some helpful commands for troubleshooting:
