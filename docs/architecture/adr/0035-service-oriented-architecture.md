@@ -1,6 +1,6 @@
 ---
 adr: "0035"
-status: Proposed
+status: Accepted
 date: 2026-09-22
 tags: [server, server-sdk]
 ---
@@ -107,41 +107,43 @@ Chosen option: **Service-oriented architecture**.
 The rules:
 
 1. Service boundaries `MUST` derive from data ownership, not from team structure.
-2. Every resource `MUST` have exactly one owning service, and that service is the only process that
+1. Every resource `MUST` have exactly one owning service, and that service is the only process that
    reads or writes its data store.
-3. Services `MUST` be built on the `Bitwarden.Server.Sdk` package.
-4. Services `MUST` document their APIs in [OpenAPI format](https://www.openapis.org/). A
+1. Services `MUST` be built on the `Bitwarden.Server.Sdk` package.
+1. Services `MUST` document their APIs in [OpenAPI format](https://www.openapis.org/). A
    **service-to-service API** — one whose callers are other Bitwarden services, rather than the
    clients and third parties that call the private and public APIs today — `MUST` additionally
    conform to the forthcoming **Service-to-Service API Standards**.
-5. Services `SHOULD NOT` make breaking changes.
+1. Services `SHOULD NOT` make breaking changes.
    - If the changes that need to be made _would_ be breaking to a service-to-service API, such
      services `SHOULD` follow the API versioning process as outlined by the forthcoming
      Service-to-Service API Standards.
    - Fixing bugs, including security issues, are not subject to this rule and `MUST` be fixed "in
      place".
-6. Services `MUST` provide a **service client** for consumers.
-7. Service clients `SHOULD` make use of a network cache to mitigate performance issues.
+1. Services `MUST` provide a **service client** for consumers.
+   - Service clients `SHOULD` implement best practices for resiliency including timeouts, retries,
+     and idempotency.
+   - Service clients `SHOULD` make use of a network cache to mitigate performance issues.
    - Any cache used `MUST` be owned and invalidated by the owning service.
    - Serving results from cache `MUST NOT` bypass authorization the owning service would otherwise
      enforce.
-8. Services that need to read, write, or validate data owned by another service `SHOULD` do so via
+1. Services that need to read, write, or validate data owned by another service `SHOULD` do so via
    the owner's published service client.
-9. A service `MAY` hold a local copy of another service's data only with a recorded justification
+1. A service `MAY` hold a local copy of another service's data only with a recorded justification
    (e.g. a measured hot-path volume, a stated availability requirement, etc.).
    - Any service holding a local copy `MUST` enforce the owner's row-level security on that data and
      document the security ramifications of stale reads (due to messaging lag, event processing
      failures, etc.).
-10. Services `SHOULD` publish events for all relevant state changes using the "transactional outbox"
-    pattern, regardless of whether there are any known consumers. Exactly what makes an event
-    "relevant", the shape of such events, the authorization model, dead-letter policies, and how
-    such events are delivered and consumed will be the subject of a forthcoming ADR and is out of
-    scope here.
-    - A service `MUST` publish a "resource deleted" event for each resource it owns, so that rule 11
-      is satisfiable.
-11. A service that owns resources whose lifetime depends on a resource owned by another service
-    `MUST` consume that owner's "resource deleted" events and cascade the deletion to the resources
-    it owns. An owning service is not responsible for deleting data it does not own.
+1. Services `SHOULD` publish events for all relevant state changes using the "transactional outbox"
+   pattern, regardless of whether there are any known consumers. Exactly what makes an event
+   "relevant", the shape of such events, the authorization model, dead-letter policies, and how such
+   events are delivered and consumed will be the subject of a forthcoming ADR and is out of scope
+   here.
+   - A service `MUST` publish a "resource deleted" event for each resource it owns, so that
+     consuming service can delete dependent data.
+1. A service that owns resources whose lifetime depends on a resource owned by another service
+   `MUST` consume that owner's "resource deleted" events and cascade the deletion to the resources
+   it owns. An owning service is not responsible for deleting data it does not own.
 
 ### Positive consequences
 
