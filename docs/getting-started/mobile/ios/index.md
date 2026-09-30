@@ -31,8 +31,9 @@ sidebar_position: 1
    ```
 
    > **Note** The dependencies are listed in the
-   > [`Brewfile`](https://github.com/bitwarden/ios/blob/main/Brewfile). `Scripts/boostrap.sh` checks
-   > that they are installed, so re-run `brew bundle` if bootstrapping reports missing dependencies.
+   > [`Brewfile`](https://github.com/bitwarden/ios/blob/main/Brewfile). `Scripts/bootstrap.sh`
+   > checks that they are installed, so re-run `brew bundle` if bootstrapping reports missing
+   > dependencies.
 
    Alternatively, if you prefer to install Mint without `brew`, clone the Mint repo into a temporary
    directory and run `make`.
