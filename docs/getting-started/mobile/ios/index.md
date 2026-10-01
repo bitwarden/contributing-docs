@@ -22,11 +22,9 @@ sidebar_position: 1
    $ git clone https://github.com/bitwarden/ios
    ```
 
-2. Install [Homebrew](https://brew.sh/) dependencies (including
-   [Mint](https://github.com/yonaskolb/mint)) from the repository root:
+2. Install [Homebrew](https://brew.sh/) dependencies from the repository root:
 
    ```sh
-   $ cd ios
    $ brew bundle
    ```
 
@@ -34,15 +32,6 @@ sidebar_position: 1
    > [`Brewfile`](https://github.com/bitwarden/ios/blob/main/Brewfile). `Scripts/bootstrap.sh`
    > checks that they are installed, so re-run `brew bundle` if bootstrapping reports missing
    > dependencies.
-
-   Alternatively, if you prefer to install Mint without `brew`, clone the Mint repo into a temporary
-   directory and run `make`.
-
-   ```sh
-   $ git clone https://github.com/yonaskolb/Mint.git
-   $ cd Mint
-   $ make
-   ```
 
 3. Bootstrap the project:
 
