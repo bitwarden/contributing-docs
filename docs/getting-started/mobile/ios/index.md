@@ -95,7 +95,7 @@ sidebar_position: 1
    ```
 
    If you see an error that a Ruby version is not installed, or that you should run
-   `bundle install`, re-run `rbenv install -s` and `bundle install` from the root of the `ios` repo.
+   `bundle install`, re-run `rbenv install -s` and `bundle install` from the repository root.
 
    > **Note** Only run `bundle update` when you intend to upgrade the project's Ruby dependencies.
    > It resolves the newest gem versions allowed by the `Gemfile` and rewrites `Gemfile.lock`, which
