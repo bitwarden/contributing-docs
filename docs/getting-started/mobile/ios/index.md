@@ -66,7 +66,8 @@ sidebar_position: 1
    Current version: 16.4
    ```
 
-4. Install [fastlane](https://docs.fastlane.tools/) for automated package deployments:
+4. (Optional) Install [fastlane](https://docs.fastlane.tools/) if you're developing or testing CI
+   and automation workflows locally:
 
    > **Note** We manage non-system Ruby installations with `rbenv` as homebrew tends to break the
    > required Ruby dependencies
@@ -76,7 +77,7 @@ sidebar_position: 1
    $ rbenv init
    ```
 
-   From the root directory of the `ios` repo do the following:
+   From the repository root, run:
 
    ```
    $ rbenv install -s
@@ -116,7 +117,7 @@ sidebar_position: 1
 2. Run the app in the Simulator with the `Bitwarden` target for the Password Manager app or
    `Authenticator` for the Authenticator app.
 
-> [!TIP] To open the workspace in Xcode, just go to the root folder with the CLI and run:
+> [!TIP] To open the workspace in Xcode, go to the repository root and run:
 >
 > ```sh
 > open Bitwarden.xcworkspace
