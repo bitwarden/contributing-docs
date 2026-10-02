@@ -39,7 +39,10 @@ a new crate under the `crates/` directory in the
 
 1. Create the crate with `cargo init` and add it to the workspace `Cargo.toml`.
 2. Add `bitwarden-core` as a dependency for the shared runtime.
-3. Configure `CODEOWNERS` to ensure the appropriate team is assigned to review changes to the crate.
+3. If the crate exposes anything over WASM, add `bitwarden-ffi` as a dependency, and `wasm-bindgen`
+   and `tsify` as optional dependencies. Enable all three from the crate's `wasm` feature:
+   `bitwarden-ffi/wasm`, `dep:wasm-bindgen`, and `dep:tsify`.
+4. Configure `CODEOWNERS` to ensure the appropriate team is assigned to review changes to the crate.
 
 ## 3. Define the client struct
 
@@ -58,8 +61,7 @@ pub struct FoldersClient {
 }
 ```
 
-If the client will be exposed over WASM, annotate it with
-`#[cfg_attr(feature = "wasm", wasm_bindgen)]`.
+If the client will be exposed over WASM, annotate it with `#[bitwarden_ffi::wasm_object]`.
 
 ## 4. Wire into the application interface
 
@@ -92,7 +94,7 @@ implementing every method itself. For example, `VaultClient` exposes `FoldersCli
 `CiphersClient`, and others through accessor methods:
 
 ```rust
-#[cfg_attr(feature = "wasm", wasm_bindgen)]
+#[bitwarden_ffi::wasm_export]
 impl VaultClient {
     pub fn folders(&self) -> FoldersClient {
         FoldersClient::from_client(&self.client)
@@ -137,7 +139,7 @@ set up test doubles.
 :::
 
 ```rust
-#[cfg_attr(feature = "wasm", wasm_bindgen)]
+#[bitwarden_ffi::wasm_export]
 impl FoldersClient {
     pub async fn get(&self, folder_id: FolderId) -> Result<FolderView, GetFolderError> {
         let folder = self
