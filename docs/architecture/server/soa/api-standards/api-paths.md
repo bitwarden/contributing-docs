@@ -8,12 +8,13 @@ API paths `MUST` use **lowercase "kebab-case"** and conform as follows:
 
 1. The first element(s) of the API path `MUST` be a namespace. By default, the namespace `SHOULD` be
    `api`.
-1. The next element of the API path `MUST` be the version number starting with `v1`.
-1. The next element of the API path `MUST` specify the resource or resources it targets. For
+2. The next element of the API path `MUST` be the version number starting with `v1`.
+3. The next element of the API path `MUST` specify the resource or resources it targets. For
    resource-oriented APIs, this element `SHOULD` be the "resource plural" (e.g. `users`).
-1. For resource-oriented APIs, the next element of the API path `SHOULD` be the ID of the resource
+   - APIs that create or bulk-process resources stop here.
+4. For resource-oriented APIs, the next element of the API path `SHOULD` be the ID of the resource
    it targets.
-1. Additional elements `MAY` be specified to target sub-resources.
+5. Additional elements `MAY` be specified to target sub-resources.
 
 > **Why versioning in the path?** It is visible in logs, traces, routing rules and curl commands; it
 > needs no content negotiation to read; and it lets two versions coexist behind one host. Header and
