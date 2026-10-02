@@ -16,7 +16,7 @@ will be forthcoming .
 ## Well-defined APIs
 
 A well-defined API spells out exactly how it should be called and what the caller can expect in
-return - for both the happy path and the not-so-happy path. Developers are encouraged to think in
+return - for both the happy path and possible error paths. Developers are encouraged to think in
 terms of resources and be on guard against **API proliferation** that can result from over-tailoring
 APIs to the unique needs of this caller or that.
 
