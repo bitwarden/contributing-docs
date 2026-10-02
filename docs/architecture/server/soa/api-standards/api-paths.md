@@ -28,8 +28,8 @@ API paths `MUST` use **lowercase "kebab-case"** and conform as follows:
 /api/v1/users/123/addresses
 ```
 
-Paths `SHOULD` be traversable and authorization scoped. If `GET /api/v1/users/123/addresses/456` returns the details about
-address 456 of user 123, then every parent path `SHOULD` resolve:
+Paths `SHOULD` be traversable and authorization scoped. If `GET /api/v1/users/123/addresses/456`
+returns the details about address 456 of user 123, then every parent path `SHOULD` resolve:
 
 - `GET /api/v1/users/123/addresses` should return all addresses of user 123.
 - `GET /api/v1/users/123` should return details about user 123.
@@ -50,13 +50,11 @@ the operation, and belongs to authentication and authorization (standard forthco
 
 **Examples**
 
-| Path                                | Subject                          |
-| ----------------------------------- | -------------------------------- |
-| `GET /api/v1/users`                 | users                            |
-| `GET /api/v1/users/123`             | user 123                         |
-| `GET /api/v1/organizations`         | organizations                    |
-| `GET /api/v1/organizations/123`     | organization 123                 |
-| `GET /api/v1/organizations/current` | the organization the scope names |
+| Path                        | Subject                             |
+| --------------------------- | ----------------------------------- |
+| `GET /api/v1/users`         | users                               |
+| `GET /api/v1/users/123`     | user 123                            |
+| `GET /api/v1/users/current` | the user that is currently in scope |
 
 `current` `SHOULD` be used where the subject is whatever the scope names, rather than repeating an
 identifier the caller has already supplied.
