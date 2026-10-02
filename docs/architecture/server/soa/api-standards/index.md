@@ -10,12 +10,8 @@ In general, RESTful APIs are resource-oriented and do one of 4 things:
 This is the familiar CRUD paradigm and, while there will always be exceptions, developers `SHOULD`
 strive to think in these terms for every API created. Both for simplicity and consistency.
 
-There is, however, a 5th type of API that doesn't cleanly fit the CRUD paradigm:
-
-- **Act** upon a resource.
-
-Each of these, except read, also has a bulk form that applies it to many resources at once.
-Standards for each type of API are documented on their own pages.
+Standards for APIs that don't fit cleanly into the CRUD paradigm (e.g. actions, bulk processing)
+will be forthcoming .
 
 ## Well-defined APIs
 
