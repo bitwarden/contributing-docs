@@ -9,7 +9,7 @@ tags: [server, server-sdk]
 
 <AdrTable frontMatter={frontMatter}></AdrTable>
 
-{/* cspell:ignore ciphertext CSDL Hydra */}
+{/* cspell:ignore CSDL Hydra */}
 
 ## Notation
 
@@ -52,8 +52,8 @@ Three ground rules keep the comparison fair:
 2. Leaves room for a version, so an unavoidable breaking change has somewhere to go.
 3. Customer-friendly: callable from any language, from a browser, and with `curl`.
 4. Machine-readable contracts and generated clients in C#, Rust, TypeScript, Swift, and Kotlin.
-5. The owning service decides what can be queried. Most vault data is ciphertext, which cannot be
-   filtered or sorted.
+5. The owning service decides what can be queried, because every query it supports has to be indexed
+   and authorized.
 6. Works through customer-operated proxies on self-hosted installs, and with standard HTTP
    infrastructure.
 7. Fits ASP.NET Core and data access that is largely Dapper over stored procedures.
@@ -121,8 +121,7 @@ What each row means:
   CSDL, with OpenAPI produced by conversion.
 - **Owner decides what can be queried:** whether the owning service controls exactly which fields
   can be filtered, sorted, or expanded, rather than exposing a general-purpose query language over
-  every field. This matters because most vault data is ciphertext, and every supported query has to
-  be indexed and authorized.
+  every field. This matters because every supported query has to be indexed and authorized.
 - **Works through customer proxies:** whether the API works through the proxies and load balancers
   that self-hosted customers operate, which cannot be assumed to support HTTP/2 with trailers end to
   end.
@@ -219,8 +218,7 @@ remain available as additional interfaces.
 - Its query language reaches every exposed property unless restricted, where the owning service
   needs to control exactly which queries it supports, because each one has to be indexed and
   authorized.
-- Most of that query power cannot apply to zero-knowledge data, because ciphertext cannot be
-  filtered or sorted.
+
 - `$expand` assumes related entities live in the same model. Across service boundaries, they live in
   another service's store.
 - Its ASP.NET Core library translates queries to `IQueryable`, which suits Entity Framework but not
@@ -241,8 +239,8 @@ remain available as additional interfaces.
   need GraphQL-aware infrastructure, along with query depth and cost limits.
 - Mutations have no standard semantics, so create, update, delete, idempotency, concurrency, and
   most other design questions would still be ours.
-- Its main strength, caller-composed queries over a richly connected graph, has little to work with
-  when most fields are ciphertext and each service owns a narrow slice of the data.
+- Its main strength, caller-composed queries over a richly connected graph, has less to work with
+  when each service owns a narrow slice of the data.
 
 #### gRPC
 
