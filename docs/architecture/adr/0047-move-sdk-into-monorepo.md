@@ -18,33 +18,6 @@ turns delivery into a single serialized pipeline: many teams write to the SDK, e
 through one published version, and many teams consume it on the other side. One team's unfinished
 downstream fix holds up everyone waiting for a later SDK change.
 
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 560" fontFamily="ui-sans-serif, system-ui, sans-serif">
-  <text x="120" y="70" fill="#1a1a1a" fontSize="30">SDK</text>
-  <text x="472" y="66" fill="#888" fontSize="26">NPM</text>
-  <text x="800" y="70" fill="#1a1a1a" fontSize="30">Clients</text>
-
-  <line x1="500" y1="110" x2="500" y2="490" fill="none" stroke="#888" strokeWidth="2" />
-
-  <g fill="none" stroke="#1a1a1a" strokeWidth="3" strokeLinecap="round">
-    <path d="M70,120 L290,120 C360,120 380,300 450,300" />
-    <path d="M70,165 L240,165 C330,165 370,300 450,300" />
-    <path d="M70,210 L190,210 C300,210 350,300 450,300" />
-    <path d="M70,480 L290,480 C360,480 380,300 450,300" />
-    <path d="M70,435 L240,435 C330,435 370,300 450,300" />
-    <path d="M70,390 L190,390 C300,390 350,300 450,300" />
-    <path d="M70,300 L450,300" />
-    <path d="M550,300 C650,300 700,210 810,210 L930,210" />
-    <path d="M550,300 C630,300 660,165 760,165 L930,165" />
-    <path d="M550,300 C620,300 640,120 710,120 L930,120" />
-    <path d="M550,300 C650,300 700,390 810,390 L930,390" />
-    <path d="M550,300 C630,300 660,435 760,435 L930,435" />
-    <path d="M550,300 C620,300 640,480 710,480 L930,480" />
-    <path d="M550,300 L930,300" />
-  </g>
-
-  <path d="M450,300 L550,300" fill="none" stroke="#1a1a1a" strokeWidth="3" strokeLinecap="round" strokeDasharray="2 14" />
-</svg>
-
 Put another way: every breaking change in the SDK adds to a queue of fixes that then have to merge
 on the clients side in the same order they merged in the SDK. If Team A merges a breaking change
 into the SDK, every other team waits for Team A's corresponding client fix before it can pull in any
@@ -148,12 +121,11 @@ the client. It also does not remove the bundling. Breaking merges land close tog
 within 3 days), so each release would carry a bundle of unrelated breaks, and adopting it would take
 PRs with effort from several teams.
 
-Mobile is in a different position. Mobile is broken more often than the clients (50 of the 68
-measured events), but the cost there is adaptation, not waiting. Mobile developers do not contribute
-to the SDK at the same scale, so they rarely need to cross the gap to ship their own work, and they
-already adopt published versions when it suits them, sometimes days or weeks later. In practice
-mobile already consumes the SDK this way. Their problem is learning what changed, not the gap
-itself.
+Mobile is in a different position. Mobile is also broken by SDK changes, but the cost there is
+adaptation, not waiting. Mobile developers do not contribute to the SDK at the same scale, so they
+rarely need to cross the gap to ship their own work, and they already adopt published versions when
+it suits them, sometimes days or weeks later. In practice mobile already consumes the SDK this way.
+Their problem is learning what changed, not the gap itself.
 
 ### Product repository
 
@@ -232,10 +204,9 @@ SDK.
 
 ### Positive consequences
 
-- Breaking changes between the SDK and the clients stop being cross-repo events (18 of the 68
-  measured events). A change to the SDK and the client code that uses it is one commit that only
-  merges if it builds, so main stays green by construction and there is no published version to
-  bundle.
+- Breaking changes between the SDK and the clients stop being cross-repo events. A change to the SDK
+  and the client code that uses it is one commit that only merges if it builds, so main stays green
+  by construction and there is no published version to bundle.
 - Components that are meant to work together share one build graph and one place to reason about
   them. AI review, for example, sees the SDK change and the client code that calls it in the same
   diff, instead of an opaque package-version bump with a new API.
@@ -257,9 +228,9 @@ SDK.
   they always have to stay compatible with each other, and that is separate work regardless of how
   the source is organized.
 - It does not solve mobile's problems. Android and iOS still take SDK breaks across a
-  published-package boundary (50 of the 68 measured events), and the runtime and behavior changes
-  that hurt mobile the most cannot be detected with today's tools. With the SDK inside `clients`, it
-  can also become easier to forget that mobile depends on it.
+  published-package boundary, and the runtime and behavior changes that hurt mobile the most cannot
+  be detected with today's tools. With the SDK inside `clients`, it can also become easier to forget
+  that mobile depends on it.
 
 ### Plan
 
