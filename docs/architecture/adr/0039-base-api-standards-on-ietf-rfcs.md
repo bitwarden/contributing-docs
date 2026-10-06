@@ -119,6 +119,11 @@ The rules:
    their own answer instead, they `MUST` record why.
 3. Conventions taken from other specifications `SHOULD` be credited to their source.
 
+This decision does not preclude GraphQL or gRPC. A service `MAY` also offer either where it makes
+sense, for example GraphQL where callers need to compose data from a richly connected model, or gRPC
+on a high-volume path between services. The standards govern the HTTP APIs that services publish,
+and a GraphQL or gRPC interface is offered in addition to those, not instead of them.
+
 ### Positive consequences
 
 - One set of answers, stated in our own words, with every borrowed rule credited.
@@ -135,6 +140,9 @@ The rules:
 - Every departure from an RFC needs a recorded reason, and each is a point someone may contest.
 
 ### Rejected options
+
+Each of these was rejected as the foundation for the standards. As noted above, GraphQL and gRPC
+remain available as additional interfaces.
 
 - **JSON:API:** full conformance is impractical, because its media type, `PATCH`-only updates, `400`
   for unrecognized query parameters, and `relationships` objects would all be departed from. It does
