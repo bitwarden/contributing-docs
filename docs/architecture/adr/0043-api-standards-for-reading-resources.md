@@ -9,7 +9,7 @@ tags: [server, server-sdk]
 
 <AdrTable frontMatter={frontMatter}></AdrTable>
 
-{/* cspell:ignore ciphertext FIQL fieldsets */}
+{/* cspell:ignore FIQL fieldsets */}
 
 ## Notation
 
@@ -24,8 +24,8 @@ how resources are read: reading one and reading many, filtering, multi-value par
 sorting, sparse fieldsets, paging, and advanced queries. Payload shape and errors are set by
 ADR-0040.
 
-No RFC covers these topics, so the answers are ours. Most vault data is ciphertext, which cannot be
-filtered or sorted, so each service declares exactly which fields can be queried.
+No RFC covers these topics, so the answers are ours. Each service declares exactly which fields can
+be queried, because every query it supports has to be indexed and authorized.
 
 ## Considered options
 
