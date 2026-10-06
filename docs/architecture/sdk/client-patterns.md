@@ -36,10 +36,19 @@ fields, tests can construct clients directly with test doubles instead of spinni
 
 ### WASM support
 
-If the client will be exposed over WASM, annotate both the struct and its `impl` blocks with:
+If the client will be exposed over WASM, annotate the struct with `#[bitwarden_ffi::wasm_object]`
+and its `impl` blocks with `#[bitwarden_ffi::wasm_export]`:
 
 ```rust
-#[cfg_attr(feature = "wasm", wasm_bindgen)]
+#[bitwarden_ffi::wasm_object]
+pub struct FoldersClient {
+    // ...
+}
+
+#[bitwarden_ffi::wasm_export]
+impl FoldersClient {
+    // ...
+}
 ```
 
 ### UniFFI wrappers
