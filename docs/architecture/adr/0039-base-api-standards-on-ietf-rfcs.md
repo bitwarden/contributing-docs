@@ -215,8 +215,18 @@ remain available as additional interfaces.
 
 #### OData
 
+- It exposes the data model rather than the domain. Queries are built from entities, properties, and
+  relationships, so callers couple themselves to a service's internal structure, and a structural
+  change becomes a breaking change.
+- It is a full application protocol, not a set of conventions. Beyond querying, it brings `$apply`,
+  `$compute`, `$search`, `$batch`, and more, so the standards would have to decide which parts are
+  required, optional, or prohibited.
 - `$expand` assumes related entities live in the same model. Across service boundaries, they live in
   another service's store.
+- It is not walk-up usable. Callers have to learn its query language and conventions before they can
+  use it.
+- It solves a problem most of our APIs do not have. Rich, caller-driven querying is valuable for
+  data-oriented APIs, but it is more than most APIs need from their foundation.
 - Its ASP.NET Core library translates queries to `IQueryable`, which suits Entity Framework but not
   Dapper over stored procedures.
 - `$filter` is a string expression language, so building one means concatenating, quoting, and
