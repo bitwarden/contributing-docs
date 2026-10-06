@@ -9,7 +9,7 @@ tags: [server, server-sdk]
 
 <AdrTable frontMatter={frontMatter}></AdrTable>
 
-{/* cspell:ignore ciphertext Hydra */}
+{/* cspell:ignore ciphertext CSDL Hydra */}
 
 ## Notation
 
@@ -96,6 +96,49 @@ Three ground rules keep the comparison fair:
 | Streaming and push                  |     ❌      |    ❌    |     ❌     |  ❌   |   ✅    |  ✅  | ⚠️  |  ❌   |
 | Compact wire format                 |     ❌      |    ❌    |     ❌     |  ❌   |   ❌    |  ✅  | ⚠️  |  ❌   |
 | Published origin                    |     ⚠️      |    ✅    |     ⚠️     |  ✅   |   ✅    |  ✅  | ⚠️  |  ⚠️   |
+
+What each row means:
+
+- **Answers the common design questions:** whether the option itself answers the questions every API
+  faces, such as payload shape, errors, querying, paging, concurrency, bulk operations, asynchronous
+  work, versioning, and deprecation, rather than leaving them to us. ✅ means most are answered, ⚠️
+  some, ❌ few.
+- **Room for a version:** whether an API can carry a version and introduce a new one when a breaking
+  change is unavoidable. GraphQL is ⚠️ because, although versioning is possible, its documentation
+  discourages it in favor of additive evolution.
+- **Contracts express required fields:** whether a contract can say that a field is always present,
+  so contracts do not drift toward every field being optional. proto3 has no required fields, so
+  gRPC and AIP can express this only through validation annotations.
+- **Customer-friendly:** whether a developer who has never seen Bitwarden can call the API from any
+  language, from a browser, and with `curl`, without learning a query language or installing special
+  tooling.
+- **Generated clients:** whether a machine-readable contract (OpenAPI, a GraphQL schema, or Protocol
+  Buffers) can generate typed clients in the languages we ship: C#, Rust, TypeScript, Swift, and
+  Kotlin. A JSON:API API is described in OpenAPI like any other HTTP API, so standard generators
+  work. Its envelope appears in the generated types unless the generators are configured to hide it,
+  which is a question of payload shape, not of whether clients can be generated. Hypermedia formats
+  are ⚠️ because their links add little to a generated client, and OData because its contract is
+  CSDL, with OpenAPI produced by conversion.
+- **Owner decides what can be queried:** whether the owning service controls exactly which fields
+  can be filtered, sorted, or expanded, rather than exposing a general-purpose query language over
+  every field. This matters because most vault data is ciphertext, and every supported query has to
+  be indexed and authorized.
+- **Works through customer proxies:** whether the API works through the proxies and load balancers
+  that self-hosted customers operate, which cannot be assumed to support HTTP/2 with trailers end to
+  end.
+- **Works with HTTP infrastructure:** whether caching, rate limiting, firewall rules, metrics, and
+  tracing can work per route and method without understanding request bodies. GraphQL sends
+  everything as a `POST` to one endpoint.
+- **Fits our stack:** whether the option is well supported on ASP.NET Core and on data access that
+  is largely Dapper over stored procedures. JSON:API is ⚠️ because its .NET implementations are
+  oriented to controllers and Entity Framework Core, and OData because its ASP.NET Core library
+  depends on `IQueryable`.
+- **Streaming and push:** whether the option itself supports streaming responses or pushing changes
+  to callers.
+- **Compact wire format:** whether payloads use an efficient binary encoding rather than JSON text.
+- **Published origin:** whether the option comes from a published, adopted specification. ⚠️ means
+  guidelines, drafts, or, for our own standards, an RFC per topic where one exists rather than a
+  single document.
 
 ## Decision outcome
 
