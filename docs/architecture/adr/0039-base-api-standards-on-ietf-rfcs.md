@@ -215,10 +215,6 @@ remain available as additional interfaces.
 
 #### OData
 
-- Its query language reaches every exposed property unless restricted, where the owning service
-  needs to control exactly which queries it supports, because each one has to be indexed and
-  authorized.
-
 - `$expand` assumes related entities live in the same model. Across service boundaries, they live in
   another service's store.
 - Its ASP.NET Core library translates queries to `IQueryable`, which suits Entity Framework but not
