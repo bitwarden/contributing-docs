@@ -187,24 +187,92 @@ and a GraphQL or gRPC interface is offered in addition to those, not instead of 
 Each of these was rejected as the foundation for the standards. As noted above, GraphQL and gRPC
 remain available as additional interfaces.
 
-- **JSON:API:** full conformance is impractical, because its media type, `PATCH`-only updates, `400`
-  for unrecognized query parameters, and `relationships` objects would all be departed from. It does
-  not cover concurrency or deprecation, and covers asynchronous processing only in non-normative
-  recommendations. Its useful conventions remain available to the standards, with credit.
-- **Hypermedia formats:** they answer almost none of the design questions, and are built for clients
-  that discover an API at run time, where ours are generated at build time. JSON-LD aside, none is
-  an adopted standard.
-- **OData:** a general-purpose query language over every exposed property, most of which cannot
-  apply to ciphertext. `$expand` does not cross service boundaries, its ASP.NET Core library depends
-  on `IQueryable`, and `$filter` is a string grammar.
-- **GraphQL:** it discourages versioning, cannot be used without learning a query language, needs
-  authorization per field and per path plus GraphQL-aware infrastructure, and leaves write semantics
-  and most design questions to us.
-- **gRPC:** a transport rather than an API design standard. proto3 has no required fields, customers
-  and browsers need additional tooling, and HTTP/2 with trailers cannot be guaranteed through
-  customer-operated proxies.
-- **Google AIP:** its tooling is protobuf-first, its filter grammar is a string language, its errors
-  are Google-specific, and it is written for Google's infrastructure.
-- **Azure guidelines:** written for Azure service teams and infrastructure, with an Azure-specific
-  error envelope, a dated `api-version` query parameter on every request, and an OData-style filter
-  grammar.
+#### JSON:API
+
+- Full conformance is impractical. Its required media type, `PATCH` as the only way to update, `400`
+  for any unrecognized query parameter, and `relationships` objects for references to other
+  resources would all be departed from, leaving a long list of deviations from a specification the
+  standards would cite.
+- It does not cover concurrency or deprecation, and covers asynchronous processing only in
+  non-normative recommendations, so those topics would be ours to write anyway.
+- Existing .NET implementations are oriented to controllers and Entity Framework Core rather than
+  minimal APIs over Dapper.
+- Adopting it as the foundation is not needed to use its best ideas. Its document shape and query
+  parameter families remain available to the standards on their merits, with credit.
+
+#### Hypermedia formats
+
+- They answer almost none of the common design questions. Beyond links, and an error object in
+  Collection+JSON, errors, validation, paging, filtering, sorting, concurrency, bulk operations, and
+  long-running operations are all left to us.
+- They are built for clients that discover an API at run time. Our clients are generated from a
+  contract at build time and already know the operations, so links are weight that generated clients
+  do not use.
+- None is an adopted API standard. HAL is an individual IETF draft that expired in 2024 without
+  being adopted, Siren has not changed since 2020, and JSON-LD is a data format rather than an API
+  standard.
+- Links, their one distinctive feature, can be added to the standards later if a use for them
+  appears.
+
+#### OData
+
+- Its query language reaches every exposed property unless restricted, where the owning service
+  needs to control exactly which queries it supports, because each one has to be indexed and
+  authorized.
+- Most of that query power cannot apply to zero-knowledge data, because ciphertext cannot be
+  filtered or sorted.
+- `$expand` assumes related entities live in the same model. Across service boundaries, they live in
+  another service's store.
+- Its ASP.NET Core library translates queries to `IQueryable`, which suits Entity Framework but not
+  Dapper over stored procedures.
+- `$filter` is a string expression language, so building one means concatenating, quoting, and
+  escaping strings, which is how injection bugs happen.
+- It does not specify API versioning. The `OData-Version` header versions the protocol, not the API.
+
+#### GraphQL
+
+- It discourages versioning. Its documentation "takes a strong opinion on avoiding versioning" in
+  favor of additive evolution, the posture that eventually makes every new field optional.
+- Customers cannot walk up and use it. Calling it means learning schemas, fragments, variables, and
+  nullability.
+- The request surface is any traversal the schema allows, so authorization has to be decided per
+  field and per path through the graph.
+- Every request is a `POST` to one endpoint, so caching, rate limiting, firewall rules, and tracing
+  need GraphQL-aware infrastructure, along with query depth and cost limits.
+- Mutations have no standard semantics, so create, update, delete, idempotency, concurrency, and
+  most other design questions would still be ours.
+- Its main strength, caller-composed queries over a richly connected graph, has little to work with
+  when most fields are ciphertext and each service owns a narrow slice of the data.
+
+#### gRPC
+
+- It is a transport and an interface definition language, not an API design standard. Apart from
+  status codes, it does not address paging, filtering, sorting, bulk operations, concurrency, or
+  deprecation, so it would still need design guidance alongside it.
+- proto3 has no required fields. Required-ness can be expressed only through validation annotations,
+  so the contract itself treats every field as optional.
+- Customers and browsers cannot call it without extra tooling. Payloads are binary, the command line
+  needs specialized tools, and browsers need gRPC-Web and a proxy. Serving them through JSON
+  transcoding adds a second surface to document, test, and secure.
+- It needs HTTP/2, including trailers, end to end, which cannot be guaranteed through
+  customer-operated proxies on self-hosted installs.
+
+#### Google AIP
+
+- It is protobuf-first. The definition is the `.proto` file and its linter works on it, so applied
+  to APIs described any other way it loses its tooling and becomes a style guide.
+- Its filter grammar (AIP-160) is a string expression language, with the same drawbacks as OData's.
+- Errors use `google.rpc.Status`, a Google-specific shape.
+- It is written for Google's own APIs, and many proposals assume Google's infrastructure, so we
+  would adopt only a subset.
+
+#### Microsoft Azure REST API Guidelines
+
+- They are written for Azure service teams and enforced by Microsoft's own review process, and many
+  rules assume Azure infrastructure, such as Resource Manager, Azure SDK conventions, and `x-ms-`
+  headers.
+- The error envelope is Azure's own.
+- Versioning is a dated `api-version` query parameter on every request, built around Azure's release
+  process.
+- Filter expressions follow OData syntax, a string grammar.
+- They are guidelines rather than a specification, revised at Microsoft's discretion.
