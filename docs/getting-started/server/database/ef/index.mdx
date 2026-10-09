@@ -50,6 +50,13 @@ The workflow here is broadly the same as with the normal MSSQL implementation: s
 container, configure user secrets, and run migrations against their relating databases in
 chronological order.
 
+:::note
+
+The Aspire `AppHost` only provides MSSQL. Use the [manual setup](../../guide.md#run-manually) and
+the Docker Compose instructions below for Entity Framework databases.
+
+:::
+
 ### Requirements
 
 - A working local development server ([see steps](../../guide.md))

@@ -36,7 +36,8 @@ Bitwarden as they occur.
 
 ### Start the SCIM Project
 
-3. Start the SCIM project in your local server repository:
+3. Start the SCIM project in your local server repository. Skip this step if you run the server with
+   Aspire, which starts SCIM for you.
 
    ```bash
    cd bitwarden_license/src/Scim

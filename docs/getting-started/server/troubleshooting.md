@@ -4,6 +4,21 @@ sidebar_position: 10
 
 # Troubleshooting
 
+## Aspire
+
+The Aspire dashboard shows the logs for every resource. Check the logs for `setup-secrets` and
+`run-db-migrations` first, because the services wait for both to finish.
+
+| Symptom                              | Fix                                                                                                                                        |
+| ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| Containers fail to start             | Make sure Docker Desktop is running, and stop any Docker Compose containers that use the same ports                                        |
+| Services stay in a waiting state     | Check the `setup-secrets` and `run-db-migrations` logs for errors                                                                          |
+| Migrations fail to connect           | Make sure the `Database:Password` AppHost user secret matches the password in your `secrets.json` connection string                        |
+| Migrations fail immediately          | Make sure `pwsh` is on your `PATH`                                                                                                         |
+| `azurite-setup` fails                | Install the `Az` PowerShell module, as described in the [Setup Guide](./guide.md#set-up-aspire)                                            |
+| A service fails with a port conflict | Set `Services:<name>:BasePort` to a free port with `dotnet user-secrets set` in the `AppHost` folder                                       |
+| User secrets changes disappear       | Aspire runs `setup_secrets.ps1 -clear` on every start. Add the values to `dev/secrets.json` instead of setting them on individual projects |
+
 ## macOS
 
 ### AppleCFErrorCryptographicException
