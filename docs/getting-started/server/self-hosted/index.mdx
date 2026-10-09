@@ -121,6 +121,9 @@ it.
 You must call `migrate.ps1` with the `-selfhost` option in the future to keep your self-host
 database up-to-date with any migrations.
 
+If you run the self-hosted server with [Aspire](#running), it runs `migrate.ps1 -selfhost` for you
+on every start.
+
 ### Define Installation Id and Key for Your Cloud Database
 
 You need to manually add the Installation key to your cloud-configured instance, so that it knows
@@ -176,7 +179,45 @@ self-hosted launch configurations (e.g. "Api-SelfHost") will set the Environment
 `developSelfHosted` flag for you.
 
 <Tabs groupId="ide">
-<TabItem value="vscode" label="Visual Studio Code" default>
+<TabItem value="aspire" label="Aspire" default>
+
+The Aspire `AppHost` can run every service in the self-hosted configuration. It sets
+`developSelfHosted` to `true` for each service and moves each service to its self-hosted port.
+
+1.  Navigate to the `AppHost` folder and switch the AppHost to self-hosted mode:
+
+    ```bash
+    cd AppHost
+    dotnet user-secrets set "SelfHost" "true"
+    ```
+
+2.  Set the SQL Server password for self-hosted mode. Aspire reuses the same SQL Server container
+    and data volume in both modes, so use the same value as `Database:Password`. The connection
+    string in the `Dev:SelfHostOverride:GlobalSettings` section of your `secrets.json` must use this
+    password too.
+
+    ```bash
+    dotnet user-secrets set "Database:SelfHostPassword" "<your SQL Server password>"
+    ```
+
+3.  Start the AppHost:
+
+    ```bash
+    dotnet run
+    ```
+
+4.  Test that the Identity service is alive by navigating to
+    [http://localhost:33657/.well-known/openid-configuration](http://localhost:33657/.well-known/openid-configuration)
+5.  Test that the Api service is alive by navigating to
+    [http://localhost:4001/alive](http://localhost:4001/alive)
+
+To switch back to the cloud configuration, set `SelfHost` to `false` and restart the AppHost.
+
+The AppHost runs one configuration at a time. If you need cloud and self-hosted servers running
+together, start one of them with the instructions in the other tabs.
+
+</TabItem>
+<TabItem value="vscode" label="Visual Studio Code">
 
 We have a number of launch configurations as well as combined configurations to make launching the
 services easy. By default, the individual self-host launches are hidden. Navigate to `launch.json`
@@ -251,6 +292,9 @@ From the `clients` repository and in the `clients/apps/web` directory, you can e
 to spin up a Bitwarden-licensed or OSS web server. The default port will be `8081`, so you can run
 both a cloud-configured and self-hosted-configured web client at once. It is also configured to
 point at the default `*-SelfHost` ports for the various server projects.
+
+In self-hosted mode, the Aspire `web-frontend` resource runs `build:bit:selfhost:watch` on port
+`8081` for you. Start it from the Aspire dashboard.
 
 <details>
 

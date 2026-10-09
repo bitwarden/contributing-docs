@@ -9,7 +9,9 @@ sidebar_custom_props:
 
 For local development, we use
 [Docker Test SAML 2.0 Identity Provider](https://github.com/kenchan0130/docker-simplesamlphp), which
-we have pre-configured in an `idp` Docker container for easy setup.
+we have pre-configured in an `idp` Docker container for easy setup. If you run the server with
+[Aspire](../guide.md#run-with-aspire), the `idp` container is an Aspire resource. Otherwise, start
+it with Docker Compose.
 
 ### Prerequisites
 
@@ -32,21 +34,28 @@ we have pre-configured in an `idp` Docker container for easy setup.
     ```bash
     cd ~/Projects/server/dev
     ```
-6.  Open your `.env` file and set the following environment variables using the "SP Entity ID" and
-    "Assertion Consumer Service (ACS) URL" values from the SSO configuration page opened in step #4
-    above:
+6.  Configure the IdP with the "SP Entity ID" and "Assertion Consumer Service (ACS) URL" values from
+    the SSO configuration page opened in step #4 above.
+    - **Aspire:** the AppHost builds both values from your organization ID. Copy the organization ID
+      from the SP Entity ID (the last segment of the URL), then set it from the `AppHost` folder:
 
-    ```bash
-    IDP_SP_ENTITY_ID={SP Entity ID}
-    IDP_SP_ACS_URL={ACS URL}
-    ```
+      ```bash
+      dotnet user-secrets set "Parameters:sso-org-id" "<your organization ID>"
+      ```
 
-    :::note
+    - **Docker Compose:** open your `.env` file and set the following environment variables:
 
-    You should have created this `.env` file during your initial server setup. You can refer back to
-    the `.env.example` file if required.
+      ```bash
+      IDP_SP_ENTITY_ID={SP Entity ID}
+      IDP_SP_ACS_URL={ACS URL}
+      ```
 
-    :::
+      :::note
+
+      You should have created this `.env` file during your initial server setup. You can refer back
+      to the `.env.example` file if required.
+
+      :::
 
 7.  (Optional) You may generate a certificate to sign SSO requests. You can do this with a script
     made for your OS of choice.
@@ -93,11 +102,14 @@ we have pre-configured in an `idp` Docker container for easy setup.
     [here](https://github.com/kenchan0130/docker-simplesamlphp#customize-sp-remote-metadata-reference)
     for more information about this file.
 
-10. Start the docker container:
+10. Start the IdP:
+    - **Aspire:** restart the AppHost so it picks up `sso-org-id`, then start the `idp` resource
+      from the Aspire dashboard. It doesn't start automatically.
+    - **Docker Compose:** start the docker container:
 
-    ```bash
-    docker compose --profile idp up -d
-    ```
+      ```bash
+      docker compose --profile idp up -d
+      ```
 
 11. You can test your user configuration by navigating to
     [http://localhost:8090/simplesaml](http://localhost:8090/simplesaml) and clicking Authentication
@@ -138,7 +150,10 @@ and click Logout. Alternatively, you can use a private browsing session.
 
 ### SAML configuration
 
-To change the Entity ID or ACS URL, edit the `.env` file and then restart the Docker container:
+With Aspire, set a new `Parameters:sso-org-id` user secret in the `AppHost` folder, then restart the
+AppHost and start the `idp` resource again.
+
+With Docker Compose, edit the `.env` file and then restart the Docker container:
 
 ```bash
 docker compose --profile idp up -d
@@ -152,9 +167,10 @@ You’re missing the `uid` claim for the user in `authsources.php`.
 
 ### IdP displays a "Metadata not found" error
 
-- Your Entity ID and/or ACS URL in `.env` are incorrect. Make sure they match the values shown in
-  the SSO configuration page of the Admin Console. If you change the values in `.env`, run the
-  `docker compose` command above to restart the container with the updated variables.
+- Your Entity ID and/or ACS URL are incorrect. Make sure they match the values shown in the SSO
+  configuration page of the Admin Console. With Aspire, check the `sso-org-id` parameter. With
+  Docker Compose, check `.env` and run the `docker compose` command above to restart the container
+  with the updated variables.
 - Your domain has been claimed by a different organization (e.g. due to old test data). Bitwarden is
   using that organization's SSO configuration, which doesn't match your local IDP configuration.
   Remove any claimed domains and try again.
