@@ -8,13 +8,15 @@ sidebar_custom_props:
 ## Background
 
 Support for feature flags was added based on
-[ADR 0018](https://contributing.bitwarden.com/architecture/adr/feature-management/). Some
-highlights:
+[ADR 0018](https://contributing.bitwarden.com/architecture/adr/feature-management/). Server-side
+flag evaluation is provided by the `Bitwarden.Server.Sdk.Features` package from
+[`dotnet-extensions`](https://github.com/bitwarden/dotnet-extensions/tree/main/extensions/Bitwarden.Server.Sdk.Features).
+Some highlights:
 
-- [Context](https://github.com/bitwarden/server/blob/main/src/Core/Context/ICurrentContext.cs) is
-  provided when requesting the state of a flag. We currently allow targeting on user, organization,
-  and machine account (previously known as service account). Only the IDs are sent to LaunchDarkly
-  to avoid PII sharing.
+- [Context](https://github.com/bitwarden/server/blob/main/src/Core/Services/Implementations/ServerContextBuilder.cs)
+  is provided when requesting the state of a flag. We currently allow targeting on user,
+  organization, machine account (previously known as service account), and device. Only IDs and
+  non-identifying client attributes are sent to LaunchDarkly to avoid PII sharing.
 - All available feature flag states are provided to clients calling the
   [configuration API](https://github.com/bitwarden/server/blob/main/src/Api/Models/Response/ConfigResponseModel.cs).
 - Environments (production, QA, and development for now) exist to segment flag states further. This
@@ -139,16 +141,17 @@ Environment variables can also be used like with other application setting overr
 
 In some situations there may be a need to change a feature flag value to be something other than its
 default state before cleanup activities can fully complete, especially when deployed clients are
-still depending on the flag value being returned to ensure certain functionality. In the server
-codebase there exists a method `GetLocalOverrideFlagValues()` alongside the feature flag
-[constants definition](#server) where overrides can be placed as dictionary key-value pairs:
+still depending on the flag value being returned to ensure certain functionality. Flag values can be
+added in code with `AddFeatureFlagValues()` when registering services:
 
 ```csharp
-return new Dictionary<string, string>()
-{
-    { ExampleBooleanKey, "true" }
-};
+services.AddFeatureFlagValues([
+    KeyValuePair.Create(FeatureFlagKeys.ExampleBooleanKey, "true"),
+]);
 ```
+
+These values only apply when the server is not connected to LaunchDarkly, such as local development
+and self-hosted installations. Values added this way overwrite values from configuration.
 
 This should only be used temporarily and as part of the feature flag cleanup process, as well as to
 enable rapid feature availability for installations that are not using or aware of alternative
@@ -177,10 +180,31 @@ Recommendations for naming are:
   a feature flag. For example, `new-feature` is recommended instead of `enable-new-feature`.
 - Keep key names succinct.
 
-Once a name has been decided, add the feature flag to the
-[`FeatureFlagKeys`](https://github.com/bitwarden/server/blob/main/src/Core/Constants.cs) constants
-file on the server. This will allow the flag to be retrieved from LaunchDarkly via whichever data
-source you configure below.
+Once a name has been decided, add the feature flag as a constant to a flag key collection on the
+server. This will allow the flag to be retrieved from LaunchDarkly via whichever data source you
+configure below.
+
+A flag key collection is a `static partial` class annotated with `[FlagKeyCollection]`, which
+generates a `GetKeys()` method returning every key in the class. Flags do not need to be added to
+the shared [`FeatureFlagKeys`](https://github.com/bitwarden/server/blob/main/src/Core/Constants.cs)
+collection; prefer a smaller collection owned by your team or feature:
+
+```csharp
+[FlagKeyCollection]
+public static partial class MyFeatureFlags
+{
+    public const string MyNewFeature = "pm-12345-my-new-feature";
+}
+```
+
+Register the collection as known flags alongside your feature's other services:
+
+```csharp
+services.AddKnownFeatureFlags(MyFeatureFlags.GetKeys());
+```
+
+Only known flags are returned from the `/config` endpoint, so for flags consumed by clients this
+registration must happen in the `Api` service. Keys in `FeatureFlagKeys` are registered for you.
 
 ### Local development
 
@@ -277,17 +301,27 @@ the retrieval methods:
 
 ### Server
 
-1. Inject `IFeatureService` where you need a feature flag. Note that you’ll also need
-   `ICurrentContext` when accessing the feature state.
-2. Find the constant in the
-   [`FeatureFlagKeys`](https://github.com/bitwarden/server/blob/main/src/Core/Constants.cs) list for
-   the key you plan on using. It should have been added when
-   [creating a new flag](#creating-a-new-flag).
+1. Find the constant in the flag key collection for the key you plan on using. It should have been
+   added when [creating a new flag](#creating-a-new-flag).
+2. Inject `Bitwarden.Server.Sdk.Features.IFeatureService` where you need a feature flag. The
+   evaluation context for the current request is built for you.
 3. Utilize the above key constant with the appropriate method on the feature service:
 
 - `IsEnabled` for Booleans, with `false` an assumed default.
 - `GetIntVariation` for integers, with `0` an assumed default.
 - `GetStringVariation` for strings, with `null` an assumed default.
+
+See the
+[`Bitwarden.Server.Sdk.Features` documentation](https://github.com/bitwarden/dotnet-extensions/tree/main/extensions/Bitwarden.Server.Sdk.Features)
+for additional capabilities of the library.
+
+## Removing a flag
+
+Once a flag has been fully rolled out, remove it and all of its usages from the code. On the server,
+every constant in a `[FlagKeyCollection]` class is reported with the
+[BW0001](https://github.com/bitwarden/dotnet-extensions/blob/main/docs/diagnostics.md#bw0001)
+diagnostic, which comes with a code fix. Apply the code fix from your IDE on the flag constant and
+it will attempt to clean the flag from the codebase. Always review the changes it made.
 
 ## Self-hosted considerations
 
