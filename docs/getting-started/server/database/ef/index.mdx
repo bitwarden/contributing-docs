@@ -52,8 +52,9 @@ chronological order.
 
 :::note
 
-The Aspire `AppHost` only provides MSSQL. Use the [manual setup](../../guide.md#run-manually) and
-the Docker Compose instructions below for Entity Framework databases.
+The Aspire `AppHost` doesn't start Entity Framework database containers. Start your database
+container with Docker Compose as described below. Services that Aspire starts use the database
+provider set in your user secrets. Aspire still starts SQL Server and runs the MSSQL migrations.
 
 :::
 

@@ -43,6 +43,8 @@ it with Docker Compose.
       dotnet user-secrets set "Parameters:sso-org-id" "<your organization ID>"
       ```
 
+      You can also set `sso-org-id` from the Parameters tab of the Aspire dashboard.
+
     - **Docker Compose:** open your `.env` file and set the following environment variables:
 
       ```bash
@@ -103,8 +105,8 @@ it with Docker Compose.
     for more information about this file.
 
 10. Start the IdP:
-    - **Aspire:** restart the AppHost so it picks up `sso-org-id`, then start the `idp` resource
-      from the Aspire dashboard. It doesn't start automatically.
+    - **Aspire:** if you set `sso-org-id` with a user secret, restart the AppHost. Then start the
+      `idp` resource from the Aspire dashboard. It doesn't start automatically.
     - **Docker Compose:** start the docker container:
 
       ```bash
@@ -150,8 +152,9 @@ and click Logout. Alternatively, you can use a private browsing session.
 
 ### SAML configuration
 
-With Aspire, set a new `Parameters:sso-org-id` user secret in the `AppHost` folder, then restart the
-AppHost and start the `idp` resource again.
+With Aspire, change `sso-org-id` from the Parameters tab of the Aspire dashboard, or set a new
+`Parameters:sso-org-id` user secret in the `AppHost` folder and restart the AppHost. Then start the
+`idp` resource again.
 
 With Docker Compose, edit the `.env` file and then restart the Docker container:
 

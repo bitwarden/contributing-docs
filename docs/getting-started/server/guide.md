@@ -9,18 +9,10 @@ This page will show you how to set up a local Bitwarden server for development p
 The Bitwarden server is comprised of several services that can run independently. For a basic
 development setup, you will need the **Api** and **Identity** services.
 
-There are two ways to run the server locally:
-
-- **[Aspire](#run-with-aspire) (recommended):** the `AppHost` project in the server repository uses
-  [.NET Aspire](https://aspire.dev) to start the supporting containers, apply your user secrets,
-  migrate the database, and run every server service from a single command.
-- **[Manual setup](#run-manually):** you start the Docker Compose containers, run the helper
-  scripts, and launch each service yourself. Use this if you need an
-  [Entity Framework database](./database/ef/index.mdx) or another container that Aspire doesn't
-  manage.
-
-Both approaches share the same first steps and use the same `dev/secrets.json` file, so you can
-switch between them.
+This guide runs the server with [.NET Aspire](https://aspire.dev). The `AppHost` project in the
+server repository starts the supporting containers, applies your user secrets, migrates the
+database, and runs every server service from a single command. If you can't use Aspire, follow the
+[Manual Setup](./manual-setup.md) after you configure your user secrets.
 
 :::info
 
@@ -89,7 +81,7 @@ repository.
     </Community>
 
     <Bitwarden>
-    - Copy the user secrets file from the shared Development collection (Your Bitwarden Vault) into
+    - Copy the user secrets file from the shared Development collection (in your Bitwarden vault) into
       the `dev` folder.
     - If you don't have access to the Development collection, contact our IT Manager to arrange
       access. Make sure you have first set up a Bitwarden account using your company email address.
@@ -98,8 +90,7 @@ repository.
 
     </Bitwarden>
 
-2.  Choose a password for your local SQL Server. You will use it for the SQL Server `sa` account in
-    either setup.
+2.  Choose a password for your local SQL Server. You will use it for the SQL Server `sa` account.
 
     :::caution
 
@@ -152,7 +143,7 @@ repository.
     </Bitwarden>
 
 4.  Once you have your `secrets.json` complete, run the below command from the `dev` folder to add
-    the secrets to each Bitwarden server project.
+    the secrets to each Bitwarden server project. Aspire also does this each time it starts.
 
     ```bash
     pwsh setup_secrets.ps1
@@ -189,9 +180,9 @@ full configuration reference.
 
 ### Set up Aspire
 
-1.  Stop any Docker Compose containers from a previous manual setup. Aspire uses the same host ports
-    (for example 1433 for SQL Server and 1080 for MailCatcher) and won't start while they are in
-    use. From the `dev` folder, run:
+1.  Stop any Docker Compose containers from a previous [manual setup](./manual-setup.md). Aspire
+    uses the same host ports (for example 1433 for SQL Server and 1080 for MailCatcher) and won't
+    start while they are in use. From the `dev` folder, run:
 
     ```bash
     docker compose --profile cloud --profile mail --profile idp down
@@ -299,150 +290,15 @@ Common settings include:
 Restart the AppHost to apply changes. Path settings are relative to the `AppHost` folder, so use
 absolute paths if you work from a Git worktree.
 
-## Run manually
+### Debug with Aspire
 
-If you aren't using Aspire, start the dependencies and services yourself.
-
-### Configure Docker
-
-We provide a [Docker Compose](https://docs.docker.com/compose/) configuration, which is used during
-development to provide the required dependencies. This is split up into multiple service profiles to
-facilitate easy customization.
-
-1.  Some Docker settings are configured in the environment file, `dev/.env`. Copy the example
-    environment file:
-
-    ```bash
-    cd dev
-    cp .env.example .env
-    ```
-
-2.  Open `.env` with your preferred editor.
-
-3.  Set the `MSSQL_PASSWORD` variable to the SQL Server password you chose when you
-    [configured user secrets](#configure-user-secrets).
-
-4.  You can change the other variables or use their default values. Save and quit this file.
-5.  Start the Docker containers.
-
-    Using PowerShell, navigate to the cloned server repo location, into the `dev` folder and run the
-    docker command below.
-
-    <Community>
-
-    ```bash
-    docker compose --profile mssql --profile mail up -d
-    ```
-
-    Which starts the MSSQL and local mail server containers, which should be suitable for most
-    community contributions.
-
-    </Community>
-
-    <Bitwarden>
-
-    ```bash
-    docker compose --profile cloud --profile mail up -d
-    ```
-
-    Which starts MSSQL, mail, Redis, and Azurite container. The additional Azurite container is
-    required to emulate Azure used by the Bitwarden cloud environment.
-
-    </Bitwarden>
-
-After you’ve run the `docker compose` command, you can use the
-[Docker Dashboard](https://docs.docker.com/desktop/dashboard/) to manage your containers. You should
-see your containers running under the `bitwardenserver` group.
-
-:::caution
-
-Changing `MSSQL_PASSWORD` variable after first running docker compose will require a re-creation of
-the storage volume.
-
-**Warning: this will delete your development database.**
-
-To do this, run
-
-```bash
-docker compose --profile mssql down
-docker volume rm bitwardenserver_mssql_dev_data
-```
-
-After that, rerun the docker compose command from Step 5.
-
-:::
-
-### Create database
-
-You now have the MSSQL server running in Docker. The next step is to create the database that will
-be used by the Bitwarden server.
-
-We provide a helper script which will create the development database `vault_dev` and also run all
-migrations.
-
-Navigate to the `dev` folder in your server repo and perform the following steps:
-
-1.  Create the database and run all migrations:
-
-    ```bash
-    pwsh migrate.ps1
-    ```
-
-2.  You should receive confirmation that the migration scripts have run successfully:
-
-    ```
-    info: Bit.Migrator.DbMigrator[12482444]
-          Migrating database.
-    info: Bit.Migrator.DbMigrator[12482444]
-          Migration successful.
-    ```
-
-:::note
-
-You’ll need to re-run the migration helper script regularly to keep your local development database
-up-to-date. See [MSSQL Database](./database/mssql/index.md) for more information.
-
-:::
-
-### Build and run the server
-
-You are now ready to build and run your development server.
-
-1.  Open a new terminal window in the root of the repository.
-2.  Restore the nuget packages required for the Identity service:
-
-    ```bash
-    cd src/Identity
-    dotnet restore
-    ```
-
-3.  Start the Identity service:
-
-    ```bash
-    dotnet run
-    ```
-
-4.  Test that the Identity service is alive by navigating to
-    [http://localhost:33656/.well-known/openid-configuration](http://localhost:33656/.well-known/openid-configuration)
-5.  In another terminal window, restore the nuget packages required for the Api service:
-
-    ```bash
-    cd src/Api
-    dotnet restore
-    ```
-
-6.  Start the Api Service:
-
-    ```bash
-    dotnet run
-    ```
-
-7.  Test that the Api service is alive by navigating to
-    [http://localhost:4000/alive](http://localhost:4000/alive)
+Debug the `AppHost` project from your IDE. Visual Studio and Rider attach the debugger to each
+service that the AppHost starts, so breakpoints in Api, Identity, and the other services work
+without launching them separately. Rider requires the Aspire plugin.
 
 ## Local services
 
-Both setups provide the following local services.
+Aspire and the [manual setup](./manual-setup.md) both provide the following local services.
 
 ### SQL Server
 
@@ -484,14 +340,12 @@ connection string setting in `secrets.json`, see
 [CACHING.md](https://github.com/bitwarden/server/blob/main/src/Core/Utilities/CACHING.md).
 
 (Optional) [Monitor](https://redis.io/docs/latest/commands/monitor/) Redis activity using the Redis
-CLI. With the manual setup, run this from the `dev` folder:
+CLI. With Aspire, open the `redis` resource in the dashboard to find its container, then use
+`docker exec` with that container name. With the manual setup, run this from the `dev` folder:
 
 ```bash
 docker compose exec redis redis-cli
 ```
-
-With Aspire, open the `redis` resource in the dashboard to find its container, then use
-`docker exec` with that container name.
 
 ### Azurite
 
@@ -505,21 +359,8 @@ This section applies to Bitwarden developers only.
 Queues and Table storage. We use it to minimize the online dependencies required for developing in a
 cloud environment.
 
-Aspire bootstraps Azurite for you with its `azurite-setup` resource. With the manual setup, navigate
-to the `dev` directory in your server repo and run the following commands:
-
-1.  Install the `Az` module. This may take a few minutes to complete without providing any user
-    feedback (it may appear frozen).
-
-    ```bash
-    pwsh -Command "Install-Module -Name Az -Scope CurrentUser -Repository PSGallery -Force"
-    ```
-
-2.  Run the setup script:
-
-    ```bash
-    pwsh setup_azurite.ps1
-    ```
+Aspire bootstraps Azurite for you with its `azurite-setup` resource. With the manual setup, follow
+[Bootstrap Azurite](./manual-setup.md#bootstrap-azurite).
 
 ## Client connection
 
@@ -544,30 +385,3 @@ We recommend continuing with the [Web Vault](../clients/web-vault/index.mdx) aft
 administrative operations can only be performed in it.
 
 :::
-
-## Debugging
-
-:::info
-
-On macOS, you must run `dotnet restore` for each Project before it can be launched in the a
-debugger.
-
-:::
-
-### Aspire
-
-Debug the `AppHost` project from your IDE. Visual Studio and Rider attach the debugger to each
-service that the AppHost starts, so breakpoints in Api, Identity, and the other services work
-without launching them separately. Rider requires the Aspire plugin.
-
-### Visual Studio
-
-To debug:
-
-- On Windows, right-click on each project > click **Debug** > click **Start New Instance**
-- On macOS, right-click each project > click **Start Debugging Project**
-
-### Rider
-
-Launch the Api project and the Identity project by clicking the "Play" button for each project
-separately.

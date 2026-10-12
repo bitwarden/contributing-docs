@@ -49,8 +49,10 @@ For a detailed look at the architecture and technical details, see
 
    :::note
 
-   The emulator connects to the Docker Compose `mssql` container, so it doesn't work with the SQL
-   Server that Aspire starts. Use the [manual setup](./guide.md#run-manually) for Azure Service Bus.
+   The emulator stores its state in SQL Server and finds it by the hostname `mssql` on the Docker
+   Compose network. The SQL Server that Aspire starts isn't on that network, and the Compose `mssql`
+   container can't run alongside it because both use port 1433. Use the
+   [Manual Setup](./manual-setup.md) for Azure Service Bus.
 
    :::
 
