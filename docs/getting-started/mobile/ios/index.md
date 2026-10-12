@@ -22,11 +22,9 @@ sidebar_position: 1
    $ git clone https://github.com/bitwarden/ios
    ```
 
-2. Install [Homebrew](https://brew.sh/) dependencies (including
-   [Mint](https://github.com/yonaskolb/mint)) from the repository root:
+2. Install [Homebrew](https://brew.sh/) dependencies from the repository root:
 
    ```sh
-   $ cd ios
    $ brew bundle
    ```
 
@@ -34,15 +32,6 @@ sidebar_position: 1
    > [`Brewfile`](https://github.com/bitwarden/ios/blob/main/Brewfile). `Scripts/bootstrap.sh`
    > checks that they are installed, so re-run `brew bundle` if bootstrapping reports missing
    > dependencies.
-
-   Alternatively, if you prefer to install Mint without `brew`, clone the Mint repo into a temporary
-   directory and run `make`.
-
-   ```sh
-   $ git clone https://github.com/yonaskolb/Mint.git
-   $ cd Mint
-   $ make
-   ```
 
 3. Bootstrap the project:
 
@@ -77,7 +66,8 @@ sidebar_position: 1
    Current version: 16.4
    ```
 
-4. Install [fastlane](https://docs.fastlane.tools/) for automated package deployments:
+4. (Optional) Install [fastlane](https://docs.fastlane.tools/) if you're developing or testing CI
+   and automation workflows locally:
 
    > **Note** We manage non-system Ruby installations with `rbenv` as homebrew tends to break the
    > required Ruby dependencies
@@ -87,7 +77,7 @@ sidebar_position: 1
    $ rbenv init
    ```
 
-   From the root directory of the `ios` repo do the following:
+   From the repository root, run:
 
    ```
    $ rbenv install -s
@@ -105,7 +95,7 @@ sidebar_position: 1
    ```
 
    If you see an error that a Ruby version is not installed, or that you should run
-   `bundle install`, re-run `rbenv install -s` and `bundle install` from the root of the `ios` repo.
+   `bundle install`, re-run `rbenv install -s` and `bundle install` from the repository root.
 
    > **Note** Only run `bundle update` when you intend to upgrade the project's Ruby dependencies.
    > It resolves the newest gem versions allowed by the `Gemfile` and rewrites `Gemfile.lock`, which
@@ -127,7 +117,7 @@ sidebar_position: 1
 2. Run the app in the Simulator with the `Bitwarden` target for the Password Manager app or
    `Authenticator` for the Authenticator app.
 
-> [!TIP] To open the workspace in Xcode, just go to the root folder with the CLI and run:
+> [!TIP] To open the workspace in Xcode, go to the repository root and run:
 >
 > ```sh
 > open Bitwarden.xcworkspace
