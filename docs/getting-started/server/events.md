@@ -47,6 +47,15 @@ For a detailed look at the architecture and technical details, see
    for writing events to Azure Table Storage). In addition, this assumes you're using the `mssql`
    default profile and have the `${MSSQL_PASSWORD}` set via `.env`.
 
+   :::note
+
+   The emulator stores its state in SQL Server and finds it by the hostname `mssql` on the Docker
+   Compose network. The SQL Server that Aspire starts isn't on that network, and the Compose `mssql`
+   container can't run alongside it because both use port 1433. Use the
+   [Manual Setup](./manual-setup.md) for Azure Service Bus.
+
+   :::
+
 2. Run Docker Compose to add/start the local emulator:
 
    ```bash
@@ -204,7 +213,8 @@ To emulate this locally:
     default value of `UseDevelopmentStorage=true`
 
 3.  Start the Events and EventsProcessor projects using `dotnet run` or your IDE. (Also ensure you
-    have Api, Identity and your web vault running.)
+    have Api, Identity and your web vault running.) Aspire starts Events and EventsProcessor for
+    you.
 
 You should now observe that your enterprise organization is logging events (e.g. when creating an
 item or inviting a user). These should appear in the Event Logs section of the organization vault.

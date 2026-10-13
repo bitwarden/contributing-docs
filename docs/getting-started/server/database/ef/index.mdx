@@ -50,6 +50,14 @@ The workflow here is broadly the same as with the normal MSSQL implementation: s
 container, configure user secrets, and run migrations against their relating databases in
 chronological order.
 
+:::note
+
+The Aspire `AppHost` doesn't start Entity Framework database containers. Start your database
+container with Docker Compose as described below. Services that Aspire starts use the database
+provider set in your user secrets. Aspire still starts SQL Server and runs the MSSQL migrations.
+
+:::
+
 ### Requirements
 
 - A working local development server ([see steps](../../guide.md))

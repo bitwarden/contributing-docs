@@ -114,6 +114,7 @@ ungated
 unsynchronized
 WCAG
 weweave
+worktree
 Xcodes.app
 xcworkspace
 xmldoc
