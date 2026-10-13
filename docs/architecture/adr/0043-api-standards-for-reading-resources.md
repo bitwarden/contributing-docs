@@ -65,8 +65,8 @@ credited to [JSON:API](https://jsonapi.org/), the `:search` syntax to
 
 - Read-many APIs that accept search criteria `MUST` take them as `filter[{name}]` query parameters,
   where `name` `SHOULD` be a resource attribute.
-- APIs `MAY` support wildcards. Those that do `MUST` support `*` for "starts with", "ends with", and
-  "contains".
+- APIs `MAY` support `*` as a wildcard in filter values. Those that do `MUST` document which
+  attributes accept it.
 - APIs `MAY` filter on a nested attribute using dot notation, such as `address.city`.
 
 ### Multi-value parameters and ranges
@@ -108,10 +108,11 @@ always returned.
 
 ### Paging
 
-APIs `SHOULD` page, and those that do `MUST` support offset paging, cursor paging, or both.
+APIs `SHOULD` page, and those that do `MUST` support offset paging, cursor paging, or both, and
+`MUST` document a maximum `page[size]`.
 
 - **Offset paging:** `page[number]` (one-based) and `page[size]`. The response `meta` `MUST` carry
-  `pageCount`, `pageNumber`, `pageSize`, and `totalCount`.
+  `pageNumber` and `pageSize`, and `SHOULD` carry `pageCount` and `totalCount`.
 - **Cursor paging:** `page[size]` and `page[after]`. The response `meta` `MUST` carry `pageSize`,
   `hasMore`, and `cursor`, the value to pass as `page[after]` for the next page. The final page
   `MUST` return `hasMore` as `false` and `MUST` omit `cursor`.
