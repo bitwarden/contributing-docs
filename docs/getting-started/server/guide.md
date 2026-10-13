@@ -107,13 +107,16 @@ repository.
     :::
 
 3.  Update `secrets.json` with your own values:
-    - `sqlServer` > `connectionString`: insert your SQL Server password where indicated
+    - `sqlServer` > `connectionString`: insert your SQL Server password where indicated. You will
+      give Aspire the same password later, and the two must be identical.
+    - `licenseDirectory`: set this to the absolute path of an empty directory on your current
+      operating system. This is where uploaded license files will be stored. Files carried over from
+      another setup may still hold a Windows path such as `c:/...`, which won't work on macOS or
+      Linux.
 
     <Community>
     - `installation` > `id` and `key`:
       [request a hosting installation Id and Key](https://bitwarden.com/host/) and insert them here
-    - `licenseDirectory`: set this to an empty directory, this is where uploaded license files will
-      be stored.
 
     </Community>
 
@@ -188,10 +191,16 @@ full configuration reference.
     docker compose --profile cloud --profile mail --profile idp down
     ```
 
+    This stops the containers in the `cloud`, `mail`, and `idp` profiles. Containers from other
+    profiles, such as `postgres` and `mysql`, can keep running because they don't use Aspire's
+    ports. Running `down` without `-v` keeps the old volumes.
+
     :::note
 
-    Aspire creates its own SQL Server data volume. Data in your Docker Compose database is not
-    carried over.
+    Aspire creates its own SQL Server data volume, so your first run starts with an empty
+    `vault_dev` database. Data in your Docker Compose database is not carried over. To create users
+    and organizations, use the
+    [Seeder Utility](https://github.com/bitwarden/server/blob/main/util/SeederUtility/README.md).
 
     :::
 
@@ -208,13 +217,26 @@ full configuration reference.
     dotnet dev-certs https --trust
     ```
 
+    A certificate can exist without being trusted. To confirm that it's trusted, run:
+
+    ```bash
+    dotnet dev-certs https --check --trust
+    ```
+
 4.  From the `dev` folder, navigate to the `AppHost` folder and store your SQL Server password in
-    the AppHost's user secrets. This must be the same password you put in the `sqlServer` connection
-    string in `secrets.json`.
+    the AppHost's user secrets. Aspire uses `Database:Password` as the `sa` password of its SQL
+    Server container, and the services connect with the `sqlServer` connection string in
+    `secrets.json`. The two passwords must be identical.
 
     ```bash
     cd ../AppHost
     dotnet user-secrets set "Database:Password" "<your SQL Server password>"
+    ```
+
+    Confirm the secret was saved. The output should include `Database:Password`:
+
+    ```bash
+    dotnet user-secrets list
     ```
 
     :::warning
@@ -223,6 +245,17 @@ full configuration reference.
     `AppHost/appsettings.Development.json`, which is checked in.
 
     :::
+
+5.  Build the Admin portal's CSS and JavaScript. Aspire doesn't build them, and without them the
+    Admin portal renders as unstyled HTML. From the `AppHost` folder, run:
+
+    ```bash
+    cd ../src/Admin
+    npm ci && npm run build
+    cd ../../AppHost
+    ```
+
+    Run this again whenever the Admin portal's front-end dependencies change.
 
 ### Start the server
 
@@ -253,9 +286,29 @@ Aspire runs the database migrations and re-applies `dev/secrets.json` on every s
 changes or edit `secrets.json`, restart the AppHost, or restart the `setup-secrets` or
 `run-db-migrations` resource from the dashboard.
 
+To turn on [feature flags](../../contributing/feature-flags.md#local-configuration-user-secrets)
+locally, set `globalSettings:launchDarkly:flagValues:<flag-key>` in `dev/secrets.json`. Aspire
+applies them on every start.
+
 To stop the server, press `Ctrl+C` in the terminal running the AppHost. The SQL Server, Azurite,
 MailCatcher, and Redis containers are persistent and keep running between sessions, so later starts
-are faster.
+are faster. To stop them too, stop them from the dashboard before you stop the AppHost, or find
+their names and stop them with Docker:
+
+```bash
+docker ps
+docker stop <container name>
+```
+
+Stopping a container keeps its data volume. The next AppHost run starts the containers again.
+
+### Log in to the Admin portal
+
+The Admin portal uses passwordless email login.
+
+1.  Make sure your email address is listed in `adminSettings` > `admins` in `dev/secrets.json`.
+2.  Navigate to [http://localhost:62911](http://localhost:62911) and enter your email address.
+3.  Open MailCatcher at [http://localhost:1080](http://localhost:1080) and click the sign-in link.
 
 ### Optional resources
 
