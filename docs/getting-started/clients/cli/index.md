@@ -106,6 +106,15 @@ chmod +x bw.js
 ./bw.js login
 ```
 
+In order to copy and paste commands directly from the
+[CLI help page](https://bitwarden.com/help/cli/) it may be useful to alias the executable file to
+`bw`:
+
+```bash
+alias bw='./bw.js'
+bw login
+```
+
 To debug the CLI client, run it from a
 [Javascript Debug Terminal](https://code.visualstudio.com/docs/nodejs/nodejs-debugging#_javascript-debug-terminal)
 and place the breakpoints in your Typescript code.
