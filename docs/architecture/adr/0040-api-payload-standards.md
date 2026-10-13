@@ -27,8 +27,8 @@ conventions, status codes, validation, and errors.
 
 **Payload shape**
 
-- **A standard envelope:** every payload is one top-level object. `data` holds a resource or an
-  array of resources, and `meta` holds response metadata.
+- **A standard envelope** (chosen): every payload is one top-level object. `data` holds a resource
+  or an array of resources, and `meta` holds response metadata.
 - **No standard shape:** each API decides.
 - **Plain resources, with metadata in headers** such as `Link` and `X-Total-Count`.
 - **Plain single resources, with a wrapper only for collections:** the `object`, `data`, and
@@ -37,19 +37,20 @@ conventions, status codes, validation, and errors.
 
 **Errors**
 
-- **An array of error objects** in a top-level `errors` field.
+- **An array of error objects** (chosen) in a top-level `errors` field.
 - **[RFC 9457](https://www.rfc-editor.org/info/rfc9457/) Problem Details,** as published.
 - **Problem Details with an `errors` extension member,** or ASP.NET Core's
   `ValidationProblemDetails`.
 
 **Empty strings, nulls, and whitespace**
 
-- **Treat an empty string, an absent field, and `null` alike,** and strip surrounding whitespace.
+- **Treat an empty string, an absent field, and `null` alike** (chosen), and strip surrounding
+  whitespace.
 - **Preserve every string exactly,** and distinguish an empty string from `null`.
 
 **Validation**
 
-- **Validate exhaustively and report every failure at once.**
+- **Validate exhaustively and report every failure at once** (chosen).
 - **Stop at the first failure.**
 
 ## Decision outcome
@@ -165,7 +166,7 @@ for every API, and APIs `SHOULD NOT` document them individually:
 | `429`  | The caller has made too many requests.                                           |
 | `500`  | An unexpected error the caller cannot fix. By definition, a bug.                 |
 | `501`  | The API is stubbed out and not yet implemented.                                  |
-| `503`  | A dependency is unavailable or timed out.                                        |
+| `503`  | The service or a dependency is unavailable, overloaded, or timed out.            |
 
 The commonly confused pairs:
 
@@ -173,8 +174,8 @@ The commonly confused pairs:
 - **`403` or `404`:** `403` for a resource the caller may know exists, `404` for one it may not.
 - **`404` or `422`:** `404` when the resource named in the path is not found, `422` when it is found
   but a resource referenced in the body is not.
-- **`500` or `503`:** `500` for a failure inside the service, `503` for a dependency that is down,
-  unreachable, or timed out.
+- **`500` or `503`:** `500` for a failure inside the service, `503` when the service is overloaded
+  or a dependency is down, unreachable, or timed out.
 
 ### Request validation
 
@@ -256,6 +257,4 @@ reasons:
 
 - The envelope is visible to callers who call an API directly, and generators for client SDKs have
   to be configured to hide it.
-- `Bit.HttpExtensions` returns Problem Details for validation failures today, so those responses
-  would change format.
 - Departing from RFC 9457 is a point reviewers may contest.
