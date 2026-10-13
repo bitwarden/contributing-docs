@@ -109,10 +109,8 @@ repository.
 3.  Update `secrets.json` with your own values:
     - `sqlServer` > `connectionString`: insert your SQL Server password where indicated. You will
       give Aspire the same password later, and the two must be identical.
-    - `licenseDirectory`: set this to the absolute path of an empty directory on your current
-      operating system. This is where uploaded license files will be stored. Files carried over from
-      another setup may still hold a Windows path such as `c:/...`, which won't work on macOS or
-      Linux.
+    - `licenseDirectory`: set this to the absolute path of an empty directory. This is where
+      uploaded license files will be stored.
 
     <Community>
     - `installation` > `id` and `key`:
@@ -286,9 +284,8 @@ Aspire runs the database migrations and re-applies `dev/secrets.json` on every s
 changes or edit `secrets.json`, restart the AppHost, or restart the `setup-secrets` or
 `run-db-migrations` resource from the dashboard.
 
-To turn on [feature flags](../../contributing/feature-flags.md#local-configuration-user-secrets)
-locally, set `globalSettings:launchDarkly:flagValues:<flag-key>` in `dev/secrets.json`. Aspire
-applies them on every start.
+To turn on [feature flags](../../contributing/feature-flags.md) locally, set
+`Features:FlagValues:<flag-key>` in `dev/secrets.json`. Aspire applies them on every start.
 
 To stop the server, press `Ctrl+C` in the terminal running the AppHost. The SQL Server, Azurite,
 MailCatcher, and Redis containers are persistent and keep running between sessions, so later starts
