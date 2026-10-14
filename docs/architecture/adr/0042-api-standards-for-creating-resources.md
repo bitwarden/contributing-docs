@@ -35,6 +35,7 @@ a second call.
 
 - The method `MUST` be `POST`, and the path `SHOULD` be the collection, `/api/v1/{resource plural}`.
 - When the service generates the ID, the request `MUST` omit `id`.
+- If the request's `type` is not one the collection accepts, the API `MUST` return `422`.
 - APIs that support create-or-update `MUST` do so through `PUT` (see ADR-0044).
 - On success, APIs `SHOULD` return `201` but `MAY` return `202` or `204`.
 
