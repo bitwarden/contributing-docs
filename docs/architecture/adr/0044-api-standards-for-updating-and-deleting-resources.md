@@ -42,6 +42,8 @@ Chosen options are marked above.
 - The method `MUST` be `PUT`, with complete-replacement semantics, and the path `SHOULD` be
   `/api/v1/{resource plural}/{id}`.
 - APIs that support create-or-update `MUST` do so through `PUT`.
+- If the request's `type` is not that of the resource named in the path, or its `id` is not the one
+  in the path, the API `MUST` return `422`. This applies to partial updates too.
 - Resources `SHOULD` carry `updatedBy` and `updatedAt`.
 - On success, APIs `SHOULD` return `200`, or `201` if the request created the resource, but `MAY`
   return `202` or `204`. A `200` or `201` carries the latest representation of the resource, a `202`
