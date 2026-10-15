@@ -31,19 +31,30 @@ applies them to many resources at once.
 
 ## Contents
 
+### Contracts
+
 - [OpenAPI](./openapi.md)
   - [Operation identifiers](./openapi.md#operation-identifiers)
 - [API paths](./api-paths.md)
   - [Subject and scope](./api-paths.md#subject-and-scope)
 - [Breaking changes and versioning](./breaking-changes-and-versioning.md)
 - [Unrecognized fields, query parameters, and headers](./unrecognized-fields-query-parameters-and-headers.md)
+- [Deprecation](./deprecation.md)
+
+### Payloads and responses
+
 - [Payload shape](./payload-shape.md)
 - [JSON values](./json-values.md)
 - [Naming conventions](./naming-conventions.md)
+- [Standard fields](./standard-fields.md)
 - [Content negotiation](./content-negotiation.md)
 - [Standard responses](./standard-responses.md)
   - [Commonly confused status codes](./standard-responses.md#commonly-confused-status-codes)
-- [Standard fields](./standard-fields.md)
+- [Request validation](./request-validation.md)
+- [Errors](./errors.md)
+
+### Operations
+
 - [Methods](./methods.md)
 - [Creating resources](./creating-resources.md)
 - [Reading resources](./reading-resources.md)
@@ -53,12 +64,18 @@ applies them to many resources at once.
 - [Deleting resources](./deleting-resources.md)
   - [Soft deletes](./deleting-resources.md#soft-deletes)
 - [Acting upon resources](./acting-upon-resources.md)
+
+### Querying
+
 - [Filtering](./filtering.md)
   - [Multi-value parameters and ranges](./filtering.md#multi-value-parameters-and-ranges)
 - [Paging](./paging.md)
 - [Sorting](./sorting.md)
 - [Sparse fieldsets](./sparse-fieldsets.md)
 - [Advanced queries](./advanced-queries.md)
+
+### Bulk and asynchronous work
+
 - [Bulk operations](./bulk-operations.md)
   - [Targeting](./bulk-operations.md#targeting)
   - [Per-resource rules](./bulk-operations.md#per-resource-rules)
@@ -70,10 +87,7 @@ applies them to many resources at once.
   - [Bulk replace](./bulk-operations.md#bulk-replace)
   - [Bulk delete](./bulk-operations.md#bulk-delete)
   - [Bulk action](./bulk-operations.md#bulk-action)
-- [Request validation](./request-validation.md)
-- [Errors](./errors.md)
 - [Jobs](./jobs.md)
-- [Deprecation](./deprecation.md)
 
 Authentication and authorization, including how the current organization travels with a request,
 will be covered by a later standard.

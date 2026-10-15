@@ -1,7 +1,3 @@
----
-sidebar_position: 1
----
-
 # OpenAPI
 
 APIs `MUST` be described in OpenAPI.

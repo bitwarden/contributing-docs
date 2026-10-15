@@ -1,7 +1,3 @@
----
-sidebar_position: 28
----
-
 # Deprecation
 
 Deprecation announces that an API should no longer be called, tells callers what they should be

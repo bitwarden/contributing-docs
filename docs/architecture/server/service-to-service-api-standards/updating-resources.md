@@ -1,7 +1,3 @@
----
-sidebar_position: 14
----
-
 # Updating resources
 
 - The method `MUST` be `PUT`, with complete-replacement semantics, and the path `SHOULD` be

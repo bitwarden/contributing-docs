@@ -1,7 +1,3 @@
----
-sidebar_position: 27
----
-
 # Jobs
 
 APIs that accept work to be completed later `MUST` return `202 Accepted` with a **job**: a resource

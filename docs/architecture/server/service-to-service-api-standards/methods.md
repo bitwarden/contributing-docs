@@ -1,7 +1,3 @@
----
-sidebar_position: 11
----
-
 # Methods
 
 APIs `MUST` use the standard method semantics of

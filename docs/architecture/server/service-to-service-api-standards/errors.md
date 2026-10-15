@@ -1,7 +1,3 @@
----
-sidebar_position: 26
----
-
 # Errors
 
 Errors `MUST` be returned as an array of error objects in a top-level `errors` field. Each error

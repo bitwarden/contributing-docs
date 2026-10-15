@@ -1,7 +1,3 @@
----
-sidebar_position: 23
----
-
 # Advanced queries
 
 `filter` parameters cannot express arbitrary combinations of "and" and "or", and long expressions

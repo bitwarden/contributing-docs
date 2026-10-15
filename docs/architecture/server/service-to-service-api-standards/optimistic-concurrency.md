@@ -1,7 +1,3 @@
----
-sidebar_position: 16
----
-
 # Optimistic concurrency
 
 - APIs that update resources `SHOULD` detect conflicting updates. Those that do `MUST` use a

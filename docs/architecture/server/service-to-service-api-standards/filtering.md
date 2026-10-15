@@ -1,7 +1,3 @@
----
-sidebar_position: 19
----
-
 # Filtering
 
 - Read-many APIs that accept search criteria `MUST` take them as `filter[{name}]` query parameters,

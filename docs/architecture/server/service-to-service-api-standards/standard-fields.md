@@ -1,7 +1,3 @@
----
-sidebar_position: 10
----
-
 # Standard fields
 
 When relevant, resources `MUST` use these names: `createdAt`, `createdBy`, `updatedAt`, `updatedBy`,

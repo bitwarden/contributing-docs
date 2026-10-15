@@ -1,7 +1,3 @@
----
-sidebar_position: 24
----
-
 # Bulk operations
 
 A bulk operation creates, updates, replaces, deletes, or acts upon many resources in one request. It

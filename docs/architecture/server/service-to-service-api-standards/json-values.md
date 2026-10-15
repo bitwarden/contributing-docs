@@ -1,7 +1,3 @@
----
-sidebar_position: 6
----
-
 # JSON values
 
 - Dates `MUST` be formatted in ISO 8601 (for example `2026-01-01T00:00:00Z`), `MUST` include a time

@@ -1,7 +1,3 @@
----
-sidebar_position: 18
----
-
 # Acting upon resources
 
 {/* cspell:ignore kebab */}

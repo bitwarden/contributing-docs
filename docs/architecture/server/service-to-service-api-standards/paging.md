@@ -1,7 +1,3 @@
----
-sidebar_position: 20
----
-
 # Paging
 
 APIs `SHOULD` page, and those that do `MUST` support offset paging, cursor paging, or both, and

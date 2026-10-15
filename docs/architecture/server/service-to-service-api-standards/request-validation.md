@@ -1,7 +1,3 @@
----
-sidebar_position: 25
----
-
 # Request validation
 
 Requests `MUST` be validated exhaustively before processing, and APIs `SHOULD` report every failure
