@@ -34,9 +34,9 @@ applies them to many resources at once.
 ### Contracts
 
 - [OpenAPI](./openapi.md)
-  - [Operation identifiers](./openapi.md#operation-identifiers)
+- [Operation identifiers](./openapi.md#operation-identifiers)
 - [API paths](./api-paths.md)
-  - [Subject and scope](./api-paths.md#subject-and-scope)
+- [Subject and scope](./api-paths.md#subject-and-scope)
 - [Breaking changes and versioning](./breaking-changes-and-versioning.md)
 - [Unrecognized fields, query parameters, and headers](./unrecognized-fields-query-parameters-and-headers.md)
 - [Deprecation](./deprecation.md)
@@ -49,7 +49,7 @@ applies them to many resources at once.
 - [Standard fields](./standard-fields.md)
 - [Content negotiation](./content-negotiation.md)
 - [Standard responses](./standard-responses.md)
-  - [Commonly confused status codes](./standard-responses.md#commonly-confused-status-codes)
+- [Commonly confused status codes](./standard-responses.md#commonly-confused-status-codes)
 - [Request validation](./request-validation.md)
 - [Errors](./errors.md)
 
@@ -62,13 +62,13 @@ applies them to many resources at once.
 - [Partial updates](./partial-updates.md)
 - [Optimistic concurrency](./optimistic-concurrency.md)
 - [Deleting resources](./deleting-resources.md)
-  - [Soft deletes](./deleting-resources.md#soft-deletes)
+- [Soft deletes](./deleting-resources.md#soft-deletes)
 - [Acting upon resources](./acting-upon-resources.md)
 
 ### Querying
 
 - [Filtering](./filtering.md)
-  - [Multi-value parameters and ranges](./filtering.md#multi-value-parameters-and-ranges)
+- [Multi-value parameters and ranges](./filtering.md#multi-value-parameters-and-ranges)
 - [Paging](./paging.md)
 - [Sorting](./sorting.md)
 - [Sparse fieldsets](./sparse-fieldsets.md)
@@ -77,16 +77,16 @@ applies them to many resources at once.
 ### Bulk and asynchronous work
 
 - [Bulk operations](./bulk-operations.md)
-  - [Targeting](./bulk-operations.md#targeting)
-  - [Per-resource rules](./bulk-operations.md#per-resource-rules)
-  - [Atomicity](./bulk-operations.md#atomicity)
-  - [Execution](./bulk-operations.md#execution)
-  - [Responses](./bulk-operations.md#responses)
-  - [Bulk create](./bulk-operations.md#bulk-create)
-  - [Bulk update](./bulk-operations.md#bulk-update)
-  - [Bulk replace](./bulk-operations.md#bulk-replace)
-  - [Bulk delete](./bulk-operations.md#bulk-delete)
-  - [Bulk action](./bulk-operations.md#bulk-action)
+- [Targeting](./bulk-operations.md#targeting)
+- [Per-resource rules](./bulk-operations.md#per-resource-rules)
+- [Atomicity](./bulk-operations.md#atomicity)
+- [Execution](./bulk-operations.md#execution)
+- [Responses](./bulk-operations.md#responses)
+- [Bulk create](./bulk-operations.md#bulk-create)
+- [Bulk update](./bulk-operations.md#bulk-update)
+- [Bulk replace](./bulk-operations.md#bulk-replace)
+- [Bulk delete](./bulk-operations.md#bulk-delete)
+- [Bulk action](./bulk-operations.md#bulk-action)
 - [Jobs](./jobs.md)
 
 Authentication and authorization, including how the current organization travels with a request,
