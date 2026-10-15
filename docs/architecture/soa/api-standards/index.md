@@ -1,4 +1,8 @@
-# Service-to-service API standards
+# API standards
+
+## Scope
+
+Currently, these standards apply only to new APIs developed in new services.
 
 ## Notation
 
