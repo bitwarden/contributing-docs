@@ -20,7 +20,7 @@ the first instance, in the C# `server`. The other four need the same ratchet, ea
 toolchain.
 
 [ADR-0008](./0008-server-CQRS-pattern.md) replaced `<<Entity>>Service` classes with
-[commands and queries](../server/command-query-separation.md). The transition was opportunistic.
+[commands and queries](../soa/command-query-separation.md). The transition was opportunistic.
 [ADR-0032](./0032-break-up-core.md) warns that the `Core` breakup may stall without an aggressive
 timeline. Four years after ADR-0008, the CQS migration is not done.
 
