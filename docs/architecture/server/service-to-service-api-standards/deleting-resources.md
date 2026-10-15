@@ -1,7 +1,3 @@
----
-sidebar_position: 17
----
-
 # Deleting resources
 
 - The method `MUST` be `DELETE`, and the path `SHOULD` be `/api/v1/{resource plural}/{id}`.

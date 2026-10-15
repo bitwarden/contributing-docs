@@ -1,7 +1,3 @@
----
-sidebar_position: 13
----
-
 # Reading resources
 
 - The method `MUST` be `GET`.

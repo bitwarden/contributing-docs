@@ -1,7 +1,3 @@
----
-sidebar_position: 15
----
-
 # Partial updates
 
 - Services `SHOULD NOT` support partial updates. A service that does `MUST` use `PATCH`.

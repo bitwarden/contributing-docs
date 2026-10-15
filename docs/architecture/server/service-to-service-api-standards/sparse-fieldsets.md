@@ -1,7 +1,3 @@
----
-sidebar_position: 22
----
-
 # Sparse fieldsets
 
 APIs `MAY` let callers choose which fields to return. Those that do `MUST` take one `fields`

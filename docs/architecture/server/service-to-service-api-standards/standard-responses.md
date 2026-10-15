@@ -1,7 +1,3 @@
----
-sidebar_position: 9
----
-
 # Standard responses
 
 Status codes follow [RFC 9110](https://www.rfc-editor.org/info/rfc9110/). The following are possible

@@ -1,7 +1,3 @@
----
-sidebar_position: 7
----
-
 # Naming conventions
 
 - Field names `MUST` be camel case (for example `firstName`).

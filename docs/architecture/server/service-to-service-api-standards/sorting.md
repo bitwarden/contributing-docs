@@ -1,7 +1,3 @@
----
-sidebar_position: 21
----
-
 # Sorting
 
 APIs that support sorting `MUST` take one `sort` parameter holding a comma-delimited list of fields.

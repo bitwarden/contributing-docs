@@ -1,7 +1,3 @@
----
-sidebar_position: 3
----
-
 # Breaking changes and versioning
 
 APIs `SHOULD NOT` make breaking changes. A breaking change is one that causes a request that is

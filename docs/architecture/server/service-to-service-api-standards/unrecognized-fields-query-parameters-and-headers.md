@@ -1,7 +1,3 @@
----
-sidebar_position: 4
----
-
 # Unrecognized fields, query parameters, and headers
 
 A service rolled back to fix a defect can receive fields from callers that have already upgraded. So

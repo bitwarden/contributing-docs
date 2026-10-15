@@ -1,7 +1,3 @@
----
-sidebar_position: 12
----
-
 # Creating resources
 
 - The method `MUST` be `POST`, and the path `SHOULD` be the collection, `/api/v1/{resource plural}`.

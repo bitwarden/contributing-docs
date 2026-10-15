@@ -1,7 +1,3 @@
----
-sidebar_position: 5
----
-
 # Payload shape
 
 - Every request and response body that carries resources `MUST` be a JSON object that holds them in
