@@ -52,16 +52,38 @@ security add-generic-password -a "<apple_id>" -w "<app_specific_password>" -s "A
 
 ### Provisioning Profile
 
-1. Ask BRE (@bre in slack) to have your `Apple Development` signing certificate added to the
-   provisioning profile, and your Mac `Provisioning UDID` added to the whitelist. The
-   `Provisioning UDID` can be found by going to `About This Mac > System Report...` and copying the
+1. Retrieve your Mac "Provisioning UDID" by going to "System Information > Hardware" and copying the
    `Provisioning UDID:` row.
+2. Ask BRE (@bre in slack) to have your `Apple Development` signing certificate and device UDID
+   added to the following provisioning profiles:
+   - PM Beta Desktop-App Testing
+   - PM Beta Desktop-ExtAutofill Testing
+   - PM Dev Desktop-App Testing
+   - PM Stable Desktop-App Testing
+   - PM Stable Desktop-ExtAutofill Testing
 
-2. Once everything is added, download the `Bitwarden Desktop Development (2021)` provisioning
-   profile from https://developer.apple.com/account/resources/profiles/list
+3. Once everything is added, download the provisioning profiles from
+   https://developer.apple.com/account/resources/profiles/list.
 
-3. Install the provisioning profile to your device, and place it the `clients/apps/desktop`
-   repository root.
+4. Install each provisioning profile to your device by double-clicking it, which will open a System
+   Settings window. This will allow your machine to trust and execute the apps built with this
+   profile.
+
+5. Copy the provisioning profiles to the locations required for building. They must go in both
+   `clients/apps/desktop` and the Xcode provisioning profile directory. Here is an example script
+   demonstrating this:
+   ```bash
+    mkdir -p ~/Library/Developer/Xcode/UserData/Provisioning\ Profiles
+    cp ~/Downloads/PM_*.provisionprofile clients/apps/desktop
+    for profile in ~/Downloads/PM_*.provisionprofile; do
+      uuid=$(/usr/libexec/PlistBuddy -c "Print :UUID" <(security cms -D -i "$profile"))
+      if [ -z "$uuid" ]; then
+        echo "Could not read UUID from $profile, skipping" >&2
+        continue
+      fi
+      cp -v "$profile" ~/Library/Developer/Xcode/UserData/Provisioning\ Profiles/"$uuid".provisionprofile
+    done
+   ```
 
 ### Building
 
