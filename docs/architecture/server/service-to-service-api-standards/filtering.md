@@ -35,7 +35,9 @@ sending two values. Confirm that the field's values cannot contain commas before
 | --------------------------------------------------------------- | -------------------------------- |
 | `filter[lastName]=Smith`                                        | Last name is "Smith".            |
 | `filter[lastName]=S*`                                           | Last name begins with "S".       |
+| `filter[lastName]=*th`                                          | Last name ends with "th".        |
 | `filter[lastName]=*mi*`                                         | Last name contains "mi".         |
 | `filter[lastName]=Smith,Jones`                                  | Last name is "Smith" or "Jones". |
 | `filter[failedLoginCount]=[3,*)`                                | Three or more failed logins.     |
+| `filter[birthDate]=(*,2000-01-01T00:00:00Z)`                    | Born before the year 2000.       |
 | `filter[birthDate]=[2000-01-01T00:00:00Z,2001-01-01T00:00:00Z)` | Born in the year 2000.           |

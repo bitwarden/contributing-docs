@@ -1,5 +1,12 @@
 # Service-to-service API standards
 
+## Notation
+
+The keywords `MUST`, `MUST NOT`, `SHOULD`, `SHOULD NOT`, and `MAY` are to be interpreted as
+described in [RFC 2119](https://www.rfc-editor.org/info/rfc2119/).
+
+## Overview
+
 [ADR-0036](../../adr/0036-service-to-service-api-standards.md) requires service-to-service APIs to
 conform to a documented set of standards. These are those standards.
 
@@ -21,11 +28,6 @@ email, disabling a user, or rotating a key. These are [actions](./acting-upon-re
 
 Creates, updates, deletes, and actions each also have a [bulk](./bulk-operations.md) form that
 applies them to many resources at once.
-
-## Notation
-
-The keywords `MUST`, `MUST NOT`, `SHOULD`, `SHOULD NOT`, and `MAY` are to be interpreted as
-described in [RFC 2119](https://www.rfc-editor.org/info/rfc2119/).
 
 ## Contents
 
@@ -63,7 +65,11 @@ described in [RFC 2119](https://www.rfc-editor.org/info/rfc2119/).
   - [Atomicity](./bulk-operations.md#atomicity)
   - [Execution](./bulk-operations.md#execution)
   - [Responses](./bulk-operations.md#responses)
-  - [Operation-specific rules](./bulk-operations.md#operation-specific-rules)
+  - [Bulk create](./bulk-operations.md#bulk-create)
+  - [Bulk update](./bulk-operations.md#bulk-update)
+  - [Bulk replace](./bulk-operations.md#bulk-replace)
+  - [Bulk delete](./bulk-operations.md#bulk-delete)
+  - [Bulk action](./bulk-operations.md#bulk-action)
 - [Request validation](./request-validation.md)
 - [Errors](./errors.md)
 - [Jobs](./jobs.md)

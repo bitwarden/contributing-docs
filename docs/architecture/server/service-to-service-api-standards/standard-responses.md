@@ -27,7 +27,8 @@ for every API, and APIs `SHOULD NOT` document them individually:
 
 - **`400` or `422`:** `400` when the request cannot be parsed, `422` when it parses but is invalid.
 - **`403` or `404`:** `403` for a resource the caller may know exists, `404` for one it may not.
-- **`404` or `422`:** `404` when the resource named in the path is not found, `422` when it is found
-  but a resource referenced in the body is not.
+- **`404` or `422`:** `404` when the resource named in the path is not found, or the caller should
+  not know it exists. `422` when it is found but a resource referenced in the body is not, or the
+  caller should not know it exists.
 - **`500` or `503`:** `500` for a failure inside the service, `503` when the service is overloaded
   or a dependency is down, unreachable, or timed out.

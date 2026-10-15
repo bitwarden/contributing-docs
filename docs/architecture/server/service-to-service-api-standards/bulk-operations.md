@@ -77,6 +77,10 @@ Prefer all-or-nothing when a partial result would leave related resources incons
 best-effort when each resource stands alone and failures can be reported or retried individually, as
 in an import.
 
+```http
+POST /api/v1/users:bulk-delete?atomic=false
+```
+
 ## Execution
 
 - Synchronous responses carry the outcome. Asynchronous responses are `202` with a [job](./jobs.md).
@@ -93,11 +97,11 @@ expensive work, such as calls to other services.
 
 - On success, a bulk API returns `200` with the outcome, `202` with a job, or `204` (all-or-nothing
   only) when every resource succeeded and nothing needs returning.
-- A `200` response carries `meta.affectedCount` (always), `meta.failedCount` (best-effort), `data`
-  with the latest representation of each resource that succeeded (creates `SHOULD` return it, for
-  the generated IDs, and others `MAY`), and `errors` (best-effort only) with at least one error per
-  failed resource. When `data` is returned for `data` or `ids` targeting, it `MUST` follow request
-  order.
+- A `200` response carries `meta.affectedCount`, the number of resources that succeeded (always),
+  `meta.failedCount`, the number of resources that failed (best-effort), `data` with the latest
+  representation of each resource that succeeded (creates `SHOULD` return it, for the generated IDs,
+  and others `MAY`), and `errors` (best-effort only) with at least one error per failed resource.
+  When `data` is returned for `data` or `ids` targeting, it `MUST` follow request order.
 - Each [error](./errors.md) `MUST` identify its resource, by `source.pointer` into the request (such
   as `/data/2/attributes/email` or `/ids/2`) or, for `filter` targeting, by `meta.resource`. Its
   `status` `MUST` be what the single-resource API would have returned, such as `404`, `409`, or
@@ -113,19 +117,9 @@ expensive work, such as calls to other services.
 `207 Multi-Status` is not used: it comes from WebDAV and implies an XML body, and callers already
 inspect `failedCount` and `errors` to learn which resources failed.
 
-```http
-POST /api/v1/users:bulk-create?atomic=false
-Content-Type: application/json
-```
+**Best-effort example**
 
-```json
-{
-  "data": [
-    { "attributes": { "email": "bob@example.com" }, "lid": "bob", "type": "user" },
-    { "attributes": { "email": "alice@example.com" }, "lid": "alice", "type": "user" }
-  ]
-}
-```
+A possible response to the [bulk create example](#bulk-create):
 
 ```json
 {
@@ -153,23 +147,158 @@ Content-Type: application/json
 
 ## Operation-specific rules
 
-- **Bulk update** applies the same change to every targeted resource. `update` `MUST` be present and
-  has [partial-update](./partial-updates.md) semantics, even on services that do not otherwise offer
-  `PATCH`. It `MUST` contain only fields the single-resource update accepts, and naming a read-only
-  field `MUST` be rejected with `422`. A single-resource update ignores read-only fields because the
-  caller sends back the whole resource it read, but a bulk update names only the fields to change,
-  so a read-only field there is a request that cannot be honored. Update rules `MUST` hold for each
-  resource both before and after the change. Bulk updates do not check `version`, but `MUST` change
-  it on every resource they change. A field that changes only through an action cannot be
-  bulk-updated, so changing it for many resources is a bulk action.
-- **Bulk replace** is `PUT` once per resource. Each item `MUST` carry its `id`, services that check
-  versions `MUST` check each item's `version` (a mismatch is a `409` for that item), and a bulk
-  replace `MAY` create resources if the single-resource `PUT` can.
-- **Bulk delete** follows the single-resource rules, including
-  [soft deletes](./deleting-resources.md#soft-deletes) and `permanent=true`.
-- **Bulk action** paths use the single-resource [action](./acting-upon-resources.md)'s name, as in
-  `/api/v1/users:bulk-send-email` for `/api/v1/users/{id}/actions/send-email`. `data` holds the body
-  the action accepts and applies to every targeted resource, and `MAY` be omitted if the action
-  takes none. Where each resource needs its own body, `data` `MUST` be an array used with `ids`, not
-  `filter`, of the same length, with `data[n]` the body for `ids[n]` and failures reported against
-  `/data/{n}`.
+### Bulk create
+
+A bulk create is the equivalent of creating each resource in `data`.
+
+```http
+POST /api/v1/users:bulk-create?atomic=false
+Accept: application/json
+Content-Type: application/json
+```
+
+```json
+{
+  "data": [
+    { "attributes": { "email": "bob@example.com" }, "lid": "bob", "type": "user" },
+    { "attributes": { "email": "alice@example.com" }, "lid": "alice", "type": "user" }
+  ]
+}
+```
+
+### Bulk update
+
+A bulk update applies the same change to every targeted resource. `update` `MUST` be present and has
+[partial-update](./partial-updates.md) semantics, even on services that do not otherwise offer
+`PATCH`. It `MUST` contain only fields the single-resource update accepts, and naming a read-only
+field `MUST` be rejected with `422`. A single-resource update ignores read-only fields because the
+caller sends back the whole resource it read, but a bulk update names only the fields to change, so
+a read-only field there is a request that cannot be honored. Update rules `MUST` hold for each
+resource both before and after the change. Bulk updates do not check `version`, but `MUST` change it
+on every resource they change. A field that changes only through an action cannot be bulk-updated,
+so changing it for many resources is a bulk action.
+
+```http
+POST /api/v1/users:bulk-update
+Accept: application/json
+Content-Type: application/json
+```
+
+```json
+{
+  "filter": {
+    "in": [{ "var": "department" }, ["Eng", "R&D"]]
+  },
+  "update": {
+    "department": "Engineering"
+  }
+}
+```
+
+### Bulk replace
+
+A bulk replace is `PUT` once per resource. Each item `MUST` carry its `id`, services that check
+versions `MUST` check each item's `version` (a mismatch is a `409` for that item), and a bulk
+replace `MAY` create resources if the single-resource `PUT` can.
+
+```http
+POST /api/v1/users:bulk-replace
+Accept: application/json
+Content-Type: application/json
+```
+
+```json
+{
+  "data": [
+    {
+      "attributes": {
+        "firstName": "Bob",
+        "lastName": "Smith",
+        "version": "4"
+      },
+      "id": "62bed180-1f78-45d4-8a56-c996936a2947",
+      "type": "user"
+    },
+    {
+      "attributes": {
+        "firstName": "Alice",
+        "lastName": "Jones",
+        "version": "7"
+      },
+      "id": "cacba8c1-29fa-4018-8950-acd400ec76b7",
+      "type": "user"
+    }
+  ]
+}
+```
+
+### Bulk delete
+
+A bulk delete follows the single-resource rules, including
+[soft deletes](./deleting-resources.md#soft-deletes) and `permanent=true`.
+
+```http
+POST /api/v1/users:bulk-delete
+Accept: application/json
+Content-Type: application/json
+```
+
+```json
+{
+  "filter": {
+    "and": [
+      { "==": [{ "var": "status" }, "INVITED"] },
+      { "<": [{ "var": "invitedAt" }, "2026-06-01T00:00:00Z"] }
+    ]
+  }
+}
+```
+
+### Bulk action
+
+Bulk action paths `MUST` be like `/api/v1/{resource plural}:bulk-{action}`, where `{action}` is the
+name of the single-resource [action](./acting-upon-resources.md), as in
+`/api/v1/users:bulk-send-email` for `/api/v1/users/{id}/actions/send-email`. `data` holds the body
+the action accepts and applies to every targeted resource, and `MAY` be omitted if the action takes
+none.
+
+```http
+POST /api/v1/users:bulk-send-email
+Accept: application/json
+Content-Type: application/json
+```
+
+```json
+{
+  "ids": ["62bed180-1f78-45d4-8a56-c996936a2947", "cacba8c1-29fa-4018-8950-acd400ec76b7"],
+  "data": {
+    "subject": "Hello",
+    "body": "World!"
+  }
+}
+```
+
+Where each resource needs its own body, `data` `MUST` be an array used with `ids`, not `filter`, of
+the same length, with `data[n]` the body for `ids[n]` and failures reported against `/data/{n}`.
+
+```http
+POST /api/v1/users:bulk-send-email
+Accept: application/json
+Content-Type: application/json
+```
+
+```json
+{
+  "ids": ["62bed180-1f78-45d4-8a56-c996936a2947", "cacba8c1-29fa-4018-8950-acd400ec76b7"],
+  "data": [
+    {
+      "subject": "Hello.",
+      "body": "Hi, John!"
+    },
+    {
+      "subject": "Hello",
+      "body": "Hi, Mary!"
+    }
+  ]
+}
+```
