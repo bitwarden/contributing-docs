@@ -12,6 +12,26 @@ sidebar_position: 15
   and preferred, as in `POST /api/v1/groups/{id}/actions/add-collection`. APIs `MAY` instead
   implement [RFC 6902](https://www.rfc-editor.org/info/rfc6902/) JSON Patch.
 
+**Example**
+
+```http
+PATCH /api/v1/users/62bed180-1f78-45d4-8a56-c996936a2947
+Accept: application/json
+Content-Type: application/json
+```
+
+```json
+{
+  "data": {
+    "attributes": {
+      "firstName": "Bobby"
+    },
+    "id": "62bed180-1f78-45d4-8a56-c996936a2947",
+    "type": "user"
+  }
+}
+```
+
 These semantics are credited to [RFC 7396](https://www.rfc-editor.org/info/rfc7396/) JSON Merge
 Patch, with one departure. RFC 7396 stores an empty string as an empty string. These standards treat
 an empty string as not present, so the field is left unchanged. The reasons:

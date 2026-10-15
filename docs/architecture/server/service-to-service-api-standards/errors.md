@@ -7,17 +7,17 @@ sidebar_position: 26
 Errors `MUST` be returned as an array of error objects in a top-level `errors` field. Each error
 has:
 
-| Field              | Description                                                                                             |
-| ------------------ | ------------------------------------------------------------------------------------------------------- |
-| `code`             | A stable, machine-readable error code.                                                                  |
-| `detail`           | A human-readable explanation of this occurrence. May be localized.                                      |
-| `id`               | A unique identifier for this occurrence.                                                                |
-| `meta.resource`    | In a [bulk operation](./bulk-operations.md#responses), the `type` and `id` of the resource that failed. |
-| `source.header`    | The request header that caused the error.                                                               |
-| `source.parameter` | The query parameter that caused the error.                                                              |
-| `source.pointer`   | A JSON Pointer to the field in error, such as `/data/attributes/title`.                                 |
-| `status`           | The HTTP status code that applies, as a string.                                                         |
-| `title`            | A short summary that does not change from occurrence to occurrence.                                     |
+| Field              | Description                                                                                                         |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------- |
+| `code`             | A stable, machine-readable error code.                                                                              |
+| `detail`           | A human-readable explanation of this occurrence. May be localized.                                                  |
+| `id`               | A unique identifier for this occurrence.                                                                            |
+| `meta.resource`    | In a [bulk operation](./bulk-operations.md#responses), the `type` and `id` of the resource that failed.             |
+| `source.header`    | The request header that caused the error.                                                                           |
+| `source.parameter` | The query parameter that caused the error.                                                                          |
+| `source.pointer`   | A [JSON Pointer](https://www.rfc-editor.org/info/rfc6901/) to the field in error, such as `/data/attributes/title`. |
+| `status`           | The HTTP status code that applies, as a string.                                                                     |
+| `title`            | A short summary that does not change from occurrence to occurrence.                                                 |
 
 At most one `source` member applies to any one error.
 
