@@ -1,7 +1,5 @@
 # Acting upon resources
 
-{/* cspell:ignore kebab */}
-
 Operations that do not fit creating, reading, updating, or deleting a resource are exposed as
 **actions** on the resource. Modeling each operation as a distinct API makes it easy to discover,
 and lets it be authorized independently of the standard update.

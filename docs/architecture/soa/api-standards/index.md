@@ -2,7 +2,9 @@
 
 ## Scope
 
-Currently, these standards apply only to new APIs developed in new services.
+Currently, these standards apply only to new APIs developed in new services. Bitwarden's existing
+public API is out of scope and is not changing. APIs we must implement that conform to some external
+standard (e.g. webhooks, OpenTelemetry, health checks) are also not subject to these standards.
 
 ## Overview
 
@@ -33,12 +35,12 @@ are two notable examples. Standards for every pattern are described below.
 ### Well-defined APIs
 
 A well-defined API spells out exactly how it should be called and what the caller can expect in
-return - for both the happy path and the not-so-happy path. Developers `SHOULD` strive to think in
+return - for both the happy path and possible error paths. Developers are encouraged to think in
 terms of resources and be on guard against **API proliferation** that can result from over-tailoring
 APIs to the unique needs of this caller or that.
 
-In general, it is better to have one API that can be called two different ways (e.g. query
-parameters) than two APIs that can only be called one way.
+In general, it is better to have one API per resource that can be called two different ways (e.g.
+query parameters) than two APIs that can only be called one way.
 
 ### Notation
 

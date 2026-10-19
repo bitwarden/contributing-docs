@@ -1,7 +1,5 @@
 # API paths
 
-{/* cspell:ignore kebab */}
-
 API paths `MUST` use **lowercase "kebab-case"** and conform as follows:
 
 1. The first element(s) of the API path `MUST` be a namespace. By default, the namespace `SHOULD` be
@@ -10,8 +8,10 @@ API paths `MUST` use **lowercase "kebab-case"** and conform as follows:
 3. The next element of the API path `MUST` specify the resource or resources it targets. For
    resource-oriented APIs, this element `SHOULD` be the "resource plural" (e.g. `users`).
    [Bulk-processing](./bulk-operations.md) APIs are an exception to this rule.
+   - APIs that create resources stop here.
 4. If the API targets a specific resource (e.g. update or delete), the next element of the API path
    `SHOULD` be the ID of the resource it targets.
+5. Additional elements `MAY` be specified to target sub-resources.
 
 :::faq[Why versioning in the path?]
 
@@ -48,7 +48,8 @@ should be cohesive, and how they _would_ resolve if APIs existed for every paren
 
 Every request targets a **subject** and runs inside a **scope**:
 
-- The **subject** is what the request acts on. It `MUST` be named in the path.
+- The **subject** is what the request acts on (i.e. a resource or a collection of resources). It
+  `MUST` be named in the path.
 - The **scope** is what the request runs inside - the current organization, the current user. It
   `MUST NOT` be named in the path; it travels as context.
 
