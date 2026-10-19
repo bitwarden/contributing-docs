@@ -2,7 +2,9 @@
 
 {/* cspell:ignore kebab */}
 
-APIs that don't fit cleanly into the CRUD paradigm can typically be modeled as **actions**.
+Operations that do not fit creating, reading, updating, or deleting a resource are exposed as
+**actions** on the resource. Modeling each operation as a distinct API makes it easy to discover,
+and lets it be authorized independently of the standard update.
 
 - HTTP verb `MUST` be `POST`.
 - API path `SHOULD` follow the pattern `/api/v1/{resource plural}/{id}/actions/{action}`, with the
@@ -33,9 +35,5 @@ Upon success, APIs `SHOULD` return `204` but `MAY` return `200` or `202`.
 | `202 Accepted`   | The action is scheduled.   | The [job](./jobs.md) that was scheduled to execute the action. |
 | `204 No Content` | The action was successful. | Nothing.                                                       |
 
-- A field that changes only through actions, typically a status whose transitions follow business
-  rules, `MUST` be read-only, so that no update can bypass the action.
-
-Operations that do not fit creating, reading, updating, or deleting a resource are exposed as
-actions on the resource. The path still names the resource acted on, the action reads clearly in
-logs and routing rules, and transitions governed by business rules stay out of ordinary updates.
+> A field that changes only through actions (e.g. a status whose transitions follow business rules)
+> `MUST` be read-only, so that no update can bypass the action.
