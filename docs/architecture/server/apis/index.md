@@ -1,11 +1,15 @@
-# API standards
+# APIs
 
 ## Scope
 
-Existing Bitwarden APIs predate these standards and are not being changed to conform. These
-standards apply only to new APIs developed in new services. Bitwarden's existing public API is out
-of scope and is not changing. APIs we must implement that conform to some external standard (e.g.
-webhooks, OpenTelemetry, health checks) are also not subject to these standards.
+These standards apply to service-to-service APIs (APIs that one Bitwarden service calls on another)
+developed in new services.
+
+They do not apply to:
+
+- Existing Bitwarden APIs, which predate these standards and are not being changed to conform. This
+  includes the public API and the APIs our own clients call.
+- APIs that implement an external standard (e.g. webhooks, OpenTelemetry, health checks).
 
 ## Overview
 
