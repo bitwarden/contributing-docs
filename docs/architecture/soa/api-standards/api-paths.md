@@ -13,11 +13,11 @@ API paths `MUST` use **lowercase "kebab-case"** and conform as follows:
 4. If the API targets a specific resource (e.g. update or delete), the next element of the API path
    `SHOULD` be the ID of the resource it targets.
 
-:::tip
+:::faq[Why versioning in the path?]
 
-**Why versioning in the path?** It is visible in logs, traces, routing rules and curl commands; it
-needs no content negotiation to read; and it lets two versions coexist behind one host. Header and
-media-type versioning are both defensible but harder to operate.
+It is visible in logs, traces, routing rules and curl commands; it needs no content negotiation to
+read; and it lets two versions coexist behind one host. Header and media-type versioning are both
+defensible but harder to operate.
 
 :::
 
@@ -67,12 +67,12 @@ the operation, and belongs to authentication and authorization (standard forthco
 `current` `SHOULD` be used where the subject is whatever the scope names, rather than repeating an
 identifier the caller has already supplied.
 
-:::tip
+:::faq[Why keep the scope out?]
 
-**Why keep the scope out?** An identifier in a path is something a caller can try other values of,
-and a path that accepts one must prove on every request that this caller may use this value. A scope
-taken from context is established once, where the caller is authenticated. It also keeps one path
-for a resource that can belong to more than one kind of owner.
+An identifier in a path is something a caller can try other values of, and a path that accepts one
+must prove on every request that this caller may use this value. A scope taken from context is
+established once, where the caller is authenticated. It also keeps one path for a resource that can
+belong to more than one kind of owner.
 
 :::
 

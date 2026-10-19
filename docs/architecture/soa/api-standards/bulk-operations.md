@@ -41,12 +41,11 @@ implemented as one set-based statement where the outcome allows. The `:verb` syn
 
 A request `MUST` supply exactly one form of targeting, whichever forms the operation accepts.
 
-:::tip
+:::faq[Why IDs when a filter can say `{ "in": [{ "var": "id" }, [...]] }`?]
 
-**Why IDs when a filter can say `{ "in": [{ "var": "id" }, [...]] }`?** Because of what happens to
-an ID that matches nothing. With ids, the caller named the resource, so a missing one is a failure
-and is reported back. With filter, the caller described a set, and a resource that isn't in it
-simply isn't in it.
+Because of what happens to an ID that matches nothing. With ids, the caller named the resource, so a
+missing one is a failure and is reported back. With filter, the caller described a set, and a
+resource that isn't in it simply isn't in it.
 
 :::
 
