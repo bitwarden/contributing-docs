@@ -13,3 +13,6 @@ APIs `MUST` use the standard verb semantics:
 The only exceptions are [actions](./acting-upon-resources.md),
 [advanced queries](./advanced-queries.md), and [bulk operations](./bulk-operations.md), which use
 `POST` whether or not they create a resource.
+
+The verb semantics are credited to [RFC 9110](https://www.rfc-editor.org/info/rfc9110/) HTTP
+Semantics.

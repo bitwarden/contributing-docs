@@ -255,6 +255,10 @@ Bulk updates apply the same change to every targeted resource.
 - Bulk updates do not check [version](./optimistic-concurrency.md), but `MUST` increment it on every
   resource they change.
 
+The semantics of `update` are credited to [RFC 7396](https://www.rfc-editor.org/info/rfc7396/) JSON
+Merge Patch, with the departure described under
+[partial updates](./partial-updates.md#where-we-depart-from-an-rfc).
+
 :::tip
 
 **A bulk update is never a way around an action.** A field that changes only through actions -

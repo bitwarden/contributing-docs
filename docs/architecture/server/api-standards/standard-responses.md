@@ -20,6 +20,9 @@ every API:
 | `501`    | The API has just been stubbed out and has not been implemented, yet.                                           |
 | `503`    | The service or a dependency is unavailable, overloaded, or timed out.                                          |
 
+The status codes and their meanings are credited to
+[RFC 9110](https://www.rfc-editor.org/info/rfc9110/) HTTP Semantics.
+
 ## 400 vs. 422
 
 - Return `400` for requests that are malformed and cannot even be parsed (e.g. invalid JSON).

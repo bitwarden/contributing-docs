@@ -2,9 +2,10 @@
 
 ## Scope
 
-Currently, these standards apply only to new APIs developed in new services. Bitwarden's existing
-public API is out of scope and is not changing. APIs we must implement that conform to some external
-standard (e.g. webhooks, OpenTelemetry, health checks) are also not subject to these standards.
+Existing Bitwarden APIs predate these standards and are not being changed to conform. These
+standards apply only to new APIs developed in new services. Bitwarden's existing public API is out
+of scope and is not changing. APIs we must implement that conform to some external standard (e.g.
+webhooks, OpenTelemetry, health checks) are also not subject to these standards.
 
 ## Overview
 
@@ -114,37 +115,3 @@ organization travels with a request are the subject of a forthcoming standard.
 - [Bulk deletes](./bulk-operations.md#bulk-deletes)
 - [Bulk actions](./bulk-operations.md#bulk-actions)
 - [Jobs](./jobs.md)
-
-## Sources
-
-These standards are our own: every rule is stated on this page, and none depends on another
-document. Where a rule adopts or adapts a published specification, the source is credited here.
-
-- [RFC 9110 HTTP Semantics](https://www.rfc-editor.org/info/rfc9110/): methods, status codes, and
-  their meanings.
-- [JSON:API](https://jsonapi.org/format/): the resource shape (`data`, `type`, `id`, `attributes`,
-  `meta`), the error object, the `filter`, `page`, `sort`, and `fields` query parameters, and `lid`.
-- [Google AIP-136](https://google.aip.dev/136): the `:verb` syntax for collection operations such as
-  `:search` and `:bulk-create`.
-- [RFC 7396 JSON Merge Patch](https://www.rfc-editor.org/info/rfc7396/): the semantics of partial
-  updates and bulk updates, with the departure noted below.
-- [RFC 6901 JSON Pointer](https://www.rfc-editor.org/info/rfc6901/): `source.pointer` in errors.
-- [RFC 6902 JSON Patch](https://www.rfc-editor.org/info/rfc6902/): adding or removing elements of a
-  collection.
-- [RFC 7240 Prefer](https://www.rfc-editor.org/info/rfc7240/): requesting asynchronous processing.
-- [RFC 9745 Deprecation](https://www.rfc-editor.org/info/rfc9745/),
-  [RFC 8594 Sunset](https://www.rfc-editor.org/info/rfc8594/), and
-  [RFC 8288 Web Linking](https://www.rfc-editor.org/info/rfc8288/): announcing deprecation and
-  naming the replacement.
-- [JSON Logic](https://jsonlogic.com/): the notation for advanced queries.
-- [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601): dates and times.
-- [RFC 2119](https://www.rfc-editor.org/info/rfc2119/): the keywords `MUST`, `SHOULD`, and `MAY`.
-
-### Where we depart from an RFC
-
-Where an RFC covers a topic, these standards adopt it unless there is a reason not to. Each
-departure, and the reasons for it, is described below.
-
-- [Errors](./errors.md#where-we-depart-from-an-rfc)
-- [Optimistic concurrency](./optimistic-concurrency.md#where-we-depart-from-an-rfc)
-- [Empty strings in partial updates](./partial-updates.md#where-we-depart-from-an-rfc)
