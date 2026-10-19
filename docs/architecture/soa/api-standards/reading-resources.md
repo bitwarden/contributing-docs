@@ -1,11 +1,11 @@
 # Reading resources
 
-- The method `MUST` be `GET`.
-- The path `SHOULD` be `/api/v1/{resource plural}` to read many, and
-  `/api/v1/{resource plural}/{id}` to read one.
-- On success, APIs `MUST` return `200` with the resource, or the array of resources, in `data`.
+## Read many
 
-**Read many example**
+- HTTP verb `MUST` be `GET`.
+- API path `SHOULD` be like `/api/v1/{resource plural}`.
+
+**Example**
 
 ```http
 GET /api/v1/users
@@ -35,7 +35,31 @@ Accept: application/json
 }
 ```
 
-**Read one example**
+**Success responses**
+
+Upon success, APIs `MUST` return `200`.
+
+| Status   | Description             | Response                 |
+| -------- | ----------------------- | ------------------------ |
+| `200 OK` | Request was successful. | The resources requested. |
+
+**See also:**
+
+- [Advanced queries](./advanced-queries.md)
+- [Filtering](./filtering.md)
+- [Paging](./paging.md)
+- [Sorting](./sorting.md)
+- [Sparse fieldsets](./sparse-fieldsets.md)
+
+Each service declares exactly which fields can be queried, because every query it supports has to be
+indexed and authorized.
+
+## Read one
+
+- HTTP verb `MUST` be `GET`.
+- API path `SHOULD` be like `/api/v1/{resource plural}/{id}`.
+
+**Example**
 
 ```http
 GET /api/v1/users/62bed180-1f78-45d4-8a56-c996936a2947
@@ -55,9 +79,10 @@ Accept: application/json
 }
 ```
 
-Read-many APIs are narrowed, ordered, and divided with [filtering](./filtering.md),
-[sorting](./sorting.md), [sparse fieldsets](./sparse-fieldsets.md), and [paging](./paging.md).
-Queries that these cannot express use an [advanced query](./advanced-queries.md).
+**Success responses**
 
-Each service declares exactly which fields can be queried, because every query it supports has to be
-indexed and authorized.
+Upon success, APIs `MUST` return `200`.
+
+| Status   | Description             | Response                |
+| -------- | ----------------------- | ----------------------- |
+| `200 OK` | Request was successful. | The resource requested. |

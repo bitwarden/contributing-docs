@@ -1,8 +1,10 @@
 # Sparse fieldsets
 
-APIs `MAY` let callers choose which fields to return. Those that do `MUST` take one `fields`
-parameter holding a comma-delimited list, such as `fields=firstName,lastName`. `id` and `type` are
+APIs `MAY` allow callers to specify which fields to return. Those that do `MUST` accept a `fields`
+query parameter whose value is a comma-delimited list of the fields to include. `id` and `type` are
 always returned.
+
+**Example**
 
 ```http
 GET /api/v1/users?fields=firstName,lastName

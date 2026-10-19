@@ -3,18 +3,29 @@
 APIs `SHOULD` page, and those that do `MUST` support offset paging, cursor paging, or both, and
 `MUST` document a maximum `page[size]`.
 
-- **Offset paging:** `page[number]` (one-based) and `page[size]`. The response `meta` `MUST` carry
-  `pageNumber` and `pageSize`, and `SHOULD` carry `pageCount` and `totalCount`.
-- **Cursor paging:** `page[size]` and `page[after]`. The response `meta` `MUST` carry `pageSize`,
-  `hasMore`, and `cursor`, the value to pass as `page[after]` for the next page. The final page
-  `MUST` return `hasMore` as `false` and `MUST` omit `cursor`.
-- A cursor `MUST` be treated as opaque. Callers `MUST NOT` construct, parse, or modify one, and a
-  service `MAY` change its encoding without a new version.
-
 Offset paging over data that changes between requests can skip or repeat resources. Cursor paging
 avoids this, at the cost of no page numbers or totals.
 
-**Offset paging example**
+## Offset/limit style paging
+
+APIs that implement offset/limit style paging do so via the following query parameters:
+
+| Parameter      | Description                           |
+| -------------- | ------------------------------------- |
+| `page[number]` | The page number to return, one-based. |
+| `page[size]`   | The number of resources to return.    |
+
+The response `meta` `MUST` carry `pageNumber` and `pageSize`, and `SHOULD` carry `pageCount` and
+`totalCount`.
+
+| Field        | Description                                         |
+| ------------ | --------------------------------------------------- |
+| `pageCount`  | The total number of pages.                          |
+| `pageNumber` | The current page number.                            |
+| `pageSize`   | The current page size.                              |
+| `totalCount` | The total number of resources matching the request. |
+
+**Example**
 
 ```http
 GET /api/v1/users?page[number]=1&page[size]=2
@@ -25,12 +36,18 @@ Accept: application/json
 {
   "data": [
     {
-      "attributes": { "firstName": "Bob", "lastName": "Smith" },
+      "attributes": {
+        "firstName": "Bob",
+        "lastName": "Smith"
+      },
       "id": "62bed180-1f78-45d4-8a56-c996936a2947",
       "type": "user"
     },
     {
-      "attributes": { "firstName": "Alice", "lastName": "Jones" },
+      "attributes": {
+        "firstName": "Alice",
+        "lastName": "Jones"
+      },
       "id": "cacba8c1-29fa-4018-8950-acd400ec76b7",
       "type": "user"
     }
@@ -44,7 +61,27 @@ Accept: application/json
 }
 ```
 
-**Cursor paging example**
+## Cursor-style paging
+
+APIs that implement cursor-style paging do so via the following query parameters:
+
+| Parameter     | Description                                                        |
+| ------------- | ------------------------------------------------------------------ |
+| `page[size]`  | The number of resources to return.                                 |
+| `page[after]` | An opaque cursor. Returns the resources that follow that position. |
+
+A cursor `MUST` be treated as opaque. Callers `MUST NOT` construct, parse, or modify one, and a
+service `MAY` change its encoding at any time without a new API version.
+
+Paging metadata `MUST` be populated within the `meta` field of responses as follows:
+
+| Field      | Description                                                    |
+| ---------- | -------------------------------------------------------------- |
+| `pageSize` | The current page size.                                         |
+| `hasMore`  | Whether more resources follow this page.                       |
+| `cursor`   | The cursor to pass as `page[after]` to retrieve the next page. |
+
+**Example**
 
 ```http
 GET /api/v1/users?page[size]=2&page[after]=dXNlcnM6NjJiZWQxODA
@@ -55,12 +92,18 @@ Accept: application/json
 {
   "data": [
     {
-      "attributes": { "firstName": "Bob", "lastName": "Smith" },
+      "attributes": {
+        "firstName": "Bob",
+        "lastName": "Smith"
+      },
       "id": "62bed180-1f78-45d4-8a56-c996936a2947",
       "type": "user"
     },
     {
-      "attributes": { "firstName": "Alice", "lastName": "Jones" },
+      "attributes": {
+        "firstName": "Alice",
+        "lastName": "Jones"
+      },
       "id": "cacba8c1-29fa-4018-8950-acd400ec76b7",
       "type": "user"
     }
@@ -72,5 +115,7 @@ Accept: application/json
   }
 }
 ```
+
+The final page `MUST` return `hasMore` as `false` and `MUST` omit `cursor`.
 
 The `page` parameter family is credited to [JSON:API](https://jsonapi.org/).

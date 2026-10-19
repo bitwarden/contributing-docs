@@ -1,23 +1,32 @@
 # Optimistic concurrency
 
-- APIs that update resources `SHOULD` detect conflicting updates. Those that do `MUST` use a
-  `version` field marked `required` and not `readOnly`.
-- `version` `SHOULD` be an integer incremented on every successful update, and `MUST` be formatted
-  as a string whatever its value.
-- If the value sent does not match the stored version, the API `MUST` return `409 Conflict`.
-- On every successful update, the API `MUST` change the version.
+- APIs that update resources `SHOULD` implement
+  [optimistic concurrency](https://en.wikipedia.org/wiki/Optimistic_concurrency_control) to detect
+  concurrent modifications. Those that do `MUST` do so using a `version` field marked `required` and
+  not `readOnly`.
+- The `version` field `SHOULD` be a simple integer that is incremented after every successful update
+  but, regardless of what value is used, the field `MUST` be formatted as a string.
+- If the value provided does not match the stored version, the API `MUST` respond `409 Conflict`.
+- Upon successfully updating the resource, the API `MUST` update the version identifier.
 
-This departs from [RFC 9110](https://www.rfc-editor.org/info/rfc9110/)'s conditional requests
-(`ETag`, `If-Match`, `412`), for these reasons:
+## Where we depart from an RFC
 
-- **Described by the same RFC.** RFC 9110 gives this exact case as its example of `409`: a
-  representation sent with `PUT` that conflicts with an earlier change, where versioning is in use.
-  Conditional requests are an alternative, not a requirement.
+**RFC:** [RFC 9110](https://www.rfc-editor.org/info/rfc9110/) conditional requests: an `ETag`
+response header, an `If-Match` request header, and `412 Precondition Failed` on a mismatch.
+
+**These standards:** A `version` field in the resource, sent back on update, and `409 Conflict` on a
+mismatch.
+
+**Why:**
+
+- **Sanctioned by the same RFC.** RFC 9110 describes this exact case under `409`: a representation
+  sent with `PUT` that conflicts with an earlier change, where versioning is in use. Conditional
+  requests are an alternative, not a requirement.
 - **Simpler for callers.** The version is part of the resource the caller already reads and sends
   back. There is no header to capture and replay, and generated clients expose it as an ordinary
   property.
-- **Works for bulk operations.** A [bulk replace](./bulk-operations.md#operation-specific-rules)
-  carries many resources, each with its own version. One `If-Match` header cannot.
-- **Travels with the data.** The version stays with the resource in events, local copies, logs, and
-  caches.
+- **Works for bulk operations.** A bulk replace carries many resources in one request, each with its
+  own version. One `If-Match` header cannot.
+- **Travels with the data.** The version stays with the resource wherever the resource goes: events,
+  local copies, logs, and caches.
 - **Nothing lost.** A service can still return `ETag` for HTTP caching.

@@ -1,30 +1,43 @@
 # Breaking changes and versioning
 
-APIs `SHOULD NOT` make breaking changes. A breaking change is one that causes a request that is
-valid today to be rejected tomorrow, or a response a caller can process today to become
-unprocessable. In practice:
+APIs `SHOULD NOT` make **breaking changes**. A breaking change is any change that causes a request
+that is valid today to be rejected tomorrow, or a response that a caller can process today to become
+unprocessable. In practice, that means:
 
-- adding a required field, or making an optional field required,
-- changing a field's type,
-- adding constraints to a field, or
-- removing a field from a response.
+1. Adding a new, required field.
+2. Making an optional field required.
+3. Changing the datatype of a field.
+4. Adding additional constraints to a field.
+5. Removing a field from a response.
 
-The keyword is `SHOULD NOT` rather than `MUST NOT` because these are service-to-service APIs and we
-own every caller:
+The verb is `SHOULD NOT` rather than `MUST NOT` because these are service-to-service APIs and we own
+every caller. A team `MAY` make a breaking change in place when it can account for every caller -
+either because the change has been coordinated with them, or because the rejection surfaces
+somewhere the caller or the user can act on it.
 
-- A team `MAY` make a breaking change in place when it can account for every caller, either because
-  the change is coordinated with them or because the rejection surfaces where the caller or user can
-  act on it.
-- Bugs `SHOULD` be fixed in place, even when the fix is technically breaking.
-- Otherwise, a breaking change `MUST` be made in a new version of the API, and the old version
-  [deprecated](./deprecation.md).
+Bugs, however, `SHOULD` be fixed "in place", without creating new versions of the API, even if the
+changes would technically be considered breaking changes.
 
-Adding a value to a constrained field is not breaking by this definition, but a generated client
-that maps the field to a closed enumeration will fail on a value it has never seen. Consider whether
-callers tolerate unknown values before adding one.
+Otherwise, if changes need to be made that _would_ be breaking changes, a new version of the API
+`MUST` be created and the old one [deprecated](./deprecation.md).
 
-Versioning costs a path segment while an API stays at `v1`. In exchange, a contract that needs to
-change shape has somewhere to go, instead of making every new field optional so that nothing ever
-breaks. The version is in the [path](./api-paths.md) because it is then visible in logs, traces,
-routing rules, and `curl` commands, needs no content negotiation, and lets two versions run side by
-side behind one host.
+:::faq[Why are service-to-service APIs versioned? Public APIs aren't.]
+
+We feel strongly that service-to-service APIs should be formally versioned. Without formal
+versioning, every change must be additive, which means the shape can never change and every new
+field is optional. Contracts constrained like that get weaker over time, and what we _want_ to
+express eventually cannot be expressed, because we have committed ourselves to "additive changes
+only". This rules out adopting the existing public API conventions, which are expressly unversioned.
+
+:::
+
+:::note
+
+Adding a value to a constrained field deserves a second look. It is additive, so it is not a
+breaking change by the definition above, and a caller that treats the field as an open string is
+unaffected. But a generated client that deserializes the field into a closed enumeration will fail
+on a value it has never seen - and it will fail at the client, on a change that looked safe from the
+service. Consider whether the callers of that field are tolerant of unknown values before adding
+one.
+
+:::

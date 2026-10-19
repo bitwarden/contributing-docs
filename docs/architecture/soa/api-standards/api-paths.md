@@ -2,14 +2,26 @@
 
 {/* cspell:ignore kebab */}
 
-- Paths `MUST` be lowercase kebab-case.
-- The first element `MUST` be a namespace, `api` by default. The next `MUST` be the version,
-  starting at `v1` (see [breaking changes and versioning](./breaking-changes-and-versioning.md)).
-  The next `MUST` name the resource, and `SHOULD` be its plural (for example `users`). Where the API
-  targets one resource, the next `SHOULD` be its ID.
-- Paths `SHOULD` be traversable: if `/api/v1/users/123/addresses/456` names an address, its parent
-  paths name all of that user's addresses, the user, and all users. This shows how paths fit
-  together. It does not require every parent path to exist.
+API paths `MUST` use **lowercase "kebab-case"** and conform as follows:
+
+1. The first element(s) of the API path `MUST` be a namespace. By default, the namespace `SHOULD` be
+   `api`.
+2. The next element of the API path `MUST` be the version number starting with `v1`.
+3. The next element of the API path `MUST` specify the resource or resources it targets. For
+   resource-oriented APIs, this element `SHOULD` be the "resource plural" (e.g. `users`).
+   [Bulk-processing](./bulk-operations.md) APIs are an exception to this rule.
+4. If the API targets a specific resource (e.g. update or delete), the next element of the API path
+   `SHOULD` be the ID of the resource it targets.
+
+:::tip
+
+**Why versioning in the path?** It is visible in logs, traces, routing rules and curl commands; it
+needs no content negotiation to read; and it lets two versions coexist behind one host. Header and
+media-type versioning are both defensible but harder to operate.
+
+:::
+
+**Examples**
 
 ```text
 /api/v1/users
@@ -17,25 +29,74 @@
 /api/v1/users/123/addresses
 ```
 
-## Subject and scope
+Paths `SHOULD` be traversable. If `GET /api/v1/users/123/addresses/456` returns the details about
+address 456 of user 123, then every parent path would resolve as follows:
 
-Every request acts on a **subject** and runs inside a **scope**:
+- `GET /api/v1/users/123/addresses` should return all addresses of user 123.
+- `GET /api/v1/users/123` should return details about user 123.
+- `GET /api/v1/users` should return all users.
 
-- The subject is what the request acts on, and it `MUST` be named in the path.
-- The scope is what the request runs inside, such as the current organization and user. It
-  `MUST NOT` be named in the path, and travels as context instead. Callers `SHOULD` send the current
-  organization and user on every request where each exists.
-- `current` `SHOULD` be used where the subject is whatever the scope names, as in
-  `/api/v1/users/current`.
+:::tip
 
-An identifier in a path is something a caller can try other values of, and the API has to prove on
-every request that the caller may use it. A scope taken from context is established once, where the
-caller authenticates, and one path then serves a resource that can belong to more than one kind of
-owner. Which parts of the scope an operation requires is declared by the operation, and is the
-subject of the forthcoming authentication and authorization standard.
+To be clear, we are not saying every “parent path” must actually exist as a callable API, or even
+that the current user should be authorized to call them. We are only trying to show how API paths
+should be cohesive, and how they _would_ resolve if APIs existed for every parent path.
 
-A caller working across several organizations can make one call per organization, use a filter such
-as `filter[organization]=123,456`, or use an [advanced query](./advanced-queries.md). None of these
-puts the organization in the path. An operation can also be declared so that less scope means more,
-for example returning users across every organization the caller belongs to when no organization is
-in context.
+:::
+
+## Which identifiers belong in the path
+
+Every request targets a **subject** and runs inside a **scope**:
+
+- The **subject** is what the request acts on. It `MUST` be named in the path.
+- The **scope** is what the request runs inside - the current organization, the current user. It
+  `MUST NOT` be named in the path; it travels as context.
+
+That is the whole of the path rule. A path says what is acted on (or fetched). It does not say what
+a call returns: which parts of the scope an operation requires, permits or refuses is declared by
+the operation, and belongs to authentication and authorization (standard forthcoming).
+
+**Examples**
+
+| Path                        | Subject                  |
+| --------------------------- | ------------------------ |
+| `GET /api/v1/users`         | users                    |
+| `GET /api/v1/users/123`     | user 123                 |
+| `GET /api/v1/users/current` | the user the scope names |
+
+`current` `SHOULD` be used where the subject is whatever the scope names, rather than repeating an
+identifier the caller has already supplied.
+
+:::tip
+
+**Why keep the scope out?** An identifier in a path is something a caller can try other values of,
+and a path that accepts one must prove on every request that this caller may use this value. A scope
+taken from context is established once, where the caller is authenticated. It also keeps one path
+for a resource that can belong to more than one kind of owner.
+
+:::
+
+Callers `SHOULD` send the current organization and the current user on every request where each
+exists. Two services may publish the same path and declare different things about the scope - one
+`GET /api/v1/organizations` requiring a user and returning theirs, another requiring none and
+returning all. Both name the same subject; the path is not what distinguishes them.
+
+## Working across several scopes
+
+A caller that reaches several organizations does not turn the organization into a subject, nor does
+it necessarily mean one call per organization. Options include:
+
+- If it is somewhat rare and typically only "a few", then making N calls with a different
+  organization in context is probably fine.
+- The API may be enhanced to allow the caller to specify what organizations to return data for (e.g.
+  `GET /api/v1/users?filter[organization]=123,456,789`).
+- An [advanced query](./advanced-queries.md) may be used where the list travels in the body rather
+  than the URL.
+
+An operation can also be declared so that supplying less scope means more.
+
+For example, `GET /api/v1/users` called with a user and an organization in context returns every
+user within the specified organization, but that _same_ API called with only a user in context might
+return every user for every organization the user is a member of. Whether it behaves that way is the
+operation's declaration rather than the path's - and the option exists without any of these patterns
+putting the organization in the path.

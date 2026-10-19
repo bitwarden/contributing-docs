@@ -1,5 +1,6 @@
 # Content negotiation
 
-- Services `MUST` honor the `Accept` media type and `MUST` return `406 Not Acceptable` when they
-  cannot produce it.
-- Services `MUST` return `415 Unsupported Media Type` when they cannot process the `Content-Type`.
+- Services `MUST` respect the `Accept` media type requested by the caller. If the caller asks for
+  XML and the server cannot return XML, the service `MUST` return `406 Not Acceptable`.
+- Services `MUST` return `415 Unsupported Media Type` if the server can't process the specified
+  `Content-Type`.

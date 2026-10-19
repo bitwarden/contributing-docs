@@ -1,30 +1,44 @@
 # Standard responses
 
-Status codes follow [RFC 9110](https://www.rfc-editor.org/info/rfc9110/). The following are possible
-for every API, and APIs `SHOULD NOT` document them individually:
+APIs `SHOULD NOT` document standard responses because these responses apply to every API and
+documenting them over and over again just creates noise. The following responses are possible for
+every API:
 
-| Status | Meaning                                                                          |
-| ------ | -------------------------------------------------------------------------------- |
-| `400`  | The request is malformed and cannot be parsed, such as invalid JSON.             |
-| `401`  | The caller is not authenticated.                                                 |
-| `403`  | The caller is not authorized to invoke the API.                                  |
-| `404`  | The resource named in the path does not exist, or the caller may not know of it. |
-| `405`  | The HTTP method is not allowed.                                                  |
-| `406`  | The API cannot return the requested media type.                                  |
-| `409`  | The update conflicts with another update.                                        |
-| `415`  | The API does not accept the request's media type.                                |
-| `422`  | The request is invalid in a way the caller can fix.                              |
-| `429`  | The caller has made too many requests.                                           |
-| `500`  | An unexpected error the caller cannot fix. By definition, a bug.                 |
-| `501`  | The API is stubbed out and not yet implemented.                                  |
-| `503`  | The service or a dependency is unavailable, overloaded, or timed out.            |
+| Response | Description                                                                                                    |
+| -------- | -------------------------------------------------------------------------------------------------------------- |
+| `400`    | A malformed request (i.e. invalid JSON).                                                                       |
+| `401`    | The caller isn't [recognized](./index.md#authentication-and-authorization) (i.e. not authenticated).           |
+| `403`    | The caller isn't [authorized](./index.md#authentication-and-authorization) to invoke the API (i.e. forbidden). |
+| `404`    | The resource specified via the URL path does not exist (or the caller isn't allowed to know it exists).        |
+| `405`    | The HTTP method is not allowed.                                                                                |
+| `406`    | The API doesn't return the specified media type.                                                               |
+| `409`    | The attempted update conflicts with some other update (i.e. was changed since the caller last read it).        |
+| `415`    | The API doesn't accept the specified media type.                                                               |
+| `422`    | An error the client can fix.                                                                                   |
+| `429`    | The caller has made too many requests.                                                                         |
+| `500`    | An unexpected error the client cannot fix.                                                                     |
+| `501`    | The API has just been stubbed out and has not been implemented, yet.                                           |
+| `503`    | The service or a dependency is unavailable, overloaded, or timed out.                                          |
 
-## Commonly confused status codes
+## 400 vs. 422
 
-- **`400` or `422`:** `400` when the request cannot be parsed, `422` when it parses but is invalid.
-- **`403` or `404`:** `403` for a resource the caller may know exists, `404` for one it may not.
-- **`404` or `422`:** `404` when the resource named in the path is not found, or the caller should
-  not know it exists. `422` when it is found but a resource referenced in the body is not, or the
-  caller should not know it exists.
-- **`500` or `503`:** `500` for a failure inside the service, `503` when the service is overloaded
-  or a dependency is down, unreachable, or timed out.
+- Return `400` for requests that are malformed and cannot even be parsed (e.g. invalid JSON).
+- Return `422` for invalid requests. See [Request validation](./request-validation.md).
+
+## 403 vs. 404
+
+- Return `403` for attempts to read, write, or act upon resources the user is allowed to know exist.
+- Return `404` for attempts to read, write, or act upon resources the user should _not_ know exist.
+
+## 404 vs. 422
+
+- If the resource specified by the URL is **not found**, or the caller should not know it exists,
+  APIs `MUST` return `404`.
+- If the resource specified by the URL is **found**, but a resource referenced within the payload
+  does not exist (or the caller should not know it exists), APIs `MUST` return `422`.
+
+## 500 vs. 503
+
+- Return `500` for unexpected errors that occur within the service that the client cannot fix. By
+  definition, a `500` is a bug.
+- Return `503` when the service is overloaded or a dependency is down, unreachable, or timed out.

@@ -1,16 +1,17 @@
 # Advanced queries
 
-`filter` parameters cannot express arbitrary combinations of "and" and "or", and long expressions
-exceed practical URL lengths. APIs that need richer queries `MUST` offer a search operation that
-carries the expression in the body.
+The `filter` query parameters cover simple predicates, but they cannot express arbitrary `AND` and
+`OR` combinations, and a long expression will exceed the practical limit on URL length. APIs that
+need richer queries `MUST` expose a **search** operation that carries the expression in the request
+body.
 
-- The method `MUST` be `POST`, and the path `MUST` be `/api/v1/{resource plural}:search`.
-- The expression `MUST` be written in JSON Logic, in a top-level `filter` field. Only the operators
-  below are supported.
-- A request using any other operator, or referencing a field the API does not support, `MUST` be
-  rejected with `422`.
-- On success, APIs `MUST` return `200`, and the response `MUST` have the same shape as the
-  equivalent read-many response, including [paging](./paging.md) and [sorting](./sorting.md).
+- HTTP verb `MUST` be `POST`.
+- API path `MUST` be like `/api/v1/{resource plural}:search`.
+
+The expression is written in [JSON Logic](https://jsonlogic.com/) and placed in a top-level `filter`
+field. JSON Logic is adopted for its notation only. Its full operator set includes control flow,
+iteration, and arithmetic, none of which belong in a query, so only the following operators are
+supported:
 
 | Operator             | Meaning                                             |
 | -------------------- | --------------------------------------------------- |
@@ -21,12 +22,27 @@ carries the expression in the body.
 | `and`, `or`          | Boolean composition, each taking two or more terms. |
 | `!`                  | Negation.                                           |
 
+A request that uses any other operator, or references a field the API does not support, `MUST` be
+rejected with `422`.
+
+:::faq[Why are we standardizing on JSON Logic instead of OData?]
+
+1. OData's `$filter` is a string expression language, so both building and parsing it require string
+   handling where JSON is already right there.
+2. Composing a filter by concatenating strings means quoting and escaping, which is how injection
+   bugs happen. Composing a JSON object does not.
+3. OData brings a great deal more than filtering - metadata documents, `$expand`, batch, its own
+   conventions - and we only want the filtering.
+
+:::
+
 **Example**
 
 Find active or invited users whose KDF iterations are below the current minimum:
 
 ```http
 POST /api/v1/users:search?page[size]=50&sort=-createdAt
+Accept: application/json
 Content-Type: application/json
 ```
 
@@ -41,11 +57,18 @@ Content-Type: application/json
 }
 ```
 
-JSON Logic is adopted for its notation only. Its full operator set includes control flow, iteration,
-and arithmetic, none of which belong in a query. It is preferred to a string grammar such as OData's
-`$filter` because a JSON object is built and parsed without string handling, and composing a filter
-by concatenating strings is how injection bugs happen. OData also brings a great deal more than
-filtering, such as metadata documents, `$expand`, and batching, and only the filtering is wanted.
+The response `MUST` be identical in shape to the equivalent
+[read-many](./reading-resources.md#read-many) request.
+
+[Learn more about JSON Logic](https://jsonlogic.com/)
+
+**Success responses**
+
+Upon success, APIs `MUST` return `200`.
+
+| Status   | Description                | Response                                  |
+| -------- | -------------------------- | ----------------------------------------- |
+| `200 OK` | The search was successful. | The matching resources, paged and sorted. |
 
 The same notation selects resources for [bulk operations](./bulk-operations.md#targeting).
 
