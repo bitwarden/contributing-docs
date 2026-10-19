@@ -65,7 +65,9 @@ organization travels with a request are the subject of a forthcoming standard.
 
 ### Payloads and responses
 
-- [Resource fields](./resource-fields.md)
+- [Payload shape](./payload-shape.md)
+- [Envelope](./payload-shape.md#envelope)
+- [Resource fields](./payload-shape.md#resource-fields)
 - [JSON](./json.md)
 - [Naming conventions](./naming-conventions.md)
 - [Standard fields](./standard-fields.md)
