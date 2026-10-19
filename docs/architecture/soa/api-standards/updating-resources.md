@@ -1,7 +1,7 @@
 # Updating resources
 
 - HTTP verb `MUST` be `PUT`.
-- API path `SHOULD` be like `/api/v1/{resource plural}/{id}`.
+- API path `SHOULD` follow the pattern `/api/v1/{resource plural}/{id}`.
 - Resources `SHOULD` carry `updatedBy` and `updatedAt` fields.
 
 If the request's `type` is not that of the resource named in the path, or its `id` is not the one in

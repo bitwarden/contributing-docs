@@ -5,8 +5,8 @@
 APIs that don't fit cleanly into the CRUD paradigm can typically be modeled as **actions**.
 
 - HTTP verb `MUST` be `POST`.
-- API path `SHOULD` be like `/api/v1/{resource plural}/{id}/actions/{action}`, with the action named
-  in kebab-case.
+- API path `SHOULD` follow the pattern `/api/v1/{resource plural}/{id}/actions/{action}`, with the
+  action named in kebab-case.
 
 ```http
 POST /api/v1/users/62bed180-1f78-45d4-8a56-c996936a2947/actions/send-email

@@ -3,7 +3,7 @@
 ## Read many
 
 - HTTP verb `MUST` be `GET`.
-- API path `SHOULD` be like `/api/v1/{resource plural}`.
+- API path `SHOULD` follow the pattern `/api/v1/{resource plural}`.
 
 **Example**
 
@@ -57,7 +57,7 @@ indexed and authorized.
 ## Read one
 
 - HTTP verb `MUST` be `GET`.
-- API path `SHOULD` be like `/api/v1/{resource plural}/{id}`.
+- API path `SHOULD` follow the pattern `/api/v1/{resource plural}/{id}`.
 
 **Example**
 

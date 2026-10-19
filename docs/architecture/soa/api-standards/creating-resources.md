@@ -1,7 +1,7 @@
 # Creating resources
 
 - HTTP verb `MUST` be `POST`.
-- API path `SHOULD` be like `/api/v1/{resource plural}`.
+- API path `SHOULD` follow the pattern `/api/v1/{resource plural}`.
 
 If the request's `type` is not one the collection accepts, the API `MUST` return `422`.
 

@@ -6,7 +6,7 @@ need richer queries `MUST` expose a **search** operation that carries the expres
 body.
 
 - HTTP verb `MUST` be `POST`.
-- API path `MUST` be like `/api/v1/{resource plural}:search`.
+- API path `MUST` follow the pattern `/api/v1/{resource plural}:search`.
 
 The expression is written in [JSON Logic](https://jsonlogic.com/) and placed in a top-level `filter`
 field. JSON Logic is adopted for its notation only. Its full operator set includes control flow,

@@ -1,7 +1,7 @@
 # Deleting resources
 
 - HTTP verb `MUST` be `DELETE`.
-- API path `SHOULD` be like `/api/v1/{resource plural}/{id}`.
+- API path `SHOULD` follow the pattern `/api/v1/{resource plural}/{id}`.
 
 **Example**
 

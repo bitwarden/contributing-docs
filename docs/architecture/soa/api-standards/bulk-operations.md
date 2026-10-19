@@ -359,8 +359,8 @@ Content-Type: application/json
 Bulk actions are the equivalent of invoking an [action](./acting-upon-resources.md) upon each
 targeted resource.
 
-- API path `MUST` be like `/api/v1/{resource plural}:bulk-{action}`, where `{action}` is the name of
-  the single-resource action - e.g. `/api/v1/users:bulk-send-email` for
+- API path `MUST` follow the pattern `/api/v1/{resource plural}:bulk-{action}`, where `{action}` is
+  the name of the single-resource action - e.g. `/api/v1/users:bulk-send-email` for
   `/api/v1/users/{id}/actions/send-email`.
 - Because bulk actions share a namespace with the other bulk operations, actions `MUST NOT` be named
   `create`, `update`, `replace`, or `delete`.
