@@ -2,7 +2,7 @@
 
 ## Envelope
 
-- Every request and response body that carries resources `MUST` be a JSON object that holds them in
+- Every request and response body that carries non-binary resources `MUST` be a JSON object that holds them in
   `data`: one resource, or an array of resources.
 - Response metadata, such as paging state and counts, `MUST` be placed in a top-level `meta` object.
 - Errors are carried in a top-level `errors` array (see [errors](./errors.md)). Bodies that carry
