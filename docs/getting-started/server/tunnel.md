@@ -79,3 +79,29 @@ DNS to start resolving before trying to access it.
 Anyone with this URL can access the forwarded URL on your machine.
 
 :::
+
+### Ngrok with Aspire
+
+The Aspire `AppHost` can tunnel the Billing service through ngrok, which is useful for testing
+Stripe webhooks. The ngrok plugin is turned off by default.
+
+1. Create an `AppHost.csproj.user` file next to `AppHost/AppHost.csproj`. Git ignores this file.
+
+   ```xml
+   <Project>
+     <PropertyGroup>
+       <EnableNgrokCommunityPlugin>true</EnableNgrokCommunityPlugin>
+     </PropertyGroup>
+   </Project>
+   ```
+
+2. From the `AppHost` folder, store your ngrok auth token in user secrets:
+
+   ```bash
+   dotnet user-secrets set "NgrokAuthToken" "<your ngrok auth token>"
+   ```
+
+3. Start the AppHost, then start the `billing-webhook-ngrok-endpoint` resource from the Aspire
+   dashboard. It doesn't start automatically.
+
+To tunnel other services, use the standalone `ngrok` command above.
