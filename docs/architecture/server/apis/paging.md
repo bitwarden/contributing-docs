@@ -6,6 +6,15 @@ APIs `SHOULD` page, and those that do `MUST` support offset paging, cursor pagin
 APIs that page `MUST` also document a default `page[size]` and `MUST` apply it when the caller omits
 the parameter. For offset paging, `page[number]` `MUST` default to `1`.
 
+:::faq[When is it safe not to page?]
+
+Adding paging to an API later is a breaking change, because callers that received every result would
+start receiving only the first page. An API that does not page is betting its collection stays small
+for the life of the version, which is a safe bet only where the number of results has a small, fixed
+upper bound.
+
+:::
+
 Offset paging over data that changes between requests can skip or repeat resources. Cursor paging
 avoids this, at the cost of no page numbers or totals.
 
