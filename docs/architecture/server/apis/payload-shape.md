@@ -19,6 +19,16 @@ The last page of a paged list of users:
   "data": [
     {
       "attributes": {
+        "emailAddresses": [
+          {
+            "address": "bob@example.com",
+            "type": "WORK"
+          },
+          {
+            "address": "bob.smith@example.net",
+            "type": "PERSONAL"
+          }
+        ],
         "firstName": "Bob",
         "lastName": "Smith"
       },
@@ -27,6 +37,12 @@ The last page of a paged list of users:
     },
     {
       "attributes": {
+        "emailAddresses": [
+          {
+            "address": "alice@example.com",
+            "type": "WORK"
+          }
+        ],
         "firstName": "Alice",
         "lastName": "Jones"
       },
@@ -58,6 +74,16 @@ Every resource `MUST` include the following fields:
 ```json
 {
   "attributes": {
+    "emailAddresses": [
+      {
+        "address": "bob@example.com",
+        "type": "WORK"
+      },
+      {
+        "address": "bob.smith@example.net",
+        "type": "PERSONAL"
+      }
+    ],
     "firstName": "Bob",
     "lastName": "Smith"
   },
