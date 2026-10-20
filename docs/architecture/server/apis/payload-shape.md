@@ -116,11 +116,15 @@ The shape is credited to [JSON:API](https://jsonapi.org/).
 ### Why do I have to specify the ID in the path _and_ the JSON body?
 
 1. So that the JSON is comprehensive and self-describing.
-2. Establishing just one rule to "always include it" is easier to remember than multiple rules for
+2. Because the context in which the JSON is consumed cannot be completely known in advance.
+3. Establishing just one rule to "always include it" is easier to remember than multiple rules for
    when it is required and when it is not required.
 
 ### Why do I have to specify the type? You can infer that from the URL path.
 
 1. So that the JSON is comprehensive and self-describing.
-2. Establishing just one rule to "always include it" is easier to remember than multiple rules for
+2. Because the context in which the JSON is consumed cannot be completely known in advance.
+3. Because some APIs are polymorphic and return multiple types (e.g. `GET /api/v1/users` might
+   return some whose type is `employee` and others whose type is `contractor`).
+4. Establishing just one rule to "always include it" is easier to remember than multiple rules for
    when it is required and when it is not required.
