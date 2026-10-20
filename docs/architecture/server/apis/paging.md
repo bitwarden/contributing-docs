@@ -3,8 +3,8 @@
 APIs `SHOULD` page, and those that do `MUST` support offset paging, cursor paging, or both, and
 `MUST` document a maximum `page[size]`.
 
-APIs that page `MUST` also document a default `page[size]` and, for offset paging, a default
-`page[number]`, and `MUST` apply those defaults when the caller omits the parameter.
+APIs that page `MUST` also document a default `page[size]` and `MUST` apply it when the caller omits
+the parameter. For offset paging, `page[number]` `MUST` default to `1`.
 
 Offset paging over data that changes between requests can skip or repeat resources. Cursor paging
 avoids this, at the cost of no page numbers or totals.
