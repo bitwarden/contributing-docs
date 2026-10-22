@@ -197,8 +197,8 @@ full configuration reference.
 
     Aspire creates its own SQL Server data volume, so your first run starts with an empty
     `vault_dev` database. Data in your Docker Compose database is not carried over. To create users
-    and organizations, use the
-    [Seeder Utility](https://github.com/bitwarden/server/blob/main/util/SeederUtility/README.md).
+    and organizations, use the Seeder. The [Seeder](./seeder.md) page explains which entry point to
+    use and how to run it the first time.
 
     :::
 
@@ -279,6 +279,9 @@ full configuration reference.
     [http://localhost:33656/.well-known/openid-configuration](http://localhost:33656/.well-known/openid-configuration)
 5.  Test that the Api service is alive by navigating to
     [http://localhost:4000/alive](http://localhost:4000/alive)
+
+A new `vault_dev` database has no accounts. Use the [Seeder](./seeder.md) to create users and
+organizations you can log in with.
 
 Aspire runs the database migrations and re-applies `dev/secrets.json` on every start. After you pull
 changes or edit `secrets.json`, restart the AppHost, or restart the `setup-secrets` or
