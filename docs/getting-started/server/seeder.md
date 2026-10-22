@@ -78,7 +78,7 @@ services only when you log in afterward.
     applies `dev/secrets.json` to the Seeder CLI as well.
 2.  In the server repository, ask Claude for the data you need in plain words, such as "an
     organization to test collection permissions". The
-    [`seeding-bitwarden-data` skill](https://github.com/bitwarden/server/blob/main/.claude/skills/seeding-bitwarden-data/SKILL.md)
+    [seeding-bitwarden-data skill](https://github.com/bitwarden/server/blob/main/.claude/skills/seeding-bitwarden-data/SKILL.md)
     picks a preset, runs the Seeder CLI, and lists the logins it created. Without Claude, find your
     problem in the
     [scenarios index](https://github.com/bitwarden/server/blob/main/util/Seeder/Seeds/docs/scenarios/README.md)
