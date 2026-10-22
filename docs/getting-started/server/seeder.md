@@ -38,10 +38,16 @@ flowchart TD
 
 The Seeder CLI lives in `util/SeederUtility` in the server repository and seeds on demand. Use it
 when you want data that stays in the database, such as the accounts you log in with every day. It
-has three commands. `preset` loads a curated JSON fixture from the catalog, which creates the same
-users, organizations, and items every time. `organization` and `individual` build one organization
-or one user from flags you pass, such as a name, plan type, or subscription. If you do not know what
-to seed yet, start with the
+has three commands:
+
+- `preset` loads a curated JSON fixture from the catalog, which creates the same users,
+  organizations, and items every time.
+- `organization` builds one organization from flags you pass, such as a name or plan type, when no
+  preset fits.
+- `individual` builds one user from flags you pass, such as a name or subscription, when no preset
+  fits.
+
+If you do not know what to seed yet, start with the
 [scenarios index](https://github.com/bitwarden/server/blob/main/util/Seeder/Seeds/docs/scenarios/README.md),
 which maps common problems to commands. If you do, browse the
 [presets catalog](https://github.com/bitwarden/server/blob/main/util/Seeder/Seeds/docs/presets.md)
@@ -70,25 +76,17 @@ services only when you log in afterward.
     or the [Entity Framework](./database/ef/index.mdx) page for your provider. Each path creates and
     migrates the database, and the [Configure user secrets](./guide.md#configure-user-secrets) step
     applies `dev/secrets.json` to the Seeder CLI as well.
-2.  List the available presets from the `util/SeederUtility` folder. The first run also builds the
-    Rust SDK shim with cargo, so it takes longer.
-
-    ```bash
-    dotnet run -- preset --list
-    ```
-
-3.  Decide what to seed. The
+2.  In the server repository, ask Claude for the data you need in plain words, such as "an
+    organization to test collection permissions". The
+    [`seeding-bitwarden-data` skill](https://github.com/bitwarden/server/blob/main/.claude/skills/seeding-bitwarden-data/SKILL.md)
+    picks a preset, runs the Seeder CLI, and lists the logins it created. Without Claude, find your
+    problem in the
     [scenarios index](https://github.com/bitwarden/server/blob/main/util/Seeder/Seeds/docs/scenarios/README.md)
-    starts from a problem and ends with a command. The
-    [presets catalog](https://github.com/bitwarden/server/blob/main/util/Seeder/Seeds/docs/presets.md)
-    describes each preset. Bitwarden developers: follow your team's direction on what to seed.
-4.  Run the command you chose from the same folder:
-
-    ```bash
-    dotnet run -- <command> [options]
-    ```
-
-5.  Start the server if it is not running, point a client at it as described in
+    and run its command from the `util/SeederUtility` folder. Start from a preset, and use
+    `organization` or `individual` only when no preset fits. The first run also builds the Rust SDK
+    shim with cargo, so it takes longer. Bitwarden developers: follow your team's direction on what
+    to seed.
+3.  Start the server if it is not running, point a client at it as described in
     [Client connection](./guide.md#client-connection), and log in with an account the run created.
     The
     [Seeder CLI README](https://github.com/bitwarden/server/blob/main/util/SeederUtility/README.md)
