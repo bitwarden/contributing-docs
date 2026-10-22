@@ -76,16 +76,15 @@ services only when you log in afterward.
     or the [Entity Framework](./database/ef/index.mdx) page for your provider. Each path creates and
     migrates the database, and the [Configure user secrets](./guide.md#configure-user-secrets) step
     applies `dev/secrets.json` to the Seeder CLI as well.
-2.  In the server repository, ask Claude for the data you need in plain words, such as "an
-    organization to test collection permissions". The
+2.  In the server repository, ask your AI coding agent for the data you need in plain words, such as
+    "an organization to test collection permissions". The
     [seeding-bitwarden-data skill](https://github.com/bitwarden/server/blob/main/.claude/skills/seeding-bitwarden-data/SKILL.md)
-    picks a preset, runs the Seeder CLI, and lists the logins it created. Without Claude, find your
-    problem in the
+    picks a preset, runs the Seeder CLI, and lists the logins it created. Without an agent, find
+    your problem in the
     [scenarios index](https://github.com/bitwarden/server/blob/main/util/Seeder/Seeds/docs/scenarios/README.md)
     and run its command from the `util/SeederUtility` folder. Start from a preset, and use
     `organization` or `individual` only when no preset fits. The first run also builds the Rust SDK
-    shim with cargo, so it takes longer. Bitwarden developers: follow your team's direction on what
-    to seed.
+    shim with cargo, so it takes longer.
 3.  Start the server if it is not running, point a client at it as described in
     [Client connection](./guide.md#client-connection), and log in with an account the run created.
     The
