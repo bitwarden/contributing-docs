@@ -37,15 +37,11 @@ populates the following fields, except that at most one `source` member applies 
 }
 ```
 
-:::note
-
-A 500 response `MUST NOT` include any detail about the failure. title and detail `MUST` be generic,
-and source `MUST` be omitted. Exception messages, stack traces, type names, connection strings, and
-dependency identities are all disclosure risks and belong in traces and logs, which are not
-reachable by the caller. The id field is how a caller and an operator correlate a report with the
-logged detail.
-
-:::
+A `500` response `MUST NOT` include any detail about the failure. Its `title` and `detail` `MUST` be
+generic, and `source` `MUST` be omitted, because exception messages, stack traces, type names,
+connection strings, and dependency identities are all disclosure risks. That detail belongs in
+traces and logs, which the caller cannot reach, and the `id` field is how a caller and an operator
+correlate a report with the logged detail.
 
 The error object is credited to [JSON:API](https://jsonapi.org/).
 
