@@ -1,5 +1,7 @@
 # APIs
 
+**Audience:** Developers and AI agents designing or implementing service-to-service APIs.
+
 ## Scope
 
 These standards apply to service-to-service APIs (APIs that one Bitwarden service calls on another)
