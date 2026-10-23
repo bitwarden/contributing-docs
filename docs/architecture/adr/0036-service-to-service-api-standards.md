@@ -119,9 +119,10 @@ path. To be useful, the standards have to be comprehensive. At a minimum, they n
 Chosen option: **Documented standards**.
 
 Service-to-service APIs `MUST` conform to a comprehensive, documented set of standards covering, at
-a minimum, the topics listed above. The standards will be published separately as a living
-reference: their rules evolve by pull request without superseding this decision, and this ADR is
-superseded only if the decision to have documented standards itself changes.
+a minimum, the topics listed above. The standards are published separately as a
+[living reference](../server/apis/index.md): their rules evolve by pull request without superseding
+this decision, and this ADR is superseded only if the decision to have documented standards itself
+changes.
 
 ### Positive consequences
 
