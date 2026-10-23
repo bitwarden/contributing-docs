@@ -1,5 +1,7 @@
 # Partial updates
 
+Notation follows the [APIs index](./index.md#notation).
+
 Services `SHOULD NOT` support partial updates - see below for why. A service that _does_ support
 them `MUST` use `PATCH` and `MUST` ignore any field that is not specified. In a partial update, an
 absent field means "do not change" and an explicit `null` clears the value.

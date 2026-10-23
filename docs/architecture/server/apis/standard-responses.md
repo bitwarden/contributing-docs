@@ -1,5 +1,7 @@
 # Standard responses
 
+Notation follows the [APIs index](./index.md#notation).
+
 APIs `SHOULD NOT` document standard responses because these responses apply to every API and
 documenting them over and over again just creates noise. The following responses are possible for
 every API:

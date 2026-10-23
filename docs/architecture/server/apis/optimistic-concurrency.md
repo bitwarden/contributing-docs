@@ -1,5 +1,7 @@
 # Optimistic concurrency
 
+Notation follows the [APIs index](./index.md#notation).
+
 - APIs that update resources `SHOULD` implement
   [optimistic concurrency](https://en.wikipedia.org/wiki/Optimistic_concurrency_control) to detect
   concurrent modifications. Those that do `MUST` do so using a `version` field marked `required` and

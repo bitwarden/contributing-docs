@@ -1,5 +1,7 @@
 # Verbs
 
+Notation follows the [APIs index](./index.md#notation).
+
 APIs `MUST` use the standard verb semantics:
 
 | Verb     | Meaning                                                                                                           |

@@ -1,5 +1,7 @@
 # OpenAPI
 
+Notation follows the [APIs index](./index.md#notation).
+
 APIs `MUST` be documented in [OpenAPI](https://www.openapis.org/) format.
 
 - APIs `MUST` provide a description written with the API consumer as the audience in mind, free of

@@ -1,5 +1,7 @@
 # Deleting resources
 
+Notation follows the [APIs index](./index.md#notation).
+
 - HTTP verb `MUST` be `DELETE`.
 - API path `SHOULD` follow the pattern `/api/v1/{resource plural}/{id}`.
 

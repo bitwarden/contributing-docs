@@ -1,5 +1,7 @@
 # Standard fields
 
+Notation follows the [APIs index](./index.md#notation).
+
 When relevant, resources `MUST` use the following field names:
 
 | Field       | Description                                                                                                           | Type     |

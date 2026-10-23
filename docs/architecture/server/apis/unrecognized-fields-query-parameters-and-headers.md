@@ -1,5 +1,7 @@
 # Unrecognized fields, query parameters, and headers
 
+Notation follows the [APIs index](./index.md#notation).
+
 1. APIs `MUST` ignore unrecognized fields, query parameters, and headers.
 2. APIs `MUST` reject the request with `422`, rather than ignore it, when given a parameter that
    shapes the result:

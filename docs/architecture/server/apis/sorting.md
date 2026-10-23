@@ -1,5 +1,7 @@
 # Sorting
 
+Notation follows the [APIs index](./index.md#notation).
+
 APIs that support sorting `MUST` do so using a single query parameter named `sort` whose value is a
 comma-delimited list of field names to sort by. Any field preceded by a hyphen `MUST` be interpreted
 as descending.

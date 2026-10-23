@@ -1,5 +1,7 @@
 # Reading resources
 
+Notation follows the [APIs index](./index.md#notation).
+
 ## Read many
 
 - HTTP verb `MUST` be `GET`.

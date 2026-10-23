@@ -1,5 +1,7 @@
 # Updating resources
 
+Notation follows the [APIs index](./index.md#notation).
+
 - HTTP verb `MUST` be `PUT`.
 - API path `SHOULD` follow the pattern `/api/v1/{resource plural}/{id}`.
 - Resources `SHOULD` carry `updatedBy` and `updatedAt` fields.

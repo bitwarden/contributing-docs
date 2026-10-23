@@ -1,5 +1,7 @@
 # Naming conventions
 
+Notation follows the [APIs index](./index.md#notation).
+
 - Field names `MUST` be in camel case (e.g. `firstName`, `lastName`).
 - Fields holding a date or date/time `SHOULD` end in `At` (e.g. `createdAt`, `expiresAt`).
 - Boolean fields `MUST NOT` be prefixed with `is` (e.g. `active`, not `isActive`).

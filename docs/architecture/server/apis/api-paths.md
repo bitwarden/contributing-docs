@@ -1,5 +1,7 @@
 # API paths
 
+Notation follows the [APIs index](./index.md#notation).
+
 API paths `MUST` use **lowercase "kebab-case"** and conform as follows:
 
 1. The first element(s) of the API path `MUST` be a namespace. By default, the namespace `SHOULD` be

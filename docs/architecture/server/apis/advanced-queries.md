@@ -1,5 +1,7 @@
 # Advanced queries
 
+Notation follows the [APIs index](./index.md#notation).
+
 The `filter` query parameters cover simple predicates, but they cannot express arbitrary `AND` and
 `OR` combinations, and a long expression will exceed the practical limit on URL length. APIs that
 need richer queries `MUST` expose a **search** operation that carries the expression in the request

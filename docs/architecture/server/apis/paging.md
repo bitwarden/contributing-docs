@@ -1,5 +1,7 @@
 # Paging
 
+Notation follows the [APIs index](./index.md#notation).
+
 APIs `SHOULD` page, and those that do `MUST` support offset paging, cursor paging, or both, and
 `MUST` document a maximum `page[size]`.
 

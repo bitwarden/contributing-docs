@@ -1,5 +1,7 @@
 # Creating resources
 
+Notation follows the [APIs index](./index.md#notation).
+
 - HTTP verb `MUST` be `POST`.
 - API path `SHOULD` follow the pattern `/api/v1/{resource plural}`.
 

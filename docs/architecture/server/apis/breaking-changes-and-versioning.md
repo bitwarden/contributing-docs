@@ -1,5 +1,7 @@
 # Breaking changes and versioning
 
+Notation follows the [APIs index](./index.md#notation).
+
 APIs `SHOULD NOT` make **breaking changes**. A breaking change is any change that causes a request
 that is valid today to be rejected tomorrow, or a response that a caller can process today to become
 unprocessable or incomplete. In practice, that means:

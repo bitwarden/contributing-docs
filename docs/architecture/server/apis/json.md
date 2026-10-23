@@ -1,5 +1,7 @@
 # JSON
 
+Notation follows the [APIs index](./index.md#notation).
+
 - Dates `MUST` be formatted in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format (e.g.
   `2026-01-01T00:00:00Z`) and `MUST` include a time zone indicator and `SHOULD` standardize on UTC.
 - Field values that are constrained to a fixed set of values `SHOULD` enumerate the valid values in

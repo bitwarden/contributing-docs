@@ -1,5 +1,7 @@
 # Request validation
 
+Notation follows the [APIs index](./index.md#notation).
+
 Requests `MUST` be exhaustively validated before attempting to process the request and `SHOULD`
 return all errors at once (not stop after the first error is encountered). Exhaustive validation
 includes the following:

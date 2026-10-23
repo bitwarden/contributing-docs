@@ -1,5 +1,7 @@
 # Payload shape
 
+Notation follows the [APIs index](./index.md#notation).
+
 ## Envelope
 
 - Every request and response body that carries non-binary resources `MUST` be a JSON object that

@@ -1,5 +1,7 @@
 # Deprecation
 
+Notation follows the [APIs index](./index.md#notation).
+
 Deprecation announces that an API should no longer be called, tells callers what they _should_ be
 calling, instead, and, ideally, how much time they have to migrate.
 

@@ -1,5 +1,7 @@
 # Filtering
 
+Notation follows the [APIs index](./index.md#notation).
+
 - Read-many APIs that allow callers to specify search criteria `MUST` do so via one or more
   `filter[{name}]` query parameters where the `name` `SHOULD` be the same as one of the resource
   attributes.

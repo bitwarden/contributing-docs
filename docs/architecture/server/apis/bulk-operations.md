@@ -1,5 +1,7 @@
 # Bulk operations
 
+Notation follows the [APIs index](./index.md#notation).
+
 A bulk operation creates, updates, deletes, or acts upon many resources in one request. It is
 shorthand for calling the corresponding single-resource API once per resource, and is never a way
 around that API's [rules](#per-resource-rules).

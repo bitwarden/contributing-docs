@@ -1,5 +1,7 @@
 # Errors
 
+Notation follows the [APIs index](./index.md#notation).
+
 Errors `MUST` be returned as an array of error objects within a top-level `errors` field. Each error
 populates the following fields, except that at most one `source` member applies to any one error:
 

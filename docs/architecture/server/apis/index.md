@@ -2,6 +2,16 @@
 
 **Audience:** Developers and AI agents designing or implementing service-to-service APIs.
 
+## Notation
+
+The keywords `MUST`, `MUST NOT`, `SHOULD`, `SHOULD NOT`, and `MAY` are to be interpreted as
+described in [RFC 2119](https://www.rfc-editor.org/info/rfc2119/).
+
+Text in braces, such as `{resource plural}`, `{id}`, or `{action}`, is a placeholder for a value.
+
+A colon after a collection path, as in `/api/v1/users:search` or `/api/v1/users:bulk-delete`, names
+an operation on the collection as a whole.
+
 ## Scope
 
 These standards apply to service-to-service APIs (APIs that one Bitwarden service calls on another)
@@ -48,11 +58,6 @@ APIs to the unique needs of this caller or that.
 
 In general, it is better to have one API per resource that can be called two different ways (e.g.
 query parameters) than two APIs that can only be called one way.
-
-### Notation
-
-The keywords `MUST`, `MUST NOT`, `SHOULD`, `SHOULD NOT`, and `MAY` are to be interpreted as
-described in [RFC 2119](https://www.rfc-editor.org/info/rfc2119/).
 
 ## Authentication and authorization
 
