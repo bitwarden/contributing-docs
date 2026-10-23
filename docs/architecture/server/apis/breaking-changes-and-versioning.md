@@ -2,13 +2,15 @@
 
 APIs `SHOULD NOT` make **breaking changes**. A breaking change is any change that causes a request
 that is valid today to be rejected tomorrow, or a response that a caller can process today to become
-unprocessable. In practice, that means:
+unprocessable or incomplete. In practice, that means:
 
 1. Adding a new, required field.
 2. Making an optional field required.
 3. Changing the datatype of a field.
 4. Adding additional constraints to a field.
 5. Removing a field from a response.
+6. Returning fewer results for the same request, such as introducing paging or lowering a default
+   page size.
 
 The verb is `SHOULD NOT` rather than `MUST NOT` because these are service-to-service APIs and we own
 every caller. A team `MAY` make a breaking change in place when it can account for every caller -
