@@ -27,6 +27,6 @@ Link: </api/v2/groups>; rel="successor-version"
 | `Sunset`      | When it will stop working, as an HTTP date. It `MUST` be a real date, and it `MUST NOT` pass without either removal or a published extension. |
 | `Link`        | Points at the replacement.                                                                                                                    |
 
-The headers are defined by [RFC 9745](https://www.rfc-editor.org/info/rfc9745/) (`Deprecation`),
-[RFC 8594](https://www.rfc-editor.org/info/rfc8594/) (`Sunset`), and
-[RFC 8288](https://www.rfc-editor.org/info/rfc8288/) (`Link`).
+`Deprecation` is defined by [RFC 9745](https://www.rfc-editor.org/info/rfc9745/), `Sunset` by
+[RFC 8594](https://www.rfc-editor.org/info/rfc8594/), and `Link` by
+[RFC 8288](https://www.rfc-editor.org/info/rfc8288/).

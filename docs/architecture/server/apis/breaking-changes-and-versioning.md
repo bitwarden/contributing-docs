@@ -27,11 +27,11 @@ Otherwise, if changes need to be made that _would_ be breaking changes, a new ve
 
 :::faq[Why are service-to-service APIs versioned? Public APIs are not.]
 
-We feel strongly that service-to-service APIs should be formally versioned. Without formal
-versioning, every change must be additive, which means the shape can never change and every new
-field is optional. Contracts constrained like that get weaker over time, and what we _want_ to
-express eventually cannot be expressed, because we have committed ourselves to "additive changes
-only". This rules out adopting the existing public API conventions, which are expressly unversioned.
+Without formal versioning, every change must be additive, which means the shape can never change and
+every new field is optional. Contracts constrained like that get weaker over time, and what we
+_want_ to express eventually cannot be expressed, because we have committed ourselves to "additive
+changes only". This rules out adopting the existing public API conventions, which are expressly
+unversioned.
 
 :::
 

@@ -7,7 +7,7 @@ shorthand for calling the corresponding single-resource API once per resource, a
 around that API's [rules](#per-resource-rules).
 
 Every bulk operation has three properties, and every combination of them is legitimate. Business
-rules, data volumes, and what the caller needs back decide which combination an API implements; this
+rules, data volumes, and what the caller needs back decide which combination an API implements. This
 standard decides how each combination looks.
 
 | Property                                     | Options                     | Governs                                       |
@@ -107,19 +107,19 @@ POST /api/v1/users:bulk-delete?atomic=false
   progress and collect the outcome.
 
 A service that supports both `MUST` respond synchronously unless the caller sends
-`Prefer: respond-async` ([RFC 7240](https://www.rfc-editor.org/info/rfc7240/)). A service that
-honors the preference `SHOULD` return `Preference-Applied: respond-async`. A service `MAY` also
-respond asynchronously, regardless of preference, to requests that exceed a documented size. Callers
-`MUST` handle every response the API documents.
+`Prefer: respond-async`, as defined by [RFC 7240](https://www.rfc-editor.org/info/rfc7240/). A
+service that honors the preference `SHOULD` return `Preference-Applied: respond-async`. A service
+`MAY` also respond asynchronously, regardless of preference, to requests that exceed a documented
+size. Callers `MUST` handle every response the API documents.
 
 ## Choosing semantics
 
-| When…                                                                                               | Consider…      |
-| --------------------------------------------------------------------------------------------------- | -------------- |
-| A partial result would leave related resources inconsistent, or the caller treats the set as one.   | All-or-nothing |
-| Each resource stands alone and the caller can report or retry individual failures (e.g. an import). | Best-effort    |
-| The set is small and bounded, and each resource is cheap to process.                                | Synchronous    |
-| The set is unbounded, or each resource is expensive to process (events, calls to other services).   | Asynchronous   |
+| When…                                                                                                                | Consider…      |
+| -------------------------------------------------------------------------------------------------------------------- | -------------- |
+| A partial result would leave related resources inconsistent, or the caller treats the set as one.                    | All-or-nothing |
+| Each resource stands alone and the caller can report or retry individual failures, as in an import.                  | Best-effort    |
+| The set is small and bounded, and each resource is cheap to process.                                                 | Synchronous    |
+| The set is unbounded, or each resource is expensive to process, such as by raising events or calling other services. | Asynchronous   |
 
 ## Bulk responses
 
@@ -127,7 +127,7 @@ respond asynchronously, regardless of preference, to requests that exceed a docu
 
 | Status           | Description                                                                                             | Response                                               |
 | ---------------- | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ |
-| `200 OK`         | The request was processed. If all-or-nothing, every resource succeeded; if best-effort, any number did. | As described below.                                    |
+| `200 OK`         | The request was processed. If all-or-nothing, every resource succeeded. If best-effort, any number did. | As described below.                                    |
 | `202 Accepted`   | The request is scheduled.                                                                               | The [job](./jobs.md) that was scheduled to process it. |
 | `204 No Content` | All-or-nothing only. Every resource succeeded.                                                          | Nothing.                                               |
 
@@ -144,15 +144,15 @@ A `200` response carries:
 - `meta.affectedCount` - the number of resources that succeeded. `MUST` be present.
 - `meta.failedCount` - the number of resources that failed. `MUST` be present for best-effort.
 - `data` - for creates, updates, and replaces, the latest representation of each resource that
-  succeeded. Bulk creates `SHOULD` return it, because the caller needs the generated IDs; other
+  succeeded. Bulk creates `SHOULD` return it, because the caller needs the generated IDs. Other
   operations `MAY`. When present with `data` or `ids` targeting, it `MUST` follow request order.
 - `errors` - best-effort only. At least one [error](./errors.md) for each resource that failed.
 
 Each error `MUST` identify the resource that failed:
 
-- by `source.pointer` into the request, where the resource appears there (e.g.
-  `/data/2/attributes/email` or `/ids/2`), or
-- by `meta.resource`, a `type` and `id`, where it does not (i.e. `filter` targeting).
+- by `source.pointer` into the request, where the resource appears there, such as
+  `/data/2/attributes/email` or `/ids/2`, or
+- by `meta.resource`, a `type` and `id`, where it does not, as with `filter` targeting.
 
 An error's `status` `MUST` be what the single-resource API would have returned for that resource -
 for example, `404` for an ID that does not exist, `409` for a version conflict, or `422` for a
@@ -265,8 +265,8 @@ Merge Patch, with the departure described under
 
 **A bulk update is never a way around an action.** A field that changes only through actions -
 typically a status whose transitions are governed by business rules - is read-only, and so cannot be
-set by a bulk update. Changing it for many resources is a bulk action (e.g.
-`POST /api/v1/users:bulk-disable`), which applies the action's transition rules to each resource.
+set by a bulk update. Changing it for many resources is a bulk action, such as
+`POST /api/v1/users:bulk-disable`, which applies the action's transition rules to each resource.
 
 :::
 

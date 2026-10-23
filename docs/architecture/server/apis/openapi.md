@@ -21,8 +21,8 @@ APIs `MUST` be documented in [OpenAPI](https://www.openapis.org/) format.
 
 Every operation `MUST` carry an explicit, stable
 [`operationId`](https://spec.openapis.org/oas/latest.html#operation-object). "v1" APIs `SHOULD NOT`
-include the version number but "v2" APIs `MUST` in order to generate stable clients (e.g.
-`getGroup`, `getGroupV2`). These IDs are necessary for stable, generated clients:
+include the version number but "v2" APIs `MUST` in order to generate stable clients, as in
+`getGroup` and `getGroupV2`. These IDs are necessary for stable, generated clients:
 
 1. Without the version, `/api/v1/groups/{id}` and `/api/v2/groups/{id}` collide into one method
    name.

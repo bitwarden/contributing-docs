@@ -7,8 +7,8 @@ Notation follows the [APIs index](./index.md#notation).
 - Every request and response body that carries non-binary resources `MUST` be a JSON object that
   holds them in `data`: one resource, or an array of resources.
 - Response metadata, such as paging state and counts, `MUST` be placed in a top-level `meta` object.
-- Errors are carried in a top-level `errors` array (see [errors](./errors.md)). Bodies that carry
-  something other than resources, such as [advanced queries](./advanced-queries.md),
+- Errors are carried in a top-level `errors` array, as [errors](./errors.md) describes. Bodies that
+  carry something other than resources, such as [advanced queries](./advanced-queries.md),
   [action](./acting-upon-resources.md) bodies, [bulk targeting](./bulk-operations.md#targeting), and
   JSON Patch documents, have shapes of their own, set by the pages that define them.
 
@@ -69,7 +69,7 @@ Every resource `MUST` include the following fields:
 | ------------ | -------------------------------------------------------------------------------- | -------- |
 | `attributes` | Details about the resource.                                                      | `object` |
 | `id`         | The unique ID of the resource. Even if the ID is numeric, it `MUST` be a string. | `string` |
-| `type`       | The _singular_ name of the resource (e.g. `user`).                               | `string` |
+| `type`       | The _singular_ name of the resource, such as `user`.                             | `string` |
 
 **Example**
 
@@ -112,7 +112,7 @@ The shape is credited to [JSON:API](https://jsonapi.org/).
 1. The envelope gives pagination, counts, and other response metadata somewhere to live that is not
    mixed in with the resource itself.
 2. It is a serialization concern, not a programming model concern. Handlers take and return plain
-   model classes; how those serialize is the framework's business. No application code should ever
+   model classes. How those serialize is the framework's business. No application code should ever
    see `data` or `attributes`.
 
 ### Why do I have to specify the ID in the path _and_ the JSON body?
@@ -126,7 +126,7 @@ The shape is credited to [JSON:API](https://jsonapi.org/).
 
 1. So that the JSON is comprehensive and self-describing.
 2. Because the context in which the JSON is consumed cannot be completely known in advance.
-3. Because some APIs are polymorphic and return multiple types (e.g. `GET /api/v1/users` might
-   return some whose type is `employee` and others whose type is `contractor`).
+3. Because some APIs are polymorphic and return multiple types. For example, `GET /api/v1/users`
+   might return some resources whose type is `employee` and others whose type is `contractor`.
 4. Establishing just one rule to "always include it" is easier to remember than multiple rules for
    when it is required and when it is not required.

@@ -14,14 +14,14 @@ an operation on the collection as a whole.
 
 ## Scope
 
-These standards apply to service-to-service APIs (APIs that one Bitwarden service calls on another)
-developed in new services.
+These standards apply to service-to-service APIs developed in new services. A service-to-service API
+is one that a Bitwarden service calls on another.
 
 They do not apply to:
 
 - Existing Bitwarden APIs, which predate these standards and are not being changed to conform. This
   includes the public API and the APIs our own clients call.
-- APIs that implement an external standard (e.g. webhooks, OpenTelemetry, health checks).
+- APIs that implement an external standard, such as webhooks, OpenTelemetry, or health checks.
 
 ## Overview
 
@@ -56,8 +56,8 @@ return - for both the happy path and possible error paths. Developers are encour
 terms of resources and be on guard against **API proliferation** that can result from over-tailoring
 APIs to the unique needs of this caller or that.
 
-In general, it is better to have one API per resource that can be called two different ways (e.g.
-query parameters) than two APIs that can only be called one way.
+In general, it is better to have one API per resource that can be called two different ways, such as
+through query parameters, than two APIs that can only be called one way.
 
 ## Authentication and authorization
 

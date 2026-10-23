@@ -7,8 +7,8 @@ Notation follows the [APIs index](./index.md#notation).
   attributes.
 - APIs `MAY` support `*` as a wildcard in filter values. Those that do `MUST` document which
   attributes accept it.
-- APIs that support filtering by an attribute of an attribute `MAY` use dot-notation (e.g.
-  `address.city`).
+- APIs that support filtering by an attribute of an attribute `MAY` use dot-notation, such as
+  `address.city`.
 
 ## Multi-value parameters
 

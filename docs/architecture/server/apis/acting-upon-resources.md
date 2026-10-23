@@ -35,5 +35,5 @@ Upon success, APIs `SHOULD` return `204` but `MAY` return `200` or `202`.
 | `202 Accepted`   | The action is scheduled.   | The [job](./jobs.md) that was scheduled to execute the action. |
 | `204 No Content` | The action was successful. | Nothing.                                                       |
 
-> A field that changes only through actions (e.g. a status whose transitions follow business rules)
-> `MUST` be read-only, so that no update can bypass the action.
+> A field that changes only through actions, such as a status whose transitions follow business
+> rules, `MUST` be read-only, so that no update can bypass the action.

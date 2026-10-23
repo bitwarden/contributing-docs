@@ -14,9 +14,6 @@ absent field means "do not change" and an explicit `null` clears the value.
    to do the same thing.
 4. It is hard to tell the difference between "null this field out" vs. "do not update this field".
 
-To be clear, teams _can_ support partial updates. We just think you will be better served by just
-sticking to simple updates.
-
 :::
 
 **Example**

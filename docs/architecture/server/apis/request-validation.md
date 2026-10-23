@@ -3,8 +3,8 @@
 Notation follows the [APIs index](./index.md#notation).
 
 Requests `MUST` be exhaustively validated before attempting to process the request and `SHOULD`
-return all errors at once (not stop after the first error is encountered). Exhaustive validation
-includes the following:
+return all errors at once, rather than stopping at the first error. Exhaustive validation includes
+the following:
 
 - Every required field, parameter, and header is present, not set to null, and not an empty string.
 - The data type of every field, parameter, and header is the correct data type. In the case of
@@ -21,8 +21,7 @@ includes the following:
 
 :::tip
 
-With some enhancements, developers should get all of the above "for free" from the
-`Bitwarden.Server.Sdk` which will <u>guarantee</u> that no request reaches developer code that does
-not conform to the declared request model.
+With some enhancements, `Bitwarden.Server.Sdk` is expected to perform all of the above validation,
+so that no request reaches developer code without conforming to the declared request model.
 
 :::
