@@ -19,9 +19,5 @@ the following:
 - Each resource's `type` is one the endpoint accepts, and its `id`, where the path names a resource,
   is the one in the path.
 
-:::tip
-
 With some enhancements, `Bitwarden.Server.Sdk` is expected to perform all of the above validation,
 so that no request reaches developer code without conforming to the declared request model.
-
-:::

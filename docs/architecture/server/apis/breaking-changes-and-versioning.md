@@ -25,17 +25,12 @@ of the API, even if the changes would technically be considered breaking changes
 Otherwise, if changes need to be made that _would_ be breaking changes, a new version of the API
 `MUST` be created and the old one [deprecated](./deprecation.md).
 
-:::faq[Why are service-to-service APIs versioned? Public APIs are not.]
+Service-to-service APIs are versioned, unlike the existing public API, because without formal
+versioning every change must be additive, which means the shape can never change and every new field
+is optional. Contracts constrained like that get weaker over time, and what we _want_ to express
+eventually cannot be expressed.
 
-Without formal versioning, every change must be additive, which means the shape can never change and
-every new field is optional. Contracts constrained like that get weaker over time, and what we
-_want_ to express eventually cannot be expressed, because we have committed ourselves to "additive
-changes only". This rules out adopting the existing public API conventions, which are expressly
-unversioned.
-
-:::
-
-:::note
+## Adding values to constrained fields
 
 Adding a value to a constrained field deserves a second look. It is additive, so it is not a
 breaking change by the definition above, and a caller that treats the field as an open string is
@@ -43,5 +38,3 @@ unaffected. But a generated client that deserializes the field into a closed enu
 on a value it has never seen - and it will fail at the client, on a change that looked safe from the
 service. Consider whether the callers of that field are tolerant of unknown values before adding
 one.
-
-:::

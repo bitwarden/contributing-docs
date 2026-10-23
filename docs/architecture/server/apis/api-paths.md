@@ -15,14 +15,6 @@ API paths `MUST` use **lowercase "kebab-case"** and conform as follows:
    path `SHOULD` be the ID of the resource it targets.
 5. Additional elements `MAY` be specified to target sub-resources.
 
-:::faq[Why versioning in the path?]
-
-It is visible in logs, traces, routing rules, and curl commands. It needs no content negotiation to
-read, and it lets two versions coexist behind one host. Header and media-type versioning are both
-defensible but harder to operate.
-
-:::
-
 **Examples**
 
 ```text
@@ -38,11 +30,15 @@ address 456 of user 123, then every parent path would resolve as follows:
 - `GET /api/v1/users/123` should return details about user 123.
 - `GET /api/v1/users` should return all users.
 
-:::tip
-
 Not every parent path has to exist as a callable API, and a caller is not necessarily authorized to
 call one that does. Traversable paths show how paths fit together, and how they _would_ resolve if
 APIs existed for every parent path.
+
+:::note
+
+2. The version is in the path because it is then visible in logs, traces, routing rules, and curl
+   commands, needs no content negotiation to read, and lets two versions coexist behind one host.
+   Header and media-type versioning are both defensible but harder to operate.
 
 :::
 
@@ -50,10 +46,10 @@ APIs existed for every parent path.
 
 Every request targets a **subject** and runs inside a **scope**:
 
-- The **subject** is what the request acts on, which is a resource or a collection of resources. It
-  `MUST` be named in the path.
-- The **scope** is what the request runs inside - the current organization, the current user. It
-  `MUST NOT` be named in the path. It travels as context.
+1. The **subject** is what the request acts on, which is a resource or a collection of resources. It
+   `MUST` be named in the path.
+2. The **scope** is what the request runs inside - the current organization, the current user. It
+   `MUST NOT` be named in the path. It travels as context.
 
 That is the whole of the path rule. A path says what is acted on or fetched. It does not say what a
 call returns: which parts of the scope an operation requires, permits or refuses is declared by the
@@ -70,19 +66,19 @@ operation, and belongs to authentication and authorization, which a forthcoming 
 `current` `SHOULD` be used where the subject is whatever the scope names, rather than repeating an
 identifier the caller has already supplied.
 
-:::faq[Why keep the scope out?]
-
-An identifier in a path is something a caller can try other values of, and a path that accepts one
-must prove on every request that this caller may use this value. A scope taken from context is
-established once, where the caller is authenticated. It also keeps one path for a resource that can
-belong to more than one kind of owner.
-
-:::
-
 Callers `SHOULD` send the current organization and the current user on every request where each
 exists. Two services may publish the same path and declare different things about the scope - one
 `GET /api/v1/organizations` requiring a user and returning theirs, another requiring none and
 returning all. Both name the same subject. The path is not what distinguishes them.
+
+:::note
+
+2. The scope stays out of the path because an identifier in a path is something a caller can try
+   other values of, and a path that accepts one must prove on every request that this caller may use
+   this value. A scope taken from context is established once, where the caller is authenticated. It
+   also keeps one path for a resource that can belong to more than one kind of owner.
+
+:::
 
 ## Working across several scopes
 

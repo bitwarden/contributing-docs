@@ -23,14 +23,10 @@ On a parameter that accepts multiple values or a [range](#ranges), a comma that 
 Wherever either escape applies, a backslash that is part of a value `MUST` also be escaped as `\\`.
 A parameter that takes a single value is never split, so a comma in its value needs no escaping.
 
-:::tip
-
-**Take care when a single-value parameter gains multi-value support.** A caller sending an unescaped
+Take care when a single-value parameter gains multi-value support. A caller sending an unescaped
 comma will suddenly be sending two values. That is usually safe, because the evolution typically
 happens on constrained fields whose values cannot contain commas - but confirm it before making the
 change.
-
-:::
 
 ## Ranges
 

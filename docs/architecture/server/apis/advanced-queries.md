@@ -27,7 +27,7 @@ supported:
 A request that uses any other operator, or references a field the API does not support, `MUST` be
 rejected with `422`.
 
-:::faq[Why are we standardizing on JSON Logic instead of OData?]
+JSON Logic is used rather than OData's `$filter` because:
 
 1. OData's `$filter` is a string expression language, so both building and parsing it require string
    handling where JSON is already right there.
@@ -35,8 +35,6 @@ rejected with `422`.
    bugs happen. Composing a JSON object does not.
 3. OData brings a great deal more than filtering - metadata documents, `$expand`, batch, its own
    conventions - and we only want the filtering.
-
-:::
 
 **Example**
 

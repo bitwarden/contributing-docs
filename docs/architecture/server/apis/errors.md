@@ -47,15 +47,12 @@ The error object is credited to [JSON:API](https://jsonapi.org/).
 
 ## Where we depart from an RFC
 
-**RFC:** [RFC 9457](https://www.rfc-editor.org/info/rfc9457/) Problem Details: one problem per
-response, identified by a `type` URI and served as `application/problem+json`. Multiple failures
-require an extension member that each API defines.
-
-**These standards:** An array of error objects in a top-level `errors` field, each with a `code`,
-`status`, `title`, `detail`, `id`, and a `source` that points at a body field, a query parameter, or
-a header.
-
-**Why:**
+[RFC 9457](https://www.rfc-editor.org/info/rfc9457/) Problem Details reports one problem per
+response, identified by a `type` URI and served as `application/problem+json`, and multiple failures
+require an extension member that each API defines. These standards instead return an array of error
+objects in a top-level `errors` field, each with a `code`, `status`, `title`, `detail`, `id`, and a
+`source` that points at a body field, a query parameter, or a header. They depart from RFC 9457
+because:
 
 - **Simpler for callers.** Every error response has the same shape whether it reports one failure or
   twenty, so a caller writes one parser. Problem Details needs an extension, defined by us, as soon

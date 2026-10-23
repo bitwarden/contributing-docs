@@ -43,13 +43,10 @@ implemented as one set-based statement where the outcome allows. The `:verb` syn
 
 A request `MUST` supply exactly one form of targeting, whichever forms the operation accepts.
 
-:::faq[Why IDs when a filter can say `{ "in": [{ "var": "id" }, [...]] }`?]
-
-Because of what happens to an ID that matches nothing. With ids, the caller named the resource, so a
-missing one is a failure and is reported back. With filter, the caller described a set, and a
+`ids` exists alongside `filter`, even though a filter can say `{ "in": [{ "var": "id" }, [...]] }`,
+because of what happens to an ID that matches nothing. With `ids`, the caller named the resource, so
+a missing one is a failure and is reported back. With `filter`, the caller described a set, and a
 resource that is not in it simply is not in it.
-
-:::
 
 - A `filter` `MUST NOT` be empty.
 - `ids` and `data` `MUST NOT` name the same resource twice.
@@ -131,13 +128,9 @@ size. Callers `MUST` handle every response the API documents.
 | `202 Accepted`   | The request is scheduled.                                                                               | The [job](./jobs.md) that was scheduled to process it. |
 | `204 No Content` | All-or-nothing only. Every resource succeeded.                                                          | Nothing.                                               |
 
-:::faq[Why not `207 Multi-Status` for best-effort results?]
-
-`207` comes from WebDAV and carries an XML body by definition. Callers already have to inspect
-`meta.failedCount` and `errors` to learn which resources failed, so a distinct status code adds
-nothing but another case to handle.
-
-:::
+Best-effort results use `200` rather than `207 Multi-Status` because `207` comes from WebDAV and
+carries an XML body by definition. Callers already have to inspect `meta.failedCount` and `errors`
+to learn which resources failed, so a distinct status code adds nothing but another case to handle.
 
 A `200` response carries:
 
@@ -261,14 +254,10 @@ The semantics of `update` are credited to [RFC 7396](https://www.rfc-editor.org/
 Merge Patch, with the departure described under
 [partial updates](./partial-updates.md#where-we-depart-from-an-rfc).
 
-:::tip
-
-**A bulk update is never a way around an action.** A field that changes only through actions -
-typically a status whose transitions are governed by business rules - is read-only, and so cannot be
-set by a bulk update. Changing it for many resources is a bulk action, such as
+A bulk update is never a way around an action. A field that changes only through actions, typically
+a status whose transitions are governed by business rules, is read-only, and so cannot be set by a
+bulk update. Changing it for many resources is a bulk action, such as
 `POST /api/v1/users:bulk-disable`, which applies the action's transition rules to each resource.
-
-:::
 
 **Example**
 

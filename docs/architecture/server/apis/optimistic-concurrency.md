@@ -13,13 +13,10 @@ Notation follows the [APIs index](./index.md#notation).
 
 ## Where we depart from an RFC
 
-**RFC:** [RFC 9110](https://www.rfc-editor.org/info/rfc9110/) conditional requests: an `ETag`
-response header, an `If-Match` request header, and `412 Precondition Failed` on a mismatch.
-
-**These standards:** A `version` field in the resource, sent back on update, and `409 Conflict` on a
-mismatch.
-
-**Why:**
+[RFC 9110](https://www.rfc-editor.org/info/rfc9110/) conditional requests use an `ETag` response
+header, an `If-Match` request header, and `412 Precondition Failed` on a mismatch. These standards
+instead use a `version` field in the resource, sent back on update, and `409 Conflict` on a
+mismatch. They depart from conditional requests because:
 
 - **Sanctioned by the same RFC.** RFC 9110 describes this exact case under `409`: a representation
   sent with `PUT` that conflicts with an earlier change, where versioning is in use. Conditional
