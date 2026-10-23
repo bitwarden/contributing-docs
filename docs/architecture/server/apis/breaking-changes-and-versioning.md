@@ -21,7 +21,7 @@ of the API, even if the changes would technically be considered breaking changes
 Otherwise, if changes need to be made that _would_ be breaking changes, a new version of the API
 `MUST` be created and the old one [deprecated](./deprecation.md).
 
-:::faq[Why are service-to-service APIs versioned? Public APIs aren't.]
+:::faq[Why are service-to-service APIs versioned? Public APIs are not.]
 
 We feel strongly that service-to-service APIs should be formally versioned. Without formal
 versioning, every change must be additive, which means the shape can never change and every new

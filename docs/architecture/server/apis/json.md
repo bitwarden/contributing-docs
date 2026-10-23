@@ -8,7 +8,7 @@
   runtime, however, APIs `MUST` ignore case when validating these values.
 - APIs `SHOULD` strip leading and trailing whitespace from all strings before processing them.
 - APIs `MUST` treat an empty string the same as if the field is not present.
-- APIs `MUST` treat a field that isn't present the same as `null`, except in
+- APIs `MUST` treat a field that is not present the same as `null`, except in
   [partial updates](./partial-updates.md).
 - APIs `SHOULD NOT` include `null` fields in responses.
 

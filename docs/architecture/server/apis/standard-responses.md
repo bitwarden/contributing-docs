@@ -4,21 +4,21 @@ APIs `SHOULD NOT` document standard responses because these responses apply to e
 documenting them over and over again just creates noise. The following responses are possible for
 every API:
 
-| Response | Description                                                                                                    |
-| -------- | -------------------------------------------------------------------------------------------------------------- |
-| `400`    | A malformed request (i.e. invalid JSON).                                                                       |
-| `401`    | The caller isn't [recognized](./index.md#authentication-and-authorization) (i.e. not authenticated).           |
-| `403`    | The caller isn't [authorized](./index.md#authentication-and-authorization) to invoke the API (i.e. forbidden). |
-| `404`    | The resource specified via the URL path does not exist (or the caller isn't allowed to know it exists).        |
-| `405`    | The HTTP method is not allowed.                                                                                |
-| `406`    | The API doesn't return the specified media type.                                                               |
-| `409`    | The attempted update conflicts with some other update (i.e. was changed since the caller last read it).        |
-| `415`    | The API doesn't accept the specified media type.                                                               |
-| `422`    | An error the client can fix.                                                                                   |
-| `429`    | The caller has made too many requests.                                                                         |
-| `500`    | An unexpected error the client cannot fix.                                                                     |
-| `501`    | The API has just been stubbed out and has not been implemented, yet.                                           |
-| `503`    | The service or a dependency is unavailable, overloaded, or timed out.                                          |
+| Response | Description                                                                                                     |
+| -------- | --------------------------------------------------------------------------------------------------------------- |
+| `400`    | A malformed request (i.e. invalid JSON).                                                                        |
+| `401`    | The caller is not [recognized](./index.md#authentication-and-authorization) (i.e. not authenticated).           |
+| `403`    | The caller is not [authorized](./index.md#authentication-and-authorization) to invoke the API (i.e. forbidden). |
+| `404`    | The resource specified via the URL path does not exist (or the caller is not allowed to know it exists).        |
+| `405`    | The HTTP method is not allowed.                                                                                 |
+| `406`    | The API does not return the specified media type.                                                               |
+| `409`    | The attempted update conflicts with some other update (i.e. was changed since the caller last read it).         |
+| `415`    | The API does not accept the specified media type.                                                               |
+| `422`    | An error the client can fix.                                                                                    |
+| `429`    | The caller has made too many requests.                                                                          |
+| `500`    | An unexpected error the client cannot fix.                                                                      |
+| `501`    | The API has just been stubbed out and has not been implemented, yet.                                            |
+| `503`    | The service or a dependency is unavailable, overloaded, or timed out.                                           |
 
 The status codes and their meanings are credited to
 [RFC 9110](https://www.rfc-editor.org/info/rfc9110/) HTTP Semantics.

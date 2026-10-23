@@ -20,7 +20,7 @@ includes the following:
 :::tip
 
 With some enhancements, developers should get all of the above "for free" from the
-`Bitwarden.Server.Sdk` which will <u>guarantee</u> that no request reaches developer code that
-doesn't conform to the declared request model.
+`Bitwarden.Server.Sdk` which will <u>guarantee</u> that no request reaches developer code that does
+not conform to the declared request model.
 
 :::

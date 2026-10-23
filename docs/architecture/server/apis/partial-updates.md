@@ -1,10 +1,10 @@
 # Partial updates
 
 Services `SHOULD NOT` support partial updates - see below for why. A service that _does_ support
-them `MUST` use `PATCH` and `MUST` ignore any field that isn't specified. In a partial update, an
+them `MUST` use `PATCH` and `MUST` ignore any field that is not specified. In a partial update, an
 absent field means "do not change" and an explicit `null` clears the value.
 
-:::faq[Why shouldn't we support partial updates?]
+:::faq[Why should we not support partial updates?]
 
 1. `PUT` with completely-replace semantics is simpler to implement and far more common.
 2. UI teams tend to prefer read-modify-write semantics which works well with `PUT`.

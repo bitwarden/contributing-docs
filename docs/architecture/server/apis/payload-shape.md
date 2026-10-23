@@ -105,7 +105,7 @@ The shape is credited to [JSON:API](https://jsonapi.org/).
 
 ## Frequently asked questions
 
-### Why is there an envelope? Can't the API just return the object?
+### Why is there an envelope? Why not just return the object?
 
 1. The envelope gives pagination, counts, and other response metadata somewhere to live that is not
    mixed in with the resource itself.

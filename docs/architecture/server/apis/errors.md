@@ -14,7 +14,7 @@ populates the following fields, except that at most one `source` member applies 
 | `source.parameter` | The query parameter that caused the error.                                                                        | `string` |
 | `source.pointer`   | A [JSON Pointer](https://www.rfc-editor.org/info/rfc6901/) to the field in error (e.g. `/data/attributes/title`). | `string` |
 | `status`           | The HTTP status code applicable to this problem.                                                                  | `string` |
-| `title`            | A short, human-readable summary of the problem that doesn't change from occurrence to occurrence.                 | `string` |
+| `title`            | A short, human-readable summary of the problem that does not change from occurrence to occurrence.                | `string` |
 
 **Example**
 

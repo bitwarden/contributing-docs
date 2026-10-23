@@ -45,7 +45,7 @@ A request `MUST` supply exactly one form of targeting, whichever forms the opera
 
 Because of what happens to an ID that matches nothing. With ids, the caller named the resource, so a
 missing one is a failure and is reported back. With filter, the caller described a set, and a
-resource that isn't in it simply isn't in it.
+resource that is not in it simply is not in it.
 
 :::
 
@@ -153,8 +153,8 @@ Each error `MUST` identify the resource that failed:
 - by `meta.resource`, a `type` and `id`, where it does not (i.e. `filter` targeting).
 
 An error's `status` `MUST` be what the single-resource API would have returned for that resource -
-for example, `404` for an ID that doesn't exist, `409` for a version conflict, or `422` for a broken
-business rule.
+for example, `404` for an ID that does not exist, `409` for a version conflict, or `422` for a
+broken business rule.
 
 To correlate created resources with request items, a bulk create `MAY` accept a
 [lid](https://jsonapi.org/format/#document-resource-object-identification) on each item. An API that
