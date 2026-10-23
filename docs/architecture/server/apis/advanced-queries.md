@@ -38,7 +38,8 @@ rejected with `422`.
 
 **Example**
 
-Find active or invited users whose KDF iterations are below the current minimum:
+Find active or invited users whose key derivation function (KDF) iterations are below the current
+minimum:
 
 ```http
 POST /api/v1/users:search?page[size]=50&sort=-createdAt
