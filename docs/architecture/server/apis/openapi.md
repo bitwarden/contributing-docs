@@ -14,7 +14,7 @@ APIs `MUST` be documented in [OpenAPI](https://www.openapis.org/) format.
   `version`, which `MUST NOT` be marked `readOnly` because callers send it back on update, as
   [optimistic concurrency](./optimistic-concurrency.md) explains.
 - If a single-resource request includes a read-only field, the API `MUST` ignore it. A
-  [bulk update](./bulk-operations.md#bulk-updates) that names a read-only field is instead rejected
+  [bulk update](./bulk-operations/bulk-updates.md) that names a read-only field is instead rejected
   with `422`.
 
 ## Operation identifiers

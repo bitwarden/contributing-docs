@@ -39,4 +39,4 @@ Upon success, APIs `SHOULD` return `201` but `MAY` return `202` or `204`.
 A successful create returns the new resource because the caller usually needs the server-generated
 ID and the stored representation, and getting both in one response saves a second call.
 
-Creating many resources at once is a [bulk create](./bulk-operations.md#bulk-creates).
+Creating many resources at once is a [bulk create](./bulk-operations/bulk-creates.md).

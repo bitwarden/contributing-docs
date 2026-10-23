@@ -10,7 +10,7 @@ Notation follows the [APIs index](./index.md#notation).
    object.
 3. Errors are carried in a top-level `errors` array, as [errors](./errors.md) describes. Bodies that
    carry something other than resources, such as [advanced queries](./advanced-queries.md),
-   [action](./acting-upon-resources.md) bodies, [bulk targeting](./bulk-operations.md#targeting),
+   [action](./acting-upon-resources.md) bodies, [bulk targeting](./bulk-operations/targeting.md),
    and JSON Patch documents, have shapes of their own, set by the pages that define them.
 
 **Example**
@@ -103,7 +103,7 @@ Every resource `MUST` include the following fields:
 ```
 
 The only exception is when a resource is being created via `POST`, or via a
-[bulk create](./bulk-operations.md#bulk-creates), against an API that will generate the ID. In this
+[bulk create](./bulk-operations/bulk-creates.md), against an API that will generate the ID. In this
 case, the `id` field `MUST` be omitted.
 
 Each kind of resource in a service `MUST` have its own `type`: no two share one.

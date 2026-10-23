@@ -56,8 +56,8 @@ This is the familiar CRUD paradigm and, while there will always be exceptions, d
 strive to think in these terms for every API created. Both for simplicity and consistency.
 
 We do recognize, however, that not every API will fit cleanly into this CRUD paradigm. APIs that
-[“act” upon resources](./acting-upon-resources.md) and [bulk-processing](./bulk-operations.md) APIs
-are two notable examples. Standards for every pattern are described below.
+[“act” upon resources](./acting-upon-resources.md) and [bulk-processing](./bulk-operations/index.md)
+APIs are two notable examples. Standards for every pattern are described below.
 
 ### Well-defined APIs
 
@@ -124,15 +124,15 @@ organization travels with a request are the subject of a forthcoming standard.
 
 ### Bulk and asynchronous work
 
-- [Bulk operations](./bulk-operations.md)
-- [Targeting](./bulk-operations.md#targeting)
-- [Per-resource rules](./bulk-operations.md#per-resource-rules)
-- [All-or-nothing and best-effort](./bulk-operations.md#all-or-nothing-and-best-effort)
-- [Synchronous and asynchronous](./bulk-operations.md#synchronous-and-asynchronous)
-- [Bulk responses](./bulk-operations.md#bulk-responses)
-- [Bulk creates](./bulk-operations.md#bulk-creates)
-- [Bulk updates](./bulk-operations.md#bulk-updates)
-- [Bulk replaces](./bulk-operations.md#bulk-replaces)
-- [Bulk deletes](./bulk-operations.md#bulk-deletes)
-- [Bulk actions](./bulk-operations.md#bulk-actions)
+- [Bulk operations](./bulk-operations/index.md)
+- [Targeting](./bulk-operations/targeting.md)
+- [Per-resource rules](./bulk-operations/per-resource-rules.md)
+- [All-or-nothing and best-effort](./bulk-operations/all-or-nothing-and-best-effort.md)
+- [Synchronous and asynchronous](./bulk-operations/synchronous-and-asynchronous.md)
+- [Bulk responses](./bulk-operations/bulk-responses.md)
+- [Bulk creates](./bulk-operations/bulk-creates.md)
+- [Bulk updates](./bulk-operations/bulk-updates.md)
+- [Bulk replaces](./bulk-operations/bulk-replaces.md)
+- [Bulk deletes](./bulk-operations/bulk-deletes.md)
+- [Bulk actions](./bulk-operations/bulk-actions.md)
 - [Jobs](./jobs.md)

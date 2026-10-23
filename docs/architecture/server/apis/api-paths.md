@@ -9,7 +9,7 @@ API paths `MUST` use **lowercase "kebab-case"** and conform as follows:
 2. The next element of the API path `MUST` be the version number starting with `v1`.
 3. The next element of the API path `MUST` specify the resource or resources it targets. For
    resource-oriented APIs, this element `SHOULD` be the "resource plural", such as `users`.
-   [Bulk-processing](./bulk-operations.md) APIs are an exception to this rule.
+   [Bulk-processing](./bulk-operations/index.md) APIs are an exception to this rule.
    - APIs that create resources stop here.
 4. If the API targets a specific resource, as an update or delete does, the next element of the API
    path `SHOULD` be the ID of the resource it targets.

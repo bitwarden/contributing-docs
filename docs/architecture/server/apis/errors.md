@@ -10,7 +10,7 @@ populates the following fields, except that at most one `source` member applies 
 | `code`             | A stable, machine-readable error code.                                                                              | `string` |
 | `detail`           | A human-readable explanation specific to this occurrence. May be localized.                                         | `string` |
 | `id`               | A unique identifier for this particular occurrence of the problem.                                                  | `string` |
-| `meta.resource`    | The `type` and `id` of the resource that failed, in a [bulk operation](./bulk-operations.md#bulk-responses).        | `object` |
+| `meta.resource`    | The `type` and `id` of the resource that failed, in a [bulk operation](./bulk-operations/bulk-responses.md).        | `object` |
 | `source`           | A reference to the primary source of the error.                                                                     | `object` |
 | `source.header`    | The name of the request header that caused the error.                                                               | `string` |
 | `source.parameter` | The query parameter that caused the error.                                                                          | `string` |

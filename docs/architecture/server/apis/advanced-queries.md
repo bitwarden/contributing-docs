@@ -67,7 +67,7 @@ Upon success, APIs `MUST` return `200`.
 | -------- | -------------------------- | ----------------------------------------- |
 | `200 OK` | The search was successful. | The matching resources, paged and sorted. |
 
-The same notation selects resources for [bulk operations](./bulk-operations.md#targeting).
+The same notation selects resources for [bulk operations](./bulk-operations/targeting.md).
 
 The `:search` syntax is credited to [Google AIP-136](https://google.aip.dev/136), and the query
 notation to [JSON Logic](https://jsonlogic.com/).
