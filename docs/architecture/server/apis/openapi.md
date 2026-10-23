@@ -8,8 +8,12 @@ APIs `MUST` be documented in [OpenAPI](https://www.openapis.org/) format.
 - APIs `SHOULD` document which attributes are filterable and which are sortable.
 - Fields that must always be present `MUST` be marked as `required`.
 - Fields whose value may be null `MUST` be marked as `nullable`.
-- Fields whose value is set by the server `MUST` be marked as `readOnly`. If a request includes a
-  read-only field, the API `MUST` ignore it.
+- Fields whose value is set by the server `MUST` be marked as `readOnly`. The one exception is
+  `version`, which `MUST NOT` be marked `readOnly` because callers send it back on update, as
+  [optimistic concurrency](./optimistic-concurrency.md) explains.
+- If a single-resource request includes a read-only field, the API `MUST` ignore it. A
+  [bulk update](./bulk-operations.md#bulk-updates) that names a read-only field is instead rejected
+  with `422`.
 
 ## Operation identifiers
 

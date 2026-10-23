@@ -253,7 +253,7 @@ Bulk updates apply the same change to every targeted resource.
 - The single-resource update rules `MUST` be applied to each resource, both as it is and as it would
   be after the change.
 - Bulk updates do not check [version](./optimistic-concurrency.md), but `MUST` increment it on every
-  resource they change.
+  resource they change. A request whose `update` includes `version` `MUST` be rejected with `422`.
 
 The semantics of `update` are credited to [RFC 7396](https://www.rfc-editor.org/info/rfc7396/) JSON
 Merge Patch, with the departure described under
