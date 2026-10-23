@@ -18,10 +18,10 @@ They do not apply to:
 [ADR-0036](../../adr/0036-service-to-service-api-standards.md) requires service-to-service APIs to
 conform to a documented set of standards. These are those standards.
 
-As set out in ADR-0039, the standards are self-contained: every rule is stated here, and no rule is
-incorporated by reference. Where an IETF RFC covers a topic, the standards adopt it as published,
-and where they keep their own answer instead, they record why. Conventions taken from other
-specifications are credited to their source.
+As set out in [ADR-0039](../../adr/0039-base-api-standards-on-ietf-rfcs.md), the standards are
+self-contained: every rule is stated here, and no rule is incorporated by reference. Where an IETF
+RFC covers a topic, the standards adopt it as published, and where they keep their own answer
+instead, they record why. Conventions taken from other specifications are credited to their source.
 
 ## General
 
