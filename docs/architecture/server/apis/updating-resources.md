@@ -4,7 +4,7 @@ Notation follows the [APIs index](./index.md#notation).
 
 - HTTP verb `MUST` be `PUT`.
 - API path `SHOULD` follow the pattern `/api/v1/{resource plural}/{id}`.
-- Resources `SHOULD` carry `updatedBy` and `updatedAt` fields.
+- Resources `SHOULD` carry `updatedBy` and `revisionDate` fields.
 
 If the request's `type` is not that of the resource named in the path, or its `id` is not the one in
 the path, the API `MUST` return `422`. This applies to [partial updates](./partial-updates.md) too.

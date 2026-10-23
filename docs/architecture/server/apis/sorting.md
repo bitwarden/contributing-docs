@@ -8,11 +8,11 @@ as descending.
 
 **Examples**
 
-| Example                | Description                                                      |
-| ---------------------- | ---------------------------------------------------------------- |
-| `sort=name`            | Sort by the user's name ascending.                               |
-| `sort=-name`           | Sort by the user's name descending.                              |
-| `sort=name,email`      | Sort by the user's name and then by email.                       |
-| `sort=name,-createdAt` | Sort by the user's name and then by most recently created first. |
+| Example                   | Description                                                      |
+| ------------------------- | ---------------------------------------------------------------- |
+| `sort=name`               | Sort by the user's name ascending.                               |
+| `sort=-name`              | Sort by the user's name descending.                              |
+| `sort=name,email`         | Sort by the user's name and then by email.                       |
+| `sort=name,-creationDate` | Sort by the user's name and then by most recently created first. |
 
 The `sort` parameter is credited to [JSON:API](https://jsonapi.org/).

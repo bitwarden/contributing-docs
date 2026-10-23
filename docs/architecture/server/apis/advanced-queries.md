@@ -41,7 +41,7 @@ JSON Logic is used rather than OData's `$filter` because:
 Find premium users whose key derivation function (KDF) iterations are below the current minimum:
 
 ```http
-POST /api/v1/users:search?page[size]=50&sort=-createdAt
+POST /api/v1/users:search?page[size]=50&sort=-creationDate
 Accept: application/json
 Content-Type: application/json
 ```

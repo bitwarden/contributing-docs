@@ -21,7 +21,7 @@ Content-Type: application/json
   "filter": {
     "and": [
       { "==": [{ "var": "emailVerified" }, false] },
-      { "<": [{ "var": "createdAt" }, "2026-06-01T00:00:00Z"] }
+      { "<": [{ "var": "creationDate" }, "2026-06-01T00:00:00Z"] }
     ]
   }
 }

@@ -39,16 +39,16 @@ to" are implemented.
 
 ## Examples
 
-| Example                                                         | Description                                                    |
-| --------------------------------------------------------------- | -------------------------------------------------------------- |
-| `filter[email]=bob@example.com`                                 | Users whose email is 'bob@example.com'.                        |
-| `filter[name]=B*`                                               | Users whose name begins with 'B'.                              |
-| `filter[name]=*Smith`                                           | Users whose name ends with 'Smith'.                            |
-| `filter[name]=*mi*`                                             | Users whose name contains 'mi'.                                |
-| `filter[email]=bob@example.com,alice@example.com`               | Users whose email is 'bob@example.com' or 'alice@example.com'. |
-| `filter[failedLoginCount]=[3,*)`                                | Users who have 3 or more failed login attempts.                |
-| `filter[createdAt]=(*,2026-01-01T00:00:00Z)`                    | Users created before 2026.                                     |
-| `filter[createdAt]=[2025-01-01T00:00:00Z,2026-01-01T00:00:00Z)` | Users created in 2025.                                         |
+| Example                                                            | Description                                                    |
+| ------------------------------------------------------------------ | -------------------------------------------------------------- |
+| `filter[email]=bob@example.com`                                    | Users whose email is 'bob@example.com'.                        |
+| `filter[name]=B*`                                                  | Users whose name begins with 'B'.                              |
+| `filter[name]=*Smith`                                              | Users whose name ends with 'Smith'.                            |
+| `filter[name]=*mi*`                                                | Users whose name contains 'mi'.                                |
+| `filter[email]=bob@example.com,alice@example.com`                  | Users whose email is 'bob@example.com' or 'alice@example.com'. |
+| `filter[failedLoginCount]=[3,*)`                                   | Users who have 3 or more failed login attempts.                |
+| `filter[creationDate]=(*,2026-01-01T00:00:00Z)`                    | Users created before 2026.                                     |
+| `filter[creationDate]=[2025-01-01T00:00:00Z,2026-01-01T00:00:00Z)` | Users created in 2025.                                         |
 
 See also [Advanced Queries](./advanced-queries.md).
 
