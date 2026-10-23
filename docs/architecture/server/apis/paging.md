@@ -96,7 +96,7 @@ Paging metadata `MUST` be populated within the `meta` field of responses as foll
 **Example**
 
 ```http
-GET /api/v1/users?page[size]=2&page[after]=dXNlcnM6NjJiZWQxODA
+GET /api/v1/users?page[size]=2&page[after]=dXNlcnM6NGMxZTlhMmY
 Accept: application/json
 ```
 
