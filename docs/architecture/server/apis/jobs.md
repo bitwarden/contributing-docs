@@ -8,11 +8,7 @@ and bulk operations alike.
 
 :::info
 
-:::info
-
 The job resource, including its fields, its states, and how a caller follows its progress, is not
 yet defined.
-
-:::
 
 :::
