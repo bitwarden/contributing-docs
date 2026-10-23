@@ -79,6 +79,7 @@ explicit `null` clears it.
   an empty string, which these standards never store.
 - **Fewer bugs.** A distinction between an empty string and an absent field has to survive every
   serializer, language, and data store a value passes through. Treating them the same removes that
-  class of bug, as [the FAQ](./json.md) explains.
+  class of bug, as the [JSON](./json.md) page explains in its answer to why empty strings are
+  treated like `null`.
 - **Just as easy to adopt.** A caller building a merge patch document with a standard library is
   unaffected unless it sends an empty string.
