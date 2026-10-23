@@ -38,8 +38,7 @@ JSON Logic is used rather than OData's `$filter` because:
 
 **Example**
 
-Find active or invited users whose key derivation function (KDF) iterations are below the current
-minimum:
+Find premium users whose key derivation function (KDF) iterations are below the current minimum:
 
 ```http
 POST /api/v1/users:search?page[size]=50&sort=-createdAt
@@ -50,10 +49,7 @@ Content-Type: application/json
 ```json
 {
   "filter": {
-    "and": [
-      { "<": [{ "var": "kdfIterations" }, 600000] },
-      { "in": [{ "var": "status" }, ["ACTIVE", "INVITED"]] }
-    ]
+    "and": [{ "<": [{ "var": "kdfIterations" }, 600000] }, { "==": [{ "var": "premium" }, true] }]
   }
 }
 ```

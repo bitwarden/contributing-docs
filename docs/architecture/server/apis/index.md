@@ -12,6 +12,16 @@ Text in braces, such as `{resource plural}`, `{id}`, or `{action}`, is a placeho
 A colon after a collection path, as in `/api/v1/users:search` or `/api/v1/users:bulk-delete`, names
 an operation on the collection as a whole.
 
+## Examples
+
+No service implements these standards yet, so the examples are illustrative rather than taken from
+running code. They are modeled on existing data in the server repository, such as users in
+[`src/Core/Entities/User.cs`](https://github.com/bitwarden/server/blob/main/src/Core/Entities/User.cs),
+devices in
+[`src/Core/Entities/Device.cs`](https://github.com/bitwarden/server/blob/main/src/Core/Entities/Device.cs),
+and groups in
+[`src/Core/AdminConsole/Entities/Group.cs`](https://github.com/bitwarden/server/blob/main/src/Core/AdminConsole/Entities/Group.cs).
+
 ## Scope
 
 These standards apply to service-to-service APIs developed in new services. A service-to-service API

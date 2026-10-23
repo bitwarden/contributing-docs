@@ -32,8 +32,7 @@ The last page of a paged list of users:
             "type": "PERSONAL"
           }
         ],
-        "firstName": "Bob",
-        "lastName": "Smith"
+        "name": "Bob Smith"
       },
       "id": "62bed180-1f78-45d4-8a56-c996936a2947",
       "type": "user"
@@ -46,8 +45,7 @@ The last page of a paged list of users:
             "type": "WORK"
           }
         ],
-        "firstName": "Alice",
-        "lastName": "Jones"
+        "name": "Alice Jones"
       },
       "id": "cacba8c1-29fa-4018-8950-acd400ec76b7",
       "type": "user"
@@ -97,8 +95,7 @@ Every resource `MUST` include the following fields:
         "type": "PERSONAL"
       }
     ],
-    "firstName": "Bob",
-    "lastName": "Smith"
+    "name": "Bob Smith"
   },
   "id": "62bed180-1f78-45d4-8a56-c996936a2947",
   "type": "user"

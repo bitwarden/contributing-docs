@@ -18,10 +18,10 @@ supporting multiple-values without changing the external-facing contract. When m
 provided, "or" query semantics `MUST` be applied.
 
 On a parameter that accepts multiple values or a [range](#ranges), a comma that is part of a value
-`MUST` be escaped with a backslash - `filter[displayName]=Smith\, Jr` is the single value
-`Smith, Jr`. An asterisk `MUST` likewise be escaped wherever the API supports wildcard matching.
-Wherever either escape applies, a backslash that is part of a value `MUST` also be escaped as `\\`.
-A parameter that takes a single value is never split, so a comma in its value needs no escaping.
+`MUST` be escaped with a backslash - `filter[name]=Smith\, Jr` is the single value `Smith, Jr`. An
+asterisk `MUST` likewise be escaped wherever the API supports wildcard matching. Wherever either
+escape applies, a backslash that is part of a value `MUST` also be escaped as `\\`. A parameter that
+takes a single value is never split, so a comma in its value needs no escaping.
 
 Take care when a single-value parameter gains multi-value support. A caller sending an unescaped
 comma will suddenly be sending two values. That is usually safe, because the evolution typically
@@ -39,16 +39,16 @@ to" are implemented.
 
 ## Examples
 
-| Example                                                         | Description                                     |
-| --------------------------------------------------------------- | ----------------------------------------------- |
-| `filter[lastName]=Smith`                                        | Users whose last name is 'Smith'.               |
-| `filter[lastName]=S*`                                           | Users whose last name begins with 'S'.          |
-| `filter[lastName]=*th`                                          | Users whose last name ends with 'th'.           |
-| `filter[lastName]=*mi*`                                         | Users whose last name contains 'mi'.            |
-| `filter[lastName]=Smith,Jones`                                  | Users whose last name is 'Smith' or 'Jones'.    |
-| `filter[failedLoginCount]=[3,*)`                                | Users who have 3 or more failed login attempts. |
-| `filter[birthDate]=(*,2000-01-01T00:00:00Z)`                    | Users born before the year 2000.                |
-| `filter[birthDate]=[2000-01-01T00:00:00Z,2001-01-01T00:00:00Z)` | Users born in the year 2000.                    |
+| Example                                                         | Description                                                    |
+| --------------------------------------------------------------- | -------------------------------------------------------------- |
+| `filter[email]=bob@example.com`                                 | Users whose email is 'bob@example.com'.                        |
+| `filter[name]=B*`                                               | Users whose name begins with 'B'.                              |
+| `filter[name]=*Smith`                                           | Users whose name ends with 'Smith'.                            |
+| `filter[name]=*mi*`                                             | Users whose name contains 'mi'.                                |
+| `filter[email]=bob@example.com,alice@example.com`               | Users whose email is 'bob@example.com' or 'alice@example.com'. |
+| `filter[failedLoginCount]=[3,*)`                                | Users who have 3 or more failed login attempts.                |
+| `filter[createdAt]=(*,2026-01-01T00:00:00Z)`                    | Users created before 2026.                                     |
+| `filter[createdAt]=[2025-01-01T00:00:00Z,2026-01-01T00:00:00Z)` | Users created in 2025.                                         |
 
 See also [Advanced Queries](./advanced-queries.md).
 

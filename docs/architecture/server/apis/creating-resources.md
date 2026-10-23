@@ -18,8 +18,8 @@ Content-Type: application/json
 {
   "data": {
     "attributes": {
-      "firstName": "Bob",
-      "lastName": "Smith"
+      "email": "bob@example.com",
+      "name": "Bob Smith"
     },
     "type": "user"
   }

@@ -270,10 +270,10 @@ Content-Type: application/json
 ```json
 {
   "filter": {
-    "in": [{ "var": "department" }, ["Eng", "R&D"]]
+    "in": [{ "var": "culture" }, ["en", "en-us"]]
   },
   "update": {
-    "department": "Engineering"
+    "culture": "en-US"
   }
 }
 ```
@@ -301,8 +301,8 @@ Content-Type: application/json
   "data": [
     {
       "attributes": {
-        "firstName": "Bob",
-        "lastName": "Smith",
+        "email": "bob@example.com",
+        "name": "Bob Smith",
         "version": "4"
       },
       "id": "62bed180-1f78-45d4-8a56-c996936a2947",
@@ -310,8 +310,8 @@ Content-Type: application/json
     },
     {
       "attributes": {
-        "firstName": "Alice",
-        "lastName": "Jones",
+        "email": "alice@example.com",
+        "name": "Alice Jones",
         "version": "7"
       },
       "id": "cacba8c1-29fa-4018-8950-acd400ec76b7",
@@ -341,8 +341,8 @@ Content-Type: application/json
 {
   "filter": {
     "and": [
-      { "==": [{ "var": "status" }, "INVITED"] },
-      { "<": [{ "var": "invitedAt" }, "2026-06-01T00:00:00Z"] }
+      { "==": [{ "var": "emailVerified" }, false] },
+      { "<": [{ "var": "createdAt" }, "2026-06-01T00:00:00Z"] }
     ]
   }
 }

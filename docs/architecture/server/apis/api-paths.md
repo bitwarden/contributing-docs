@@ -20,13 +20,13 @@ API paths `MUST` use **lowercase "kebab-case"** and conform as follows:
 ```text
 /api/v1/users
 /api/v1/users/123
-/api/v1/users/123/addresses
+/api/v1/users/123/devices
 ```
 
-Paths `SHOULD` be traversable. If `GET /api/v1/users/123/addresses/456` returns the details about
-address 456 of user 123, then every parent path would resolve as follows:
+Paths `SHOULD` be traversable. If `GET /api/v1/users/123/devices/456` returns the details about
+device 456 of user 123, then every parent path would resolve as follows:
 
-- `GET /api/v1/users/123/addresses` should return all addresses of user 123.
+- `GET /api/v1/users/123/devices` should return all devices of user 123.
 - `GET /api/v1/users/123` should return details about user 123.
 - `GET /api/v1/users` should return all users.
 

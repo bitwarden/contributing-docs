@@ -9,7 +9,7 @@ always returned.
 **Example**
 
 ```http
-GET /api/v1/users?fields=firstName,lastName
+GET /api/v1/users?fields=name,email
 ```
 
 The `fields` parameter is credited to [JSON:API](https://jsonapi.org/).

@@ -19,16 +19,16 @@ Accept: application/json
   "data": [
     {
       "attributes": {
-        "firstName": "Bob",
-        "lastName": "Smith"
+        "email": "bob@example.com",
+        "name": "Bob Smith"
       },
       "id": "62bed180-1f78-45d4-8a56-c996936a2947",
       "type": "user"
     },
     {
       "attributes": {
-        "firstName": "Alice",
-        "lastName": "Jones"
+        "email": "alice@example.com",
+        "name": "Alice Jones"
       },
       "id": "cacba8c1-29fa-4018-8950-acd400ec76b7",
       "type": "user"
@@ -72,8 +72,8 @@ Accept: application/json
 {
   "data": {
     "attributes": {
-      "firstName": "Bob",
-      "lastName": "Smith"
+      "email": "bob@example.com",
+      "name": "Bob Smith"
     },
     "id": "62bed180-1f78-45d4-8a56-c996936a2947",
     "type": "user"

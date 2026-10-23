@@ -5,7 +5,7 @@ Notation follows the [APIs index](./index.md#notation).
 1. Dates `MUST` be formatted in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format, such as
    `2026-01-01T00:00:00Z`, and `MUST` include a time zone indicator and `SHOULD` standardize on UTC.
 2. Field values that are constrained to a fixed set of values `SHOULD` enumerate the valid values in
-   all caps, such as `RED`, `GREEN`, and `BLUE`, restricted to only ASCII characters, in both the
+   all caps, such as `OWNER`, `ADMIN`, and `USER`, restricted to only ASCII characters, in both the
    OpenAPI spec and in example JSON to help distinguish these fields from free-text string fields.
    At runtime, however, APIs `MUST` ignore case when validating these values.
 3. APIs `SHOULD` strip leading and trailing whitespace from all strings before processing them.

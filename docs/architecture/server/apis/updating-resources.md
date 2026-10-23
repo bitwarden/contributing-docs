@@ -21,8 +21,8 @@ Content-Type: application/json
 {
   "data": {
     "attributes": {
-      "firstName": "Bob",
-      "lastName": "Smith"
+      "email": "bob@example.com",
+      "name": "Bob Smith"
     },
     "id": "62bed180-1f78-45d4-8a56-c996936a2947",
     "type": "user"
