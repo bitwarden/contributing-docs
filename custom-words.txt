@@ -43,6 +43,7 @@ Iterm
 Jetpack
 jslib
 jumpcloud
+kebab
 keychain
 keypair
 keyserver
