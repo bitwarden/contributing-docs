@@ -22,13 +22,13 @@ or both.
 
 All bulk operations use `POST`:
 
-| Operation                          | API path                                  | Targeting                        |
-| ---------------------------------- | ----------------------------------------- | -------------------------------- |
-| [Bulk create](./bulk-creates.md)   | `/api/v1/{resource plural}:bulk-create`   | `data`                           |
-| [Bulk update](./bulk-updates.md)   | `/api/v1/{resource plural}:bulk-update`   | `ids` or `filter`, plus `update` |
-| [Bulk replace](./bulk-replaces.md) | `/api/v1/{resource plural}:bulk-replace`  | `data`                           |
-| [Bulk delete](./bulk-deletes.md)   | `/api/v1/{resource plural}:bulk-delete`   | `ids` or `filter`                |
-| [Bulk action](./bulk-actions.md)   | `/api/v1/{resource plural}:bulk-{action}` | `ids` or `filter`, plus `data`   |
+| Operation                          | API path                                  | Targeting                                       |
+| ---------------------------------- | ----------------------------------------- | ----------------------------------------------- |
+| [Bulk create](./bulk-creates.md)   | `/api/v1/{resource plural}:bulk-create`   | `data`                                          |
+| [Bulk update](./bulk-updates.md)   | `/api/v1/{resource plural}:bulk-update`   | `ids` or `filter`, plus `update`                |
+| [Bulk replace](./bulk-replaces.md) | `/api/v1/{resource plural}:bulk-replace`  | `data`                                          |
+| [Bulk delete](./bulk-deletes.md)   | `/api/v1/{resource plural}:bulk-delete`   | `ids` or `filter`                               |
+| [Bulk action](./bulk-actions.md)   | `/api/v1/{resource plural}:bulk-{action}` | `ids` or `filter`, plus `data`, or `data` alone |
 
 Each operation says exactly what it does, can be authorized and validated as a whole, and can be
 implemented as one set-based statement where the outcome allows. The `:verb` syntax is credited to

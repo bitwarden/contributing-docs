@@ -2,8 +2,11 @@
 
 Notation follows the [APIs index](../index.md#notation).
 
-- `data` is an array of resources, each shaped exactly as the corresponding single-resource API
-  expects it. It is used where each resource carries its own content: creates and replaces.
+- `data` is an array of items, used where each resource carries its own content. For creates and
+  replaces, each item is a resource shaped exactly as the corresponding single-resource API expects
+  it. For
+  [actions whose body differs per resource](./bulk-actions.md#input-that-differs-per-resource), each
+  item is the target's `id` and the action's `body`.
 - `ids` is an array of resource IDs.
 - `filter` is an [advanced query](../advanced-queries.md) expression.
 

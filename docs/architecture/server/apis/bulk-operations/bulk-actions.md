@@ -33,10 +33,11 @@ Content-Type: application/json
 
 ## Input that differs per resource
 
-Actions that require per-resource bodies specify the data as an array.
+Actions that require per-resource bodies use `data` targeting, with one item per targeted resource.
 
-- It `MUST` be used with `ids`, not `filter`, and `MUST` be the same length. `data[n]` is the body
-  for `ids[n]`.
+- Each item `MUST` carry the `id` of the resource it targets and, in `body`, exactly what the
+  single-resource action would accept as its body.
+- The request `MUST NOT` also carry `ids` or `filter`.
 - A failure is reported against `/data/{n}`.
 
 **Example**
@@ -49,15 +50,20 @@ Content-Type: application/json
 
 ```json
 {
-  "ids": ["62bed180-1f78-45d4-8a56-c996936a2947", "cacba8c1-29fa-4018-8950-acd400ec76b7"],
   "data": [
     {
-      "subject": "Hello.",
-      "body": "Hi, John!"
+      "id": "62bed180-1f78-45d4-8a56-c996936a2947",
+      "body": {
+        "subject": "Hello.",
+        "body": "Hi, John!"
+      }
     },
     {
-      "subject": "Hello",
-      "body": "Hi, Mary!"
+      "id": "cacba8c1-29fa-4018-8950-acd400ec76b7",
+      "body": {
+        "subject": "Hello",
+        "body": "Hi, Mary!"
+      }
     }
   ]
 }
