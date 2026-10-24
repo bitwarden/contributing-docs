@@ -20,7 +20,8 @@ A `200` response carries:
 - `meta.failedCount` - the number of resources that failed. `MUST` be present for best-effort.
 - `data` - for creates, updates, and replaces, the latest representation of each resource that
   succeeded. Bulk creates `SHOULD` return it, because the caller needs the generated IDs. Other
-  operations `MAY`. When present with `data` or `ids` targeting, it `MUST` follow request order.
+  operations `MAY`. When present with `data` or `ids` targeting, it `MUST` follow request order for
+  bulk creates and `SHOULD` follow it for other operations.
 - `errors` - best-effort only. At least one [error](../errors.md) for each resource that failed.
 
 Each error `MUST` identify the resource that failed:
