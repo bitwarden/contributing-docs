@@ -30,8 +30,8 @@ Each error `MUST` identify the resource that failed:
 - by `meta.resource`, a `type` and `id`, where it does not, as with `filter` targeting.
 
 An error's `status` `MUST` be what the single-resource API would have returned for that resource -
-for example, `404` for an ID that does not exist, `409` for a version conflict, or `422` for a
-broken business rule.
+for example, `404` for an ID that does not exist or that the caller is not allowed to know exists,
+`409` for a version conflict, or `422` for a broken business rule.
 
 To correlate created resources with request items, a bulk create `MAY` accept a
 [lid](https://jsonapi.org/format/#document-resource-object-identification) on each item. An API that
