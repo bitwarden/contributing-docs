@@ -172,6 +172,9 @@ You are now ready to build and run your development server.
 7.  Test that the Api service is alive by navigating to
     [http://localhost:4000/alive](http://localhost:4000/alive)
 
+A new `vault_dev` database has no accounts. Use the [Seeder](./seeder.md) to create users and
+organizations you can log in with.
+
 When the services are running, continue with [Client connection](./guide.md#client-connection).
 
 ## Debugging
