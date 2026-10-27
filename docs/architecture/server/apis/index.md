@@ -45,7 +45,11 @@ instead, they record why. Conventions taken from other specifications are credit
 
 ## General
 
-In general, RESTful APIs are resource-oriented and do one of 4 things:
+These APIs borrow REST's vocabulary of resources and self-descriptive messages, but they are not
+RESTful. Each API is versioned on its own, so operations on the same resource can live at different
+paths, and responses carry identifiers rather than hyperlinks.
+
+In general, these APIs are resource-oriented and do one of 4 things:
 
 - [Create a resource](./creating-resources.md)
 - [Read a resource](./reading-resources.md#read-many)
