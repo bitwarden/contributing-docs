@@ -34,6 +34,9 @@ Not every parent path has to exist as a callable API, and a caller is not necess
 call one that does. Traversable paths show how paths fit together, and how they _would_ resolve if
 APIs existed for every parent path.
 
+Each API is versioned independently. The version belongs to the API, not to the path prefix, so
+`GET /api/v2/users/123/devices` does not imply that `GET /api/v2/users/123` exists.
+
 :::note
 
 2. The version is in the path because it is then visible in logs, traces, routing rules, and curl
