@@ -1,4 +1,5 @@
 ---
+sidebar_position: 8
 sidebar_custom_props:
   access: bitwarden
 ---
@@ -322,6 +323,10 @@ every constant in a `[FlagKeyCollection]` class is reported with the
 [BW0001](https://github.com/bitwarden/dotnet-extensions/blob/main/docs/diagnostics.md#bw0001)
 diagnostic, which comes with a code fix. Apply the code fix from your IDE on the flag constant and
 it will attempt to clean the flag from the codebase. Always review the changes it made.
+
+Clients and the server remove a flag at different times. Remove the server's flag constant only
+after every client release that still checks the flag has aged out of the compatibility window, as
+[Version Compatibility](./release-compatibility.md#feature-flags) describes.
 
 ## Self-hosted considerations
 
