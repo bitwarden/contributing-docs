@@ -19,10 +19,6 @@ The compatibility policy can be stated as follows:
 - **Client backward and forward compatibility:** Every **client** release has to work with
   **servers** that are up to two months older or newer than it.
 
-In practice, each side only has to look backward. Servers keep working for clients up to two months
-older, and clients keep working with servers up to two months older. The "newer" half of each
-promise is the other side's backward compatibility.
-
 This page explains how that window works, how to tell when old behavior can be removed, and what it
 means for server, client, and SDK code.
 
