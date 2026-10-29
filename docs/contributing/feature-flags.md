@@ -326,7 +326,7 @@ it will attempt to clean the flag from the codebase. Always review the changes i
 
 Clients and the server remove a flag at different times. Remove the server's flag constant only
 after every client release that still checks the flag has aged out of the compatibility window, as
-[Version Compatibility](./release-compatibility.md#feature-flags) describes.
+[Version Compatibility](./version-compatibility.md#feature-flags) describes.
 
 ## Self-hosted considerations
 
