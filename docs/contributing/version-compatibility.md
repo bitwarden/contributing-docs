@@ -68,6 +68,14 @@ Each side's obligation protects a different group of users:
 
 ## When you can introduce breaking changes
 
+:::warning Release tags are the source of truth
+
+Always work from release tags, not from the release calendar. Release tags are the source of truth
+for which release contained behavior. See
+[Determining when changes are in deployed code](#determining-when-changes-are-in-deployed-code).
+
+:::
+
 As a general rule, you can remove old behavior and thereby introduce breaking changes **three major
 versions after the last release that depends on it**. Three is the two-version window plus one, so
 by then every version that still needed the old behavior has aged out.
@@ -88,9 +96,9 @@ To find that release:
 
 ### Determining when changes are in deployed code
 
-**Always work from release tags because they are the source of truth for which release contained
-behavior.** Which clients ship in a given release varies, and each client releases on its own. If
-the dependency is gone from `main` but hasn't shipped yet, you can't start counting.
+Use release tags to find which release contained a behavior. Which clients ship in a given release
+varies, and each client releases on its own. If the dependency is gone from `main` but hasn't
+shipped yet, you can't start counting.
 
 | **Repository** | **Tag format**              | **Example**         |
 | -------------- | --------------------------- | ------------------- |
