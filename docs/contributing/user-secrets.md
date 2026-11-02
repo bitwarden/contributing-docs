@@ -1,3 +1,7 @@
+---
+sidebar_position: 10
+---
+
 # Modifying User Secrets
 
 ## Manually editing user secrets
