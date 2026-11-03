@@ -38,28 +38,14 @@ These are available as additional dependencies in the Visual Studio Installer.
 </TabItem>
 </Tabs>
 
-:::tip Nx commands are preferred.
-
-We now recommend using Nx commands for building projects. For desktop:
-
-```bash
-# Build and serve (including the native module)
-npx nx serve desktop
-```
-
-For complete Nx documentation and all available commands, see
-[Using Nx to Build Projects](https://github.com/bitwarden/clients/blob/main/docs/using-nx-to-build-projects.md).
-:::
-
 ## Build native module
 
 The desktop application relies on a native module written in rust, which needs to be compiled
-separately. This is baked in to the build process for `npm run electron`, but you can also compile
-it manually. See [Desktop Native](./desktop-native/index.mdx) for more information.
+separately. This is baked in to `npx nx serve desktop`, but you can also compile it manually with
+Nx. See [Desktop Native](./desktop-native/index.mdx) for more information.
 
 ```bash
-cd apps/desktop/desktop_native/napi
-npm run build
+npx nx build-native desktop
 ```
 
 **Note**: This module needs to be re-built if the native code has changed.
@@ -94,12 +80,27 @@ npm run build -- --target x86_64-unknown-linux-musl # Replace with relevant targ
 
 ## Build instructions
 
-Build and run:
+We recommend using Nx commands to build the desktop application. Run the following from the
+repository root to build and serve (this also compiles the native module):
+
+```bash
+npx nx serve desktop
+```
+
+For complete Nx documentation and all available commands, see
+[Using Nx to Build Projects](https://github.com/bitwarden/clients/blob/main/docs/using-nx-to-build-projects.md).
+
+## Manual build commands
+
+Before the migration to Nx, the desktop application was built and run directly with npm scripts.
+These commands are still available but are no longer the recommended approach.
 
 ```bash
 cd apps/desktop
 npm run electron
 ```
+
+This script also compiles the native module before launching Electron.
 
 ## Debugging
 
