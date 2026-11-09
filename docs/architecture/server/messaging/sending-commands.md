@@ -28,7 +28,8 @@ Commands `SHOULD` be named in the imperative, for what to do, such as `send.mail
 
 ## Breaking changes
 
-A receiver `MUST NOT` make a breaking change to a command type it already accepts.
+A receiver `MUST NOT` make a breaking change to a command type it already accepts, except to fix a
+[bug](./index.md#versioning).
 
 The receiver owns a command's contract and reads the command, so a change is breaking when the
 receiver demands something that senders that have not yet deployed do not send.

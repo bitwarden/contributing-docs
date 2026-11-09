@@ -46,7 +46,8 @@ Events `SHOULD` be named in the past tense, for what happened, such as `user.del
 
 ## Breaking changes
 
-A publisher `MUST NOT` make a breaking change to an event type it already publishes.
+A publisher `MUST NOT` make a breaking change to an event type it already publishes, except to fix a
+[bug](./index.md#versioning).
 
 The publisher owns an event's contract and writes the event, so a change is breaking when the
 publisher stops sending something that subscribers that have not yet deployed rely on.

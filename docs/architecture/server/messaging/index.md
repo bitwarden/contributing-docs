@@ -146,3 +146,8 @@ until nothing uses it:
 
 - A publisher publishes both versions until no consumer subscribes to the old one.
 - A service that consumes commands accepts both versions until no sender sends the old one.
+
+Bugs, however, including security issues, `MUST` be fixed "in place", without creating new versions
+of the message type, even if the changes would technically be considered breaking changes. For
+example, an event found to carry a field it should not is fixed by removing that field from the
+existing event type.
