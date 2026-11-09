@@ -21,17 +21,8 @@ This ADR uses [RFC 2119](https://www.rfc-editor.org/info/rfc2119/) keywords (`MU
 [ADR-0036](./0036-service-to-service-api-standards.md) requires service-to-service APIs to conform
 to a comprehensive, documented set of standards. It does not say what those standards are built on:
 an existing specification, published design guidelines, a different API technology, or nothing at
-all. This ADR decides that. The ADRs that follow set the standards themselves:
-
-- ADR-0040: request, response, and error payloads.
-- ADR-0041: contracts and their evolution.
-- ADR-0042: creating resources.
-- ADR-0043: reading resources.
-- ADR-0044: updating and deleting resources.
-- ADR-0045: acting upon resources.
-- ADR-0046: bulk processing resources.
-
-Authentication and authorization will follow in a later ADR.
+all. This ADR decides that. The standards themselves are published as the
+[service-to-service API standards](../server/apis/index.md).
 
 Three ground rules keep the comparison fair:
 
@@ -178,7 +169,8 @@ and a GraphQL or gRPC interface is offered in addition to those, not instead of 
 
 - Topics with no RFC, such as payload shape, filtering, sorting, paging, and bulk operations, are
   ours to write and maintain.
-- No single outside document describes the standards. They are learned from these ADRs.
+- No single outside document describes the standards. They are learned from the
+  [service-to-service API standards](../server/apis/index.md).
 - Every departure from an RFC needs a recorded reason, and each is a point someone may contest.
 
 ### Rejected options
