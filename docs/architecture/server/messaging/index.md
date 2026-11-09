@@ -109,6 +109,17 @@ The pseudo-code above is for illustration only. In practice, the
 
 [Learn more about the transactional outbox pattern](https://microservices.io/patterns/data/transactional-outbox.html)
 
+## Message contents
+
+A message is copied to the sender's outbox table, to the broker, and to any retry or dead-letter
+queue, and each copy has its own access and retention. A message therefore carries identifiers and
+the minimum facts the receiver needs:
+
+- A message `MUST NOT` carry Vault Data, Authentication Tokens, key material, or other secrets, such
+  as a two-factor code or a master password hint.
+- Outbox rows and dead-letter queues `MUST` be readable only by the service that owns them, and
+  `SHOULD` be kept no longer than needed to deliver the message or investigate its failure.
+
 ## Versioning
 
 Services publishing _events_ define the shape of those events. Likewise, services consuming
