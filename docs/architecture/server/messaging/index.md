@@ -140,14 +140,46 @@ We address this by following two rules:
 2. When breaking changes are unavoidable, establish a formal way to **version** messages so existing
    consumers (and senders) continue to work.
 
-When a breaking change is unavoidable, the owner introduces a new message type with the version in
-its name, such as `membership.removed.v2` or `send.mail.v2`, and keeps the old one alongside it
-until nothing uses it:
+When a breaking change is unavoidable, the owner adds a new version of the message, not a new
+message type. The sender puts every version it supports into one message, and the receiver reads the
+newest version it understands and ignores the rest. The message type, such as `membership.removed`,
+does not change, so subscriptions and queues do not change either.
 
-- A publisher publishes both versions until no consumer subscribes to the old one.
-- A service that consumes commands accepts both versions until no sender sends the old one.
+For example, suppose version 1 of `membership.removed` gives `removedAt` in seconds since the Unix
+epoch, and version 2 changes it to an ISO 8601 timestamp. Until version 1 is retired, the publisher
+sends both versions in one message:
 
-Bugs, however, including security issues, `MUST` be fixed "in place", without creating new versions
-of the message type, even if the changes would technically be considered breaking changes. For
-example, an event found to carry a field it should not is fixed by removing that field from the
-existing event type.
+```json
+[
+  {
+    "$type": "v2",
+    "membershipId": "5d0c8b9e-2f4a-4c1e-9b7a-1e2f3a4b5c6d",
+    "organizationId": "a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+    "removedAt": "2026-11-03T12:00:00Z"
+  },
+  {
+    "$type": "v1",
+    "membershipId": "5d0c8b9e-2f4a-4c1e-9b7a-1e2f3a4b5c6d",
+    "organizationId": "a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+    "removedAt": 1793707200
+  }
+]
+```
+
+A consumer built before version 2 existed reads `v1` and ignores `v2`. A consumer that knows version
+2 reads `v2`. Each consumer upgrades on its own schedule, and messages already waiting in its
+subscription contain the version it reads after the upgrade.
+
+Adding a version is not a breaking change, but removing one is:
+
+- A publisher `MUST NOT` stop sending a version of an event while any consumer still reads only that
+  version.
+- A service that consumes commands `MUST NOT` stop accepting a version of a command while any sender
+  still sends only that version.
+
+`Bitwarden.Server.Sdk.MessageBroker` packs and unpacks the versions and reports which version each
+consumer reads, so an owner can tell when an old version is no longer needed.
+
+Bugs, however, including security issues, `MUST` be fixed "in place", without adding a new version,
+even if the changes would technically be considered breaking changes. For example, an event found to
+carry a field it should not is fixed by removing that field from every version of the event.

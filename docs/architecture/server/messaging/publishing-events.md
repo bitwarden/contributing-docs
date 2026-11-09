@@ -66,5 +66,5 @@ These changes are not:
 - Adding a constraint to a field.
 - Removing an optional field.
 
-When a breaking change is unavoidable, the publisher introduces a new version of the event type, as
+When a breaking change is unavoidable, the publisher adds a new version to the event, as
 [Versioning](./index.md#versioning) describes.

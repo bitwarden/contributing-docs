@@ -47,5 +47,5 @@ These changes are not:
 - Making a required field optional.
 - Adding an optional field.
 
-When a breaking change is unavoidable, the receiver introduces a new version of the command type, as
+When a breaking change is unavoidable, the receiver adds a new version to the command, as
 [Versioning](./index.md#versioning) describes.
