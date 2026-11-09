@@ -7,8 +7,7 @@ sidebar_position: 2
 ## Command queues
 
 A service that accepts commands has exactly one command queue, `{service}.commands`. Other services
-send commands to it, and only the owner reads from it. The owner decides which services may send
-which commands.
+send commands to it. Services other than the owner `MUST NOT` be able to read from it.
 
 ```mermaid
 flowchart LR
