@@ -137,10 +137,9 @@ The rules:
 1. Services `SHOULD` publish events for all relevant state changes using the "transactional outbox"
    pattern, regardless of whether there are any known consumers. Exactly what makes an event
    "relevant", the shape of such events, the authorization model, dead-letter policies, and how such
-   events are delivered and consumed will be the subject of a forthcoming ADR and is out of scope
-   here.
+   events are delivered and consumed are out of scope here.
    - A service `MUST` publish a "resource deleted" event for each resource it owns, so that
-     consuming service can delete dependent data.
+     consuming services can delete dependent data.
 1. A service that owns resources whose lifetime depends on a resource owned by another service
    `MUST` consume that owner's "resource deleted" events and cascade the deletion to the resources
    it owns. An owning service is not responsible for deleting data it does not own.
