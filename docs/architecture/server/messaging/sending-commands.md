@@ -6,7 +6,7 @@ sidebar_position: 2
 
 ## Command queues
 
-A service that accepts commands has exactly one command queue, `<service>.commands`. Other services
+A service that accepts commands has exactly one command queue, `{service}.commands`. Other services
 send commands to it, and only the owner reads from it. The owner decides which services may send
 which commands.
 
@@ -24,9 +24,11 @@ in any order.
 
 ## Naming
 
-Commands are named in the imperative, for what to do, such as `send.mail`.
+Commands `SHOULD` be named in the imperative, for what to do, such as `send.mail`.
 
 ## Breaking changes
+
+A receiver `MUST NOT` make a breaking change to a command type it already accepts.
 
 The receiver owns a command's contract and reads the command, so a change is breaking when the
 receiver demands something that senders that have not yet deployed do not send.
@@ -45,4 +47,5 @@ These changes are not:
 - Making a required field optional.
 - Adding an optional field.
 
-[Versioning](./index.md#versioning) covers what to do when a breaking change is unavoidable.
+When a breaking change is unavoidable, the receiver introduces a new version of the command type, as
+[Versioning](./index.md#versioning) describes.

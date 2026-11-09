@@ -8,6 +8,13 @@ each other asynchronously. A service sends a message and carries on, and the ser
 it act on it in their own time. A service that needs an answer calls the other service's
 [API](../apis/index.md) instead.
 
+## Notation
+
+The keywords `MUST`, `MUST NOT`, `SHOULD`, `SHOULD NOT`, and `MAY` are to be interpreted as
+described in [RFC 2119](https://www.rfc-editor.org/info/rfc2119/).
+
+Text in braces, such as `{service}`, is a placeholder for a value.
+
 ## Events and commands
 
 There are two kinds of messages: **events** and **commands**. They are used in different ways, and
@@ -15,15 +22,15 @@ both are needed.
 
 - An **event** reports something that has already happened to data the publishing service owns, such
   as `organization.deleted`. [Events are published to a topic](./publishing-events.md) the publisher
-  owns. Any number of services may subscribe, and each decides for itself what to do. The publisher
-  does not know or care if any subscribers exist or when they are added.
+  owns. Any number of services `MAY` subscribe, and each decides for itself what to do. The
+  publisher does not know or care if any subscribers exist or when they are added.
 - A **command** asks one particular service to do something, such as `send.mail`.
   [Commands are sent to a queue](./sending-commands.md) the receiving service owns. The sender
   decides exactly what is to be done and the receiver carries it out.
 
 ## Message processing
 
-Messages must be processed according to these principles:
+Messages `MUST` be processed according to these principles:
 
 - **A stable identifier.** A message's identifier is assigned by the sender when it is sent and
   never changes through re-sends, retries, and replays.
@@ -32,15 +39,15 @@ Messages must be processed according to these principles:
 - **Duplicates are harmless.** If a duplicate message does arrive, it is either inherently safe to
   repeat (e.g. deleting data that is already gone), or the message's identifier is used to recognize
   the repeat and ignore it.
-- **No ordering.** Messages can arrive in any order, so consumers must not assume any particular
+- **No ordering.** Messages can arrive in any order, so consumers `MUST NOT` assume any particular
   order.
 
 ## Sending messages
 
-Services that send messages, whether it is an event or a command, must follow two rules:
+Services that send messages, whether it is an event or a command, `MUST` follow two rules:
 
 1. A message is sent if, and only if, its associated transaction commits.
-2. It must be impossible for a service to _fail_ to send a message that should be sent.
+2. It `MUST` be impossible for a service to _fail_ to send a message that should be sent.
 
 Before we look at the pattern that helps us comply with these rules, let's take a quick look at how
 messaging works without one.
@@ -106,9 +113,9 @@ _commands_ define the shape of those commands. Naturally, other services will co
 those events and commands looking "just so" so it is incumbent upon services that publish events or
 consume commands to not make breaking changes.
 
-- Event publishers must assume consumers will continue to run "old code" for some period of time
+- Event publishers `MUST` assume consumers will continue to run "old code" for some period of time
   that expects events to look the way they used to.
-- Services consuming commands must assume they will receive "old commands" sent by senders running
+- Services consuming commands `MUST` assume they will receive "old commands" sent by senders running
   old code that send commands that look the way they used to.
 
 We address this by following two rules:

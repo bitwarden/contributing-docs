@@ -6,8 +6,8 @@ sidebar_position: 1
 
 ## Event topics
 
-Every service that publishes one or more events has exactly one event topic, `<service>.events`, to
-which all of its events are published. Only that service may send to it.
+Every service that publishes one or more events has exactly one event topic, `{service}.events`, to
+which all of its events are published. Other services `MUST NOT` be able to send to it.
 
 ```mermaid
 flowchart LR
@@ -42,9 +42,11 @@ flowchart LR
 
 ## Naming
 
-Events are named in the past tense, for what happened, such as `user.deleted`.
+Events `SHOULD` be named in the past tense, for what happened, such as `user.deleted`.
 
 ## Breaking changes
+
+A publisher `MUST NOT` make a breaking change to an event type it already publishes.
 
 The publisher owns an event's contract and writes the event, so a change is breaking when the
 publisher stops sending something that subscribers that have not yet deployed rely on.
@@ -63,4 +65,5 @@ These changes are not:
 - Adding a constraint to a field.
 - Removing an optional field.
 
-[Versioning](./index.md#versioning) covers what to do when a breaking change is unavoidable.
+When a breaking change is unavoidable, the publisher introduces a new version of the event type, as
+[Versioning](./index.md#versioning) describes.
