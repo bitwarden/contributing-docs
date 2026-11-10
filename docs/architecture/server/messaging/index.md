@@ -43,7 +43,10 @@ Messages `MUST` be processed according to these principles:
 - **Duplicates are harmless.** If a duplicate message does arrive, it is either inherently safe to
   repeat at any time (e.g. deleting data that is already gone), or the message's identifier is used
   to recognize the repeat and ignore it. Work that sets a value, such as a member's role, is not
-  inherently safe to repeat, since a late repeat can overwrite a newer value.
+  inherently safe to repeat, since a late repeat can overwrite a newer value. Work with a side
+  effect outside the service's own database, such as sending an email, cannot record the repeat in
+  the same transaction as the side effect, so the identifier is passed to the external system as an
+  idempotency key where it supports one.
 - **No ordering.** Messages can arrive in any order, so consumers `MUST NOT` assume any particular
   order. A consumer that keeps its own copy of another service's data `MUST` be able to recognize a
   stale message, either from a revision the sender includes in the message or by reading the current
