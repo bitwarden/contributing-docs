@@ -27,13 +27,14 @@ Commands `SHOULD` be named in the imperative, for what to do, such as `send.mail
 
 ## Breaking changes
 
-A receiver `MUST NOT` make a breaking change to a command type it already accepts, except to fix a
-[bug](./index.md#versioning).
+A receiver `MUST NOT` make a breaking change to a version of a command it already accepts, except to
+fix a [bug](./index.md#versioning). A change that would break senders goes into a new version of the
+command instead, as [Versioning](./index.md#versioning) describes.
 
-The receiver owns a command's contract and reads the command, so a change is breaking when the
-receiver demands something that senders that have not yet deployed do not send.
+The receiver owns a command's contract and reads the command, so a change to an existing version is
+breaking when the receiver demands something that senders that have not yet deployed do not send.
 
-These changes are breaking:
+These changes need a new version:
 
 - Changing a field's type, format, meaning, or units.
 - Renaming a required field.
@@ -41,11 +42,8 @@ These changes are breaking:
 - Making an optional field required.
 - Adding a constraint to a field.
 
-These changes are not:
+These changes can be made within a version:
 
 - Removing a field, required or optional.
 - Making a required field optional.
 - Adding an optional field.
-
-When a breaking change is unavoidable, the receiver adds a new version to the command, as
-[Versioning](./index.md#versioning) describes.

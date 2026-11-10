@@ -56,25 +56,24 @@ Events `SHOULD` be named in the past tense, for what happened, such as `user.del
 
 ## Breaking changes
 
-A publisher `MUST NOT` make a breaking change to an event type it already publishes, except to fix a
-[bug](./index.md#versioning).
+A publisher `MUST NOT` make a breaking change to a version of an event it already publishes, except
+to fix a [bug](./index.md#versioning). A change that would break subscribers goes into a new version
+of the event instead, as [Versioning](./index.md#versioning) describes.
 
-The publisher owns an event's contract and writes the event, so a change is breaking when the
-publisher stops sending something that subscribers that have not yet deployed rely on.
+The publisher owns an event's contract and writes the event, so a change to an existing version is
+breaking when the publisher stops sending something that subscribers that have not yet deployed rely
+on.
 
-These changes are breaking:
+These changes need a new version:
 
 - Changing a field's type, format, meaning, or units.
 - Renaming a required field.
 - Removing a required field.
 - Making a required field optional.
 
-These changes are not:
+These changes can be made within a version:
 
 - Adding a field, required or optional.
 - Making an optional field required.
 - Adding a constraint to a field.
 - Removing an optional field.
-
-When a breaking change is unavoidable, the publisher adds a new version to the event, as
-[Versioning](./index.md#versioning) describes.
