@@ -174,12 +174,17 @@ A consumer built before version 2 existed reads `v1` and ignores `v2`. A consume
 2 reads `v2`. Each consumer upgrades on its own schedule, and messages already waiting in its
 subscription contain the version it reads after the upgrade.
 
-Adding a version is not a breaking change, but removing one is:
+Adding a version is not a breaking change, but removing one is. Either side of a message may upgrade
+first, so the rules apply to both sides:
 
-- A publisher `MUST NOT` stop sending a version of an event while any consumer still reads only that
+- A publisher of an event `MUST NOT` stop sending a version while any consumer still reads only that
   version.
+- A consumer of an event `MUST NOT` stop accepting a version while any publisher still sends only
+  that version.
 - A service that consumes commands `MUST NOT` stop accepting a version of a command while any sender
   still sends only that version.
+- A service that sends commands `MUST NOT` stop sending a version of a command while the receiver
+  still reads only that version.
 
 `Bitwarden.Server.Sdk.MessageBroker` packs and unpacks the versions and reports which version each
 consumer reads, so an owner can tell when an old version is no longer needed.
