@@ -19,8 +19,9 @@ flowchart LR
 ## Subscribing
 
 A service subscribes to each event type it consumes with a subscription of its own: **one
-subscription per event type**. The broker does the filtering, so a service never receives an event
-type it has not subscribed to, and a burst of one type never holds up another.
+subscription per event type per consuming service**. The broker does the filtering, so a service
+never receives an event type it has not subscribed to, and a burst of one type never holds up
+another.
 
 ```mermaid
 flowchart LR
