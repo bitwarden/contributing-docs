@@ -4,8 +4,9 @@
 
 Messaging is how services in Bitwarden's
 [service-oriented architecture](../../adr/0035-service-oriented-architecture.md) communicate with
-each other asynchronously. A service sends a message and carries on, and the services that receive
-it act on it in their own time. A service that needs an answer calls the other service's
+each other asynchronously. A service sends a message and carries on, whether or not the services
+that receive it are running, and they act on it in their own time. A service that needs an answer,
+or needs to know that the recipient received its request, calls the other service's
 [API](../apis/index.md) instead.
 
 ## Notation
@@ -28,7 +29,8 @@ both are needed.
   [Commands are sent to a queue](./sending-commands.md) the receiving service owns. The sender
   decides exactly what is to be done and the receiver carries it out. The sender does not wait for
   any confirmation that the action took place or even that the intended recipient received the
-  command.
+  command. The receiving service does not need to be running when the command is sent; the command
+  waits in its queue until it is. This is what a command offers that an API call does not.
 
 ## Message processing
 
