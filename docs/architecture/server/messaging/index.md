@@ -93,7 +93,9 @@ The "transactional outbox" pattern is used to guarantee that:
 an "outbox" table in its own database, _in the same transaction_ as the associated change. If the
 transaction fails, the message never gets written to the table. Meanwhile, a lightweight background
 task periodically polls this table for any messages to send, sends them to the broker, and only
-deletes from this table when the message is sent successfully.
+deletes from this table when the message is sent successfully. This is one reason messages are sent
+_at least_ once rather than _exactly_ once: the database transaction cannot include the broker, so a
+service that stops after sending a message but before deleting it sends the message again.
 
 ```sql
 BEGIN TRAN
