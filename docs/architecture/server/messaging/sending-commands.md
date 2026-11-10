@@ -23,7 +23,8 @@ in any order.
 
 ## Naming
 
-Commands `SHOULD` be named in the imperative, for what to do, such as `send.mail`.
+Command names `MUST` be lowercase words separated by dots, and `SHOULD` be in the imperative, for
+what to do, such as `send.mail`.
 
 ## Breaking changes
 

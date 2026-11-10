@@ -52,7 +52,8 @@ flowchart LR
 
 ## Naming
 
-Events `SHOULD` be named in the past tense, for what happened, such as `user.deleted`.
+Event names `MUST` be lowercase words separated by dots, and `SHOULD` be in the past tense, for what
+happened, such as `user.deleted`.
 
 ## Breaking changes
 
