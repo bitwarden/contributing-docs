@@ -26,7 +26,9 @@ both are needed.
   publisher does not know or care if any subscribers exist or when they are added.
 - A **command** asks one particular service to do something, such as `send.mail`.
   [Commands are sent to a queue](./sending-commands.md) the receiving service owns. The sender
-  decides exactly what is to be done and the receiver carries it out.
+  decides exactly what is to be done and the receiver carries it out. The sender does not wait for
+  any confirmation that the action took place or even that the intended recipient received the
+  command.
 
 ## Message processing
 
