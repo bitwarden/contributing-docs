@@ -27,19 +27,28 @@ another.
 flowchart LR
   org["Organization Service"]
   t_org[["organization.events"]]
-  s1(["subscription: organization.deleted"])
-  s2(["subscription: membership.removed"])
+  s1a(["subscription: organization.deleted.vault"])
+  s2a(["subscription: membership.removed.vault"])
+  s1b(["subscription: organization.deleted.secrets"])
+  s2b(["subscription: membership.removed.secrets"])
   vault["Vault Service"]
+  secrets["Secrets Service"]
   org -->|"organization.deleted"| t_org
   org -->|"membership.removed"| t_org
-  t_org --> s1
-  t_org --> s2
-  s1 --> vault
-  s2 --> vault
+  t_org --> s1a
+  t_org --> s2a
+  s1a --> vault
+  s2a --> vault
+  t_org --> s1b
+  t_org --> s2b
+  s1b --> secrets
+  s2b --> secrets
 ```
 
-- The Vault Service consumes two event types, so it has two subscriptions.
-- Only the Vault Service may read from them.
+- The Vault Service and the Secrets Service each consume two event types, so each has two
+  subscriptions of its own.
+- Only the service that owns a subscription may read from it.
+- Subscription names in the diagram are illustrative.
 
 ## Naming
 
