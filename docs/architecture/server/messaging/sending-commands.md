@@ -12,7 +12,7 @@ send commands to it. Services other than the owner `MUST NOT` be able to read fr
 ```mermaid
 flowchart LR
   billing["Billing Service"]
-  q_ncmd[("notification.commands")]
+  q_ncmd(["notification.commands"])
   notif["Notification Service"]
   billing -.->|"send.mail"| q_ncmd
   q_ncmd -.-> notif
