@@ -177,10 +177,6 @@ The rules:
 - **Row-level security in the data layer is not yet portable.** The current implementation composes
   T-SQL and has no Entity Framework path, so the enforcement this ADR relies on is available on SQL
   Server only until that gap is closed.
-- **A cache cannot be assumed to exist.** Redis and Cosmos are both exposed through configuration
-  and some self-host operators do configure one, but neither is provisioned by default and Bitwarden
-  Lite ships no cache service at all. Rule 7's caching is therefore an optimization a service may
-  find available, never a mechanism it can depend on being there.
 
 ### Plan
 
@@ -190,10 +186,8 @@ The rules:
   cached.
 - Publish a service identity and context page covering service-to-service authentication,
   authorization by scope, and context propagation, and build the cloud path it describes.
-- Provide an Entity Framework path for organization scoping, so rule 9 holds on all supported
+- Provide an Entity Framework path for organization scoping, so rule 8 holds on all supported
   database providers.
-- Provide a transactional outbox and a broker-free event transport, so rules 10 and 11 hold on
+- Provide a transactional outbox and a broker-free event transport, so rules 9 and 10 hold on
   deployments that ship no broker.
-- Decide the shared cache posture for full self-host and Bitwarden Lite. The cache implementation is
-  settled by [ADR-0028](./0028-adopt-fusion-cache.md).
 - Apply the standard to the next service extraction as the reference implementation.
