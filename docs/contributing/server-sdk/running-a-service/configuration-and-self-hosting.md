@@ -164,12 +164,17 @@ don't write it; you fill it from settings.
 - `version` is `IBitwardenEnvironment.Version`, or the service assembly's informational version
   without build metadata.
 
-The flags are evaluated for a LaunchDarkly context the platform builds from the request: a `user`
-context keyed by the acting user (or a shared anonymous key), with the person's confirmed
-organizations; a `device` context from the token's `device` claim or the `Device-Identifier` header;
-and the client's version and type. With an SDK key, that context goes to LaunchDarkly: identifiers,
-client version and type, never Vault Data. To build your own, register it with
-`services.AddContextBuilder<T>()` in `ConfigureServices`.
+The flags are evaluated for a LaunchDarkly context the platform builds from `IContext`: a `device`
+context from the token's `device` claim or the `Device-Identifier` header, and one context for the
+party the request was made by, as its token's `type` claim says. A person's is a `user` context
+keyed by the person, with their confirmed organizations, and nobody's a `user` context under a
+shared anonymous key, with the organization an organization's own client acts for. A machine
+account's is a `service-account` context, an access connector's an `access-connector` context with
+its organization, and an organization's an `organization` context. Each carries the client's
+version, prerelease marker, device type and client type. A domain service builds the same context
+from what the product service carried in `Bitwarden-Context`. With an SDK key, that context goes to
+LaunchDarkly: identifiers, client version and type, never Vault Data. To build your own, register it
+with `services.AddContextBuilder<T>()` in `ConfigureServices`.
 
 ## Settings
 

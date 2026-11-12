@@ -62,8 +62,9 @@ public static class WidgetsEndpoints
 ```
 
 - `IContext` has `OrganizationId`, `UserId`, `ProviderId`, `ClientIpAddress`, `DeviceType`,
-  `DeviceIdentifier` and, for audit records only, `Credential`, `RecordedUserId` and
-  `RecordedProviderId`.
+  `DeviceIdentifier`; for audit records only, `Credential`, `RecordedUserId` and
+  `RecordedProviderId`; and, for feature flag targeting only, `FlagSubjectKind`, `FlagSubjectKey`,
+  `UserOrganizationIds`, `ClientVersion` and `ClientVersionIsPrerelease`.
 - `context.UserId!.Value` is safe here because the operation requires a user: a request without one
   is refused before the handler runs.
 - `Expire` acts for a person when `widget-jobs` asserts one on its own authority. From any other
@@ -141,8 +142,10 @@ handler runs. Each refusal names the header at fault in the error's `source.head
   reason, on each operation, so the exception is reviewed where it is read.
 - **Enforce your own access rules.** A context says whom a call concerns, not what the caller may
   do. An asserted context is only the calling service's word, so check your own rules too.
-- **Keep audit-only members audit-only.** `Credential`, `RecordedUserId`, `RecordedProviderId` and
-  `UserOrganizationIds` must never drive authorization, a row filter or a cache.
+- **Keep audit and targeting members out of decisions.** `Credential`, `RecordedUserId`,
+  `RecordedProviderId` and the flag targeting members (`FlagSubjectKind`, `FlagSubjectKey`,
+  `UserOrganizationIds`, `ClientVersion`, `ClientVersionIsPrerelease`) must never drive
+  authorization, a row filter or a cache.
 - **The context carries identifiers only.** Never put a key or an encrypted value in it. Vault Data
   moves between services only as Protected Data, in request bodies.
 
