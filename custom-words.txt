@@ -8,6 +8,7 @@ Bitwarden
 bitwardensecret
 bytemark
 Casbin
+ciphertext
 clickjacking
 codebases
 CODEOWNERS
@@ -39,6 +40,7 @@ inet
 ingestibility
 initialisms
 IntelliJ
+invariantly
 Iterm
 Jetpack
 jslib
@@ -70,6 +72,7 @@ opid
 osslsigncode
 OTLP
 owasp
+parameterless
 passcode
 passwordless
 passthroughs
@@ -117,6 +120,7 @@ typechecks
 typesafe
 udeps
 UDID
+undelete
 ungated
 unsynchronized
 WCAG
