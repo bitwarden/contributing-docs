@@ -54,20 +54,18 @@ complex types and data exchange.
 
 ### Basic functions
 
-To create functions that can be called from JavaScript using `wasm-bindgen`, you need to apply the
-`wasm_bindgen` attribute to the function and ensure the return type is something that can be
+To create functions that can be called from JavaScript using `wasm-bindgen`, apply
+`#[bitwarden_ffi::wasm_export]` to the function and ensure the return type is something that can be
 converted into a JavaScript type. For instance, simple types like `u32`, `f64`, `bool`, and `String`
 can be returned directly:
 
 ```rust
-use wasm_bindgen::prelude::*;
-
-#[wasm_bindgen]
+#[bitwarden_ffi::wasm_export]
 pub fn do_something() -> u32 {
     42
 }
 
-#[wasm_bindgen]
+#[bitwarden_ffi::wasm_export]
 pub fn say_hello() -> String {
     "Hello, World!".to_owned()
 }
@@ -89,13 +87,12 @@ export function say_hello(): string;
 
 ### Structs
 
-If you want to return more complex types, you can annotate a Rust struct with the `wasm_bindgen`
-attribute. Make sure that any fields you want to access from JavaScript are public:
+If you want to return more complex types, you can annotate a Rust struct with
+`#[bitwarden_ffi::wasm_object]`. Make sure that any fields you want to access from JavaScript are
+public:
 
 ```rust
-use wasm_bindgen::prelude::*;
-
-#[wasm_bindgen]
+#[bitwarden_ffi::wasm_object]
 pub struct User {
     pub age: u32,
 }
@@ -115,7 +112,7 @@ attribute to ensure JavaScript can access the value without directly referencing
 memory:
 
 ```rust
-#[wasm_bindgen(getter_with_clone)]
+#[bitwarden_ffi::wasm_object(getter_with_clone)]
 pub struct User {
     pub name: String,
     pub age: u32,
@@ -139,13 +136,13 @@ This ensures that values like `String` are properly cloned before being passed t
 You can also return types with methods:
 
 ```rust
-#[wasm_bindgen(getter_with_clone)]
+#[bitwarden_ffi::wasm_object(getter_with_clone)]
 pub struct User {
     pub name: String,
     pub age: u32,
 }
 
-#[wasm_bindgen]
+#[bitwarden_ffi::wasm_export]
 impl User {
     pub fn say_hello(&self) -> String {
         format!("Hello, {}!", self.name)
@@ -176,16 +173,14 @@ up automatically. For more information see
 
 ### Basic types
 
-To return a struct from Rust to JavaScript using `tsify`, derive `Serialize`, `Deserialize`, and
-`Tsify`:
+To return a struct from Rust to JavaScript using `tsify`, derive `Serialize` and `Deserialize`, and
+annotate it with `#[bitwarden_ffi::wasm_record]`:
 
 ```rust
 use serde::{Deserialize, Serialize};
-#[cfg(feature = "wasm")]
-use {tsify_next::Tsify, wasm_bindgen::prelude::*};
 
 #[derive(Serialize, Deserialize)]
-#[cfg_attr(feature = "wasm", derive(Tsify), tsify(into_wasm_abi, from_wasm_abi))]
+#[bitwarden_ffi::wasm_record]
 pub struct User {
     pub name: String,
     pub age: u32,
@@ -193,7 +188,7 @@ pub struct User {
 }
 
 #[derive(Serialize, Deserialize)]
-#[cfg_attr(feature = "wasm", derive(Tsify), tsify(into_wasm_abi, from_wasm_abi))]
+#[bitwarden_ffi::wasm_record]
 pub struct Address {
     pub street: String,
     pub city: String,
@@ -229,7 +224,7 @@ use chrono::{DateTime, Utc};
 use uuid::Uuid;
 
 #[derive(Serialize, Deserialize)]
-#[cfg_attr(feature = "wasm", derive(Tsify), tsify(into_wasm_abi, from_wasm_abi))]
+#[bitwarden_ffi::wasm_record]
 pub struct FolderView {
     pub id: Option<Uuid>,
     pub name: String,

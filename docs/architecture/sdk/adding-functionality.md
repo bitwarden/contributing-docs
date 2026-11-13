@@ -39,7 +39,10 @@ a new crate under the `crates/` directory in the
 
 1. Create the crate with `cargo init` and add it to the workspace `Cargo.toml`.
 2. Add `bitwarden-core` as a dependency for the shared runtime.
-3. Configure `CODEOWNERS` to ensure the appropriate team is assigned to review changes to the crate.
+3. If the crate exposes anything over WASM, add `bitwarden-ffi` as a dependency, and `wasm-bindgen`
+   and `tsify` as optional dependencies. Enable all three from the crate's `wasm` feature:
+   `bitwarden-ffi/wasm`, `dep:wasm-bindgen`, and `dep:tsify`.
+4. Configure `CODEOWNERS` to ensure the appropriate team is assigned to review changes to the crate.
 
 ## 3. Define the client struct
 
@@ -58,8 +61,7 @@ pub struct FoldersClient {
 }
 ```
 
-If the client will be exposed over WASM, annotate it with
-`#[cfg_attr(feature = "wasm", wasm_bindgen)]`.
+If the client will be exposed over WASM, annotate it with `#[bitwarden_ffi::wasm_object]`.
 
 ## 4. Wire into the application interface
 
@@ -92,7 +94,7 @@ implementing every method itself. For example, `VaultClient` exposes `FoldersCli
 `CiphersClient`, and others through accessor methods:
 
 ```rust
-#[cfg_attr(feature = "wasm", wasm_bindgen)]
+#[bitwarden_ffi::wasm_export]
 impl VaultClient {
     pub fn folders(&self) -> FoldersClient {
         FoldersClient::from_client(&self.client)
@@ -137,7 +139,7 @@ set up test doubles.
 :::
 
 ```rust
-#[cfg_attr(feature = "wasm", wasm_bindgen)]
+#[bitwarden_ffi::wasm_export]
 impl FoldersClient {
     pub async fn get(&self, folder_id: FolderId) -> Result<FolderView, GetFolderError> {
         let folder = self
@@ -165,38 +167,41 @@ If the new functionality needs to be available on mobile platforms (Android / iO
 
 ### Expose the client
 
-Add an accessor method on the appropriate UniFFI client — typically in
-[`bitwarden-uniffi/src/lib.rs`][uniffi-lib] or a sub-client — that returns a new wrapper struct:
+Add an accessor method on the appropriate UniFFI client (typically in
+[`bitwarden-uniffi/src/lib.rs`][uniffi-lib] or a sub-client) that returns a new wrapper struct:
 
 ```rust
+#[uniffi::export]
 impl Client {
-    pub fn vault(&self) -> Arc<VaultClient> {
-        Arc::new(VaultClient(self.0.clone()))
+    pub fn vault(&self) -> VaultClient {
+        VaultClient(self.0.vault())
     }
 }
 ```
 
 ### Create the wrapper
 
-Create a wrapper struct that holds the SDK `Client` and delegates to the underlying Rust client. See
-[`bitwarden-uniffi/src/tool/sends.rs`][uniffi-sends] for a complete example.
+Create a wrapper struct that holds the feature crate's client and delegates to it. See
+[`bitwarden-uniffi/src/tools/sends.rs`][uniffi-sends] for a complete example.
 
 ```rust
 use crate::Result;
 
-pub struct FoldersClient(pub(crate) SharedClient);
+#[derive(uniffi::Object)]
+pub struct FoldersClient(pub(crate) bitwarden_vault::FoldersClient);
 
 #[uniffi::export]
 impl FoldersClient {
     pub async fn get(&self, folder_id: FolderId) -> Result<FolderView> {
-        Ok(self.0.vault().folders().get(folder_id).await?)
+        Ok(self.0.get(folder_id).await?)
     }
 }
 ```
 
-The wrapper should convert errors into `BitwardenError`. When introducing a new error type, add a
-variant for it in [`bitwarden-uniffi/src/error.rs`][uniffi-error] and implement the `From`
-conversion.
+Every method must return `BitwardenError`, which the crate-level `Result<T>` alias provides. When
+introducing a new error type, add a variant for it in
+[`bitwarden-uniffi/src/error.rs`][uniffi-error] and implement the `From` conversion. See
+[Client patterns — Why the wrappers exist](client-patterns.md#why-the-wrappers-exist).
 
 ## Ownership
 
@@ -209,5 +214,5 @@ crate, coordinate with the Platform team to establish ownership and review expec
   https://github.com/bitwarden/sdk-internal/blob/main/crates/bitwarden-uniffi/src/error.rs
 [uniffi-lib]: https://github.com/bitwarden/sdk-internal/blob/main/crates/bitwarden-uniffi/src/lib.rs
 [uniffi-sends]:
-  https://github.com/bitwarden/sdk-internal/blob/main/crates/bitwarden-uniffi/src/tool/sends.rs
+  https://github.com/bitwarden/sdk-internal/blob/main/crates/bitwarden-uniffi/src/tools/sends.rs
 [vault-crate]: https://github.com/bitwarden/sdk-internal/tree/main/crates/bitwarden-vault

@@ -16,6 +16,9 @@ To disambiguate this application from others in the Bitwarden landscape, we refe
 
 ## Setup
 
+If you run the server with [Aspire](./guide.md#run-with-aspire), it starts the Admin project for
+you. Complete steps 1 to 5 once to build the stylesheets and libraries, then skip step 6.
+
 1.  Navigate to the `server/src/Admin` directory.
 2.  Restore nuget packages:
 
@@ -74,9 +77,16 @@ See [User Secrets](../../contributing/user-secrets.md) for how to configure your
 
 :::
 
-<Bitwarden>
-
 ### Authorization
+
+<Community>
+
+Your local server runs as a self-hosted instance, which doesn't use role-based access control. No
+further setup is needed.
+
+</Community>
+
+<Bitwarden>
 
 The Bitwarden Portal uses role-based access control to restrict access to application functionality.
 In order to have access to the features within the Bitwarden Portal, you will need to assign your

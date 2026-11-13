@@ -1,0 +1,55 @@
+# Filtering
+
+Notation follows the [APIs index](./index.md#notation).
+
+- Read-many APIs that allow callers to specify search criteria `MUST` do so via one or more
+  `filter[{name}]` query parameters where the `name` `SHOULD` be the same as one of the resource
+  attributes.
+- APIs `MAY` support `*` as a wildcard in filter values. Those that do `MUST` document which
+  attributes accept it.
+- APIs that support filtering by an attribute of an attribute `MAY` use dot-notation, such as
+  `address.city`.
+
+## Multi-value parameters
+
+APIs that support specifying multiple values for a query parameter `MUST` do so via a
+comma-delimited list. This allows APIs that started with single-value query parameters to evolve to
+supporting multiple-values without changing the external-facing contract. When multiple values are
+provided, "or" query semantics `MUST` be applied.
+
+On a parameter that accepts multiple values or a [range](#ranges), a comma that is part of a value
+`MUST` be escaped with a backslash - `filter[name]=Smith\, Jr` is the single value `Smith, Jr`. An
+asterisk `MUST` likewise be escaped wherever the API supports wildcard matching. Wherever either
+escape applies, a backslash that is part of a value `MUST` also be escaped as `\\`. A parameter that
+takes a single value is never split, so a comma in its value needs no escaping.
+
+Take care when a single-value parameter gains multi-value support. A caller sending an unescaped
+comma will suddenly be sending two values. That is usually safe, because the evolution typically
+happens on constrained fields whose values cannot contain commas - but confirm it before making the
+change.
+
+## Ranges
+
+Query parameters that allow the caller to specify a range of values `MUST` do so using two values,
+separated by commas, and using `[` and `]` to represent **inclusive** begin and end, and `(` and `)`
+to represent **exclusive** begin and end. An asterisk `*` `MAY` be used to represent no limit.
+
+Ranges are also how "less than", "greater than", "less than or equal to", and "greater than or equal
+to" are implemented.
+
+## Examples
+
+| Example                                                            | Description                                                    |
+| ------------------------------------------------------------------ | -------------------------------------------------------------- |
+| `filter[email]=bob@example.com`                                    | Users whose email is 'bob@example.com'.                        |
+| `filter[name]=B*`                                                  | Users whose name begins with 'B'.                              |
+| `filter[name]=*Smith`                                              | Users whose name ends with 'Smith'.                            |
+| `filter[name]=*mi*`                                                | Users whose name contains 'mi'.                                |
+| `filter[email]=bob@example.com,alice@example.com`                  | Users whose email is 'bob@example.com' or 'alice@example.com'. |
+| `filter[failedLoginCount]=[3,*)`                                   | Users who have 3 or more failed login attempts.                |
+| `filter[creationDate]=(*,2026-01-01T00:00:00Z)`                    | Users created before 2026.                                     |
+| `filter[creationDate]=[2025-01-01T00:00:00Z,2026-01-01T00:00:00Z)` | Users created in 2025.                                         |
+
+See also [Advanced Queries](./advanced-queries.md).
+
+The `filter` parameter family is credited to [JSON:API](https://jsonapi.org/).

@@ -20,6 +20,10 @@ run migrations. You should run the helper script whenever you sync with the `mai
 a new migration script. Migrations that have already been run are tracked in the `Migration` table
 of your database.
 
+If you run the server with [Aspire](../../guide.md#run-with-aspire), the `run-db-migrations`
+resource runs this script every time the AppHost starts. To apply new migrations without restarting
+the AppHost, restart `run-db-migrations` from the Aspire dashboard.
+
 ## Modifying the database
 
 The process for modifying the database is described in

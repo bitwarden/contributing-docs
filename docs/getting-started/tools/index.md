@@ -113,7 +113,7 @@ recommended ones include the following:
 
 :::tip
 
-To learn more about how we use AI tools at Bitwarden, see our [AI](../../contributing/ai.md)
+To learn more about how we use AI tools at Bitwarden, see our [AI](../../contributing/ai/index.md)
 documentation. This page specifies how to configure AI tooling for development.
 
 :::

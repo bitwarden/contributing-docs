@@ -22,7 +22,9 @@ deprioritized
 diffable
 dockerized
 dotfile
+downcasting
 F-Droid
+fieldsets
 frontmatter
 Gitter
 HKDF
@@ -41,6 +43,7 @@ Iterm
 Jetpack
 jslib
 jumpcloud
+kebab
 keychain
 keypair
 keyserver
@@ -113,10 +116,12 @@ typecheck
 typechecks
 typesafe
 udeps
+UDID
 ungated
 unsynchronized
 WCAG
 weweave
+worktree
 Xcodes.app
 xcworkspace
 xmldoc

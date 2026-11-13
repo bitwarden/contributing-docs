@@ -46,7 +46,7 @@ subscription.
 
 ## Emails
 
-Docker compose will spin up a local smtp server, Mailcatcher, that can be used. See the
+Aspire and Docker Compose both start a local SMTP server, Mailcatcher, that can be used. See the
 [Setup Guide](./guide.md#mailcatcher) for more information about Mailcatcher.
 
 It’s also possible to use other services such as Mailtrap, or Amazon to debug the amazon
@@ -63,8 +63,8 @@ integration.
 File uploads are stored using one of two methods.
 
 - Azure Storage is used by our production cloud instance.
-  - Docker will create a local [Azurite](https://github.com/Azure/Azurite) instance which emulates
-    the Azure Storage API. And is used for the primary testing.
+  - Aspire or Docker will create a local [Azurite](https://github.com/Azure/Azurite) instance which
+    emulates the Azure Storage API. And is used for the primary testing.
   - We also have a test Azure Storage account for development use. The user secrets for this are
     attached to the the "Server User Secrets" shared vault item. You'll need to copy the `send` and
     `attachment` keys into your own user secrets.
@@ -136,13 +136,16 @@ The steps for setting up your local server for YubiKey validation are:
       dotnet user-secrets set globalSettings:yubico:key [Key]
       dotnet user-secrets set globalSettings:yubico:clientid [ClientId]
    ```
+   If you use Aspire, add these values to `dev/secrets.json` instead. Aspire clears and re-applies
+   user secrets from that file every time it starts.
 
 ## Reverse proxy setup
 
 Running a reverse proxy can be used to simulate running multiple server services in a distributed
 manner. The [Docker Compose](https://docs.docker.com/compose/) configuration in the `/dev` folder
 already has a configuration prepared for the Api and Identity services (can be expanded for other
-services).
+services). Aspire doesn't start the reverse proxy or extra service instances, so start them as
+described below.
 
 1. The reverse proxy container is setup to use an
    [nginx](https://nginx.org/en/docs/beginners_guide.html#conf_structure) config file located at
