@@ -23,6 +23,6 @@ below.
 3.  Open Firefox Developer Edition and navigate to `about:addons`
 4.  Click the cog in the top-right next to “Manage Your Extensions”
 5.  Click “Install Add-on From File”
-6.  Open `dist/dist-firefox.zip` in your local repository
+6.  Open `dist/oss-dist-firefox.zip` in your local repository
 7.  The extension will now be the `about:addons` page. Click on the name of the extension to expand
     it, and then toggle “Run in Private Windows”.
