@@ -18,12 +18,22 @@ at team level; a team that needs an exception brings the case to the architectur
 ## Context and problem statement
 
 The monolith's SQL Server database uses a collation that ignores case,
-`SQL_Latin1_General_CP1_CI_AS`. Nothing in the code says which rules depend on that. A unique index
-on an email address, a lookup by an organization's identifier and a join on a single sign-on
-identifier all ignore case because the database does, not because the schema or the code declares
-it. The other engines the server supports have different defaults: PostgreSQL and SQLite compare
-text exactly, and MySQL and MariaDB ignore case. The same code therefore behaves differently
-depending on the engine it runs on.
+`SQL_Latin1_General_CP1_CI_AS`, and its schema there doesn't say which rules depend on that. A
+unique index on an email address, a lookup by an organization's identifier and a match on a single
+sign-on identifier all ignore case because the database does.
+
+The other engines the server supports behave differently, and the monolith handles each in its own
+way:
+
+- On PostgreSQL, whose default compares exactly, the monolith's Entity Framework model declares a
+  case-insensitive collation for three columns only: the account's email address, the organization's
+  identifier and the single sign-on external identifier. That collation also ignores accents, which
+  SQL Server's does not.
+- MySQL and MariaDB ignore case by default, so nothing is declared.
+- SQLite compares exactly, and nothing is declared.
+
+So the same rule is implicit on one engine, declared for three columns on another and absent on a
+third, and the same code gives different answers depending on the engine it runs on.
 
 Under the [service-oriented architecture](./0035-service-oriented-architecture.md), each service
 owns its data store, and each store runs on every supported engine. A collation is set when a
@@ -121,15 +131,28 @@ where it is enforced.
 
 The rules:
 
-1. A service's data store `MUST` compare text exactly by default. On SQL Server the database
-   collation is `Latin1_General_100_BIN2`; on MySQL and MariaDB every table and text column is
-   `utf8mb4_bin`; PostgreSQL and SQLite use their defaults.
-2. A service `MUST` refuse to start on a store whose default collation ignores case, and on a store
-   where a table or text column ignores case without the schema declaring it. `Bitwarden.Server.Sdk`
-   provides both checks.
+1. A service's data store `MUST` compare and sort text by code point by default:
+   - SQL Server: the database collation is `Latin1_General_100_BIN2`.
+   - MySQL and MariaDB: every table and text column uses a binary collation. The proof of concept
+     uses `utf8mb4_bin`, which ignores trailing spaces. `utf8mb4_0900_bin` on MySQL and
+     `utf8mb4_nopad_bin` on MariaDB do not, and are proposed here in its place.
+   - PostgreSQL: the database is created with the `C` collation. PostgreSQL's usual default is a
+     language's locale, which compares for equality exactly but sorts, ranges and orders indexes by
+     that language's rules, and those rules can change when the operating system's or ICU's library
+     is upgraded. The proof of concept uses the default; `C` is proposed here in its place.
+   - SQLite: the default, `BINARY`.
+
+   The two proposals above change what the proof of concept provisions, and the architecture group
+   `SHOULD` confirm them before this ADR is accepted.
+
+2. A service `MUST` refuse to start on a store whose default collation doesn't meet rule 1, and on a
+   store where a table or text column ignores case without the schema declaring it.
+   `Bitwarden.Server.Sdk` provides both checks for case today.
 3. A column that has to ignore case `MUST` declare that in the service's schema, on every engine,
-   with a comment giving the reason. Such a column `SHOULD` use the collation the monolith uses on
-   that engine when the rule comes from the monolith, so both judge the same values equal.
+   with a comment giving the reason. The declaration `MUST` give the same answer on every engine.
+   When the rule comes from the monolith, the column `SHOULD` behave as the monolith does on SQL
+   Server, which the cloud runs on: it ignores case and regards accents. The monolith's PostgreSQL
+   collation, which also ignores accents, is not the model.
 4. A value that has to be unique whatever its case `MUST` be guarded by a unique index that ignores
    case. A check in code is not enough, because two concurrent writes can both pass it. The index is
    one of:
@@ -147,7 +170,8 @@ The rules:
 
 ### Positive consequences
 
-- A service gives the same answers on SQL Server, PostgreSQL, MySQL, MariaDB and SQLite.
+- A service compares and sorts text the same way on SQL Server, PostgreSQL, MySQL, MariaDB and
+  SQLite, apart from trailing spaces on SQL Server (see below).
 - Encoded values can't be merged by a collation.
 - A reviewer can find every case-insensitive rule by searching the schema for a declared collation
   or a normalized column.
@@ -163,6 +187,10 @@ The rules:
   below.
 - Normalizing in code and normalizing in the engine can disagree outside ASCII. A normalized copy
   written by the service avoids relying on each engine's `LOWER()`.
+- SQL Server ignores trailing spaces when it compares text and in unique indexes, under every
+  collation, so `'abc'` and `'abc '` are equal there and different on the other engines. No
+  collation changes this. A service that must behave the same everywhere has to trim such values
+  before it stores them.
 - On SQL Server installations other than Azure SQL Database, a database with a binary collation also
   compares object names exactly, so `dbo.ciphers` does not find `dbo.Ciphers`.
 - The server's own collation usually differs from the store's. Temporary tables take the server's
@@ -174,15 +202,18 @@ The rules:
 - Correct what the proof of concept's review found: move ciphertext columns to
   `Latin1_General_100_BIN2_UTF8`, make the index on the lowercased account address unique, guard the
   remaining names that are unique ignoring case, and lowercase addresses the migration copies.
-- Extend the start-up checks in `Bitwarden.Server.Sdk` so a column that ignores case and holds an
-  encoded value is refused (rule 6).
+- Confirm the PostgreSQL, MySQL and MariaDB collations proposed in rule 1, and provision the stores
+  with them.
+- Extend the start-up checks in `Bitwarden.Server.Sdk`: read PostgreSQL's database collation (rule
+  2), and refuse a column that ignores case and holds an encoded value (rule 6).
 - Document the rules in the server database guide, with the pattern for each kind of index in
   rule 4.
 - Database operations provisions cloud stores with the collation in rule 1 and adds a check for it
   to its own tooling.
 
 **Open question.** An identifier that an external identity provider supplies for single sign-on
-compares exactly under rule 1, where the monolith ignores its case. An identity provider that
-changes the case of an identifier would then stop matching an existing account. Whether such
-identifiers keep exact comparison, are normalized, or are declared case-insensitive under rule 3 is
-undecided, and this ADR `SHOULD NOT` be accepted until it is settled.
+compares exactly under rule 1, where the monolith ignores its case: through the database's collation
+on SQL Server, and through a collation its model declares for that column on PostgreSQL. An identity
+provider that changes the case of an identifier would then stop matching an existing account.
+Whether such identifiers keep exact comparison, are normalized, or are declared case-insensitive
+under rule 3 is undecided, and this ADR `SHOULD NOT` be accepted until it is settled.
