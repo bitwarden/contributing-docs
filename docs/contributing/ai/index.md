@@ -191,7 +191,7 @@ The Claude Code ecosystem moves quickly, so last session's habits may already be
    [`claude-config-validator`](https://github.com/bitwarden/ai-plugins/tree/main/plugins/claude-config-validator)
    to get it locally too.
 
-5. Open the pull request. A non-draft pull request receives a Claude Code review automatically, once
-   per pull request, with no label needed. Apply the `ai-review` label to review a draft, or to
-   request another review after one has already posted. The label keeps working on every push, so
-   remove it once you have the review you wanted.
+5. Open the pull request with the `ai-review` label. You SHOULD leave the label on, especially as
+   you push commits that are not merge commits. While it is on, Claude reviews the pull request on
+   every push, drafts included. Without it, a non-draft pull request gets one automatic review and
+   no more. [AI code review](../pull-requests/ai-code-review.md) explains when each review runs.

@@ -108,12 +108,8 @@ Project settings contain useful configuration such as
 
 ### Automated reviews
 
-Actions workflows for review of issues and pull requests. Targets two use cases:
-
-- Review of pull requests: Reviews are posted via a sticky comment that updates. Reviews will only
-  performed if an `ai-review` label is present on the pull request. The pull request must be opened,
-  reopened, or synchronized (e.g. new commits pushed) to trigger a review.
-- Response: By mentioning `@claude` in issue or pull request (including inline) comments. Specific
-  responses to the mention will be generated.
+Actions workflows for review of issues and pull requests. Targets two use cases: reviewing pull
+requests and responding to `@claude` mentions. [AI code review](./pull-requests/ai-code-review.md)
+explains when each one runs and how to use it.
 
 Each above use case calls a reusable workflow in the `gh-actions` repository.
