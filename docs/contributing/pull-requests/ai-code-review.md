@@ -4,7 +4,7 @@ sidebar_custom_props:
   access: bitwarden
 ---
 
-# AI code review
+# AI Code Review
 
 Claude reviews your change in layers before a human does: on your machine before you push, on the
 pull request when it opens, and on every push after that while the `ai-review` label is on.

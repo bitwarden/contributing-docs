@@ -194,4 +194,4 @@ The Claude Code ecosystem moves quickly, so last session's habits may already be
 5. Open the pull request with the `ai-review` label. You SHOULD leave the label on, especially as
    you push commits that are not merge commits. While it is on, Claude reviews the pull request on
    every push, drafts included. Without it, a non-draft pull request gets one automatic review and
-   no more. [AI code review](../pull-requests/ai-code-review.md) explains when each review runs.
+   no more. [AI Code Review](../pull-requests/ai-code-review.md) explains when each review runs.

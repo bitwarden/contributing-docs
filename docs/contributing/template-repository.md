@@ -109,7 +109,7 @@ Project settings contain useful configuration such as
 ### Automated reviews
 
 Actions workflows for review of issues and pull requests. Targets two use cases: reviewing pull
-requests and responding to `@claude` mentions. [AI code review](./pull-requests/ai-code-review.md)
+requests and responding to `@claude` mentions. [AI Code Review](./pull-requests/ai-code-review.md)
 explains when each one runs and how to use it.
 
 Each above use case calls a reusable workflow in the `gh-actions` repository.
