@@ -94,6 +94,11 @@ What the package does for you:
 
 ## Things to know
 
+- **Mark a create another service may repeat.** When the service chooses the identifier, a retry
+  would create a second resource. Mark the operation `[AcceptsIdempotencyKey]`
+  (Bitwarden.Server.Sdk.Idempotency), and a repeat from another service with the same
+  `Idempotency-Key` gets the first answer. A browser's write runs every time it arrives. See
+  [Opt an operation in](https://github.com/bitwarden/dotnet-extensions/blob/main/extensions/Bitwarden.Server.Sdk.Idempotency/src/PACKAGE.md#opt-an-operation-in).
 - **The caller's `id` reaches your handler.** The package passes an `id` sent in the body through to
   `request.Data.Id`. Assign your own identifier in the store and don't use the one sent.
 - **You fill the audit fields.** The package drops the caller's `createdAt` and `createdBy` but

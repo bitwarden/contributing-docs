@@ -47,8 +47,9 @@ internal sealed class WidgetService(string[] args) : Service("widget-service", "
 
 - The document is served at `/api/openapi.json` and a documentation UI at `/docs`, both without
   authentication. `GET /` redirects to `/docs/index.html`.
-- Without the `AddOpenApi()` call the document is still served, but has no summaries or
-  descriptions.
+- Without the `AddOpenApi()` call the document is still served, but has none of your XML comments:
+  no operation summaries or descriptions, and no member descriptions. Section descriptions from
+  `[ApiTag]` still appear.
 
 ## Describe a resource
 
@@ -248,13 +249,22 @@ To catch contract changes in review, regenerate the document in CI and fail on a
 
 - **The service refuses to start** when two endpoints would get the same operation identifier, when
   a standard endpoint is hidden with `ExcludeFromDescription()`, or when a standard endpoint is
-  mapped with a verb or route other than its attribute's. Every problem is listed at once. Two
-  handlers called `GetWidget` on `v1` routes in two endpoints classes collide; rename one or name it
-  with `.WithName(...)`.
+  mapped with a verb or route other than its attribute's (see [API paths](api-paths.md)). Every
+  problem is listed at once. Two handlers called `GetWidget` on `v1` routes in two endpoints classes
+  collide; rename one or name it with `.WithName(...)`.
 - **One document per service.** It holds every version of every operation the service serves.
 - **The schema shows what callers send and receive, not your record.** A resource's members appear
   under `attributes`.
 - **Examples are yours,** as are summaries, remarks, `<param>` text and section descriptions.
+- **`page[size]` publishes its limits:** its minimum, its default, and its maximum, which is 200 or
+  what `[MaximumPageSize(n)]` declares. Its description says that larger sizes are treated as the
+  maximum. See [Paging](../querying/paging.md#let-a-page-hold-more).
+- **An operation marked `[AcceptsIdempotencyKey]`** carries `x-bitwarden-idempotency-key: true`, so
+  a generated client sends an `Idempotency-Key` to it and only to it.
+- **An operation whose handler takes a cacheable query** carries `x-bitwarden-cache`: what a client
+  may read from the service's cache and the checks it makes, with `readMany` for a cached list. It
+  changes in the committed document like any other part of the contract. See
+  [Caching and extensions](../running-a-service/caching-and-extensions.md).
 
 ## See also
 

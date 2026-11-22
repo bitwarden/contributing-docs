@@ -19,8 +19,9 @@ The package then handles the rest:
   inside `attributes` or beside them, is dropped before your handler sees the resource. So is a
   `[ReadOnly]` member.
 - **Undeclared query parameters are ignored.** Only parameters the handler declares are bound.
-- **Unknown headers are ignored.** The exception: a product service refuses the context headers
-  (`Bitwarden-Organization` and the rest) with `400`, because only a domain service takes them.
+- **Unknown headers are ignored.** The exception: a product service refuses, with `400`, every
+  header only services send: the context headers (`Bitwarden-Organization` and the rest) and
+  `Bitwarden-Call-Chain`.
 - **`sort` is checked when the handler takes `Sort`.** A field the resource doesn't mark
   `[Sortable]` is refused with `422`, and the error lists the sortable fields.
 - **`fields[type]` is checked when the handler takes `Fields<T>`.** An attribute the resource

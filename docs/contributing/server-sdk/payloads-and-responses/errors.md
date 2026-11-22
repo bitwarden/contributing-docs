@@ -32,18 +32,18 @@ public static async Task<ResourceDocument<Widget>> GetWidget(
 
 What each exception becomes:
 
-| Throw                                             | Status                              | Code                       | What the caller is told                                       |
-| ------------------------------------------------- | ----------------------------------- | -------------------------- | ------------------------------------------------------------- |
-| `NotFoundException()`, `(type, id)` or `(detail)` | `404`                               | `not-found`                | The detail, such as "No widget with ID '...' exists."         |
-| `ForbiddenException(detail)`                      | `403`                               | `forbidden`                | The detail.                                                   |
-| `UnauthenticatedException(detail)`                | `401`                               | `unauthenticated`          | The detail.                                                   |
-| `ConflictException()` or `(detail)`               | `409`                               | `conflict`                 | The detail, or that the resource changed since it was read.   |
-| `InvalidRequestException(detail, pointer, code)`  | `422`                               | `code`, or `invalid-value` | The detail, at `source.pointer` when one is given.            |
-| `PendingServiceException(service, requirement)`   | `501`                               | `not-implemented`          | Which service the rule waits on, and what it needs.           |
-| `NotImplementedException`                         | `501`                               | `not-implemented`          | A fixed detail.                                               |
-| `ServiceUnavailableException`                     | `503`                               | `service-unavailable`      | Which dependency, and what happened; never how it is reached. |
-| An exception implementing `IProvideErrors`        | Its `StatusCode` (`422` by default) | Its own                    | Its `Errors`, as many as it has.                              |
-| Anything else                                     | `500`                               | `internal-error`           | Nothing.                                                      |
+| Throw                                             | Status                              | Code                       | What the caller is told                                                                         |
+| ------------------------------------------------- | ----------------------------------- | -------------------------- | ----------------------------------------------------------------------------------------------- |
+| `NotFoundException()`, `(type, id)` or `(detail)` | `404`                               | `not-found`                | The detail, such as "No widget with ID '...' exists."                                           |
+| `ForbiddenException()` or `(detail)`              | `403`                               | `forbidden`                | The detail, or that the caller may not perform the operation.                                   |
+| `UnauthenticatedException()` or `(detail)`        | `401`                               | `unauthenticated`          | The detail, or that a valid access token is required.                                           |
+| `ConflictException()` or `(detail)`               | `409`                               | `conflict`                 | The detail, or that the resource changed since it was read.                                     |
+| `InvalidRequestException(detail, pointer, code)`  | `422`                               | `code`, or `invalid-value` | The detail, at `source.pointer` when one is given. The title is always that of `invalid-value`. |
+| `PendingServiceException(service, requirement)`   | `501`                               | `not-implemented`          | Which service the rule waits on, and what it needs.                                             |
+| `NotImplementedException`                         | `501`                               | `not-implemented`          | A fixed detail.                                                                                 |
+| `ServiceUnavailableException`                     | `503`                               | `service-unavailable`      | Which dependency, and what happened; never how it is reached.                                   |
+| An exception implementing `IProvideErrors`        | Its `StatusCode` (`422` by default) | Its own                    | Its `Errors`, as many as it has.                                                                |
+| Anything else                                     | `500`                               | `internal-error`           | Nothing.                                                                                        |
 
 - The detail of a recognized exception is sent as you wrote it. Write it for the caller, and never
   put Vault Data, ciphertext, a secret or an internal address in one.
@@ -57,17 +57,17 @@ What each exception becomes:
 
 The package fills in each error's members, and leaves out those without a value:
 
-| Field              | What the package puts there                                                                                                                         |
-| ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `status`           | The response's status, as a string.                                                                                                                 |
-| `code`             | A stable code from `ErrorCodes`, such as `not-found`, `invalid-value`, `field-required`, `invalid-type`, `conflict`; or the one an exception gives. |
-| `title`            | The same text for every error with that code (`ErrorTitles`).                                                                                       |
-| `detail`           | What went wrong this time. For an exception the package recognizes, its message.                                                                    |
-| `source.pointer`   | A JSON Pointer into the body, on the wire's names: `/data/attributes/name`, `/data/attributes/part/code`, `/shine`.                                 |
-| `source.parameter` | The query parameter, such as `filter[createdAt]` or `page[number]`.                                                                                 |
-| `source.header`    | The context header that was refused. Any other header parameter is reported with a pointer instead, `/{header-name}`.                               |
-| `meta.resource`    | The `type` and `id` of a resource a bulk operation couldn't act on (`FailedResource`), when there's nothing in the request to point at.             |
-| `id`               | On a `500`, `501` or `503` an exception produced: the request's trace identifier, which the log records with the exception. Other errors have none. |
+| Field              | What the package puts there                                                                                                                                                                                                              |
+| ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `status`           | The response's status, as a string.                                                                                                                                                                                                      |
+| `code`             | A stable code from `ErrorCodes`, such as `not-found`, `invalid-value`, `field-required`, `invalid-type`, `conflict`; or the one an exception gives.                                                                                      |
+| `title`            | The same text for every error with that code (`ErrorTitles`). An `InvalidRequestException` always carries `invalid-value`'s title, whatever its code.                                                                                    |
+| `detail`           | What went wrong this time. For an exception the package recognizes, its message.                                                                                                                                                         |
+| `source.pointer`   | A JSON Pointer into the body, on the wire's names: `/data/attributes/name`, `/data/attributes/part/code`, `/shine`.                                                                                                                      |
+| `source.parameter` | The query parameter, such as `filter[createdAt]` or `page[number]`.                                                                                                                                                                      |
+| `source.header`    | A header the platform refused: one only services send, at a product service, or a context header or context token that failed a domain service's check. Any other header parameter is reported with a pointer instead, `/{header-name}`. |
+| `meta.resource`    | Set by your handler, never by the package: the `type` and `id` of a resource a bulk operation couldn't act on (`FailedResource`), when there's nothing in the request to point at.                                                       |
+| `id`               | On a `500`, `501` or `503` an exception produced: the request's trace identifier, which the log records with the exception. Other errors have none.                                                                                      |
 
 ## Report several errors at once
 
@@ -210,8 +210,10 @@ public static class RegionHeader
 
 - **Codes are part of your contract.** Use an `ErrorCodes` constant where one fits. Callers branch
   on a code of your own, so never change it. Titles and details may be reworded.
-- **Keep a title per code.** `ErrorTitles` holds the package's titles. Give a code of your own the
-  same title every time, as `UnknownPartsException` does.
+- **Keep a title per code.** `ErrorTitles` holds the package's titles. To give a code of your own a
+  title of its own, throw an exception implementing `IProvideErrors`, as `UnknownPartsException`
+  does, and use the same title every time. `InvalidRequestException` keeps `invalid-value`'s title
+  whatever code it carries.
 - **Details reach the caller.** Only a `500` hides what happened. Everything else you write in an
   exception's message is sent.
 

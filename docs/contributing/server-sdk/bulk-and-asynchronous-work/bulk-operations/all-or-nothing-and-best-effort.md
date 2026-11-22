@@ -105,7 +105,9 @@ public static class WidgetsEndpoints
   conflict, use the `BulkRefusals.For` helper on [Bulk responses](bulk-responses.md).
 - **Catch only per-resource failures.** Pass the exceptions your rules throw (`NotFoundException`,
   `ConflictException`, `InvalidRequestException` and so on) to `BulkFailure.At`. Let anything else
-  propagate: `BulkFailure.At` describes an unrecognized exception as a `500` without its message.
+  propagate: `BulkFailure.At` describes an unrecognized exception as a `500` without its message. A
+  library's exception is translated only when you pass the service's `IExceptionTranslator`s, as
+  `BulkFailure.At(exception, pointer, translators)`.
 - **Choosing a mode.** All-or-nothing when a partial result would leave related resources
   inconsistent, or the caller treats the set as one. Best-effort when each resource stands alone and
   the caller can report or retry individual failures.

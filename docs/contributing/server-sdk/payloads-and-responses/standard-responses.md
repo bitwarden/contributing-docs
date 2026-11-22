@@ -15,14 +15,14 @@ failures itself before your handler runs.
 
 The helpers come from `using static Bitwarden.Server.Sdk.Resources.StandardResponses;`:
 
-| Operation            | Return                                                           | Status                                      |
-| -------------------- | ---------------------------------------------------------------- | ------------------------------------------- |
-| `[StandardCreate]`   | `CreateResponse(resource)`                                       | `201`, with `Location` from the path and id |
-| `[StandardReadOne]`  | `ReadOneResponse(resource)` or `(resource, fields)`              | `200`                                       |
-| `[StandardReadMany]` | `ReadManyResponse(...)`: a list, an offset page or a cursor page | `200`, with paging `meta` and links         |
-| `[StandardUpdate]`   | `UpdateResponse(resource)`                                       | `200`                                       |
-| `[StandardAction]`   | `ActionResponse(resource)`, or your own value                    | `200`                                       |
-| Any operation        | Nothing (`Task`)                                                 | `204`                                       |
+| Operation            | Return                                                           | Status                                                                               |
+| -------------------- | ---------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
+| `[StandardCreate]`   | `CreateResponse(resource)`                                       | `201`, with `Location` from the path and id                                          |
+| `[StandardReadOne]`  | `ReadOneResponse(resource)` or `(resource, fields)`              | `200`                                                                                |
+| `[StandardReadMany]` | `ReadManyResponse(...)`: a list, an offset page or a cursor page | `200`; an offset page adds paging `meta` and links, a cursor page paging `meta` only |
+| `[StandardUpdate]`   | `UpdateResponse(resource)`                                       | `200`                                                                                |
+| `[StandardAction]`   | `ActionResponse(resource)`, or your own value                    | `200`                                                                                |
+| Any operation        | Nothing (`Task`)                                                 | `204`                                                                                |
 
 - Each helper takes an optional `meta`.
 - A handler that returns an `IResult`, or sets the status itself, keeps the status it chose.

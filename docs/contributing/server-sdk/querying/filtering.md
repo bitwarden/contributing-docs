@@ -54,7 +54,7 @@ public static class WidgetsEndpoints
         PageSize pageSize = default,
         CancellationToken cancellationToken = default)
     {
-        var page = new Page { Number = pageNumber, Size = pageSize };
+        var page = new Page(pageNumber, pageSize);
         var widgets = database.Widgets.AsNoTracking();
 
         // A list filter matches a row that has any of its values.

@@ -40,12 +40,14 @@ internal sealed class WidgetService(string[] args) : Service("widget-service", "
 }
 ```
 
-- The guard resolves each request's host first and refuses an address in a private, loopback,
-  link-local or other reserved range, before anything connects.
+- The guard resolves each request's host first and refuses a name it can't resolve, or one that
+  resolves to any address in a private, loopback, link-local or other reserved range, before
+  anything connects.
 - It then connects to the address it checked, keeping the original host for TLS, so the name can't
   resolve elsewhere in between.
 - It turns off automatic redirects on the primary handler and follows them itself (up to 10),
-  checking every hop.
+  checking every hop. It never carries the original request's headers, `Authorization` among them,
+  to the next hop, and returns rather than follows a redirect from `https://` to `http://`.
 - `AddCloudSsrfProtection()` guards only in Bitwarden's cloud, and leaves a self-hosted install's
   client unguarded.
 - The extensions are in the `Microsoft.Extensions.DependencyInjection` namespace.
@@ -113,10 +115,11 @@ authority that issued their certificates:
   fetches.
 - A server certificate is trusted when the system trusts it or it chains to a named root. A host
   name that doesn't match is never trusted.
-- `Tls:RequireHttps` refuses a plain-HTTP bearer authority at startup, and a plain-HTTP address the
-  service is configured to listen on (`urls`, `http_ports`, `Kestrel:Endpoints:*:Url`, with
-  Kestrel's precedence). Once it listens, a plain-HTTP address it listens on, such as one set in
-  code or Kestrel's default `http://localhost:5000`, stops it.
+- `Tls:RequireHttps` refuses a plain-HTTP bearer authority at startup, a service client
+  (Bitwarden.Server.Sdk.Client) whose service or identity address is plain HTTP, and a plain-HTTP
+  address the service is configured to listen on (`urls`, `http_ports`, `Kestrel:Endpoints:*:Url`,
+  with Kestrel's precedence). Once it listens, a plain-HTTP address it listens on, such as one set
+  in code or Kestrel's default `http://localhost:5000`, stops it.
 - `Tls:HealthPort` is the one port that may stay plain HTTP, for infrastructure that probes without
   TLS. List it with the others (`https://+:8443;http://127.0.0.1:8081`). On it the service answers
   `/api/v1/health`, `/api/v1/readiness` and `/api/v1/startup` alone; anything else is `404`.
@@ -125,14 +128,14 @@ authority that issued their certificates:
 
 ## Settings
 
-| Setting                      | Default | What it does                                                                                                                           |
-| ---------------------------- | ------- | -------------------------------------------------------------------------------------------------------------------------------------- |
-| `Tls:CertificateAuthorities` | None    | PEM files of root certificate authorities trusted for outbound calls and the bearer handler's key fetches, besides the system's roots. |
-| `Tls:RequireHttps`           | `false` | When true, the bearer authority and every listening address but the health port must be `https://`, or the service does not start.     |
-| `Tls:ServerCertificate`      | None    | The server certificate, base64 DER, for every HTTPS endpoint without one of its own. With `Tls:ServerKey`.                             |
-| `Tls:ServerKey`              | None    | Its private key, base64 PKCS #8. A secret.                                                                                             |
-| `Tls:HealthPort`             | None    | The one port allowed plain HTTP with `Tls:RequireHttps`, answering the probes alone.                                                   |
-| `globalSettings:selfHosted`  | `false` | When true, `AddCloudSsrfProtection()` clients are unguarded.                                                                           |
+| Setting                      | Default | What it does                                                                                                                                                                               |
+| ---------------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `Tls:CertificateAuthorities` | None    | PEM files of root certificate authorities trusted for outbound calls and the bearer handler's key fetches, besides the system's roots.                                                     |
+| `Tls:RequireHttps`           | `false` | When true, the bearer authority, every service client's service and identity addresses, and every listening address but the health port must be `https://`, or the service does not start. |
+| `Tls:ServerCertificate`      | None    | The server certificate, base64 DER, for every HTTPS endpoint without one of its own. With `Tls:ServerKey`.                                                                                 |
+| `Tls:ServerKey`              | None    | Its private key, base64 PKCS #8. A secret.                                                                                                                                                 |
+| `Tls:HealthPort`             | None    | The one port allowed plain HTTP with `Tls:RequireHttps`, answering the probes alone.                                                                                                       |
+| `globalSettings:selfHosted`  | `false` | When true, `AddCloudSsrfProtection()` clients are unguarded.                                                                                                                               |
 
 ## Security trade-offs
 
@@ -151,6 +154,15 @@ authority that issued their certificates:
 
 - **The guard is opt-in per client.** A client you don't guard can reach anything. Guard none whose
   destination is the deployment's own, since the guard would refuse it.
+- **A guarded client sends with a `SocketsHttpHandler`.** A primary handler you configure must be
+  one, without a `ConnectCallback` of its own, or creating the client fails. The guard refuses
+  HTTP/3. Following redirects buffers the request body in memory, so use `followRedirects: false`
+  for a client that sends large or streamed bodies.
+  [Bitwarden.Server.Sdk.Http](https://github.com/bitwarden/dotnet-extensions/blob/main/extensions/Bitwarden.Server.Sdk.Http/src/PACKAGE.md)
+  lists the rest, such as what a proxy sees.
+- **Calls to other Bitwarden services** go through their client packages, which
+  [Bitwarden.Server.Sdk.Client](https://github.com/bitwarden/dotnet-extensions/blob/main/extensions/Bitwarden.Server.Sdk.Client/src/PACKAGE.md)
+  describes: timeouts, retries, the context they carry and the request memo.
 - **A client with its own primary handler** gets `Tls:CertificateAuthorities` too, whenever it names
   it, unless that handler checks certificates itself (its own validation callback), which it keeps.
   A handler no HTTP client factory makes, such as a reverse proxy's, gets nothing: give it

@@ -43,8 +43,8 @@ Defining the service itself, securing it, configuring it and running it.
 - [Outbound HTTP](running-a-service/outbound-http.md): calls guarded against SSRF, and internal TLS.
 - [Observability and health](running-a-service/observability-and-health.md): traces, metrics, logs
   and health probes.
-- [Caching and extensions](running-a-service/caching-and-extensions.md): a short in-process memo,
-  and extending the platform from a package.
+- [Caching and extensions](running-a-service/caching-and-extensions.md): the request memo, cached
+  reads and lists, and extending the platform from a package.
 
 ## Contracts
 

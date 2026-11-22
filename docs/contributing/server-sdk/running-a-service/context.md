@@ -83,13 +83,15 @@ context another service sends, and believes it only as Identity signed it.
 | Address, device and credential | `Bitwarden-Context`, as the token signed it                                            | The connection's address, the `device` claim, the client's headers |
 | A context header               | Believed from an internal service with a valid context token; ignored from anyone else | Refused with `400`, whoever sends it                               |
 | A token without a GUID `sub`   | Accepted                                                                               | Refused with `401`, except a credential an operation accepts       |
-| `ICallerRole`                  | Always `None`                                                                          | From the session, for the organization it names                    |
+| `ICallerRole`                  | Always `None`                                                                          | The person's standing now, in the organization the session names   |
 
 The context headers are `BitwardenHeaders.All`: `Bitwarden-Organization`, `Bitwarden-User`,
 `Bitwarden-Provider`, `Bitwarden-Context` (a closed, versioned JSON object) and
 `Bitwarden-Delegation` (the signed form of the other four).
 
-- **A product service** refuses all five with `400`, before authentication, whoever sends them.
+- **A product service** refuses all five with `400`, before authentication, whoever sends them, and
+  `Bitwarden-Call-Chain` too: together they are `BitwardenHeaders.ServiceOnly`, the headers only
+  services send.
 - **A domain service** believes them only from another service (a token whose `client_id` is
   `internal.*`), and only as its context token says. From a person's token, a Send's token or no
   token, they are not read and the context is empty. The request then meets the operation's
@@ -136,8 +138,9 @@ handler runs. Each refusal names the header at fault in the error's `source.head
 ## Things to know
 
 - **Strip the headers at the edge.** Every proxy in front of a service must strip
-  `BitwardenHeaders.All` from what clients send. A product service refuses them anyway; a domain
-  service reached through a public entry point relies on the proxy.
+  `BitwardenHeaders.ServiceOnly` (the context headers and `Bitwarden-Call-Chain`) from what clients
+  send. A product service refuses them anyway; a domain service reached through a public entry point
+  relies on the proxy.
 - **Name the callers that may assert a person.** Put them in `[AcceptsAssertedContext]` with the
   reason, on each operation, so the exception is reviewed where it is read.
 - **Enforce your own access rules.** A context says whom a call concerns, not what the caller may

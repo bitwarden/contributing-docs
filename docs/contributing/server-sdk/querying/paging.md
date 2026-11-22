@@ -12,9 +12,10 @@ it must, and writes the paging `meta` and links.
 
 ## Page by number
 
-Take `PageNumber pageNumber = default` and `PageSize pageSize = default`, combine them into a
-`Page`, and return a `PagedResourceListDocument<T>`. `Page` takes the slice from an ordered query,
-and `ToPagedAsync` works out the total. Here with Entity Framework Core:
+Take `PageNumber pageNumber = default` and `PageSize pageSize = default`, build a `Page` from them
+with `new Page(pageNumber, pageSize)`, and return a `PagedResourceListDocument<T>`. `Page` takes the
+slice from an ordered query, and `ToPagedAsync` works out the total. Here with Entity Framework
+Core:
 
 ```csharp
 using System.ComponentModel;
@@ -41,7 +42,7 @@ public static async Task<PagedResourceListDocument<Widget>> ListWidgets(
     [DefaultValue(25)] PageSize pageSize = default,
     CancellationToken cancellationToken = default)
 {
-    var page = new Page { Number = pageNumber, Size = pageSize };
+    var page = new Page(pageNumber, pageSize);
 
     var widgets = database.Widgets.AsNoTracking();
     int? atMost = null;
@@ -68,10 +69,12 @@ public static async Task<PagedResourceListDocument<Widget>> ListWidgets(
 }
 ```
 
-- The page number defaults to 1. A number below 1, or above 10737418 (the farthest page whose rows
-  fit in an `int`), is refused with `422`.
-- The page size defaults to 50, or to the `[DefaultValue]` you put on the `PageSize` parameter. The
-  maximum is 200 (`Page.MaximumSize`) for every operation: a larger size is reduced to 200, and a
+- The page number defaults to 1. A number below 1, or past the farthest page, is refused with `422`.
+  The farthest page is the last whose rows, at the operation's maximum page size, fit in an `int`:
+  10737418 at the usual maximum of 200.
+- The page size defaults to 50, or to the `[DefaultValue]` you put on the `PageSize` parameter. Its
+  maximum is 200 (`Page.MaximumSize`), or what the operation declares with `[MaximumPageSize]` (see
+  [Let a page hold more](#let-a-page-hold-more)). A larger size is treated as the maximum, and a
   size below 1 is refused with `422`. The OpenAPI document publishes the default, minimum and
   maximum.
 - `ReadManyResponse(paged, page)` writes the page number, page size, page count and total count, and
@@ -107,8 +110,9 @@ public static PagedResourceListDocument<Widget> ListWidgets(IReadOnlyList<Widget
 
 Cursor paging never counts and stays stable while rows are written, at the cost of page numbers and
 totals. Use it for a large collection read in order, such as an event log. Take
-`PageSize pageSize = default` and `PageAfter pageAfter = default`, combine them into a `CursorPage`,
-and return a `CursorPagedResourceListDocument<T>`:
+`PageSize pageSize = default` and `PageAfter pageAfter = default`, build a `CursorPage` from them
+with `new CursorPage(pageSize) { After = pageAfter }`, and return a
+`CursorPagedResourceListDocument<T>`:
 
 ```csharp
 [Sortable(nameof(CreatedAt), Default = true, Descending = true)]
@@ -137,7 +141,7 @@ public static async Task<CursorPagedResourceListDocument<WidgetEvent>> ListWidge
     PageAfter pageAfter = default,
     CancellationToken cancellationToken = default)
 {
-    var page = new CursorPage { Size = pageSize, After = pageAfter };
+    var page = new CursorPage(pageSize) { After = pageAfter };
     var order = sort ?? Sort.Default<WidgetEvent>();
 
     // Filters go before Page; Page orders the query and reads one row more than the
@@ -163,6 +167,54 @@ public static async Task<CursorPagedResourceListDocument<WidgetEvent>> ListWidge
   things on different databases.
 - A cursor records the sort, not the filters. A caller who changes filters part way through should
   start again without a cursor.
+
+## Let a page hold more
+
+A collection that a caller reads whole, such as a list a client syncs, costs one request per page.
+Let its pages hold more by declaring a maximum of the operation's own with `[MaximumPageSize(n)]` on
+the `PageSize` parameter, and build the page with `new Page(pageNumber, pageSize)`, which carries
+it:
+
+```csharp
+/// <summary>
+/// List widgets
+/// </summary>
+/// <param name="database">Where widgets are kept.</param>
+/// <param name="pageNumber">Which page to return.</param>
+/// <param name="pageSize">How many widgets a page holds.</param>
+/// <param name="cancellationToken">Cancels the request.</param>
+[StandardReadMany]
+public static async Task<PagedResourceListDocument<Widget>> ListWidgets(
+    WidgetDatabase database,
+    PageNumber pageNumber = default,
+    [MaximumPageSize(1000)] PageSize pageSize = default,
+    CancellationToken cancellationToken = default)
+{
+    // Holds up to 1,000 widgets when the caller asks for that many.
+    var page = new Page(pageNumber, pageSize);
+
+    var widgets = database.Widgets.AsNoTracking();
+    var rows = await widgets
+        .OrderBy(widget => widget.Id)
+        .Page(page)
+        .ToListAsync(cancellationToken);
+
+    return ReadManyResponse(await rows.ToPagedAsync(page, ToResource, widgets.CountAsync, cancellationToken), page);
+}
+```
+
+- **The maximum travels with the page size.** Binding carries it on the `PageSize` value
+  (`PageSize.Maximum`), and `new Page(pageNumber, pageSize)` and `new CursorPage(pageSize)` apply
+  it. A page built with an initializer, such as `new Page { Number = pageNumber, Size = pageSize }`,
+  reads the size as an `int` and holds at most 200, whatever the operation declares.
+- **The farthest page follows from it.** A page number is refused with `422` past the last page
+  whose rows, at the declared maximum, fit in an `int`.
+- **The OpenAPI document publishes it** as the maximum of `page[size]`, and says that a larger size
+  is treated as the maximum.
+- **The default doesn't change.** A caller who sends no `page[size]` still gets 50, or the
+  `[DefaultValue]` on the parameter; a caller who wants more pages asks for them.
+- **Lowering it is a breaking change** for a caller that asks for more. See
+  [Breaking changes and versioning](../contracts/breaking-changes-and-versioning.md).
 
 ## Refuse paging parameters an operation doesn't take
 
@@ -210,3 +262,5 @@ Take `HttpRequest request` as a handler parameter and call, for example,
 - [Filtering](filtering.md) and [Sparse fieldsets](sparse-fieldsets.md): parameters the page links
   carry.
 - [Advanced queries](advanced-queries.md): a search pages the same way.
+- [Caching and extensions](../running-a-service/caching-and-extensions.md): a cached list, whose
+  most rows may not exceed its operation's maximum page size.

@@ -138,7 +138,7 @@ public static class SoftDeletingWidgetsEndpoints
         PageSize pageSize = default,
         CancellationToken cancellationToken = default)
     {
-        var page = new Page { Number = pageNumber, Size = pageSize };
+        var page = new Page(pageNumber, pageSize);
 
         return ReadManyResponse(await store.ListAsync(page, includeDeleted, cancellationToken), page);
     }

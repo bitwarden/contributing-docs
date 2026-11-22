@@ -71,7 +71,7 @@ What the package exports for you:
 - **Metrics** from ASP.NET Core, `HttpClient`, SqlClient, the runtime, and every `Bitwarden.*` and
   `Bit.*` meter.
 - **Logs** with their formatted message and scopes.
-- **Nothing** while the process only writes its OpenAPI document (`--emit-openapi`).
+- **Nothing** while the process only describes itself (`--emit-openapi` or `--emit-infrastructure`).
 
 ## Know who a record concerns
 
@@ -128,10 +128,13 @@ The call-chain check and `[AcceptsReentry]` are in
 [Bitwarden.Server.Sdk.Authorization](https://github.com/bitwarden/dotnet-extensions/blob/main/extensions/Bitwarden.Server.Sdk.Authorization/src/PACKAGE.md),
 which `Service` registers for you.
 
-- The chain is believed only from another service's authenticated call. From anybody else, a
-  person's browser included, the header is removed and the request has none.
-- It names services only, at most 16, each a registered name. A value that isn't one is read as
-  none, so nothing else reaches a log, a span or a metric tag.
+- The chain is believed only from another service's authenticated call. A product service refuses it
+  from anybody else with `400`, as it does the context headers. At a domain service, anybody else's
+  chain is removed and the request has none.
+- It names services only, at most 16, each shaped like a service name: a lowercase letter, then
+  lowercase letters, digits and single hyphens, at most 64 characters, holding no GUID. A value that
+  isn't one is read as none. The shape isn't a registry: a name that passes is not known to be a
+  service's.
 - Identity's token endpoint and the health probes are never a re-entry: a token or context exchange
   is the platform's plumbing.
 - A call your service makes while handling a message or running a job starts a chain of its own.
@@ -149,6 +152,9 @@ never traced.
 
 - The package doesn't check your dependencies. Add a check for each dependency the service can't
   serve without.
+- To report a problem as it happens, take `IHealthReporter` (Bitwarden.Server.Sdk.HealthChecks).
+  `ReportDegradation` reports degraded until the handle it returns is disposed; `ReportUnhealthy`
+  makes readiness answer `503` until the process restarts.
 - When readiness answers `503`, its detail joins the descriptions of the unhealthy checks. Write a
   description an operator can act on.
 - A check that failed with an exception, or has no description, is reported as "A dependency is not

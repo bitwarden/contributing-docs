@@ -109,18 +109,26 @@ The platform's middleware runs in this order, outermost first:
 
 1. Finishing writes: a request other than `GET`, `HEAD`, `OPTIONS` or `TRACE` runs to the end even
    when its client disconnects. A safe request keeps the client's cancellation.
-2. The forwarded client address, from a trusted proxy.
-3. The log scope naming the organization, user and provider.
-4. The exception handler, then status-code pages, both answering in the standard error document.
-5. CORS, only when browser origins are configured.
-6. Per-address rate limits.
-7. The context refusal (product services only).
-8. The documentation UI at `/docs`.
-9. Authentication, then the context check (domain services only), then authorization.
-10. The call-chain check: the services a call passed through, and a call back into this service.
-11. Feature-flag checks.
-12. Idempotency keys: a write another service repeats with the same `Idempotency-Key`, to an
+2. The request memo: within one request, the service's clients send a repeated read of another
+   service once. See [Caching and extensions](caching-and-extensions.md).
+3. The forwarded client address, from a trusted proxy.
+4. The log scope naming the organization, user and provider.
+5. The exception handler, then status-code pages, both answering in the standard error document.
+6. CORS, only when browser origins are configured.
+7. Per-address rate limits.
+8. The refusal of headers only services send (product services only): the context headers and
+   `Bitwarden-Call-Chain`.
+9. The documentation UI at `/docs`.
+10. Authentication, then the context check (domain services) or the current-standing check (product
+    services), then authorization.
+11. The call-chain check: the services a call passed through, and a call back into this service.
+12. Feature-flag checks.
+13. Idempotency keys: a write another service repeats with the same `Idempotency-Key`, to an
     operation marked `[AcceptsIdempotencyKey]`, is answered from its first run.
+14. The operation's writes: an operation whose writes span services without declaring how it
+    recovers, with `[SpansServices]`, is logged and counted in `bitwarden.operation.spans`, and
+    refused when `SpansServices:RefuseUndeclared` is on. Inside idempotency keys, so a replayed
+    answer isn't counted.
 
 `AddPlatformServices` and `UsePlatformMiddleware` are virtual too, but overriding either replaces
 the platform's baseline wholesale. Use the hooks on either side of them instead.
@@ -128,7 +136,7 @@ the platform's baseline wholesale. Use the hooks on either side of them instead.
 ## Start the service in a test
 
 `Build()` returns the configured `WebApplication` without starting it, for tests and hosting
-harnesses:
+harnesses. Outside `Development`, set `Idempotency:Secret` first, or the host doesn't start:
 
 ```csharp
 await using var app = new WidgetService([]).Build();
@@ -136,7 +144,9 @@ await app.StartAsync();
 ```
 
 `Run()` builds and runs it. Given `--emit-openapi <path>`, it writes the OpenAPI document instead
-and exits.
+and exits. Given `--emit-infrastructure <path>`, it writes the infrastructure the service declares
+(Bitwarden.Server.Sdk.Infrastructure's requirements, such as message topics and queues) instead, and
+exits.
 
 ## Choose the kind of service
 
@@ -157,7 +167,9 @@ internal sealed class WidgetService(string[] args) : Service("widget-service", "
 
 - A **domain service** takes whom a request concerns from the context another service sends.
 - A **product service** is where a person's session ends. It takes whom a request concerns from the
-  validated token, refuses the context headers, and serves `GET /api/v1/config`.
+  validated token, authorizes the person from their current standing (it must register an
+  `ICurrentStanding`, or it doesn't start), refuses the headers only services send, and serves
+  `GET /api/v1/config`.
 - A **product domain service** behaves exactly as a domain service. The attribute changes only how
   its documentation UI looks, so the three kinds can be told apart.
 - A type carrying both attributes makes the constructor throw.
@@ -169,9 +181,11 @@ what each kind believes about a request.
 
 ## Settings
 
-| Setting                 | Default                      | What it does                                                                                                                            |
-| ----------------------- | ---------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
-| `Bitwarden:ServiceName` | The name passed to `Service` | The name the client packages authenticate as (`internal.{name}`). Supplied as the lowest-precedence source, so a deployment can set it. |
+| Setting                          | Default                      | What it does                                                                                                                                                                                                                                                                                                                                        |
+| -------------------------------- | ---------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Bitwarden:ServiceName`          | The name passed to `Service` | The name the client packages authenticate as (`internal.{name}`). Supplied as the lowest-precedence source, so a deployment can set it.                                                                                                                                                                                                             |
+| `Idempotency:Secret`             | None                         | The secret the service's own operations derive their idempotency keys with. Required outside `Development`: unset, or the development secret, the service doesn't start. [Idempotency.Abstractions](https://github.com/bitwarden/dotnet-extensions/blob/main/extensions/Bitwarden.Server.Sdk.Idempotency.Abstractions/src/PACKAGE.md) describes it. |
+| `SpansServices:RefuseUndeclared` | `false`                      | Refuses a write whose operation spans services without declaring how it recovers. Turn it on in tests and `Development`.                                                                                                                                                                                                                            |
 
 ## Things to know
 

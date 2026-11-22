@@ -124,15 +124,15 @@ run on the same file.
 The package publishes what your types say, so ordinary-looking edits to a resource can break
 callers:
 
-| Edit                                                                         | Why it breaks callers                                                                             |
-| ---------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
-| Adding a non-nullable member to a resource                                   | It is required, in the document and when a request is validated.                                  |
-| Making a nullable member non-nullable                                        | It becomes required.                                                                              |
-| Changing a member's type                                                     | The schema changes, and a request with the old type is refused with `422`.                        |
-| Adding `[StringLength]`, `[Range]` or a lower `[Encrypted(MaxLength = ...)]` | A request that passed before can be refused. A string with no bound of its own is limited to 255. |
-| Removing a member, or marking it `[ReadOnly]`                                | A response loses a field, or a request's value is dropped.                                        |
-| Adding paging to a list, or lowering `[DefaultValue]` on its `PageSize`      | The same request returns fewer results.                                                           |
-| Renaming a handler                                                           | Its operation identifier, and every generated client's method, change.                            |
+| Edit                                                                                           | Why it breaks callers                                                                             |
+| ---------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| Adding a non-nullable member to a resource                                                     | It is required, in the document and when a request is validated.                                  |
+| Making a nullable member non-nullable                                                          | It becomes required.                                                                              |
+| Changing a member's type                                                                       | The schema changes, and a request with the old type is refused with `422`.                        |
+| Adding `[StringLength]`, `[Range]` or a lower `[Encrypted(MaxLength = ...)]`                   | A request that passed before can be refused. A string with no bound of its own is limited to 255. |
+| Removing a member, or marking it `[ReadOnly]`                                                  | A response loses a field, or a request's value is dropped.                                        |
+| Adding paging to a list, or lowering `[DefaultValue]` or `[MaximumPageSize]` on its `PageSize` | The same request returns fewer results.                                                           |
+| Renaming a handler                                                                             | Its operation identifier, and every generated client's method, change.                            |
 
 - **Adding an enumeration value** is accepted by the service at once. An enumeration is published as
   a string with its permitted values in upper snake case (`SMALL`, `LARGE`). A client generated from

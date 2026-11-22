@@ -144,8 +144,10 @@ describes the request body with the targeting it accepts.
 ## When the service refuses to start
 
 - A bulk endpoint's `Map` route disagrees with its attribute's route.
-- A handler takes `BulkUpdate<T>`, `BulkDelete<T>`, `BulkAction<T>` or `Search<T>` without the
-  matching attribute. Its filter would otherwise reach the handler unchecked.
+- A handler takes `Search<T>`, `BulkUpdate<T>`, `BulkDelete<T>`, `BulkAction<T>` or
+  `BulkAction<T, TInput>` on an operation that isn't a `[StandardSearch]` or `[StandardBulk...]`
+  operation in a group mapped with `WithStandards()`, or takes a bare `Query` anywhere. Its filter
+  would otherwise reach the handler unchecked.
 - A bulk action is named `create`, `update`, `replace` or `delete`.
 
 ## Things to know

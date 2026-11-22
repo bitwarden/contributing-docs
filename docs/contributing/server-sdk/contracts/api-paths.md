@@ -68,8 +68,10 @@ public static class WidgetsEndpoints
 - `[StandardReadOne]`, `[StandardUpdate]` and `[StandardDelete]` default to `{id}`.
   `[StandardCreate]` and `[StandardReadMany]` default to the collection itself.
 - For any other route, pass a template to the attribute, such as `[StandardReadMany("{id}/parts")]`,
-  and map the same route. A standard endpoint mapped on a different route stops the service from
-  starting.
+  and map the same route. A standard endpoint mapped on a route other than its attribute's template
+  stops the service from starting. `[StandardCreate]` and `[StandardReadMany]` without a template
+  have no route to compare, so they are accepted wherever they are mapped. The verb is always
+  checked.
 - A route parameter binds to the handler parameter of the same name (`string id`).
 - Segments the package generates are kebab case: an action's name (`actions/send-email`) and a bulk
   operation's suffix (`:bulk-delete`). Your own segments are up to you; use lowercase kebab case.

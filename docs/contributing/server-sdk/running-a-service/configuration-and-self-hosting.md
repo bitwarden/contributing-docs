@@ -6,10 +6,12 @@ sidebar_position: 4
 
 **Audience:** engineers writing a Bitwarden service, and its API, with the server SDK.
 
-A service reads its settings from the standard ASP.NET Core sources. Every setting the package reads
-is optional: a service with none of them runs in the cloud configuration. Use feature flags with
-`[RequireFeature]` and `IFeatureService`, and keep operations to one kind of install with
-`[SelfHostedOnly]` and `[NotSelfHostedOnly]`.
+A service reads its settings from the standard ASP.NET Core sources. Most settings the package reads
+are optional. Outside `Development`, every service needs `Idempotency:Secret`, or it doesn't start
+(see [Defining a service](defining-a-service.md#settings)), and one that shares rate-limit counts in
+Redis needs `RateLimiting:Secret` (see [Network and request limits](network-and-request-limits.md)).
+Use feature flags with `[RequireFeature]` and `IFeatureService`, and keep operations to one kind of
+install with `[SelfHostedOnly]` and `[NotSelfHostedOnly]`.
 
 ## Where settings come from
 
@@ -20,8 +22,9 @@ is optional: a service with none of them runs in the cloud configuration. Use fe
 - The package supplies some defaults as the lowest-precedence source, so a deployment can override
   them: `Bitwarden:ServiceName`, `Logging:Console:IncludeScopes` and the request-line log level.
 
-Keep secrets out of `appsettings*.json`. The LaunchDarkly SDK key, Redis connection strings and
-database passwords belong in user secrets or the environment.
+Keep secrets out of `appsettings*.json`. The LaunchDarkly SDK key, `Idempotency:Secret`,
+`RateLimiting:Secret`, Redis connection strings and database passwords belong in user secrets or the
+environment.
 
 ## Use feature flags
 
@@ -142,8 +145,9 @@ behavior:
   user secrets, environment variables and the command line.
 - `IBitwardenEnvironment.SelfHosted` is true, and `SelfHostFlavor` is
   `globalSettings:selfHostFlavor` (`unknown` when unset).
-- Per-address rate limits are off (Bitwarden.Server.Sdk.RateLimiting reads the setting itself),
-  telemetry exporters default to off, and `AddCloudSsrfProtection()` clients are unguarded.
+- Per-address rate limits are off (Bitwarden.Server.Sdk.RateLimiting reads the setting itself, and a
+  configured Redis still needs `RateLimiting:Secret`), telemetry exporters default to off, and
+  `AddCloudSsrfProtection()` clients are unguarded.
 - The config resource reports `settings.selfHosted` as true.
 
 Ship an `appsettings.SelfHosted.json` for what differs in a self-hosted install, rather than

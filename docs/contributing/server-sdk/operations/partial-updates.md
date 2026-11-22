@@ -132,8 +132,9 @@ public static class PatchedWidgetsEndpoints
 - A member left out, or sent as an empty string, is unchanged. A member sent as `null` is cleared,
   unless it is required, which is refused.
 - `MapPatch` works in a group mapped with `WithStandards()`. The endpoint gets the standard error
-  document, a plain body's binding and validation (a body that isn't JSON is refused with `422`
-  before your handler runs), and the service's write scope.
+  document, a plain body's binding and validation (a body sent with a content type other than JSON
+  is refused with `415`, and malformed JSON with `422`, before your handler runs), and the service's
+  write scope.
 - It doesn't get an operation identifier (name it with `WithName`), a `type` or `id` check, or a
   documented resource schema. The handler does those checks itself.
 

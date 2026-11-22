@@ -42,7 +42,7 @@ public static class WidgetsEndpoints
         PageSize pageSize = default,
         CancellationToken cancellationToken = default)
     {
-        var page = new Page { Number = pageNumber, Size = pageSize };
+        var page = new Page(pageNumber, pageSize);
 
         // Nothing found is an empty page, never a 404.
         var found = await store.ListAsync(page, cancellationToken);
@@ -76,9 +76,10 @@ public static class WidgetsEndpoints
 - `ReadOneResponse(resource)` builds a single-resource document. `ReadOneResponse(resource, fields)`
   leaves out the attributes a sparse fieldset didn't ask for.
 - `ReadManyResponse` has three forms: a whole list (`IReadOnlyList<T>`), an offset page (`Paged<T>`
-  and the `Page` asked for), and a cursor page (`CursorPaged<T>` and the `CursorPage`). A paged
-  response carries the counts and the paging links, built from the request so they keep the caller's
-  filters and sort.
+  and the `Page` asked for), and a cursor page (`CursorPaged<T>` and the `CursorPage`). An
+  offset-paged response carries the counts and the paging links, built from the request so they keep
+  the caller's filters and sort. A cursor-paged response carries no count and no links: its `meta`
+  holds the page size, whether more follow, and the cursor for the next page.
 - Your store returns the `Paged<Widget>`: the page's widgets and the total. A store that queries
   with Entity Framework Core uses `Page(page)` and `ToPagedAsync`; one holding a list in memory uses
   `ToPaged(page)`. See [Paging](../querying/paging.md).
@@ -94,7 +95,12 @@ public static class WidgetsEndpoints
   authorized. Declare them as parameters and attributes; see [Filtering](../querying/filtering.md),
   [Sorting](../querying/sorting.md) and [Sparse fieldsets](../querying/sparse-fieldsets.md).
 - **Page anything that grows.** Return `ResourceListDocument<T>` only for a collection that is small
-  by nature.
+  by nature. A page holds at most 200 unless the operation declares its own maximum with
+  `[MaximumPageSize(n)]`; see [Paging](../querying/paging.md#let-a-page-hold-more).
+- **A read other services make often can be served from your cache.** A read of one through a
+  `CacheableQuery`, and a list a party reads whole through a `CacheableListQuery`, let other
+  services answer it from Redis. See
+  [Caching and extensions](../running-a-service/caching-and-extensions.md).
 - **Soft-deleted resources** are yours to leave out. See
   [Soft deletes](deleting-resources.md#soft-deletes).
 

@@ -81,8 +81,9 @@ public sealed record PolishWidget([property: Range(1, 10)] int Shine);
   For a singleton the caller's scope names, pass its literal: `template: "current"` gives
   `current/actions/reset`. The `actions/{action}` part is always added by the package.
 - **The body is a plain JSON object** bound to your request type, with no `data` envelope. Its
-  members are validated with data annotations: a `Shine` of 11 is refused with `422`, pointing at
-  `/shine`. An action with no body parameter takes no body.
+  members are validated with data annotations, then the type's own class-level validation attributes
+  and `IValidatableObject.Validate`: a `Shine` of 11 is refused with `422`, pointing at `/shine`. An
+  action with no body parameter takes no body.
 - **`ActionResponse` answers `200`** with the resource. A handler that returns nothing answers
   `204`.
 - **An action demands the service's write scope** unless it declares a scope of its own. Give it its
@@ -126,6 +127,11 @@ public enum WidgetStatus
 
 ## Things to know
 
+- **Mark an action another service may repeat** when a repeat would do something twice, such as
+  sending a mail or issuing a secret. Mark it `[AcceptsIdempotencyKey]`
+  (Bitwarden.Server.Sdk.Idempotency), and a repeat from another service with the same
+  `Idempotency-Key` gets the first answer. Leave it off an action that only sets a value. See
+  [Opt an operation in](https://github.com/bitwarden/dotnet-extensions/blob/main/extensions/Bitwarden.Server.Sdk.Idempotency/src/PACKAGE.md#opt-an-operation-in).
 - **Make anything with its own rules or permission an action,** such as a status transition, sending
   an email or adding one element to a collection. Don't model these as writes to a field.
 - **Pick the error the caller can act on.** A transition that isn't allowed from the current state

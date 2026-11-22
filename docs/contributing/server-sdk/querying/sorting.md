@@ -68,7 +68,7 @@ public static async Task<PagedResourceListDocument<Widget>> ListWidgets(
     PageSize pageSize = default,
     CancellationToken cancellationToken = default)
 {
-    var page = new Page { Number = pageNumber, Size = pageSize };
+    var page = new Page(pageNumber, pageSize);
     var widgets = database.Widgets.AsNoTracking();
 
     // The caller's order, or the resource's default, then the identifier so rows that

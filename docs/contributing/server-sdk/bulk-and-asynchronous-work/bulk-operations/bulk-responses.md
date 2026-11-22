@@ -21,8 +21,14 @@ and `BulkRefusedException` to build these.
 | `throw new BulkRefusedException(failures)`     | All-or-nothing failure                   | `422` with every failure                                                                       |
 
 - **`BulkFailure.At(exception, pointer)`** builds one failure. It uses the same mapping as the
-  exception handler: `404` for `NotFoundException`, `409` for `ConflictException`, `422` for
-  `InvalidRequestException` (keeping its `code`), and a `500` without the message for anything else.
+  exception handler. An exception that provides its own errors (`IProvideErrors`) is reported by its
+  first error, with the status it carries. Otherwise: `404` for `NotFoundException`, `403` for
+  `ForbiddenException`, `401` for `UnauthenticatedException`, `409` for `ConflictException`, `422`
+  for `InvalidRequestException` (keeping its `code`), `501` for `PendingServiceException`, `503` for
+  `ServiceUnavailableException`, and a `500` without the message for anything else.
+- **Translate a library's exception** as the exception handler does by passing the service's
+  translators: `BulkFailure.At(exception, pointer, translators)`, with
+  `IEnumerable<IExceptionTranslator>` taken from dependency injection.
 - **Give each business rule its own `code`.** `InvalidRequestException` takes a `code` argument
   (`name-in-use`, `archived`), so callers can tell failures apart.
 

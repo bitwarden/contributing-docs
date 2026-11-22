@@ -62,17 +62,21 @@ The package ships no rules. Add them in `IpRateLimitOptions`:
 - **Refusal.** A request over a limit is refused with `429`, a `Retry-After` header and the standard
   error document, before authentication.
 - **Matching.** `Endpoint` is `*` or `verb:path`, with `*` for any run of characters and `?` for any
-  one. It is matched without case against the path in lower case, without a trailing slash and with
-  repeated slashes collapsed. `Period` is a number followed by `s`, `m`, `h` or `d`.
+  one. It is matched without case against the path as sent, and against the path without a trailing
+  slash and with repeated slashes collapsed. `EndpointWhitelist` entries match only the normalized
+  path, so write them without a trailing slash. `Period` is a number followed by `s`, `m`, `h` or
+  `d`.
 - **Counting.** With `EnableEndpointRateLimiting` (the default), each method and path counts apart,
   so `post:*` gives every `POST` route its own allowance. Of the rules that apply, the most
   restrictive for each period counts, shortest period first, and counting stops at the first over
   its limit. Windows are fixed.
-- **Grants.** A rule with `Grants` counts a token request only when its form's `grant_type` is one
-  of them.
+- **Grants.** A rule with `Grants` counts a token request only when its form names exactly one
+  `grant_type` and it is one of them. A request naming none, or several, counts as it would against
+  a rule without grants.
 - **Off** when self-hosted, when `Enabled` is false, and when there are no rules.
-- **Shared counts.** Set `globalSettings:distributedIpRateLimiting:redisConnectionString` and every
-  instance of the service shares one allowance in Redis. Unset, each process counts on its own.
+- **Shared counts.** Set `globalSettings:distributedIpRateLimiting:redisConnectionString`, and the
+  same `RateLimiting:Secret` on every instance, and every instance of the service shares one
+  allowance in Redis. Unset, each process counts on its own.
 - **Your service network.** List it in `IpWhitelist`, since services call each other and fetch their
   own tokens.
 
@@ -138,39 +142,45 @@ Name the web pages that may call the service from a browser:
 
 ## Settings
 
-| Setting                                                              | Default | What it does                                                                                                           |
-| -------------------------------------------------------------------- | ------- | ---------------------------------------------------------------------------------------------------------------------- |
-| `ForwardedHeaders:KnownProxies`                                      | None    | Comma-separated addresses or host names of proxies whose `X-Forwarded-For` and `X-Forwarded-Proto` are believed.       |
-| `ForwardedHeaders:KnownNetworks`                                     | None    | Comma-separated CIDR networks of such proxies.                                                                         |
-| `IpRateLimitOptions:Enabled`                                         | `true`  | Whether limits apply. Off when self-hosted, and with no rules, whatever this says.                                     |
-| `IpRateLimitOptions:GeneralRules`                                    | None    | The rules: `Endpoint` (default `*`), `Period` (default `1m`), `Limit` (default `0`, refusing every request), `Grants`. |
-| `IpRateLimitOptions:EnableEndpointRateLimiting`                      | `true`  | Counts each method and path apart. When false, only `*` rules apply, counting all of an address's requests.            |
-| `IpRateLimitOptions:IpWhitelist`                                     | None    | Addresses and CIDR networks never limited.                                                                             |
-| `IpRateLimitOptions:EndpointWhitelist`                               | None    | `verb:path` patterns never limited.                                                                                    |
-| `IpRateLimitOptions:HttpStatusCode`                                  | `429`   | The status a request over a limit is refused with.                                                                     |
-| `globalSettings:distributedIpRateLimiting:redisConnectionString`     | None    | A Redis where every instance keeps one shared count. Unset, each process counts on its own.                            |
-| `globalSettings:distributedIpRateLimiting:enabled`                   | `true`  | Whether a configured Redis is used.                                                                                    |
-| `globalSettings:distributedIpRateLimiting:maxRedisTimeoutsThreshold` | `10`    | How many Redis failures within the window set Redis aside, letting requests through unlimited.                         |
-| `globalSettings:distributedIpRateLimiting:slidingWindowSeconds`      | `120`   | The window, in seconds, those failures are counted in.                                                                 |
-| `Service:BrowserOrigins`                                             | None    | The browser origins admitted cross-origin, as an array or a single value.                                              |
+| Setting                                                              | Default | What it does                                                                                                                                                                                                                                                      |
+| -------------------------------------------------------------------- | ------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ForwardedHeaders:KnownProxies`                                      | None    | Comma-separated addresses or host names of proxies whose `X-Forwarded-For` and `X-Forwarded-Proto` are believed.                                                                                                                                                  |
+| `ForwardedHeaders:KnownNetworks`                                     | None    | Comma-separated CIDR networks of such proxies.                                                                                                                                                                                                                    |
+| `IpRateLimitOptions:Enabled`                                         | `true`  | Whether limits apply. Off when self-hosted, and with no rules, whatever this says.                                                                                                                                                                                |
+| `IpRateLimitOptions:GeneralRules`                                    | None    | The rules: `Endpoint` (default `*`), `Period` (default `1m`), `Limit` (default `0`, refusing every request), `Grants`.                                                                                                                                            |
+| `IpRateLimitOptions:EnableEndpointRateLimiting`                      | `true`  | Counts each method and path apart. When false, only `*` rules apply, counting all of an address's requests.                                                                                                                                                       |
+| `IpRateLimitOptions:IpWhitelist`                                     | None    | Addresses and CIDR networks never limited.                                                                                                                                                                                                                        |
+| `IpRateLimitOptions:EndpointWhitelist`                               | None    | `verb:path` patterns never limited.                                                                                                                                                                                                                               |
+| `IpRateLimitOptions:HttpStatusCode`                                  | `429`   | The status a request over a limit is refused with.                                                                                                                                                                                                                |
+| `globalSettings:distributedIpRateLimiting:redisConnectionString`     | None    | A Redis where every instance keeps one shared count. Unset, each process counts on its own.                                                                                                                                                                       |
+| `globalSettings:distributedIpRateLimiting:enabled`                   | `true`  | Whether a configured Redis is used.                                                                                                                                                                                                                               |
+| `globalSettings:distributedIpRateLimiting:maxRedisTimeoutsThreshold` | `10`    | How many Redis failures within the window set Redis aside, letting requests through unlimited.                                                                                                                                                                    |
+| `globalSettings:distributedIpRateLimiting:slidingWindowSeconds`      | `120`   | The window, in seconds, those failures are counted in.                                                                                                                                                                                                            |
+| `RateLimiting:Secret`                                                | None    | The secret shared counts' keys are derived with: base64 of 32 random bytes, the same on every instance. Required outside `Development` whenever a Redis is configured and enabled, even while limits are off. Never another secret, such as `Idempotency:Secret`. |
+| `Service:BrowserOrigins`                                             | None    | The browser origins admitted cross-origin, as an array or a single value.                                                                                                                                                                                         |
 
 ## Security trade-offs
 
 - **Trusted proxies.** A trusted proxy chooses the address a request is recorded and rate-limited
   under, so name only the proxies in front of the service and keep `KnownNetworks` as narrow as
   their network. Each proxy must add the address it took the request from last in `X-Forwarded-For`,
-  and must strip the context headers (`BitwardenHeaders.All`) a client sends. An address that
-  doesn't parse is looked up as a host name and trusts nobody if the lookup fails; a network that
-  doesn't parse is ignored. Behind a proxy that is not trusted, every request carries the proxy's
-  address, so all clients share one allowance.
-- **Rate-limit rules.** A `Period` that doesn't parse, or an `IpWhitelist` entry that is neither an
-  address nor a CIDR network, stops the service at startup.
-- **Shared counts.** Every instance must name the same Redis; counts are kept apart per service
-  name, under keys `{service}:ip-rate-limit:{SHA-256}` that expire with their window. The hash is
-  unsalted and the IPv4 address space is small, so anyone who can read the Redis can recover the
-  addresses: protect it as you would the logs, and keep its connection string (which usually carries
-  a password) in secrets. When Redis fails, the service lets requests through rather than refusing
-  them.
+  and must strip the headers only services send (`BitwardenHeaders.ServiceOnly`: the context headers
+  and `Bitwarden-Call-Chain`) from what a client sends. An address that doesn't parse is looked up
+  as a host name and trusts nobody if the lookup fails; a network that doesn't parse is ignored.
+  Behind a proxy that is not trusted, every request carries the proxy's address, so all clients
+  share one allowance.
+- **Rate-limit rules.** A `Period` that doesn't parse, an `IpWhitelist` entry that is neither an
+  address nor a CIDR network, or a Redis connection string that doesn't parse, stops the service at
+  startup.
+- **Shared counts.** Every instance must name the same Redis and hold the same
+  `RateLimiting:Secret`. Counts are kept apart per service name, under keys
+  `{service}:ip-rate-limit:{derived key}`, the bucket derived from the address with the secret, and
+  expire with their window. Without the secret, reading the Redis doesn't reveal an address, though
+  counts and their timing still show: keep the secret, and the connection string (which usually
+  carries a password), in secrets. Outside `Development`, a service with a Redis configured and
+  enabled, and no `RateLimiting:Secret` or the development secret, doesn't start, even while its
+  limits are off. Changing the secret starts every window afresh. When Redis fails, the service lets
+  requests through rather than refusing them.
 - **Browser origins.** CORS decides which web pages may read a service's answers. Name each origin
   exactly as a browser sends it. `*`, an empty entry, a path, a trailing slash, a written-out
   default port, user info, a scheme other than `http` or `https`, or a `*` anywhere but the first

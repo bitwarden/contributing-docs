@@ -134,7 +134,10 @@ public sealed class WidgetArchiving(IWidgetStore store, IWidgetEvents events)
 
 - **`BulkFailure.At(exception, pointer)`** turns the exception the single action would throw into an
   error with the same status, code and detail, using the same mapping as the exception handler.
-  Point it at the resource's position, such as `/ids/1`.
+  Point it at the resource's position, such as `/ids/1`. When your rules can throw a library's
+  exception that a registered `IExceptionTranslator` maps, pass the translators too
+  (`BulkFailure.At(exception, pointer, translators)`), so the failure matches what the single action
+  answers.
 - **`BulkRefusedException(failures)`** refuses an all-or-nothing request with every failure.
 - **The operation's own authorization** (its scope and context, set by the attribute) is checked
   once for the request. Each resource's authorization is yours.

@@ -109,7 +109,7 @@ public static class WidgetsEndpoints
         PageSize pageSize,
         CancellationToken cancellationToken)
     {
-        var page = new Page { Number = pageNumber, Size = pageSize };
+        var page = new Page(pageNumber, pageSize);
 
         var rows = await widgets
             .SortedBy(sort ?? Sort.Default<Widget>(), widget => widget.Id)

@@ -169,11 +169,13 @@ The package reads an enumeration value differently depending on where it arrives
 
 - **A `filter[...]` parameter (`Filter<T>`):** the upper snake case name, in any case. Anything else
   is refused `422`.
-- **A resource attribute:** the upper snake case name, exactly. A name the enumeration doesn't have
-  is refused `422` with the permitted values. The right name in another case passes that check and
-  is then refused `422` `invalid-value`.
-- **A plain JSON body:** the upper snake case name exactly, or any number, defined or not. Anything
-  else is refused `422`.
+- **A resource attribute:** the upper snake case name. A name the enumeration doesn't have is
+  refused `422` with the permitted values. A one-word name is read in any case (`plain`, `Plain`),
+  but a multi-word name in another case (`special_edition`) passes that check and is then refused
+  `422` `invalid-value`.
+- **A plain JSON body:** the upper snake case name exactly, the C# member name in any case
+  (`SpecialEdition`, `specialedition`), or any number, defined or not. Anything else, such as
+  `special_edition`, is refused `422`.
 - **A plain route, query or header parameter:** the C# member name exactly, or any number, as
   ASP.NET Core parses an enumeration. The upper snake case name is refused.
 

@@ -81,15 +81,17 @@ What the package does with these:
   encrypted string (its type, pieces and base64), as "Notes is not a valid encrypted string.". The
   value is never decrypted. Ciphertext is longer than the text it hides, so give it a larger bound
   than you would the text.
-- **Cross-member rules.** `IValidatableObject.Validate` runs once every member passes its own rules.
+- **Cross-member rules.** Validation attributes declared on the class, then
+  `IValidatableObject.Validate`, run once every member passes its own rules, on the model and on
+  each item of a list or dictionary.
 - **Errors.** Each points at what failed: `source.pointer` into the body
   (`/data/attributes/part/code`), or `source.parameter` for a query parameter. Up to 200 are
   returned at once. See [Errors](errors.md).
 
 A resource document is checked a level at a time: its shape, then each attribute's presence and
-kind, then the declared rules, then each object's `IValidatableObject`. A request that fails one
-level is not checked at the next, so an absent `name` is reported without the over-long `color`
-beside it.
+kind, then the declared rules, then each object's own rules (its class-level attributes and
+`IValidatableObject`). A request that fails one level is not checked at the next, so an absent
+`name` is reported without the over-long `color` beside it.
 
 The same rules apply to `[FromForm]` and `[AsParameters]` models.
 

@@ -128,12 +128,23 @@ public static class WidgetsEndpoints
 
 ## Require roles and permissions (product services)
 
-Roles and permissions come from a person's session, read through `ICallerRole`, so they apply in a
-product service. Set `OrganizationRole`, `Permission` or `ProviderRole` on `[Authorization]`.
+Roles and permissions are the person's standing now in what their session names, read through
+`ICallerRole`, so they apply in a product service. Set `OrganizationRole`, `Permission` or
+`ProviderRole` on `[Authorization]`.
 
 - A role is satisfied by it or any role above it (`User`, `Custom`, `Admin`, `Owner`).
-- An owner or administrator holds every permission.
+- An owner or administrator holds every permission. A custom member holds only the permissions
+  granted to them.
 - A role counts only in the organization the session names.
+- The standing comes from an `ICurrentStanding`, which the service that owns the standing provides
+  in its client package. A product service registers one, or it doesn't start. Once per request,
+  before authorization, the package asks it about the organization or provider the session names. A
+  person who is no longer a confirmed member of that organization, or no longer staff of that
+  provider, is refused with `404`. A provider's staff member whose provider no longer administers
+  the client organization, or who is no longer its staff, is refused with `403`. The role and
+  permission claims the session was issued with are never read.
+  [Require a role or permission](https://github.com/bitwarden/dotnet-extensions/blob/main/extensions/Bitwarden.Server.Sdk.Authorization/src/PACKAGE.md#require-a-role-or-permission-product-services)
+  in Authorization's PACKAGE.md lists what is asked for each kind of session.
 
 For a check `[Authorization]` can't express, write an attribute implementing `IAuthorizesOperation`
 (Bitwarden.Server.Sdk.Resources). It runs after authorization and before anything is bound or
@@ -148,8 +159,13 @@ using Bitwarden.Server.Sdk.Service;
 [ProductService]
 internal sealed class WidgetPortal(string[] args) : Service("widget-portal", "Widget Portal", args)
 {
-    protected override void ConfigureServices(IServiceCollection services) =>
+    protected override void ConfigureServices(IServiceCollection services)
+    {
         services.AddSingleton<IWidgetStore, WidgetStore>();
+
+        // Where a person's current standing is read. The standing's owner provides this in its client package.
+        services.AddSingleton<ICurrentStanding, WidgetStanding>();
+    }
 
     protected override void MapEndpoints(IEndpointRouteBuilder endpoints) =>
         SharedWidgetsEndpoints.Map(endpoints);
@@ -234,12 +250,12 @@ authorization.
 
 ## Settings
 
-| Setting                                   | Default | What it does                                                                                                                                   |
-| ----------------------------------------- | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
-| `Authentication:Schemes:Bearer:Authority` | None    | The Identity service whose tokens are trusted. Read by Bitwarden.Server.Sdk.Authentication.                                                    |
-| `Authentication:Schemes:Bearer:*`         | None    | Any other `JwtBearerOptions` property.                                                                                                         |
-| `Tls:RequireHttps`                        | `false` | When true, the bearer authority must be `https://`, or the service does not start.                                                             |
-| `Service:PublicIdentityUrl`               | None    | Where a browser reaches Identity, for the documentation UI's token request. Must be absolute `http` or `https`, or the service does not start. |
+| Setting                                   | Default | What it does                                                                                                                                                          |
+| ----------------------------------------- | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Authentication:Schemes:Bearer:Authority` | None    | The Identity service whose tokens are trusted. Read by Bitwarden.Server.Sdk.Authentication.                                                                           |
+| `Authentication:Schemes:Bearer:*`         | None    | Any other `JwtBearerOptions` property.                                                                                                                                |
+| `Tls:RequireHttps`                        | `false` | When true, the bearer authority must be `https://`, or the service does not start. Service clients' addresses are checked too; see [Outbound HTTP](outbound-http.md). |
+| `Service:PublicIdentityUrl`               | None    | Where a browser reaches Identity, for the documentation UI's token request. Must be absolute `http` or `https`, or the service does not start.                        |
 
 ## Things to know
 
@@ -247,6 +263,9 @@ authorization.
   demanding a role refuses every call with `403`. The package doesn't refuse such a declaration at
   startup. Keep role requirements on product services, and in a domain service authorize by scope
   and context instead.
+- **Read a role only where the standing was read.** On a product service, `ICallerRole` throws for a
+  person's session whose standing wasn't resolved: on an operation open to anybody
+  (`Anonymous = true`), or in code outside the request pipeline.
 - **Extra audiences reach every endpoint.** If only one surface should accept another audience,
   check `aud` yourself in an `IAuthorizesOperation` on the other operations, or host that surface in
   its own service.
