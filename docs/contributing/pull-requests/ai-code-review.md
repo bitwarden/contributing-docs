@@ -88,13 +88,13 @@ diagrams the rules that decide whether a review runs.
 ### `ai-review` label
 
 Leave the `ai-review` label on your pull request unless you have a reason to remove it. While it is
-on, the review reruns on every push. Even one last, small commit on a pull request carries risk. The
-label also reviews a draft. The
+on, the review reruns on every push. Without it, Claude skips every commit pushed after its first
+review, even one last, small one. With the label on, Claude also reviews a draft. The
 [review workflow README](https://github.com/bitwarden/gh-actions/blob/main/review-code/README.md)
 describes the label rules.
 
 The `ai-review-vnext` label runs a version of the review that is still being tested. Use it only
-when the AI Team asks you to as a beta tester.
+when you are asked to beta test changes to the review workflow.
 
 ### `@claude` mention
 
@@ -119,15 +119,13 @@ then checks each finding. It reviews local changes, a pull request, a commit, or
 
 ## Act on a review
 
-Triage every finding before acting on it. Our work on a pull request is complete when all Claude
-findings are resolved and we have human approval. We address Claude findings with a code change or a
-brief reply that says why the code stays as it is. A reply is a valid resolution because Claude can
-miss domain context, and it can flag too much or too little. The
+Triage every finding with Claude in the loop: ask it to check each finding against the code and fix
+the ones that hold up, then review each fix before you keep it. Our work on a pull request is
+complete when all Claude findings are resolved and we have human approval. We address Claude
+findings with a code change or a brief reply that says why the code stays as it is. A reply is a
+valid resolution because Claude can miss domain context, and it can flag too much or too little. The
 [plugin README](https://github.com/bitwarden/ai-plugins/blob/main/plugins/bitwarden-code-review/README.md#finding-classification)
-links the severity levels Claude uses. The
-[`addressing-code-review-comments` skill](https://github.com/bitwarden/ai-plugins/blob/main/plugins/bitwarden-code-review/skills/addressing-code-review-comments/SKILL.md)
-checks each finding against the code, fixes the clear-cut ones, and drafts replies for the rest. You
-decide what to keep and post.
+links the severity levels Claude uses.
 
 ## Troubleshooting
 
