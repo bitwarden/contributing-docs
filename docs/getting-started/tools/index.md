@@ -107,46 +107,6 @@ recommended ones include the following:
   - [PostgreSQL](https://marketplace.visualstudio.com/items?itemName=ckolkman.vscode-postgres) -
     syntax highlighting for PostgreSQL
 
-<Bitwarden>
-
-## AI tools
-
-:::tip
-
-To learn more about how we use AI tools at Bitwarden, see our [AI](../../contributing/ai/index.md)
-documentation. This page specifies how to configure AI tooling for development.
-
-:::
-
-### Claude Code
-
-We use Claude Code as our primary AI tool for development workflows.
-
-#### Installation
-
-Follow the installation instructions [here](https://code.claude.com/docs/en/quickstart). When
-prompted, sign into the Anthropic Console via SSO and authenticate your local client.
-
-We also recommend integrating Claude Code into your IDE. See
-[VS Code](https://code.claude.com/docs/en/vs-code) for setup instructions.
-
-#### Basic usage
-
-We recommend that you start with
-[common workflows](https://code.claude.com/docs/en/common-workflows) and
-[best practices](https://code.claude.com/docs/en/best-practices) from Anthropic for learning how to
-start using Claude for development.
-
-### Bitwarden AI plugin marketplace
-
-Bitwarden maintains a curated set of AI plugins designed for our development workflows in our
-[marketplace](https://github.com/bitwarden/ai-plugins).
-
-See the [`README`](https://github.com/bitwarden/ai-plugins/tree/main?tab=readme-ov-file#usage) in
-the `ai-plugins` repo for installation and setup instructions.
-
-</Bitwarden>
-
 ## Optional tools
 
 The following tools may be useful depending on your preferences or what you’re developing.
