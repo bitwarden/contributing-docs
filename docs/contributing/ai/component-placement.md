@@ -1,4 +1,5 @@
 ---
+sidebar_position: 2
 sidebar_custom_props:
   access: bitwarden
 ---
@@ -9,6 +10,8 @@ Every AI component, whether a skill, agent, command, hook, or prompt, lives in e
 single home keeps knowledge single-sourced, so copies cannot drift apart, and role bundles still
 give each person one install. The reasoning is recorded in
 [ADR 0038](../../architecture/adr/0038-adopt-ai-component-taxonomy.md).
+
+**Audience:** Bitwarden engineers placing a new skill, agent, command, hook, or prompt.
 
 ## Plugin layers
 
