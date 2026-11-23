@@ -7,14 +7,20 @@ sidebar_custom_props:
 # AI Code Review
 
 Claude reviews your change in layers before a human does: on your machine before you push, on the
-pull request when it opens, and on every push after that while the `ai-review` label is on.
+pull request when it opens, and on every push after that while the `ai-review` label is on. The pull
+request reviews run on their own and post inline comments and a summary comment. The local reviews
+and the security review run when you ask for them.
 
 **Audience:** Bitwarden engineers who open or review pull requests.
 
-:::warning Not a replacement for human review
+:::info Before you start
 
-Claude's review does not replace human review or approval. Every pull request still needs the review
-described in [Code Review](./code-review.md).
+These plugins must be installed and loaded from `bitwarden-marketplace`:
+
+- `bitwarden-code-review`
+- `bitwarden-delivery-tools`
+- `bitwarden-software-engineer`
+- `bitwarden-security-engineer`
 
 :::
 
@@ -23,12 +29,19 @@ described in [Code Review](./code-review.md).
 ### Local review
 
 When you ask Claude to open a pull request, the
-[`bitwarden-delivery-tools` plugin](https://github.com/bitwarden/ai-plugins/tree/main/plugins/bitwarden-delivery-tools)
+[bitwarden-delivery-tools plugin](https://github.com/bitwarden/ai-plugins/tree/main/plugins/bitwarden-delivery-tools)
 runs this review for you through its `creating-pull-request` skill before it pushes. Both reviews
 below write their findings to files on your machine, and nothing is posted to GitHub. They come from
 the `bitwarden-code-review` plugin, and the
 [plugin README](https://github.com/bitwarden/ai-plugins/blob/main/plugins/bitwarden-code-review/README.md)
 lists its commands and how to install it.
+
+The `creating-pull-request` skill asks how deep your change is before it runs the review. `Standard`
+runs the single-agent review and `Substantial` runs the multi-agent review.
+
+Use these reviews on other people's pull requests too, by passing the pull request number to either
+command. Then ask Claude follow-up questions in the same session to understand the change before you
+take your questions to its author.
 
 :::tip Use a different model and a clean context window
 
@@ -113,7 +126,8 @@ miss domain context, and it can flag too much or too little. The
 [plugin README](https://github.com/bitwarden/ai-plugins/blob/main/plugins/bitwarden-code-review/README.md#finding-classification)
 links the severity levels Claude uses. The
 [`addressing-code-review-comments` skill](https://github.com/bitwarden/ai-plugins/blob/main/plugins/bitwarden-code-review/skills/addressing-code-review-comments/SKILL.md)
-helps you check each finding against the code and draft your replies.
+checks each finding against the code, fixes the clear-cut ones, and drafts replies for the rest. You
+decide what to keep and post.
 
 ## Troubleshooting
 
