@@ -91,8 +91,8 @@ uses, such as hooks, subagents, and compaction.
 
 - [AI Code Review](../../contributing/pull-requests/ai-code-review.md) explains which local review
   fits your change, the reviews that run on your pull request, and when your work on it is complete.
-- [Contributing Claude context](../../contributing/ai/index.md#contributing-claude-context) explains
-  how to teach Claude about a codebase.
+- [Claude context](../../contributing/ai/contributing-claude-context.md) explains how to teach
+  Claude about a codebase.
 - The [AI](../../contributing/ai/index.md) section explains how Bitwarden uses AI and what is
   expected of you.
 
