@@ -104,7 +104,7 @@ Initial content placeholders provide AI assistance and automated code reviews:
 ```
 
 Project settings contain useful configuration such as
-[our marketplace](./../getting-started/tools/index.md#bitwarden-ai-plugin-marketplace).
+[our marketplace](./../getting-started/tools/claude-code.md#setup).
 
 ### Automated reviews
 
