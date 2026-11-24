@@ -119,11 +119,11 @@ then checks each finding. It reviews local changes, a pull request, a commit, or
 
 ## Act on a review
 
-Triage every finding with Claude in the loop: ask it to check each finding against the code and fix
-the ones that hold up, then review each fix before you keep it. Our work on a pull request is
-complete when all Claude findings are resolved and we have human approval. We address Claude
-findings with a code change or a brief reply that says why the code stays as it is. A reply is a
-valid resolution because Claude can miss domain context, and it can flag too much or too little. The
+Triage every finding. When a finding misreads the intent of the change, reply with why it does not
+apply. A reply is a valid resolution because Claude can miss domain context, and it can flag too
+much or too little. For the legitimate findings, ask Claude to fix the defects, then review each fix
+before you commit it and resolve the finding. Our work on a pull request is complete when all Claude
+findings are resolved and we have human approval. The
 [plugin README](https://github.com/bitwarden/ai-plugins/blob/main/plugins/bitwarden-code-review/README.md#finding-classification)
 links the severity levels Claude uses.
 
