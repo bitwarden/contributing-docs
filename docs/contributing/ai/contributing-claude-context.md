@@ -4,7 +4,7 @@ sidebar_custom_props:
   access: bitwarden
 ---
 
-# Contributing Claude context
+# Claude context
 
 Every time you catch Claude making the same mistake twice, explain the same convention in chat, or
 hand a teammate a mental map they did not have, that is knowledge worth encoding. This page covers
@@ -17,9 +17,9 @@ the code it describes.
 
 Ask whether the knowledge is specific to one codebase or generic enough to work across repositories.
 
-- **Specific to one codebase**: contribute it to that repository's `.claude/` directory. Examples
-  include how a new module is added in that codebase, or how its feature-flag system works.
-- **Generic and reusable across repositories**: contribute it to
+- If it is specific to one codebase, put it in that repository's `.claude/` directory, for example
+  how a new module is added or how the feature-flag system works.
+- If it applies across repositories, put it in
   [bitwarden/ai-plugins](https://github.com/bitwarden/ai-plugins), in the plugin that
   [component placement](./component-placement.md) points to.
 
@@ -141,7 +141,7 @@ The Claude Code ecosystem moves quickly, so last session's habits may already be
    [`claude-config-validator`](https://github.com/bitwarden/ai-plugins/tree/main/plugins/claude-config-validator)
    to get it locally too.
 
-5. Open the pull request with the `ai-review` label. You SHOULD leave the label on, especially as
+5. Open the pull request with the `ai-review` label. You `SHOULD` leave the label on, especially as
    you push commits that are not merge commits. While it is on, Claude reviews the pull request on
    every push, drafts included. Without it, a non-draft pull request gets one automatic review and
    no more. [AI Code Review](../pull-requests/ai-code-review.md) explains when each review runs.
