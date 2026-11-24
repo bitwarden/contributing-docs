@@ -359,6 +359,12 @@ Some appropriate operators are:
   consider carefully if this is the right operator for your use case. mergeMap will flatten
   observables but not care about the order. If ordering is important use `concatMap`. If you only
   care about the latest value use `switchMap`.
+- [`exhaustMap`](https://www.learnrxjs.io/learn-rxjs/operators/transformation/exhaustmap): Ignores
+  new events while the current operation is still running. Use this when an action must not run
+  twice at the same time, such as a save or submit button.
+
+For a side-by-side comparison of all four operators with Angular examples, see this
+[guide](https://frontendatlas.com/angular/trivia/rxjs-switchmap-mergemap-exhaustmap-concatmap-angular-when-to-use).
 
 ### Reactive forms ([ADR-0001](../../../architecture/adr/0001-reactive-forms.md))
 
