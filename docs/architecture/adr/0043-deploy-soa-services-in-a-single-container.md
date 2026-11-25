@@ -100,7 +100,7 @@ This ADR decides three things for that end state:
 |                                             | No messaging                   | Home-grown                             | RabbitMQ                         | LavinMQ                              |
 | ------------------------------------------- | ------------------------------ | -------------------------------------- | -------------------------------- | ------------------------------------ |
 | Uses a transport the SDK already ships      | ❌ disabled in this deployment | ⚠️ in-memory channel only, one process | ✅ SDK RabbitMQ transport        | ✅ SDK RabbitMQ transport            |
-| SDK transport suite passes unchanged        | N/A                            | ❌ no such suite                       | ✅ RabbitMQ 4.2.0                | ⚠️ to re-run on current transport    |
+| SDK transport suite passes unchanged        | N/A                            | ❌ no such suite                       | ✅ RabbitMQ 4.2.0                | ✅ LavinMQ 2.10.4                    |
 | Delivery guarantees provided by the broker  | N/A                            | ❌ reimplemented by us                 | ✅                               | ✅                                   |
 | Works across processes                      | N/A                            | ⚠️ database queue only                 | ✅                               | ✅                                   |
 | Features that consume published events work | ❌                             | ✅                                     | ✅                               | ✅                                   |
@@ -164,12 +164,29 @@ LavinMQ's.
 ### Negative consequences
 
 - The single-container deployment's memory grows with the number of services, one .NET runtime each,
-  plus Redis and LavinMQ. Its minimum hardware requirements will have to be restated once the SOA
-  service count is settled.
+  plus Redis and LavinMQ.
 - Two more third-party products ship inside the image and must be patched with it.
 - Messaging uses the SDK's RabbitMQ transport, not the Azure Service Bus transport cloud uses, so
-  cloud does not exercise it. LavinMQ's results are to be re-run against the current transport.
-- LavinMQ publishes no build for 32-bit ARM (arm/v7). If arm/v7 support is required, we will either
-  produce an arm/v7 build of LavinMQ ourselves or support only RabbitMQ on that architecture, and
-  RabbitMQ's memory requirements may make running the SOA version of Bitwarden on a 32-bit Raspberry
-  Pi impractical.
+  cloud does not exercise it.
+- LavinMQ publishes no build for 32-bit ARM (arm/v7), so supporting arm/v7 means building LavinMQ
+  ourselves or running RabbitMQ, whose memory may make a 32-bit Raspberry Pi impractical.
+
+### Plan
+
+The decisions take effect when the single-container deployment moves to the SOA's services. Today's
+image is unchanged until then.
+
+- **Broker support in the SDK:** `Bitwarden.Server.Sdk.MessageBroker` supports LavinMQ alongside
+  RabbitMQ and runs its broker tests on LavinMQ in CI
+  ([dotnet-extensions#489](https://github.com/bitwarden/dotnet-extensions/pull/489)). A self-hosted
+  service creates the broker topology it needs as it starts
+  ([dotnet-extensions#502](https://github.com/bitwarden/dotnet-extensions/pull/502)).
+- **Memory measurements:** repeat the 2026-10-10 measurements against the current `MessageBroker`
+  topology before the image changes.
+- **The image:** in `bitwarden/self-host`'s `bitwarden-lite/`, run each SOA service that applies to
+  a self-hosted install as a supervised program behind nginx, as today, and add Redis and LavinMQ as
+  supervised programs that the services reach on localhost.
+- **arm/v7:** decide with the self-host team whether the single-container deployment keeps 32-bit
+  ARM. If it does, build LavinMQ for arm/v7 or run RabbitMQ on that architecture.
+- **Hardware requirements:** restate the minimum requirements once the SOA's service count is
+  settled.
