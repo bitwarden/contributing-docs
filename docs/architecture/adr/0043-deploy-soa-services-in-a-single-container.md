@@ -119,7 +119,7 @@ delivery limits).
 
 ## Decision outcome
 
-### 1. Each service runs as a stand-alone process
+### Each service runs as a stand-alone process
 
 The single-container deployment runs each service as its own process, under a supervisor and behind
 nginx, for the following reasons:
@@ -146,7 +146,7 @@ Alternatives rejected:
   runaway allocation in any one of them would take down all of them. The memory it would save does
   not come close to paying for that.
 
-### 2. Redis ships in the container
+### Redis ships in the container
 
 Redis runs as a supervised process inside the image for the following reasons:
 
@@ -168,7 +168,7 @@ Alternatives rejected:
   owner can clear only its own copy, and every other process keeps serving stale data, including
   stale authorization data.
 
-### 3. LavinMQ ships in the container
+### LavinMQ ships in the container
 
 LavinMQ runs as a supervised process inside the image for the following reasons:
 
