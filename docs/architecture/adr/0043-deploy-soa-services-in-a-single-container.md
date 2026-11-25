@@ -119,79 +119,38 @@ delivery limits).
 
 ## Decision outcome
 
-### Each service runs as a stand-alone process
+### Decision 1: hosting the services
 
-The single-container deployment runs each service as its own process, under a supervisor and behind
-nginx, for the following reasons:
+Chosen option: **Multiple processes**, because it is the only option with one code path: each
+service runs the same binary, startup and service-to-service calls as in cloud.
 
-- It runs the same binary as cloud, so a service tested in cloud is tested for the single-container
-  deployment.
-- Every service-to-service call takes the same path as in cloud: an HTTP request through the
-  callee's full pipeline.
-- Adding a service is additive: one more binary, one more supervisor program and one more nginx
-  route.
-- It is how the single-container deployment works today: eight services, each its own process.
+One process would be a startup path that exists only in this deployment, merging every service's DI
+registrations, authentication and middleware into one `WebApplication`, and it would put Bitwarden's
+SOA, which already tracks over 1,100 APIs, in one failure domain. The memory it would save does not
+pay for that. A service with no function on a self-hosted install, such as Billing, is not shipped.
 
-A service that has no function on a self-hosted install, such as Billing, is not shipped.
+### Decision 2: the network cache
 
-Alternatives rejected:
+Chosen option: **Redis**, because services and service clients use the same cache code and
+configuration as in cloud, and one shared cache lets the owning service's invalidation reach every
+reader.
 
-- **One process is rejected because it is a second code path and a single failure domain:** each
-  service owns its `Program.cs`: its DI registrations, options, authentication schemes, middleware
-  order, health checks and hosted services such as the outbox relay. Merging them into one
-  `WebApplication` would be a second startup path that exists only in this deployment, with
-  collisions wherever two services register the same types differently, and a standing temptation to
-  call other services in-process, past their authorization and validation. It would also put
-  Bitwarden's SOA, which already tracks over 1,100 APIs, in one failure domain: a crash, deadlock or
-  runaway allocation in any one of them would take down all of them. The memory it would save does
-  not come close to paying for that.
+A database table is a worse Redis: it needs a schema for each of four database providers and puts
+cache traffic on the database the cache exists to protect. No cache leaves cloud's caching code
+untested in this deployment. An in-memory cache is incorrect: the owning service can clear only its
+own process's copy, so every other process keeps serving stale data, including stale authorization
+data.
 
-### Redis ships in the container
+### Decision 3: messaging
 
-Redis runs as a supervised process inside the image for the following reasons:
+Chosen option: **LavinMQ**, because it runs on the RabbitMQ transport the SDK already ships, the
+broker provides the delivery guarantees, and it needs about a quarter of RabbitMQ's memory.
 
-- Services and service clients use the same cache code and configuration as in cloud, pointed at
-  localhost.
-- Every process shares it, so the owning service's invalidation reaches every reader.
-- It is lightweight: one more small process alongside the eight services the image already runs.
-
-Alternatives rejected:
-
-- **A database-backed cache is rejected because it is a worse Redis:** it needs a schema and
-  implementation for each of four database providers, it moves cache traffic onto the database the
-  cache exists to protect, and its expiry and concurrency semantics differ from what cloud runs.
-- **No cache is rejected because it removes code cloud depends on:** keys, serialization, expiry and
-  invalidation would go untested in this deployment, and every service client would behave
-  differently between deployments.
-- **In-memory is rejected because it is incorrect:** the owning service invalidates the cache in its
-  own write path, but readers are service clients in other processes. With a cache per process, the
-  owner can clear only its own copy, and every other process keeps serving stale data, including
-  stale authorization data.
-
-### LavinMQ ships in the container
-
-LavinMQ runs as a supervised process inside the image for the following reasons:
-
-- Services publish and consume through the SDK's RabbitMQ transport, which ships and is tested
-  alongside the Azure Service Bus transport cloud uses. No transport is written for this deployment.
-- The broker provides durability, retry, dead-lettering and publisher confirms, so we build none of
-  them.
-- It is lightweight: about 28 MiB of program memory, and it drained a 100,000-message backlog inside
-  64 MiB without tuning.
-
-Alternatives rejected:
-
-- **No messaging is rejected because it is a second code path in every service:** each publish and
-  consume would need a switch for this deployment alone, the outbox would be turned off in it, and
-  every feature built on published events would be missing or reimplemented there.
-- **A home-grown transport is rejected because it reimplements the broker:** it would have to
-  rebuild durability, retry, dead-lettering and publisher confirms, it would be exercised by the
-  fewest installs, and it would be a second implementation of the platform's delivery guarantees.
-  The SDK's in-memory channel transport runs inside one process, so it cannot carry messages between
-  services.
-- **RabbitMQ is rejected on memory:** it runs the same transport code, so it costs nothing in code
-  paths, but it needs about 100 MiB of program memory, four times LavinMQ's, and was killed at 160
-  MiB draining the same backlog until given an absolute memory limit.
+No messaging would need a switch for this deployment in every service and would turn off every
+feature built on published events. A home-grown transport would reimplement the broker's delivery
+guarantees for the fewest installs, and the SDK's in-memory channel runs inside one process.
+RabbitMQ runs the same transport code but needs about 100 MiB of program memory, four times
+LavinMQ's.
 
 ### Positive consequences
 
