@@ -49,6 +49,7 @@ keypair
 keyserver
 Kroki
 Kubebuilder
+LavinMQ
 LDIF
 libmagic
 LLDB
