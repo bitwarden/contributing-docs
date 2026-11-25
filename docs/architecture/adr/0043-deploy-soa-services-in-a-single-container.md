@@ -19,21 +19,21 @@ operator except a database. Bitwarden Lite is today's single-container deploymen
 
 Source: `bitwarden/self-host`, `bitwarden-lite/`, `main` as of 2026-11-23.
 
-- **One image, eight independent services.** The image is built on
+- **One image, eight independent services:** the image is built on
   `mcr.microsoft.com/dotnet/aspnet:10.0-alpine3.24` and copies each service's binaries, unmodified,
   out of that service's own server image: **Admin, Api, Events, Icons, Identity, Notifications, SCIM
   and SSO**. The image runs the same binaries as every other deployment.
-- **Each service is its own process.** `supervisord` runs each one as a separate program on its own
+- **Each service is its own process:** `supervisord` runs each one as a separate program on its own
   localhost port. nginx, also supervised, routes by path (`/api/`, `/identity`, `/notifications/`,
   `/scim/` and so on) and serves the web vault and attachments. A tenth program runs scheduled
   database backups.
-- **Services are switched on and off individually.** Each has a `BW_ENABLE_*` setting; Events, SCIM
+- **Services are switched on and off individually:** each has a `BW_ENABLE_*` setting; Events, SCIM
   and SSO are off by default.
-- **Services not relevant to a self-hosted install are not shipped.** The server's Billing and
+- **Services not relevant to a self-hosted install are not shipped:** the server's Billing and
   EventsProcessor services are not in the image.
-- **The database is external and operator-supplied**: SQL Server, PostgreSQL, MySQL/MariaDB or
+- **The database is external and operator-supplied:** SQL Server, PostgreSQL, MySQL/MariaDB or
   SQLite.
-- **There is no cache server and no message broker.** Where cloud uses them, the server substitutes
+- **There is no cache server and no message broker:** where cloud uses them, the server substitutes
   a per-deployment implementation chosen at startup:
 
 | Concern   | Supported implementations                                                                 | The image uses         |
@@ -50,16 +50,16 @@ of a **network cache** and **messaging**.
 
 This ADR decides three things for that end state:
 
-1. How the services are hosted.
-2. What to use for the network cache (if anything).
-3. What to use for messaging (if anything).
+- How the services are hosted.
+- What to use for the network cache (if anything).
+- What to use for messaging (if anything).
 
 ## Considered options
 
 ### Decision 1: hosting the services
 
-- **One process.** Compose every service's Minimal API endpoints into a single host process.
-- **Multiple processes.** Run each service as its own process, the same binary as cloud, as the
+- **One process:** compose every service's Minimal API endpoints into a single host process.
+- **Multiple processes:** run each service as its own process, the same binary as cloud, as the
   single-container deployment does today.
 
 |                                                            | One Process                          | Multiple Processes            |
@@ -74,11 +74,11 @@ This ADR decides three things for that end state:
 
 ### Decision 2: the network cache
 
-- **Database table.** Use a database-backed cache table in the operator's database.
-- **No cache.** Use no cache in the single-container deployment; service clients call the owner
+- **Database table:** use a database-backed cache table in the operator's database.
+- **No cache:** use no cache in the single-container deployment; service clients call the owner
   every time.
-- **In-memory.** Use an in-memory cache in each process.
-- **Redis.** Ship Redis in the image and use it exactly as cloud does.
+- **In-memory:** use an in-memory cache in each process.
+- **Redis:** ship Redis in the image and use it exactly as cloud does.
 
 |                                                 | Database table    | No cache | In-memory                        | Redis                |
 | ----------------------------------------------- | ----------------- | -------- | -------------------------------- | -------------------- |
@@ -90,12 +90,12 @@ This ADR decides three things for that end state:
 
 ### Decision 3: messaging
 
-- **No messaging.** Send no messages in the single-container deployment: disable the code paths that
+- **No messaging:** send no messages in the single-container deployment: disable the code paths that
   publish and consume.
-- **Home-grown.** Use an in-process or home-grown transport: an in-memory channel, or a queue table
+- **Home-grown:** use an in-process or home-grown transport: an in-memory channel, or a queue table
   in the operator's database.
-- **RabbitMQ.** Ship [RabbitMQ](https://www.rabbitmq.com/) in the image.
-- **LavinMQ.** Ship [LavinMQ](https://lavinmq.com/) in the image.
+- **RabbitMQ:** ship [RabbitMQ](https://www.rabbitmq.com/) in the image.
+- **LavinMQ:** ship [LavinMQ](https://lavinmq.com/) in the image.
 
 |                                             | No messaging                   | Home-grown                             | RabbitMQ                         | LavinMQ                              |
 | ------------------------------------------- | ------------------------------ | -------------------------------------- | -------------------------------- | ------------------------------------ |
@@ -136,7 +136,7 @@ A service that has no function on a self-hosted install, such as Billing, is not
 
 Alternatives rejected:
 
-- **One process is rejected because it is a second code path and a single failure domain.** Each
+- **One process is rejected because it is a second code path and a single failure domain:** each
   service owns its `Program.cs`: its DI registrations, options, authentication schemes, middleware
   order, health checks and hosted services such as the outbox relay. Merging them into one
   `WebApplication` would be a second startup path that exists only in this deployment, with
@@ -157,13 +157,13 @@ Redis runs as a supervised process inside the image for the following reasons:
 
 Alternatives rejected:
 
-- **A database-backed cache is rejected because it is a worse Redis.** It needs a schema and
+- **A database-backed cache is rejected because it is a worse Redis:** it needs a schema and
   implementation for each of four database providers, it moves cache traffic onto the database the
   cache exists to protect, and its expiry and concurrency semantics differ from what cloud runs.
-- **No cache is rejected because it removes code cloud depends on.** Keys, serialization, expiry and
+- **No cache is rejected because it removes code cloud depends on:** keys, serialization, expiry and
   invalidation would go untested in this deployment, and every service client would behave
   differently between deployments.
-- **In-memory is rejected because it is incorrect.** The owning service invalidates the cache in its
+- **In-memory is rejected because it is incorrect:** the owning service invalidates the cache in its
   own write path, but readers are service clients in other processes. With a cache per process, the
   owner can clear only its own copy, and every other process keeps serving stale data, including
   stale authorization data.
@@ -181,15 +181,15 @@ LavinMQ runs as a supervised process inside the image for the following reasons:
 
 Alternatives rejected:
 
-- **No messaging is rejected because it is a second code path in every service.** Each publish and
+- **No messaging is rejected because it is a second code path in every service:** each publish and
   consume would need a switch for this deployment alone, the outbox would be turned off in it, and
   every feature built on published events would be missing or reimplemented there.
-- **A home-grown transport is rejected because it reimplements the broker.** It would have to
+- **A home-grown transport is rejected because it reimplements the broker:** it would have to
   rebuild durability, retry, dead-lettering and publisher confirms, it would be exercised by the
   fewest installs, and it would be a second implementation of the platform's delivery guarantees.
   The SDK's in-memory channel transport runs inside one process, so it cannot carry messages between
   services.
-- **RabbitMQ is rejected on memory.** It runs the same transport code, so it costs nothing in code
+- **RabbitMQ is rejected on memory:** it runs the same transport code, so it costs nothing in code
   paths, but it needs about 100 MiB of program memory, four times LavinMQ's, and was killed at 160
   MiB draining the same backlog until given an absolute memory limit.
 
