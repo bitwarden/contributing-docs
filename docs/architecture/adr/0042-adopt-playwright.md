@@ -176,9 +176,8 @@ not 'just work'" and describes only stubbing Electron's events.
 
 **Cons**
 
-- Electron support is labeled experimental, and Playwright "does not intercept the native Electron
-  dialog API" ([Electron](https://playwright.dev/docs/api/class-electron)). The POC's desktop suite
-  runs on it anyway, so the label has not blocked anything so far.
+- Electron support is still marked experimental
+  ([Electron](https://playwright.dev/docs/api/class-electron)).
 - Its documentation describes no iOS automation. Android support is labeled experimental and covers
   "Chrome for Android and Android WebView"
   ([Android](https://playwright.dev/docs/api/class-android)). Mobile keeps its own framework, so
