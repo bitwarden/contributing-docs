@@ -24,16 +24,19 @@ Appium drives the native iOS and Android apps. The part that overlaps with this 
 test methods. The repository also holds mobile, CLI and API test methods, which this ADR does not
 impact.
 
-The tests are not part of a client developer's workflow. No engineer outside QA runs them while
-writing a change, because getting a run takes a second checkout, a second toolchain, a Secrets
-Manager access token and a target, either a named environment or a base URL, with an internal setup
-guide. The bar this ADR sets is one command from a `bitwarden/clients` checkout, with the tests
-present locally for everyone.
+The Selenium end-to-end tests are not part of a client developer's workflow. No engineer outside QA
+runs them while writing a change, because there is a barrier to setting them up, and because they
+are yet another pull request to manage. The bar this ADR sets is one command from a
+`bitwarden/clients` checkout, with the tests present locally for everyone. A developer, or an agent
+working on a change, should write end-to-end tests confirming the behavior works as expected. Tests
+are part of the change, not an afterthought.
 
 Keeping the tests in a separate repository has the following costs:
 
 - A client change and its end-to-end test live in different repositories and different languages, so
   a change in behavior takes two pull requests and leaves the tests broken in between.
+- Running a suite takes a second checkout, a second toolchain, a Secrets Manager access token and a
+  target, either a named environment or a base URL, with an internal setup guide.
 - No test in the test repository runs automatically on a `bitwarden/clients` pull request. The web,
   extension and desktop suites run on a weekday schedule. The pull-request workflows in the test
   repository build, lint and review the test code itself.
