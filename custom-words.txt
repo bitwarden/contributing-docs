@@ -119,6 +119,7 @@ udeps
 UDID
 ungated
 unsynchronized
+USDEV
 WCAG
 weweave
 worktree
