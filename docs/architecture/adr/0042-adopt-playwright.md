@@ -73,9 +73,6 @@ suites have no infrastructure for and do not test; it duplicates no Selenium tes
 - One desktop test file drives the SSH agent with OpenSSH's own `ssh`, `ssh-keygen` and `ssh-add`
   against a local `sshd`.
 
-The POC is a proof of concept for the testing strategy, not for the features it covers. Its tests
-are the only coverage those features have, and they stay regardless of the outcome of this ADR.
-
 Playwright predates the POC at Bitwarden:
 [`bitwarden/browser-interactions-testing`](https://github.com/bitwarden/browser-interactions-testing)
 runs the extension's autofill tests on it.
@@ -91,17 +88,6 @@ rule.
 - **Adopt WebdriverIO:** write new client tests in TypeScript on WebdriverIO.
 - **Adopt Playwright in `bitwarden/clients`:** write new client tests in TypeScript on Playwright,
   as the POC does.
-
-Cypress was ruled out before the comparison. Its
-[trade-offs](https://docs.cypress.io/app/references/trade-offs) page lists these as permanent:
-"Cypress commands run inside of a browser" and "You cannot use Cypress to drive two browsers at the
-same time." A test that drives the web vault, the browser extension and desktop together needs a
-runner outside the clients, which Cypress is not. The
-[browser launch API](https://docs.cypress.io/api/node-events/browser-launch-api) loads unpacked
-extensions, but "Headless Chrome does not support loading extensions", and Chrome-branded builds
-from version 137 no longer load extensions through it. Its
-[FAQ](https://docs.cypress.io/app/faq#Can-I-test-my-Electron-app) says testing an Electron app "does
-not 'just work'" and describes only stubbing Electron's events.
 
 ### Keep Selenium and Appium in the test repository
 
@@ -154,9 +140,8 @@ not 'just work'" and describes only stubbing Electron's events.
 - The shared primitives buy little. Almost no behavior is shared between the web vault, the
   extension, desktop and the mobile apps, so each still needs its own tests and its own fixtures.
 - Its mobile reach goes through Appium, which the test repository already uses. Mobile is an
-  autonomous team in its own repositories, and it has already chosen its own end-to-end tests
-  ([bitwarden/ios#3232](https://github.com/bitwarden/ios/pull/3232)). A framework generic enough to
-  span mobile and the clients is not a goal of this ADR.
+  autonomous team in its own repositories, and it has already chosen its own end-to-end tests. A
+  framework generic enough to span mobile and the clients is not a goal of this ADR.
 
 ### Adopt Playwright in `bitwarden/clients`
 
@@ -220,7 +205,7 @@ extension and desktop suites nightly against the development environment.
 5. Tests `SHOULD` locate elements by role, label or visible text. A test `SHOULD NOT` add a new
    `data-testid` attribute to product code.
 6. A test that changes account state `MUST` create its own data and `MUST NOT` rely on a shared
-   account. Independent data is what removes the one-at-a-time limit.
+   account. Shared accounts force suites to run one at a time; independent data removes that limit.
 7. A test `MUST` obtain its account from a shared account-creation fixture. The fixture has a Seeder
    API implementation ([ADR-0040](./0040-seed-test-data-as-the-client.md)) where that is available,
    and also supports account creation through the UI. This makes it possible to run the end-to-end
@@ -243,7 +228,7 @@ extension and desktop suites nightly against the development environment.
 - Build the account-creation fixture with both backings, Seeder API and UI registration, and make
   the backing a configuration choice so a suite runs unchanged against USDEV or a local stack.
 - Give CI a Seeder API it can reach, so the seeded tests run there.
-- Move the shared-account tests onto the fixture, then lift the one-at-a-time limit.
+- Move the shared-account tests onto the fixture, then lift that limit.
 - Make the web suite test the pull request's own build.
 - Decide how fork pull requests get a run.
 - Add an end-to-end testing page under `docs/contributing/testing/`.
