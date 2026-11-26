@@ -201,20 +201,10 @@ extension and desktop suites nightly against the development environment.
 
 ### Negative consequences
 
-- Extension coverage is Chromium-only, so where the Firefox, Edge and Safari extension tests live is
-  a question for the test organization plan. Chrome and Edge removed the command-line flags for
-  side-loading an extension ([Chrome extensions](https://playwright.dev/docs/chrome-extensions)),
-  which constrains every framework driving those browsers, not Playwright alone.
-- Only the web suite runs headless: Electron has no headless mode, and the POC runs the extension
-  headed because Chromium's headless mode restarts the extension's service worker. CI therefore runs
-  a virtual display, which is the standard setup for Electron and not specific to Playwright.
-- Two end-to-end stacks remain: Playwright in TypeScript, and Selenium and Appium in C#.
-- The overlapping Selenium web and desktop tests are rewritten, not ported, and their coverage is
-  duplicated until each test retires. Where the Firefox and Edge extension tests go is settled in
-  the test organization plan.
+- There are two end-to-end stacks until we transition the Selenium tests to Playwright. Agents can
+  machine-translate the existing tests, so the transition is not a hand rewrite of all 1,400 test
+  methods.
 - CI retries a failing test once, which can hide a flaky test.
-- The Seeder API is not portable, so account creation has to go through a fixture with a UI-backed
-  fallback. A suite run against USDEV or a local stack pays UI registration's cost per account.
 - The POC's limits become adoption work, listed in the plan: shared accounts force one run at a
   time, CI has no Seeder account so the seeded tests skip there, the web suite on a pull request
   drives a deployed web vault, and fork pull requests get no run.
@@ -222,9 +212,6 @@ extension and desktop suites nightly against the development environment.
   honor, and
   [`libs/automation-driver`](https://github.com/bitwarden/clients/tree/main/libs/automation-driver),
   which is attached to the global object in every Angular build.
-- The shared extension-and-desktop tests rewrite the built manifest to require the native-messaging
-  permission, so the permission prompt is not tested there. Chrome exposes no way to drive that
-  prompt, so no framework tests it.
 
 ### Plan
 
@@ -244,12 +231,10 @@ extension and desktop suites nightly against the development environment.
    `data-testid` attribute to product code.
 6. A test that changes account state `MUST` create its own data and `MUST NOT` rely on a shared
    account. Independent data is what removes the one-at-a-time limit.
-7. A test `MUST` obtain its accounts from a shared account-creation fixture rather than calling the
-   Seeder API itself. The fixture is backed by the Seeder API
-   ([ADR-0040](./0040-seed-test-data-as-the-client.md)) where it is reachable, and by registration
-   through the client's own UI where it is not. The Seeder API does not run against an arbitrary
-   server, and requiring it directly would stop the suites from running against USDEV or a local
-   stack for anyone without CI access.
+7. A test `MUST` obtain its account from a shared account-creation fixture. The fixture has a Seeder
+   API implementation ([ADR-0040](./0040-seed-test-data-as-the-client.md)) where that is available,
+   and also supports account creation through the UI. This makes it possible to run the end-to-end
+   suite against arbitrary servers, even ones for which Seeder is not available.
 8. Playwright end-to-end runs `MUST` use test accounts only and `MUST NOT` target Production.
    Traces, videos and reports CI uploads `MUST NOT` contain credentials for a shared test account. A
    [trace](https://playwright.dev/docs/trace-viewer) records the page's network requests and the
