@@ -208,10 +208,6 @@ extension and desktop suites nightly against the development environment.
 - The POC's limits become adoption work, listed in the plan: shared accounts force one run at a
   time, CI has no Seeder account so the seeded tests skip there, the web suite on a pull request
   drives a deployed web vault, and fork pull requests get no run.
-- The tests depend on test-only hooks in the clients: a biometrics fake that only development builds
-  honor, and
-  [`libs/automation-driver`](https://github.com/bitwarden/clients/tree/main/libs/automation-driver),
-  which is attached to the global object in every Angular build.
 
 ### Plan
 
@@ -249,9 +245,6 @@ extension and desktop suites nightly against the development environment.
   - Naming, tags, and shared fixtures and page objects.
   - What runs on a pull request and what runs nightly, and who is told when it fails.
   - The order in which the overlapping Selenium tests retire.
-- Assess `libs/automation-driver` against the
-  [security principles](../security/principles/index.mdx), or link the existing assessment, and gate
-  or remove what it rejects.
 - Keep shared test-account credentials out of the traces and reports CI uploads.
 - Build the account-creation fixture with both backings, Seeder API and UI registration, and make
   the backing a configuration choice so a suite runs unchanged against USDEV or a local stack.
