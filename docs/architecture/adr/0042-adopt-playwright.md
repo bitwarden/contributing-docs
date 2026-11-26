@@ -189,15 +189,13 @@ extension and desktop suites nightly against the development environment.
 
 ### Positive consequences
 
-- A client change and its end-to-end test are written, reviewed and merged in one pull request.
+- A client change and its end-to-end test are written, reviewed and merged in one pull request. This
+  prevents any drift between the two, and makes changes easier and safer.
+- The barrier to write end-to-end tests becomes lower.
 - Extension and desktop changes can be tested from the pull request's build, before merge.
 - A failing test keeps a trace, a screenshot and a video.
-- Playwright waits for elements before acting on them.
-- One test can drive several clients.
-- Playwright and Selenium tests seed through the same Seeder API.
-- Shared unlock, biometrics and passkeys become testable.
-- Engineers who change a client write and own its end-to-end tests, so the tests follow the behavior
-  instead of lagging it.
+- We gain infrastructure for complex tests, such as shared unlock and biometrics, and these become
+  easy to test.
 
 ### Negative consequences
 
