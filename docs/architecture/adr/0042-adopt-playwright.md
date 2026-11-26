@@ -204,10 +204,6 @@ extension and desktop suites nightly against the development environment.
 - There are two end-to-end stacks until we transition the Selenium tests to Playwright. Agents can
   machine-translate the existing tests, so the transition is not a hand rewrite of all 1,400 test
   methods.
-- CI retries a failing test once, which can hide a flaky test.
-- The POC's limits become adoption work, listed in the plan: shared accounts force one run at a
-  time, CI has no Seeder account so the seeded tests skip there, the web suite on a pull request
-  drives a deployed web vault, and fork pull requests get no run.
 
 ### Plan
 
