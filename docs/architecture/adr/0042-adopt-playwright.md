@@ -171,17 +171,11 @@ not 'just work'" and describes only stubbing Electron's events.
 - Complex test behaviors are easy to set up: biometrics, shared unlock and passkeys all have working
   tests in the POC, and none of them has infrastructure in the Selenium suites.
 - In a survey of tech leads, nearly all developers surveyed preferred Playwright.
+- Runs the web vault on Chromium, Firefox and Safari
+  ([Browsers](https://playwright.dev/docs/browsers)).
 
 **Cons**
 
-- Extension testing is limited to Chromium: "Extensions only work in Chromium when launched with a
-  persistent context", and Google Chrome and Microsoft Edge "removed the command-line flags needed
-  to side-load extensions" ([Chrome extensions](https://playwright.dev/docs/chrome-extensions)). The
-  side-loading half of that is Chrome and Edge policy, so it constrains every framework that drives
-  those browsers, not Playwright alone.
-- Firefox and Safari are tested through Playwright's own builds. Playwright "doesn't work with the
-  branded version" of either "since it relies on patches"
-  ([Browsers](https://playwright.dev/docs/browsers)), so a branded-build regression can escape.
 - Electron support is labeled experimental, and Playwright "does not intercept the native Electron
   dialog API" ([Electron](https://playwright.dev/docs/api/class-electron)). The POC's desktop suite
   runs on it anyway, so the label has not blocked anything so far.
@@ -212,8 +206,10 @@ extension and desktop suites nightly against the development environment.
 
 ### Negative consequences
 
-- Playwright covers the Chromium extension only. Firefox and Safari run on Playwright's patched
-  builds, not the branded ones.
+- Extension coverage is Chromium-only, so where the Firefox, Edge and Safari extension tests live is
+  a question for the test organization plan. Chrome and Edge removed the command-line flags for
+  side-loading an extension ([Chrome extensions](https://playwright.dev/docs/chrome-extensions)),
+  which constrains every framework driving those browsers, not Playwright alone.
 - Only the web suite runs headless: Electron has no headless mode, and the POC runs the extension
   headed because Chromium's headless mode restarts the extension's service worker. CI therefore runs
   a virtual display, which is the standard setup for Electron and not specific to Playwright.
