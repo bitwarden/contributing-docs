@@ -8,6 +8,7 @@ Bitwarden
 bitwardensecret
 bytemark
 Casbin
+ciphertext
 clickjacking
 codebases
 CODEOWNERS
